@@ -4,7 +4,7 @@ let config = function () {
     return {
         host: 'localhost:9200',
         log: 'trace',
-        apiVersion: '2.3'
+        apiVersion: '2.2'
     }
 }
 
