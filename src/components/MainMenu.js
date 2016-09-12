@@ -6,10 +6,10 @@ import Drawer from "material-ui/Drawer";
 import Subheader from "material-ui/Subheader";
 import { List, ListItem } from "material-ui/List";
 
-import { Actions, ActionKeyStore } from "./redux/actions";
-import { MessageBoxActions } from "./MessageBox/redux/actions"
-import { getAll } from "../configs/nuage/vsd";
-import { theme } from "../theme";
+import { Actions as MessageBoxActions } from "./MessageBox/redux/actions"
+import { Actions as ComponentActions, ActionKeyStore as ComponentActionKeyStore } from './redux/actions';
+import { ActionKeyStore as ElasticsearchActionKeyStore } from '../utils/redux/actions';
+import {theme} from '../theme';
 
 var style = {
     header: {
@@ -34,26 +34,6 @@ var style = {
 }
 
 class MainMenuView extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            domains: []
-        };
-    };
-
-    componentWillMount() {
-        let view = this;
-
-        // Example
-        getAll("enterprises", "5446b9fd-b196-4afe-9a2f-1d2739dd8528", "domains").then(function (response) {
-                view.setState({domains: response});
-
-            }, function (error) {
-                view.props.showMessageBox("Ooops, something went wrong !", "It seems the cannot access the REST API to retrieve all domains");
-                view.setState({domains: []});
-            });
-    }
 
     render() {
         return (
@@ -90,13 +70,13 @@ class MainMenuView extends React.Component {
                             // See https://github.com/callemall/material-ui/issues/4602
                             <div key={0} style={style.nestedItems}>
                                 <Subheader style={style.subHeader}>Domains</Subheader>
-                                    {this.state.domains.map((domain, index) => {
-
+                                    {this.props.domains.map((domain) => {
+                                        var domainURI = encodeURIComponent(domain.trim())
                                         return (<ListItem
-                                                    key={domain.ID}
-                                                    primaryText={domain.name}
+                                                    key={domainURI}
+                                                    primaryText={domain}
                                                     style={style.nestedItem}
-                                                    onTouchTap={() => {this.props.goTo("/domains/" + domain.ID)}}
+                                                    onTouchTap={() => {this.props.goTo("/domains/" + domainURI)}}
                                                     />)
                                     })}
 
@@ -131,18 +111,19 @@ MainMenuView.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  open: state.interface.get(ActionKeyStore.KEY_STORE_MAIN_MENU_OPENED),
+    open: state.interface.get(ComponentActionKeyStore.KEY_STORE_MAIN_MENU_OPENED),
+    domains: state.elasticsearch.get(ElasticsearchActionKeyStore.KEY_STORE_RESULTS)
 });
 
 const actionCreators = (dispatch) => ({
   onRequestChange: function() {
-      dispatch(Actions.toggleMainMenu());
+      dispatch(ComponentActions.toggleMainMenu());
   },
   setPageTitle: function(aTitle) {
-      dispatch(Actions.updateTitle(aTitle));
+      dispatch(ComponentActions.updateTitle(aTitle));
   },
   goTo: function(link) {
-      dispatch(Actions.toggleMainMenu());
+      dispatch(ComponentActions.toggleMainMenu());
       dispatch(push(link));
   },
   showMessageBox: function(title, body) {

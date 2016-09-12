@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { ActionKeyStore, MessageBoxActions } from "./redux/actions";
+import { ActionKeyStore, Actions } from "./redux/actions";
 
 import Dialog from "material-ui/Dialog";
 import FlatButton from "material-ui/FlatButton";
@@ -47,7 +47,7 @@ const mapStateToProps = (state) => ({
 
 const actionCreators = (dispatch) => ({
     close: () => {
-      dispatch(MessageBoxActions.toggleMessageBox(false));
+      dispatch(Actions.toggleMessageBox(false));
     },
  });
 

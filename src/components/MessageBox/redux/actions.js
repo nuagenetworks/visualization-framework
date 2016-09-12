@@ -10,7 +10,7 @@ export const ActionKeyStore = {
 };
 
 
-export const MessageBoxActions = {
+export const Actions = {
     toggleMessageBox: function(opened, title, body, buttons) {
         return {
             type: ActionTypes.ACTION_MESSAGE_BOX_TOGGLE,
