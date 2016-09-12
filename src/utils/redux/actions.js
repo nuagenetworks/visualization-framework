@@ -21,7 +21,7 @@ export const Actions = {
             search({
                 q: 'domains',
             }).then(function () {
-                let results = ['domain 1', 'domain 2', 'domain 3'];
+                let results = ['domain 1', 'domain 2', 'domain 3', 'domain 4'];
                 dispatch(Actions.searchResponse(results));
                 console.log('ElasticSearch is UP !');
 
