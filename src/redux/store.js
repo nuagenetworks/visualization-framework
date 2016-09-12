@@ -1,5 +1,6 @@
 import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
 import { reduxReactRouter, routerStateReducer } from 'redux-router';
+import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import interfaceReducer from '../components/redux/reducer';
 import { createHistory } from 'history';
@@ -17,7 +18,10 @@ const rootReducer = (state, action) => {
 
 const createStoreWithRouterAndMiddleware = compose(
     reduxReactRouter({createHistory}),
-    applyMiddleware(loggerMiddleware)
+    applyMiddleware(
+        thunkMiddleware,
+        loggerMiddleware
+    )
 )(createStore);
 
 let store = createStoreWithRouterAndMiddleware(rootReducer);
