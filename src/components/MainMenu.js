@@ -7,8 +7,8 @@ import Subheader from 'material-ui/Subheader';
 import {CardHeader} from 'material-ui/Card';
 import { List, ListItem } from 'material-ui/List';
 
-import { Actions, ActionKeyStore } from './redux/actions';
-import {search} from '../utils/elasticsearch';
+import { Actions, ActionKeyStore as ComponentActionKeyStore } from './redux/actions';
+import { ActionKeyStore as ElasticsearchActionKeyStore } from '../utils/redux/actions';
 import {theme} from '../theme';
 
 var style = {
@@ -29,25 +29,7 @@ class MainMenuView extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            domains: []
-        };
     };
-
-    componentWillMount() {
-        let view = this;
-
-        search({
-            q: 'domains',
-        }).then(function () {
-            view.setState({domains: ['domain 1', 'domain 2', 'domain 3']});
-            console.error('ElasticSearch is UP !');
-
-        }, function () {
-            view.setState({domains: []});
-            console.error('ElasticSearch cluster is down!');
-        });
-    }
 
     render() {
         return (
@@ -79,7 +61,7 @@ class MainMenuView extends React.Component {
                         nestedItems={[
                             <div style={style.nestedItems}>
                                 <Subheader>Domains</Subheader>
-                                    {this.state.domains.map((domain) => {
+                                    {this.props.domains.map((domain) => {
                                         var domainURI = encodeURIComponent(domain.trim())
                                         return (<ListItem
                                                     key={domainURI}
@@ -121,7 +103,8 @@ MainMenuView.propTypes = {
 
 
 const mapStateToProps = (state) => ({
-  open: state.interface.get(ActionKeyStore.KEY_STORE_MAIN_MENU_OPENED),
+    open: state.interface.get(ComponentActionKeyStore.KEY_STORE_MAIN_MENU_OPENED),
+    domains: state.elasticsearch.get(ElasticsearchActionKeyStore.KEY_STORE_RESULTS)
 });
 
 
