@@ -4,12 +4,11 @@ import { push } from 'redux-router';
 
 import Drawer from 'material-ui/Drawer';
 import Subheader from 'material-ui/Subheader';
-import {CardHeader} from 'material-ui/Card';
 import { List, ListItem } from 'material-ui/List';
 
 import { Actions, ActionKeyStore } from './redux/actions';
-import {search} from '../utils/elasticsearch';
-import {theme} from '../theme';
+import { search } from '../utils/elasticsearch';
+import { theme } from '../theme';
 
 var style = {
     header: {
@@ -77,10 +76,13 @@ class MainMenuView extends React.Component {
                         initiallyOpen={true}
                         primaryTogglesNestedList={false}
                         nestedItems={[
-                            <div style={style.nestedItems}>
+                            // warning.js:36 Warning: Unknown prop `nestedLevel` on <div> tag. Remove this prop from the element
+                            // See https://github.com/callemall/material-ui/issues/4602
+                            <div key={0} style={style.nestedItems}>
                                 <Subheader>Domains</Subheader>
-                                    {this.state.domains.map((domain) => {
+                                    {this.state.domains.map((domain, index) => {
                                         var domainURI = encodeURIComponent(domain.trim())
+
                                         return (<ListItem
                                                     key={domainURI}
                                                     primaryText={domain}
