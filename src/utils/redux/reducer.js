@@ -5,11 +5,15 @@ let initialState = Map(); // eslint-disable-line
 initialState = initialState.set(ActionKeyStore.KEY_STORE_IS_FETCHING, false);
 initialState = initialState.set(ActionKeyStore.KEY_STORE_RESULTS, []);
 
-
 function requestSearch(state) {
     return state.set(ActionKeyStore.KEY_STORE_IS_FETCHING, true);
 }
 
+function receiveResults(state, results) {
+    return state
+      .set(ActionKeyStore.KEY_STORE_IS_FETCHING, false)
+      .set(ActionKeyStore.KEY_STORE_RESULTS, results);
+}
 
 function elasticsearchReducer(state = initialState, action) {
 
@@ -17,8 +21,8 @@ function elasticsearchReducer(state = initialState, action) {
         case ActionTypes.ES_SEARCH_REQUEST:
             return requestSearch(state);
 
-        //case ActionTypes.ES_SEARCH_SUCCESS:
-        //    return receiveResults(state, action.results);
+        case ActionTypes.ES_SEARCH_SUCCESS:
+            return receiveResults(state, action.results);
 
         default:
             return state;
