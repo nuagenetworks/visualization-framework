@@ -6,10 +6,9 @@ import Drawer from "material-ui/Drawer";
 import Subheader from "material-ui/Subheader";
 import { List, ListItem } from "material-ui/List";
 
-import { Actions as MessageBoxActions } from "./MessageBox/redux/actions"
-import { Actions as ComponentActions, ActionKeyStore as ComponentActionKeyStore } from './redux/actions';
-import { ActionKeyStore as ElasticsearchActionKeyStore } from '../utils/redux/actions';
-import {theme} from '../theme';
+import { Actions as ComponentActions, ActionKeyStore as ComponentActionKeyStore } from "./redux/actions";
+import { ActionKeyStore as ElasticsearchActionKeyStore } from "../utils/redux/actions";
+import {theme} from "../theme";
 
 var style = {
     header: {
@@ -65,6 +64,7 @@ class MainMenuView extends React.Component {
                         initiallyOpen={true}
                         primaryTogglesNestedList={false}
                         style={style.listItem}
+                        onTouchTap={() => {this.props.goTo("/enterprises/5446b9fd-b196-4afe-9a2f-1d2739dd8528")}}
                         nestedItems={[
                             // warning.js:36 Warning: Unknown prop `nestedLevel` on <div> tag. Remove this prop from the element
                             // See https://github.com/callemall/material-ui/issues/4602
@@ -125,10 +125,7 @@ const actionCreators = (dispatch) => ({
   goTo: function(link) {
       dispatch(ComponentActions.toggleMainMenu());
       dispatch(push(link));
-  },
-  showMessageBox: function(title, body) {
-      dispatch(MessageBoxActions.toggleMessageBox(true, title, body));
-  },
+  }
 });
 
 

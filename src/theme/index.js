@@ -18,7 +18,7 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
         disabledColor: "#DEBB4E", // orange
         pickerHeaderColor: "#4E95D8", // blue
         clockCircleColor: "#55C6C9", // light blue
-        shadowColor: "#56B79B", // Green
+        // shadowColor: "", // #56B79B Green
 
         // Custom
         thinBorder: "solid 1px",
