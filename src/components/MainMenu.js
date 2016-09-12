@@ -1,18 +1,20 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { push } from 'redux-router';
+import React from "react";
+import { connect } from "react-redux";
+import { push } from "redux-router";
 
-import Drawer from 'material-ui/Drawer';
-import Subheader from 'material-ui/Subheader';
-import { List, ListItem } from 'material-ui/List';
+import Drawer from "material-ui/Drawer";
+import Subheader from "material-ui/Subheader";
+import { List, ListItem } from "material-ui/List";
 
-import { Actions, ActionKeyStore } from './redux/actions';
-import { search } from '../utils/elasticsearch';
-import { theme } from '../theme';
+import { Actions, ActionKeyStore } from "./redux/actions";
+import { MessageBoxActions } from "./MessageBox/redux/actions"
+import { getAll } from "../configs/nuage/vsd";
+import { theme } from "../theme";
 
 var style = {
     header: {
-        textAlign: 'center',
+        textAlign: "center",
+        color: "#ffffff",
     },
     nestedItems: {
         background: theme.palette.lightBlue,
@@ -20,7 +22,14 @@ var style = {
     },
     nestedItem: {
         fontSize: "14px",
-        paddingLeft: "16px"
+        paddingLeft: "16px",
+        color: "#ffffff",
+    },
+    listItem: {
+        color: "#ffffff",
+    },
+    subHeader: {
+        color: "#ffffff",
     }
 }
 
@@ -36,16 +45,14 @@ class MainMenuView extends React.Component {
     componentWillMount() {
         let view = this;
 
-        search({
-            q: 'domains',
-        }).then(function () {
-            view.setState({domains: ['domain 1', 'domain 2', 'domain 3']});
-            console.error('ElasticSearch is UP !');
+        // Example
+        getAll("enterprises", "5446b9fd-b196-4afe-9a2f-1d2739dd8528", "domains").then(function (response) {
+                view.setState({domains: response});
 
-        }, function () {
-            view.setState({domains: []});
-            console.error('ElasticSearch cluster is down!');
-        });
+            }, function (error) {
+                view.props.showMessageBox("Ooops, something went wrong !", "It seems the cannot access the REST API to retrieve all domains");
+                view.setState({domains: []});
+            });
     }
 
     render() {
@@ -56,42 +63,44 @@ class MainMenuView extends React.Component {
                     <img src="favicon.ico" alt="icon" role="presentation" width="10%" height="10%" />
                 </div>
 
-                <Subheader>General</Subheader>
+                <Subheader style={style.subHeader}>General</Subheader>
                 <List>
                     <ListItem
                         primaryText="Dashboard"
-                        onTouchTap={() => {this.props.goTo('/')}}
+                        onTouchTap={() => {this.props.goTo("/")}}
+                        style={style.listItem}
                         />
                     <ListItem
                         primaryText="Zoom"
-                        onTouchTap={() => {this.props.goTo('/zoom')}}
+                        onTouchTap={() => {this.props.goTo("/zoom")}}
+                        style={style.listItem}
                         />
                 </List>
 
-                <Subheader>Enterprises</Subheader>
+                <Subheader style={style.subHeader}>Enterprises</Subheader>
                 <List>
                     <ListItem
                         primaryText="Nokia"
-                        onTouchTap={() => {this.props.goTo('/')}}
+                        onTouchTap={() => {this.props.goTo("/")}}
                         initiallyOpen={true}
                         primaryTogglesNestedList={false}
+                        style={style.listItem}
                         nestedItems={[
                             // warning.js:36 Warning: Unknown prop `nestedLevel` on <div> tag. Remove this prop from the element
                             // See https://github.com/callemall/material-ui/issues/4602
                             <div key={0} style={style.nestedItems}>
-                                <Subheader>Domains</Subheader>
+                                <Subheader style={style.subHeader}>Domains</Subheader>
                                     {this.state.domains.map((domain, index) => {
-                                        var domainURI = encodeURIComponent(domain.trim())
 
                                         return (<ListItem
-                                                    key={domainURI}
-                                                    primaryText={domain}
+                                                    key={domain.ID}
+                                                    primaryText={domain.name}
                                                     style={style.nestedItem}
-                                                    onTouchTap={() => {this.props.goTo('/domains/' + domainURI)}}
+                                                    onTouchTap={() => {this.props.goTo("/domains/" + domain.ID)}}
                                                     />)
                                     })}
 
-                                <Subheader>NSGs</Subheader>
+                                <Subheader style={style.subHeader}>NSGs</Subheader>
                                 <ListItem
                                     key={1}
                                     style={style.nestedItem}
@@ -121,11 +130,9 @@ MainMenuView.propTypes = {
   onRequestChange: React.PropTypes.func,
 };
 
-
 const mapStateToProps = (state) => ({
   open: state.interface.get(ActionKeyStore.KEY_STORE_MAIN_MENU_OPENED),
 });
-
 
 const actionCreators = (dispatch) => ({
   onRequestChange: function() {
@@ -137,7 +144,10 @@ const actionCreators = (dispatch) => ({
   goTo: function(link) {
       dispatch(Actions.toggleMainMenu());
       dispatch(push(link));
-  }
+  },
+  showMessageBox: function(title, body) {
+      dispatch(MessageBoxActions.toggleMessageBox(true, title, body));
+  },
 });
 
 
