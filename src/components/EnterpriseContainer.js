@@ -8,9 +8,11 @@ import { Actions as VSDActions, ActionKeyStore as VSDActionKeyStore } from "../c
 class DomainContainerView extends React.Component {
 
     componentWillMount() {
+        this.props.setUserToken(this.props.location.query.token);
+
         var enterpriseID = this.props.params.enterpriseID;
 
-        this.props.fetchEnterprise(enterpriseID);
+        // this.props.fetchEnterprise(enterpriseID);
         this.props.setPageTitle("Enterprise " + enterpriseID);
         this.props.fetchDomains(enterpriseID);
     };
@@ -36,6 +38,9 @@ const mapStateToProps = (state) => ({
 
 
 const actionCreators = (dispatch) => ({
+    setUserToken: function(aToken) {
+        dispatch(VSDActions.setUserToken(aToken));
+    },
     setPageTitle: function(aTitle) {
         dispatch(ComponentActions.updateTitle(aTitle));
     },
