@@ -1,5 +1,5 @@
-import {Map} from 'immutable';
-import {ActionTypes, ActionKeyStore} from './actions'
+import { Map } from "immutable";
+import { ActionTypes, ActionKeyStore } from "./actions"
 
 
 let initialState = Map(); // eslint-disable-line
