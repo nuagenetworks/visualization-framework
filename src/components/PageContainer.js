@@ -1,18 +1,18 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { push } from 'redux-router';
+import React from "react";
+import { connect } from "react-redux";
+import { push } from "redux-router";
 
-import { Actions } from './redux/actions';
+import { Actions } from "./redux/actions";
 
-import ReactGridLayout from 'react-grid-layout';
-import AppBar from 'material-ui/AppBar';
+import ReactGridLayout from "react-grid-layout";
+import AppBar from "material-ui/AppBar";
 
-import graph1 from '../static/images/graph1.png'
-import graph2 from '../static/images/graph2.png'
-import graph3 from '../static/images/graph3.png'
-import graph4 from '../static/images/graph4.png'
+import graph1 from "../static/images/graph1.png"
+import graph2 from "../static/images/graph2.png"
+import graph3 from "../static/images/graph3.png"
+import graph4 from "../static/images/graph4.png"
 
-import {theme} from '../theme'
+import {theme} from "../theme"
 
 var style = {
     navBar: {
@@ -25,16 +25,17 @@ var style = {
 }
 
 class PageContainerView extends React.Component {
+
     componentWillMount() {
         this.props.setPageTitle("Dashboard");
     };
 
     render() {
         var layout = [
-            {i: 'graph1', x: 0, y: 0, w: 6, h: 22, minW:6, minH:22},
-            {i: 'graph2', x: 6, y: 0, w: 6, h: 22, minW:6, minH:22},
-            {i: 'graph3', x: 0, y: 22, w: 2, h: 16, minW:2, minH:16},
-            {i: 'graph4', x: 2, y: 22, w: 4, h: 16, minW:4, minH:16},
+            {i: "graph1", x: 0, y: 0, w: 6, h: 22, minW:6, minH:22},
+            {i: "graph2", x: 6, y: 0, w: 6, h: 22, minW:6, minH:22},
+            {i: "graph3", x: 0, y: 22, w: 2, h: 16, minW:2, minH:16},
+            {i: "graph4", x: 2, y: 22, w: 4, h: 16, minW:4, minH:16},
         ];
 
         return (
@@ -46,7 +47,7 @@ class PageContainerView extends React.Component {
                 width={1200}
                 >
 
-                <div style={style.card} key={'graph1'} onTouchTap={() => {this.props.goTo('/zoom', {graph:1})}}>
+                <div style={style.card} key={"graph1"} onTouchTap={() => {this.props.goTo("/zoom", {graph:1})}}>
                     <AppBar
                         title="Graph 1"
                         showMenuIconButton={false}
@@ -60,7 +61,7 @@ class PageContainerView extends React.Component {
                     </footer>
                 </div>
 
-                <div style={style.card} key={'graph2'} onTouchTap={() => {this.props.goTo('/zoom', {graph:2})}}>
+                <div style={style.card} key={"graph2"} onTouchTap={() => {this.props.goTo("/zoom", {graph:2})}}>
                     <AppBar
                         title="Graph 2"
                         showMenuIconButton={false}
@@ -74,7 +75,7 @@ class PageContainerView extends React.Component {
                     </footer>
                 </div>
 
-                <div style={style.card} key={'graph3'} onTouchTap={() => {this.props.goTo('/zoom', {graph:3})}}>
+                <div style={style.card} key={"graph3"} onTouchTap={() => {this.props.goTo("/zoom", {graph:3})}}>
                     <AppBar
                         title="Graph 3"
                         showMenuIconButton={false}
@@ -88,7 +89,7 @@ class PageContainerView extends React.Component {
                     </footer>
                 </div>
 
-                <div style={style.card} key={'graph4'} onTouchTap={() => {this.props.goTo('/zoom', {graph:4})}}>
+                <div style={style.card} key={"graph4"} onTouchTap={() => {this.props.goTo("/zoom", {graph:4})}}>
                     <AppBar
                         title="Graph 4"
                         showMenuIconButton={false}
