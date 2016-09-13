@@ -1,53 +1,29 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { getAll } from "../configs/nuage/vsd";
-
 import { Actions as MessageBoxActions } from "./MessageBox/redux/actions"
 import { Actions as ComponentActions } from "./redux/actions";
+import { Actions as VSDActions, ActionKeyStore as VSDActionKeyStore } from "../configs/nuage/redux/actions";
 
 class DomainContainerView extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            domains: []
-        };
-    }
-
     componentWillMount() {
-        this.updateTitle(this.props.params.enterpriseID);
-        this.loadDomains(this.props.params.enterpriseID);
-    };
+        var enterpriseID = this.props.params.enterpriseID;
 
-    componentWillReceiveProps(nextProps) {
-        this.updateTitle(nextProps.params.enterpriseID);
-        this.loadDomains(nextProps.params.enterpriseID);
-    }
-
-    updateTitle(enterpriseID) {
+        this.props.fetchEnterprise(enterpriseID);
         this.props.setPageTitle("Enterprise " + enterpriseID);
-    }
-
-    loadDomains(enterpriseID) {
-        let view = this;
-        getAll("enterprises", enterpriseID, "domains").then(function (response) {
-            view.setState({domains: response});
-
-        }, function (error) {
-            view.setState({domains: []});
-            view.props.showMessageBox("Ooops, something went wrong !", "It seems the cannot access the REST API to retrieve all domains");
-        });
-    }
+        this.props.fetchDomains(enterpriseID);
+    };
 
     render() {
         return (
             <div>
                 <h1>List of domains</h1>
 
-                {this.state.domains.map((domain) => {
+                {this.props.domains.map((domain) => {
                     return (<li key={domain.ID}>{domain.name}</li>)
                 })}
+
             </div>
         );
     }
@@ -55,7 +31,7 @@ class DomainContainerView extends React.Component {
 
 
 const mapStateToProps = (state) => ({
-
+    domains: state.VSD.get(VSDActionKeyStore.KEY_STORE_RESULTS)
 });
 
 
@@ -66,6 +42,12 @@ const actionCreators = (dispatch) => ({
     showMessageBox: function(title, body) {
         dispatch(MessageBoxActions.toggleMessageBox(true, title, body));
     },
+    fetchDomains: function(enterpriseID) {
+        dispatch(VSDActions.fetch("enterprises", enterpriseID, "domains"));
+    },
+    fetchEnterprise: function(enterpriseID) {
+        dispatch(VSDActions.fetch("enterprises", enterpriseID));
+    }
  });
 
 

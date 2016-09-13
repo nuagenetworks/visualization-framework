@@ -60,7 +60,6 @@ class MainMenuView extends React.Component {
                 <List>
                     <ListItem
                         primaryText="Nokia"
-                        onTouchTap={() => {this.props.goTo("/")}}
                         initiallyOpen={true}
                         primaryTogglesNestedList={false}
                         style={style.listItem}
