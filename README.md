@@ -16,3 +16,18 @@ This configuration allows any origin to access your ElasticSearch instance, whic
 After editing this file, restart ElasticSearch.
 
 `sudo service elasticsearch restart`
+
+## Git Submodules
+
+This project relies on Git submodules. To initialize the project, you'll need to execute the following commands:
+
+```
+git submodule init
+git submodule update
+```
+
+Then every time there is an update to the submodule, you should get the modification using:
+
+```
+git submodule update
+```
