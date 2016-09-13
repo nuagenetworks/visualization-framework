@@ -10,12 +10,10 @@ initialState = initialState.set(ActionKeyStore.KEY_STORE_MESSAGE_BOX_BUTTONS, Li
 
 
 function toggleMessageBox(state, opened, title, body, buttons) {
-    return state.merge({
-        opened: opened,
-        title: title,
-        body: body,
-        buttons: buttons,
-    });
+    return state.set(ActionKeyStore.KEY_STORE_MESSAGE_BOX_OPENED, opened)
+                .set(ActionKeyStore.KEY_STORE_MESSAGE_BOX_TITLE, title)
+                .set(ActionKeyStore.KEY_STORE_MESSAGE_BOX_BODY, body)
+                .set(ActionKeyStore.KEY_STORE_MESSAGE_BOX_BUTTONS, buttons);
 }
 
 function messageBoxReducer(state = initialState, action) {

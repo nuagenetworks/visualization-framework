@@ -32,11 +32,9 @@ class DomainContainerView extends React.Component {
     loadDomains(enterpriseID) {
         let view = this;
         getAll("enterprises", enterpriseID, "domains").then(function (response) {
-            console.error(response);
             view.setState({domains: response});
 
         }, function (error) {
-            console.error(error);
             view.setState({domains: []});
             view.props.showMessageBox("Ooops, something went wrong !", "It seems the cannot access the REST API to retrieve all domains");
         });
@@ -66,7 +64,6 @@ const actionCreators = (dispatch) => ({
         dispatch(ComponentActions.updateTitle(aTitle));
     },
     showMessageBox: function(title, body) {
-        console.error(title);
         dispatch(MessageBoxActions.toggleMessageBox(true, title, body));
     },
  });
