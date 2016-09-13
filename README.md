@@ -31,3 +31,12 @@ Then every time there is an update to the submodule, you should get the modifica
 ```
 git submodule update
 ```
+
+## Installation Procedure
+
+    1. Clone the repository https://github.com/nuagenetworks/visualization-framework
+    2. Go inside the `visualization-framework` folder
+    3. Initialize the submodule that deals with the configuration `git submodule init`
+    4. Update the submodule to get the lastest sources `git submodule update`
+    5. Install all dependancies using `npm install` (it will take some time, please be patient)
+    6. Run the application using `npm run start` command.
