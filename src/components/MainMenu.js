@@ -111,7 +111,7 @@ MainMenuView.propTypes = {
 
 const mapStateToProps = (state) => ({
     open: state.interface.get(ComponentActionKeyStore.KEY_STORE_MAIN_MENU_OPENED),
-    domains: state.elasticsearch.get(ElasticsearchActionKeyStore.KEY_STORE_RESULTS)
+    domains: state.elasticsearch.getIn([ElasticsearchActionKeyStore.KEY_STORE_ALL_REQUESTS, 'temporaryID', ElasticsearchActionKeyStore.KEY_STORE_RESULTS]) || []
 });
 
 const actionCreators = (dispatch) => ({

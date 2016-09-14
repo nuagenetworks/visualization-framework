@@ -19,4 +19,4 @@ ReactDOM.render(
 
 // Dispatch our thunk action creator that will
 // kick off the initial ElasticSearch query.
-store.dispatch(ElasticsearchActions.fetchSearch());
+store.dispatch(ElasticsearchActions.fetch());
