@@ -10,16 +10,17 @@
     "immutable": "3.7.6",
     "jquery": "3.1.0",
     "material-ui": "^0.15.4",
+    "react": "^15.3.0",
     "react-dom": "^15.2.1",
     "react-grid-layout": "^0.13.4",
     "react-redux": "^4.4.5",
     "react-router": "^2.6.1",
     "react-tap-event-plugin": "^1.0.0",
-    "react": "^15.3.0",
+    "redux": "^3.5.2",
     "redux-logger": "^2.6.1",
     "redux-router": "^2.1.2",
     "redux-thunk": "^2.1.0",
-    "redux": "^3.5.2"
+    "whatwg-fetch": "^1.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -3,6 +3,7 @@ import { ReduxRouter } from "redux-router";
 import { Route } from "react-router";
 
 import AppContainer from "./components/App/AppContainer.js";
+import Dashboard from "./components/Dashboard"
 
 // Examples
 import DomainContainer from "./components/Examples/DomainContainer.js";
@@ -19,6 +20,7 @@ class App extends Component {
             <AppContainer>
                 <ReduxRouter>
                     <Route path="/" component={PageContainer} />
+                    <Route path="/dashboards/:dashboardID" component={Dashboard} />
                     <Route path="/zoom" component={Page2Container} />
                     <Route path="/enterprises/:enterpriseID" component={EnterpriseContainer} />
                     <Route path="/domains/:domainID" component={DomainContainer} />
