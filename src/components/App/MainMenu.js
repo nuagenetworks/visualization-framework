@@ -7,8 +7,8 @@ import Subheader from "material-ui/Subheader";
 import { List, ListItem } from "material-ui/List";
 
 import { Actions as ComponentActions, ActionKeyStore as ComponentActionKeyStore } from "./redux/actions";
-import { ActionKeyStore as ElasticsearchActionKeyStore } from "../utils/redux/actions";
-import {theme} from "../theme";
+import { ActionKeyStore as ElasticsearchActionKeyStore } from "../../utils/redux/actions";
+import { theme } from "../../theme";
 
 var style = {
     header: {

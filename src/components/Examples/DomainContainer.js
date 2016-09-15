@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { Actions } from '../App/redux/actions';
 
-import { Actions } from './redux/actions';
 
 class DomainContainerView extends React.Component {
     componentWillMount() {

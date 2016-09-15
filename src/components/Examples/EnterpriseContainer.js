@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { Actions as MessageBoxActions } from "./MessageBox/redux/actions";
-import { Actions as ComponentActions } from "./redux/actions";
-import { Actions as VSDActions, ActionKeyStore as VSDActionKeyStore } from "../configs/nuage/redux/actions";
+import { Actions as MessageBoxActions } from "../MessageBox/redux/actions";
+import { Actions as AppActions } from "../App/redux/actions";
+import { Actions as VSDActions, ActionKeyStore as VSDActionKeyStore } from "../../configs/nuage/redux/actions";
 
-import { getRequestID } from "../configs/nuage/vsd";
+import { getRequestID } from "../../configs/nuage/vsd";
 
 
 class DomainContainerView extends React.Component {
@@ -48,7 +48,7 @@ const actionCreators = (dispatch) => ({
         dispatch(VSDActions.setUserToken(aToken));
     },
     setPageTitle: function(aTitle) {
-        dispatch(ComponentActions.updateTitle(aTitle));
+        dispatch(AppActions.updateTitle(aTitle));
     },
     showMessageBox: function(title, body) {
         dispatch(MessageBoxActions.toggleMessageBox(true, title, body));

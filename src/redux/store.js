@@ -6,7 +6,7 @@ import thunkMiddleware from "redux-thunk";
 import createLogger from "redux-logger";
 
 import elasticsearchReducer from "../utils/redux/reducer";
-import interfaceReducer from "../components/redux/reducer";
+import interfaceReducer from "../components/App/redux/reducer";
 import messageBoxReducer from "../components/MessageBox/redux/reducer";
 import VSDReducer from "../configs/nuage/redux/reducer"
 

@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import NavBar from "./NavBar.js"
-import MessageBox from "./MessageBox"
+import NavBar from "./NavBar.js";
+import MessageBox from "../MessageBox";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import {theme} from "../theme"
+import { theme } from "../../theme";
 
 let style = {
     container: {
