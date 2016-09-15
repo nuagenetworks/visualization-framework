@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import { ReduxRouter } from "redux-router";
 import { Route } from "react-router";
 
-import AppContainer from "./components/AppContainer.js"
-import DomainContainer from "./components/DomainContainer.js"
-import EnterpriseContainer from "./components/EnterpriseContainer.js"
-import Page2Container from "./components/Page2Container.js"
-import PageContainer from "./components/PageContainer.js"
+import AppContainer from "./components/App/AppContainer.js";
+
+// Examples
+import DomainContainer from "./components/Examples/DomainContainer.js";
+import EnterpriseContainer from "./components/Examples/EnterpriseContainer.js";
+import Page2Container from "./components/Examples/Page2Container.js";
+import PageContainer from "./components/Examples/PageContainer.js";
 
 
 class App extends Component {

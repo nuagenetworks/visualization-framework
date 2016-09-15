@@ -1,46 +1,67 @@
-import {search} from '../elasticsearch';
+import { search } from '../elasticsearch';
 
 export const ActionTypes = {
-    ES_SEARCH_REQUEST: "ES_SEARCH_REQUEST",
-    ES_SEARCH_SUCCESS: "ES_SEARCH_SUCCESS"
+    ES_WILL_START_REQUEST: "ES_WILL_START_REQUEST",
+    ES_DID_START_REQUEST: "ES_DID_START_REQUEST",
+    ES_DID_RECEIVE_RESPONSE: "ES_DID_RECEIVE_RESPONSE",
+    ES_DID_RECEIVE_ERROR: "ES_DID_RECEIVE_ERROR",
 };
 
 export const ActionKeyStore = {
+    KEY_STORE_ERROR: "error",
     KEY_STORE_IS_FETCHING: "isFetching",
-    KEY_STORE_RESULTS: "results"
+    KEY_STORE_RESULTS: "results",
+    KEY_STORE_ALL_REQUESTS: "requests",
 };
 
 export const Actions = {
 
     // This is a thunk action creator that will
     // initiate a request to ElasticSearch.
-    fetchSearch: function (){
+    fetch: function () {
         return function (dispatch){
-            dispatch(Actions.searchRequest);
+            var requestID = 'temporaryID'
+            dispatch(Actions.willStartRequest(requestID));
+            dispatch(Actions.didStartRequest(requestID));
 
             search({
                 q: 'domains',
+
             }).then(function () {
                 let results = ['domain 1', 'domain 2', 'domain 3', 'domain 4'];
-                dispatch(Actions.searchResponse(results));
-                console.log('ElasticSearch is UP !');
+                dispatch(Actions.didReceiveResponse(requestID, results));
 
-            }, function () {
-                dispatch(Actions.searchResponse([]));
-                console.error('ElasticSearch cluster is down!');
+            }, function (error) {
+                dispatch(Actions.didReceiveError(requestID, error));
+                dispatch(Actions.didReceiveResponse(requestID, []));
             });
         }
     },
 
-    searchRequest: function() {
+    willStartRequest: function(requestID) {
         return {
-            type: ActionTypes.ES_SEARCH_REQUEST
+            type: ActionTypes.ES_WILL_START_REQUEST,
+            requestID: requestID,
         };
     },
-    searchResponse: function(results) {
+    didStartRequest: function(requestID) {
         return {
-            type: ActionTypes.ES_SEARCH_SUCCESS,
+            type: ActionTypes.ES_DID_START_REQUEST,
+            requestID: requestID,
+        };
+    },
+    didReceiveResponse: function(requestID, results) {
+        return {
+            type: ActionTypes.ES_DID_RECEIVE_RESPONSE,
+            requestID: requestID,
             results: results
         };
-    }
+    },
+    didReceiveError: function(requestID, error) {
+        return {
+            type: ActionTypes.ES_DID_RECEIVE_ERROR,
+            requestID: requestID,
+            error: error
+        };
+    },
 };

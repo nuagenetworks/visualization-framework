@@ -1,16 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import graph1 from '../static/images/graph1.png'
-import graph2 from '../static/images/graph2.png'
-import graph3 from '../static/images/graph3.png'
-import graph4 from '../static/images/graph4.png'
+import graph1 from '../../static/images/graph1.png'
+import graph2 from '../../static/images/graph2.png'
+import graph3 from '../../static/images/graph3.png'
+import graph4 from '../../static/images/graph4.png'
 
-import { Actions } from './redux/actions';
+import { Actions } from '../App/redux/actions';
+
 
 class PageContainer2View extends React.Component {
     componentWillMount() {
-        this.props.setPageTitle("Zoom");
+        this.props.setPageTitle("Page 2 Container - Zoom Example");
     };
 
     graphFromNumber(graphNumber) {

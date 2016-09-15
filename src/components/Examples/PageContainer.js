@@ -2,17 +2,17 @@ import React from "react";
 import { connect } from "react-redux";
 import { push } from "redux-router";
 
-import { Actions } from "./redux/actions";
+import { Actions } from "../App/redux/actions";
 
 import ReactGridLayout from "react-grid-layout";
 import AppBar from "material-ui/AppBar";
 
-import graph1 from "../static/images/graph1.png"
-import graph2 from "../static/images/graph2.png"
-import graph3 from "../static/images/graph3.png"
-import graph4 from "../static/images/graph4.png"
+import graph1 from "../../static/images/graph1.png"
+import graph2 from "../../static/images/graph2.png"
+import graph3 from "../../static/images/graph3.png"
+import graph4 from "../../static/images/graph4.png"
 
-import {theme} from "../theme"
+import {theme} from "../../theme"
 
 var style = {
     navBar: {
@@ -24,10 +24,11 @@ var style = {
     }
 }
 
+
 class PageContainerView extends React.Component {
 
     componentWillMount() {
-        this.props.setPageTitle("Dashboard");
+        this.props.setPageTitle("Page Container - Dashboard Example");
     };
 
     render() {
