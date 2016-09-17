@@ -23,7 +23,7 @@ export const Actions = {
                     dispatch(Actions.didReceiveResponse(dashboardID, data));
                 })
                 .catch(function (error) {
-                    dispatch(Actions.didReceiveError(dashboardID, error));
+                    dispatch(Actions.didReceiveError(dashboardID, error.message));
                     dispatch(Actions.didReceiveResponse(dashboardID, []));
                 });
         }
