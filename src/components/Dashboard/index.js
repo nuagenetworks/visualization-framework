@@ -21,8 +21,9 @@ class DashboardView extends React.Component {
                     This dashboard component is loading the configuration file...
                 </p>
                 {(() => {
-                    if (this.props.error)
-                        return <div>this.props.error</div>
+                    if (this.props.error){
+                        return <div>{this.props.error}</div>
+                    }
 
                     if (this.props.configuration) {
                         let configuration = this.props.configuration.toJS();
