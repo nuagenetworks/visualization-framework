@@ -17,20 +17,20 @@ class DashboardView extends React.Component {
     render() {
         return (
             <div>
-                <p>
-                    This dashboard component is loading the configuration file...
-                </p>
                 {(() => {
-                    if (this.props.error){
+                    if (this.props.fetching)
+                        return <p>
+                            <CircularProgress color="#eeeeee"/>
+                            This dashboard component is loading the configuration file...
+                        </p>
+
+                    if (this.props.error)
                         return <div>{this.props.error}</div>
-                    }
 
                     if (this.props.configuration) {
                         let configuration = this.props.configuration.toJS();
                         return <div>#{configuration.id} - {configuration.title}</div>
                     }
-
-                    return <CircularProgress color="#eeeeee"/>
                 })()}
             </div>
         );
