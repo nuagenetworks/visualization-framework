@@ -19,6 +19,7 @@ function didReceiveResponse(state, dashboardID, data) {
 function didReceiveError(state, dashboardID, error) {
     return state
         .setIn([ActionKeyStore.KEY_STORE_DASHBOARDS, dashboardID, ActionKeyStore.KEY_STORE_IS_FETCHING], false)
+        .setIn([ActionKeyStore.KEY_STORE_DASHBOARDS, dashboardID, ActionKeyStore.KEY_STORE_DATA], fromJS([]))
         .setIn([ActionKeyStore.KEY_STORE_DASHBOARDS, dashboardID, ActionKeyStore.KEY_STORE_ERROR], fromJS(error));
 }
 

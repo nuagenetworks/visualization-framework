@@ -24,7 +24,6 @@ export const Actions = {
                 })
                 .catch(function (error) {
                     dispatch(Actions.didReceiveError(dashboardID, error.message));
-                    dispatch(Actions.didReceiveResponse(dashboardID, []));
                 });
         }
     },
