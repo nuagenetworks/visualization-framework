@@ -13,7 +13,7 @@ function willStartRequest(state, requestID) {
 }
 
 function didStartRequest(state, requestID) {
-    return state.setIn([ActionKeyStore.KEY_STORE_ALL_REQUESTS, requestID, ActionKeyStore.KEY_STORE_IS_FETCHING], false);
+    return state.setIn([ActionKeyStore.KEY_STORE_ALL_REQUESTS, requestID, ActionKeyStore.KEY_STORE_IS_FETCHING], true);
 }
 
 function didReceiveResponse(state, requestID, results) {

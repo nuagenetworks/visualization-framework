@@ -1,4 +1,4 @@
-import { search } from '../elasticsearch';
+import { search } from '../index';
 
 export const ActionTypes = {
     ES_WILL_START_REQUEST: "ES_WILL_START_REQUEST",
