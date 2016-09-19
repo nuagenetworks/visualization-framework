@@ -4,6 +4,7 @@ import { push } from "redux-router";
 
 import CircularProgress from "material-ui/CircularProgress";
 import ReactGridLayout from "react-grid-layout";
+import AppBar from "material-ui/AppBar";
 
 import { Actions as AppActions } from "../App/redux/actions";
 import { Actions as DashboardActions, ActionKeyStore as DashboardActionKeyStore } from "../../utils/dashboards/redux/actions"
@@ -39,6 +40,10 @@ class DashboardView extends React.Component {
                     >
                     {layout.map((item) => {
                         return <div key={item.i}>
+                            <AppBar
+                                title={item.title}
+                                showMenuIconButton={false}
+                                />
                             {item.i}
                         </div>
                     })}
