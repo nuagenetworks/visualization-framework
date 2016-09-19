@@ -39,7 +39,7 @@ class MainMenuView extends React.Component {
             <Drawer open={this.props.open} docked={false} onRequestChange={this.props.onRequestChange}>
                 <div style={style.header}>
                     <p>Visualization Framework</p>
-                    <img src="favicon.ico" alt="icon" role="presentation" width="10%" height="10%" />
+                    <img src="/src/favicon.ico" alt="icon" role="presentation" width="10%" height="10%" />
                 </div>
 
                 <Subheader style={style.subHeader}>General</Subheader>

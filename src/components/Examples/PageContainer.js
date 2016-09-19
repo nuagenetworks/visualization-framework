@@ -7,10 +7,10 @@ import { Actions } from "../App/redux/actions";
 import ReactGridLayout from "react-grid-layout";
 import AppBar from "material-ui/AppBar";
 
-import graph1 from "../../static/images/graph1.png"
-import graph2 from "../../static/images/graph2.png"
-import graph3 from "../../static/images/graph3.png"
-import graph4 from "../../static/images/graph4.png"
+import graph1 from "../../images/graph1.png"
+import graph2 from "../../images/graph2.png"
+import graph3 from "../../images/graph3.png"
+import graph4 from "../../images/graph4.png"
 
 import {theme} from "../../theme"
 
