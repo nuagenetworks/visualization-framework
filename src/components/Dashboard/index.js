@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { push } from "redux-router";
 
 import CircularProgress from "material-ui/CircularProgress";
+import ReactGridLayout from "react-grid-layout";
 
 import { Actions as AppActions } from "../App/redux/actions";
 import { Actions as DashboardActions, ActionKeyStore as DashboardActionKeyStore } from "../../utils/dashboards/redux/actions"
@@ -29,11 +30,19 @@ class DashboardView extends React.Component {
             this.props.setPageTitle(title);
 
             return (
-              <ul>
-                {layout.map((item) => {
-                  return <li>{item.i}</li>
-                })}
-              </ul>
+                <ReactGridLayout
+                    className="layout"
+                    layout={layout}
+                    cols={12}
+                    rowHeight={10}
+                    width={1200}
+                    >
+                    {layout.map((item) => {
+                        return <div key={item.i}>
+                            {item.i}
+                        </div>
+                    })}
+                </ReactGridLayout>
             );
         } else {
             return <div>Unhandled case</div>
