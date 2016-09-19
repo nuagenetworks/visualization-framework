@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { push } from "redux-router";
 
-import CircularProgress from 'material-ui/CircularProgress';
+import CircularProgress from "material-ui/CircularProgress";
 
 import { Actions as AppActions } from "../App/redux/actions";
 import { Actions as DashboardActions, ActionKeyStore as DashboardActionKeyStore } from "../../utils/dashboards/redux/actions"
@@ -28,8 +28,17 @@ class DashboardView extends React.Component {
                         return <div>{this.props.error}</div>
 
                     if (this.props.configuration) {
-                        let configuration = this.props.configuration.toJS();
-                        return <div>#{configuration.id} - {configuration.title}</div>
+                        let { id, title, data } = this.props.configuration.toJS();
+
+                        let { layout } = data;
+                        return (
+                          <div>
+                            <h3>#{id} - {title}</h3>
+                            <ul>
+                              {JSON.stringify(layout)}
+                            </ul>
+                          </div>
+                        );
                     }
                 })()}
             </div>
