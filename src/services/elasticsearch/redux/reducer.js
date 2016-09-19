@@ -6,14 +6,9 @@ let initialState = Map() // eslint-disable-line
                     .set(ActionKeyStore.REQUESTS, Map()); // eslint-disable-line
 
 
-function willStartRequest(state, requestID) {
-    // Initialize state structure
-    return state.setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], false)
-                .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.ERROR], null);
-}
-
 function didStartRequest(state, requestID) {
-    return state.setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], true);
+    return state.setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], true)
+                .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.ERROR], null);
 }
 
 function didReceiveResponse(state, requestID, results) {
@@ -31,9 +26,6 @@ function didReceiveError(state, requestID, error) {
 function elasticsearchReducer(state = initialState, action) {
 
     switch (action.type) {
-        case ActionTypes.ES_WILL_START_REQUEST:
-            return willStartRequest(state, action.requestID);
-
         case ActionTypes.ES_DID_START_REQUEST:
             return didStartRequest(state, action.requestID);
 

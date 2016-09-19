@@ -1,7 +1,6 @@
 import { search } from '../index';
 
 export const ActionTypes = {
-    ES_WILL_START_REQUEST: "ES_WILL_START_REQUEST",
     ES_DID_START_REQUEST: "ES_DID_START_REQUEST",
     ES_DID_RECEIVE_RESPONSE: "ES_DID_RECEIVE_RESPONSE",
     ES_DID_RECEIVE_ERROR: "ES_DID_RECEIVE_ERROR",
@@ -21,7 +20,6 @@ export const Actions = {
     fetch: function () {
         return function (dispatch){
             var requestID = 'temporaryID'
-            dispatch(Actions.willStartRequest(requestID));
             dispatch(Actions.didStartRequest(requestID));
 
             search({
@@ -37,12 +35,6 @@ export const Actions = {
         }
     },
 
-    willStartRequest: function(requestID) {
-        return {
-            type: ActionTypes.ES_WILL_START_REQUEST,
-            requestID: requestID,
-        };
-    },
     didStartRequest: function(requestID) {
         return {
             type: ActionTypes.ES_DID_START_REQUEST,
