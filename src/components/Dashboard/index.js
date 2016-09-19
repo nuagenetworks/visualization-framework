@@ -44,6 +44,9 @@ class DashboardView extends React.Component {
                                 title={item.title}
                                 showMenuIconButton={false}
                                 />
+                            <div>
+                                <img src={`/static/media/${item.i}.png`} alt={item.title} width="100%" height="100%" />
+                            </div>
                             {item.i}
                         </div>
                     })}
