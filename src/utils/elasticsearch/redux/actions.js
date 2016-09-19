@@ -11,7 +11,7 @@ export const ActionKeyStore = {
     ERROR: "error",
     IS_FETCHING: "isFetching",
     RESULTS: "results",
-    ALL_REQUESTS: "requests",
+    REQUESTS: "requests",
 };
 
 export const Actions = {
@@ -33,7 +33,6 @@ export const Actions = {
 
             }, function (error) {
                 dispatch(Actions.didReceiveError(requestID, error));
-                dispatch(Actions.didReceiveResponse(requestID, []));
             });
         }
     },

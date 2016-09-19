@@ -38,8 +38,8 @@ class DomainContainerView extends React.Component {
 
 
 const mapStateToProps = (state, ownProps) => ({
-    domains: state.VSD.getIn([VSDActionKeyStore.ALL_REQUESTS, getRequestID("enterprises", ownProps.params.enterpriseID, "domains"), VSDActionKeyStore.RESULTS]) || [],
-    enterprises: state.VSD.getIn([VSDActionKeyStore.ALL_REQUESTS, getRequestID("enterprises", ownProps.params.enterpriseID), VSDActionKeyStore.RESULTS])
+    domains: state.VSD.getIn([VSDActionKeyStore.REQUESTS, getRequestID("enterprises", ownProps.params.enterpriseID, "domains"), VSDActionKeyStore.RESULTS]) || [],
+    enterprises: state.VSD.getIn([VSDActionKeyStore.REQUESTS, getRequestID("enterprises", ownProps.params.enterpriseID), VSDActionKeyStore.RESULTS])
 });
 
 
