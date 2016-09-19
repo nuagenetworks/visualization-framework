@@ -10,7 +10,7 @@ import { Actions as DashboardActions, ActionKeyStore as DashboardActionKeyStore 
 
 import "./Dashboard.css"
 
-class DashboardView extends React.Component {
+export class DashboardView extends React.Component {
 
     componentWillMount() {
         this.props.setPageTitle("Dashboard");
@@ -23,10 +23,12 @@ class DashboardView extends React.Component {
                 <CircularProgress color="#eeeeee"/>
                 This dashboard component is loading the configuration file...
             </p>
+
         } else if (this.props.error) {
             return <div>{this.props.error}</div>
+
         } else if (this.props.configuration) {
-            let { id, title, data } = this.props.configuration.toJS();
+            let { title, data } = this.props.configuration.toJS();
             let { layout } = data;
 
             this.props.setPageTitle(title);
