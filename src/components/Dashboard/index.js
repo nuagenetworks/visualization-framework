@@ -29,13 +29,14 @@ class DashboardView extends React.Component {
 
                     if (this.props.configuration) {
                         let { id, title, data } = this.props.configuration.toJS();
-
                         let { layout } = data;
                         return (
                           <div>
                             <h3>#{id} - {title}</h3>
                             <ul>
-                              {JSON.stringify(layout)}
+                              {layout.map((item) => {
+                                return <li>{item.i}</li>
+                              })}
                             </ul>
                           </div>
                         );
