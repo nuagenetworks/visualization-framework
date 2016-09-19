@@ -15,35 +15,29 @@ class DashboardView extends React.Component {
     };
 
     render() {
-        return (
-            <div>
-                {(() => {
-                    if (this.props.fetching)
-                        return <p>
-                            <CircularProgress color="#eeeeee"/>
-                            This dashboard component is loading the configuration file...
-                        </p>
+        if (this.props.fetching) {
+            return <p>
+                <CircularProgress color="#eeeeee"/>
+                This dashboard component is loading the configuration file...
+            </p>
+        } else if (this.props.error) {
+            return <div>{this.props.error}</div>
+        } else if (this.props.configuration) {
+            let { id, title, data } = this.props.configuration.toJS();
+            let { layout } = data;
 
-                    if (this.props.error)
-                        return <div>{this.props.error}</div>
+            this.props.setPageTitle(title);
 
-                    if (this.props.configuration) {
-                        let { id, title, data } = this.props.configuration.toJS();
-                        let { layout } = data;
-                        return (
-                          <div>
-                            <h3>#{id} - {title}</h3>
-                            <ul>
-                              {layout.map((item) => {
-                                return <li>{item.i}</li>
-                              })}
-                            </ul>
-                          </div>
-                        );
-                    }
-                })()}
-            </div>
-        );
+            return (
+              <ul>
+                {layout.map((item) => {
+                  return <li>{item.i}</li>
+                })}
+              </ul>
+            );
+        } else {
+            return <div>Unhandled case</div>
+        }
     }
 }
 
