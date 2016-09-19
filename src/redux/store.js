@@ -5,8 +5,8 @@ import { createHistory } from "history";
 import thunkMiddleware from "redux-thunk";
 import createLogger from "redux-logger";
 
-import dashboardsReducer from "../utils/dashboards/redux/reducer";
-import elasticsearchReducer from "../utils/elasticsearch/redux/reducer";
+import dashboardsReducer from "../services/dashboards/redux/reducer";
+import elasticsearchReducer from "../services/elasticsearch/redux/reducer";
 import interfaceReducer from "../components/App/redux/reducer";
 import messageBoxReducer from "../components/MessageBox/redux/reducer";
 import VSDReducer from "../configs/nuage/redux/reducer"

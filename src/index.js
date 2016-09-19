@@ -5,7 +5,7 @@ import { Provider as ReduxProvider } from "react-redux";
 import "./index.css"
 import App from "./App";
 import store from "./redux/store";
-import { Actions as ElasticsearchActions } from "./utils/elasticsearch/redux/actions";
+import { Actions as ElasticsearchActions } from "./services/elasticsearch/redux/actions";
 import injectTapEventPlugin from "react-tap-event-plugin";
 
 injectTapEventPlugin();

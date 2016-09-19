@@ -6,7 +6,7 @@ import ReactGridLayout from "react-grid-layout";
 import AppBar from "material-ui/AppBar";
 
 import { Actions as AppActions } from "../App/redux/actions";
-import { Actions as DashboardActions, ActionKeyStore as DashboardActionKeyStore } from "../../utils/dashboards/redux/actions"
+import { Actions as DashboardActions, ActionKeyStore as DashboardActionKeyStore } from "../../services/dashboards/redux/actions"
 
 import "./Dashboard.css"
 
