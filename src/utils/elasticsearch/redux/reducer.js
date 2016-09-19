@@ -3,29 +3,29 @@ import { ActionTypes, ActionKeyStore } from './actions';
 
 let initialState = Map() // eslint-disable-line
                     // .set(,) // Usefull if we need to set some elastic search configuration information
-                    .set(ActionKeyStore.KEY_STORE_ALL_REQUESTS, Map()); // eslint-disable-line
+                    .set(ActionKeyStore.ALL_REQUESTS, Map()); // eslint-disable-line
 
 
 function willStartRequest(state, requestID) {
     // Initialize state structure
-    return state.setIn([ActionKeyStore.KEY_STORE_ALL_REQUESTS, requestID, ActionKeyStore.KEY_STORE_IS_FETCHING], false)
-                .setIn([ActionKeyStore.KEY_STORE_ALL_REQUESTS, requestID, ActionKeyStore.KEY_STORE_ERROR], null);
+    return state.setIn([ActionKeyStore.ALL_REQUESTS, requestID, ActionKeyStore.IS_FETCHING], false)
+                .setIn([ActionKeyStore.ALL_REQUESTS, requestID, ActionKeyStore.ERROR], null);
 }
 
 function didStartRequest(state, requestID) {
-    return state.setIn([ActionKeyStore.KEY_STORE_ALL_REQUESTS, requestID, ActionKeyStore.KEY_STORE_IS_FETCHING], true);
+    return state.setIn([ActionKeyStore.ALL_REQUESTS, requestID, ActionKeyStore.IS_FETCHING], true);
 }
 
 function didReceiveResponse(state, requestID, results) {
     return state
-      .setIn([ActionKeyStore.KEY_STORE_ALL_REQUESTS, requestID, ActionKeyStore.KEY_STORE_IS_FETCHING], false)
-      .setIn([ActionKeyStore.KEY_STORE_ALL_REQUESTS, requestID, ActionKeyStore.KEY_STORE_RESULTS], results);
+      .setIn([ActionKeyStore.ALL_REQUESTS, requestID, ActionKeyStore.IS_FETCHING], false)
+      .setIn([ActionKeyStore.ALL_REQUESTS, requestID, ActionKeyStore.RESULTS], results);
 }
 
 function didReceiveError(state, requestID, error) {
     return state
-        .setIn([ActionKeyStore.KEY_STORE_ALL_REQUESTS, requestID, ActionKeyStore.KEY_STORE_IS_FETCHING], false)
-        .setIn([ActionKeyStore.KEY_STORE_ALL_REQUESTS, requestID, ActionKeyStore.KEY_STORE_ERROR], error);
+        .setIn([ActionKeyStore.ALL_REQUESTS, requestID, ActionKeyStore.IS_FETCHING], false)
+        .setIn([ActionKeyStore.ALL_REQUESTS, requestID, ActionKeyStore.ERROR], error);
 }
 function elasticsearchReducer(state = initialState, action) {
 

@@ -20,7 +20,7 @@ class NavBarView extends React.Component {
 
 
 const mapStateToProps = (state) => ({
-    title: state.interface.get(ActionKeyStore.KEY_STORE_NAV_BAR_TITLE)
+    title: state.interface.get(ActionKeyStore.NAV_BAR_TITLE)
 });
 
 

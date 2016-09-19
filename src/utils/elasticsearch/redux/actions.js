@@ -8,10 +8,10 @@ export const ActionTypes = {
 };
 
 export const ActionKeyStore = {
-    KEY_STORE_ERROR: "error",
-    KEY_STORE_IS_FETCHING: "isFetching",
-    KEY_STORE_RESULTS: "results",
-    KEY_STORE_ALL_REQUESTS: "requests",
+    ERROR: "error",
+    IS_FETCHING: "isFetching",
+    RESULTS: "results",
+    ALL_REQUESTS: "requests",
 };
 
 export const Actions = {

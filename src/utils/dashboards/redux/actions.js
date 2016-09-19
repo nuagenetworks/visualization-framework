@@ -7,10 +7,10 @@ export const ActionTypes = {
 };
 
 export const ActionKeyStore = {
-    KEY_STORE_DASHBOARDS: "dashboards",
-    KEY_STORE_DATA: "data",
-    KEY_STORE_ERROR: "error",
-    KEY_STORE_IS_FETCHING: "isFetching",
+    DASHBOARDS: "dashboards",
+    DATA: "data",
+    ERROR: "error",
+    IS_FETCHING: "isFetching",
 };
 
 export const Actions = {

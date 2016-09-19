@@ -65,21 +65,21 @@ export class DashboardView extends React.Component {
 const mapStateToProps = (state, ownProps) => ({
 
     configuration: state.dashboards.getIn([
-        DashboardActionKeyStore.KEY_STORE_DASHBOARDS,
+        DashboardActionKeyStore.DASHBOARDS,
         ownProps.params.dashboardID,
-        DashboardActionKeyStore.KEY_STORE_DATA
+        DashboardActionKeyStore.DATA
     ]),
 
     fetching: state.dashboards.getIn([
-        DashboardActionKeyStore.KEY_STORE_DASHBOARDS,
+        DashboardActionKeyStore.DASHBOARDS,
         ownProps.params.dashboardID,
-        DashboardActionKeyStore.KEY_STORE_IS_FETCHING
+        DashboardActionKeyStore.IS_FETCHING
     ]),
 
     error: state.dashboards.getIn([
-        DashboardActionKeyStore.KEY_STORE_DASHBOARDS,
+        DashboardActionKeyStore.DASHBOARDS,
         ownProps.params.dashboardID,
-        DashboardActionKeyStore.KEY_STORE_ERROR
+        DashboardActionKeyStore.ERROR
     ])
 });
 

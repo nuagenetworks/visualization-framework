@@ -3,10 +3,10 @@ export const ActionTypes = {
 };
 
 export const ActionKeyStore = {
-    KEY_STORE_MESSAGE_BOX_OPENED: "opened",
-    KEY_STORE_MESSAGE_BOX_TITLE: "title",
-    KEY_STORE_MESSAGE_BOX_BODY: "body",
-    KEY_STORE_MESSAGE_BOX_BUTTONS: "buttons",
+    MESSAGE_BOX_OPENED: "opened",
+    MESSAGE_BOX_TITLE: "title",
+    MESSAGE_BOX_BODY: "body",
+    MESSAGE_BOX_BUTTONS: "buttons",
 };
 
 
