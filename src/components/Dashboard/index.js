@@ -1,11 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
-import { push } from "redux-router";
 
 import CircularProgress from 'material-ui/CircularProgress';
 
 import { Actions as AppActions } from "../App/redux/actions";
 import { Actions as DashboardActions, ActionKeyStore as DashboardActionKeyStore } from "../../utils/dashboards/redux/actions"
+
+import "./Dashboard.css"
 
 class DashboardView extends React.Component {
 
