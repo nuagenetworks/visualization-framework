@@ -20,7 +20,7 @@ class App extends Component {
             <AppContainer>
                 <ReduxRouter>
                     <Route path="/" component={PageContainer} />
-                    <Route path="/dashboards/:dashboardID" component={Dashboard} />
+                    <Route path="/dashboards/:id" component={Dashboard} />
                     <Route path="/zoom" component={Page2Container} />
                     <Route path="/enterprises/:enterpriseID" component={EnterpriseContainer} />
                     <Route path="/domains/:domainID" component={DomainContainer} />

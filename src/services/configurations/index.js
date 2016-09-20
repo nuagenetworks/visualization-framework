@@ -2,11 +2,11 @@ import "whatwg-fetch";
 import { checkStatus, parseJSON } from "../common";
 
 let config = {
-    path: "/src/configs/nuage/dashboards/",
+    path: "/src/configs/nuage/",
 }
 
-export const fetchConfiguration = function (identifier) {
-    let url = config.path + identifier + ".json";
+export const fetchConfiguration = function (id, configType) {
+    let url = config.path + configType + "/" + id + ".json";
     return fetch(url)
         .then(checkStatus)
         .then(parseJSON);

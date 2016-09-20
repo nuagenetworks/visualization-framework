@@ -6,7 +6,7 @@ import ReactGridLayout from "react-grid-layout";
 import AppBar from "material-ui/AppBar";
 
 import { Actions as AppActions } from "../App/redux/actions";
-import { Actions as DashboardActions, ActionKeyStore as DashboardActionKeyStore } from "../../services/dashboards/redux/actions"
+import { Actions as ConfigurationsActions, ActionKeyStore as ConfigurationsActionKeyStore } from "../../services/configurations/redux/actions"
 
 import "./Dashboard.css"
 import graph1 from "../../images/graph1.png"
@@ -19,7 +19,7 @@ export class DashboardView extends React.Component {
 
     componentWillMount() {
         this.props.setPageTitle("Dashboard");
-        this.props.fetchDashboardConfiguration(this.props.params.dashboardID);
+        this.props.fetchDashboardConfiguration(this.props.params.id);
     };
 
     getGraph(name) {
@@ -83,22 +83,22 @@ export class DashboardView extends React.Component {
 
 const mapStateToProps = (state, ownProps) => ({
 
-    configuration: state.dashboards.getIn([
-        DashboardActionKeyStore.DASHBOARDS,
-        ownProps.params.dashboardID,
-        DashboardActionKeyStore.DATA
+    configuration: state.configurations.getIn([
+        ConfigurationsActionKeyStore.DASHBOARDS,
+        ownProps.params.id,
+        ConfigurationsActionKeyStore.DATA
     ]),
 
-    fetching: state.dashboards.getIn([
-        DashboardActionKeyStore.DASHBOARDS,
-        ownProps.params.dashboardID,
-        DashboardActionKeyStore.IS_FETCHING
+    fetching: state.configurations.getIn([
+        ConfigurationsActionKeyStore.DASHBOARDS,
+        ownProps.params.id,
+        ConfigurationsActionKeyStore.IS_FETCHING
     ]),
 
-    error: state.dashboards.getIn([
-        DashboardActionKeyStore.DASHBOARDS,
-        ownProps.params.dashboardID,
-        DashboardActionKeyStore.ERROR
+    error: state.configurations.getIn([
+        ConfigurationsActionKeyStore.DASHBOARDS,
+        ownProps.params.id,
+        ConfigurationsActionKeyStore.ERROR
     ])
 });
 
@@ -107,8 +107,11 @@ const actionCreators = (dispatch) => ({
     setPageTitle: function(aTitle) {
         dispatch(AppActions.updateTitle(aTitle));
     },
-    fetchDashboardConfiguration: function(dashboardID) {
-        dispatch(DashboardActions.fetch(dashboardID));
+    fetchDashboardConfiguration: function(id) {
+        dispatch(ConfigurationsActions.fetch(
+            id,
+            ConfigurationsActionKeyStore.DASHBOARDS
+        ));
     }
  });
 

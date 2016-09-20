@@ -5,7 +5,7 @@ import { createHistory } from "history";
 import thunkMiddleware from "redux-thunk";
 import createLogger from "redux-logger";
 
-import dashboardsReducer from "../services/dashboards/redux/reducer";
+import configurationsReducer from "../services/configurations/redux/reducer";
 import elasticsearchReducer from "../services/elasticsearch/redux/reducer";
 import interfaceReducer from "../components/App/redux/reducer";
 import messageBoxReducer from "../components/MessageBox/redux/reducer";
@@ -15,7 +15,7 @@ import VSDReducer from "../configs/nuage/redux/reducer"
 const loggerMiddleware = createLogger();
 
 const appReducer = combineReducers({
-    dashboards: dashboardsReducer,
+    configurations: configurationsReducer,
     elasticsearch: elasticsearchReducer,
     interface: interfaceReducer,
     messageBox: messageBoxReducer,
