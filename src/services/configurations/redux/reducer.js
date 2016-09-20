@@ -26,13 +26,13 @@ function didReceiveError(state, dashboardID, error) {
 function dashboardsReducer(state = initialState, action) {
 
     switch (action.type) {
-        case ActionTypes.DASHBOARD_DID_START_REQUEST:
+        case ActionTypes.CONFIG_DID_START_REQUEST:
             return didStartRequest(state, action.dashboardID);
 
-        case ActionTypes.DASHBOARD_DID_RECEIVE_RESPONSE:
+        case ActionTypes.CONFIG_DID_RECEIVE_RESPONSE:
             return didReceiveResponse(state, action.dashboardID, action.data);
 
-        case ActionTypes.DASHBOARD_DID_RECEIVE_ERROR:
+        case ActionTypes.CONFIG_DID_RECEIVE_ERROR:
             return didReceiveError(state, action.dashboardID, action.error);
 
         default:

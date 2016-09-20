@@ -1,9 +1,9 @@
 import { fetchConfiguration } from '../index';
 
 export const ActionTypes = {
-    DASHBOARD_DID_START_REQUEST: "DASHBOARD_DID_START_REQUEST",
-    DASHBOARD_DID_RECEIVE_RESPONSE: "DASHBOARD_DID_RECEIVE_RESPONSE",
-    DASHBOARD_DID_RECEIVE_ERROR: "DASHBOARD_DID_RECEIVE_ERROR",
+    CONFIG_DID_START_REQUEST: "CONFIG_DID_START_REQUEST",
+    CONFIG_DID_RECEIVE_RESPONSE: "CONFIG_DID_RECEIVE_RESPONSE",
+    CONFIG_DID_RECEIVE_ERROR: "CONFIG_DID_RECEIVE_ERROR",
 };
 
 export const ActionKeyStore = {
@@ -31,20 +31,20 @@ export const Actions = {
     },
     didStartRequest: function(dashboardID) {
         return {
-            type: ActionTypes.DASHBOARD_DID_START_REQUEST,
+            type: ActionTypes.CONFIG_DID_START_REQUEST,
             dashboardID: dashboardID,
         };
     },
     didReceiveResponse: function(dashboardID, data) {
         return {
-            type: ActionTypes.DASHBOARD_DID_RECEIVE_RESPONSE,
+            type: ActionTypes.CONFIG_DID_RECEIVE_RESPONSE,
             dashboardID: dashboardID,
             data: data
         };
     },
     didReceiveError: function(dashboardID, error) {
         return {
-            type: ActionTypes.DASHBOARD_DID_RECEIVE_ERROR,
+            type: ActionTypes.CONFIG_DID_RECEIVE_ERROR,
             dashboardID: dashboardID,
             error: error
         };
