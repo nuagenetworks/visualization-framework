@@ -6,34 +6,34 @@ let initialState = Map() // eslint-disable-line
                     .set(ActionKeyStore.DASHBOARDS, Map()); // eslint-disable-line
 
 
-function didStartRequest(state, dashboardID) {
-    return state.setIn([ActionKeyStore.DASHBOARDS, dashboardID, ActionKeyStore.IS_FETCHING], true);
+function didStartRequest(state, id) {
+    return state.setIn([ActionKeyStore.DASHBOARDS, id, ActionKeyStore.IS_FETCHING], true);
 }
 
-function didReceiveResponse(state, dashboardID, data) {
+function didReceiveResponse(state, id, data) {
     return state
-      .setIn([ActionKeyStore.DASHBOARDS, dashboardID, ActionKeyStore.IS_FETCHING], false)
-      .setIn([ActionKeyStore.DASHBOARDS, dashboardID, ActionKeyStore.DATA], fromJS(data));
+      .setIn([ActionKeyStore.DASHBOARDS, id, ActionKeyStore.IS_FETCHING], false)
+      .setIn([ActionKeyStore.DASHBOARDS, id, ActionKeyStore.DATA], fromJS(data));
 }
 
-function didReceiveError(state, dashboardID, error) {
+function didReceiveError(state, id, error) {
     return state
-        .setIn([ActionKeyStore.DASHBOARDS, dashboardID, ActionKeyStore.IS_FETCHING], false)
-        .setIn([ActionKeyStore.DASHBOARDS, dashboardID, ActionKeyStore.DATA], fromJS([]))
-        .setIn([ActionKeyStore.DASHBOARDS, dashboardID, ActionKeyStore.ERROR], fromJS(error));
+        .setIn([ActionKeyStore.DASHBOARDS, id, ActionKeyStore.IS_FETCHING], false)
+        .setIn([ActionKeyStore.DASHBOARDS, id, ActionKeyStore.DATA], fromJS([]))
+        .setIn([ActionKeyStore.DASHBOARDS, id, ActionKeyStore.ERROR], fromJS(error));
 }
 
 function dashboardsReducer(state = initialState, action) {
 
     switch (action.type) {
         case ActionTypes.CONFIG_DID_START_REQUEST:
-            return didStartRequest(state, action.dashboardID);
+            return didStartRequest(state, action.id);
 
         case ActionTypes.CONFIG_DID_RECEIVE_RESPONSE:
-            return didReceiveResponse(state, action.dashboardID, action.data);
+            return didReceiveResponse(state, action.id, action.data);
 
         case ActionTypes.CONFIG_DID_RECEIVE_ERROR:
-            return didReceiveError(state, action.dashboardID, action.error);
+            return didReceiveError(state, action.id, action.error);
 
         default:
             return state;

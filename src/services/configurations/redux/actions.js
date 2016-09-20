@@ -14,38 +14,38 @@ export const ActionKeyStore = {
 };
 
 export const Actions = {
-    fetch: function (dashboardID) {
+    fetch: function (id) {
         return function (dispatch){
-            dispatch(Actions.didStartRequest(dashboardID));
+            dispatch(Actions.didStartRequest(id));
 
             // Important: It is essential for redux to return a promise in order
             // to test this method (See: http://redux.js.org/docs/recipes/WritingTests.html)
-            return fetchConfiguration(dashboardID)
+            return fetchConfiguration(id)
                 .then(function (data) {
-                    dispatch(Actions.didReceiveResponse(dashboardID, data));
+                    dispatch(Actions.didReceiveResponse(id, data));
                 })
                 .catch(function (error) {
-                    dispatch(Actions.didReceiveError(dashboardID, error.message));
+                    dispatch(Actions.didReceiveError(id, error.message));
                 });
         }
     },
-    didStartRequest: function(dashboardID) {
+    didStartRequest: function(id) {
         return {
             type: ActionTypes.CONFIG_DID_START_REQUEST,
-            dashboardID: dashboardID,
+            id: id,
         };
     },
-    didReceiveResponse: function(dashboardID, data) {
+    didReceiveResponse: function(id, data) {
         return {
             type: ActionTypes.CONFIG_DID_RECEIVE_RESPONSE,
-            dashboardID: dashboardID,
+            id: id,
             data: data
         };
     },
-    didReceiveError: function(dashboardID, error) {
+    didReceiveError: function(id, error) {
         return {
             type: ActionTypes.CONFIG_DID_RECEIVE_ERROR,
-            dashboardID: dashboardID,
+            id: id,
             error: error
         };
     },
