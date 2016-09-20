@@ -53,7 +53,7 @@ export const Actions = {
                     dispatch(Actions.didReceiveResponse(id, configType, data));
                 })
                 .catch(function (error) {
-                    dispatch(Actions.didReceiveError(id, error.message));
+                    dispatch(Actions.didReceiveError(id, configType, error.message));
                 });
         }
     },
@@ -72,10 +72,11 @@ export const Actions = {
             data: data
         };
     },
-    didReceiveError: function(id, error) {
+    didReceiveError: function(id, configType, error) {
         return {
             type: ActionTypes.CONFIG_DID_RECEIVE_ERROR,
             id: id,
+            configType: configType,
             error: error
         };
     },
