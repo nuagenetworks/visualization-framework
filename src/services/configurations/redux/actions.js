@@ -48,7 +48,7 @@ export const Actions = {
 
             // Important: It is essential for redux to return a promise in order
             // to test this method (See: http://redux.js.org/docs/recipes/WritingTests.html)
-            return fetchConfiguration(id)
+            return fetchConfiguration(id, configType)
                 .then(function (data) {
                     dispatch(Actions.didReceiveResponse(id, configType, data));
                 })
