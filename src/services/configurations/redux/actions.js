@@ -7,10 +7,21 @@ export const ActionTypes = {
 };
 
 export const ActionKeyStore = {
-    DASHBOARDS: "dashboards",
+
     DATA: "data",
     ERROR: "error",
     IS_FETCHING: "isFetching",
+
+    /*
+      The following keys correspond to the various
+      kinds of configurations that can be loaded.
+
+      They correspond to the directories from which
+      the configuration files will be fetched.
+    */
+    DASHBOARDS: "dashboards",
+    VISUALIZATIONS: "visualizations",
+    QUERIES: "queries"
 };
 
 export const Actions = {
