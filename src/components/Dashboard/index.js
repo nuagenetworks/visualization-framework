@@ -108,7 +108,10 @@ const actionCreators = (dispatch) => ({
         dispatch(AppActions.updateTitle(aTitle));
     },
     fetchDashboardConfiguration: function(id) {
-        dispatch(ConfigurationsActions.fetch(id));
+        dispatch(ConfigurationsActions.fetch(
+            id,
+            ConfigurationsActionKeyStore.DASHBOARDS
+        ));
     }
  });
 

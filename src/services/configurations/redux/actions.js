@@ -25,7 +25,24 @@ export const ActionKeyStore = {
 };
 
 export const Actions = {
-    fetch: function (id) {
+    
+    /*
+      This thunk action creator will fetch the specified configuration.
+      Arguments:
+       * id - The identifier of the configuration, corresponding to the file name.
+       * configType - Specifies what kind of configuration to fetch.
+         The value must be one of the following:
+
+            ActionKeyStore.DASHBOARDS
+            ActionKeyStore.VISUALIZATIONS
+            ActionKeyStore.QUERIES
+    */
+    fetch: function (id, configType) {
+
+        if(!configType){
+        //    throw new Error("configType argument must be specified.");
+        }
+
         return function (dispatch){
             dispatch(Actions.didStartRequest(id));
 
