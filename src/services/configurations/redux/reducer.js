@@ -6,8 +6,8 @@ let initialState = Map() // eslint-disable-line
                     .set(ActionKeyStore.DASHBOARDS, Map()); // eslint-disable-line
 
 
-function didStartRequest(state, id) {
-    return state.setIn([ActionKeyStore.DASHBOARDS, id, ActionKeyStore.IS_FETCHING], true);
+function didStartRequest(state, id, configType) {
+    return state.setIn([configType, id, ActionKeyStore.IS_FETCHING], true);
 }
 
 function didReceiveResponse(state, id, data) {
@@ -27,7 +27,7 @@ function configurationsReducer(state = initialState, action) {
 
     switch (action.type) {
         case ActionTypes.CONFIG_DID_START_REQUEST:
-            return didStartRequest(state, action.id);
+            return didStartRequest(state, action.id, action.configType);
 
         case ActionTypes.CONFIG_DID_RECEIVE_RESPONSE:
             return didReceiveResponse(state, action.id, action.data);

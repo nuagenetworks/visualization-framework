@@ -40,11 +40,11 @@ export const Actions = {
     fetch: function (id, configType) {
 
         if(!configType){
-        //    throw new Error("configType argument must be specified.");
+            throw new Error("configType argument must be specified.");
         }
 
         return function (dispatch){
-            dispatch(Actions.didStartRequest(id));
+            dispatch(Actions.didStartRequest(id, configType));
 
             // Important: It is essential for redux to return a promise in order
             // to test this method (See: http://redux.js.org/docs/recipes/WritingTests.html)
@@ -57,10 +57,11 @@ export const Actions = {
                 });
         }
     },
-    didStartRequest: function(id) {
+    didStartRequest: function(id, configType) {
         return {
             type: ActionTypes.CONFIG_DID_START_REQUEST,
             id: id,
+            configType: configType
         };
     },
     didReceiveResponse: function(id, data) {
