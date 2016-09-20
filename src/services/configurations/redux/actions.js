@@ -50,7 +50,7 @@ export const Actions = {
             // to test this method (See: http://redux.js.org/docs/recipes/WritingTests.html)
             return fetchConfiguration(id)
                 .then(function (data) {
-                    dispatch(Actions.didReceiveResponse(id, data));
+                    dispatch(Actions.didReceiveResponse(id, configType, data));
                 })
                 .catch(function (error) {
                     dispatch(Actions.didReceiveError(id, error.message));
@@ -64,10 +64,11 @@ export const Actions = {
             configType: configType
         };
     },
-    didReceiveResponse: function(id, data) {
+    didReceiveResponse: function(id, configType, data) {
         return {
             type: ActionTypes.CONFIG_DID_RECEIVE_RESPONSE,
             id: id,
+            configType: configType,
             data: data
         };
     },

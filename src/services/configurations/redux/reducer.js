@@ -12,10 +12,10 @@ function didStartRequest(state, id, configType) {
     return state.setIn([configType, id, ActionKeyStore.IS_FETCHING], true);
 }
 
-function didReceiveResponse(state, id, data) {
+function didReceiveResponse(state, id, configType, data) {
     return state
-      .setIn([ActionKeyStore.DASHBOARDS, id, ActionKeyStore.IS_FETCHING], false)
-      .setIn([ActionKeyStore.DASHBOARDS, id, ActionKeyStore.DATA], fromJS(data));
+      .setIn([configType, id, ActionKeyStore.IS_FETCHING], false)
+      .setIn([configType, id, ActionKeyStore.DATA], fromJS(data));
 }
 
 function didReceiveError(state, id, error) {
@@ -32,7 +32,7 @@ function configurationsReducer(state = initialState, action) {
             return didStartRequest(state, action.id, action.configType);
 
         case ActionTypes.CONFIG_DID_RECEIVE_RESPONSE:
-            return didReceiveResponse(state, action.id, action.data);
+            return didReceiveResponse(state, action.id, action.configType, action.data);
 
         case ActionTypes.CONFIG_DID_RECEIVE_ERROR:
             return didReceiveError(state, action.id, action.error);
