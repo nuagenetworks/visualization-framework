@@ -19,7 +19,7 @@ export class DashboardView extends React.Component {
 
     componentWillMount() {
         this.props.setPageTitle("Dashboard");
-        this.props.fetchDashboardConfiguration(this.props.params.dashboardID);
+        this.props.fetchDashboardConfiguration(this.props.params.id);
     };
 
     getGraph(name) {
@@ -85,19 +85,19 @@ const mapStateToProps = (state, ownProps) => ({
 
     configuration: state.configurations.getIn([
         ConfigurationsActionKeyStore.DASHBOARDS,
-        ownProps.params.dashboardID,
+        ownProps.params.id,
         ConfigurationsActionKeyStore.DATA
     ]),
 
     fetching: state.configurations.getIn([
         ConfigurationsActionKeyStore.DASHBOARDS,
-        ownProps.params.dashboardID,
+        ownProps.params.id,
         ConfigurationsActionKeyStore.IS_FETCHING
     ]),
 
     error: state.configurations.getIn([
         ConfigurationsActionKeyStore.DASHBOARDS,
-        ownProps.params.dashboardID,
+        ownProps.params.id,
         ConfigurationsActionKeyStore.ERROR
     ])
 });
@@ -107,8 +107,8 @@ const actionCreators = (dispatch) => ({
     setPageTitle: function(aTitle) {
         dispatch(AppActions.updateTitle(aTitle));
     },
-    fetchDashboardConfiguration: function(dashboardID) {
-        dispatch(ConfigurationsActions.fetch(dashboardID));
+    fetchDashboardConfiguration: function(id) {
+        dispatch(ConfigurationsActions.fetch(id));
     }
  });
 
