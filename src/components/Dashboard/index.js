@@ -6,7 +6,7 @@ import ReactGridLayout from "react-grid-layout";
 import AppBar from "material-ui/AppBar";
 
 import { Actions as AppActions } from "../App/redux/actions";
-import { Actions as DashboardActions, ActionKeyStore as DashboardActionKeyStore } from "../../services/dashboards/redux/actions"
+import { Actions as ConfigurationsActions, ActionKeyStore as ConfigurationsActionKeyStore } from "../../services/configurations/redux/actions"
 
 import "./Dashboard.css"
 import graph1 from "../../images/graph1.png"
@@ -83,22 +83,22 @@ export class DashboardView extends React.Component {
 
 const mapStateToProps = (state, ownProps) => ({
 
-    configuration: state.dashboards.getIn([
-        DashboardActionKeyStore.DASHBOARDS,
+    configuration: state.configurations.getIn([
+        ConfigurationsActionKeyStore.DASHBOARDS,
         ownProps.params.dashboardID,
-        DashboardActionKeyStore.DATA
+        ConfigurationsActionKeyStore.DATA
     ]),
 
-    fetching: state.dashboards.getIn([
-        DashboardActionKeyStore.DASHBOARDS,
+    fetching: state.configurations.getIn([
+        ConfigurationsActionKeyStore.DASHBOARDS,
         ownProps.params.dashboardID,
-        DashboardActionKeyStore.IS_FETCHING
+        ConfigurationsActionKeyStore.IS_FETCHING
     ]),
 
-    error: state.dashboards.getIn([
-        DashboardActionKeyStore.DASHBOARDS,
+    error: state.configurations.getIn([
+        ConfigurationsActionKeyStore.DASHBOARDS,
         ownProps.params.dashboardID,
-        DashboardActionKeyStore.ERROR
+        ConfigurationsActionKeyStore.ERROR
     ])
 });
 
@@ -108,7 +108,7 @@ const actionCreators = (dispatch) => ({
         dispatch(AppActions.updateTitle(aTitle));
     },
     fetchDashboardConfiguration: function(dashboardID) {
-        dispatch(DashboardActions.fetch(dashboardID));
+        dispatch(ConfigurationsActions.fetch(dashboardID));
     }
  });
 
