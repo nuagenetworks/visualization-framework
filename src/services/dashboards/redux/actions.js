@@ -7,10 +7,10 @@ export const ActionTypes = {
 };
 
 export const ActionKeyStore = {
-    KEY_STORE_DASHBOARDS: "dashboards",
-    KEY_STORE_DATA: "data",
-    KEY_STORE_ERROR: "error",
-    KEY_STORE_IS_FETCHING: "isFetching",
+    DASHBOARDS: "dashboards",
+    DATA: "data",
+    ERROR: "error",
+    IS_FETCHING: "isFetching",
 };
 
 export const Actions = {
@@ -18,7 +18,9 @@ export const Actions = {
         return function (dispatch){
             dispatch(Actions.didStartRequest(dashboardID));
 
-            fetchConfiguration(dashboardID)
+            // Important: It is essential for redux to return a promise in order
+            // to test this method (See: http://redux.js.org/docs/recipes/WritingTests.html)
+            return fetchConfiguration(dashboardID)
                 .then(function (data) {
                     dispatch(Actions.didReceiveResponse(dashboardID, data));
                 })

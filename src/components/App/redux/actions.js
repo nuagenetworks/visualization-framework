@@ -4,8 +4,8 @@ export const ActionTypes = {
 };
 
 export const ActionKeyStore = {
-    KEY_STORE_MAIN_MENU_OPENED: "mainMenuOpened",
-    KEY_STORE_NAV_BAR_TITLE: "title",
+    MAIN_MENU_OPENED: "mainMenuOpened",
+    NAV_BAR_TITLE: "title",
 };
 
 

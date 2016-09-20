@@ -38,10 +38,10 @@ MessageBoxView.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-    opened: state.messageBox.get(ActionKeyStore.KEY_STORE_MESSAGE_BOX_OPENED),
-    title: state.messageBox.get(ActionKeyStore.KEY_STORE_MESSAGE_BOX_TITLE),
-    body: state.messageBox.get(ActionKeyStore.KEY_STORE_MESSAGE_BOX_BODY),
-    buttons: state.messageBox.get(ActionKeyStore.KEY_STORE_MESSAGE_BOX_BUTTONS),
+    opened: state.messageBox.get(ActionKeyStore.MESSAGE_BOX_OPENED),
+    title: state.messageBox.get(ActionKeyStore.MESSAGE_BOX_TITLE),
+    body: state.messageBox.get(ActionKeyStore.MESSAGE_BOX_BODY),
+    buttons: state.messageBox.get(ActionKeyStore.MESSAGE_BOX_BUTTONS),
 });
 
 

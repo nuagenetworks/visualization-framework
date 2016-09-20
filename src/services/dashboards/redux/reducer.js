@@ -3,24 +3,24 @@ import { ActionTypes, ActionKeyStore } from './actions';
 
 let initialState = Map() // eslint-disable-line
                     // .set(,) // Usefull if we need to set some elastic search configuration information
-                    .set(ActionKeyStore.KEY_STORE_DASHBOARDS, Map()); // eslint-disable-line
+                    .set(ActionKeyStore.DASHBOARDS, Map()); // eslint-disable-line
 
 
 function didStartRequest(state, dashboardID) {
-    return state.setIn([ActionKeyStore.KEY_STORE_DASHBOARDS, dashboardID, ActionKeyStore.KEY_STORE_IS_FETCHING], true);
+    return state.setIn([ActionKeyStore.DASHBOARDS, dashboardID, ActionKeyStore.IS_FETCHING], true);
 }
 
 function didReceiveResponse(state, dashboardID, data) {
     return state
-      .setIn([ActionKeyStore.KEY_STORE_DASHBOARDS, dashboardID, ActionKeyStore.KEY_STORE_IS_FETCHING], false)
-      .setIn([ActionKeyStore.KEY_STORE_DASHBOARDS, dashboardID, ActionKeyStore.KEY_STORE_DATA], fromJS(data));
+      .setIn([ActionKeyStore.DASHBOARDS, dashboardID, ActionKeyStore.IS_FETCHING], false)
+      .setIn([ActionKeyStore.DASHBOARDS, dashboardID, ActionKeyStore.DATA], fromJS(data));
 }
 
 function didReceiveError(state, dashboardID, error) {
     return state
-        .setIn([ActionKeyStore.KEY_STORE_DASHBOARDS, dashboardID, ActionKeyStore.KEY_STORE_IS_FETCHING], false)
-        .setIn([ActionKeyStore.KEY_STORE_DASHBOARDS, dashboardID, ActionKeyStore.KEY_STORE_DATA], fromJS([]))
-        .setIn([ActionKeyStore.KEY_STORE_DASHBOARDS, dashboardID, ActionKeyStore.KEY_STORE_ERROR], fromJS(error));
+        .setIn([ActionKeyStore.DASHBOARDS, dashboardID, ActionKeyStore.IS_FETCHING], false)
+        .setIn([ActionKeyStore.DASHBOARDS, dashboardID, ActionKeyStore.DATA], fromJS([]))
+        .setIn([ActionKeyStore.DASHBOARDS, dashboardID, ActionKeyStore.ERROR], fromJS(error));
 }
 
 function dashboardsReducer(state = initialState, action) {

@@ -7,7 +7,7 @@ import Subheader from "material-ui/Subheader";
 import { List, ListItem } from "material-ui/List";
 
 import { Actions as ComponentActions, ActionKeyStore as ComponentActionKeyStore } from "./redux/actions";
-import { ActionKeyStore as ElasticsearchActionKeyStore } from "../../utils/elasticsearch/redux/actions";
+import { ActionKeyStore as ElasticsearchActionKeyStore } from "../../services/elasticsearch/redux/actions";
 import { theme } from "../../theme";
 
 var style = {
@@ -39,7 +39,7 @@ class MainMenuView extends React.Component {
             <Drawer open={this.props.open} docked={false} onRequestChange={this.props.onRequestChange}>
                 <div style={style.header}>
                     <p>Visualization Framework</p>
-                    <img src="favicon.ico" alt="icon" role="presentation" width="10%" height="10%" />
+                    <img src="/src/favicon.ico" alt="icon" role="presentation" width="10%" height="10%" />
                 </div>
 
                 <Subheader style={style.subHeader}>General</Subheader>
@@ -110,8 +110,8 @@ MainMenuView.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-    open: state.interface.get(ComponentActionKeyStore.KEY_STORE_MAIN_MENU_OPENED),
-    domains: state.elasticsearch.getIn([ElasticsearchActionKeyStore.KEY_STORE_ALL_REQUESTS, 'temporaryID', ElasticsearchActionKeyStore.KEY_STORE_RESULTS]) || []
+    open: state.interface.get(ComponentActionKeyStore.MAIN_MENU_OPENED),
+    domains: state.elasticsearch.getIn([ElasticsearchActionKeyStore.REQUESTS, 'temporaryID', ElasticsearchActionKeyStore.RESULTS]) || []
 });
 
 const actionCreators = (dispatch) => ({

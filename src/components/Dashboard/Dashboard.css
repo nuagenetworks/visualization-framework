@@ -1,8 +1,8 @@
-img {
-    pointer-events: none;
-}
-
 .react-grid-item.react-grid-placeholder {
     background: #83a8cd;
     opacity: 0.1;
+}
+
+img {
+    pointer-events: none;
 }

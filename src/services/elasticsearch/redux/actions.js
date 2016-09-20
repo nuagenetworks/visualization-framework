@@ -1,17 +1,16 @@
 import { search } from '../index';
 
 export const ActionTypes = {
-    ES_WILL_START_REQUEST: "ES_WILL_START_REQUEST",
     ES_DID_START_REQUEST: "ES_DID_START_REQUEST",
     ES_DID_RECEIVE_RESPONSE: "ES_DID_RECEIVE_RESPONSE",
     ES_DID_RECEIVE_ERROR: "ES_DID_RECEIVE_ERROR",
 };
 
 export const ActionKeyStore = {
-    KEY_STORE_ERROR: "error",
-    KEY_STORE_IS_FETCHING: "isFetching",
-    KEY_STORE_RESULTS: "results",
-    KEY_STORE_ALL_REQUESTS: "requests",
+    ERROR: "error",
+    IS_FETCHING: "isFetching",
+    RESULTS: "results",
+    REQUESTS: "requests",
 };
 
 export const Actions = {
@@ -21,7 +20,6 @@ export const Actions = {
     fetch: function () {
         return function (dispatch){
             var requestID = 'temporaryID'
-            dispatch(Actions.willStartRequest(requestID));
             dispatch(Actions.didStartRequest(requestID));
 
             search({
@@ -33,17 +31,10 @@ export const Actions = {
 
             }, function (error) {
                 dispatch(Actions.didReceiveError(requestID, error));
-                dispatch(Actions.didReceiveResponse(requestID, []));
             });
         }
     },
 
-    willStartRequest: function(requestID) {
-        return {
-            type: ActionTypes.ES_WILL_START_REQUEST,
-            requestID: requestID,
-        };
-    },
     didStartRequest: function(requestID) {
         return {
             type: ActionTypes.ES_DID_START_REQUEST,

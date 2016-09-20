@@ -1,19 +1,39 @@
 import React from "react";
 import { connect } from "react-redux";
-import { push } from "redux-router";
 
 import CircularProgress from "material-ui/CircularProgress";
 import ReactGridLayout from "react-grid-layout";
 import AppBar from "material-ui/AppBar";
 
 import { Actions as AppActions } from "../App/redux/actions";
-import { Actions as DashboardActions, ActionKeyStore as DashboardActionKeyStore } from "../../utils/dashboards/redux/actions"
+import { Actions as DashboardActions, ActionKeyStore as DashboardActionKeyStore } from "../../services/dashboards/redux/actions"
 
-class DashboardView extends React.Component {
+import "./Dashboard.css"
+import graph1 from "../../images/graph1.png"
+import graph2 from "../../images/graph2.png"
+import graph3 from "../../images/graph3.png"
+import graph4 from "../../images/graph4.png"
+
+
+export class DashboardView extends React.Component {
 
     componentWillMount() {
         this.props.setPageTitle("Dashboard");
         this.props.fetchDashboardConfiguration(this.props.params.dashboardID);
+    };
+
+    getGraph(name) {
+        switch(name) {
+            case "graph1":
+                return graph1;
+            case "graph2":
+                return graph2;
+            case "graph3":
+                return graph3;
+            case "graph4":
+            default:
+                return graph4;
+        }
     };
 
     render() {
@@ -22,10 +42,12 @@ class DashboardView extends React.Component {
                 <CircularProgress color="#eeeeee"/>
                 This dashboard component is loading the configuration file...
             </p>
+
         } else if (this.props.error) {
             return <div>{this.props.error}</div>
+
         } else if (this.props.configuration) {
-            let { id, title, data } = this.props.configuration.toJS();
+            let { title, data } = this.props.configuration.toJS();
             let { layout } = data;
 
             this.props.setPageTitle(title);
@@ -45,7 +67,7 @@ class DashboardView extends React.Component {
                                 showMenuIconButton={false}
                                 />
                             <div>
-                                <img src={`/static/media/${item.i}.png`} alt={item.title} width="100%" height="100%" />
+                                <img src={this.getGraph(item.i)} alt={item.title} width="100%" height="100%" />
                             </div>
                             {item.i}
                         </div>
@@ -62,21 +84,21 @@ class DashboardView extends React.Component {
 const mapStateToProps = (state, ownProps) => ({
 
     configuration: state.dashboards.getIn([
-        DashboardActionKeyStore.KEY_STORE_DASHBOARDS,
+        DashboardActionKeyStore.DASHBOARDS,
         ownProps.params.dashboardID,
-        DashboardActionKeyStore.KEY_STORE_DATA
+        DashboardActionKeyStore.DATA
     ]),
 
     fetching: state.dashboards.getIn([
-        DashboardActionKeyStore.KEY_STORE_DASHBOARDS,
+        DashboardActionKeyStore.DASHBOARDS,
         ownProps.params.dashboardID,
-        DashboardActionKeyStore.KEY_STORE_IS_FETCHING
+        DashboardActionKeyStore.IS_FETCHING
     ]),
 
     error: state.dashboards.getIn([
-        DashboardActionKeyStore.KEY_STORE_DASHBOARDS,
+        DashboardActionKeyStore.DASHBOARDS,
         ownProps.params.dashboardID,
-        DashboardActionKeyStore.KEY_STORE_ERROR
+        DashboardActionKeyStore.ERROR
     ])
 });
 
