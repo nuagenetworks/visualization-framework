@@ -23,7 +23,7 @@ function didReceiveError(state, id, error) {
         .setIn([ActionKeyStore.DASHBOARDS, id, ActionKeyStore.ERROR], fromJS(error));
 }
 
-function dashboardsReducer(state = initialState, action) {
+function configurationsReducer(state = initialState, action) {
 
     switch (action.type) {
         case ActionTypes.CONFIG_DID_START_REQUEST:
@@ -40,4 +40,4 @@ function dashboardsReducer(state = initialState, action) {
     }
 };
 
-export default dashboardsReducer;
+export default configurationsReducer;
