@@ -3,7 +3,9 @@ import { ActionTypes, ActionKeyStore } from './actions';
 
 let initialState = Map() // eslint-disable-line
                     // .set(,) // Usefull if we need to set some elastic search configuration information
-                    .set(ActionKeyStore.DASHBOARDS, Map()); // eslint-disable-line
+                    .set(ActionKeyStore.DASHBOARDS, Map()) // eslint-disable-line
+                    .set(ActionKeyStore.VISUALIZATIONS, Map()) // eslint-disable-line
+                    .set(ActionKeyStore.QUERIES, Map()); // eslint-disable-line
 
 
 function didStartRequest(state, id, configType) {
