@@ -5,6 +5,8 @@ import CircularProgress from "material-ui/CircularProgress";
 import ReactGridLayout from "react-grid-layout";
 import AppBar from "material-ui/AppBar";
 
+import Visualization from "../Visualization";
+
 import { Actions as AppActions } from "../App/redux/actions";
 import { Actions as ConfigurationsActions, ActionKeyStore as ConfigurationsActionKeyStore } from "../../services/configurations/redux/actions"
 
@@ -61,16 +63,20 @@ export class DashboardView extends React.Component {
                     width={1200}
                     >
                     {layout.map((item) => {
-                        return <div key={item.i}>
-                            <AppBar
-                                title={item.title}
-                                showMenuIconButton={false}
-                                />
-                            <div>
-                                <img src={this.getGraph(item.i)} alt={item.title} width="100%" height="100%" />
+                        return (
+                            <div key={item.i}>
+                                <Visualization />
                             </div>
-                            {item.i}
-                        </div>
+                        );
+                        //    <AppBar
+                        //        title={item.title}
+                        //        showMenuIconButton={false}
+                        //        />
+                        //    <div>
+                        //        <img src={this.getGraph(item.i)} alt={item.title} width="100%" height="100%" />
+                        //    </div>
+                        //    {item.i}
+                        //</div>
                     })}
                 </ReactGridLayout>
             );

@@ -7,7 +7,7 @@ import { Actions } from "./redux/actions";
 class VisualizationView extends React.Component {
 
     componentWillMount() {
-        this.props.setPageTitle("Visualization");
+        //this.props.setPageTitle("Visualization");
     };
 
     render() {
