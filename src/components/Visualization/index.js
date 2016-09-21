@@ -47,11 +47,11 @@ class VisualizationView extends React.Component {
     };
 
     render() {
-        let { id } = this.props;
+        let { id, title } = this.props;
         return (
             <div style={style.card}>
                 <AppBar
-                    title={id}
+                    title={title}
                     showMenuIconButton={false}
                     style={style.navBar}
                     />
@@ -63,20 +63,14 @@ class VisualizationView extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    //configuration = state.configurations.getIn([
-    //    ConfigurationsActionKeyStore.VISUALIZATIONS,
-    //    ownProps.params.id,
-    //    ConfigurationsActionKeyStore.DATA
-    //]);
-    console.log(JSON.stringify(state.configurations.getIn([
+const mapStateToProps = (state, ownProps) => ({
+    title: state.configurations.getIn([
         ConfigurationsActionKeyStore.VISUALIZATIONS,
-        //ownProps.params.id,
-     //   ConfigurationsActionKeyStore.DATA
-    ]), null, 2));
-
-    return {};
-};
+        ownProps.id,
+        ConfigurationsActionKeyStore.DATA,
+        "title"
+    ])
+});
 
 
 const actionCreators = (dispatch) => ({
