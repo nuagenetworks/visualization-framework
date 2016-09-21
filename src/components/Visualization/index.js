@@ -74,6 +74,7 @@ const mapStateToProps = (state) => {
         //ownProps.params.id,
      //   ConfigurationsActionKeyStore.DATA
     ]), null, 2));
+
     return {};
 };
 
