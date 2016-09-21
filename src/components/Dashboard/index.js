@@ -41,9 +41,9 @@ export class DashboardView extends React.Component {
                     rowHeight={10}
                     width={1200}
                     >
-                    {visualizations.map(({i}) => 
-                        <div key={i}>
-                            <Visualization id={i} />
+                    {visualizations.map((visualization) => 
+                        <div key={visualization.i}>
+                            <Visualization id={visualization.i} />
                         </div>
                     )}
                 </ReactGridLayout>
