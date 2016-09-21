@@ -43,6 +43,9 @@ function getGraph(name) {
 class VisualizationView extends React.Component {
 
     componentWillMount() {
+        // Not setting the title here because this component
+        // may be either instantiated within a dashboard
+        // OR in an individual visualization page.
         //this.props.setPageTitle("Visualization");
     };
 
