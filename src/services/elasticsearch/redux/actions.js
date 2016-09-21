@@ -31,7 +31,7 @@ export const ActionKeyStore = {
         enterpriseName: "my-company-name"
     }
 */
-const computeQuery = function (id, configuration, context) {
+export const computeQuery = function (id, configuration, context) {
     let query = configuration;
 
     if (!query.aggs)
@@ -42,13 +42,13 @@ const computeQuery = function (id, configuration, context) {
     if (!aggsKeys.length)
         return query
 
-    let key = aggsKeys[0],
-        filters = query.aggs[key].filters.filters;
+    let key = aggsKeys[0];
 
-    if (!filters)
+    if (!("filters" in query.aggs[key]) || !("filters" in query.aggs[key].filters))
         return query;
 
-    let filterKey, contextKey;
+    let filters = query.aggs[key].filters.filters,
+        filterKey, contextKey;
 
     for (filterKey in filters) {
         if (filters.hasOwnProperty(filterKey)) {
