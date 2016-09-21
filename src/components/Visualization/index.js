@@ -11,6 +11,18 @@ import graph2 from "../../images/graph2.png"
 import graph3 from "../../images/graph3.png"
 import graph4 from "../../images/graph4.png"
 
+import {theme} from "../../theme"
+
+const style = {
+    navBar: {
+        background: theme.palette.primary2Color,
+    },
+    card: {
+        border: theme.palette.thinBorder + theme.palette.primary2Color,
+        borderRadius: theme.palette.smallBorderRadius,
+    }
+};
+
 function getGraph(name) {
     switch(name) {
         case "graph1":
@@ -35,15 +47,15 @@ class VisualizationView extends React.Component {
     render() {
         let { id } = this.props;
         return (
-            <div>
+            <div style={style.card}>
                 <AppBar
                     title={id}
                     showMenuIconButton={false}
+                    style={style.navBar}
                     />
                 <div>
                     <img src={getGraph(id)} alt={id} width="100%" height="100%" />
                 </div>
-                {id}
             </div>
         );
     }
