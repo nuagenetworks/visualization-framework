@@ -6,6 +6,8 @@ import AppBar from "material-ui/AppBar";
 
 import { Actions } from "./redux/actions";
 
+import { ActionKeyStore as ConfigurationsActionKeyStore } from "../../services/configurations/redux/actions";
+
 import graph1 from "../../images/graph1.png"
 import graph2 from "../../images/graph2.png"
 import graph3 from "../../images/graph3.png"
@@ -61,9 +63,19 @@ class VisualizationView extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-
-});
+const mapStateToProps = (state) => {
+    //configuration = state.configurations.getIn([
+    //    ConfigurationsActionKeyStore.VISUALIZATIONS,
+    //    ownProps.params.id,
+    //    ConfigurationsActionKeyStore.DATA
+    //]);
+    console.log(JSON.stringify(state.configurations.getIn([
+        ConfigurationsActionKeyStore.VISUALIZATIONS,
+        //ownProps.params.id,
+     //   ConfigurationsActionKeyStore.DATA
+    ]), null, 2));
+    return {};
+};
 
 
 const actionCreators = (dispatch) => ({
