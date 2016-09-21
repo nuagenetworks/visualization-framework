@@ -29,23 +29,33 @@ export class DashboardView extends React.Component {
             return <div>{this.props.error}</div>
 
         } else if (this.props.configuration) {
-            let { title, visualizations } = this.props.configuration.toJS();
+            const { title, visualizations } = this.props.configuration.toJS();
 
             this.props.setPageTitle(title);
+
+            // Expose each visualization id as the property "i",
+            // which is required by the ReactGridLayout "layout" prop.
+            const layout = visualizations.map((visualization) => {
+              return Object.assign({}, visualization, {
+                i: visualization.id
+              });
+            });
 
             return (
                 <ReactGridLayout
                     className="layout"
-                    layout={visualizations}
+                    layout={layout}
                     cols={12}
                     rowHeight={10}
                     width={1200}
                     >
-                    {visualizations.map(({i}) => 
-                        <div key={i}>
-                            <Visualization id={i} />
-                        </div>
-                    )}
+                    {
+                        visualizations.map((visualization) => 
+                            <div key={visualization.id}>
+                                <Visualization id={visualization.id} />
+                            </div>
+                        )
+                    }
                 </ReactGridLayout>
             );
         } else {
