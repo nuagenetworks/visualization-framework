@@ -11,7 +11,6 @@ import { getRequestID } from "../../configs/nuage/vsd";
 class DomainContainerView extends React.Component {
 
     componentWillMount() {
-        this.props.setUserToken(this.props.location.query.token);
         this.props.setPageTitle("Enterprise ");
 
         var enterpriseID = this.props.params.enterpriseID;
@@ -21,8 +20,6 @@ class DomainContainerView extends React.Component {
     };
 
     render() {
-
-
         return (
             <div>
                 <h1>List of domains of enterprise {this.props.enterprises ? this.props.enterprises[0].name : "loading"}</h1>
@@ -44,11 +41,8 @@ const mapStateToProps = (state, ownProps) => ({
 
 
 const actionCreators = (dispatch) => ({
-    setUserToken: function(aToken) {
-        dispatch(VSDActions.setUserToken(aToken));
-    },
-    setPageTitle: function(aTitle) {
-        dispatch(AppActions.updateTitle(aTitle));
+    setPageTitle: function(title) {
+        dispatch(AppActions.updateTitle(title));
     },
     showMessageBox: function(title, body) {
         dispatch(MessageBoxActions.toggleMessageBox(true, title, body));

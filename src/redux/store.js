@@ -11,6 +11,8 @@ import interfaceReducer from "../components/App/redux/reducer";
 import messageBoxReducer from "../components/MessageBox/redux/reducer";
 import VSDReducer from "../configs/nuage/redux/reducer"
 
+import { Actions as VSDActions, ActionKeyStore as VSDActionKeyStore} from "../configs/nuage/redux/actions"
+
 
 const loggerMiddleware = createLogger();
 
@@ -36,5 +38,11 @@ const createStoreWithRouterAndMiddleware = compose(
 )(createStore);
 
 let store = createStoreWithRouterAndMiddleware(rootReducer);
+
+store.subscribe(function() {
+    const state = store.getState();
+    if (state.router.location.query.token && state.router.location.query.token !== state.VSD.get(VSDActionKeyStore.TOKEN))
+        store.dispatch(VSDActions.setSettings(store.getState().router.location.query.token, store.getState().router.location.query.api))
+});
 
 export default store;
