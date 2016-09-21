@@ -20,13 +20,17 @@ export class DashboardView extends React.Component {
 
     render() {
         if (this.props.fetching) {
-            return <p>
-                <CircularProgress color="#eeeeee"/>
-                This dashboard component is loading the configuration file...
-            </p>
+            return (
+                <div>
+                    <CircularProgress color="#eeeeee"/>
+                    This dashboard component is loading the configuration file...
+                </div>
+            );
 
         } else if (this.props.error) {
-            return <div>{this.props.error}</div>
+            return (
+                <div>{this.props.error}</div>
+            );
 
         } else if (this.props.configuration) {
             let { title, visualizations } = this.props.configuration.toJS();
@@ -41,7 +45,7 @@ export class DashboardView extends React.Component {
                     rowHeight={10}
                     width={1200}
                     >
-                    {visualizations.map(({i}) => 
+                    {visualizations.map(({i}) =>
                         <div key={i}>
                             <Visualization id={i} />
                         </div>
