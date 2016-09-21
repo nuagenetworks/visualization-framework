@@ -60,7 +60,7 @@ export const Actions = {
                             // fetch all visualization configurations
                             Promise.all(
                                 configuration[ActionKeyStore.VISUALIZATIONS].map((visualization) => {
-                                    return dispatch(Actions.fetch(visualization.i, ActionKeyStore.VISUALIZATIONS, context));
+                                    return dispatch(Actions.fetch(visualization.id, ActionKeyStore.VISUALIZATIONS, context));
                                 })
                             )
                             .then(function () {
