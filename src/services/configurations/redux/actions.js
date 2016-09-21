@@ -25,7 +25,7 @@ export const ActionKeyStore = {
 };
 
 export const Actions = {
-    
+
     /*
       This thunk action creator will fetch the specified configuration.
       Arguments:
@@ -43,14 +43,53 @@ export const Actions = {
             throw new Error("configType argument must be specified.");
         }
 
-        return function (dispatch){
+        return function (dispatch) {
             dispatch(Actions.didStartRequest(id, configType));
 
             // Important: It is essential for redux to return a promise in order
             // to test this method (See: http://redux.js.org/docs/recipes/WritingTests.html)
             return fetchConfiguration(id, configType)
-                .then(function (data) {
-                    dispatch(Actions.didReceiveResponse(id, configType, data));
+                .then(function (configuration) {
+
+                    switch (configType) {
+                        case ActionKeyStore.DASHBOARDS:
+                            // fetch all visualization configurations
+                            Promise.all(
+                                configuration.visualizations.map((visualizationID) => {
+                                    return dispatch(Actions.fetch(visualizationID, ActionKeyStore.VISUALIZATIONS));
+                                })
+                            )
+                            .then(function () {
+                                dispatch(Actions.didReceiveResponse(id, configType, configuration));
+
+                            })
+                            .catch(function (error) {
+                                dispatch(Actions.didReceiveError(id, configType, error.message));
+
+                            });
+                            break;
+
+                        case ActionKeyStore.VISUALIZATIONS:
+                            // fetch query of the visualization
+                            return dispatch(Actions.fetch(configuration.query, ActionKeyStore.QUERIES))
+                                   .then(function () {
+                                       dispatch(Actions.didReceiveResponse(id, configType, configuration));
+
+                                   })
+                                   .catch(function (error) {
+                                       dispatch(Actions.didReceiveError(id, configType, error.message));
+
+                                   });
+
+                        case ActionKeyStore.QUERIES:
+                            // Note: Should we make the elastic search query here ?
+                            dispatch(Actions.didReceiveResponse(id, configType, configuration));
+                            break;
+
+                        default:
+                            // Should not happen, do nothing for now.
+                            throw new Error("Uknown configType " + configType + " should never happen.");
+                    }
                 })
                 .catch(function (error) {
                     dispatch(Actions.didReceiveError(id, configType, error.message));
