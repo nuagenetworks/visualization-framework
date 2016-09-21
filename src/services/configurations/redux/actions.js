@@ -55,8 +55,8 @@ export const Actions = {
                         case ActionKeyStore.DASHBOARDS:
                             // fetch all visualization configurations
                             Promise.all(
-                                configuration.visualizations.map((visualizationID) => {
-                                    return dispatch(Actions.fetch(visualizationID, ActionKeyStore.VISUALIZATIONS));
+                                configuration[ActionKeyStore.VISUALIZATIONS].map((visualization) => {
+                                    return dispatch(Actions.fetch(visualization.i, ActionKeyStore.VISUALIZATIONS));
                                 })
                             )
                             .then(function () {
