@@ -8,7 +8,7 @@ import { Actions as VSDActions, ActionKeyStore as VSDActionKeyStore } from "../.
 import { getRequestID } from "../../configs/nuage/vsd";
 
 
-class DomainContainerView extends React.Component {
+class EnterpriseContainerView extends React.Component {
 
     componentWillMount() {
         this.props.setPageTitle("Enterprise ");
@@ -47,13 +47,13 @@ const actionCreators = (dispatch) => ({
     showMessageBox: function(title, body) {
         dispatch(MessageBoxActions.toggleMessageBox(true, title, body));
     },
-    fetchDomains: function(enterpriseID) {
-        dispatch(VSDActions.fetch("enterprises", enterpriseID, "domains"));
-    },
-    fetchEnterprise: function(enterpriseID) {
+    fetchEnterprise: function (enterpriseID) {
         dispatch(VSDActions.fetch("enterprises", enterpriseID));
+    },
+    fetchDomains: function (enterpriseID) {
+        dispatch(VSDActions.fetch("enterprises", enterpriseID, "domains"));
     }
  });
 
 
-export default connect(mapStateToProps, actionCreators)(DomainContainerView);
+export default connect(mapStateToProps, actionCreators)(EnterpriseContainerView);

@@ -6,6 +6,9 @@ import MessageBox from "../MessageBox";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { theme } from "../../theme";
 
+import { ActionKeyStore as VSDActionKeyStore } from "../../configs/nuage/redux/actions";
+import { getRequestID } from "../../configs/nuage/vsd";
+
 let style = {
     container: {
         margin: "20px",
@@ -21,6 +24,7 @@ class AppContainerView extends React.Component {
                 <div>
                     <NavBar />
                     <MessageBox />
+                    {this.props.licenses ? this.props.licenses : "No License"}
                     <div style={style.container}>
                         {this.props.children}
                     </div>
@@ -32,11 +36,11 @@ class AppContainerView extends React.Component {
 
 
 const mapStateToProps = (state) => ({
+    licenses: state.VSD.getIn([VSDActionKeyStore.REQUESTS, getRequestID("licenses"), VSDActionKeyStore.RESULTS]),
 });
 
 
 const actionCreators = (dispatch) => ({
-
  });
 
 

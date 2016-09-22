@@ -63,7 +63,7 @@ class MainMenuView extends React.Component {
                         initiallyOpen={true}
                         primaryTogglesNestedList={false}
                         style={style.listItem}
-                        onTouchTap={() => {this.props.goTo("/enterprises/5446b9fd-b196-4afe-9a2f-1d2739dd8528")}}
+                        onTouchTap={() => {this.props.goTo("/enterprises/f0d5d98c-3f6b-469d-90bf-15bb9d4f0517")}}
                         nestedItems={[
                             // warning.js:36 Warning: Unknown prop `nestedLevel` on <div> tag. Remove this prop from the element
                             // See https://github.com/callemall/material-ui/issues/4602
