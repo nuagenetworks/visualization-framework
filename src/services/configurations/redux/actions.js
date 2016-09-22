@@ -1,4 +1,7 @@
-import { fetchConfiguration } from '../index';
+import { fetchConfiguration } from "../index";
+
+import { Actions as ElasticSearchActions } from "../../elasticsearch/redux/actions"
+
 
 export const ActionTypes = {
     CONFIG_DID_START_REQUEST: "CONFIG_DID_START_REQUEST",
@@ -36,8 +39,9 @@ export const Actions = {
             ActionKeyStore.DASHBOARDS
             ActionKeyStore.VISUALIZATIONS
             ActionKeyStore.QUERIES
+        * context - Object that specifies the context of the query
     */
-    fetch: function (id, configType) {
+    fetch: function (id, configType, context) {
 
         if(!configType){
             throw new Error("configType argument must be specified.");
@@ -56,7 +60,7 @@ export const Actions = {
                             // fetch all visualization configurations
                             Promise.all(
                                 configuration[ActionKeyStore.VISUALIZATIONS].map((visualization) => {
-                                    return dispatch(Actions.fetch(visualization.id, ActionKeyStore.VISUALIZATIONS));
+                                    return dispatch(Actions.fetch(visualization.id, ActionKeyStore.VISUALIZATIONS, context));
                                 })
                             )
                             .then(function () {
@@ -71,7 +75,7 @@ export const Actions = {
 
                         case ActionKeyStore.VISUALIZATIONS:
                             // fetch query of the visualization
-                            return dispatch(Actions.fetch(configuration.query, ActionKeyStore.QUERIES))
+                            return dispatch(Actions.fetch(configuration.query, ActionKeyStore.QUERIES, context))
                                    .then(function () {
                                        dispatch(Actions.didReceiveResponse(id, configType, configuration));
 
@@ -83,6 +87,7 @@ export const Actions = {
 
                         case ActionKeyStore.QUERIES:
                             // Note: Should we make the elastic search query here ?
+                            dispatch(ElasticSearchActions.fetch(id, configuration, context));
                             dispatch(Actions.didReceiveResponse(id, configType, configuration));
                             break;
 

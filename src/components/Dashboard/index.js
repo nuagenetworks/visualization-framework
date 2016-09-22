@@ -15,18 +15,22 @@ export class DashboardView extends React.Component {
 
     componentWillMount() {
         this.props.setPageTitle("Dashboard");
-        this.props.fetchDashboardConfiguration(this.props.params.id);
+        this.props.fetchDashboardConfiguration(this.props.params.id, {Application: "My Application"});
     };
 
     render() {
         if (this.props.fetching) {
-            return <p>
-                <CircularProgress color="#eeeeee"/>
-                This dashboard component is loading the configuration file...
-            </p>
+            return (
+                <div>
+                    <CircularProgress color="#eeeeee"/>
+                    This dashboard component is loading the configuration file...
+                </div>
+            );
 
         } else if (this.props.error) {
-            return <div>{this.props.error}</div>
+            return (
+                <div>{this.props.error}</div>
+            );
 
         } else if (this.props.configuration) {
             const { title, visualizations } = this.props.configuration.toJS();
@@ -50,7 +54,7 @@ export class DashboardView extends React.Component {
                     width={1200}
                     >
                     {
-                        visualizations.map((visualization) => 
+                        visualizations.map((visualization) =>
                             <div key={visualization.id}>
                                 <Visualization id={visualization.id} />
                             </div>
@@ -91,10 +95,11 @@ const actionCreators = (dispatch) => ({
     setPageTitle: function(aTitle) {
         dispatch(AppActions.updateTitle(aTitle));
     },
-    fetchDashboardConfiguration: function(id) {
+    fetchDashboardConfiguration: function(id, context) {
         dispatch(ConfigurationsActions.fetch(
             id,
-            ConfigurationsActionKeyStore.DASHBOARDS
+            ConfigurationsActionKeyStore.DASHBOARDS,
+            context
         ));
     }
  });
