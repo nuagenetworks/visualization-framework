@@ -8,7 +8,6 @@ import Visualization from "../Visualization";
 
 import { Actions as AppActions } from "../App/redux/actions";
 import { Actions as ConfigurationsActions, ActionKeyStore as ConfigurationsActionKeyStore } from "../../services/configurations/redux/actions"
-import { Actions as VSDActions } from "../../configs/nuage/redux/actions";
 
 import "./Dashboard.css"
 
@@ -16,7 +15,6 @@ import "./Dashboard.css"
 export class DashboardView extends React.Component {
 
     componentWillMount() {
-        this.props.setSettings(this.props.location.query.token, this.props.location.query.api);
         this.props.setPageTitle("Dashboard");
         this.props.fetchDashboardConfiguration(this.props.params.id);
     };
@@ -99,9 +97,6 @@ const actionCreators = (dispatch) => ({
             id,
             ConfigurationsActionKeyStore.DASHBOARDS
         ));
-    },
-    setSettingsIfProvided: function(token, api) {
-        dispatch(VSDActions.setSettings(token, api));
     },
  });
 
