@@ -27,7 +27,7 @@ export class DashboardView extends React.Component {
     }
 
     loadConfiguration(id) {
-        this.props.fetchDashboardConfiguration(id);
+        this.props.fetchConfiguration(id);
     }
 
     render() {
@@ -45,7 +45,7 @@ export class DashboardView extends React.Component {
             );
 
         } else if (this.props.configuration) {
-            const { title, visualizations } = this.props.configuration.toJS();
+            let { title, visualizations } = this.props.configuration;
 
             this.props.setPageTitle(title);
 
@@ -58,6 +58,8 @@ export class DashboardView extends React.Component {
             });
 
             const context = splatToContext(this.props.params.splat);
+
+            // visualizations = [visualizations.pop()];
 
             return (
                 <ReactGridLayout
@@ -112,7 +114,7 @@ const actionCreators = (dispatch) => ({
     setPageTitle: function(aTitle) {
         dispatch(AppActions.updateTitle(aTitle));
     },
-    fetchDashboardConfiguration: function(id) {
+    fetchConfiguration: function(id) {
         dispatch(ConfigurationsActions.fetch(
             id,
             ConfigurationsActionKeyStore.DASHBOARDS

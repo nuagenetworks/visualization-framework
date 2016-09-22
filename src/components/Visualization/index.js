@@ -1,19 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
-import { push } from "redux-router";
 
-import AppBar from "material-ui/AppBar";
+import { Actions as ConfigurationsActions, ActionKeyStore as ConfigurationsActionKeyStore } from "../../services/configurations/redux/actions"
 
-import { Actions } from "./redux/actions";
-
-import { ActionKeyStore as ConfigurationsActionKeyStore } from "../../services/configurations/redux/actions";
-
+import CircularProgress from "material-ui/CircularProgress";
 import graph1 from "../../images/graph1.png"
 import graph2 from "../../images/graph2.png"
 import graph3 from "../../images/graph3.png"
 import graph4 from "../../images/graph4.png"
 
 import {theme} from "../../theme"
+import store from "../../redux/store"
 
 const style = {
     navBar: {
@@ -25,64 +22,108 @@ const style = {
     }
 };
 
-function getGraph(name) {
-    switch(name) {
-        case "graph1":
-            return graph1;
-        case "graph2":
-            return graph2;
-        case "graph3":
-            return graph3;
-        case "graph4":
-        default:
-            return graph4;
-    }
-};
-
 
 class VisualizationView extends React.Component {
 
     componentWillMount() {
-        // Not setting the title here because this component
-        // may be either instantiated within a dashboard
-        // OR in an individual visualization page.
-        //this.props.setPageTitle("Visualization");
+        this.loadConfiguration(this.props.id);
+    };
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.id !== nextProps.id)
+            this.loadConfiguration(nextProps.id)
+
+        if (nextProps.configuration.query)
+            this.makeQuery(nextProps.configuration.query);
+    }
+
+    loadConfiguration(id) {
+        // 1. Load its configuration according to the identifier given in its props
+        this.props.fetchConfiguration(id);
+    }
+
+    makeQuery(id) {
+        const state = store.getState();
+        const queryConfiguration = state.configurations.getIn([
+            ConfigurationsActionKeyStore.QUERIES,
+            id,
+            ConfigurationsActionKeyStore.DATA
+        ])
+
+        // 2. Load its query configuration according to its configuration
+        console.error("CONFIG=");
+        console.error(queryConfiguration);
+
+        // 3. Parameterize its query according to the context given in its props
+        // 4. Choose to be hidden or displayed based on the context and the query
+    }
+
+    getGraph(name) {
+        switch(name) {
+            case "graph1":
+                return graph1;
+            case "graph2":
+                return graph2;
+            case "graph3":
+                return graph3;
+            case "graph4":
+            default:
+                return graph4;
+        }
     };
 
     render() {
-        let { id, title } = this.props;
+
+        if (!this.props.configuration) {
+            return (
+                <div>
+                    <CircularProgress color="#eeeeee"/>
+                    This visualization component is loading its configuration file...
+                </div>
+            );
+        }
+
+        let configuration = this.props.configuration;
+
         return (
             <div style={style.card}>
-                <AppBar
-                    title={title}
-                    showMenuIconButton={false}
-                    style={style.navBar}
-                    />
+                {this.props.query}
+                <h1>{configuration.title}</h1>
                 <div>
-                    <img src={getGraph(id)} alt={id} width="100%" height="100%" />
+                    <img src={this.getGraph(this.props.id)} alt={this.props.id} width="100%" height="100%" />
                 </div>
             </div>
         );
     }
 }
 
+VisualizationView.propTypes = {
+  id: React.PropTypes.string,
+  context: React.PropTypes.object,
+};
+
+
 const mapStateToProps = (state, ownProps) => ({
-    title: state.configurations.getIn([
+    configuration: state.configurations.getIn([
         ConfigurationsActionKeyStore.VISUALIZATIONS,
         ownProps.id,
-        ConfigurationsActionKeyStore.DATA,
-        "title"
-    ])
+        ConfigurationsActionKeyStore.DATA
+    ]),
+    // query: state.configurations.getIn([
+    //     ConfigurationsActionKeyStore.QUERIES,
+    //     configuration.query,
+    //     ConfigurationsActionKeyStore.DATA
+    // ])
 });
 
 
 const actionCreators = (dispatch) => ({
-    setPageTitle: function(aTitle) {
-        dispatch(Actions.updateTitle(aTitle));
+    fetchConfiguration: function(id) {
+        dispatch(ConfigurationsActions.fetch(
+            id,
+            ConfigurationsActionKeyStore.VISUALIZATIONS
+        ))
     },
-    goTo: function(link, filters) {
-        dispatch(push({pathname:link, query:filters}));
-    }
  });
 
 

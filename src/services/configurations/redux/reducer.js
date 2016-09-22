@@ -1,4 +1,4 @@
-import { fromJS, Map } from 'immutable';
+import { Map } from 'immutable';
 import { ActionTypes, ActionKeyStore } from './actions';
 
 let initialState = Map() // eslint-disable-line
@@ -15,14 +15,14 @@ function didStartRequest(state, id, configType) {
 function didReceiveResponse(state, id, configType, data) {
     return state
       .setIn([configType, id, ActionKeyStore.IS_FETCHING], false)
-      .setIn([configType, id, ActionKeyStore.DATA], fromJS(data));
+      .setIn([configType, id, ActionKeyStore.DATA], data);
 }
 
 function didReceiveError(state, id, configType, error) {
     return state
         .setIn([configType, id, ActionKeyStore.IS_FETCHING], false)
-        .setIn([configType, id, ActionKeyStore.DATA], fromJS([]))
-        .setIn([configType, id, ActionKeyStore.ERROR], fromJS(error));
+        .setIn([configType, id, ActionKeyStore.DATA], [])
+        .setIn([configType, id, ActionKeyStore.ERROR], error);
 }
 
 function configurationsReducer(state = initialState, action) {
