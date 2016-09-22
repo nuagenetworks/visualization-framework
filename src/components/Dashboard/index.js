@@ -11,6 +11,7 @@ import { Actions as ConfigurationsActions, ActionKeyStore as ConfigurationsActio
 
 import "./Dashboard.css"
 
+
 export class DashboardView extends React.Component {
 
     componentWillMount() {
@@ -101,7 +102,7 @@ const actionCreators = (dispatch) => ({
             ConfigurationsActionKeyStore.DASHBOARDS,
             context
         ));
-    }
+    },
  });
 
 

@@ -12,7 +12,9 @@ let style = {
     }
 }
 
+
 class AppContainerView extends React.Component {
+
     render() {
         return (
             <MuiThemeProvider muiTheme={theme}>
@@ -30,7 +32,6 @@ class AppContainerView extends React.Component {
 
 
 const mapStateToProps = (state) => ({
-
 });
 
 
