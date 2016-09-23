@@ -97,13 +97,9 @@ export const Actions = {
 
     // This is a thunk action creator that will
     // initiate a request to ElasticSearch.
-    fetch: function (id, configuration, context) {
-
-        let query = computeQuery(id, configuration, context);
+    fetch: function (id, query, requestID) {
 
         return function (dispatch) {
-            let requestID = getRequestID(id, context);
-
             dispatch(Actions.didStartRequest(requestID));
 
             return search(query)

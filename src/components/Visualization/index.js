@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { Actions as ConfigurationsActions, ActionKeyStore as ConfigurationsActionKeyStore } from "../../services/configurations/redux/actions"
+import { Actions as ElasticSearchActions, ActionKeyStore as ElasticSearchActionKeyStore, getRequestID } from "../../services/elasticsearch/redux/actions"
 
 import CircularProgress from "material-ui/CircularProgress";
 import graph1 from "../../images/graph1.png"
@@ -25,6 +26,17 @@ const style = {
 
 class VisualizationView extends React.Component {
 
+    constructor(props){
+        super(props);
+        this.state = {
+            queryID: null,
+            queryConfiguration: null,
+            parameterizedQuery: null,
+            componentShouldDisplay: false,
+            request: null,
+        }
+    }
+
     componentWillMount() {
         this.loadConfiguration(this.props.id);
     };
@@ -33,8 +45,8 @@ class VisualizationView extends React.Component {
         if (this.props.id !== nextProps.id)
             this.loadConfiguration(nextProps.id)
 
-        if (nextProps.configuration.query)
-            this.makeQuery(nextProps.configuration.query);
+        if (nextProps.configuration.query && nextProps.configuration.query !== this.state.queryID)
+            this.loadQuery(nextProps.configuration.query);
     }
 
     loadConfiguration(id) {
@@ -42,20 +54,42 @@ class VisualizationView extends React.Component {
         this.props.fetchConfiguration(id);
     }
 
-    makeQuery(id) {
-        const state = store.getState();
-        const queryConfiguration = state.configurations.getIn([
-            ConfigurationsActionKeyStore.QUERIES,
-            id,
-            ConfigurationsActionKeyStore.DATA
-        ])
-
+    loadQuery (id) {
         // 2. Load its query configuration according to its configuration
-        console.error("CONFIG=");
-        console.error(queryConfiguration);
+        const state                  = store.getState(),
+              queryConfiguration     = state.configurations.getIn([
+                                            ConfigurationsActionKeyStore.QUERIES,
+                                            id,
+                                            ConfigurationsActionKeyStore.DATA
+                                       ]),
+              requestID              = getRequestID(id, this.props.context);
 
         // 3. Parameterize its query according to the context given in its props
         // 4. Choose to be hidden or displayed based on the context and the query
+        // TODO: Use query templating method (See https://github.com/nuagenetworks/visualization-framework/issues/47)
+        // For now, we assume the configuration has default parameters.
+        let parameterizedQuery     = queryConfiguration,
+            componentShouldDisplay = true;
+
+        this.setState({
+            queryID: id,
+            queryConfiguration: queryConfiguration,
+            parameterizedQuery: parameterizedQuery,
+            componentShouldDisplay: componentShouldDisplay,
+        });
+
+        if (componentShouldDisplay) {
+            let component = this;
+
+            store.dispatch(ElasticSearchActions.fetch(id, parameterizedQuery, requestID)).then(function () {
+                let request = store.getState().elasticsearch.getIn([ElasticSearchActionKeyStore.REQUESTS, requestID]).toJS();
+
+                component.setState({
+                    request: request,
+                });
+            });
+        }
+
     }
 
     getGraph(name) {
@@ -72,13 +106,16 @@ class VisualizationView extends React.Component {
         }
     };
 
-    render() {
+    shouldShowCircularProgress () {
+        return !this.props.configuration || !this.state.queryConfiguration || !this.state.request || this.state.request.isFetching;
+    }
 
-        if (!this.props.configuration) {
+    render() {
+        if (this.shouldShowCircularProgress()) {
             return (
                 <div>
                     <CircularProgress color="#eeeeee"/>
-                    This visualization component is loading its configuration file...
+                    This visualization component is loading, pleaes wait...
                 </div>
             );
         }
@@ -87,7 +124,7 @@ class VisualizationView extends React.Component {
 
         return (
             <div style={style.card}>
-                {this.props.query}
+                {this.state.queryConfiguration.id}
                 <h1>{configuration.title}</h1>
                 <div>
                     <img src={this.getGraph(this.props.id)} alt={this.props.id} width="100%" height="100%" />
@@ -109,11 +146,6 @@ const mapStateToProps = (state, ownProps) => ({
         ownProps.id,
         ConfigurationsActionKeyStore.DATA
     ]),
-    // query: state.configurations.getIn([
-    //     ConfigurationsActionKeyStore.QUERIES,
-    //     configuration.query,
-    //     ConfigurationsActionKeyStore.DATA
-    // ])
 });
 
 
@@ -124,6 +156,7 @@ const actionCreators = (dispatch) => ({
             ConfigurationsActionKeyStore.VISUALIZATIONS
         ))
     },
+
  });
 
 
