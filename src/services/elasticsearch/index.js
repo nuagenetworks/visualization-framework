@@ -9,7 +9,12 @@ let config = function () {
 }
 
 let ESClient = function () {
-    return new elasticsearch.Client(config());
+    let currentConfig = config()
+
+    if (process.env.REACT_APP_ELASTICSEARACH_HOST)
+        currentConfig.host = process.env.REACT_APP_ELASTICSEARACH_HOST;
+
+    return new elasticsearch.Client(currentConfig);
 }
 
 export const search = function (parameters) {
