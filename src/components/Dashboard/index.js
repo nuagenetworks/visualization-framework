@@ -24,21 +24,27 @@ export class DashboardView extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        this.updateTitle(prevProps);
+        this.updateTitleIfNecessary(prevProps);
         this.updateConfiguration();
     }
 
-    updateTitle(prevProps) {
-        if(this.props.configuration){
-            const title = this.props.configuration.get("title");
-            const prevTitle = (
-                prevProps.configuration ?
-                prevProps.configuration.get("title") :
-                ""
+    shouldUpdateTitle(prevProps){
+        if(!prevProps.configuration){
+            return true;
+        } else {
+            return (
+                this.props.configuration.get("title")
+                !==
+                prevProps.configuration.get("title")
             );
-            if(title !== prevTitle){
-                this.props.setPageTitle(title);
-            }
+        }
+    }
+
+    updateTitleIfNecessary(prevProps) {
+        if(!this.props.configuration)
+            return;
+        if(this.shouldUpdateTitle(prevProps)){
+            this.props.setPageTitle(this.props.configuration.get("title"));
         }
     }
 
