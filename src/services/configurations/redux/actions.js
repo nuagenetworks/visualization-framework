@@ -53,52 +53,53 @@ export const Actions = {
             // to test this method (See: http://redux.js.org/docs/recipes/WritingTests.html)
             return fetchConfiguration(id, configType)
                 .then(function (configuration) {
-
-                    switch (configType) {
-                        case ActionKeyStore.DASHBOARDS:
-                            // fetch all visualization configurations
-                            Promise.all(
-                                configuration[ActionKeyStore.VISUALIZATIONS].map((visualization) => {
-                                    return dispatch(Actions.fetch(visualization.id, ActionKeyStore.VISUALIZATIONS));
-                                })
-                            )
-                            .then(function () {
-                                dispatch(Actions.didReceiveResponse(id, configType, configuration));
-
-                            })
-                            .catch(function (error) {
-                                dispatch(Actions.didReceiveError(id, configType, error.message));
-
-                            });
-                            break;
-
-                        case ActionKeyStore.VISUALIZATIONS:
-                            // fetch query of the visualization
-                            return dispatch(Actions.fetch(configuration.query, ActionKeyStore.QUERIES))
-                                   .then(function () {
-                                       dispatch(Actions.didReceiveResponse(id, configType, configuration));
-
-                                   })
-                                   .catch(function (error) {
-                                       dispatch(Actions.didReceiveError(id, configType, error.message));
-
-                                   });
-
-                        case ActionKeyStore.QUERIES:
-
-                            throw new Error("TODO fetch ES Query with context!");
-                            //dispatch(ElasticSearchActions.fetch(id, configuration, context));
-                            //dispatch(Actions.didReceiveResponse(id, configType, configuration));
-                            break;
-
-                        default:
-                            // Should not happen, do nothing for now.
-                            throw new Error("Uknown configType " + configType + " should never happen.");
-                    }
+                    dispatch(Actions.didReceiveResponse(id, configType, configuration));
                 })
                 .catch(function (error) {
                     dispatch(Actions.didReceiveError(id, configType, error.message));
                 });
+
+                //    switch (configType) {
+                //        case ActionKeyStore.DASHBOARDS:
+                //            // fetch all visualization configurations
+                //            Promise.all(
+                //                configuration[ActionKeyStore.VISUALIZATIONS].map((visualization) => {
+                //                    return dispatch(Actions.fetch(visualization.id, ActionKeyStore.VISUALIZATIONS));
+                //                })
+                //            )
+                //            .then(function () {
+                //                dispatch(Actions.didReceiveResponse(id, configType, configuration));
+
+                //            })
+                //            .catch(function (error) {
+                //                dispatch(Actions.didReceiveError(id, configType, error.message));
+
+                //            });
+                //            break;
+
+                //        case ActionKeyStore.VISUALIZATIONS:
+                //            // fetch query of the visualization
+                //            return dispatch(Actions.fetch(configuration.query, ActionKeyStore.QUERIES))
+                //                   .then(function () {
+                //                       dispatch(Actions.didReceiveResponse(id, configType, configuration));
+
+                //                   })
+                //                   .catch(function (error) {
+                //                       dispatch(Actions.didReceiveError(id, configType, error.message));
+
+                //                   });
+
+                //        case ActionKeyStore.QUERIES:
+
+                //            throw new Error("TODO fetch ES Query with context!");
+                //            //dispatch(ElasticSearchActions.fetch(id, configuration, context));
+                //            //dispatch(Actions.didReceiveResponse(id, configType, configuration));
+                //            break;
+
+                //        default:
+                //            // Should not happen, do nothing for now.
+                //            throw new Error("Uknown configType " + configType + " should never happen.");
+                //    }
         }
     },
     didStartRequest: function(id, configType) {
