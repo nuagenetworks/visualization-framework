@@ -59,38 +59,9 @@ export const Actions = {
                     dispatch(Actions.didReceiveError(id, configType, error.message));
                 });
 
+                // TODO move this logic to the approproate place.
                 //    switch (configType) {
-                //        case ActionKeyStore.DASHBOARDS:
-                //            // fetch all visualization configurations
-                //            Promise.all(
-                //                configuration[ActionKeyStore.VISUALIZATIONS].map((visualization) => {
-                //                    return dispatch(Actions.fetch(visualization.id, ActionKeyStore.VISUALIZATIONS));
-                //                })
-                //            )
-                //            .then(function () {
-                //                dispatch(Actions.didReceiveResponse(id, configType, configuration));
-
-                //            })
-                //            .catch(function (error) {
-                //                dispatch(Actions.didReceiveError(id, configType, error.message));
-
-                //            });
-                //            break;
-
-                //        case ActionKeyStore.VISUALIZATIONS:
-                //            // fetch query of the visualization
-                //            return dispatch(Actions.fetch(configuration.query, ActionKeyStore.QUERIES))
-                //                   .then(function () {
-                //                       dispatch(Actions.didReceiveResponse(id, configType, configuration));
-
-                //                   })
-                //                   .catch(function (error) {
-                //                       dispatch(Actions.didReceiveError(id, configType, error.message));
-
-                //                   });
-
                 //        case ActionKeyStore.QUERIES:
-
                 //            throw new Error("TODO fetch ES Query with context!");
                 //            //dispatch(ElasticSearchActions.fetch(id, configuration, context));
                 //            //dispatch(Actions.didReceiveResponse(id, configType, configuration));

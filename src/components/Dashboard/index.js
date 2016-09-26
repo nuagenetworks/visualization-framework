@@ -7,7 +7,10 @@ import ReactGridLayout from "react-grid-layout";
 import Visualization from "../Visualization";
 
 import { Actions as AppActions } from "../App/redux/actions";
-import { Actions as ConfigurationsActions, ActionKeyStore as ConfigurationsActionKeyStore } from "../../services/configurations/redux/actions"
+import {
+  Actions as ConfigurationsActions,
+  ActionKeyStore as ConfigurationsActionKeyStore
+} from "../../services/configurations/redux/actions"
 
 import "./Dashboard.css"
 
