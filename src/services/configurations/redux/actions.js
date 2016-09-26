@@ -60,17 +60,7 @@ export const Actions = {
                 });
 
                 // TODO move this logic to the approproate place.
-                //    switch (configType) {
-                //        case ActionKeyStore.QUERIES:
-                //            throw new Error("TODO fetch ES Query with context!");
-                //            //dispatch(ElasticSearchActions.fetch(id, configuration, context));
-                //            //dispatch(Actions.didReceiveResponse(id, configType, configuration));
-                //            break;
-
-                //        default:
-                //            // Should not happen, do nothing for now.
-                //            throw new Error("Uknown configType " + configType + " should never happen.");
-                //    }
+                //  dispatch(ElasticSearchActions.fetch(id, configuration, context));
         }
     },
     didStartRequest: function(id, configType) {
