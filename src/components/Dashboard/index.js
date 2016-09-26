@@ -9,6 +9,8 @@ import Visualization from "../Visualization";
 import { Actions as AppActions } from "../App/redux/actions";
 import { Actions as ConfigurationsActions, ActionKeyStore as ConfigurationsActionKeyStore } from "../../services/configurations/redux/actions"
 
+import { splatToContext } from "../../utils/urls"
+
 import "./Dashboard.css"
 
 
@@ -16,8 +18,17 @@ export class DashboardView extends React.Component {
 
     componentWillMount() {
         this.props.setPageTitle("Dashboard");
-        this.props.fetchDashboardConfiguration(this.props.params.id, {Application: "My Application"});
+        this.loadConfiguration(this.props.params.id);
     };
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.params.id !== nextProps.params.id)
+            this.loadConfiguration(nextProps.params.id)
+    }
+
+    loadConfiguration(id) {
+        this.props.fetchConfiguration(id);
+    }
 
     render() {
         if (this.props.fetching) {
@@ -34,7 +45,7 @@ export class DashboardView extends React.Component {
             );
 
         } else if (this.props.configuration) {
-            const { title, visualizations } = this.props.configuration.toJS();
+            let { title, visualizations } = this.props.configuration;
 
             this.props.setPageTitle(title);
 
@@ -45,6 +56,10 @@ export class DashboardView extends React.Component {
                 i: visualization.id
               });
             });
+
+            const context = splatToContext(this.props.params.splat);
+
+            // visualizations = [visualizations.pop()];
 
             return (
                 <ReactGridLayout
@@ -57,7 +72,10 @@ export class DashboardView extends React.Component {
                     {
                         visualizations.map((visualization) =>
                             <div key={visualization.id}>
-                                <Visualization id={visualization.id} />
+                                <Visualization
+                                    id={visualization.id}
+                                    context={context}
+                                    />
                             </div>
                         )
                     }
@@ -96,11 +114,10 @@ const actionCreators = (dispatch) => ({
     setPageTitle: function(aTitle) {
         dispatch(AppActions.updateTitle(aTitle));
     },
-    fetchDashboardConfiguration: function(id, context) {
+    fetchConfiguration: function(id) {
         dispatch(ConfigurationsActions.fetch(
             id,
-            ConfigurationsActionKeyStore.DASHBOARDS,
-            context
+            ConfigurationsActionKeyStore.DASHBOARDS
         ));
     },
  });

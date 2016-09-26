@@ -1,6 +1,6 @@
 import { fetchConfiguration } from "../index";
 
-import { Actions as ElasticSearchActions } from "../../elasticsearch/redux/actions"
+// import { Actions as ElasticSearchActions } from "../../elasticsearch/redux/actions"
 
 
 export const ActionTypes = {
@@ -39,9 +39,8 @@ export const Actions = {
             ActionKeyStore.DASHBOARDS
             ActionKeyStore.VISUALIZATIONS
             ActionKeyStore.QUERIES
-        * context - Object that specifies the context of the query
     */
-    fetch: function (id, configType, context) {
+    fetch: function (id, configType) {
 
         if(!configType){
             throw new Error("configType argument must be specified.");
@@ -57,25 +56,11 @@ export const Actions = {
 
                     switch (configType) {
                         case ActionKeyStore.DASHBOARDS:
-                            // fetch all visualization configurations
-                            Promise.all(
-                                configuration[ActionKeyStore.VISUALIZATIONS].map((visualization) => {
-                                    return dispatch(Actions.fetch(visualization.id, ActionKeyStore.VISUALIZATIONS, context));
-                                })
-                            )
-                            .then(function () {
-                                dispatch(Actions.didReceiveResponse(id, configType, configuration));
-
-                            })
-                            .catch(function (error) {
-                                dispatch(Actions.didReceiveError(id, configType, error.message));
-
-                            });
-                            break;
+                            return dispatch(Actions.didReceiveResponse(id, configType, configuration));
 
                         case ActionKeyStore.VISUALIZATIONS:
                             // fetch query of the visualization
-                            return dispatch(Actions.fetch(configuration.query, ActionKeyStore.QUERIES, context))
+                            return dispatch(Actions.fetch(configuration.query, ActionKeyStore.QUERIES))
                                    .then(function () {
                                        dispatch(Actions.didReceiveResponse(id, configType, configuration));
 
@@ -87,9 +72,8 @@ export const Actions = {
 
                         case ActionKeyStore.QUERIES:
                             // Note: Should we make the elastic search query here ?
-                            dispatch(ElasticSearchActions.fetch(id, configuration, context));
-                            dispatch(Actions.didReceiveResponse(id, configType, configuration));
-                            break;
+                            // dispatch(ElasticSearchActions.fetch(id, configuration));
+                            return dispatch(Actions.didReceiveResponse(id, configType, configuration));
 
                         default:
                             // Should not happen, do nothing for now.
