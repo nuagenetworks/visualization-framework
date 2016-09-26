@@ -39,9 +39,8 @@ export const Actions = {
             ActionKeyStore.DASHBOARDS
             ActionKeyStore.VISUALIZATIONS
             ActionKeyStore.QUERIES
-        * context - Object that specifies the context of the query
     */
-    fetch: function (id, configType, context) {
+    fetch: function (id, configType) {
 
         if(!configType){
             throw new Error("configType argument must be specified.");
@@ -54,51 +53,24 @@ export const Actions = {
             // to test this method (See: http://redux.js.org/docs/recipes/WritingTests.html)
             return fetchConfiguration(id, configType)
                 .then(function (configuration) {
-
-                    switch (configType) {
-                        case ActionKeyStore.DASHBOARDS:
-                            // fetch all visualization configurations
-                            Promise.all(
-                                configuration[ActionKeyStore.VISUALIZATIONS].map((visualization) => {
-                                    return dispatch(Actions.fetch(visualization.id, ActionKeyStore.VISUALIZATIONS, context));
-                                })
-                            )
-                            .then(function () {
-                                dispatch(Actions.didReceiveResponse(id, configType, configuration));
-
-                            })
-                            .catch(function (error) {
-                                dispatch(Actions.didReceiveError(id, configType, error.message));
-
-                            });
-                            break;
-
-                        case ActionKeyStore.VISUALIZATIONS:
-                            // fetch query of the visualization
-                            return dispatch(Actions.fetch(configuration.query, ActionKeyStore.QUERIES, context))
-                                   .then(function () {
-                                       dispatch(Actions.didReceiveResponse(id, configType, configuration));
-
-                                   })
-                                   .catch(function (error) {
-                                       dispatch(Actions.didReceiveError(id, configType, error.message));
-
-                                   });
-
-                        case ActionKeyStore.QUERIES:
-                            // Note: Should we make the elastic search query here ?
-                            dispatch(ElasticSearchActions.fetch(id, configuration, context));
-                            dispatch(Actions.didReceiveResponse(id, configType, configuration));
-                            break;
-
-                        default:
-                            // Should not happen, do nothing for now.
-                            throw new Error("Uknown configType " + configType + " should never happen.");
-                    }
+                    dispatch(Actions.didReceiveResponse(id, configType, configuration));
                 })
                 .catch(function (error) {
                     dispatch(Actions.didReceiveError(id, configType, error.message));
                 });
+
+                // TODO move this logic to the approproate place.
+                //    switch (configType) {
+                //        case ActionKeyStore.QUERIES:
+                //            throw new Error("TODO fetch ES Query with context!");
+                //            //dispatch(ElasticSearchActions.fetch(id, configuration, context));
+                //            //dispatch(Actions.didReceiveResponse(id, configType, configuration));
+                //            break;
+
+                //        default:
+                //            // Should not happen, do nothing for now.
+                //            throw new Error("Uknown configType " + configType + " should never happen.");
+                //    }
         }
     },
     didStartRequest: function(id, configType) {

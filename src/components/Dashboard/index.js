@@ -7,7 +7,10 @@ import ReactGridLayout from "react-grid-layout";
 import Visualization from "../Visualization";
 
 import { Actions as AppActions } from "../App/redux/actions";
-import { Actions as ConfigurationsActions, ActionKeyStore as ConfigurationsActionKeyStore } from "../../services/configurations/redux/actions"
+import {
+  Actions as ConfigurationsActions,
+  ActionKeyStore as ConfigurationsActionKeyStore
+} from "../../services/configurations/redux/actions"
 
 import "./Dashboard.css"
 
@@ -16,8 +19,34 @@ export class DashboardView extends React.Component {
 
     componentWillMount() {
         this.props.setPageTitle("Dashboard");
-        this.props.fetchDashboardConfiguration(this.props.params.id, {Application: "My Application"});
-    };
+        this.updateConfiguration();
+    }
+
+    componentDidUpdate(prevProps) {
+        this.updateTitle(prevProps);
+        this.updateConfiguration();
+    }
+
+    updateTitle(prevProps) {
+        if(this.props.configuration){
+            const title = this.props.configuration.get("title");
+            const prevTitle = (
+                prevProps.configuration ?
+                prevProps.configuration.get("title") :
+                ""
+            );
+            if(title !== prevTitle){
+                this.props.setPageTitle(title);
+            }
+        }
+    }
+
+    updateConfiguration() {
+        const { configuration, isFetching, params, fetchConfiguration } = this.props;
+        if(!(configuration || isFetching)){
+            fetchConfiguration(params.id);
+        }
+    }
 
     render() {
         if (this.props.fetching) {
@@ -34,9 +63,7 @@ export class DashboardView extends React.Component {
             );
 
         } else if (this.props.configuration) {
-            const { title, visualizations } = this.props.configuration.toJS();
-
-            this.props.setPageTitle(title);
+            const { visualizations } = this.props.configuration.toJS();
 
             // Expose each visualization id as the property "i",
             // which is required by the ReactGridLayout "layout" prop.
@@ -96,11 +123,10 @@ const actionCreators = (dispatch) => ({
     setPageTitle: function(aTitle) {
         dispatch(AppActions.updateTitle(aTitle));
     },
-    fetchDashboardConfiguration: function(id, context) {
+    fetchConfiguration: function(id) {
         dispatch(ConfigurationsActions.fetch(
             id,
-            ConfigurationsActionKeyStore.DASHBOARDS,
-            context
+            ConfigurationsActionKeyStore.DASHBOARDS
         ));
     },
  });
