@@ -17,7 +17,12 @@ export class DashboardView extends React.Component {
     componentWillMount() {
         this.props.setPageTitle("Dashboard");
         this.props.fetchConfiguration(this.props.params.id);
-    };
+    }
+
+    componentDidUpdate(prevProps) {
+        const { title } = this.props.configuration.toJS();
+        this.props.setPageTitle(title);
+    }
 
     render() {
         if (this.props.fetching) {
@@ -34,9 +39,7 @@ export class DashboardView extends React.Component {
             );
 
         } else if (this.props.configuration) {
-            const { title, visualizations } = this.props.configuration.toJS();
-
-            this.props.setPageTitle(title);
+            const { visualizations } = this.props.configuration.toJS();
 
             // Expose each visualization id as the property "i",
             // which is required by the ReactGridLayout "layout" prop.
