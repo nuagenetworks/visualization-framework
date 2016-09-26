@@ -46,16 +46,24 @@ function getGraph(name) {
 class VisualizationView extends React.Component {
 
     componentWillMount() {
+        this.updateConfiguration();
+        this.updateQuery();
+    }
 
-        // Fetch the configuration for this visualization.
+    componentDidUpdate(prevProps) {
+        this.updateQuery();
+    }
+
+    updateConfiguration() {
+
+        // Fetch the configuration for this visualization if required.
         const { configuration, isFetching, id, fetchConfiguration } = this.props;
         if(!(configuration || isFetching)){
             fetchConfiguration(id);
         }
-
     }
 
-    componentDidUpdate(prevProps) {
+    updateQuery() {
 
         // Fetch the referenced query if it is not already fetched.
         const { configuration, queries, fetchQuery } = this.props;
