@@ -46,22 +46,13 @@ function getGraph(name) {
 class VisualizationView extends React.Component {
 
     componentWillMount() {
-        this.updateConfiguration();
+        this.props.fetchConfigurationIfNeeded(this.props.id);
         this.updateQuery();
     }
 
     componentDidUpdate(prevProps) {
-        this.updateConfiguration();
+        this.props.fetchConfigurationIfNeeded(this.props.id);
         this.updateQuery();
-    }
-
-    updateConfiguration() {
-
-        // Fetch the configuration for this visualization if required.
-        const { configuration, isFetching, id, fetchConfiguration } = this.props;
-        if(!(configuration || isFetching)){
-            fetchConfiguration(id);
-        }
     }
 
     updateQuery() {
@@ -104,12 +95,6 @@ const mapStateToProps = (state, ownProps) => ({
         ConfigurationsActionKeyStore.DATA
     ]),
 
-    fetching: state.configurations.getIn([
-        ConfigurationsActionKeyStore.VISUALIZATIONS,
-        ownProps.id,
-        ConfigurationsActionKeyStore.IS_FETCHING
-    ]),
-
     error: state.configurations.getIn([
         ConfigurationsActionKeyStore.VISUALIZATIONS,
         ownProps.id,
@@ -130,8 +115,8 @@ const actionCreators = (dispatch) => ({
     goTo: function(link, filters) {
         dispatch(push({pathname:link, query:filters}));
     },
-    fetchConfiguration: function(id) {
-        dispatch(ConfigurationsActions.fetch(
+    fetchConfigurationIfNeeded: function(id) {
+        dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.VISUALIZATIONS
         ));

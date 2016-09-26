@@ -58,6 +58,29 @@ function fetch (id, configType) {
             //  dispatch(ElasticSearchActions.fetch(id, configuration, context));
     }
 };
+
+function shouldFetch(state, id, configType){
+    const configuration = state.configurations.getIn([
+        configType,
+        id
+    ]);
+    if(!configuration){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function fetchIfNeeded(id, configType){ 
+    return function (dispatch, getState) {
+        if (shouldFetch(getState(), id, configType)){
+            return dispatch(fetch(id, configType));
+        } else {
+            return Promise.resolve();
+        }
+    }
+} 
+
 function didStartRequest (id, configType) {
     return {
         type: ActionTypes.CONFIG_DID_START_REQUEST,
@@ -84,6 +107,7 @@ function didReceiveError (id, configType, error) {
 
 export const Actions = {
     fetch,
+    fetchIfNeeded,
     didStartRequest,
     didReceiveResponse,
     didReceiveError
