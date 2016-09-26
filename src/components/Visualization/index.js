@@ -43,14 +43,15 @@ function getGraph(name) {
 class VisualizationView extends React.Component {
 
     componentWillMount() {
-        // Not setting the title here because this component
-        // may be either instantiated within a dashboard
-        // OR in an individual visualization page.
-        //this.props.setPageTitle("Visualization");
-    };
+        //const { configuration, isFetching, id, fetchConfiguration } = this.props;
+        //if(!(configuration || isFetching)){
+        //    fetchConfiguration(params.id);
+        //}
+    }
 
     render() {
-        let { id, title } = this.props;
+        const { id, configuration } = this.props;
+        const title = configuration ? configuration.get("title") : "Loading...";
         return (
             <div style={style.card}>
                 <AppBar
@@ -67,12 +68,25 @@ class VisualizationView extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-    title: state.configurations.getIn([
-        ConfigurationsActionKeyStore.VISUALIZATIONS,
+
+    configuration: state.configurations.getIn([
+        ConfigurationsActionKeyStore.DASHBOARDS,
         ownProps.id,
-        ConfigurationsActionKeyStore.DATA,
-        "title"
+        ConfigurationsActionKeyStore.DATA
+    ]),
+
+    fetching: state.configurations.getIn([
+        ConfigurationsActionKeyStore.DASHBOARDS,
+        ownProps.id,
+        ConfigurationsActionKeyStore.IS_FETCHING
+    ]),
+
+    error: state.configurations.getIn([
+        ConfigurationsActionKeyStore.DASHBOARDS,
+        ownProps.id,
+        ConfigurationsActionKeyStore.ERROR
     ])
+
 });
 
 
