@@ -16,7 +16,7 @@ export class DashboardView extends React.Component {
 
     componentWillMount() {
         this.props.setPageTitle("Dashboard");
-        this.props.fetchDashboardConfiguration(this.props.params.id, {Application: "My Application"});
+        this.props.fetchConfiguration(this.props.params.id, {Application: "My Application"});
     };
 
     render() {
@@ -96,7 +96,7 @@ const actionCreators = (dispatch) => ({
     setPageTitle: function(aTitle) {
         dispatch(AppActions.updateTitle(aTitle));
     },
-    fetchDashboardConfiguration: function(id, context) {
+    fetchConfiguration: function(id, context) {
         dispatch(ConfigurationsActions.fetch(
             id,
             ConfigurationsActionKeyStore.DASHBOARDS,
