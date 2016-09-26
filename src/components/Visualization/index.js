@@ -51,6 +51,7 @@ class VisualizationView extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
+        this.updateConfiguration();
         this.updateQuery();
     }
 
