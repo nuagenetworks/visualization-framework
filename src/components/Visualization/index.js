@@ -46,9 +46,26 @@ function getGraph(name) {
 class VisualizationView extends React.Component {
 
     componentWillMount() {
+
+        // Fetch the configuration for this visualization.
         const { configuration, isFetching, id, fetchConfiguration } = this.props;
         if(!(configuration || isFetching)){
             fetchConfiguration(id);
+        }
+
+    }
+
+    componentDidUpdate(prevProps) {
+
+        // Fetch the referenced query if it is not already fetched.
+        const { configuration, queries, fetchQuery } = this.props;
+        if(configuration){
+            const queryId = configuration.get("query");
+            const query = queries.get(queryId);
+            const queryIsFetching = query ? query.get("isFetching") : false;
+            if( !(query || queryIsFetching) ){
+                fetchQuery(queryId);
+            }
         }
     }
 
@@ -88,7 +105,11 @@ const mapStateToProps = (state, ownProps) => ({
         ConfigurationsActionKeyStore.VISUALIZATIONS,
         ownProps.id,
         ConfigurationsActionKeyStore.ERROR
-    ])
+    ]),
+
+    queries: state.configurations.get(
+        ConfigurationsActionKeyStore.QUERIES
+    )
 
 });
 
@@ -104,6 +125,12 @@ const actionCreators = (dispatch) => ({
         dispatch(ConfigurationsActions.fetch(
             id,
             ConfigurationsActionKeyStore.VISUALIZATIONS
+        ));
+    },
+    fetchQuery: function(id) {
+        dispatch(ConfigurationsActions.fetch(
+            id,
+            ConfigurationsActionKeyStore.QUERIES
         ));
     }
  });

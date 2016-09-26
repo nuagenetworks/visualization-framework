@@ -7,9 +7,10 @@ import ReactGridLayout from "react-grid-layout";
 import Visualization from "../Visualization";
 
 import { Actions as AppActions } from "../App/redux/actions";
+
 import {
-  Actions as ConfigurationsActions,
-  ActionKeyStore as ConfigurationsActionKeyStore
+    Actions as ConfigurationsActions,
+    ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions"
 
 import "./Dashboard.css"
@@ -68,9 +69,9 @@ export class DashboardView extends React.Component {
             // Expose each visualization id as the property "i",
             // which is required by the ReactGridLayout "layout" prop.
             const layout = visualizations.map((visualization) => {
-              return Object.assign({}, visualization, {
-                i: visualization.id
-              });
+                return Object.assign({}, visualization, {
+                    i: visualization.id
+                });
             });
 
             return (
@@ -128,7 +129,7 @@ const actionCreators = (dispatch) => ({
             id,
             ConfigurationsActionKeyStore.DASHBOARDS
         ));
-    },
+    }
  });
 
 
