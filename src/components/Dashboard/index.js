@@ -20,20 +20,26 @@ export class DashboardView extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-
-        if(this.props.configuration){
-            const { title } = this.props.configuration.toJS();
-
-            // TODO don't update this unnecessarily
-            this.props.setPageTitle(title);
-        }
-
+        this.updateTitle(prevProps);
         this.updateConfiguration();
+    }
+
+    updateTitle(prevProps) {
+        if(this.props.configuration){
+            const title = this.props.configuration.get("title");
+            const prevTitle = (
+                prevProps.configuration ?
+                prevProps.configuration.get("title") :
+                ""
+            );
+            if(title !== prevTitle){
+                this.props.setPageTitle(title);
+            }
+        }
     }
 
     updateConfiguration() {
         const { configuration, isFetching, params, fetchConfiguration } = this.props;
-
         if(!(configuration || isFetching)){
             fetchConfiguration(params.id);
         }
