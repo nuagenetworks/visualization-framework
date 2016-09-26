@@ -130,7 +130,7 @@ const actionCreators = (dispatch) => ({
             ConfigurationsActionKeyStore.DASHBOARDS
         ));
     }
- });
+});
 
 
 export default connect(mapStateToProps, actionCreators)(DashboardView);
