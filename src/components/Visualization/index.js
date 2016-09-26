@@ -56,16 +56,9 @@ class VisualizationView extends React.Component {
     }
 
     updateQuery() {
-
-        // Fetch the referenced query if it is not already fetched.
-        const { configuration, queries, fetchQuery } = this.props;
+        const { configuration, fetchQueryIfNeeded } = this.props;
         if(configuration){
-            const queryId = configuration.get("query");
-            const query = queries.get(queryId);
-            const queryIsFetching = query ? query.get("isFetching") : false;
-            if( !(query || queryIsFetching) ){
-                fetchQuery(queryId);
-            }
+            fetchQueryIfNeeded(configuration.get("query"));
         }
     }
 
@@ -99,11 +92,7 @@ const mapStateToProps = (state, ownProps) => ({
         ConfigurationsActionKeyStore.VISUALIZATIONS,
         ownProps.id,
         ConfigurationsActionKeyStore.ERROR
-    ]),
-
-    queries: state.configurations.get(
-        ConfigurationsActionKeyStore.QUERIES
-    )
+    ])
 
 });
 
@@ -121,8 +110,8 @@ const actionCreators = (dispatch) => ({
             ConfigurationsActionKeyStore.VISUALIZATIONS
         ));
     },
-    fetchQuery: function(id) {
-        dispatch(ConfigurationsActions.fetch(
+    fetchQueryIfNeeded: function(id) {
+        dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.QUERIES
         ));

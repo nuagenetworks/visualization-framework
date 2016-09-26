@@ -60,15 +60,7 @@ function fetch (id, configType) {
 };
 
 function shouldFetch(state, id, configType){
-    const configuration = state.configurations.getIn([
-        configType,
-        id
-    ]);
-    if(!configuration){
-        return true;
-    } else {
-        return false;
-    }
+    return !state.configurations.getIn([ configType, id ]);
 }
 
 function fetchIfNeeded(id, configType){ 
