@@ -39,9 +39,8 @@ export const Actions = {
             ActionKeyStore.DASHBOARDS
             ActionKeyStore.VISUALIZATIONS
             ActionKeyStore.QUERIES
-        * context - Object that specifies the context of the query
     */
-    fetch: function (id, configType, context) {
+    fetch: function (id, configType) {
 
         if(!configType){
             throw new Error("configType argument must be specified.");
@@ -60,7 +59,7 @@ export const Actions = {
                             // fetch all visualization configurations
                             Promise.all(
                                 configuration[ActionKeyStore.VISUALIZATIONS].map((visualization) => {
-                                    return dispatch(Actions.fetch(visualization.id, ActionKeyStore.VISUALIZATIONS, context));
+                                    return dispatch(Actions.fetch(visualization.id, ActionKeyStore.VISUALIZATIONS));
                                 })
                             )
                             .then(function () {
@@ -75,7 +74,7 @@ export const Actions = {
 
                         case ActionKeyStore.VISUALIZATIONS:
                             // fetch query of the visualization
-                            return dispatch(Actions.fetch(configuration.query, ActionKeyStore.QUERIES, context))
+                            return dispatch(Actions.fetch(configuration.query, ActionKeyStore.QUERIES))
                                    .then(function () {
                                        dispatch(Actions.didReceiveResponse(id, configType, configuration));
 
@@ -86,9 +85,10 @@ export const Actions = {
                                    });
 
                         case ActionKeyStore.QUERIES:
-                            // Note: Should we make the elastic search query here ?
-                            dispatch(ElasticSearchActions.fetch(id, configuration, context));
-                            dispatch(Actions.didReceiveResponse(id, configType, configuration));
+
+                            throw new Error("TODO fetch ES Query with context!");
+                            //dispatch(ElasticSearchActions.fetch(id, configuration, context));
+                            //dispatch(Actions.didReceiveResponse(id, configType, configuration));
                             break;
 
                         default:
