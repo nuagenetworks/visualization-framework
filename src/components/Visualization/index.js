@@ -54,7 +54,6 @@ class VisualizationView extends React.Component {
 
     render() {
         const { id, configuration } = this.props;
-        console.log(configuration);
         const title = configuration ? configuration.get("title") : "Loading...";
         return (
             <div style={style.card}>
