@@ -29,7 +29,7 @@ export class DashboardView extends React.Component {
     }
 
     shouldUpdateTitle(prevProps){
-        if(!prevProps.configuration){
+        if(!prevProps.configuration) {
             return true;
         } else {
             return (
@@ -49,10 +49,9 @@ export class DashboardView extends React.Component {
     }
 
     updateConfiguration() {
-        const { configuration, isFetching, params, fetchConfiguration } = this.props;
-        if(!(configuration || isFetching)){
-            fetchConfiguration(params.id);
-        }
+        const { params, fetchConfigurationIfNeeded } = this.props;
+
+        fetchConfigurationIfNeeded(params.id);
     }
 
     render() {
@@ -130,8 +129,8 @@ const actionCreators = (dispatch) => ({
     setPageTitle: function(aTitle) {
         dispatch(AppActions.updateTitle(aTitle));
     },
-    fetchConfiguration: function(id) {
-        dispatch(ConfigurationsActions.fetch(
+    fetchConfigurationIfNeeded: function(id) {
+        dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.DASHBOARDS
         ));

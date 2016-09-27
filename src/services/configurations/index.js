@@ -1,8 +1,9 @@
 import "whatwg-fetch";
 import { checkStatus, parseJSON } from "../common";
 
-let config = {
+export const config = {
     path: "/src/configs/nuage/",
+    cachingTime: 30000, // (ms) -> default 30s
 }
 
 export const fetchConfiguration = function (id, configType) {
