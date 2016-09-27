@@ -6,7 +6,10 @@ import AppBar from "material-ui/AppBar";
 
 import { Actions } from "./redux/actions";
 
-import { ActionKeyStore as ConfigurationsActionKeyStore } from "../../services/configurations/redux/actions";
+import {
+  Actions as ConfigurationsActions,
+  ActionKeyStore as ConfigurationsActionKeyStore
+} from "../../services/configurations/redux/actions"
 
 import graph1 from "../../images/graph1.png"
 import graph2 from "../../images/graph2.png"
@@ -43,14 +46,25 @@ function getGraph(name) {
 class VisualizationView extends React.Component {
 
     componentWillMount() {
-        // Not setting the title here because this component
-        // may be either instantiated within a dashboard
-        // OR in an individual visualization page.
-        //this.props.setPageTitle("Visualization");
-    };
+        this.props.fetchConfigurationIfNeeded(this.props.id);
+        this.updateQuery();
+    }
+
+    componentDidUpdate(prevProps) {
+        this.props.fetchConfigurationIfNeeded(this.props.id);
+        this.updateQuery();
+    }
+
+    updateQuery() {
+        const { configuration, fetchQueryIfNeeded } = this.props;
+        if(configuration){
+            fetchQueryIfNeeded(configuration.get("query"));
+        }
+    }
 
     render() {
-        let { id, title } = this.props;
+        const { id, configuration } = this.props;
+        const title = configuration ? configuration.get("title") : "Loading...";
         return (
             <div style={style.card}>
                 <AppBar
@@ -67,12 +81,19 @@ class VisualizationView extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-    title: state.configurations.getIn([
+
+    configuration: state.configurations.getIn([
         ConfigurationsActionKeyStore.VISUALIZATIONS,
         ownProps.id,
-        ConfigurationsActionKeyStore.DATA,
-        "title"
+        ConfigurationsActionKeyStore.DATA
+    ]),
+
+    error: state.configurations.getIn([
+        ConfigurationsActionKeyStore.VISUALIZATIONS,
+        ownProps.id,
+        ConfigurationsActionKeyStore.ERROR
     ])
+
 });
 
 
@@ -82,6 +103,18 @@ const actionCreators = (dispatch) => ({
     },
     goTo: function(link, filters) {
         dispatch(push({pathname:link, query:filters}));
+    },
+    fetchConfigurationIfNeeded: function(id) {
+        dispatch(ConfigurationsActions.fetchIfNeeded(
+            id,
+            ConfigurationsActionKeyStore.VISUALIZATIONS
+        ));
+    },
+    fetchQueryIfNeeded: function(id) {
+        dispatch(ConfigurationsActions.fetchIfNeeded(
+            id,
+            ConfigurationsActionKeyStore.QUERIES
+        ));
     }
  });
 
