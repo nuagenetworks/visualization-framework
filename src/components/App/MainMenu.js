@@ -80,8 +80,8 @@ class MainMenuView extends React.Component {
                         style={style.listItem}
                         />
                     <ListItem
-                        primaryText="Dashboard1"
-                        onTouchTap={() => {this.props.goTo("/dashboards/dashboard1")}}
+                        primaryText="App Aware Routing"
+                        onTouchTap={() => {this.props.goTo("/dashboards/aarEnterprise?startTime=now-900h")}}
                         style={style.listItem}
                         />
                 </List>
