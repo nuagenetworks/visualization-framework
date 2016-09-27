@@ -44,7 +44,7 @@ store.subscribe(function() {
     if (state.router.location.query.token && state.router.location.query.token !== state.VSD.get(VSDActionKeyStore.TOKEN))
     {
         store.dispatch(VSDActions.setSettings(store.getState().router.location.query.token, store.getState().router.location.query.api));
-        store.dispatch(VSDActions.fetch("me"));
+        store.dispatch(VSDActions.fetch("licenses"));
     }
 });
 
