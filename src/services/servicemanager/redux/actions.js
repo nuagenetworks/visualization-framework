@@ -14,7 +14,6 @@ export const ActionKeyStore = {
     EXPIRATION_DATE: "expirationDate",
 };
 
-
 /*
     Make a query on the service based on the service name.
 
@@ -22,7 +21,7 @@ export const ActionKeyStore = {
     * query: the parameterized query
     * serviceName: the service name we should use to make the query
 */
-function fetch(query, serviceName) {
+function fetch(query, serviceName, forceCache) {
 
     let service = ServiceManager.getService(serviceName);
 
@@ -37,7 +36,7 @@ function fetch(query, serviceName) {
 
             }, function (error) {
                 if (process.env.NODE_ENV === "development" && service.hasOwnProperty("getMockResponse")) {
-                    dispatch(didReceiveResponse(requestID, service.getMockResponse(requestID)));
+                    dispatch(didReceiveResponse(requestID, service.getMockResponse(requestID), forceCache));
                 }
                 else
                 {
@@ -59,13 +58,13 @@ function shouldFetch(state, requestID) {
     return !request.get(ActionKeyStore.IS_FETCHING) && currentDate > expireDate;
 }
 
-function fetchIfNeeded(query, serviceName) {
+function fetchIfNeeded(query, serviceName, forceCache) {
     let service   = ServiceManager.getService(serviceName),
         requestID = service.getRequestID(query);
 
     return function (dispatch, getState) {
         if (shouldFetch(getState(), requestID)) {
-            return dispatch(fetch(query, serviceName));
+            return dispatch(fetch(query, serviceName, forceCache));
 
         } else {
             return Promise.resolve();
@@ -79,13 +78,16 @@ function didStartRequest(requestID) {
         requestID: requestID,
     };
 }
-function didReceiveResponse(requestID, results) {
+
+function didReceiveResponse(requestID, results, forceCache) {
     return {
         type: ActionTypes.SERVICE_MANAGER_DID_RECEIVE_RESPONSE,
         requestID: requestID,
-        results: results
+        results: results,
+        forceCache: forceCache
     };
 }
+
 function didReceiveError(requestID, error) {
     return {
         type: ActionTypes.SERVICE_MANAGER_DID_RECEIVE_ERROR,

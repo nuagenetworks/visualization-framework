@@ -50,8 +50,9 @@ store.subscribe(function() {
     // Fetch licenses if necessary
     store.dispatch(ServiceActions.fetchIfNeeded({
         parentResource: "licenses"
-    }
-    , "VSD"));
+    },
+    "VSD",
+    true));
 });
 
 export default store;

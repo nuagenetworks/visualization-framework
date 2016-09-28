@@ -13,9 +13,11 @@ function didStartRequest(state, requestID) {
                 .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.ERROR], null);
 }
 
-function didReceiveResponse(state, requestID, results) {
-    const currentDate    = new Date(),
-          expirationDate = currentDate.setTime(currentDate.getTime() + ServiceManager.config.timingCache);
+function didReceiveResponse(state, requestID, results, forceCache) {
+
+    const timingCache    = forceCache ? 86400000 : ServiceManager.config.timingCache, // forceCache equals to 24h
+          currentDate    = new Date(),
+          expirationDate = currentDate.setTime(currentDate.getTime() + timingCache);
 
     return state
       .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], false)
@@ -36,7 +38,7 @@ function servicesReducer(state = initialState, action) {
             return didStartRequest(state, action.requestID);
 
         case ActionTypes.SERVICE_MANAGER_DID_RECEIVE_RESPONSE:
-            return didReceiveResponse(state, action.requestID, action.results);
+            return didReceiveResponse(state, action.requestID, action.results, action.forceCache);
 
         case ActionTypes.SERVICE_MANAGER_DID_RECEIVE_ERROR:
             return didReceiveError(state, action.requestID, action.error);
