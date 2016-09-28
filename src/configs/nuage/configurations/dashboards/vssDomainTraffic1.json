@@ -1,0 +1,13 @@
+{
+    "id": "vssDomainTraffic1",
+    "author": "Ronak Shah",
+    "creationDate": "10/18/2016",
+    "title": "VSS Domain Dashboard",
+    "visualizations": [
+        { "id": "vss-domain-traffic-tcp-conn", "x": 6, "y": 0, "w": 6, "h": 22, "minW": 2, "minH": 12},
+        { "id": "vss-domain-traffic-tcp-synflood", "x": 26, "y": 10, "w": 6, "h": 22, "minW": 2, "minH": 12},
+        { "id": "vss-domain-traffic-udp", "x": 46, "y": 20, "w": 6, "h": 22, "minW": 2, "minH": 12},
+        { "id": "vss-domain-traffic-icmp", "x": 66, "y": 20, "w": 6, "h": 22, "minW": 2, "minH": 12}
+    ]
+}
+

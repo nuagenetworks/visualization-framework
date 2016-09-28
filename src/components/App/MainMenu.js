@@ -95,8 +95,13 @@ class MainMenuView extends React.Component {
                         style={style.listItem}
                         />
                     <ListItem
-                        primaryText="VSS"
+                        primaryText="VSS-Enterprise"
                         onTouchTap={() => {this.props.goTo("/dashboards/vssEnterprise?startTime=now-900h")}}
+                        style={style.listItem}
+                        />
+                    <ListItem
+                        primaryText="VSS-Domain"
+                        onTouchTap={() => {this.props.goTo("/dashboards/vssDomainTraffic1?startTime=now-900h")}}
                         style={style.listItem}
                         />
                 </List>
