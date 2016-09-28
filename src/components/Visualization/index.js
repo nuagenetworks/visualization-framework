@@ -12,20 +12,9 @@ import {
   ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions"
 
-import { Actions as ServiceActions } from "../../services/servicemanager/redux/actions";
-
-import ImageGraph from "../Graphs/ImageGraph";
 import parse from "json-templates";
 
-// TODO split this out into something like "GraphManager",
-// and add a register() function
-const graphComponents = {
-  "ImageGraph": ImageGraph
-};
-
-function getGraphComponent(type){
-  return graphComponents[type];
-}
+import { GraphManager } from "../Graphs/index";
 
 const style = {
     navBar: {
@@ -41,33 +30,68 @@ class VisualizationView extends React.Component {
 
     componentWillMount() {
         this.props.fetchConfigurationIfNeeded(this.props.id);
-        this.updateQuery();
-        this.updateQueryResults();
+        // Note: It looks unnecessary as the configuration won't be fetched here.
+        // this.updateQuery(this.props);
+        // this.updateQueryResults(this.props);
     }
 
-    componentDidUpdate(prevProps) {
-        this.props.fetchConfigurationIfNeeded(this.props.id);
-        this.updateQuery();
-        this.updateQueryResults();
+    // Note: This method is called everytime a props has changed
+    componentWillReceiveProps(nextProps) {
+        console.error(JSON.stringify(this.props));
+        console.error(JSON.stringify(nextProps));
+
+        // Note: When changing the props.id, we need to update the configuration
+        if (this.props.id !== nextProps.id) {
+            this.props.fetchConfigurationIfNeeded(nextProps.id);
+        }
+
+        // Note: When the props.configuration has been updated, we need to update the query
+        if (this.props.configuration !== nextProps.configuration) {
+            console.error("Configuration changed !");
+            this.updateQuery(nextProps);
+        }
+
+        // Note: when the props.query has been updated, we need to update the query results
+        if (this.props.queryTemplate !== nextProps.queryTemplate) {
+            console.error("queryTemplate changed !");
+            this.updateQueryResults(nextProps);
+        }
     }
 
-    updateQuery() {
-        const { configuration, fetchQueryIfNeeded } = this.props;
+    // Note: This is always called after the render has been done.
+    // The content of this method is called twice:
+    // 1. In componentWillMount
+    // 2. In componentDidUpdate
+    // componentDidUpdate(prevProps) {
+    //     this.props.fetchConfigurationIfNeeded(this.props.id);
+    //     this.updateQuery();
+    //     this.updateQueryResults();
+    // }
+
+    updateQuery(props) {
+        const { configuration, fetchQueryIfNeeded } = props;
 
         if (configuration) {
             fetchQueryIfNeeded(configuration.get("query"));
         }
     }
 
-    updateQueryResults() {
-        const { queryTemplate, executeQueryIfNeeded } = this.props;
+    updateQueryResults(props) {
+        const { queryTemplate, executeQueryIfNeeded } = props;
 
         // TODO get the context from the route.
-        const context = {};
+        const context = {
+            parent: "enterprises",
+            parentID: "abc"
+        };
 
         if (queryTemplate) {
-            const template = parse(queryTemplate);
-            const query = template(context);
+            const template = parse(queryTemplate),
+                  query    = template(context);
+
+            console.error("MAKING QUERY");
+            console.error(query);
+
             executeQueryIfNeeded(query);
         }
     }
@@ -76,14 +100,16 @@ class VisualizationView extends React.Component {
         const { configuration } = this.props;
         let title, body;
 
-        if(configuration){
+        if (configuration) {
             title = configuration.get("title");
 
-            const graph = configuration.get("graph") || "ImageGraph";
-            const GraphComponent = getGraphComponent(graph);
+            const graphName      = configuration.get("graph") || "ImageGraph",
+                  GraphComponent = GraphManager.getGraphComponent(graphName);
+
             body = (
                 <GraphComponent {...this.props} />
             );
+
         } else {
             title = "Loading...";
             body = (
@@ -123,14 +149,15 @@ const mapStateToProps = (state, ownProps) => {
     };
 
     // Expose the query template as a JS object if it is available.
-    if(props.configuration){
+    if (props.configuration) {
         const queryConfiguration = state.configurations.getIn([
             ConfigurationsActionKeyStore.QUERIES,
             props.configuration.get("query")
         ]);
-        if(queryConfiguration && !queryConfiguration.get(
+
+        if (queryConfiguration && !queryConfiguration.get(
             ConfigurationsActionKeyStore.IS_FETCHING
-        )){
+        )) {
             props.queryTemplate = queryConfiguration.get(
                 ConfigurationsActionKeyStore.DATA
             ).toJS();
