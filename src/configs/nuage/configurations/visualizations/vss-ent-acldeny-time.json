@@ -1,0 +1,12 @@
+{
+    "id": "vss-ent-acldeny-time",
+    "graph": "LineGraph",
+    "title": "VSS Enterprise ACL Deny vs Time",
+    "author": "Ronak Shah",
+    "creationDate": "10/17/2016",
+    "data": {
+        "xColumn": "key",
+        "yColumn": "1"
+    },
+    "query": "vss-ent-acldeny-time"
+}
