@@ -36,7 +36,7 @@
                         }
                     },
                     "aggs": {
-                        "1": {
+                        "SumOf": {
                             "sum": {
                                 "field": "value"
                             }
@@ -46,11 +46,11 @@
                                 "field": "type",
                                 "size": 5,
                                 "order": {
-                                    "1": "desc"
+                                    "SumOf": "desc"
                                 }
                             },
                             "aggs": {
-                                "1": {
+                                "SumOf": {
                                     "sum": {
                                         "field": "value"
                                     }
