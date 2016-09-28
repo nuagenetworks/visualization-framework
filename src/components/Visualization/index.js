@@ -16,7 +16,7 @@ import { theme } from "../../theme";
 import ImageGraph from "../Graphs/ImageGraph";
 
 const graphComponents = {
-  "image": ImageGraph
+  "ImageGraph": ImageGraph
 };
 
 function getGraphComponent(type){
@@ -60,8 +60,8 @@ class VisualizationView extends React.Component {
         if(configuration){
             title = configuration.get("title");
 
-            const type = configuration.get("type") || "image";
-            const GraphComponent = getGraphComponent(type);
+            const graph = configuration.get("graph") || "ImageGraph";
+            const GraphComponent = getGraphComponent(graph);
             body = (
                 <GraphComponent {...this.props} />
             );
