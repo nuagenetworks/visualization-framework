@@ -3,20 +3,29 @@ import { connect } from "react-redux";
 import { push } from "redux-router";
 
 import AppBar from "material-ui/AppBar";
+import CircularProgress from "material-ui/CircularProgress";
+import { theme } from "../../theme";
 
 import { Actions } from "./redux/actions";
-
 import {
   Actions as ConfigurationsActions,
   ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions"
 
-import graph1 from "../../images/graph1.png"
-import graph2 from "../../images/graph2.png"
-import graph3 from "../../images/graph3.png"
-import graph4 from "../../images/graph4.png"
+import { Actions as ServiceActions } from "../../services/servicemanager/redux/actions";
 
-import {theme} from "../../theme"
+import ImageGraph from "../Graphs/ImageGraph";
+import parse from "json-templates";
+
+// TODO split this out into something like "GraphManager",
+// and add a register() function
+const graphComponents = {
+  "ImageGraph": ImageGraph
+};
+
+function getGraphComponent(type){
+  return graphComponents[type];
+}
 
 const style = {
     navBar: {
@@ -28,31 +37,18 @@ const style = {
     }
 };
 
-function getGraph(name) {
-    switch(name) {
-        case "graph1":
-            return graph1;
-        case "graph2":
-            return graph2;
-        case "graph3":
-            return graph3;
-        case "graph4":
-        default:
-            return graph4;
-    }
-};
-
-
 class VisualizationView extends React.Component {
 
     componentWillMount() {
         this.props.fetchConfigurationIfNeeded(this.props.id);
         this.updateQuery();
+        this.updateQueryResults();
     }
 
     componentDidUpdate(prevProps) {
         this.props.fetchConfigurationIfNeeded(this.props.id);
         this.updateQuery();
+        this.updateQueryResults();
     }
 
     updateQuery() {
@@ -63,9 +59,38 @@ class VisualizationView extends React.Component {
         }
     }
 
+    updateQueryResults() {
+        const { queryTemplate, executeQueryIfNeeded } = this.props;
+
+        // TODO get the context from the route.
+        const context = {};
+
+        if (queryTemplate) {
+            const template = parse(queryTemplate);
+            const query = template(context);
+            executeQueryIfNeeded(query);
+        }
+    }
+
     render() {
-        const { id, configuration } = this.props;
-        const title = configuration ? configuration.get("title") : "Loading...";
+        const { configuration } = this.props;
+        let title, body;
+
+        if(configuration){
+            title = configuration.get("title");
+
+            const graph = configuration.get("graph") || "ImageGraph";
+            const GraphComponent = getGraphComponent(graph);
+            body = (
+                <GraphComponent {...this.props} />
+            );
+        } else {
+            title = "Loading...";
+            body = (
+                <CircularProgress color="#eeeeee"/>
+            );
+        }
+
         return (
             <div style={style.card}>
                 <AppBar
@@ -73,50 +98,86 @@ class VisualizationView extends React.Component {
                     showMenuIconButton={false}
                     style={style.navBar}
                     />
-                <div>
-                    <img src={getGraph(id)} alt={id} width="100%" height="100%" />
-                </div>
+                { body }
             </div>
         );
     }
 }
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state, ownProps) => {
 
-    configuration: state.configurations.getIn([
-        ConfigurationsActionKeyStore.VISUALIZATIONS,
-        ownProps.id,
-        ConfigurationsActionKeyStore.DATA
-    ]),
+    const props = {
 
-    error: state.configurations.getIn([
-        ConfigurationsActionKeyStore.VISUALIZATIONS,
-        ownProps.id,
-        ConfigurationsActionKeyStore.ERROR
-    ])
+        configuration: state.configurations.getIn([
+            ConfigurationsActionKeyStore.VISUALIZATIONS,
+            ownProps.id,
+            ConfigurationsActionKeyStore.DATA
+        ]),
 
-});
+        error: state.configurations.getIn([
+            ConfigurationsActionKeyStore.VISUALIZATIONS,
+            ownProps.id,
+            ConfigurationsActionKeyStore.ERROR
+        ])
+
+    };
+
+    // Expose the query template as a JS object if it is available.
+    if(props.configuration){
+        const queryConfiguration = state.configurations.getIn([
+            ConfigurationsActionKeyStore.QUERIES,
+            props.configuration.get("query")
+        ]);
+        if(queryConfiguration && !queryConfiguration.get(
+            ConfigurationsActionKeyStore.IS_FETCHING
+        )){
+            props.queryTemplate = queryConfiguration.get(
+                ConfigurationsActionKeyStore.DATA
+            ).toJS();
+        }
+    }
+
+    return props;
+};
 
 
 const actionCreators = (dispatch) => ({
+
     setPageTitle: function(aTitle) {
         dispatch(Actions.updateTitle(aTitle));
     },
+
     goTo: function(link, filters) {
         dispatch(push({pathname:link, query:filters}));
     },
+
     fetchConfigurationIfNeeded: function(id) {
         dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.VISUALIZATIONS
         ));
     },
+
     fetchQueryIfNeeded: function(id) {
         dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.QUERIES
         ));
+    },
+
+    executeQueryIfNeeded: function(query) {
+
+        // TODO execute this query - now it is a valid ES query
+        console.log(JSON.stringify(query, null, 2));
+
+        // The following line does execute the query,
+        // but keeps doing so over and over again.
+        //dispatch(ServiceActions.fetch(query, "elasticsearch"));
+
+        // TODO create fetchIfNeeded
+        //dispatch(ServiceActions.fetchIfNeeded(query, "elasticsearch"));
     }
+
  });
 
 
