@@ -12,8 +12,7 @@ import {
   ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions"
 
-//import { ServiceManager } from "../../services/servicemanager";
-//console.log(ServiceManager);
+import { Actions as ServiceActions } from "../../services/servicemanager/redux/actions";
 
 import ImageGraph from "../Graphs/ImageGraph";
 import parse from "json-templates";
@@ -61,7 +60,7 @@ class VisualizationView extends React.Component {
     }
 
     updateQueryResults() {
-        const { queryTemplate } = this.props;
+        const { queryTemplate, executeQueryIfNeeded } = this.props;
 
         // TODO get the context from the route.
         const context = {};
@@ -69,9 +68,7 @@ class VisualizationView extends React.Component {
         if (queryTemplate) {
             const template = parse(queryTemplate);
             const query = template(context);
-
-            // TODO execute this query - now it is a valid ES query
-            console.log(JSON.stringify(query, null, 2));
+            executeQueryIfNeeded(query);
         }
     }
 
@@ -145,24 +142,42 @@ const mapStateToProps = (state, ownProps) => {
 
 
 const actionCreators = (dispatch) => ({
+
     setPageTitle: function(aTitle) {
         dispatch(Actions.updateTitle(aTitle));
     },
+
     goTo: function(link, filters) {
         dispatch(push({pathname:link, query:filters}));
     },
+
     fetchConfigurationIfNeeded: function(id) {
         dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.VISUALIZATIONS
         ));
     },
+
     fetchQueryIfNeeded: function(id) {
         dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.QUERIES
         ));
+    },
+
+    executeQueryIfNeeded: function(query) {
+
+        // TODO execute this query - now it is a valid ES query
+        console.log(JSON.stringify(query, null, 2));
+
+        // The following line does execute the query,
+        // but keeps doing so over and over again.
+        //dispatch(ServiceActions.fetch(query, "elasticsearch"));
+
+        // TODO create fetchIfNeeded
+        //dispatch(ServiceActions.fetchIfNeeded(query, "elasticsearch"));
     }
+
  });
 
 
