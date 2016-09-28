@@ -1,0 +1,12 @@
+{
+    "id": "aar-slastatus-enterprise",
+    "graph": "PieGraph",
+    "title": "SLA Status",
+    "author": "Ronak Shah",
+    "creationDate": "10/19/2016",
+    "data": {
+        "sliceColumn": "doc_count",
+        "labelColumn": "key"
+    },
+    "query": "aar-slastatus-enterprise"
+}
