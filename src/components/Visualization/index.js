@@ -16,7 +16,7 @@ import {
 //console.log(ServiceManager);
 
 import ImageGraph from "../Graphs/ImageGraph";
-
+import parse from "json-templates";
 
 // TODO split this out into something like "GraphManager",
 // and add a register() function
@@ -61,9 +61,17 @@ class VisualizationView extends React.Component {
     }
 
     updateQueryResults() {
-        const { queryConfiguration } = this.props;
-        if (queryConfiguration) {
-            console.log(JSON.stringify(queryConfiguration.toJS(), null, 2));
+        const { queryTemplate } = this.props;
+
+        // TODO get the context from the route.
+        const context = {};
+
+        if (queryTemplate) {
+            const template = parse(queryTemplate);
+            const query = template(context);
+
+            // TODO execute this query - now it is a valid ES query
+            console.log(JSON.stringify(query, null, 2));
         }
     }
 
@@ -117,11 +125,19 @@ const mapStateToProps = (state, ownProps) => {
 
     };
 
+    // Expose the query template as a JS object if it is available.
     if(props.configuration){
-        props.queryConfiguration = state.configurations.getIn([
+        const queryConfiguration = state.configurations.getIn([
             ConfigurationsActionKeyStore.QUERIES,
             props.configuration.get("query")
         ]);
+        if(queryConfiguration && !queryConfiguration.get(
+            ConfigurationsActionKeyStore.IS_FETCHING
+        )){
+            props.queryTemplate = queryConfiguration.get(
+                ConfigurationsActionKeyStore.DATA
+            ).toJS();
+        }
     }
 
     return props;
