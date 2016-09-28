@@ -1,55 +1,44 @@
 {
     "id":"top20-talkers-domain-table",
-    "title":"TBD",
+    "title":"Top 20 talkers",
     "service":"elasticsearch",
     "query":{
-        "size":0,
-        "query":{
-            "bool":{
-                "must":[
-                    {
-                        "range":{
-                            "timestamp":{
-                                "gte":"now-24h",
-                                "lte":"now",
-                                "format":"epoch_millis"
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        "aggs":{
-            "2":{
-                "filters":{
-                    "filters":{
-                        "Domain":{
-                            "query":{
-                                "term":{
-                                    "DomainName":"test_org"
+        "index":"{{index:nuage_dpi_flowstats}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+                "size":0,
+                "query":{
+                    "bool":{
+                        "must":[
+                            {
+                                "range":{
+                                    "timestamp":{
+                                        "gte":"{{startTime:now-24h}}",
+                                        "lte":"{{endTime:now}}",
+                                        "format":"epoch_millis"
+                                    }
                                 }
                             }
-                        }
+                        ]
                     }
                 },
                 "aggs":{
-                    "3":{
-                        "terms":{
-                            "field":"Application",
-                            "size":20,
-                            "order":{
-                                "1":"desc"
+                    "2":{
+                        "filters":{
+                            "filters":{
+                                "Domain":{
+                                    "query":{
+                                        "term":{
+                                            "DomainName":"{{DomainName:Domain1}}"
+                                        }
+                                    }
+                                }
                             }
                         },
                         "aggs":{
-                            "1":{
-                                "sum":{
-                                    "field":"TotalMB"
-                                }
-                            },
-                            "6":{
+                            "Application":{
                                 "terms":{
-                                    "field":"L7Classification",
+                                    "field":"Application",
                                     "size":20,
                                     "order":{
                                         "1":"desc"
@@ -61,9 +50,9 @@
                                             "field":"TotalMB"
                                         }
                                     },
-                                    "7":{
+                                    "L7Classification":{
                                         "terms":{
-                                            "field":"SrcVportName",
+                                            "field":"L7Classification",
                                             "size":20,
                                             "order":{
                                                 "1":"desc"
@@ -75,9 +64,9 @@
                                                     "field":"TotalMB"
                                                 }
                                             },
-                                            "8":{
+                                            "SrcVportName":{
                                                 "terms":{
-                                                    "field":"SourceNSG",
+                                                    "field":"SrcVportName",
                                                     "size":20,
                                                     "order":{
                                                         "1":"desc"
@@ -89,9 +78,9 @@
                                                             "field":"TotalMB"
                                                         }
                                                     },
-                                                    "9":{
+                                                    "SourceNSG":{
                                                         "terms":{
-                                                            "field":"SrcUplink",
+                                                            "field":"SourceNSG",
                                                             "size":20,
                                                             "order":{
                                                                 "1":"desc"
@@ -103,9 +92,9 @@
                                                                     "field":"TotalMB"
                                                                 }
                                                             },
-                                                            "10":{
+                                                            "SrcUplink":{
                                                                 "terms":{
-                                                                    "field":"SrcUplinkRole",
+                                                                    "field":"SrcUplink",
                                                                     "size":20,
                                                                     "order":{
                                                                         "1":"desc"
@@ -117,9 +106,9 @@
                                                                             "field":"TotalMB"
                                                                         }
                                                                     },
-                                                                    "12":{
+                                                                    "SrcUplinkRole":{
                                                                         "terms":{
-                                                                            "field":"DstUplinkRole",
+                                                                            "field":"SrcUplinkRole",
                                                                             "size":20,
                                                                             "order":{
                                                                                 "1":"desc"
@@ -131,9 +120,9 @@
                                                                                     "field":"TotalMB"
                                                                                 }
                                                                             },
-                                                                            "13":{
+                                                                            "DstUplinkRole":{
                                                                                 "terms":{
-                                                                                    "field":"DstUplink",
+                                                                                    "field":"DstUplinkRole",
                                                                                     "size":20,
                                                                                     "order":{
                                                                                         "1":"desc"
@@ -145,9 +134,9 @@
                                                                                             "field":"TotalMB"
                                                                                         }
                                                                                     },
-                                                                                    "14":{
+                                                                                    "DstUplink":{
                                                                                         "terms":{
-                                                                                            "field":"DestinationNSG",
+                                                                                            "field":"DstUplink",
                                                                                             "size":20,
                                                                                             "order":{
                                                                                                 "1":"desc"
@@ -159,9 +148,9 @@
                                                                                                     "field":"TotalMB"
                                                                                                 }
                                                                                             },
-                                                                                            "15":{
+                                                                                            "DestinationNSG":{
                                                                                                 "terms":{
-                                                                                                    "field":"DestVportName",
+                                                                                                    "field":"DestinationNSG",
                                                                                                     "size":20,
                                                                                                     "order":{
                                                                                                         "1":"desc"
@@ -173,9 +162,25 @@
                                                                                                             "field":"TotalMB"
                                                                                                         }
                                                                                                     },
-                                                                                                    "11":{
-                                                                                                        "sum":{
-                                                                                                            "field":"TotalPacketsCount"
+                                                                                                    "DestVportName":{
+                                                                                                        "terms":{
+                                                                                                            "field":"DestVportName",
+                                                                                                            "size":20,
+                                                                                                            "order":{
+                                                                                                                "1":"desc"
+                                                                                                            }
+                                                                                                        },
+                                                                                                        "aggs":{
+                                                                                                            "1":{
+                                                                                                                "sum":{
+                                                                                                                    "field":"TotalMB"
+                                                                                                                }
+                                                                                                            },
+                                                                                                            "11":{
+                                                                                                                "sum":{
+                                                                                                                    "field":"TotalPacketsCount"
+                                                                                                                }
+                                                                                                            }
                                                                                                         }
                                                                                                     }
                                                                                                 }
@@ -199,7 +204,7 @@
                         }
                     }
                 }
-            }
         }
     }
 }
+
