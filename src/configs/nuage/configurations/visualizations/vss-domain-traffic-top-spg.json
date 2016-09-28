@@ -1,0 +1,13 @@
+{
+    "id": "vss-domain-traffic-top-spg",
+    "graph": "BarGraph",
+    "title": "Top Source Policy Groups by Count",
+    "author": "Ronak Shah",
+    "creationDate": "10/18/2016",
+    "data": {
+        "xColumn": "SumOf",
+        "yColumn": "key",
+        "orientation": "horizontal"
+    },
+    "query": "vss-domain-traffic-top-spg"
+}
