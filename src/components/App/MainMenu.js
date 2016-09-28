@@ -7,7 +7,7 @@ import Subheader from "material-ui/Subheader";
 import { List, ListItem } from "material-ui/List";
 
 import { Actions as ComponentActions, ActionKeyStore as ComponentActionKeyStore } from "./redux/actions";
-import { ActionKeyStore as ElasticsearchActionKeyStore } from "../../services/elasticsearch/redux/actions";
+import { ActionKeyStore as ServiceActionKeyStore } from "../../services/servicemanager/redux/actions";
 import { theme } from "../../theme";
 
 var style = {
@@ -111,7 +111,7 @@ MainMenuView.propTypes = {
 
 const mapStateToProps = (state) => ({
     open: state.interface.get(ComponentActionKeyStore.MAIN_MENU_OPENED),
-    domains: state.elasticsearch.getIn([ElasticsearchActionKeyStore.REQUESTS, 'temporaryID', ElasticsearchActionKeyStore.RESULTS]) || []
+    domains: state.services.getIn([ServiceActionKeyStore.REQUESTS, 'temporaryID', ServiceActionKeyStore.RESULTS]) || []
 });
 
 const actionCreators = (dispatch) => ({

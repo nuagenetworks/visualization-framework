@@ -57,7 +57,8 @@ class VisualizationView extends React.Component {
 
     updateQuery() {
         const { configuration, fetchQueryIfNeeded } = this.props;
-        if(configuration){
+
+        if (configuration) {
             fetchQueryIfNeeded(configuration.get("query"));
         }
     }

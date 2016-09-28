@@ -11,6 +11,7 @@ export const ActionKeyStore = {
     DATA: "data",
     ERROR: "error",
     IS_FETCHING: "isFetching",
+    EXPIRATION_DATE: "expirationDate",
 
     /*
       The following keys correspond to the various
@@ -37,7 +38,7 @@ export const ActionKeyStore = {
 */
 function fetch (id, configType) {
 
-    if(!configType){
+    if(!configType) {
         throw new Error("configType argument must be specified.");
     }
 
@@ -59,19 +60,27 @@ function fetch (id, configType) {
     }
 };
 
-function shouldFetch(state, id, configType){
-    return !state.configurations.getIn([ configType, id ]);
+function shouldFetch(state, id, configType) {
+    const configuration = state.configurations.getIn([ configType, id ]);
+
+    if (!configuration)
+        return true;
+
+    let currentDate = new Date(),
+        expireDate  = new Date(configuration.get(ActionKeyStore.EXPIRATION_DATE));
+
+    return !configuration.get(ActionKeyStore.IS_FETCHING) && currentDate > expireDate;
 }
 
-function fetchIfNeeded(id, configType){ 
+function fetchIfNeeded(id, configType) {
     return function (dispatch, getState) {
-        if (shouldFetch(getState(), id, configType)){
+        if (shouldFetch(getState(), id, configType)) {
             return dispatch(fetch(id, configType));
         } else {
             return Promise.resolve();
         }
     }
-} 
+}
 
 function didStartRequest (id, configType) {
     return {

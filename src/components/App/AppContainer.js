@@ -12,8 +12,8 @@ import { Card,
 
 import { theme } from "../../theme";
 
-import { ActionKeyStore as VSDActionKeyStore } from "../../configs/nuage/redux/actions";
-import { getRequestID } from "../../configs/nuage/vsd";
+import { ActionKeyStore as ServiceActionKeyStore } from "../../services/servicemanager/redux/actions";
+import { ServiceManager } from "../../services/servicemanager/index";
 
 let style = {
     container: {
@@ -90,9 +90,15 @@ class AppContainerView extends React.Component {
 }
 
 
-const mapStateToProps = (state) => ({
-    licenses: state.VSD.getIn([VSDActionKeyStore.REQUESTS, getRequestID("licenses"), VSDActionKeyStore.RESULTS]),
-});
+const mapStateToProps = (state, ownProps) => {
+    const VSDService = ServiceManager.getService("VSD");
+
+    return {
+        licenses: state.services.getIn([ServiceActionKeyStore.REQUESTS, VSDService.getRequestID({
+            parentResource: "licenses",
+        }), ServiceActionKeyStore.RESULTS]) || [],
+    };
+};
 
 
 const actionCreators = (dispatch) => ({
