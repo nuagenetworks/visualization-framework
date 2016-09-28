@@ -1,0 +1,13 @@
+{
+    "id": "vss-top-domains-blocked-traffic",
+    "graph": "BarGraph",
+    "title": "Top 5 Apps",
+    "author": "Ronak Shah",
+    "creationDate": "10/17/2016",
+    "data": {
+        "xColumn": "Count of ACL-Deny",
+        "yColumn": "key",
+        "orientation": "horizontal"
+    },
+    "query": "vss-top-domains-blocked-traffic"
+}

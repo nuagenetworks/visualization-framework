@@ -94,6 +94,11 @@ class MainMenuView extends React.Component {
                         onTouchTap={() => {this.props.goTo("/dashboards/aarDomain?startTime=now-900h")}}
                         style={style.listItem}
                         />
+                    <ListItem
+                        primaryText="VSS"
+                        onTouchTap={() => {this.props.goTo("/dashboards/vssEnterprise?startTime=now-900h")}}
+                        style={style.listItem}
+                        />
                 </List>
 
                 <Subheader style={style.subHeader}>ENTERPRISES</Subheader>
