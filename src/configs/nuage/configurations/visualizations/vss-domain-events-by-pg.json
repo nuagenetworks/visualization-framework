@@ -1,0 +1,12 @@
+{
+    "id": "vss-domain-events-by-pg",
+    "graph": "BarGraph",
+    "title": "Count of Security Events by Source Policy Group",
+    "author": "Ronak Shah",
+    "creationDate": "10/18/2016",
+    "data": {
+        "xColumn": "key",
+        "yColumn": "Sum of Value"
+    },
+    "query": "vss-domain-events-by-pg"
+}
