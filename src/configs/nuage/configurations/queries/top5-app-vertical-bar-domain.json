@@ -1,0 +1,60 @@
+{
+    "id":"top5-app-vertical-bar-domain",
+    "title":"Top 5 Applications",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_dpi_flowstats}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs":{
+                "3":{
+                    "filters":{
+                        "filters":{
+                            "Domain":{
+                                "query":{
+                                    "term":{
+                                        "DomainName":"{{DomainName:Domain1}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "aggs":{
+                        "Application":{
+                            "terms":{
+                                "field":"Application",
+                                "size":5,
+                                "order":{
+                                    "Sum of MB":"desc"
+                                }
+                            },
+                            "aggs":{
+                                "Sum of MB":{
+                                    "sum":{
+                                        "field":"TotalMB"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
