@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 
 import { Actions as MessageBoxActions } from "../MessageBox/redux/actions";
 import { Actions as AppActions } from "../App/redux/actions";
-import { Actions as VSDActions, ActionKeyStore as VSDActionKeyStore } from "../../configs/nuage/redux/actions";
+import { Actions as ServiceActions, ActionKeyStore as ServiceActionKeyStore } from "../../services/servicemanager/redux/actions";
 
-import { getRequestID } from "../../configs/nuage/vsd";
+import { ServiceManager } from "../../services/servicemanager/index";
 
 
-class DomainContainerView extends React.Component {
+class EnterpriseContainerView extends React.Component {
 
     componentWillMount() {
         this.props.setPageTitle("Enterprise ");
@@ -34,10 +34,21 @@ class DomainContainerView extends React.Component {
 }
 
 
-const mapStateToProps = (state, ownProps) => ({
-    domains: state.VSD.getIn([VSDActionKeyStore.REQUESTS, getRequestID("enterprises", ownProps.params.enterpriseID, "domains"), VSDActionKeyStore.RESULTS]) || [],
-    enterprises: state.VSD.getIn([VSDActionKeyStore.REQUESTS, getRequestID("enterprises", ownProps.params.enterpriseID), VSDActionKeyStore.RESULTS])
-});
+const mapStateToProps = (state, ownProps) => {
+    const VSDService = ServiceManager.getService("VSD");
+
+    return {
+        domains: state.services.getIn([ServiceActionKeyStore.REQUESTS, VSDService.getRequestID({
+            parentResource: "enterprises",
+            parentID: ownProps.params.enterpriseID,
+            resource: "domains"
+        }), ServiceActionKeyStore.RESULTS]) || [],
+        enterprises: state.services.getIn([ServiceActionKeyStore.REQUESTS, VSDService.getRequestID({
+            parentResource: "enterprises",
+            parentID: ownProps.params.enterpriseID,
+        }), ServiceActionKeyStore.RESULTS])
+    };
+};
 
 
 const actionCreators = (dispatch) => ({
@@ -48,12 +59,23 @@ const actionCreators = (dispatch) => ({
         dispatch(MessageBoxActions.toggleMessageBox(true, title, body));
     },
     fetchDomains: function(enterpriseID) {
-        dispatch(VSDActions.fetch("enterprises", enterpriseID, "domains"));
+        dispatch(ServiceActions.fetch({
+            parentResource: "enterprises",
+            parentID: enterpriseID,
+            resource: "domains"
+        },
+        "VSD"
+        ));
     },
     fetchEnterprise: function(enterpriseID) {
-        dispatch(VSDActions.fetch("enterprises", enterpriseID));
+        dispatch(ServiceActions.fetch({
+            parentResource: "enterprises",
+            parentID: enterpriseID,
+        },
+        "VSD"
+        ));
     }
  });
 
 
-export default connect(mapStateToProps, actionCreators)(DomainContainerView);
+export default connect(mapStateToProps, actionCreators)(EnterpriseContainerView);
