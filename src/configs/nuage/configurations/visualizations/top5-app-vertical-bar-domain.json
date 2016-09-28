@@ -1,0 +1,12 @@
+{
+    "id": "top5-app-vertical-bar-domain",
+    "graph": "BarGraph",
+    "title": "Top 5 Apps",
+    "author": "Ronak Shah",
+    "creationDate": "10/14/2016",
+    "data": {
+        "xColumn": "key",
+        "yColumn": "Sum of MB"
+    },
+    "query": "top5-app-vertical-bar-domain"
+}

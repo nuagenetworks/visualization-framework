@@ -1,0 +1,10 @@
+{
+    "id": "aarDomain",
+    "author": "Ronak Shah",
+    "creationDate": "10/14/2016",
+    "title": "AAR Domain",
+    "visualizations": [
+        { "id": "top20-talkers-domain", "x": 26, "y": 0, "w": 6, "h": 22, "minW": 2, "minH": 12},
+        { "id": "top5-app-vertical-bar-domain", "x": 6, "y": 0, "w": 6, "h": 22, "minW": 2, "minH": 12}
+    ]
+}
