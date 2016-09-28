@@ -50,6 +50,7 @@ function fetch (id, configType) {
         return fetchConfiguration(id, configType)
             .then(function (configuration) {
                 dispatch(didReceiveResponse(id, configType, configuration));
+                return configuration;
             })
             .catch(function (error) {
                 dispatch(didReceiveError(id, configType, error.message));
@@ -74,10 +75,13 @@ function shouldFetch(state, id, configType) {
 
 function fetchIfNeeded(id, configType) {
     return function (dispatch, getState) {
-        if (shouldFetch(getState(), id, configType)) {
+        const state = getState();
+        if (shouldFetch(state, id, configType)) {
             return dispatch(fetch(id, configType));
         } else {
-            return Promise.resolve();
+            return Promise.resolve(
+                state.configurations.getIn([ configType, id ])
+            );
         }
     }
 }

@@ -15,6 +15,8 @@ import { theme } from "../../theme";
 
 import ImageGraph from "../Graphs/ImageGraph";
 
+// TODO split this out into something like "GraphManager",
+// and add a register() function
 const graphComponents = {
   "ImageGraph": ImageGraph
 };
@@ -49,8 +51,14 @@ class VisualizationView extends React.Component {
         const { configuration, fetchQueryIfNeeded } = this.props;
 
         if (configuration) {
-            fetchQueryIfNeeded(configuration.get("query"));
+            fetchQueryIfNeeded(configuration.get("query"))
+                .then(this.updateQueryResults);
         }
+    }
+
+    updateQueryResults(queryConfiguration) {
+          // TODO use this configuration to execute the query.
+          console.log(queryConfiguration);
     }
 
     render() {
@@ -110,13 +118,13 @@ const actionCreators = (dispatch) => ({
         dispatch(push({pathname:link, query:filters}));
     },
     fetchConfigurationIfNeeded: function(id) {
-        dispatch(ConfigurationsActions.fetchIfNeeded(
+        return dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.VISUALIZATIONS
         ));
     },
     fetchQueryIfNeeded: function(id) {
-        dispatch(ConfigurationsActions.fetchIfNeeded(
+        return dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.QUERIES
         ));
