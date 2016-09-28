@@ -1,5 +1,7 @@
 import { Map } from 'immutable';
 import { ActionTypes, ActionKeyStore } from './actions';
+import { ServiceManager } from "../index"
+
 
 let initialState = Map() // eslint-disable-line
                     // .set(,) // Usefull if we need to set some configuration information
@@ -11,10 +13,16 @@ function didStartRequest(state, requestID) {
                 .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.ERROR], null);
 }
 
-function didReceiveResponse(state, requestID, results) {
+function didReceiveResponse(state, requestID, results, forceCache) {
+
+    const timingCache    = forceCache ? 86400000 : ServiceManager.config.timingCache, // forceCache equals to 24h
+          currentDate    = new Date(),
+          expirationDate = currentDate.setTime(currentDate.getTime() + timingCache);
+
     return state
       .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], false)
-      .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS], results);
+      .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS], results)
+      .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.EXPIRATION_DATE], expirationDate);
 }
 
 function didReceiveError(state, requestID, error) {
@@ -30,7 +38,7 @@ function servicesReducer(state = initialState, action) {
             return didStartRequest(state, action.requestID);
 
         case ActionTypes.SERVICE_MANAGER_DID_RECEIVE_RESPONSE:
-            return didReceiveResponse(state, action.requestID, action.results);
+            return didReceiveResponse(state, action.requestID, action.results, action.forceCache);
 
         case ActionTypes.SERVICE_MANAGER_DID_RECEIVE_ERROR:
             return didReceiveError(state, action.requestID, action.error);

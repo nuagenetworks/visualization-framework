@@ -12,6 +12,7 @@ import serviceReducer from "../services/servicemanager/redux/reducer";
 import VSDReducer from "../configs/nuage/vsd/redux/reducer"
 
 import { Actions as VSDActions, ActionKeyStore as VSDActionKeyStore} from "../configs/nuage/vsd/redux/actions"
+import { Actions as ServiceActions } from "../services/servicemanager/redux/actions";
 
 
 const loggerMiddleware = createLogger();
@@ -41,8 +42,17 @@ let store = createStoreWithRouterAndMiddleware(rootReducer);
 
 store.subscribe(function() {
     const state = store.getState();
-    if (state.router.location.query.token && state.router.location.query.token !== state.VSD.get(VSDActionKeyStore.TOKEN))
-        store.dispatch(VSDActions.setSettings(store.getState().router.location.query.token, store.getState().router.location.query.api))
+
+    if (state.router.location.query.token && state.router.location.query.token !== state.VSD.get(VSDActionKeyStore.TOKEN)) {
+        store.dispatch(VSDActions.setSettings(store.getState().router.location.query.token, store.getState().router.location.query.api));
+    }
+
+    // Fetch licenses if necessary
+    store.dispatch(ServiceActions.fetchIfNeeded({
+        parentResource: "licenses"
+    },
+    "VSD",
+    true));
 });
 
 export default store;
