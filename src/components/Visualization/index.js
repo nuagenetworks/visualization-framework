@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { push } from "redux-router";
 
 import AppBar from "material-ui/AppBar";
+import CircularProgress from "material-ui/CircularProgress";
 
 import { Actions } from "./redux/actions";
 import {
@@ -13,6 +14,14 @@ import {
 import { theme } from "../../theme";
 
 import ImageGraph from "../Graphs/ImageGraph";
+
+const graphComponents = {
+  "image": ImageGraph
+};
+
+function getGraphComponent(type){
+  return graphComponents[type];
+}
 
 const style = {
     navBar: {
@@ -45,8 +54,24 @@ class VisualizationView extends React.Component {
     }
 
     render() {
-        const { id, configuration } = this.props;
-        const title = configuration ? configuration.get("title") : "Loading...";
+        const { configuration } = this.props;
+        let title, body;
+
+        if(configuration){
+            title = configuration.get("title");
+
+            const type = configuration.get("type") || "image";
+            const GraphComponent = getGraphComponent(type);
+            body = (
+                <GraphComponent {...this.props} />
+            );
+        } else {
+            title = "Loading...";
+            body = (
+                <CircularProgress color="#eeeeee"/>
+            );
+        }
+
         return (
             <div style={style.card}>
                 <AppBar
@@ -54,7 +79,7 @@ class VisualizationView extends React.Component {
                     showMenuIconButton={false}
                     style={style.navBar}
                     />
-                <ImageGraph {...this.props} />
+                { body }
             </div>
         );
     }
