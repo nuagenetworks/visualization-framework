@@ -74,8 +74,7 @@ function shouldFetch(state, id, configType) {
 
 function fetchIfNeeded(id, configType) {
     return function (dispatch, getState) {
-        const state = getState();
-        if (shouldFetch(state, id, configType)) {
+        if (shouldFetch(getState(), id, configType)) {
             return dispatch(fetch(id, configType));
         } else {
             return Promise.resolve();
