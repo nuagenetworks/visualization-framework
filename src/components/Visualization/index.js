@@ -4,6 +4,7 @@ import { push } from "redux-router";
 
 import AppBar from "material-ui/AppBar";
 import CircularProgress from "material-ui/CircularProgress";
+import { theme } from "../../theme";
 
 import { Actions } from "./redux/actions";
 import {
@@ -11,9 +12,11 @@ import {
   ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions"
 
-import { theme } from "../../theme";
+//import { ServiceManager } from "../../services/servicemanager";
+//console.log(ServiceManager);
 
 import ImageGraph from "../Graphs/ImageGraph";
+
 
 // TODO split this out into something like "GraphManager",
 // and add a register() function
@@ -40,25 +43,28 @@ class VisualizationView extends React.Component {
     componentWillMount() {
         this.props.fetchConfigurationIfNeeded(this.props.id);
         this.updateQuery();
+        this.updateQueryResults();
     }
 
     componentDidUpdate(prevProps) {
         this.props.fetchConfigurationIfNeeded(this.props.id);
         this.updateQuery();
+        this.updateQueryResults();
     }
 
     updateQuery() {
         const { configuration, fetchQueryIfNeeded } = this.props;
 
         if (configuration) {
-            fetchQueryIfNeeded(configuration.get("query"))
-                .then(this.updateQueryResults);
+            fetchQueryIfNeeded(configuration.get("query"));
         }
     }
 
-    updateQueryResults(queryConfiguration) {
-          // TODO use this configuration to execute the query.
-          console.log(queryConfiguration);
+    updateQueryResults() {
+        const { queryConfiguration } = this.props;
+        if (queryConfiguration) {
+            console.log(JSON.stringify(queryConfiguration.toJS(), null, 2));
+        }
     }
 
     render() {
@@ -93,21 +99,33 @@ class VisualizationView extends React.Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state, ownProps) => {
 
-    configuration: state.configurations.getIn([
-        ConfigurationsActionKeyStore.VISUALIZATIONS,
-        ownProps.id,
-        ConfigurationsActionKeyStore.DATA
-    ]),
+    const props = {
 
-    error: state.configurations.getIn([
-        ConfigurationsActionKeyStore.VISUALIZATIONS,
-        ownProps.id,
-        ConfigurationsActionKeyStore.ERROR
-    ])
+        configuration: state.configurations.getIn([
+            ConfigurationsActionKeyStore.VISUALIZATIONS,
+            ownProps.id,
+            ConfigurationsActionKeyStore.DATA
+        ]),
 
-});
+        error: state.configurations.getIn([
+            ConfigurationsActionKeyStore.VISUALIZATIONS,
+            ownProps.id,
+            ConfigurationsActionKeyStore.ERROR
+        ])
+
+    };
+
+    if(props.configuration){
+        props.queryConfiguration = state.configurations.getIn([
+            ConfigurationsActionKeyStore.QUERIES,
+            props.configuration.get("query")
+        ]);
+    }
+
+    return props;
+};
 
 
 const actionCreators = (dispatch) => ({
@@ -118,13 +136,13 @@ const actionCreators = (dispatch) => ({
         dispatch(push({pathname:link, query:filters}));
     },
     fetchConfigurationIfNeeded: function(id) {
-        return dispatch(ConfigurationsActions.fetchIfNeeded(
+        dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.VISUALIZATIONS
         ));
     },
     fetchQueryIfNeeded: function(id) {
-        return dispatch(ConfigurationsActions.fetchIfNeeded(
+        dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.QUERIES
         ));
