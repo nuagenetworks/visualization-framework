@@ -45,13 +45,13 @@ class MainMenuView extends React.Component {
                 <Subheader style={style.subHeader}>General</Subheader>
                 <List>
                     <ListItem
-                        primaryText="Dashboard"
-                        onTouchTap={() => {this.props.goTo("/")}}
+                        primaryText="Dashboard1"
+                        onTouchTap={() => {this.props.goTo("/dashboards/dashboard1")}}
                         style={style.listItem}
                         />
                     <ListItem
-                        primaryText="Zoom"
-                        onTouchTap={() => {this.props.goTo("/zoom")}}
+                        primaryText="Dashboard2"
+                        onTouchTap={() => {this.props.goTo("/dashboards/dashboard2")}}
                         style={style.listItem}
                         />
                 </List>
