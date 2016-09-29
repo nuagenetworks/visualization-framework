@@ -30,9 +30,18 @@ const getService = function (serviceName) {
     return services[serviceName];
 }
 
+/*
+    Get the service registered for the given name
+*/
+const getRequestID = function (query, serviceName) {
+    const service = getService(serviceName)
+    return service.getRequestID(query);
+}
+
 
 export const ServiceManager = {
     config: config,
     register: register,
     getService: getService,
+    getRequestID: getRequestID,
 }
