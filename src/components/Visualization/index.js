@@ -30,33 +30,30 @@ const style = {
     }
 };
 
+
 class VisualizationView extends React.Component {
 
     componentWillMount() {
-        this.props.fetchConfigurationIfNeeded(this.props.id);
+        this.initialize(this.props.id);
     }
 
     componentWillReceiveProps(nextProps) {
-        this.props.fetchConfigurationIfNeeded(nextProps.id);
-        this.updateQuery(nextProps);
-        this.updateQueryResults(nextProps);
+        this.initialize(nextProps.id);
     }
 
-    updateQuery(props) {
-        const { configuration, fetchQueryIfNeeded } = props;
+    initialize(id) {
+        this.props.fetchConfigurationIfNeeded(id).then(() => {
+            const { configuration } = this.props
 
-        if (configuration) {
-            fetchQueryIfNeeded(configuration.get("query"));
-        }
-    }
+            this.props.fetchQueryIfNeeded(configuration.get("query")).then(() => {
+                const { queryConfiguration, executeQueryIfNeeded, context } = this.props;
+                const pQuery = parameterizedConfiguration(queryConfiguration, context);
 
-    updateQueryResults(props) {
-        const { queryConfiguration, executeQueryIfNeeded, context } = props;
-
-        if (queryConfiguration) {
-            const pQuery = parameterizedConfiguration(queryConfiguration, context);
-            executeQueryIfNeeded(pQuery);
-        }
+                executeQueryIfNeeded(pQuery).then(() => {
+                    this.setState({initializing: false});
+                }, () => {});
+            }, () => {});
+        }, () => {});
     }
 
     render() {
@@ -157,21 +154,21 @@ const actionCreators = (dispatch) => ({
     },
 
     fetchConfigurationIfNeeded: function(id) {
-        dispatch(ConfigurationsActions.fetchIfNeeded(
+        return dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.VISUALIZATIONS
         ));
     },
 
     fetchQueryIfNeeded: function(id) {
-        dispatch(ConfigurationsActions.fetchIfNeeded(
+        return dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.QUERIES
         ));
     },
 
     executeQueryIfNeeded: function(pQuery) {
-        dispatch(ServiceActions.fetchIfNeeded(pQuery.query, pQuery.service));
+        return dispatch(ServiceActions.fetchIfNeeded(pQuery.query, pQuery.service));
     }
 
  });

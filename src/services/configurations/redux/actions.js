@@ -49,14 +49,11 @@ function fetch (id, configType) {
         // to test this method (See: http://redux.js.org/docs/recipes/WritingTests.html)
         return fetchConfiguration(id, configType)
             .then(function (configuration) {
-                dispatch(didReceiveResponse(id, configType, configuration));
+                return dispatch(didReceiveResponse(id, configType, configuration));
             })
             .catch(function (error) {
-                dispatch(didReceiveError(id, configType, error.message));
+                return dispatch(didReceiveError(id, configType, error.message));
             });
-
-            // TODO move this logic to the approproate place.
-            //  dispatch(ElasticSearchActions.fetch(id, configuration, context));
     }
 };
 
@@ -77,7 +74,7 @@ function fetchIfNeeded(id, configType) {
         if (shouldFetch(getState(), id, configType)) {
             return dispatch(fetch(id, configType));
         } else {
-            return Promise.resolve();
+            return Promise.reject("Configuration " + id + " does not need to be fetched" );
         }
     }
 }
