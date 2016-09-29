@@ -8,7 +8,6 @@
         "xColumn": "key",
         "yColumn": "1",
         "stroke": {
-          "color": "blue",
           "width": "2px"
         }
     },

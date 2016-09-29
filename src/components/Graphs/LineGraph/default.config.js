@@ -1,6 +1,8 @@
+import { theme } from "../../../theme"
+
 export const properties = {
     stroke: {
-        color: "blue",
+        color: theme.palette.blueLightColor,
         width: "4px"
     }
 }

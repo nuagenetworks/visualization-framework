@@ -6,10 +6,7 @@
     "creationDate": "10/18/2016",
     "data": {
         "xColumn": "key",
-        "yColumn": "Sum of Value",
-        "colors": [
-             "#7da3f7"
-         ]
+        "yColumn": "Sum of Value"
     },
     "query": "vss-domain-events-by-pg"
 }

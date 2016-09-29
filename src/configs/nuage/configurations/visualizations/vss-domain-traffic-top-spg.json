@@ -7,10 +7,7 @@
     "data": {
         "xColumn": "SumOf",
         "yColumn": "key",
-        "orientation": "horizontal",
-        "colors": [
-             "#7da3f7"
-         ]
+        "orientation": "horizontal"
     },
     "query": "vss-domain-traffic-top-spg"
 }
