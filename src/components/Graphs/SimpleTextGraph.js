@@ -7,7 +7,7 @@ import CircularProgress from "material-ui/CircularProgress";
 */
 class SimpleTextGraph extends React.Component {
     render() {
-        const { response, queryConfiguration } = this.props;
+        const { response, configuration } = this.props;
         let body;
 
         if (response && !response.isFetching) {
@@ -15,7 +15,7 @@ class SimpleTextGraph extends React.Component {
                 <div>
                     {response.results.length}
                     <br />
-                    {queryConfiguration.title}
+                    {configuration.title}
                 </div>
             );
         }
@@ -37,7 +37,7 @@ class SimpleTextGraph extends React.Component {
 }
 
 SimpleTextGraph.propTypes = {
-  title: React.PropTypes.string,
+  configuration: React.PropTypes.object,
   response: React.PropTypes.object
 };
 

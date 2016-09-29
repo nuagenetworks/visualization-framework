@@ -57,7 +57,7 @@ class VisualizationView extends React.Component {
     }
 
     render() {
-        const { configuration, response } = this.props;
+        const { configuration, queryConfiguration, response } = this.props;
         let title, body;
 
         title = configuration ? configuration.get("title") : "Loading...";
@@ -67,7 +67,7 @@ class VisualizationView extends React.Component {
                   GraphComponent = GraphManager.getGraphComponent(graphName);
 
             body = (
-                <GraphComponent {...this.props} />
+                <GraphComponent response={response} configuration={queryConfiguration} />
             );
         }
         else {
