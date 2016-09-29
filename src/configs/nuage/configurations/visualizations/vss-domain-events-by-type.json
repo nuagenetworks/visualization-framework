@@ -6,7 +6,7 @@
     "creationDate": "10/18/2016",
     "data": {
         "xColumn": "Sum of Value",
-        "yColumn": "key",
+        "yColumn": "EventType",
         "orientation": "horizontal",
         "colors": [
             "#ff4d4d",

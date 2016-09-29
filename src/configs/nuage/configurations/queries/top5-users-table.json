@@ -36,7 +36,7 @@
                         }
                     },
                     "aggs":{
-                        "4":{
+                        "SourceIP":{
                             "terms":{
                                 "field":"SrcIp",
                                 "size":5,

@@ -5,7 +5,7 @@
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {
-        "xColumn": "key",
+        "xColumn": "PG",
         "yColumn": "Sum of Value"
     },
     "query": "vss-domain-events-by-pg"
