@@ -90,7 +90,7 @@ export class DashboardView extends React.Component {
                     {
                         visualizations.map((visualization) =>
                             <div key={visualization.id}>
-                                <Visualization id={visualization.id} />
+                                <Visualization id={visualization.id} context={this.props.location.query} />
                             </div>
                         )
                     }

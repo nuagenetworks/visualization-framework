@@ -8,13 +8,17 @@ import { theme } from "../../theme";
 
 import { Actions } from "./redux/actions";
 import {
-  Actions as ConfigurationsActions,
-  ActionKeyStore as ConfigurationsActionKeyStore
-} from "../../services/configurations/redux/actions"
+    Actions as ServiceActions,
+    ActionKeyStore as ServiceActionKeyStore
+} from "../../services/servicemanager/redux/actions";
+import {
+    Actions as ConfigurationsActions,
+    ActionKeyStore as ConfigurationsActionKeyStore
+} from "../../services/configurations/redux/actions";
 
-import parse from "json-templates";
-
+import { parameterizedConfiguration } from "../../utils/configurations";
 import { GraphManager } from "../Graphs/index";
+import { ServiceManager } from "../../services/servicemanager/index";
 
 const style = {
     navBar: {
@@ -30,43 +34,25 @@ class VisualizationView extends React.Component {
 
     componentWillMount() {
         this.props.fetchConfigurationIfNeeded(this.props.id);
-        // Note: It looks unnecessary as the configuration won't be fetched here.
-        // this.updateQuery(this.props);
-        // this.updateQueryResults(this.props);
     }
 
-    // Note: This method is called everytime a props has changed
     componentWillReceiveProps(nextProps) {
-        console.error(JSON.stringify(this.props));
-        console.error(JSON.stringify(nextProps));
-
-        // Note: When changing the props.id, we need to update the configuration
         if (this.props.id !== nextProps.id) {
             this.props.fetchConfigurationIfNeeded(nextProps.id);
         }
 
-        // Note: When the props.configuration has been updated, we need to update the query
-        if (this.props.configuration !== nextProps.configuration) {
-            console.error("Configuration changed !");
+        if ((!this.props.configuration && nextProps.configuration) ||
+            (this.props.configuration && nextProps.configuration && this.props.configuration.id !== nextProps.configuration.id))
+        {
             this.updateQuery(nextProps);
         }
 
-        // Note: when the props.query has been updated, we need to update the query results
-        if (this.props.queryTemplate !== nextProps.queryTemplate) {
-            console.error("queryTemplate changed !");
+        if ((!this.props.queryConfiguration && nextProps.queryConfiguration) ||
+            (this.props.queryConfiguration && nextProps.queryConfiguration && this.props.queryConfiguration.id !== nextProps.queryConfiguration.id))
+        {
             this.updateQueryResults(nextProps);
         }
     }
-
-    // Note: This is always called after the render has been done.
-    // The content of this method is called twice:
-    // 1. In componentWillMount
-    // 2. In componentDidUpdate
-    // componentDidUpdate(prevProps) {
-    //     this.props.fetchConfigurationIfNeeded(this.props.id);
-    //     this.updateQuery();
-    //     this.updateQueryResults();
-    // }
 
     updateQuery(props) {
         const { configuration, fetchQueryIfNeeded } = props;
@@ -77,41 +63,30 @@ class VisualizationView extends React.Component {
     }
 
     updateQueryResults(props) {
-        const { queryTemplate, executeQueryIfNeeded } = props;
+        const { queryConfiguration, executeQueryIfNeeded, context } = props;
 
-        // TODO get the context from the route.
-        const context = {
-            parent: "enterprises",
-            parentID: "abc"
-        };
-
-        if (queryTemplate) {
-            const template = parse(queryTemplate),
-                  query    = template(context);
-
-            console.error("MAKING QUERY");
-            console.error(query);
-
-            executeQueryIfNeeded(query);
+        if (queryConfiguration) {
+            const pQuery = parameterizedConfiguration(queryConfiguration, context);
+            executeQueryIfNeeded(pQuery);
         }
     }
 
     render() {
-        const { configuration } = this.props;
+        const { configuration, response } = this.props;
         let title, body;
 
-        if (configuration) {
-            title = configuration.get("title");
+        title = configuration ? configuration.get("title") : "Loading...";
 
+        if (response) {
             const graphName      = configuration.get("graph") || "ImageGraph",
                   GraphComponent = GraphManager.getGraphComponent(graphName);
 
             body = (
                 <GraphComponent {...this.props} />
             );
+        }
+        else {
 
-        } else {
-            title = "Loading...";
             body = (
                 <CircularProgress color="#eeeeee"/>
             );
@@ -158,9 +133,24 @@ const mapStateToProps = (state, ownProps) => {
         if (queryConfiguration && !queryConfiguration.get(
             ConfigurationsActionKeyStore.IS_FETCHING
         )) {
-            props.queryTemplate = queryConfiguration.get(
+            props.queryConfiguration = queryConfiguration.get(
                 ConfigurationsActionKeyStore.DATA
             ).toJS();
+        }
+
+        // Expose received response if it is available
+        if (props.queryConfiguration) {
+            const pQuery = parameterizedConfiguration(props.queryConfiguration, ownProps.context),
+                  requestID = ServiceManager.getRequestID(pQuery.query, pQuery.service);
+
+            let response = state.services.getIn([
+                ServiceActionKeyStore.REQUESTS,
+                requestID
+            ]);
+
+            if (response && !response.get(ServiceActionKeyStore.IS_FETCHING))
+                props.response = response.toJS();
+
         }
     }
 
@@ -192,17 +182,8 @@ const actionCreators = (dispatch) => ({
         ));
     },
 
-    executeQueryIfNeeded: function(query) {
-
-        // TODO execute this query - now it is a valid ES query
-        console.log(JSON.stringify(query, null, 2));
-
-        // The following line does execute the query,
-        // but keeps doing so over and over again.
-        //dispatch(ServiceActions.fetch(query, "elasticsearch"));
-
-        // TODO create fetchIfNeeded
-        //dispatch(ServiceActions.fetchIfNeeded(query, "elasticsearch"));
+    executeQueryIfNeeded: function(pQuery) {
+        dispatch(ServiceActions.fetchIfNeeded(pQuery.query, pQuery.service));
     }
 
  });
