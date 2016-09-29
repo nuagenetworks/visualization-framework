@@ -37,21 +37,9 @@ class VisualizationView extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.id !== nextProps.id) {
-            this.props.fetchConfigurationIfNeeded(nextProps.id);
-        }
-
-        if ((!this.props.configuration && nextProps.configuration) ||
-            (this.props.configuration && nextProps.configuration && this.props.configuration.id !== nextProps.configuration.id))
-        {
-            this.updateQuery(nextProps);
-        }
-
-        if ((!this.props.queryConfiguration && nextProps.queryConfiguration) ||
-            (this.props.queryConfiguration && nextProps.queryConfiguration && this.props.queryConfiguration.id !== nextProps.queryConfiguration.id))
-        {
-            this.updateQueryResults(nextProps);
-        }
+        this.props.fetchConfigurationIfNeeded(nextProps.id);
+        this.updateQuery(nextProps);
+        this.updateQueryResults(nextProps);
     }
 
     updateQuery(props) {
