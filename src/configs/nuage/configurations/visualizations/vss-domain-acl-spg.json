@@ -7,7 +7,10 @@
     "data": {
         "xColumn": "SumOf",
         "yColumn": "key",
-        "orientation": "horizontal"
+        "orientation": "horizontal",
+        "colors": [
+             "#7da3f7"
+         ]
     },
     "query": "vss-domain-acl-spg"
 }
