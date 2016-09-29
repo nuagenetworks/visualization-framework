@@ -1,0 +1,15 @@
+{
+    "id": "vss-domain-flow",
+    "graph": "Table",
+    "title": "Flows per Domain",
+    "author": "Ronak Shah",
+    "creationDate": "10/25/2016",
+    "data": {
+        "columns": [
+            { "column": "spg", "label": "Source PG" },
+            { "column": "dpg", "label": "Destination PG" },
+            { "column": "SumOf", "label": "Sum of Packets" }
+        ]
+    },
+    "query": "vss-domain-flow"
+}
