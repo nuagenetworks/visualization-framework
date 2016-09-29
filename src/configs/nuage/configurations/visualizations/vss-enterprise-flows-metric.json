@@ -1,0 +1,8 @@
+{
+    "id": "vss-enterprise-flows-metric",
+    "title": "# Packets",
+    "query": "vss-enterprise-flows-metric",
+    "graph": "SimpleTextGraph",
+    "data": {
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "id": "vss-enterprise-acldeny-metric",
+    "title": "# ACL-Deny",
+    "query": "vss-enterprise-acldeny-metric",
+    "graph": "SimpleTextGraph",
+    "data": {
+    }
+}

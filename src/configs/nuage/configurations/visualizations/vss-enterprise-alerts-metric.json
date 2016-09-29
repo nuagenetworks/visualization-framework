@@ -1,0 +1,8 @@
+{
+    "id": "vss-enterprise-alerts-metric",
+    "title": "# TCA Alerts",
+    "query": "vss-enterprise-alerts-metric",
+    "graph": "SimpleTextGraph",
+    "data": {
+    }
+}

@@ -4,9 +4,12 @@
     "creationDate": "10/17/2016",
     "title": "VSS Enterprise Dashboard",
     "visualizations": [
-        { "id": "vss-ent-acldeny-time", "x": 0, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12 },
-        { "id": "vss-top-domains-blocked-traffic", "x": 5, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12},
-        { "id": "vss-top-sec-events", "x": 0, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 12}
+        { "id": "vss-enterprise-alerts-metric", "x": 0, "y": 0, "w": 2, "h": 2, "minW": 2, "minH": 2},
+        { "id": "vss-enterprise-acldeny-metric", "x": 2, "y": 0, "w": 2, "h": 2, "minW": 2, "minH": 2},
+        { "id": "vss-enterprise-flows-metric", "x": 4, "y": 0, "w": 2, "h": 2, "minW": 2, "minH": 2}, 
+        { "id": "vss-ent-acldeny-time", "x": 0, "y": 2, "w": 5, "h": 15, "minW": 2, "minH": 12 },
+        { "id": "vss-top-domains-blocked-traffic", "x": 5, "y": 2, "w": 5, "h": 15, "minW": 2, "minH": 12},
+        { "id": "vss-top-sec-events", "x": 0, "y": 17, "w": 5, "h": 15, "minW": 2, "minH": 12}
     ]
 }
 
