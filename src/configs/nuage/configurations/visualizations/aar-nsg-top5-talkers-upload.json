@@ -1,0 +1,16 @@
+{
+    "id": "aar-nsg-top5-talkers-upload",
+    "graph": "Table",
+    "title": "Top 5 talkers (upload)",
+    "author": "Ronak Shah",
+    "creationDate": "10/26/2016",
+    "data": {
+        "columns": [
+            { "column": "SourceIP", "label": "Source IP" },
+            { "column": "Packets", "label": "Packets" },
+            { "column": "Bytes", "label": "Bytes" },
+            { "column": "MBs", "label": "MBs" }
+        ]
+    },
+    "query": "aar-nsg-top5-talkers-upload"
+}

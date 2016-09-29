@@ -10,8 +10,8 @@
                     {
                         "range":{
                             "timestamp":{
-                                "gte":"now-24h",
-                                "lte":"now",
+                                "gte":"{{startTime:now-24h}}",
+                                "lte":"{{endTime:now}}",
                                 "format":"epoch_millis"
                             }
                         }
@@ -26,7 +26,7 @@
                         "Enterprise":{
                             "query":{
                                 "term":{
-                                    "EnterpriseName":"test_org"
+                                    "EnterpriseName":"{{EnterpriseName:test_org}}"
                                 }
                             }
                         }
