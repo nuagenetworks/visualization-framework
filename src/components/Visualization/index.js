@@ -7,14 +7,18 @@ import CircularProgress from "material-ui/CircularProgress";
 import { theme } from "../../theme";
 
 import { Actions } from "./redux/actions";
-import { Actions as ServiceActions } from "../../services/servicemanager/redux/actions";
 import {
-  Actions as ConfigurationsActions,
-  ActionKeyStore as ConfigurationsActionKeyStore
+    Actions as ServiceActions,
+    ActionKeyStore as ServiceActionKeyStore
+} from "../../services/servicemanager/redux/actions";
+import {
+    Actions as ConfigurationsActions,
+    ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions";
 
 import { parameterizedConfiguration } from "../../utils/configurations";
 import { GraphManager } from "../Graphs/index";
+import { ServiceManager } from "../../services/servicemanager/index";
 
 const style = {
     navBar: {
@@ -59,13 +63,7 @@ class VisualizationView extends React.Component {
     }
 
     updateQueryResults(props) {
-        const { queryConfiguration, executeQueryIfNeeded } = props;
-
-        // TODO get the context from the route.
-        const context = {
-            parentResource: "enterprises",
-            parentID: "abc"
-        };
+        const { queryConfiguration, executeQueryIfNeeded, context } = props;
 
         if (queryConfiguration) {
             const pQuery = parameterizedConfiguration(queryConfiguration, context);
@@ -74,21 +72,21 @@ class VisualizationView extends React.Component {
     }
 
     render() {
-        const { configuration } = this.props;
+        const { configuration, response } = this.props;
         let title, body;
 
-        if (configuration) {
-            title = configuration.get("title");
+        title = configuration ? configuration.get("title") : "Loading...";
 
+        if (response) {
             const graphName      = configuration.get("graph") || "ImageGraph",
                   GraphComponent = GraphManager.getGraphComponent(graphName);
 
             body = (
                 <GraphComponent {...this.props} />
             );
+        }
+        else {
 
-        } else {
-            title = "Loading...";
             body = (
                 <CircularProgress color="#eeeeee"/>
             );
@@ -139,6 +137,21 @@ const mapStateToProps = (state, ownProps) => {
                 ConfigurationsActionKeyStore.DATA
             ).toJS();
         }
+
+        // Expose received response if it is available
+        if (props.queryConfiguration) {
+            const pQuery = parameterizedConfiguration(props.queryConfiguration, ownProps.context),
+                  requestID = ServiceManager.getRequestID(pQuery.query, pQuery.service);
+
+            let response = state.services.getIn([
+                ServiceActionKeyStore.REQUESTS,
+                requestID
+            ]);
+
+            if (response && !response.get(ServiceActionKeyStore.IS_FETCHING))
+                props.response = response.toJS();
+
+        }
     }
 
     return props;
@@ -170,9 +183,6 @@ const actionCreators = (dispatch) => ({
     },
 
     executeQueryIfNeeded: function(pQuery) {
-        console.log("executeQueryIfNeeded");
-        console.log(JSON.stringify(pQuery, null, 2));
-
         dispatch(ServiceActions.fetchIfNeeded(pQuery.query, pQuery.service));
     }
 
