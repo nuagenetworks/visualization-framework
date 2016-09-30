@@ -27,6 +27,7 @@ const style = {
     card: {
         border: theme.palette.thinBorder + theme.palette.primary2Color,
         borderRadius: theme.palette.smallBorderRadius,
+        height: "100%"
     }
 };
 
@@ -67,7 +68,7 @@ class VisualizationView extends React.Component {
 
         title = configuration ? configuration.get("title") : "Loading...";
 
-        if (response) {
+        if (response && !response.isFetching) {
             const graphName      = configuration.get("graph") || "ImageGraph",
                   GraphComponent = GraphManager.getGraphComponent(graphName);
 

@@ -65,7 +65,6 @@ function fetchIfNeeded(query, serviceName, forceCache) {
     return function (dispatch, getState) {
         if (shouldFetch(getState(), requestID)) {
             return dispatch(fetch(query, serviceName, forceCache));
-
         } else {
             return Promise.resolve();
         }
