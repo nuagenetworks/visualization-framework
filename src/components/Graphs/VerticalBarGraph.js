@@ -20,7 +20,7 @@ export default class VerticalBarGraph extends React.Component {
           .marginRight(40)
           .xAxisLabelOffset(10)
           .yAxisLabelOffset(20)
-          .yAxisTickSpacing(121);
+          .yAxisTickSpacing(25);
 
         // TODO figure out a cleaner way here.
         this.shouldComponentUpdate(this.props);
