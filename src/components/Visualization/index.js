@@ -45,15 +45,20 @@ class VisualizationView extends React.Component {
         this.props.fetchConfigurationIfNeeded(id).then(() => {
             const { configuration } = this.props
 
+            if (!configuration)
+                return;
+
             this.props.fetchQueryIfNeeded(configuration.get("query")).then(() => {
                 const { queryConfiguration, executeQueryIfNeeded, context } = this.props;
+
+                if (!queryConfiguration)
+                    return;
+
                 const pQuery = parameterizedConfiguration(queryConfiguration, context);
 
-                executeQueryIfNeeded(pQuery).then(() => {
-                    this.setState({initializing: false});
-                }, () => {});
-            }, () => {});
-        }, () => {});
+                executeQueryIfNeeded(pQuery);
+            });
+        });
     }
 
     render() {
