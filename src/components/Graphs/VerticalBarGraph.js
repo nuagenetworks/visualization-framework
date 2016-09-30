@@ -26,7 +26,7 @@ export default class VerticalBarGraph extends React.Component {
     }
 
     shouldComponentUpdate(nextProps) {
-        const { response }  = nextProps;
+        const { response, configuration }  = nextProps;
 
         // TODO figure out how to get rid of this constant.
         // Maybe use flexbox to get proper height from clientHeight?
@@ -34,7 +34,7 @@ export default class VerticalBarGraph extends React.Component {
 
         if (response) {
             const data = tabify(response.results);
-            const properties = nextProps.configuration.get("data").toJS();
+            const properties = configuration.data;
 
             this.barChart
               .width(this.div.clientWidth)
@@ -57,7 +57,7 @@ export default class VerticalBarGraph extends React.Component {
 }
 
 VerticalBarGraph.propTypes = {
-  title: React.PropTypes.string,
+  configuration: React.PropTypes.object,
   response: React.PropTypes.object
 };
 

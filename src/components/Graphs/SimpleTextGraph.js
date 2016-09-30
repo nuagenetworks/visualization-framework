@@ -5,7 +5,7 @@ import CircularProgress from "material-ui/CircularProgress";
 /*
     This is a very basic graph that displays a text message
 */
-class SimpleTextGraph extends React.Component {
+export default class SimpleTextGraph extends React.Component {
     render() {
         const { response, configuration } = this.props;
         let body;
@@ -40,5 +40,3 @@ SimpleTextGraph.propTypes = {
   configuration: React.PropTypes.object,
   response: React.PropTypes.object
 };
-
-export default SimpleTextGraph;
