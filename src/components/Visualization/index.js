@@ -77,7 +77,7 @@ class VisualizationView extends React.Component {
 
         title = configuration ? configuration.get("title") : "Loading...";
 
-        if (response) {
+        if (response && !response.isFetching) {
             const graphName      = configuration.get("graph") || "ImageGraph",
                   GraphComponent = GraphManager.getGraphComponent(graphName);
 

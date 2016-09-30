@@ -1,42 +1,35 @@
 import React from "react";
+import ReactDOM from "react-dom";
 
 import CircularProgress from "material-ui/CircularProgress";
 import tabify from "../../utils/tabify";
+import { select } from "d3";
 
 /*
     This is a very basic graph that displays a text message
 */
-class SimpleTextGraph extends React.Component {
+class VerticalBarGraph extends React.Component {
+
+    componentDidMount(){
+        this.svg = ReactDOM.findDOMNode(this.refs.svg);
+        select(this.svg)
+          .append("rect")
+            .attr("width", 500)
+            .attr("height", 500);
+    }
+
     render() {
         const { response, queryConfiguration } = this.props;
-        let body;
-
-        if (response && !response.isFetching) {
-            const data = tabify(response.results);
-            body = (
-                <pre>{ JSON.stringify(data, null, 2) }</pre>
-            );
-        }
-        else {
-
-            body = (
-                <div>
-                    <CircularProgress color="#eeeeee" /> Loading graph
-                </div>
-            );
-        }
-
+        const data = tabify(response.results);
         return (
-            <div>
-                { body }
-            </div>
+            <svg ref="svg" />
         );
     }
 }
 
-SimpleTextGraph.propTypes = {
+VerticalBarGraph.propTypes = {
   title: React.PropTypes.string,
   response: React.PropTypes.object
 };
 
-export default SimpleTextGraph;
+export default VerticalBarGraph;
