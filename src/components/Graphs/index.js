@@ -1,12 +1,14 @@
 import SimpleTextGraph from "./SimpleTextGraph";
 import ImageGraph from "./ImageGraph";
+import VerticalBarGraph from "./VerticalBarGraph";
 
 /*
     Stores all graphs.
 */
 let registry = {
     SimpleTextGraph: SimpleTextGraph,
-    ImageGraph: ImageGraph
+    ImageGraph: ImageGraph,
+    VerticalBarGraph: VerticalBarGraph
 };
 
 /*
