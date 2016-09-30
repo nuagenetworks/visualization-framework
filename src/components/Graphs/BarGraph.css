@@ -1,0 +1,22 @@
+.bar-graph {
+  width: 100%;
+  height: 100%;
+}
+
+.axis text {
+  font: 10pt sans-serif;
+}
+
+.axis-label {
+  font: 14pt sans-serif;
+}
+
+.axis path {
+  display: none;
+}
+.tick line {
+  fill: none;
+  stroke: #DDD;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}

@@ -27,6 +27,7 @@ const style = {
     card: {
         border: theme.palette.thinBorder + theme.palette.primary2Color,
         borderRadius: theme.palette.smallBorderRadius,
+        height: "100%"
     }
 };
 
