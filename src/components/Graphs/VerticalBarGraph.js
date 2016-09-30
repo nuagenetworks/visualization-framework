@@ -12,11 +12,7 @@ class SimpleTextGraph extends React.Component {
 
         if (response && !response.isFetching) {
             body = (
-                <div>
-                    {response.results.length}
-                    <br />
-                    {queryConfiguration.title}
-                </div>
+                <div>{ JSON.stringify(response) }</div>
             );
         }
         else {
