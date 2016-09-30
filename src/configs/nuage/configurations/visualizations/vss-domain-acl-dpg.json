@@ -9,7 +9,13 @@
         "yColumn": "SumOf",
         "colors": [
              "#fec26a"
-         ]
+         ],
+        "margin": {
+            "top": 15,
+            "bottom": 20,
+            "left": 80,
+            "right": 40
+        }
     },
     "query": "vss-domain-acl-dpg"
 }

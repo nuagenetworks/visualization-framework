@@ -7,6 +7,12 @@
     "data": {
         "xColumn": "dpg",
         "yColumn": "SumOf",
+        "margin": {
+            "top": 15,
+            "bottom": 20,
+            "left": 80,
+            "right": 40
+        },
         "colors": [
              "#fec26a"
          ]
