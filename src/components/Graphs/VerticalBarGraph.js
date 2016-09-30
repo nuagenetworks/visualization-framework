@@ -35,14 +35,14 @@ export default class VerticalBarGraph extends React.Component {
 
         if(response){
             const data = tabify(response.results);
+            const properties = nextProps.configuration.get("data").toJS();
             this.barChart
               .width(this.div.clientWidth)
               .height(this.div.clientHeight - bannerHeight)
-              .xColumn("key")
-              .yColumn("Sum of MB")
+              .xColumn(properties.xColumn)
+              .yColumn(properties.yColumn)
               .data(data)
               .digest();
-            console.log(JSON.stringify( barChart() , null, 2));
         }
 
         // Manage the DOM with D3, prevent React from rendering.
