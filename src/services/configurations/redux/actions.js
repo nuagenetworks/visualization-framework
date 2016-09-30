@@ -74,7 +74,7 @@ function fetchIfNeeded(id, configType) {
         if (shouldFetch(getState(), id, configType)) {
             return dispatch(fetch(id, configType));
         } else {
-            return Promise.reject("Configuration " + id + " does not need to be fetched" );
+            return Promise.resolve();
         }
     }
 }

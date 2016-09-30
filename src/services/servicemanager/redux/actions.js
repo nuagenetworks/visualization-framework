@@ -67,7 +67,7 @@ function fetchIfNeeded(query, serviceName, forceCache) {
             return dispatch(fetch(query, serviceName, forceCache));
 
         } else {
-            return Promise.reject(serviceName + " rejected the query for " + requestID);
+            return Promise.resolve();
         }
     }
 }
