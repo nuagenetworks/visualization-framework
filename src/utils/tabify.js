@@ -11,7 +11,11 @@ export default function tabify(response){
 }
 
 function collectBucket(node){
-    Object.keys(node).forEach((key) => {
+    const keys = Object.keys(node);
+
+    // Use old school `for` so we can break control flow by returning.
+    for(let i = 0; i < keys.length; i++){
+        const key = keys[i];
         const value = node[key];
         if(typeof value === 'object'){
             if(Array.isArray(value)){
@@ -19,7 +23,7 @@ function collectBucket(node){
             }
             return collectBucket(value);
         }
-    });
+    }
 }
 
 function extractRows(buckets){

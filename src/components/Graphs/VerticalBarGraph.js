@@ -1,6 +1,7 @@
 import React from "react";
 
 import CircularProgress from "material-ui/CircularProgress";
+import tabify from "../../utils/tabify";
 
 /*
     This is a very basic graph that displays a text message
@@ -11,8 +12,9 @@ class SimpleTextGraph extends React.Component {
         let body;
 
         if (response && !response.isFetching) {
+            const data = tabify(response.results);
             body = (
-                <div>{ JSON.stringify(response) }</div>
+                <pre>{ JSON.stringify(data, null, 2) }</pre>
             );
         }
         else {
