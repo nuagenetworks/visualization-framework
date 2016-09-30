@@ -62,6 +62,9 @@ function fetchIfNeeded(query, serviceName, forceCache) {
     let service   = ServiceManager.getService(serviceName),
         requestID = service.getRequestID(query);
 
+    console.log("serviceName = " + serviceName);
+    console.log("requestID = " + requestID);
+
     return function (dispatch, getState) {
         if (shouldFetch(getState(), requestID)) {
             return dispatch(fetch(query, serviceName, forceCache));
