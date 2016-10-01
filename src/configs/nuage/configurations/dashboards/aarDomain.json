@@ -6,6 +6,8 @@
     "visualizations": [
         { "id": "top20-talkers-domain", "x": 0, "y": 0, "w": 10, "h": 15, "minW": 2, "minH": 12},
         { "id": "top5-app-vertical-bar-domain", "x": 0, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 12},
-        { "id": "aar-domain-top5-apmg", "x": 5, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 12}
+        { "id": "aar-domain-top5-apmg", "x": 0, "y": 30, "w": 5, "h": 15, "minW": 2, "minH": 12},
+        { "id": "aar-domain-probe-path", "x": 5, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 12},
+        { "id": "aar-domain-probe-table", "x": 5, "y": 30, "w": 5, "h": 15, "minW": 2, "minH": 12}
     ]
 }
