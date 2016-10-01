@@ -6,27 +6,27 @@
         "index":"{{index:nuage_flow}}",
         "type":"{{type:nuage_doc_type}}",
         "body":{
-          sort: [
+          "sort": [
             { "timestamp": { "order": "desc" } }
           ],
-          query: {
-            bool: {
-              should: [
+          "query": {
+            "bool": {
+              "should": [
         	    {
            	    "bool": {
              	    "must": [
-                    {"term": {"nuage_metadata.sourcepolicygroups": "{{spg:default}}}" },
-                    { "term": {"nuage_metadata.destinationpolicygroups": "{{dpg:default}}"} },
-                    {"range": { "timestamp": { "gte": "{{startTime: now-24h}}", "lte": "{{endTime: now}}", "format":"epoch_millis"} }}
+                    {"term": {"nuage_metadata.sourcepolicygroups": "{{spg}}"} },
+                    { "term": {"nuage_metadata.destinationpolicygroups": "{{dpg}}"} },
+                    {"range": { "timestamp": { "gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
                   ]
                 }
               },
               {
                 "bool": {
                   "must": [
-                    { "term": {"nuage_metadata.sourcepolicygroups": "{{dpg:default}}"} },
-                    { "term": {"nuage_metadata.destinationpolicygroups": "{{spg:default}}"} },
-                    {"range": { "timestamp": {"gte": "{{startTime: now-24h}}", "lte": "{{endTime: now}}", "format":"epoch_millis"} }}
+                    { "term": {"nuage_metadata.sourcepolicygroups": "{{dpg}}"} },
+                    { "term": {"nuage_metadata.destinationpolicygroups": "{{spg}}"} },
+                    {"range": { "timestamp": {"gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
                   ] 
                 }
               }
