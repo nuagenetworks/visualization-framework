@@ -26,38 +26,53 @@
                 "2": {
                     "filters":{
                         "filters":{
-                            "Domain":{
+                            "Enterprise":{
                                 "query":{
                                     "term":{
-                                        "nuage_metadata.domainName":"{{domainName:chord_domain}}"
+                                        "nuage_metadata.enterpriseName":"{{EnterpriseName:chord_enterprise}}"
                                     }
                                 }
                             }
                         }
                     },
                     "aggs": {
-                        "4": {
-                            "filters": {
-                                "filters": {
-                                    "TYPE": {
-                                        "query": {
-                                            "term": {
-                                                "type": "TCP_SYN_FLOOD"
+                        "3": {
+                            "filters":{
+                                "filters":{
+                                    "Domain":{
+                                        "query":{
+                                            "term":{
+                                                "nuage_metadata.domainName":"{{domainName:chord_domain}}"
                                             }
                                         }
                                     }
                                 }
                             },
                             "aggs": {
-                                "timestamp": {
-                                    "date_histogram": {
-                                        "field": "timestamp",
-                                        "interval": "1h"
+                                "4": {
+                                    "filters": {
+                                        "filters": {
+                                            "TYPE": {
+                                                "query": {
+                                                    "term": {
+                                                        "type": "TCP_SYN_FLOOD"
+                                                    }
+                                                }
+                                            }
+                                        }
                                     },
                                     "aggs": {
-                                        "SumOf": {
-                                            "sum": {
-                                                "field": "value"
+                                        "timestamp": {
+                                            "date_histogram": {
+                                                "field": "timestamp",
+                                                "interval": "1h"
+                                            },
+                                            "aggs": {
+                                                "SumOf": {
+                                                    "sum": {
+                                                        "field": "value"
+                                                    }
+                                                }
                                             }
                                         }
                                     }

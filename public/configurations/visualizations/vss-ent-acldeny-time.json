@@ -6,7 +6,7 @@
     "creationDate": "10/17/2016",
     "data": {
         "xColumn": "timestamp",
-        "yColumn": "1",
+        "yColumn": "SumOf",
         "stroke": {
             "color": "#f76159",
             "width": "2px"
@@ -16,7 +16,10 @@
             "bottom": 20,
             "left": 50,
             "right": 40
-        }
+        },
+        "xTickGrid": false,
+        "yTickGrid": true,
+        "yTickFormat": ".2s"
     },
     "query": "vss-ent-acldeny-time"
 }

@@ -1,7 +1,7 @@
 {
     "id": "vss-domain-flow-table",
     "graph": "Table",
-    "title": "PG to PG flow Detail",
+    "title": "{{spg:PG}} to {{dpg:PG}} flow Detail",
     "author": "Ronak Shah",
     "creationDate": "11/02/2016",
     "data": {
