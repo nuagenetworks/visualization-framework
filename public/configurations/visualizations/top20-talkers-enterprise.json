@@ -17,7 +17,7 @@
     {
         "redirect": "/dashboards/aarEnterpriseAppDetail",
         "params": {
-            "app": "Application"
+            "app": "L7Classification"
         }
     }],
 

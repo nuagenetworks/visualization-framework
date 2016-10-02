@@ -36,9 +36,9 @@
                         }
                     },
                     "aggs":{
-                        "Application":{
+                        "L7Classification":{
                             "terms":{
-                                "field":"Application",
+                                "field":"L7Classification",
                                 "size":5,
                                 "order":{
                                     "Sum of MB":"desc"
