@@ -18,17 +18,5 @@
             "right": 40
         }
     },
-    "filterOptions": [
-        {
-            "label": "Deny",
-            "parameter": "actionType",
-            "value": "DENY"
-        },
-        {
-            "label": "Allow",
-            "parameter": "actionType",
-            "value": "ALLOW"
-        }
-    ],
     "query": "vss-domain-acl-time"
 }

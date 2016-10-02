@@ -6,6 +6,24 @@
     "visualizations": [
         { "id": "vss-domain-flow", "x": 0, "y": 0, "w": 5, "h": 30, "minW": 2, "minH": 12},
         { "id": "vss-domain-flow-table", "x": 5, "y": 0, "w": 5, "h": 30, "minW": 2 , "minH": 12}
+    ],
+    "links": [
+        {
+            "label": "Traffic Analytics-I",
+            "url": "/dashboards/vssDomainTraffic1"
+        },
+        {
+            "label": "Traffic Analytics-II",
+            "url": "/dashboards/vssDomainTraffic2"
+        },
+        {
+            "label": "Event Analytics",
+            "url": "/dashboards/vssDomainEvent"
+        },
+        {
+            "label": "ACL Analytics",
+            "url": "/dashboards/vssDomainACL"
+        }
     ]
 }
 
