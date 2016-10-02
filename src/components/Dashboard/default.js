@@ -4,13 +4,13 @@ export const defaultFilterOptions = {
         "default": "now-24h",
         "options": [
             {
-                "label": "24h",
-                "value": "now-24h",
-                "default": true
+                "label": "Last 15 min",
+                "value": "now-15m",
             },
             {
-                "label": "900h",
-                "value": "now-900h"
+                "label": "Last 24h",
+                "value": "now-24h",
+                "default": true
             },
             {
                 "label": "Last 7 days",
@@ -20,12 +20,12 @@ export const defaultFilterOptions = {
     },
     "Refresh interval": {
         "parameter": "refreshInterval",
-        "default": 6000,
+        "default": 3000,
         "disabled": true,
         "options": [
             {
-                "label": "60 seconds",
-                "value": 6000,
+                "label": "30 seconds",
+                "value": 3000,
                 "disabled": true
             }
         ]

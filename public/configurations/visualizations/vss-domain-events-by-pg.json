@@ -8,11 +8,14 @@
         "xColumn": "PG",
         "yColumn": "Sum of Value",
         "margin": {
-            "top": 15,
-            "bottom": 20,
+            "top": 20,
+            "bottom": 40,
             "left": 80,
-            "right": 40
-        }
+            "right": 20
+        },
+        "xTickGrid": false,
+        "yTickGrid": true,
+        "yTickFormat": ".2s"
     },
     "query": "vss-domain-events-by-pg"
 }

@@ -29,35 +29,50 @@
                             "Enterprise":{
                                 "query":{
                                     "term":{
-                                        "nuage_metadata.domainName":"{{domainName:chord_domain}}"
+                                        "nuage_metadata.enterpriseName":"{{EnterpriseName:chord_enterprise}}"
                                     }
                                 }
                             }
                         }
                     },
                     "aggs": {
-                        "4": {
-                            "filters": {
-                                "filters": {
-                                    "ACL": {
-                                        "query": {
-                                            "term": {
-                                                "type": "{{actionType:DENY}}"
+                        "3": {
+                            "filters":{
+                                "filters":{
+                                    "Domain":{
+                                        "query":{
+                                            "term":{
+                                                "nuage_metadata.domainName":"{{domainName:chord_domain}}"
                                             }
                                         }
                                     }
                                 }
                             },
                             "aggs": {
-                                "timestamp": {
-                                    "date_histogram": {
-                                        "field": "timestamp",
-                                        "interval": "1h"
+                                "4": {
+                                    "filters": {
+                                        "filters": {
+                                            "ACL": {
+                                                "query": {
+                                                    "term": {
+                                                        "type": "{{actionType:DENY}}"
+                                                    }
+                                                }
+                                            }
+                                        }
                                     },
                                     "aggs": {
-                                        "SumOf": {
-                                            "sum": {
-                                                "field": "packets"
+                                        "timestamp": {
+                                            "date_histogram": {
+                                                "field": "timestamp",
+                                                "interval": "1h"
+                                            },
+                                            "aggs": {
+                                                "SumOf": {
+                                                    "sum": {
+                                                        "field": "packets"
+                                                    }
+                                                }
                                             }
                                         }
                                     }

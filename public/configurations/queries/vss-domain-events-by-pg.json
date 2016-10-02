@@ -29,25 +29,40 @@
                             "Enterprise":{
                                 "query":{
                                     "term":{
-                                        "nuage_metadata.domainName":"{{domainName:chord_domain}}"
+                                        "nuage_metadata.enterpriseName":"{{EnterpriseName:chord_enterprise}}"
                                     }
                                 }
                             }
                         }
                     },
                     "aggs": {
-                        "PG": {
-                            "terms": {
-                                "field": "nuage_metadata.sourcepolicygroups",
-                                "size": 5,
-                                "order": {
-                                    "Sum of Value": "desc"
+                        "3": {
+                            "filters":{
+                                "filters":{
+                                    "Domain":{
+                                        "query":{
+                                            "term":{
+                                                "nuage_metadata.domainName":"{{domainName:chord_domain}}"
+                                            }
+                                        }
+                                    }
                                 }
                             },
                             "aggs": {
-                                "Sum of Value": {
-                                    "sum": {
-                                        "field": "value"
+                                "PG": {
+                                    "terms": {
+                                        "field": "nuage_metadata.sourcepolicygroups",
+                                        "size": 5,
+                                        "order": {
+                                            "Sum of Value": "desc"
+                                        }
+                                    },
+                                    "aggs": {
+                                        "Sum of Value": {
+                                            "sum": {
+                                                "field": "value"
+                                            }
+                                        }
                                     }
                                 }
                             }

@@ -9,15 +9,14 @@
         "yColumn": "spg",
         "orientation": "horizontal",
         "margin": {
-            "top": 15,
-            "bottom": 20,
-            "left": 40,
-            "right": 40
+            "top": 20,
+            "bottom": 40,
+            "left": 80,
+            "right": 20
         },
         "xTickGrid": true,
         "yTickGrid": false,
-        "xTickFormat": ".2s",
-        "xTicks": 5
+        "xTickFormat": ".2s"
     },
     "query": "vss-domain-traffic-top-spg"
 }
