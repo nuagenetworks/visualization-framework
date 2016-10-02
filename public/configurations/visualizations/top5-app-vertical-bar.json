@@ -5,13 +5,13 @@
     "author": "Curran Kelleher",
     "creationDate": "10/13/2016",
     "data": {
-        "xColumn": "Application",
+        "xColumn": "L7Classification",
         "yColumn": "Sum of MB"
     },
     "listeners": [{
-      "redirect": "/dashboards/dateHistogramExample",
+      "redirect": "/dashboards/aarEnterpriseAppDetail",
       "params": {
-          "app": "Application"
+          "app": "L7Classification"
       }
     }],
     "query": "top5-app-vertical-bar"

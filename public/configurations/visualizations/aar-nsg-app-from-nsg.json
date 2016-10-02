@@ -1,0 +1,21 @@
+{
+    "id": "aar-nsg-app-from-nsg",
+    "graph": "Table",
+    "title": "Application - From NSG",
+    "author": "Ronak Shah",
+    "creationDate": "10/13/2016",
+    "data": {
+        "columns": [
+            { "column": "APMGroup", "label": "APM Group" },
+            { "column": "Application", "label": "Application" },
+            { "column": "L7Classification", "label": "L7 Classification" },
+            { "column": "SrcVportName", "label": "Source Vport" },
+            { "column": "SrcUplink", "label": "Source Uplink" },
+            { "column": "SrcUplinkRole", "label": "Source Uplink Role" },
+            { "column": "DestinationNSG", "label": "Destination NSG" },
+            { "column": "SumofPackets", "label": "Total Packets"},
+            { "column": "SumofMB", "label": "Total MB" } 
+        ]
+    },
+    "query": "aar-nsg-app-from-nsg"
+}
