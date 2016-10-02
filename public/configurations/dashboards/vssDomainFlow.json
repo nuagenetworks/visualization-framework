@@ -17,6 +17,10 @@
             "url": "/dashboards/vssDomainTraffic2"
         },
         {
+            "label": "Flow Analytics",
+            "url": "/dashboards/vssDomainFlow"
+        },
+        {
             "label": "Event Analytics",
             "url": "/dashboards/vssDomainEvent"
         },

@@ -24,6 +24,10 @@
         {
             "label": "Event Analytics",
             "url": "/dashboards/vssDomainEvent"
+        },
+        {
+            "label": "ACL Analytics",
+            "url": "/dashboards/vssDomainACL"
         }
     ],
     "filterOptions": [

@@ -13,6 +13,10 @@
             "url": "/dashboards/vssDomainTraffic1"
         },
         {
+            "label": "Traffic Analytics-II",
+            "url": "/dashboards/vssDomainTraffic2"
+        },
+        {
             "label": "Flow Analytics",
             "url": "/dashboards/vssDomainFlow"
         },
