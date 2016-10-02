@@ -17,7 +17,7 @@
             { "column": "DestinationNSG", "label": ""},
             { "column": "DestVportName", "label": ""},
             { "column": "1", "label": "Total MB", "format": ",.2f" },
-            { "column": "11", "label": "Total Packets Count" }
+            { "column": "11", "label": "Total Packets Count", "format": "," }
         ]
     },
     "query": "top20-talkers-domain-table"

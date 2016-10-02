@@ -2,9 +2,19 @@
     "id": "aarEnterpriseAppDetail",
     "author": "Ronak Shah",
     "creationDate": "09/29/2016",
-    "title": "AAR Enterprise - Application Detail",
+    "title": "AAR Enterprise - L7Classification Detail",
     "visualizations": [
         { "id": "top20-talkers-enterprise", "x": 0, "y": 0, "w": 10, "h": 15, "minW": 2, "minH": 12},
         { "id": "app-specific-date-histogram", "x": 0, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 12}
+    ],
+    "links": [
+        {
+            "label": "Dashboard View",
+            "url": "/dashboards/aarEnterprise"
+        },
+        {
+            "label": "Detail View",
+            "url": "/dashboards/aarEnterpriseAppDetail"
+        }
     ]
 }

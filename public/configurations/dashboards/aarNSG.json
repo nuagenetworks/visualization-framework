@@ -4,8 +4,18 @@
     "creationDate": "10/26/2016",
     "title": "AAR NSG",
     "visualizations": [
-        { "id": "aar-nsg-top10-app", "x": 0, "y": 0, "w": 5, "h": 16, "minW": 2, "minH": 12},
-        { "id": "aar-nsg-top5-talkers-upload", "x": 5, "y": 0, "w": 5, "h": 8, "minW": 2, "minH": 12},
-        { "id": "aar-nsg-top5-talkers-download", "x": 5, "y": 8, "w": 5, "h": 8, "minW": 2, "minH": 12}
+        { "id": "aar-nsg-top10-app", "x": 0, "y": 0, "w": 5, "h": 5, "minW": 5, "minH": 5},
+        { "id": "aar-nsg-top5-talkers-upload", "x": 5, "y": 0, "w": 5, "h": 15, "minW": 5, "minH": 15},
+        { "id": "aar-nsg-top5-talkers-download", "x": 5, "y": 15, "w": 5, "h": 5, "minW": 5, "minH": 15} 
+    ],
+    "links": [
+        {
+            "label": "Dashboard View",
+            "url": "/dashboards/aarNSG"
+        },
+        {
+            "label": "Detail View",
+            "url": "/dashboards/aarNSGDetail"
+        }
     ]
 }

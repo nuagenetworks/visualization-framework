@@ -59,14 +59,16 @@ class MainMenuView extends React.Component {
                             primaryText={domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo("/dashboards/kitchenSink", {startTime:"now-900h"})}}
+                            onTouchTap={() => { 
+                                this.props.goTo("/dashboards/aarDomain", {startTime:"now-900h"})
+                            }}
                             leftIcon={
                                 <FontAwesome
                                     name="plane"
                                     style={style.iconMenu}
-                                    />
+                                />
                             }
-                            />
+                        />
                     )
                 })}
             </div>
@@ -88,14 +90,16 @@ class MainMenuView extends React.Component {
                             primaryText={nsg.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo("/dashboards/kitchenSink", {startTime:"now-900h"})}}
+                            onTouchTap={() => {
+                                this.props.goTo("/dashboards/aarNSG", {startTime:"now-900h"})
+                            }}
                             leftIcon={
                                 <FontAwesome
                                     name="inbox"
                                     style={style.iconMenu}
-                                    />
+                                />
                             }
-                            />
+                        />
                     )
                 })}
             </div>
@@ -116,7 +120,9 @@ class MainMenuView extends React.Component {
                             key={enterprise.ID}
                             primaryText={enterprise.name}
                             style={style.listItem}
-                            onTouchTap={() => { this.props.goTo("/dashboards/kitchenSink", {startTime:"now-900h"})}}
+                            onTouchTap={() => {
+                                this.props.goTo("/dashboards/aarEnterprise", {startTime:"now-900h"})}
+                            }
                             nestedItems={[
                                 <div style={style.nestedItems}>
                                     {this.renderDomainsMenu()}

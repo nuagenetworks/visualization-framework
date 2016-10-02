@@ -9,10 +9,10 @@
             { "column": "SrcUplink", "label": "Source Uplink" },
             { "column": "DstUplink", "label": "Destination Uplink" },
             { "column": "PerfMonitor", "label": "Perf Monitor" },
-            { "column": "AvgJitter", "label": "Avg Jitter" },
-            { "column": "AvgLatency", "label": "Avg Latency" },
-            { "column": "AvgPacketLoss", "label": "Avg Pkt Loss"},
-            { "column": "timestamp", "label": "Timestamp"}
+            { "column": "AvgJitter", "label": "Avg Jitter", "format": ",.2f" },
+            { "column": "AvgLatency", "label": "Avg Latency", "format": ",.2f" },
+            { "column": "AvgPacketLoss", "label": "Avg Pkt Loss", "format": ",.2f"},
+            { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"}
         ]
     },
     "query": "aar-domain-probe-table"
