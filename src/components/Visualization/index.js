@@ -31,45 +31,35 @@ const style = {
     }
 };
 
+
 class VisualizationView extends React.Component {
 
     componentWillMount() {
-        this.props.fetchConfigurationIfNeeded(this.props.id);
+        this.initialize(this.props.id);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.id !== nextProps.id) {
-            this.props.fetchConfigurationIfNeeded(nextProps.id);
-        }
-
-        if ((!this.props.configuration && nextProps.configuration) ||
-            (this.props.configuration && nextProps.configuration && this.props.configuration.id !== nextProps.configuration.id))
-        {
-            this.updateQuery(nextProps);
-        }
-
-        if ((!this.props.queryConfiguration && nextProps.queryConfiguration) ||
-            (this.props.queryConfiguration && nextProps.queryConfiguration && this.props.queryConfiguration.id !== nextProps.queryConfiguration.id))
-        {
-            this.updateQueryResults(nextProps);
-        }
+        this.initialize(nextProps.id);
     }
 
-    updateQuery(props) {
-        const { configuration, fetchQueryIfNeeded } = props;
+    initialize(id) {
+        this.props.fetchConfigurationIfNeeded(id).then(() => {
+            const { configuration } = this.props
 
-        if (configuration) {
-            fetchQueryIfNeeded(configuration.get("query"));
-        }
-    }
+            if (!configuration)
+                return;
 
-    updateQueryResults(props) {
-        const { queryConfiguration, executeQueryIfNeeded, context } = props;
+            this.props.fetchQueryIfNeeded(configuration.get("query")).then(() => {
+                const { queryConfiguration, executeQueryIfNeeded, context } = this.props;
 
-        if (queryConfiguration) {
-            const pQuery = parameterizedConfiguration(queryConfiguration, context);
-            executeQueryIfNeeded(pQuery);
-        }
+                if (!queryConfiguration)
+                    return;
+
+                const pQuery = parameterizedConfiguration(queryConfiguration, context);
+
+                executeQueryIfNeeded(pQuery);
+            });
+        });
     }
 
     render() {
@@ -83,7 +73,7 @@ class VisualizationView extends React.Component {
                   GraphComponent = GraphManager.getGraphComponent(graphName);
 
             body = (
-                <GraphComponent {...this.props} />
+                <GraphComponent response={response} configuration={configuration.toJS()} />
             );
         }
         else {
@@ -170,21 +160,21 @@ const actionCreators = (dispatch) => ({
     },
 
     fetchConfigurationIfNeeded: function(id) {
-        dispatch(ConfigurationsActions.fetchIfNeeded(
+        return dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.VISUALIZATIONS
         ));
     },
 
     fetchQueryIfNeeded: function(id) {
-        dispatch(ConfigurationsActions.fetchIfNeeded(
+        return dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.QUERIES
         ));
     },
 
     executeQueryIfNeeded: function(pQuery) {
-        dispatch(ServiceActions.fetchIfNeeded(pQuery.query, pQuery.service));
+        return dispatch(ServiceActions.fetchIfNeeded(pQuery.query, pQuery.service));
     }
 
  });

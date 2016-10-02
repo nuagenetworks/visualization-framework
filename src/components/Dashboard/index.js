@@ -51,7 +51,11 @@ export class DashboardView extends React.Component {
     updateConfiguration() {
         const { params, fetchConfigurationIfNeeded } = this.props;
 
-        fetchConfigurationIfNeeded(params.id);
+        // It seems we are enforced to define callbacks. Otherwise, we will end up with Uncaught (in promise) error.
+        fetchConfigurationIfNeeded(params.id).then(
+            () => {},
+            () => {}
+        );
     }
 
     render() {
@@ -130,7 +134,7 @@ const actionCreators = (dispatch) => ({
         dispatch(AppActions.updateTitle(aTitle));
     },
     fetchConfigurationIfNeeded: function(id) {
-        dispatch(ConfigurationsActions.fetchIfNeeded(
+        return dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.DASHBOARDS
         ));

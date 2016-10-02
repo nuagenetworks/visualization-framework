@@ -52,7 +52,11 @@ store.subscribe(function() {
         parentResource: "licenses"
     },
     "VSD",
-    true));
+    true))
+    .then(
+        () => {},
+        () => {}
+    );
 });
 
 export default store;

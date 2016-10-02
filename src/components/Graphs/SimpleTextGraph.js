@@ -5,9 +5,9 @@ import CircularProgress from "material-ui/CircularProgress";
 /*
     This is a very basic graph that displays a text message
 */
-class SimpleTextGraph extends React.Component {
+export default class SimpleTextGraph extends React.Component {
     render() {
-        const { response, queryConfiguration } = this.props;
+        const { response, configuration } = this.props;
         let body;
 
         if (response && !response.isFetching) {
@@ -15,7 +15,7 @@ class SimpleTextGraph extends React.Component {
                 <div>
                     {response.results.length}
                     <br />
-                    {queryConfiguration.title}
+                    {configuration.title}
                 </div>
             );
         }
@@ -37,8 +37,6 @@ class SimpleTextGraph extends React.Component {
 }
 
 SimpleTextGraph.propTypes = {
-  title: React.PropTypes.string,
+  configuration: React.PropTypes.object,
   response: React.PropTypes.object
 };
-
-export default SimpleTextGraph;
