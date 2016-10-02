@@ -7,9 +7,9 @@
     "data": {
         "columns": [
             { "column": "SourceIP", "label": "Source IP" },
-            { "column": "Packets", "label": "Packets" },
-            { "column": "Bytes", "label": "Bytes" },
-            { "column": "MBs", "label": "MBs" }
+            { "column": "Packets", "label": "Packets", "format": "," },
+            { "column": "Bytes", "label": "Bytes", "format": "," },
+            { "column": "MBs", "label": "MBs", "format": ",.2f" }
         ]
     },
     "query": "aar-nsg-top5-talkers-upload"

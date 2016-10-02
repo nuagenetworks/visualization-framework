@@ -4,8 +4,18 @@
     "creationDate": "09/29/2016",
     "title": "AAR Enterprise Dashboard",
     "visualizations": [
-        { "id": "top5-app-vertical-bar", "x": 0, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12 },
-        { "id": "top5-users-table", "x": 5, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12},
-        { "id": "aar-slastatus-enterprise", "x": 0, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 12}
+        { "id": "top5-app-vertical-bar", "x": 3, "y": 0, "w": 3, "h": 15, "minW": 2, "minH": 10 },
+        { "id": "top5-users-table", "x": 3, "y": 15, "w": 3, "h": 15, "minW": 2, "minH": 10},
+        { "id": "aar-slastatus-enterprise", "x": 0, "y": 15, "w": 3, "h": 10, "minW": 2, "minH": 10}
+    ],
+    "links": [
+        {
+            "label": "Dashboard View",
+            "url": "/dashboards/aarEnterprise"
+        },
+        {
+            "label": "Detail View",
+            "url": "/dashboards/aarEnterpriseAppList"
+        }
     ]
 }

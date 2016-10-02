@@ -15,7 +15,10 @@
         },
         "colors": [
              "#fec26a"
-         ]
+         ],
+        "xTickGrid": false,
+        "yTickGrid": true,
+        "yTickFormat": ".2s"
     },
     "query": "vss-domain-traffic-top-dpg"
 }
