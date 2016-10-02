@@ -42,7 +42,7 @@
                                     "ACL": {
                                         "query": {
                                             "term": {
-                                                "type": "{{type:DENY}}"
+                                                "type": "{{actionType:DENY}}"
                                             }
                                         }
                                     }
