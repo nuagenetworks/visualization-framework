@@ -26,7 +26,7 @@ export default class VerticalBarGraph extends React.Component {
     }
 
     shouldComponentUpdate(nextProps) {
-        const { response, configuration }  = nextProps;
+        const { response, configuration, onBarClick }  = nextProps;
 
         // TODO figure out how to get rid of this constant.
         // Maybe use flexbox to get proper height from clientHeight?
@@ -41,8 +41,11 @@ export default class VerticalBarGraph extends React.Component {
               .height(this.div.clientHeight - bannerHeight)
               .xColumn(properties.xColumn)
               .yColumn(properties.yColumn)
-              .data(data)
-              .digest();
+              .data(data);
+
+            if(onBarClick){
+              this.barChart.onBarClick(onBarClick);
+            }
         }
 
         // Manage the DOM with D3, prevent React from rendering.
@@ -281,8 +284,9 @@ function BarChartMarks(my) {
     }, "g")
 
     ("barColor", "black")
+    ("onBarClick", function (){})
 
-    (function (circleG, data, xScale, xScaled, yScaled, barColor, innerHeight) {
+    (function (circleG, data, xScale, xScaled, yScaled, barColor, innerHeight, onBarClick) {
       var rect = circleG.selectAll("rect").data(data);
       rect.exit().remove();
       rect.enter().append("rect")
@@ -292,9 +296,10 @@ function BarChartMarks(my) {
           .attr("x", xScaled)
           .attr("y", yScaled)
           .attr("width", xScale.bandwidth)
-          .attr("height", function (d) { return innerHeight - yScaled(d); });
+          .attr("height", function (d) { return innerHeight - yScaled(d); })
+          .on("click", onBarClick);
 
-    }, "circleG, data, xScale, xScaled, yScaled, barColor, innerHeight");
+    }, "circleG, data, xScale, xScaled, yScaled, barColor, innerHeight, onBarClick");
 }
 
 function BarChart() {
