@@ -55,6 +55,9 @@ export class DashboardView extends React.Component {
     updateConfiguration() {
         const { params, fetchConfigurationIfNeeded } = this.props;
 
+        if (!params.id)
+            return;
+
         fetchConfigurationIfNeeded(params.id);
     }
 
@@ -101,7 +104,7 @@ export class DashboardView extends React.Component {
                 </ReactGridLayout>
             );
         } else {
-            return <div>Unhandled case</div>
+            return <div>No dashboard</div>
         }
     }
 }

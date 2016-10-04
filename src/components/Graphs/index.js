@@ -1,5 +1,4 @@
 import SimpleTextGraph from "./SimpleTextGraph";
-import ImageGraph from "./ImageGraph";
 import VerticalBarGraph from "./VerticalBarGraph";
 
 /*
@@ -7,7 +6,6 @@ import VerticalBarGraph from "./VerticalBarGraph";
 */
 let registry = {
     SimpleTextGraph: SimpleTextGraph,
-    ImageGraph: ImageGraph,
     VerticalBarGraph: VerticalBarGraph
 };
 
