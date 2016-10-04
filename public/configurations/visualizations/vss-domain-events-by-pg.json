@@ -19,5 +19,10 @@
         "xLabel": "Source Policy Groups",
         "yLabel": "Total # of Events"
     },
+    "listeners": [{
+      "params": {
+          "spg": "PG"
+      }
+    }],
     "query": "vss-domain-events-by-pg"
 }
