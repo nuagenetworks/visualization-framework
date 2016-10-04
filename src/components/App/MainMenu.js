@@ -87,9 +87,9 @@ class MainMenuView extends React.Component {
                 </List>
 
                 <Subheader style={Styles.subHeader}>Enterprises</Subheader>
-                    <List>
-                        {this.renderSubTree()}
-                    </List>
+                <List>
+                    {this.renderSubTree()}
+                </List>
             </Drawer>
         );
     }

@@ -21,6 +21,9 @@ const Styles = {
     },
     subHeader: {
         color: "#ffffff",
+        fontSize: "120%",
+        textDecoration: "underline",
+        fontStyle: "normal",
     }
 }
 
