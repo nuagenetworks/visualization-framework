@@ -64,9 +64,9 @@ function shouldFetch(request) {
 }
 
 function fetchIfNeeded(query, serviceName, forceCache) {
+
     let service   = ServiceManager.getService(serviceName),
         requestID = service.getRequestID(query);
-
 
     return (dispatch, getState) => {
         const state = getState(),

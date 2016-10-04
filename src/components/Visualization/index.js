@@ -34,6 +34,15 @@ const style = {
 
 class VisualizationView extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            initializing: false,
+            parameterizable: true,
+            hasResults:false,
+        }
+    }
+
     componentWillMount() {
         this.initialize(this.props.id);
     }
@@ -43,6 +52,12 @@ class VisualizationView extends React.Component {
     }
 
     initialize(id) {
+
+        // if (this.state.initializing)
+        //     return;
+
+        this.setState({initializing: true});
+
         this.props.fetchConfigurationIfNeeded(id).then(() => {
             const { configuration } = this.props
 
@@ -57,31 +72,54 @@ class VisualizationView extends React.Component {
 
                 const pQuery = parameterizedConfiguration(queryConfiguration, context);
 
-                executeQueryIfNeeded(pQuery);
+                this.setState({
+                    initializing: false,
+                    parameterizable: !!pQuery,
+                });
+
+                if (pQuery)
+                    executeQueryIfNeeded(pQuery);
             });
         });
     }
 
-    render() {
+    shouldShowVisualization() {
         const { configuration, response } = this.props;
-        let title, body;
 
-        title = configuration ? configuration.get("title") : "Loading...";
+        return configuration && response && !response.isFetching;
+    }
 
-        if (response && !response.isFetching) {
-            const graphName      = configuration.get("graph") || "ImageGraph",
-                  GraphComponent = GraphManager.getGraphComponent(graphName);
+    renderVisualization() {
+        const { configuration, response } = this.props;
 
-            body = (
-                <GraphComponent response={response} configuration={configuration.toJS()} />
-            );
+        const graphName      = configuration.get("graph") || "ImageGraph",
+              GraphComponent = GraphManager.getGraphComponent(graphName);
+
+        return (
+            <GraphComponent response={response} configuration={configuration.toJS()} />
+        )
+    }
+
+    renderVisualizationIfPossible() {
+
+        if (this.shouldShowVisualization()) {
+            return this.renderVisualization();
         }
-        else {
 
-            body = (
-                <CircularProgress color="#eeeeee"/>
-            );
+        if (!this.state.parameterizable) {
+            return (
+                <div>Oops, we are missing some parameters here!</div>
+            )
         }
+
+        return (
+            <CircularProgress color="#eeeeee"/>
+        )
+    }
+
+    render() {
+        const { configuration } = this.props;
+        let title = configuration ? configuration.get("title") : "Loading...";
 
         return (
             <div style={style.card}>
@@ -90,7 +128,7 @@ class VisualizationView extends React.Component {
                     showMenuIconButton={false}
                     style={style.navBar}
                     />
-                { body }
+                { this.renderVisualizationIfPossible() }
             </div>
         );
     }
@@ -116,6 +154,7 @@ const mapStateToProps = (state, ownProps) => {
 
     // Expose the query template as a JS object if it is available.
     if (props.configuration) {
+
         const queryConfiguration = state.configurations.getIn([
             ConfigurationsActionKeyStore.QUERIES,
             props.configuration.get("query")
@@ -131,16 +170,19 @@ const mapStateToProps = (state, ownProps) => {
 
         // Expose received response if it is available
         if (props.queryConfiguration) {
-            const pQuery = parameterizedConfiguration(props.queryConfiguration, ownProps.context),
-                  requestID = ServiceManager.getRequestID(pQuery.query, pQuery.service);
+            const pQuery = parameterizedConfiguration(props.queryConfiguration, ownProps.context);
 
-            let response = state.services.getIn([
-                ServiceActionKeyStore.REQUESTS,
-                requestID
-            ]);
+            if (pQuery) {
+                const requestID = ServiceManager.getRequestID(pQuery.query, pQuery.service);
 
-            if (response && !response.get(ServiceActionKeyStore.IS_FETCHING))
-                props.response = response.toJS();
+                let response = state.services.getIn([
+                    ServiceActionKeyStore.REQUESTS,
+                    requestID
+                ]);
+
+                if (response && !response.get(ServiceActionKeyStore.IS_FETCHING))
+                    props.response = response.toJS();
+            }
 
         }
     }
