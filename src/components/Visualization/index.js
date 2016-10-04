@@ -21,6 +21,9 @@ import { GraphManager } from "../Graphs/index";
 import { ServiceManager } from "../../services/servicemanager/index";
 
 import Styles from "./styles"
+import "./Visualization.css"
+
+import FontAwesome from "react-fontawesome";
 
 
 class VisualizationView extends React.Component {
@@ -92,12 +95,32 @@ class VisualizationView extends React.Component {
 
         if (!this.state.parameterizable) {
             return (
-                <div className="alert alert-danger">Oops, we are missing some parameters here!</div>
+                <div className="VisualizationText overlay text-center">
+                    <div>
+                        <FontAwesome
+                            name="meh-o"
+                            size="3x"
+                            />
+                        <br></br>
+                        Oops, we are missing some parameters here!
+                    </div>
+                </div>
             )
         }
 
         return (
-            <CircularProgress color="#eeeeee"/>
+            <div className="VisualizationText text-center">
+                <div>
+                    <FontAwesome
+                        name="circle-o-notch"
+                        size="2x"
+                        spin
+                        />
+                    <br></br>
+                    Please wait while loading...
+                </div>
+            </div>
+
         )
     }
 
@@ -118,7 +141,8 @@ class VisualizationView extends React.Component {
 
     render() {
         return (
-            <Card>
+            <Card className="VisualizationCard">
+
                 { this.renderTitleIfNeeded() };
                 <CardText>
                     { this.renderVisualizationIfNeeded() }
