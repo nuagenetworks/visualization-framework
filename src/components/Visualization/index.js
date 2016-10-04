@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import { push } from "redux-router";
 
 import AppBar from "material-ui/AppBar";
+import {Card,CardText} from 'material-ui/Card';
 import CircularProgress from "material-ui/CircularProgress";
-import { theme } from "../../theme";
 
 import { Actions } from "./redux/actions";
 import {
@@ -20,16 +20,7 @@ import { parameterizedConfiguration } from "../../utils/configurations";
 import { GraphManager } from "../Graphs/index";
 import { ServiceManager } from "../../services/servicemanager/index";
 
-const style = {
-    navBar: {
-        background: theme.palette.primary2Color,
-    },
-    card: {
-        border: theme.palette.thinBorder + theme.palette.primary2Color,
-        borderRadius: theme.palette.smallBorderRadius,
-        height: "100%"
-    }
-};
+import Styles from "./styles"
 
 
 class VisualizationView extends React.Component {
@@ -90,17 +81,17 @@ class VisualizationView extends React.Component {
     }
 
     renderVisualization() {
-        const { configuration, response } = this.props;
+        const { configuration, queryConfiguration, response } = this.props;
 
-        const graphName      = configuration.get("graph") || "ImageGraph",
+        const graphName      = configuration.get("graph"),
               GraphComponent = GraphManager.getGraphComponent(graphName);
 
         return (
-            <GraphComponent response={response} configuration={configuration.toJS()} />
+            <GraphComponent response={response} configuration={configuration.toJS()} queryConfiguration={queryConfiguration} />
         )
     }
 
-    renderVisualizationIfPossible() {
+    renderVisualizationIfNeeded() {
 
         if (this.shouldShowVisualization()) {
             return this.renderVisualization();
@@ -108,7 +99,7 @@ class VisualizationView extends React.Component {
 
         if (!this.state.parameterizable) {
             return (
-                <div>Oops, we are missing some parameters here!</div>
+                <div className="alert alert-danger">Oops, we are missing some parameters here!</div>
             )
         }
 
@@ -117,19 +108,31 @@ class VisualizationView extends React.Component {
         )
     }
 
-    render() {
+    renderTitleIfNeeded() {
         const { configuration } = this.props;
-        let title = configuration ? configuration.get("title") : "Loading...";
+
+        if (!configuration || !configuration.get("title"))
+            return;
 
         return (
-            <div style={style.card}>
-                <AppBar
-                    title={title}
-                    showMenuIconButton={false}
-                    style={style.navBar}
-                    />
-                { this.renderVisualizationIfPossible() }
-            </div>
+            <AppBar
+                title={configuration.get("title")}
+                showMenuIconButton={false}
+                style={Styles.navBar}
+                />
+        )
+    }
+
+    render() {
+
+
+        return (
+            <Card>
+                { this.renderTitleIfNeeded() };
+                <CardText>
+                    { this.renderVisualizationIfNeeded() }
+                </CardText>
+            </Card>
         );
     }
 }
