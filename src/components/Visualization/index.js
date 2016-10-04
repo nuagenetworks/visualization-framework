@@ -53,8 +53,8 @@ class VisualizationView extends React.Component {
 
     initialize(id) {
 
-        // if (this.state.initializing)
-        //     return;
+        if (this.state.initializing)
+            return;
 
         this.setState({initializing: true});
 
