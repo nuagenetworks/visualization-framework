@@ -15,15 +15,17 @@
              "#f79e99"
         ],
         "margin": {
-            "top": 15,
-            "bottom": 20,
-            "left": 70,
+            "top": 20,
+            "bottom": 40,
+            "left": 80,
             "right": 40
         },
         "xTickGrid": true,
         "yTickGrid": false,
         "xTickFormat": ".2s",
-        "xTicks": 5
+        "xTicks": 5,
+        "xLabel": "Total # ACL Deny",
+        "yLabel": "Domains"
     },
     "listeners": [
     {
