@@ -29,8 +29,9 @@ export class DashboardView extends React.Component {
     }
 
     shouldUpdateTitle(prevProps){
-        if(!prevProps.configuration) {
+        if (!prevProps.configuration) {
             return true;
+
         } else {
             return (
                 this.props.configuration.get("title")
@@ -41,21 +42,23 @@ export class DashboardView extends React.Component {
     }
 
     updateTitleIfNecessary(prevProps) {
-        if(!this.props.configuration)
+        const { configuration, setPageTitle } = this.props;
+
+        if (!configuration)
             return;
-        if(this.shouldUpdateTitle(prevProps)){
-            this.props.setPageTitle(this.props.configuration.get("title"));
+
+        if (this.shouldUpdateTitle(prevProps)) {
+            setPageTitle(configuration.get("title"));
         }
     }
 
     updateConfiguration() {
         const { params, fetchConfigurationIfNeeded } = this.props;
 
-        // It seems we are enforced to define callbacks. Otherwise, we will end up with Uncaught (in promise) error.
-        fetchConfigurationIfNeeded(params.id).then(
-            () => {},
-            () => {}
-        );
+        if (!params.id)
+            return;
+
+        fetchConfigurationIfNeeded(params.id);
     }
 
     render() {
@@ -101,14 +104,13 @@ export class DashboardView extends React.Component {
                 </ReactGridLayout>
             );
         } else {
-            return <div>Unhandled case</div>
+            return <div>No dashboard</div>
         }
     }
 }
 
 
 const mapStateToProps = (state, ownProps) => ({
-
     configuration: state.configurations.getIn([
         ConfigurationsActionKeyStore.DASHBOARDS,
         ownProps.params.id,
@@ -130,10 +132,10 @@ const mapStateToProps = (state, ownProps) => ({
 
 
 const actionCreators = (dispatch) => ({
-    setPageTitle: function(aTitle) {
+    setPageTitle: (aTitle) => {
         dispatch(AppActions.updateTitle(aTitle));
     },
-    fetchConfigurationIfNeeded: function(id) {
+    fetchConfigurationIfNeeded: (id) => {
         return dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.DASHBOARDS

@@ -14,6 +14,7 @@ export const ActionKeyStore = {
     EXPIRATION_DATE: "expirationDate",
 };
 
+
 /*
     Make a query on the service based on the service name.
 
@@ -25,30 +26,34 @@ function fetch(query, serviceName, forceCache) {
 
     let service = ServiceManager.getService(serviceName);
 
-    return function (dispatch, getState) {
+    return (dispatch, getState) => {
         let requestID = service.getRequestID(query);
 
         dispatch(didStartRequest(requestID));
 
         return service.fetch(query, getState())
-            .then(function (results) {
+            .then(
+            (results) => {
                 dispatch(didReceiveResponse(requestID, results));
-
-            }, function (error) {
+                return Promise.resolve(results);
+            },
+            (error) => {
                 if (process.env.NODE_ENV === "development" && service.hasOwnProperty("getMockResponse")) {
-                    dispatch(didReceiveResponse(requestID, service.getMockResponse(requestID), forceCache));
+                    const response = service.getMockResponse(requestID);
+                    dispatch(didReceiveResponse(requestID, response, forceCache));
+                    return Promise.resolve(response);
                 }
                 else
                 {
                     dispatch(didReceiveError(requestID, error));
+                    return Promise.resolve();
                 }
             });
+
     }
 }
 
-function shouldFetch(state, requestID) {
-    const request = state.services.getIn([ActionKeyStore.REQUESTS, requestID]);
-
+function shouldFetch(request) {
     if (!request)
         return true;
 
@@ -59,14 +64,19 @@ function shouldFetch(state, requestID) {
 }
 
 function fetchIfNeeded(query, serviceName, forceCache) {
+
     let service   = ServiceManager.getService(serviceName),
         requestID = service.getRequestID(query);
 
-    return function (dispatch, getState) {
-        if (shouldFetch(getState(), requestID)) {
+    return (dispatch, getState) => {
+        const state = getState(),
+              request = state.services.getIn([ActionKeyStore.REQUESTS, requestID]);
+
+        if (shouldFetch(request)) {
             return dispatch(fetch(query, serviceName, forceCache));
+
         } else {
-            return Promise.resolve();
+            return Promise.resolve(request.get(ActionKeyStore.RESULTS));
         }
     }
 }

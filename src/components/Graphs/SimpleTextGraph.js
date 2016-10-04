@@ -2,34 +2,34 @@ import React from "react";
 
 import CircularProgress from "material-ui/CircularProgress";
 
+import "./SimpleTextGraph.css";
+
 /*
     This is a very basic graph that displays a text message
 */
 export default class SimpleTextGraph extends React.Component {
     render() {
-        const { response, configuration } = this.props;
+        const { response, queryConfiguration } = this.props;
         let body;
 
         if (response && !response.isFetching) {
             body = (
-                <div>
+                <div className="SimpleTextGraph">
                     {response.results.length}
                     <br />
-                    {configuration.title}
+                    {queryConfiguration.title}
                 </div>
             );
         }
         else {
 
             body = (
-                <div>
-                    <CircularProgress color="#eeeeee" /> Loading graph
-                </div>
+                <CircularProgress color="#eeeeee" />
             );
         }
 
         return (
-            <div>
+            <div className="text-center">
                 { body }
             </div>
         );

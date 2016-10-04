@@ -25,10 +25,10 @@ const mapStateToProps = (state) => ({
 
 
 const actionCreators = (dispatch) => ({
-    onLeftIconButtonTouchTap: function() {
+    onLeftIconButtonTouchTap: () => {
         dispatch(Actions.toggleMainMenu());
     },
-    updateTitle: function(aTitle) {
+    updateTitle: (aTitle) => {
         dispatch(Actions.updateTitle(aTitle));
     }
  });

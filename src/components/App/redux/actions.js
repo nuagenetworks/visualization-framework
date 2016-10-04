@@ -10,12 +10,12 @@ export const ActionKeyStore = {
 
 
 export const Actions = {
-    toggleMainMenu: function() {
+    toggleMainMenu: () => {
         return {
             type: ActionTypes.ACTION_MAIN_MENU_TOGGLE
         };
     },
-    updateTitle: function(aTitle) {
+    updateTitle: (aTitle) => {
         return {
             type: ActionTypes.ACTION_NAV_BAR_SET_TITLE,
             title: aTitle

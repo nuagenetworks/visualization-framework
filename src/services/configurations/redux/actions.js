@@ -42,24 +42,24 @@ function fetch (id, configType) {
         throw new Error("configType argument must be specified.");
     }
 
-    return function (dispatch) {
+    return (dispatch) => {
         dispatch(didStartRequest(id, configType));
 
         // Important: It is essential for redux to return a promise in order
         // to test this method (See: http://redux.js.org/docs/recipes/WritingTests.html)
         return fetchConfiguration(id, configType)
-            .then(function (configuration) {
-                return dispatch(didReceiveResponse(id, configType, configuration));
+            .then((configuration) => {
+                dispatch(didReceiveResponse(id, configType, configuration));
+                return Promise.resolve(configuration);
             })
-            .catch(function (error) {
-                return dispatch(didReceiveError(id, configType, error.message));
+            .catch((error) => {
+                dispatch(didReceiveError(id, configType, error.message));
+                return Promise.resolve();
             });
     }
 };
 
-function shouldFetch(state, id, configType) {
-    const configuration = state.configurations.getIn([ configType, id ]);
-
+function shouldFetch(configuration) {
     if (!configuration)
         return true;
 
@@ -70,9 +70,13 @@ function shouldFetch(state, id, configType) {
 }
 
 function fetchIfNeeded(id, configType) {
-    return function (dispatch, getState) {
-        if (shouldFetch(getState(), id, configType)) {
+    return (dispatch, getState) => {
+        let state         = getState(),
+            configuration = state.configurations.getIn([ configType, id ]);
+
+        if (shouldFetch(configuration)) {
             return dispatch(fetch(id, configType));
+
         } else {
             return Promise.resolve();
         }

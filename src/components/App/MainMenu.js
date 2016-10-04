@@ -6,8 +6,16 @@ import Drawer from "material-ui/Drawer";
 import Subheader from "material-ui/Subheader";
 import { List, ListItem } from "material-ui/List";
 
-import { Actions as ComponentActions, ActionKeyStore as ComponentActionKeyStore } from "./redux/actions";
-import { ActionKeyStore as ServiceActionKeyStore } from "../../services/servicemanager/redux/actions";
+import {
+    Actions as ComponentActions,
+    ActionKeyStore as ComponentActionKeyStore
+} from "./redux/actions";
+
+import {
+    Actions as ServiceActions,
+    ActionKeyStore as ServiceActionKeyStore
+} from "../../services/servicemanager/redux/actions";
+
 import { theme } from "../../theme";
 
 var style = {
@@ -34,6 +42,47 @@ var style = {
 
 class MainMenuView extends React.Component {
 
+    componentWillMount() {
+        this.initialize();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.initialize();
+    }
+
+    initialize() {
+        this.props.fetchEnterprisesIfNeeded().then((enterprises) => {
+            // if (!enterprises)
+            //     return;
+            //
+            // for (let index in enterprises) { // eslint-disable-line
+            //     let enterprise = enterprises[index];
+            //     this.props.fetchDomainsIfNeeded(enterprise.ID);
+            // }
+        });
+    }
+
+    renderSubTree() {
+        const { enterprises } = this.props;
+
+        if (!enterprises)
+            return;
+
+        return (
+            <div>
+                {enterprises.map((enterprise) => {
+                    return (
+                        <ListItem
+                            key={enterprise.ID}
+                            primaryText={enterprise.name}
+                            style={style.listItem}
+                        />
+                    )
+                })}
+            </div>
+        )
+    }
+
     render() {
         return (
             <Drawer open={this.props.open} docked={false} onRequestChange={this.props.onRequestChange}>
@@ -42,62 +91,24 @@ class MainMenuView extends React.Component {
                     <img src="/src/favicon.ico" alt="icon" role="presentation" width="10%" height="10%" />
                 </div>
 
-                <Subheader style={style.subHeader}>General</Subheader>
+                <Subheader style={style.subHeader}>Development</Subheader>
                 <List>
+                    <ListItem
+                        primaryText="AppsOverview"
+                        onTouchTap={() => {this.props.goTo("/dashboards/appsOverview?startTime=now-900h")}}
+                        style={style.listItem}
+                        />
                     <ListItem
                         primaryText="Dashboard1"
                         onTouchTap={() => {this.props.goTo("/dashboards/dashboard1")}}
                         style={style.listItem}
                         />
-                    <ListItem
-                        primaryText="Dashboard2"
-                        onTouchTap={() => {this.props.goTo("/dashboards/dashboard2")}}
-                        style={style.listItem}
-                        />
                 </List>
 
                 <Subheader style={style.subHeader}>Enterprises</Subheader>
-                <List>
-                    <ListItem
-                        primaryText="Nokia"
-                        initiallyOpen={true}
-                        primaryTogglesNestedList={false}
-                        style={style.listItem}
-                        onTouchTap={() => {this.props.goTo("/enterprises/f0d5d98c-3f6b-469d-90bf-15bb9d4f0517")}}
-                        nestedItems={[
-                            // warning.js:36 Warning: Unknown prop `nestedLevel` on <div> tag. Remove this prop from the element
-                            // See https://github.com/callemall/material-ui/issues/4602
-                            <div key={0} style={style.nestedItems}>
-                                <Subheader style={style.subHeader}>Domains</Subheader>
-                                    {this.props.domains.map((domain) => {
-                                        var domainURI = encodeURIComponent(domain.trim())
-                                        return (<ListItem
-                                                    key={domainURI}
-                                                    primaryText={domain}
-                                                    style={style.nestedItem}
-                                                    onTouchTap={() => {this.props.goTo("/domains/" + domainURI)}}
-                                                    />)
-                                    })}
-
-                                <Subheader style={style.subHeader}>NSGs</Subheader>
-                                <ListItem
-                                    key={1}
-                                    style={style.nestedItem}
-                                    primaryText="NSG 1"
-                                    />
-                                <ListItem
-                                    key={2}
-                                    style={style.nestedItem}
-                                    primaryText="NSG 2"
-                                    />
-                                <ListItem
-                                    key={3}
-                                    style={style.nestedItem}
-                                    primaryText="NSG 3"
-                                    />
-                            </div>
-                            ]}/>
-                </List>
+                    <List>
+                        {this.renderSubTree()}
+                    </List>
             </Drawer>
         );
     }
@@ -111,19 +122,26 @@ MainMenuView.propTypes = {
 
 const mapStateToProps = (state) => ({
     open: state.interface.get(ComponentActionKeyStore.MAIN_MENU_OPENED),
-    domains: state.services.getIn([ServiceActionKeyStore.REQUESTS, 'temporaryID', ServiceActionKeyStore.RESULTS]) || []
+    enterprises: state.services.getIn([ServiceActionKeyStore.REQUESTS, 'enterprises', ServiceActionKeyStore.RESULTS]),
 });
 
 const actionCreators = (dispatch) => ({
-  onRequestChange: function() {
+  onRequestChange: () => {
       dispatch(ComponentActions.toggleMainMenu());
   },
-  setPageTitle: function(aTitle) {
+  setPageTitle: (aTitle) => {
       dispatch(ComponentActions.updateTitle(aTitle));
   },
-  goTo: function(link) {
+  goTo: (link) => {
       dispatch(ComponentActions.toggleMainMenu());
       dispatch(push(link));
+  },
+  fetchEnterprisesIfNeeded: () => {
+      return dispatch(ServiceActions.fetchIfNeeded({
+          parentResource: "enterprises"
+      },
+      "VSD"
+      ));
   }
 });
 
