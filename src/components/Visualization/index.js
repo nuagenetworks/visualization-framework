@@ -28,7 +28,6 @@ class VisualizationView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            initializing: false,
             parameterizable: true,
             hasResults:false,
         }
@@ -44,12 +43,7 @@ class VisualizationView extends React.Component {
 
     initialize(id) {
 
-        if (this.state.initializing)
-            return;
-
-        this.setState({initializing: true});
-
-        this.props.fetchConfigurationIfNeeded(id).then(() => {
+        this.props.fetchConfigurationIfNeeded(id).then((c) => {
             const { configuration } = this.props
 
             if (!configuration)
@@ -64,7 +58,6 @@ class VisualizationView extends React.Component {
                 const pQuery = parameterizedConfiguration(queryConfiguration, context);
 
                 this.setState({
-                    initializing: false,
                     parameterizable: !!pQuery,
                 });
 
@@ -124,8 +117,6 @@ class VisualizationView extends React.Component {
     }
 
     render() {
-
-
         return (
             <Card>
                 { this.renderTitleIfNeeded() };
@@ -139,17 +130,22 @@ class VisualizationView extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
 
+    const configurationID = ownProps.id || ownProps.params.id,
+          context         = ownProps.context || ownProps.location.query;
+
     const props = {
+        id: configurationID,
+        context: context,
 
         configuration: state.configurations.getIn([
             ConfigurationsActionKeyStore.VISUALIZATIONS,
-            ownProps.id,
+            configurationID,
             ConfigurationsActionKeyStore.DATA
         ]),
 
         error: state.configurations.getIn([
             ConfigurationsActionKeyStore.VISUALIZATIONS,
-            ownProps.id,
+            configurationID,
             ConfigurationsActionKeyStore.ERROR
         ])
 
@@ -157,7 +153,6 @@ const mapStateToProps = (state, ownProps) => {
 
     // Expose the query template as a JS object if it is available.
     if (props.configuration) {
-
         const queryConfiguration = state.configurations.getIn([
             ConfigurationsActionKeyStore.QUERIES,
             props.configuration.get("query")
@@ -173,7 +168,8 @@ const mapStateToProps = (state, ownProps) => {
 
         // Expose received response if it is available
         if (props.queryConfiguration) {
-            const pQuery = parameterizedConfiguration(props.queryConfiguration, ownProps.context);
+
+            const pQuery = parameterizedConfiguration(props.queryConfiguration, context);
 
             if (pQuery) {
                 const requestID = ServiceManager.getRequestID(pQuery.query, pQuery.service);
