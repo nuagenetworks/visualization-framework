@@ -16,29 +16,10 @@ import {
     ActionKeyStore as ServiceActionKeyStore
 } from "../../services/servicemanager/redux/actions";
 
-import { theme } from "../../theme";
+import Styles from "./styles"
+import Logo from "./logo.png"
 
-var style = {
-    header: {
-        textAlign: "center",
-        color: "#ffffff",
-    },
-    nestedItems: {
-        background: theme.palette.lightBlue,
-        padding: 0,
-    },
-    nestedItem: {
-        fontSize: "14px",
-        paddingLeft: "16px",
-        color: "#ffffff",
-    },
-    listItem: {
-        color: "#ffffff",
-    },
-    subHeader: {
-        color: "#ffffff",
-    }
-}
+
 
 class MainMenuView extends React.Component {
 
@@ -75,7 +56,7 @@ class MainMenuView extends React.Component {
                         <ListItem
                             key={enterprise.ID}
                             primaryText={enterprise.name}
-                            style={style.listItem}
+                            style={Styles.listItem}
                         />
                     )
                 })}
@@ -86,29 +67,29 @@ class MainMenuView extends React.Component {
     render() {
         return (
             <Drawer open={this.props.open} docked={false} onRequestChange={this.props.onRequestChange}>
-                <div style={style.header}>
-                    <p>Visualization Framework</p>
-                    <img src="/src/favicon.ico" alt="icon" role="presentation" width="10%" height="10%" />
+                <div style={Styles.header}>
+                    <img src={Logo} alt="Visualization Framework by Nuage Networks" />
+                    <p>Visualizations</p>
                 </div>
 
-                <Subheader style={style.subHeader}>Development</Subheader>
+                <Subheader style={Styles.subHeader}>Development</Subheader>
                 <List>
                     <ListItem
                         primaryText="AppsOverview"
                         onTouchTap={() => {this.props.goTo("/dashboards/appsOverview?startTime=now-900h")}}
-                        style={style.listItem}
+                        style={Styles.listItem}
                         />
                     <ListItem
                         primaryText="Dashboard1"
                         onTouchTap={() => {this.props.goTo("/dashboards/dashboard1")}}
-                        style={style.listItem}
+                        style={Styles.listItem}
                         />
                 </List>
 
-                <Subheader style={style.subHeader}>Enterprises</Subheader>
-                    <List>
-                        {this.renderSubTree()}
-                    </List>
+                <Subheader style={Styles.subHeader}>Enterprises</Subheader>
+                <List>
+                    {this.renderSubTree()}
+                </List>
             </Drawer>
         );
     }
