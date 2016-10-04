@@ -9,6 +9,10 @@
         "xColumn": "SumOf",
         "yColumn": "spg",
         "orientation": "horizontal",
+        "tooltip": [
+            { "column": "spg", "label": "PG" },
+            { "column": "SumOf", "label": "ACL Hits", "format": ",.1f"}
+        ],
         "margin": {
             "top": 20,
             "bottom": 40,
