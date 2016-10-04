@@ -1,7 +1,8 @@
 {
     "id": "vss-domain-flow-table",
     "graph": "Table",
-    "title": "{{spg:PG}} to {{dpg:PG}} flow Detail",
+    "title": "Flow detail between {{spg:PG}} and {{dpg:PG}}",
+    "description": "Detail in a reverse chronological order about flows between selected source and destination.",
     "author": "Ronak Shah",
     "creationDate": "11/02/2016",
     "data": {

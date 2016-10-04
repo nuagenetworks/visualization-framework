@@ -2,6 +2,7 @@
     "id": "vss-top-sec-events",
     "graph": "PieGraph",
     "title": "Top Security Events",
+    "description": "Top 5 security events for this enterprise in a given period of time",
     "author": "Ronak Shah",
     "creationDate": "10/17/2016",
     "data": {

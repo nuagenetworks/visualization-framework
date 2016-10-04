@@ -2,6 +2,7 @@
     "id": "vss-ent-acldeny-time",
     "graph": "LineGraph",
     "title": "VSS Enterprise ACL Deny vs Time",
+    "description": "This line graph represents total no of ACL deny received for this enterprise over a period of specified time.",
     "author": "Ronak Shah",
     "creationDate": "10/17/2016",
     "data": {
