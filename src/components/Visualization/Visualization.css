@@ -1,0 +1,29 @@
+.VisualizationCard {
+    width: 100%;
+    height:100%;
+}
+
+.VisualizationText {
+    position: absolute;
+    top: 0;
+    left:0;
+    width: 100%;
+    height:100%;
+    display: inline-block;
+}
+
+.VisualizationText div {
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    font-size: 150%;
+}
+
+.overlay {
+    background: #444444;
+    opacity: 0.5;
+}
+
+.overlay div {
+    color: #ffffff;
+}

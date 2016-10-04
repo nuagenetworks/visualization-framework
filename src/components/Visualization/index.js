@@ -4,7 +4,6 @@ import { push } from "redux-router";
 
 import AppBar from "material-ui/AppBar";
 import {Card,CardText} from 'material-ui/Card';
-import CircularProgress from "material-ui/CircularProgress";
 
 import { Actions } from "./redux/actions";
 import {
