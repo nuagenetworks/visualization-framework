@@ -41,18 +41,18 @@
                                 "field":"DstIp",
                                 "size":5,
                                 "order":{
-                                    "Packets":"desc"
+                                    "Bytes":"desc"
                                 }
                             },
                             "aggs":{
                                 "Packets":{
                                     "sum":{
-                                        "field":"EgressPackets"
+                                        "field":"IngressPackets"
                                     }
                                 },
                                 "Bytes":{
                                     "sum":{
-                                        "field":"EgressBytes"
+                                        "field":"IngressBytes"
                                     }
                                 },
                                 "DomainName":{
@@ -60,18 +60,18 @@
                                         "field":"Domain",
                                         "size":5,
                                         "order":{
-                                            "Packets":"desc"
+                                            "Bytes":"desc"
                                         }
                                     },
                                 "aggs":{
                                     "Packets":{
                                         "sum":{
-                                            "field":"EgressPackets"
+                                            "field":"IngressPackets"
                                         }
                                     },
                                     "Bytes":{
                                         "sum":{
-                                            "field":"EgressBytes"
+                                            "field":"IngressBytes"
                                         }
                                     }
                                 }
