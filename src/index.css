@@ -3,3 +3,8 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.react-grid-item.react-grid-placeholder {
+    background: #83a8cd;
+    opacity: 0.1;
+}

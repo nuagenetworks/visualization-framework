@@ -19,8 +19,7 @@ import { parameterizedConfiguration } from "../../utils/configurations";
 import { GraphManager } from "../Graphs/index";
 import { ServiceManager } from "../../services/servicemanager/index";
 
-import Styles from "./styles"
-import "./Visualization.css"
+import style from "./styles"
 
 import FontAwesome from "react-fontawesome";
 
@@ -94,8 +93,8 @@ class VisualizationView extends React.Component {
 
         if (!this.state.parameterizable) {
             return (
-                <div className="VisualizationText overlay text-center">
-                    <div>
+                <div style={style.overlayContainer}>
+                    <div style={style.overlayText}>
                         <FontAwesome
                             name="meh-o"
                             size="3x"
@@ -108,8 +107,8 @@ class VisualizationView extends React.Component {
         }
 
         return (
-            <div className="VisualizationText text-center">
-                <div>
+            <div style={style.container}>
+                <div style={style.text}>
                     <FontAwesome
                         name="circle-o-notch"
                         size="2x"
@@ -133,15 +132,14 @@ class VisualizationView extends React.Component {
             <AppBar
                 title={configuration.get("title")}
                 showMenuIconButton={false}
-                style={Styles.navBar}
+                style={style.navBar}
                 />
         )
     }
 
     render() {
         return (
-            <Card className="VisualizationCard">
-
+            <Card style={style.card}>
                 { this.renderTitleIfNeeded() };
                 <CardText>
                     { this.renderVisualizationIfNeeded() }

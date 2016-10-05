@@ -13,7 +13,7 @@ import {
     ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions"
 
-import "./Dashboard.css"
+import style from "./styles"
 
 
 export class DashboardView extends React.Component {
@@ -88,7 +88,6 @@ export class DashboardView extends React.Component {
 
             return (
                 <ReactGridLayout
-                    className="layout"
                     layout={layout}
                     cols={12}
                     rowHeight={10}

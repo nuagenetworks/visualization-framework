@@ -20,12 +20,45 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
         clockCircleColor: "#55C6C9", // light blue
         // shadowColor: "", // #56B79B Green
 
-        // Custom
+        // Custom borders
         thinBorder: "solid 1px",
         boldBorder: "solid 2px",
+
+        // Custom colors
+        blackColor: "#6b6b6b",
+        blackDarkColor: "#5e5959",
+        blackDarkerColor: "#232022",
+        blackLightColor: "#777d7d",
+        blackLighterColor: "#91aeae",
+        blueBlindColor: "#0072b2",
+        blueColor: "#6b94ec",
+        blueDarkColor: "#5a83de",
+        blueDarkerColor: "#333333",
+        blueLightColor: "#7da3f7",
+        blueLighterColor: "#b3d0ff",
+        bluePaleColor: "#c7d9f9",
+        greenBlindColor: "#009e73",
+        greenColor: "#b3d645",
+        greenDarkColor: "#36ab65",
+        greenLightColor: "#e0fe83",
+        greenLighterColor: "#ffffcb",
+        greyColor: "#d9d9d9",
+        greyDarkColor: "#ccc2c2",
+        greyDarkerColor: "#333333",
+        greyLightColor: "#f2f2f2",
+        greyLighterColor: "#fcfcfc",
+        mauveColor: "#aa97f2",
+        orangeBlindColor: "#e69f00",
+        orangeColor: "#f9b13d",
+        orangeLightColor: "#fec26a",
+        orangeLighterColor: "#fed291",
+        redBlindColor: "#d55e00",
+        redColor: "#f76159",
         transparentColor: "transparent",
-        containerBackgroundColor: "#3F5574",
-        lightBlue: "#506B93",
+        whiteColor: "#ffffff",
+        windowBodyColor: "#f5f5f5",
+        yellowBlindColor: "#f0e442",
+        yellowColor: "#eeda54",
     },
     drawer: {
         color: "#3F5574",

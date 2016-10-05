@@ -1,30 +1,33 @@
 import { theme } from "../../theme";
 
-const Styles = {
+const style = {
+    container: {
+        margin: "20px",
+    },
     header: {
         textAlign: "center",
-        color: "#ffffff",
+        color: theme.palette.whiteColor,
         fontSize: "120%",
         padding: "10px",
     },
     nestedItems: {
-        background: theme.palette.lightBlue,
+        background: theme.palette.blueLightColor,
         padding: 0,
     },
     nestedItem: {
         fontSize: "14px",
         paddingLeft: "16px",
-        color: "#ffffff",
+        color: theme.palette.whiteColor,
     },
     listItem: {
-        color: "#ffffff",
+        color: theme.palette.whiteColor,
     },
     subHeader: {
-        color: "#ffffff",
+        color: theme.palette.whiteColor,
         fontSize: "120%",
         textDecoration: "underline",
         fontStyle: "normal",
     }
 }
 
-export default Styles;
+export default style;

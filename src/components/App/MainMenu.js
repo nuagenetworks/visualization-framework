@@ -16,7 +16,7 @@ import {
     ActionKeyStore as ServiceActionKeyStore
 } from "../../services/servicemanager/redux/actions";
 
-import Styles from "./styles"
+import style from "./styles"
 import Logo from "./logo.png"
 
 
@@ -56,7 +56,7 @@ class MainMenuView extends React.Component {
                         <ListItem
                             key={enterprise.ID}
                             primaryText={enterprise.name}
-                            style={Styles.listItem}
+                            style={style.listItem}
                         />
                     )
                 })}
@@ -67,26 +67,26 @@ class MainMenuView extends React.Component {
     render() {
         return (
             <Drawer open={this.props.open} docked={false} onRequestChange={this.props.onRequestChange}>
-                <div style={Styles.header}>
+                <div style={style.header}>
                     <img src={Logo} alt="Visualization Framework by Nuage Networks" />
                     <p>Visualizations</p>
                 </div>
 
-                <Subheader style={Styles.subHeader}>Development</Subheader>
+                <Subheader style={style.subHeader}>Development</Subheader>
                 <List>
                     <ListItem
                         primaryText="AppsOverview"
                         onTouchTap={() => {this.props.goTo("/dashboards/appsOverview?startTime=now-900h")}}
-                        style={Styles.listItem}
+                        style={style.listItem}
                         />
                     <ListItem
                         primaryText="Dashboard1"
                         onTouchTap={() => {this.props.goTo("/dashboards/dashboard1")}}
-                        style={Styles.listItem}
+                        style={style.listItem}
                         />
                 </List>
 
-                <Subheader style={Styles.subHeader}>Enterprises</Subheader>
+                <Subheader style={style.subHeader}>Enterprises</Subheader>
                 <List>
                     {this.renderSubTree()}
                 </List>
