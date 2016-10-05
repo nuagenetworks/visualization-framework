@@ -40,3 +40,10 @@ git submodule update
     4. Update the submodule to get the lastest sources `git submodule update`
     5. Install all dependancies using `npm install` (it will take some time, please be patient)
     6. Run the application using `npm run start` command.
+
+## Settings
+
+Here is a list of environment variable that can be set to configure the visualization framework:
+
+    * `REACT_APP_ELASTICSEARACH_HOST` allows you to specify the Elastic Search server (ex: http://localhost:9200)
+    * `REACT_APP_VSD_API_ENDPOINT` allows to specify the VSD API endpoint (ex:https://vsd.com:8443/nuage/api/)
