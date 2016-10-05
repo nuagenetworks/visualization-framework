@@ -1,0 +1,25 @@
+simulate_pps_stats.py is a simple python program that generates simulated PPS flow logs, probe logs and sla logs in json format and writes in to elasticsearch server
+
+Requirements to run the program: Need to install elasticsearch client package ( pip install elasticsearch )
+Elastic search server ip to be configured in the config.ini
+
+Current limitations:
+Single Enterprise. And generates flows only across nsgs in the same domain.
+
+Time increment is 30 seconds
+
+In the config.ini file, user can specify the resource counts and the program will generate that many random resource UUIDS and will be used for generating flows, probes and sla logs.
+
+per timestamp:
+number of flow records generated = num_of_domains * nsg_cnt * vport_cnt Combinations 2 * app_cnt
+Eg: For def_conf: 1 * 4 * 2C2 * 5 = 20
+
+number of probe records generated = nsg_cnt Combinations 2
+Eg: For def_conf: 4C2 = 6
+
+number of sla records generated = nsg_cnt/2 * appgrp_cnt
+Eg: For def_conf: 4/2 * 2 = 4
+
+
+
+
