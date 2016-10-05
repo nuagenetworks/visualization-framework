@@ -1,6 +1,6 @@
 import { theme } from "../../theme";
 
-const Styles = {
+const style = {
     navBar: {
         background: theme.palette.primary2Color,
     },
@@ -45,4 +45,4 @@ const Styles = {
 
 };
 
-export default Styles;
+export default style;
