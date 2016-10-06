@@ -15,12 +15,7 @@ import { theme } from "../../theme";
 import { ActionKeyStore as ServiceActionKeyStore } from "../../services/servicemanager/redux/actions";
 import { ServiceManager } from "../../services/servicemanager/index";
 
-let style = {
-    container: {
-        margin: "20px",
-    }
-}
-
+import style from "./styles"
 
 class AppContainerView extends React.Component {
 
