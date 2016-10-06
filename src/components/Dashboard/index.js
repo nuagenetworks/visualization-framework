@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
-import { Map } from "immutable";
 
 import CircularProgress from "material-ui/CircularProgress";
 import ReactGridLayout from "react-grid-layout";
