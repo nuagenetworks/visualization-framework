@@ -125,7 +125,7 @@ class VisualizationView extends React.Component {
     renderTitleIfNeeded() {
         const { configuration } = this.props;
 
-        if (!configuration || !configuration.get("title"))
+        if (!configuration || !configuration.get("title") || !this.state.parameterizable)
             return;
 
         return (
@@ -139,7 +139,7 @@ class VisualizationView extends React.Component {
 
     render() {
         return (
-            <Card style={style.card}>
+            <Card style={style.card} containerStyle={style.cardContainer}>
                 { this.renderTitleIfNeeded() };
                 <CardText>
                     { this.renderVisualizationIfNeeded() }

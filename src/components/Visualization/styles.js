@@ -9,6 +9,10 @@ const style = {
         height: "100%",
         width: "100%",
     },
+    cardContainer: {
+        height: "100%",
+        width: "100%",
+    },
     overlayContainer: {
         position: "absolute",
         top: "0",
