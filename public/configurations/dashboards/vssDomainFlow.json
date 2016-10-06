@@ -4,8 +4,8 @@
     "creationDate": "11/02/2016",
     "title": "{{domainName:VSS Domain}} - Flow Visualization",
     "visualizations": [
-        { "id": "vss-domain-flow", "x": 0, "y": 0, "w": 6, "h": 25, "minW": 3, "minH": 12},
-        { "id": "vss-domain-flow-table", "x": 6, "y": 0, "w": 6, "h": 25, "minW": 4 , "minH": 12}
+        { "id": "vss-domain-flow", "x": 1, "y": 0, "w": 5, "h": 25, "minW": 2, "minH": 12},
+        { "id": "vss-domain-flow-table", "x": 6, "y": 0, "w": 5, "h": 25, "minW": 2 , "minH": 12}
     ],
     "links": [
         {
@@ -24,5 +24,45 @@
             "label": "ACL Analytics",
             "url": "/dashboards/vssDomainACL"
         }
-    ]
+    ],
+    "filterOptions": {
+        "Source Field": {
+            "parameter": "source_field",
+            "default": "nuage_metadata.spgName",
+            "options": [
+                {
+                    "label": "Subnet",
+                    "value": "nuage_metadata.subnetName"
+                },
+                {
+                    "label": "Zone",
+                    "value": "nuage_metadata.zoneName"
+                },
+                {
+                    "label": "PG",
+                    "value": "nuage_metadata.spgName",
+                    "default": true
+                }
+            ]
+        },
+        "Destination Field": {
+            "parameter": "destination_field",
+            "default": "nuage_metadata.dpgName",
+            "options": [
+                {
+                    "label": "Subnet",
+                    "value": "nuage_metadata.subnetName"
+                },
+                {
+                    "label": "Zone",
+                    "value": "nuage_metadata.zoneName"
+                },
+                {
+                    "label": "PG",
+                    "value": "nuage_metadata.dpgName",
+                    "default": true
+                }
+            ]
+        }
+    }
 }

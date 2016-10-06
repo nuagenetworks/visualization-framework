@@ -51,7 +51,7 @@
                             "aggs": {
                                 "spg": {
                                     "terms": {
-                                        "field": "nuage_metadata.spgName",
+                                        "field": "{{source_field:nuage_metadata.spgName}}",
                                         "size": 5,
                                         "order": {
                                             "SumOf": "desc"
@@ -65,7 +65,7 @@
                                         },
                                         "dpg": {
                                             "terms": {
-                                                "field": "nuage_metadata.dpgName",
+                                                "field": "{{destination_field:nuage_metadata.dpgName}}",
                                                 "size": 5,
                                                 "order": {
                                                     "SumOf": "desc"
