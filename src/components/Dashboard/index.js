@@ -1,5 +1,7 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import { connect } from "react-redux";
+import { Map } from "immutable";
 
 import CircularProgress from "material-ui/CircularProgress";
 import ReactGridLayout from "react-grid-layout";
@@ -13,10 +15,15 @@ import {
     ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions"
 
-import style from "./styles"
+import { resizeVisualization } from "../../utils/resize"
 
 
 export class DashboardView extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this._gridItems = {};
+    }
 
     componentWillMount() {
         this.props.setPageTitle("Dashboard");
@@ -61,8 +68,19 @@ export class DashboardView extends React.Component {
         fetchConfigurationIfNeeded(params.id);
     }
 
+    storeGridItem = (c) => {
+        this._gridItems[c.props.id] = ReactDOM.findDOMNode(c).parentElement;
+    }
+
+    setInnerVisualizationlayout = (id) => {
+        resizeVisualization(this._gridItems[id]);
+    }
+
+
     render() {
-        if (this.props.fetching) {
+        const { configuration, error, fetching, location} = this.props
+
+        if (fetching) {
             return (
                 <div>
                     <CircularProgress color="#eeeeee"/>
@@ -70,33 +88,25 @@ export class DashboardView extends React.Component {
                 </div>
             );
 
-        } else if (this.props.error) {
+        } else if (error) {
             return (
-                <div>{this.props.error}</div>
+                <div>{error}</div>
             );
 
-        } else if (this.props.configuration) {
-            const { visualizations } = this.props.configuration.toJS();
-
-            // Expose each visualization id as the property "i",
-            // which is required by the ReactGridLayout "layout" prop.
-            const layout = visualizations.map((visualization) => {
-                return Object.assign({}, visualization, {
-                    i: visualization.id
-                });
-            });
+        } else if (configuration) {
+            const { visualizations } = configuration.toJS();
 
             return (
                 <ReactGridLayout
-                    layout={layout}
                     cols={12}
                     rowHeight={10}
                     width={1200}
+                    onResize={(layout, previousItemLayout, currentItemLayout) => this.setInnerVisualizationlayout(currentItemLayout.i)}
                     >
                     {
-                        visualizations.map((visualization) =>
-                            <div key={visualization.id}>
-                                <Visualization id={visualization.id} context={this.props.location.query} />
+                        visualizations.map((visualization, index) =>
+                            <div key={visualization.id} data-grid={visualization}>
+                                <Visualization id={visualization.id} context={location.query} ref={this.storeGridItem}/>
                             </div>
                         )
                     }

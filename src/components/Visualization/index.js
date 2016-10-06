@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import { push } from "redux-router";
 
@@ -16,6 +17,8 @@ import {
 } from "../../services/configurations/redux/actions";
 
 import { parameterizedConfiguration } from "../../utils/configurations";
+import { resizeVisualization } from "../../utils/resize"
+
 import { GraphManager } from "../Graphs/index";
 import { ServiceManager } from "../../services/servicemanager/index";
 
@@ -40,6 +43,10 @@ class VisualizationView extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.initialize(nextProps.id);
+    }
+
+    componentDidUpdate() {
+        resizeVisualization(this._element);
     }
 
     initialize(id) {
@@ -122,10 +129,16 @@ class VisualizationView extends React.Component {
         )
     }
 
+    shouldShowTitle() {
+        const { configuration } = this.props;
+
+        return configuration && configuration.get("title") && this.state.parameterizable;
+    }
+
     renderTitleIfNeeded() {
         const { configuration } = this.props;
 
-        if (!configuration || !configuration.get("title") || !this.state.parameterizable)
+        if (!this.shouldShowTitle())
             return;
 
         return (
@@ -137,9 +150,16 @@ class VisualizationView extends React.Component {
         )
     }
 
+    cardTextReference = (c) => {
+        if (this._element)
+            return;
+
+        this._element = ReactDOM.findDOMNode(c).parentElement;
+    }
+
     render() {
         return (
-            <Card style={style.card} containerStyle={style.cardContainer}>
+            <Card style={style.card} containerStyle={style.cardContainer} ref={this.cardTextReference}>
                 { this.renderTitleIfNeeded() };
                 <CardText>
                     { this.renderVisualizationIfNeeded() }
