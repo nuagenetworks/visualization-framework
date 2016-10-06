@@ -2,6 +2,7 @@
     "id": "top5-app-vertical-bar-domain",
     "graph": "BarGraph",
     "title": "Top 5 Apps",
+    "description": "Domain level top 5 applications. Computation: Sum of total Bytes sent and/or received in descending order.",
     "author": "Ronak Shah",
     "creationDate": "10/14/2016",
     "data": {

@@ -2,6 +2,7 @@
     "id": "top20-talkers-domain",
     "graph": "Table",
     "title": "Top 20 Talkers",
+    "description": "Domain level top 20 discovered and configured applications. Computation: Sum of total Bytes sent and/or received in descending order.",
     "author": "Ronak Shah",
     "creationDate": "10/14/2016",
     "data": {

@@ -2,6 +2,7 @@
     "id": "aar-nsg-top10-app",
     "graph": "PieGraph",
     "title": "Top 10 Applications",
+    "description": "NSG level top 10 applications. Computation: Sum of total Bytes sent and/or received in descending order.",
     "author": "Ronak Shah",
     "creationDate": "10/26/2016",
     "data": {

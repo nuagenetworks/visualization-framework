@@ -2,6 +2,7 @@
     "id": "top5-users-table",
     "graph": "Table",
     "title": "Top 5 Users",
+    "description": "Enterprise level top 5 users (IP addresses). Computation: Sum of total Bytes sent and/or received in descending order.",
     "author": "Ronak Shah",
     "creationDate": "10/13/2016",
     "data": {
