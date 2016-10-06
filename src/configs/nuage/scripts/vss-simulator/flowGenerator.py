@@ -63,13 +63,16 @@ def generateFlowStats(domain_id):
 			'enterpriseName': CONFIG_DICT['enterprise.name'], 
 			'sourcevport': flow_data[0]['uuid'],
 			'destinationvport': flow_data[1]['uuid'],
-			'spgName': flow_data[0]['pg']
+			'spgName': flow_data[0]['pg'],
+                        'subnetName': CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-sub",
+                        'zoneName': CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-zone",
+                        'aclId': flow_data[0]['uuid']
 		}
 		print ("Writing flow information between " + flow_data[0]['name'] + " and " + flow_data[1]['name'])
 		writeToES(es_data)
 
 def writeToES(es_data):
-	es = Elasticsearch()
+	es = Elasticsearch("192.168.100.200")
 	write_data = []
 	# Create counters on the fly everytime
 	# Write data for a day every minute

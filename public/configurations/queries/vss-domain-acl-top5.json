@@ -1,0 +1,90 @@
+{
+    "id":"vss-domain-acl-top5",
+    "title":"top 5 acls",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_flow}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "2": {
+                    "filters":{
+                        "filters":{
+                            "Enterprise":{
+                                "query":{
+                                    "term":{
+                                        "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "aggs": {
+                        "3": {
+                            "filters":{
+                                "filters":{
+                                    "Domain":{
+                                        "query":{
+                                            "term":{
+                                                "nuage_metadata.domainName":"{{domainName:chord_domain}}"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "aggs": {
+                                "top-acls": {
+                                    "terms": {
+                                        "field": "nuage_metadata.aclId",
+                                        "size": 5                                    
+                                    },
+                                    "aggs": {
+                                        "top-acl-hits": {
+                                            "top_hits": {
+                                                "sort": [
+                                                    {
+                                                        "packets": {
+                                                            "order": "desc",
+                                                            "mode": "sum"
+                                                        }
+                                                    }
+                                                ],
+                                                "_source": {
+                                                    "include": [
+                                                        "nuage_metadata.spgName",
+                                                        "nuage_metadata.dpgName",
+                                                        "sourceport",
+                                                        "destinationport",
+                                                        "protocol"
+                                                    ]
+                                                },
+                                                "size": 1
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

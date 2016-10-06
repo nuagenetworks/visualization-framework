@@ -1,0 +1,17 @@
+{
+    "id": "vss-domain-acl-top5",
+    "graph": "Table",
+    "title": "Top 5 ACL by # hits",
+    "description": "Top 5 ACL by # of hits in this domain",
+    "author": "Ronak Shah",
+    "creationDate": "11/29/2016",
+    "data": {
+        "columns": [
+            { "column": "key", "label": "ACL ID" },
+            { "column": "protocol", "label": "Protocol" },
+            { "column": "sourceport", "label": "Source Port" },
+            { "column": "destinationport", "label": "Dest Port" }
+        ]
+    },
+    "query": "vss-domain-acl-top5"
+}
