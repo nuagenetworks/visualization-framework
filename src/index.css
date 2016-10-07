@@ -4,7 +4,11 @@ body {
   font-family: sans-serif;
 }
 
+.appBar {
+    box-shadow: 0 !important;
+}
+
 .react-grid-item.react-grid-placeholder {
-    background: #83a8cd;
+    background: #b3d0ff;
     opacity: 0.1;
 }
