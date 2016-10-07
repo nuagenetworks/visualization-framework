@@ -67,12 +67,12 @@ class MainMenuView extends React.Component {
     render() {
         return (
             <Drawer open={this.props.open} docked={false} onRequestChange={this.props.onRequestChange}>
-                <div style={style.header}>
+                <div style={style.menuLogo}>
                     <img src={Logo} alt="Visualization Framework by Nuage Networks" />
                     <p>Visualizations</p>
                 </div>
 
-                <Subheader style={style.subHeader}>Development</Subheader>
+                <Subheader style={style.subHeader}>DEVELOPMENT</Subheader>
                 <List>
                     <ListItem
                         primaryText="AppsOverview"
@@ -86,7 +86,7 @@ class MainMenuView extends React.Component {
                         />
                 </List>
 
-                <Subheader style={style.subHeader}>Enterprises</Subheader>
+                <Subheader style={style.subHeader}>ENTERPRISES</Subheader>
                 <List>
                     {this.renderSubTree()}
                 </List>

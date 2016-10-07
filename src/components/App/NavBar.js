@@ -6,12 +6,14 @@ import MainMenu from './MainMenu.js';
 
 import { Actions, ActionKeyStore } from './redux/actions';
 
+import style from "./styles"
+
 
 class NavBarView extends React.Component {
     render() {
         return (
             <div>
-                <AppBar title={this.props.title} onLeftIconButtonTouchTap={this.props.onLeftIconButtonTouchTap} />
+                <AppBar className="appBar" style={style.navBar} title={this.props.title} onLeftIconButtonTouchTap={this.props.onLeftIconButtonTouchTap} />
                 <MainMenu />
             </div>
         );

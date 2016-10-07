@@ -1,11 +1,8 @@
 import { theme } from "../../theme";
 
 const style = {
-    navBar: {
-        background: theme.palette.primary2Color,
-    },
     card: {
-        border: theme.palette.thinBorder + theme.palette.primary2Color,
+        border: theme.palette.thinBorder + theme.palette.borderColor,
         height: "100%",
         width: "100%",
     },
