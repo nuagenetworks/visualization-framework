@@ -69,8 +69,11 @@ export class DashboardView extends React.Component {
         fetchConfigurationIfNeeded(params.id);
     }
 
-    storeGridItem = (c) => {
-        this._gridItems[c.props.id] = ReactDOM.findDOMNode(c).parentElement;
+    storeGridItem = (component) => {
+        if (!component)
+            return;
+
+        this._gridItems[component.props.id] = ReactDOM.findDOMNode(component).parentElement;
     }
 
     setInnerVisualizationlayout = (id) => {
