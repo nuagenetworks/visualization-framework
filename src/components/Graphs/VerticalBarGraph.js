@@ -10,6 +10,7 @@ export default class VerticalBarGraph extends React.Component {
 
     componentDidMount() {
         this.div = ReactDOM.findDOMNode(this.refs.div);
+
         const svg = d3.select(this.div).append("svg")
         this.barChart = BarChart()
           .svg(svg)
@@ -21,24 +22,30 @@ export default class VerticalBarGraph extends React.Component {
           .yAxisLabelOffset(20)
           .yAxisTickSpacing(25);
 
-        // TODO figure out a cleaner way here.
-        this.shouldComponentUpdate(this.props);
+        this.updateData(this.props);
+        this.updateSize();
+
+        this.div.addEventListener('resize', this.updateSize.bind(this));
     }
 
-    shouldComponentUpdate(nextProps) {
-        const { response, configuration, onBarClick }  = nextProps;
+    updateSize() {
 
         // TODO figure out how to get rid of this constant.
-        // Maybe use flexbox to get proper height from clientHeight?
         const bannerHeight = 64;
+
+        this.barChart
+          .width(this.div.clientWidth)
+          .height(this.div.clientHeight - bannerHeight);
+    }
+
+    updateData(props) {
+        const { response, configuration, onBarClick }  = props;
 
         if (response) {
             const data = tabify(response.results);
             const properties = configuration.data;
 
             this.barChart
-              .width(this.div.clientWidth)
-              .height(this.div.clientHeight - bannerHeight)
               .xColumn(properties.xColumn)
               .yColumn(properties.yColumn)
               .data(data);
@@ -47,6 +54,12 @@ export default class VerticalBarGraph extends React.Component {
               this.barChart.onBarClick(onBarClick);
             }
         }
+
+    }
+
+    shouldComponentUpdate(nextProps) {
+
+        this.updateData(nextProps);
 
         // Manage the DOM with D3, prevent React from rendering.
         return false;
