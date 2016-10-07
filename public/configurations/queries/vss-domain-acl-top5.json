@@ -71,7 +71,8 @@
                                                         "nuage_metadata.dpgName",
                                                         "sourceport",
                                                         "destinationport",
-                                                        "protocol"
+                                                        "protocol",
+                                                        "type"
                                                     ]
                                                 },
                                                 "size": 1

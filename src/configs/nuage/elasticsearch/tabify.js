@@ -50,6 +50,9 @@ function collectBucket(node, stack=[]) {
         if (typeof value === 'object') {
 
             if ("hits" in value && Array.isArray(value.hits) && value.hits.length === 1) {
+                if ("sort" in value.hits[0]) {
+                    value.hits[0]._source['sort'] = value.hits[0].sort[0];
+                }
                 return value.hits[0]._source;
             }
 

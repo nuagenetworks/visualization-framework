@@ -7,10 +7,14 @@
     "creationDate": "11/29/2016",
     "data": {
         "columns": [
-            { "column": "key", "label": "ACL ID" },
-            { "column": "protocol", "label": "Protocol" },
-            { "column": "sourceport", "label": "Source Port" },
-            { "column": "destinationport", "label": "Dest Port" }
+            { "column": "top-acls", "label": "ACL ID" },
+            { "column": "top-acl-hits.sort", "label": "# Packets" },
+            { "column": "top-acl-hits.type", "label": "Type" },
+            { "column": "top-acl-hits.protocol", "label": "Protocol" },
+            { "column": "top-acl-hits.sourceport", "label": "Source Port" },
+            { "column": "top-acl-hits.destinationport", "label": "Dest Port" },
+            { "column": "top-acl-hits.nuage_metadata.spgName", "label": "Source PG" },
+            { "column": "top-acl-hits.nuage_metadata.dpgName", "label": "Dest PG" }
         ]
     },
     "query": "vss-domain-acl-top5"
