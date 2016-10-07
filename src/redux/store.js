@@ -44,7 +44,7 @@ store.subscribe(function() {
     const state = store.getState();
 
     if (state.router && state.router.location.query.token && state.router.location.query.token !== state.VSD.get(VSDActionKeyStore.TOKEN)) {
-        store.dispatch(VSDActions.setSettings(store.getState().router.location.query.token, store.getState().router.location.query.api));
+        store.dispatch(VSDActions.setSettings(state.router.location.query.token, state.router.location.query.api));
     }
 
     // Fetch licenses if necessary
