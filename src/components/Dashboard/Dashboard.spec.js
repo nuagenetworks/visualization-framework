@@ -13,12 +13,12 @@ describe('Dashboard Component', () => {
                 id: "dashboard1"
             },
             setPageTitle = ((title) => {}),
-            fetchConfiguration = ((id) => {});
+            fetchConfigurationIfNeeded = ((id) => {});
 
       shallow(<DashboardView
                 params={params}
                 setPageTitle={setPageTitle}
-                fetchConfiguration={fetchConfiguration}
+                fetchConfigurationIfNeeded={fetchConfigurationIfNeeded}
                 />);
     });
 });
