@@ -39,22 +39,22 @@ export default class VerticalBarGraph extends React.Component {
     }
 
     updateData(props) {
-        const { response, configuration, onBarClick }  = props;
+        const { response, configuration, onBarClick } = props;
 
-        if (response) {
-            const data = tabify(response.results);
-            const properties = configuration.data;
+        if (!response || response.error)
+            return;
 
-            this.barChart
-              .xColumn(properties.xColumn)
-              .yColumn(properties.yColumn)
-              .data(data);
+        const data = tabify(response.results);
+        const properties = configuration.data;
 
-            if(onBarClick){
-              this.barChart.onBarClick(onBarClick);
-            }
+        this.barChart
+          .xColumn(properties.xColumn)
+          .yColumn(properties.yColumn)
+          .data(data);
+
+        if(onBarClick) {
+          this.barChart.onBarClick(onBarClick);
         }
-
     }
 
     shouldComponentUpdate(nextProps) {
