@@ -1,0 +1,15 @@
+{
+    "id": "vss-enterprise-events-metric",
+    "title": "# Events",
+    "query": "vss-enterprise-events-metric",
+    "graph": "VariationTextGraph",
+    "showTitleBar": false,
+    "data": {
+        "titlePosition": "top",
+        "target":{
+            "column": "timezones",
+            "value": "Last 24",
+            "field": "doc_count"
+        }
+    }
+}

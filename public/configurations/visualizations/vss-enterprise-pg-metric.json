@@ -1,0 +1,15 @@
+{
+    "id": "vss-enterprise-pg-metric",
+    "title": "# PGs",
+    "query": "vss-enterprise-pg-metric",
+    "graph": "VariationTextGraph",
+    "showTitleBar": false,
+    "data": {
+        "titlePosition": "top",
+        "target":{
+            "column": "timezones",
+            "value": "Last 24",
+            "field": "value"
+        }
+    }
+}
