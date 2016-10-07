@@ -17,7 +17,7 @@ export const resizeVisualization = (gridItem) => {
     if (innerCard.length > 1) {
         cardText = innerCard[1];
         height -= innerCard[0].clientHeight;
-        
+
     } else {
         cardText = innerCard[0];
     }
@@ -26,4 +26,5 @@ export const resizeVisualization = (gridItem) => {
         return;
 
     cardText.style.height = height + "px";
+    // cardText.style.backgroundColor = "#ccc";
 }
