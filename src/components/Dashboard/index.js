@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 
 import CircularProgress from "material-ui/CircularProgress";
 import ReactGridLayout from "react-grid-layout";
+import { Responsive, WidthProvider } from 'react-grid-layout';
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 import Visualization from "../Visualization";
 
@@ -96,10 +98,8 @@ export class DashboardView extends React.Component {
             const { visualizations } = configuration.toJS();
 
             return (
-                <ReactGridLayout
-                    cols={12}
+                <ResponsiveReactGridLayout
                     rowHeight={10}
-                    width={1200}
                     onResize={(layout, previousItemLayout, currentItemLayout) => this.setInnerVisualizationlayout(currentItemLayout.i)}
                     >
                     {
@@ -109,7 +109,7 @@ export class DashboardView extends React.Component {
                             </div>
                         )
                     }
-                </ReactGridLayout>
+                </ResponsiveReactGridLayout>
             );
         } else {
             return <div>No dashboard</div>
