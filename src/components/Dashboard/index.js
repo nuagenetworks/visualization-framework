@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 
 import CircularProgress from "material-ui/CircularProgress";
-import ReactGridLayout from "react-grid-layout";
 import { Responsive, WidthProvider } from 'react-grid-layout';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
