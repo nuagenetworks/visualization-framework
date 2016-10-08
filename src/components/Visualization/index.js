@@ -33,7 +33,7 @@ class VisualizationView extends React.Component {
         super(props);
         this.state = {
             parameterizable: true,
-            hasResults:false,
+            hasResults: false,
         }
     }
 
@@ -41,12 +41,21 @@ class VisualizationView extends React.Component {
         this.initialize(this.props.id);
     }
 
+    componentDidMount() {
+
+        // Initialize width and height properties in the state.
+        this.setState(resizeVisualization(this._element));
+    }
+
     componentWillReceiveProps(nextProps) {
         this.initialize(nextProps.id);
     }
 
     componentDidUpdate() {
-        resizeVisualization(this._element);
+        const {width, height} = resizeVisualization(this._element);
+        if(width !== this.state.width || height !== this.state.height){
+            this.setState({ width, height });
+        }
     }
 
     initialize(id) {
@@ -88,7 +97,13 @@ class VisualizationView extends React.Component {
               GraphComponent = GraphManager.getGraphComponent(graphName);
 
         return (
-            <GraphComponent response={response} configuration={configuration.toJS()} queryConfiguration={queryConfiguration} />
+            <GraphComponent
+              response={response}
+              configuration={configuration.toJS()}
+              queryConfiguration={queryConfiguration}
+              width={this.state.width}
+              height={this.state.height}
+            />
         )
     }
 

@@ -24,18 +24,12 @@ export default class VerticalBarGraph extends React.Component {
 
         this.updateData(this.props);
         this.updateSize();
-
-        this.div.addEventListener('resize', this.updateSize.bind(this));
     }
 
     updateSize() {
-
-        // TODO figure out how to get rid of this constant.
-        const bannerHeight = 64;
-
         this.barChart
-          .width(this.div.clientWidth)
-          .height(this.div.clientHeight - bannerHeight);
+          .width(this.props.width)
+          .height(this.props.height)
     }
 
     updateData(props) {
