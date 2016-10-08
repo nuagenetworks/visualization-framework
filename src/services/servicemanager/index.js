@@ -31,11 +31,18 @@ const getService = function (serviceName) {
 }
 
 /*
-    Get the service registered for the given name
+    Get the query ID for the given configuration and the given context
+
+    Arguments:
+    * queryConfiguration: The query configuration
+    * context: the context if the query configuration should be parameterized
+
+    Returns:
+    A unique string that represents the request ID
 */
-const getRequestID = function (query, serviceName) {
-    const service = getService(serviceName)
-    return service.getRequestID(query);
+const getRequestID = function (queryConfiguration, context) {
+    const service = getService(queryConfiguration.service)
+    return service.getRequestID(queryConfiguration, context);
 }
 
 

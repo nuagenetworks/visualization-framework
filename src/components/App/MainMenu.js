@@ -118,11 +118,13 @@ const actionCreators = (dispatch) => ({
       dispatch(push(link));
   },
   fetchEnterprisesIfNeeded: () => {
-      return dispatch(ServiceActions.fetchIfNeeded({
-          parentResource: "enterprises"
-      },
-      "VSD"
-      ));
+      let configuration = {
+          service: "VSD",
+          query: {
+              parentResource: "enterprises",
+          }
+      }
+      return dispatch(ServiceActions.fetchIfNeeded(configuration));
   }
 });
 

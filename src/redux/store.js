@@ -48,11 +48,13 @@ store.subscribe(function() {
     }
 
     // Fetch licenses if necessary
-    store.dispatch(ServiceActions.fetchIfNeeded({
-        parentResource: "licenses"
-    },
-    "VSD",
-    true))
+    let configuration = {
+        service: "VSD",
+        query: {
+            parentResource: "licenses",
+        }
+    }
+    store.dispatch(ServiceActions.fetchIfNeeded(configuration, null, true)) // No context and force cache
 });
 
 export default store;
