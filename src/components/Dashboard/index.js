@@ -22,11 +22,16 @@ export class DashboardView extends React.Component {
 
     constructor(props) {
         super(props);
+        this.resizeCallbacks = [];
     }
 
     componentWillMount() {
         this.props.setPageTitle("Dashboard");
         this.updateConfiguration();
+    }
+
+    componentWillUnmount() {
+        this.resizeCallbacks = null;
     }
 
     componentDidUpdate(prevProps) {
@@ -68,7 +73,11 @@ export class DashboardView extends React.Component {
     }
 
     onResize(layout) {
-      console.log("HERE");
+        this.resizeCallbacks.forEach((callback) => callback())
+    }
+
+    registerResize(callback){
+        this.resizeCallbacks.push(callback);
     }
 
     render() {
@@ -95,16 +104,17 @@ export class DashboardView extends React.Component {
                     rowHeight={10}
                     onResize={this.onResize.bind(this)}
                     onLayoutChange={this.onResize.bind(this)}
-                    >
+                >
                     {
                         visualizations.map((visualization, index) =>
                             <div
-                              key={visualization.id}
-                              data-grid={visualization}
+                                key={visualization.id}
+                                data-grid={visualization}
                             >
                                 <Visualization
-                                  id={visualization.id}
-                                  context={location.query}
+                                    id={visualization.id}
+                                    context={location.query}
+                                    registerResize={this.registerResize.bind(this)}
                                 />
                             </div>
                         )

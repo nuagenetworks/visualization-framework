@@ -54,6 +54,7 @@ export default class VerticalBarGraph extends React.Component {
     shouldComponentUpdate(nextProps) {
 
         this.updateData(nextProps);
+        this.updateSize();
 
         // Manage the DOM with D3, prevent React from rendering.
         return false;

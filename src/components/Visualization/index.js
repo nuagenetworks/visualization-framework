@@ -41,9 +41,8 @@ class VisualizationView extends React.Component {
     }
 
     componentDidMount() {
-
-        // Initialize width and height properties in the state.
-        this.setState(resizeVisualization(this._element));
+        this.updateSize();
+        this.props.registerResize(this.updateSize.bind(this))
     }
 
     componentWillReceiveProps(nextProps) {
@@ -51,9 +50,15 @@ class VisualizationView extends React.Component {
     }
 
     componentDidUpdate() {
-        const {width, height} = resizeVisualization(this._element);
-        if(width !== this.state.width || height !== this.state.height){
-            this.setState({ width, height });
+        this.updateSize();
+    }
+
+    updateSize() {
+        if(this._element){
+            const {width, height} = resizeVisualization(this._element);
+            if(width !== this.state.width || height !== this.state.height){
+                this.setState({ width, height });
+            }
         }
     }
 
