@@ -16,7 +16,6 @@ import {
     ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions";
 
-import { parameterizedConfiguration } from "../../utils/configurations";
 import { resizeVisualization } from "../../utils/resize"
 
 import { GraphManager } from "../Graphs/index";
@@ -72,14 +71,18 @@ class VisualizationView extends React.Component {
                 if (!queryConfiguration)
                     return;
 
-                const pQuery = parameterizedConfiguration(queryConfiguration, context);
-
-                this.setState({
-                    parameterizable: !!pQuery,
-                });
-
-                if (pQuery)
-                    executeQueryIfNeeded(pQuery);
+                executeQueryIfNeeded(queryConfiguration, context).then(
+                    () => {
+                        this.setState({
+                            parameterizable: true,
+                        });
+                    },
+                    (error) => {
+                        this.setState({
+                            parameterizable: false,
+                        });
+                    },
+                );
             });
         });
     }
@@ -224,21 +227,15 @@ const mapStateToProps = (state, ownProps) => {
 
         // Expose received response if it is available
         if (props.queryConfiguration) {
+            const requestID = ServiceManager.getRequestID(props.queryConfiguration, context);
 
-            const pQuery = parameterizedConfiguration(props.queryConfiguration, context);
+            let response = state.services.getIn([
+                ServiceActionKeyStore.REQUESTS,
+                requestID
+            ]);
 
-            if (pQuery) {
-                const requestID = ServiceManager.getRequestID(pQuery.query, pQuery.service);
-
-                let response = state.services.getIn([
-                    ServiceActionKeyStore.REQUESTS,
-                    requestID
-                ]);
-
-                if (response && !response.get(ServiceActionKeyStore.IS_FETCHING))
-                    props.response = response.toJS();
-            }
-
+            if (response && !response.get(ServiceActionKeyStore.IS_FETCHING))
+                props.response = response.toJS();
         }
     }
 
@@ -270,8 +267,8 @@ const actionCreators = (dispatch) => ({
         ));
     },
 
-    executeQueryIfNeeded: function(pQuery) {
-        return dispatch(ServiceActions.fetchIfNeeded(pQuery.query, pQuery.service));
+    executeQueryIfNeeded: function(queryConfiguration, context) {
+        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context));
     }
 
  });

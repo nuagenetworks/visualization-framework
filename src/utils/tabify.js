@@ -6,19 +6,22 @@
   Inspired by Kibana's implementation, found at
   https://github.com/elastic/kibana/blob/master/src/ui/public/agg_response/tabify/tabify.js
 */
-export default function tabify(response){
+export default function tabify(response) {
     return collectBucket(response.aggregations);
 }
 
-function collectBucket(node){
+function collectBucket(node) {
+    if (!node)
+        return;
+
     const keys = Object.keys(node);
 
     // Use old school `for` so we can break control flow by returning.
-    for(let i = 0; i < keys.length; i++){
+    for(let i = 0; i < keys.length; i++) {
         const key = keys[i];
         const value = node[key];
-        if(typeof value === 'object'){
-            if(Array.isArray(value)){
+        if (typeof value === 'object') {
+            if (Array.isArray(value)) {
                 return extractRows(value);
             }
             return collectBucket(value);
@@ -26,12 +29,12 @@ function collectBucket(node){
     }
 }
 
-function extractRows(buckets){
+function extractRows(buckets) {
     return buckets.map((bucket) => {
-        return Object.keys(bucket).reduce(function (row, key){
+        return Object.keys(bucket).reduce(function (row, key) {
             let value = bucket[key];
 
-            if(typeof value === "object"){
+            if (typeof value === "object") {
                 value = value.value;
             }
 

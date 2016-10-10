@@ -1,4 +1,5 @@
 import { ServiceManager } from "../index"
+import { parameterizedConfiguration } from "../../../utils/configurations";
 
 export const ActionTypes = {
     SERVICE_MANAGER_DID_START_REQUEST: "SERVICE_MANAGER_DID_START_REQUEST",
@@ -19,15 +20,25 @@ export const ActionKeyStore = {
     Make a query on the service based on the service name.
 
     Arguments:
-    * query: the parameterized query
-    * serviceName: the service name we should use to make the query
+    * query: the query configuration
+    * context: the context if the query should be parameterized
+    * forceCache: a boolean to force storing the value for a long period
 */
-function fetch(query, serviceName, forceCache) {
-
-    let service = ServiceManager.getService(serviceName);
+function fetch(query, context, forceCache) {
+    let service = ServiceManager.getService(query.service);
 
     return (dispatch, getState) => {
-        let requestID = service.getRequestID(query);
+        let requestID = service.getRequestID(query, context);
+
+        if (context) {
+            const pQuery = parameterizedConfiguration(query, context);
+
+            if (pQuery)
+                query = pQuery;
+            else
+                return Promise.reject("Provided context does not allow to parameterized query " + query.id);
+        }
+
 
         dispatch(didStartRequest(requestID));
 
@@ -63,17 +74,20 @@ function shouldFetch(request) {
     return !request.get(ActionKeyStore.IS_FETCHING) && currentDate > expireDate;
 }
 
-function fetchIfNeeded(query, serviceName, forceCache) {
+function fetchIfNeeded(query, context, forceCache) {
 
-    let service   = ServiceManager.getService(serviceName),
-        requestID = service.getRequestID(query);
+    let service   = ServiceManager.getService(query.service),
+        requestID = service.getRequestID(query, context);
 
     return (dispatch, getState) => {
+        if (!requestID)
+            return Promise.resolve();
+
         const state = getState(),
               request = state.services.getIn([ActionKeyStore.REQUESTS, requestID]);
 
         if (shouldFetch(request)) {
-            return dispatch(fetch(query, serviceName, forceCache));
+            return dispatch(fetch(query, context, forceCache));
 
         } else {
             return Promise.resolve(request.get(ActionKeyStore.RESULTS));

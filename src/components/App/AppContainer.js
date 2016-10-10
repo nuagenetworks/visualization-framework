@@ -86,12 +86,15 @@ class AppContainerView extends React.Component {
 
 
 const mapStateToProps = (state, ownProps) => {
-    const VSDService = ServiceManager.getService("VSD");
+    const queryConfiguration = {
+        service: "VSD",
+        query: {
+            parentResource: "licenses",
+        }
+    };
 
     return {
-        licenses: state.services.getIn([ServiceActionKeyStore.REQUESTS, VSDService.getRequestID({
-            parentResource: "licenses",
-        }), ServiceActionKeyStore.RESULTS]) || [],
+        licenses: state.services.getIn([ServiceActionKeyStore.REQUESTS, ServiceManager.getRequestID(queryConfiguration), ServiceActionKeyStore.RESULTS]) || [],
     };
 };
 
