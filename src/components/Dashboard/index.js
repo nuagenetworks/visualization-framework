@@ -22,7 +22,6 @@ export class DashboardView extends React.Component {
 
     constructor(props) {
         super(props);
-        this._gridItems = {};
     }
 
     componentWillMount() {
@@ -68,17 +67,9 @@ export class DashboardView extends React.Component {
         fetchConfigurationIfNeeded(params.id);
     }
 
-    storeGridItem = (component) => {
-        if (!component)
-            return;
-
-        this._gridItems[component.props.id] = ReactDOM.findDOMNode(component).parentElement;
+    onResize(layout) {
+      console.log("HERE");
     }
-
-    setInnerVisualizationlayout = (id) => {
-        resizeVisualization(this._gridItems[id]);
-    }
-
 
     render() {
         const { configuration, error, fetching, location} = this.props
@@ -102,12 +93,19 @@ export class DashboardView extends React.Component {
             return (
                 <ResponsiveReactGridLayout
                     rowHeight={10}
-                    onResize={(layout, previousItemLayout, currentItemLayout) => this.setInnerVisualizationlayout(currentItemLayout.i)}
+                    onResize={this.onResize.bind(this)}
+                    onLayoutChange={this.onResize.bind(this)}
                     >
                     {
                         visualizations.map((visualization, index) =>
-                            <div key={visualization.id} data-grid={visualization}>
-                                <Visualization id={visualization.id} context={location.query} ref={this.storeGridItem}/>
+                            <div
+                              key={visualization.id}
+                              data-grid={visualization}
+                            >
+                                <Visualization
+                                  id={visualization.id}
+                                  context={location.query}
+                                />
                             </div>
                         )
                     }

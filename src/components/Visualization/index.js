@@ -164,7 +164,7 @@ class VisualizationView extends React.Component {
                 title={configuration.get("title")}
                 showMenuIconButton={false}
                 style={style.navBar}
-                />
+            />
         )
     }
 
@@ -177,7 +177,11 @@ class VisualizationView extends React.Component {
 
     render() {
         return (
-            <Card style={style.card} containerStyle={style.cardContainer} ref={this.cardTextReference}>
+            <Card
+              style={style.card}
+              containerStyle={style.cardContainer}
+              ref={this.cardTextReference}
+            >
                 { this.renderTitleIfNeeded() };
                 <CardText>
                     { this.renderVisualizationIfNeeded() }
