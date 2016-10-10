@@ -4,12 +4,9 @@ import tabify from "../../utils/tabify";
 export default class Table extends React.Component {
     render() {
         const { response, configuration } = this.props;
-        const data = tabify(response.results);
+        const rows = tabify(response.results);
         const properties = configuration.data;
         const columns = properties.columns;
-
-        console.log(data);
-        console.log(columns);
 
         return (
             <table className="table table-bordered">
@@ -20,6 +17,15 @@ export default class Table extends React.Component {
                         )) }
                     </tr>
                 </thead>
+                <tbody>
+                    { rows.map((row, j) =>(
+                        <tr key={j}>
+                            { columns.map(({column}, i) =>(
+                                <th key={i}>{ row[column] }</th>
+                            )) }
+                        </tr>
+                    )) }
+                </tbody>
             </table>
         );
     }
