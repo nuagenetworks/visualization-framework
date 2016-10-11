@@ -42,7 +42,12 @@ class VisualizationView extends React.Component {
 
     componentDidMount() {
         this.updateSize();
-        this.props.registerResize(this.updateSize.bind(this))
+
+        // If present, register the resize callback
+        // to respond to interactive resizes from react-grid-layout.
+        if(this.props.registerResize){
+            this.props.registerResize(this.updateSize.bind(this))
+        }
     }
 
     componentWillReceiveProps(nextProps) {
