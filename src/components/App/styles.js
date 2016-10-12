@@ -5,7 +5,8 @@ const style = {
         fontSize: "14px",
     },
     container: {
-        margin: "20px",
+        margin: "10px",
+        position: "relative",
     },
     menuLogo: {
         textAlign: "center",

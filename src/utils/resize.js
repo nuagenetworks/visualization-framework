@@ -13,8 +13,7 @@ export const resizeVisualization = (gridItem) => {
         innerCard     = card.childNodes[0].childNodes,
         muiPadding    = 16, // The padding applied on all sides from Material UI.
         width         = card.clientWidth - muiPadding * 2,
-        height        = card.clientHeight - muiPadding * 2,
-        cardText;
+        height        = card.clientHeight - muiPadding * 2;
 
     // Handle the case that the title bar is present.
     if (innerCard.length > 1) {

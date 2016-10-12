@@ -45,7 +45,7 @@ class VisualizationView extends React.Component {
 
         // If present, register the resize callback
         // to respond to interactive resizes from react-grid-layout.
-        if(this.props.registerResize){
+        if (this.props.registerResize) {
             this.props.registerResize(this.updateSize.bind(this))
         }
     }
@@ -59,9 +59,10 @@ class VisualizationView extends React.Component {
     }
 
     updateSize() {
-        if(this._element){
-            const {width, height} = resizeVisualization(this._element);
-            if(width !== this.state.width || height !== this.state.height){
+        if (this._element) {
+            const { width, height } = resizeVisualization(this._element);
+
+            if (width !== this.state.width || height !== this.state.height) {
                 this.setState({ width, height });
             }
         }

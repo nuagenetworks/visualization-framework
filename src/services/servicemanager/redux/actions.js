@@ -81,7 +81,7 @@ function fetchIfNeeded(query, context, forceCache) {
 
     return (dispatch, getState) => {
         if (!requestID)
-            return Promise.resolve();
+            return Promise.reject();
 
         const state = getState(),
               request = state.services.getIn([ActionKeyStore.REQUESTS, requestID]);
