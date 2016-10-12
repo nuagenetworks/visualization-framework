@@ -8,6 +8,16 @@ export default class Table extends React.Component {
         const properties = configuration.data;
         const columns = properties.columns;
 
+        if (!rows)
+            return (
+                <p>No Rows</p>
+            );
+
+        if (!columns)
+            return (
+                <p>No columns</p>
+            );
+
         return (
             <table className="table table-bordered">
                 <thead>
