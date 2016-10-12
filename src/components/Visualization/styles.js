@@ -5,6 +5,7 @@ const style = {
         border: theme.palette.thinBorder + theme.palette.borderColor,
         height: "100%",
         width: "100%",
+        minHeight: "300px",
     },
     cardContainer: {
         height: "100%",

@@ -32,7 +32,7 @@ class VisualizationView extends React.Component {
         super(props);
         this.state = {
             parameterizable: true,
-            hasResults:false,
+            hasResults: false,
         }
     }
 
@@ -40,12 +40,32 @@ class VisualizationView extends React.Component {
         this.initialize(this.props.id);
     }
 
+    componentDidMount() {
+        this.updateSize();
+
+        // If present, register the resize callback
+        // to respond to interactive resizes from react-grid-layout.
+        if (this.props.registerResize) {
+            this.props.registerResize(this.updateSize.bind(this))
+        }
+    }
+
     componentWillReceiveProps(nextProps) {
         this.initialize(nextProps.id);
     }
 
     componentDidUpdate() {
-        resizeVisualization(this._element);
+        this.updateSize();
+    }
+
+    updateSize() {
+        if (this._element) {
+            const { width, height } = resizeVisualization(this._element);
+
+            if (width !== this.state.width || height !== this.state.height) {
+                this.setState({ width, height });
+            }
+        }
     }
 
     initialize(id) {
@@ -91,7 +111,13 @@ class VisualizationView extends React.Component {
               GraphComponent = GraphManager.getGraphComponent(graphName);
 
         return (
-            <GraphComponent response={response} configuration={configuration.toJS()} queryConfiguration={queryConfiguration} />
+            <GraphComponent
+              response={response}
+              configuration={configuration.toJS()}
+              queryConfiguration={queryConfiguration}
+              width={this.state.width}
+              height={this.state.height}
+            />
         )
     }
 
@@ -149,7 +175,7 @@ class VisualizationView extends React.Component {
                 title={configuration.get("title")}
                 showMenuIconButton={false}
                 style={style.navBar}
-                />
+            />
         )
     }
 
@@ -162,7 +188,11 @@ class VisualizationView extends React.Component {
 
     render() {
         return (
-            <Card style={style.card} containerStyle={style.cardContainer} ref={this.cardTextReference}>
+            <Card
+              style={style.card}
+              containerStyle={style.cardContainer}
+              ref={this.cardTextReference}
+            >
                 { this.renderTitleIfNeeded() };
                 <CardText>
                     { this.renderVisualizationIfNeeded() }
