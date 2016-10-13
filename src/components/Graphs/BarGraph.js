@@ -13,7 +13,8 @@ export default class BarGraph extends React.Component {
 
         // These are properties that can be overridden from the configuration.
         this.defaults = {
-          margin: { top: 15, bottom: 20, left: 30, right: 20 }
+          margin: { top: 15, bottom: 20, left: 30, right: 20 },
+          padding: 0.1
         };
     }
     render() {
@@ -48,7 +49,8 @@ export default class BarGraph extends React.Component {
             bottom,
             left,
             right
-          }
+          },
+          padding
         } = properties;
 
         const innerWidth = width - left - right;
@@ -56,7 +58,8 @@ export default class BarGraph extends React.Component {
 
         xScale
           .domain(data.map(function (d){ return d[xColumn]; }))
-          .range([0, innerWidth]);
+          .range([0, innerWidth])
+          .padding(padding);
         
         yScale
           .domain([0, d3.max(data, function (d){ return d[yColumn] })])
