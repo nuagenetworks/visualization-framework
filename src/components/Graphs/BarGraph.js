@@ -19,7 +19,7 @@ export default class BarGraph extends React.Component {
           xTickGrid: false,
           xTickSizeInner: 6,
           xTickSizeOuter: 0,
-          orientation: "horizontal"
+          orientation: "vertical"
         };
     }
 
@@ -63,23 +63,40 @@ export default class BarGraph extends React.Component {
         } = this.getConfiguredProperties();
 
 
-        const horiz = orientation === "horizontal";
-        const xScale = horiz ? d3.scaleBand() : d3.scaleLinear();
-        const yScale = horiz ? d3.scaleLinear() : d3.scaleBand();
+        const vertical = orientation === "vertical";
+        const bandScale = d3.scaleBand();
+        const linearScale = d3.scaleLinear();
+        const xScale = vertical ? bandScale : linearScale;
+        const yScale = vertical ? linearScale : bandScale;
         const xAxis = d3.axisBottom(xScale);
         const yAxis = d3.axisLeft(yScale);
 
         const innerWidth = width - left - right;
         const innerHeight = height - top - bottom;
 
-        xScale
-          .domain(data.map(function (d){ return d[xColumn]; }))
-          .range([0, innerWidth])
-          .padding(padding);
-        
-        yScale
-          .domain([0, d3.max(data, function (d){ return d[yColumn] })])
-          .range([innerHeight, 0]);
+        if(vertical){
+
+            xScale
+              .domain(data.map(function (d){ return d[xColumn]; }))
+              .range([0, innerWidth])
+
+            yScale
+              .domain([0, d3.max(data, function (d){ return d[yColumn] })])
+              .range([innerHeight, 0]);
+
+        } else {
+
+            xScale
+              .domain([0, d3.max(data, function (d){ return d[xColumn] })])
+              .range([0, innerWidth])
+
+            yScale
+              .domain(data.map(function (d){ return d[yColumn]; }))
+              .range([innerHeight, 0]);
+
+        }
+
+        bandScale.padding(padding);
 
         yAxis.tickSizeInner(yTickGrid ? -innerWidth : yTickSizeInner);
         yAxis.tickSizeOuter(yTickSizeOuter);
@@ -100,13 +117,23 @@ export default class BarGraph extends React.Component {
                             ref={ (el) => d3.select(el).call(yAxis) }
                         />
                         {data.map((d, i) => (
-                            <rect
-                                key={ i }
-                                x={ xScale(d[xColumn]) }
-                                y={ yScale(d[yColumn]) }
-                                width={ xScale.bandwidth() }
-                                height={ innerHeight - yScale(d[yColumn]) }
-                            />
+                            vertical ? (
+                                <rect
+                                    key={ i }
+                                    x={ xScale(d[xColumn]) }
+                                    y={ yScale(d[yColumn]) }
+                                    width={ xScale.bandwidth() }
+                                    height={ innerHeight - yScale(d[yColumn]) }
+                                />
+                            ) : (
+                                <rect
+                                    key={ i }
+                                    x={ 0 }
+                                    y={ yScale(d[yColumn]) }
+                                    width={ xScale(d[xColumn]) }
+                                    height={ yScale.bandwidth() }
+                                />
+                            )
                         ))}
                     </g>
                 </svg>
