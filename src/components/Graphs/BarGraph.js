@@ -8,10 +8,6 @@ import "./BarGraph.css";
 export default class BarGraph extends React.Component {
     constructor(){
         super();
-        this.xScale = d3.scaleBand();
-        this.yScale = d3.scaleLinear();
-        this.xAxis = d3.axisBottom(this.xScale);
-        this.yAxis = d3.axisLeft(this.yScale);
 
         // These properties can be overridden from the configuration.
         this.defaults = {
@@ -22,16 +18,21 @@ export default class BarGraph extends React.Component {
           yTickSizeOuter: 0,
           xTickGrid: false,
           xTickSizeInner: 6,
-          xTickSizeOuter: 0
+          xTickSizeOuter: 0,
+          orientation: "horizontal"
         };
     }
+
+    // Gets the object containing all configured properties.
+    // Uses properties from the configuration,
+    // falling back to defaults for unspecified properties.
+    getConfiguredProperties() {
+        return Object.assign({}, this.defaults, this.props.configuration.data);
+    }
+
     render() {
 
         const {
-          xScale,
-          yScale,
-          xAxis,
-          yAxis,
           defaults,
           props: {
             response,
@@ -47,10 +48,6 @@ export default class BarGraph extends React.Component {
 
         const data = tabify(response.results);
 
-        // Use properties from the configuration,
-        // using defaults for unspecified properties.
-        const properties = Object.assign({}, defaults, configuration.data);
-
         const {
           xColumn,
           yColumn,
@@ -61,8 +58,16 @@ export default class BarGraph extends React.Component {
           yTickSizeOuter,
           xTickGrid,
           xTickSizeInner,
-          xTickSizeOuter
-        } = properties;
+          xTickSizeOuter,
+          orientation
+        } = this.getConfiguredProperties();
+
+
+        const horiz = orientation === "horizontal";
+        const xScale = horiz ? d3.scaleBand() : d3.scaleLinear();
+        const yScale = horiz ? d3.scaleLinear() : d3.scaleBand();
+        const xAxis = d3.axisBottom(xScale);
+        const yAxis = d3.axisLeft(yScale);
 
         const innerWidth = width - left - right;
         const innerHeight = height - top - bottom;
