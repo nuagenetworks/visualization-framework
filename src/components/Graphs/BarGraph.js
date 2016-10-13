@@ -10,12 +10,18 @@ export default class BarGraph extends React.Component {
         super();
         this.xScale = d3.scaleBand();
         this.yScale = d3.scaleLinear();
+
+        // These are properties that can be overridden from the configuration.
+        this.defaults = {
+          margin: { top: 15, bottom: 20, left: 30, right: 20 }
+        };
     }
     render() {
 
         const {
           xScale,
           yScale,
+          defaults,
           props: {
             response,
             configuration,
@@ -29,32 +35,47 @@ export default class BarGraph extends React.Component {
             return;
 
         const data = tabify(response.results);
-        const properties = configuration.data;
-        const { xColumn, yColumn } = properties;
+
+        // Use properties from the configuration,
+        // using defaults for unspecified properties.
+        const properties = Object.assign({}, defaults, configuration.data);
+
+        const {
+          xColumn,
+          yColumn,
+          margin: {
+            top,
+            bottom,
+            left,
+            right
+          }
+        } = properties;
+
+        const innerWidth = width - left - right;
+        const innerHeight = height - top - bottom;
 
         xScale
           .domain(data.map(function (d){ return d[xColumn]; }))
-          .range([0, width]);
+          .range([0, innerWidth]);
         
         yScale
           .domain([0, d3.max(data, function (d){ return d[yColumn] })])
-          .range([height, 0]);
+          .range([innerHeight, 0]);
 
-        console.log(xScale.domain())
-        console.log(xScale.range())
-        
         return (
             <div className="bar-graph">
                 <svg width={width} height={height}>
-                    {data.map((d, i) => (
-                        <rect
-                            key={ i }
-                            x={ xScale(d[xColumn]) }
-                            y={ yScale(d[yColumn]) }
-                            width={ xScale.bandwidth() }
-                            height={ height - yScale(d[yColumn]) }
-                        />
-                    ))}
+                    <g transform={ `translate(${left},${top})` } >
+                        {data.map((d, i) => (
+                            <rect
+                                key={ i }
+                                x={ xScale(d[xColumn]) }
+                                y={ yScale(d[yColumn]) }
+                                width={ xScale.bandwidth() }
+                                height={ innerHeight - yScale(d[yColumn]) }
+                            />
+                        ))}
+                    </g>
                 </svg>
             </div>
         );
