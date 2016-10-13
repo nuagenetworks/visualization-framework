@@ -6,26 +6,53 @@ import * as d3 from "d3";
 import "./BarGraph.css";
 
 export default class BarGraph extends React.Component {
+    constructor(){
+        super();
+        this.xScale = d3.scaleBand();
+        this.yScale = d3.scaleLinear();
+    }
     render() {
 
-        const { response, configuration, onBarClick } = this.props;
-        const { width, height } = this.props;
+        const {
+          xScale,
+          yScale,
+          props: {
+            response,
+            configuration,
+            onBarClick,
+            width,
+            height
+          }
+        } = this;
 
         if (!response || response.error)
             return;
 
         const data = tabify(response.results);
         const properties = configuration.data;
+        const { xColumn, yColumn } = properties;
+
+        xScale
+          .domain(data.map(function (d){ return d[xColumn]; }))
+          .range([0, width]);
+        
+        yScale
+          .domain([0, d3.max(data, function (d){ return d[yColumn] })])
+          .range([height, 0]);
+
+        console.log(xScale.domain())
+        console.log(xScale.range())
         
         return (
             <div className="bar-graph">
                 <svg width={width} height={height}>
                     {data.map((d, i) => (
                         <rect
-                            x={i*50}
-                            y="0"
-                            width="40"
-                            height="40"
+                            key={ i }
+                            x={ xScale(d[xColumn]) }
+                            y={ yScale(d[yColumn]) }
+                            width={ xScale.bandwidth() }
+                            height={ height - yScale(d[yColumn]) }
                         />
                     ))}
                 </svg>
