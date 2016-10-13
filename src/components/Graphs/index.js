@@ -1,5 +1,9 @@
 import SimpleTextGraph from "./SimpleTextGraph";
+
+// TODO delete this one.
 import VerticalBarGraph from "./VerticalBarGraph";
+
+import BarGraph from "./BarGraph";
 import Table from "./Table";
 
 /*
@@ -8,6 +12,7 @@ import Table from "./Table";
 let registry = {
     SimpleTextGraph: SimpleTextGraph,
     VerticalBarGraph: VerticalBarGraph,
+    BarGraph: BarGraph,
     Table: Table
 };
 
