@@ -1,7 +1,7 @@
 import { fromJS, Map } from "immutable";
 import { ActionTypes, ActionKeyStore } from "./actions";
 
-import { config } from "../index"
+import { ConfigurationService } from "../index"
 
 let initialState = Map() // eslint-disable-line
                     // .set(,) // Usefull if we need to set some elastic search configuration information
@@ -16,7 +16,7 @@ function didStartRequest(state, id, configType) {
 
 function didReceiveResponse(state, id, configType, data) {
     const currentDate    = new Date(),
-          expirationDate = currentDate.setTime(currentDate.getTime() + config.timingCache);
+          expirationDate = currentDate.setTime(currentDate.getTime() + ConfigurationService.config.timingCache);
 
     return state
       .setIn([configType, id, ActionKeyStore.IS_FETCHING], false)

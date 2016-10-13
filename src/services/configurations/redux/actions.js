@@ -1,4 +1,4 @@
-import { fetchConfiguration } from "../index";
+import { ConfigurationService } from "../index";
 
 export const ActionTypes = {
     CONFIG_DID_START_REQUEST: "CONFIG_DID_START_REQUEST",
@@ -47,7 +47,7 @@ function fetch (id, configType) {
 
         // Important: It is essential for redux to return a promise in order
         // to test this method (See: http://redux.js.org/docs/recipes/WritingTests.html)
-        return fetchConfiguration(id, configType)
+        return ConfigurationService.fetch(id, configType)
             .then((configuration) => {
                 dispatch(didReceiveResponse(id, configType, configuration));
                 return Promise.resolve(configuration);
