@@ -9,6 +9,7 @@ export default class BarGraph extends React.Component {
     render() {
 
         const { response, configuration, onBarClick } = this.props;
+        const { width, height } = this.props;
 
         if (!response || response.error)
             return;
@@ -18,7 +19,16 @@ export default class BarGraph extends React.Component {
         
         return (
             <div className="bar-graph">
-                {JSON.stringify(data)}
+                <svg width={width} height={height}>
+                    {data.map((d, i) => (
+                        <rect
+                            x={i*50}
+                            y="0"
+                            width="40"
+                            height="40"
+                        />
+                    ))}
+                </svg>
             </div>
         );
     }
