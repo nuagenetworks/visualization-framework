@@ -8,9 +8,9 @@ import configurationsReducer from "./redux/reducer";
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
-describe('Fetch Dashboard Configuration', () => {
+describe('ConfigurationService fetch dashboard', () => {
 
-    it('store `dashboards` when fetching dashboard from identifier', () => {
+    it('should dispatch didStartRequest and didReceiveResponse actions when succesfully load dashboard', () => {
         const expectedDashboard = {
             "id": "example",
             "author": "Christophe SERAFIN",
@@ -46,6 +46,36 @@ describe('Fetch Dashboard Configuration', () => {
                      id: 'example',
                      configType: ActionKeyStore.DASHBOARDS,
                      data: expectedDashboard,
+                 })
+             })
+    });
+
+    it('should dispatch didStartRequest and didReceiveError when error occurs', () => {
+        const expectedError = {
+            "status": "401",
+            "message": "Unknown error",
+        };
+
+        ConfigurationService.fetch = jasmine.createSpy("fetch").and.callFake(() => {
+            return Promise.reject(expectedError);
+        });
+
+        const store = mockStore({ dashboards: {} });
+
+        return store.dispatch(Actions.fetch('example', ActionKeyStore.DASHBOARDS))
+             .then((response) => {
+                 let actions = store.getActions();
+                 expect(actions.length).toEqual(2)
+                 expect(actions[0]).toEqual({
+                     type: ActionTypes.CONFIG_DID_START_REQUEST,
+                     id: 'example',
+                     configType: ActionKeyStore.DASHBOARDS,
+                 })
+                 expect(actions[1]).toEqual({
+                     type: ActionTypes.CONFIG_DID_RECEIVE_ERROR,
+                     id: 'example',
+                     configType: ActionKeyStore.DASHBOARDS,
+                     error: expectedError.message,
                  })
              })
     });
