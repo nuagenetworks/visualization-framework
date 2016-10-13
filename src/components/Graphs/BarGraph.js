@@ -10,8 +10,10 @@ export default class BarGraph extends React.Component {
         super();
         this.xScale = d3.scaleBand();
         this.yScale = d3.scaleLinear();
+        this.xAxis = d3.axisBottom(this.xScale);
+        this.yAxis = d3.axisLeft(this.yScale);
 
-        // These are properties that can be overridden from the configuration.
+        // These properties can be overridden from the configuration.
         this.defaults = {
           margin: { top: 15, bottom: 20, left: 30, right: 20 },
           padding: 0.1
@@ -22,6 +24,8 @@ export default class BarGraph extends React.Component {
         const {
           xScale,
           yScale,
+          xAxis,
+          yAxis,
           defaults,
           props: {
             response,
@@ -44,12 +48,7 @@ export default class BarGraph extends React.Component {
         const {
           xColumn,
           yColumn,
-          margin: {
-            top,
-            bottom,
-            left,
-            right
-          },
+          margin: { top, bottom, left, right },
           padding
         } = properties;
 
@@ -69,6 +68,15 @@ export default class BarGraph extends React.Component {
             <div className="bar-graph">
                 <svg width={width} height={height}>
                     <g transform={ `translate(${left},${top})` } >
+                        <g
+                            key="xAxis"
+                            ref={ (el) => d3.select(el).call(xAxis) }
+                            transform={ `translate(0,${innerHeight})` }
+                        />
+                        <g
+                            key="yAxis"
+                            ref={ (el) => d3.select(el).call(yAxis) }
+                        />
                         {data.map((d, i) => (
                             <rect
                                 key={ i }
@@ -84,7 +92,6 @@ export default class BarGraph extends React.Component {
         );
     }
 }
-
 BarGraph.propTypes = {
   configuration: React.PropTypes.object,
   response: React.PropTypes.object
