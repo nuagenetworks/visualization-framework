@@ -18,7 +18,11 @@ export default class BarGraph extends React.Component {
           margin: { top: 15, bottom: 20, left: 30, right: 20 },
           padding: 0.1,
           yTickGrid: true,
-          yTickSize: 10
+          yTickSizeInner: 6,
+          yTickSizeOuter: 0,
+          xTickGrid: false,
+          xTickSizeInner: 6,
+          xTickSizeOuter: 0
         };
     }
     render() {
@@ -52,8 +56,12 @@ export default class BarGraph extends React.Component {
           yColumn,
           margin: { top, bottom, left, right },
           padding,
-          yTickSize,
-          yTickGrid
+          yTickGrid,
+          yTickSizeInner,
+          yTickSizeOuter,
+          xTickGrid,
+          xTickSizeInner,
+          xTickSizeOuter
         } = properties;
 
         const innerWidth = width - left - right;
@@ -68,7 +76,10 @@ export default class BarGraph extends React.Component {
           .domain([0, d3.max(data, function (d){ return d[yColumn] })])
           .range([innerHeight, 0]);
 
-        yAxis.tickSize(yTickGrid ? -innerWidth : yTickSize)
+        yAxis.tickSizeInner(yTickGrid ? -innerWidth : yTickSizeInner);
+        yAxis.tickSizeOuter(yTickSizeOuter);
+        xAxis.tickSizeInner(xTickGrid ? -innerHeight : xTickSizeInner);
+        xAxis.tickSizeOuter(xTickSizeOuter);
 
         return (
             <div className="bar-graph">
