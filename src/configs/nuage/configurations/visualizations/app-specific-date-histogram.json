@@ -1,0 +1,16 @@
+{
+    "id": "app-specific-date-histogram",
+    "graph": "BarGraph",
+    "title": "App-specific Date Histogram",
+    "author": "Curran Kelleher",
+    "creationDate": "10/14/2016",
+    "data": {
+        "dateHistogram": true,
+        "columns": [
+            { "column": "key", "label": "App" },
+            { "column": "Sum of MB" },
+            { "column": "doc_count", "label": "Document Count" }
+        ]
+    },
+    "query": "app-specific-vertical-bar"
+}
