@@ -3,56 +3,60 @@
     "title":"App Specific Vertical Bar",
     "service":"elasticsearch",
     "query":{
-        "size":0,
-        "query":{
-            "bool":{
-                "must":[
-                    {
-                        "range":{
-                            "timestamp":{
-                                "gte":"now-24h",
-                                "lte":"now",
-                                "format":"epoch_millis"
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        "aggs":{
-            "4":{
-                "filters":{
-                    "filters":{
-                        "Applications":{
-                            "query":{
-                                "term":{
-                                    "Application":"myNTP"
+        "index":"{{index:nuage_dpi_flowstats}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":1475018737744,
+                                    "lte":1475038317702,
+                                    "format":"epoch_millis"
                                 }
                             }
                         }
-                    }
-                },
-                "aggs":{
-                    "3":{
-                        "date_histogram":{
-                            "field":"timestamp",
-                            "interval":"30s",
-                            "time_zone":"America/Los_Angeles",
-                            "min_doc_count":1,
-                            "extended_bounds":{
-                                "min":1473885450891,
-                                "max":1473886350891
+                    ]
+                }
+            },
+            "aggs":{
+                "4":{
+                    "filters":{
+                        "filters":{
+                            "Applications":{
+                                "query":{
+                                    "term":{
+                                        "Application":"{{app:myApp-0}}"
+                                    }
+                                }
                             }
-                        },
-                        "aggs":{
-                            "1":{
-                                "sum":{
-                                    "field":"TotalBytesCount"
+                        }
+                    },
+                    "aggs":{
+                        "3":{
+                            "date_histogram":{
+                                "field":"timestamp",
+                                "interval":"5m",
+                                "time_zone":"America/Los_Angeles",
+                                "min_doc_count":1,
+                                "extended_bounds":{
+                                    "min":1475018737744,
+                                    "max":1475038317702
                                 }
                             },
-                            "2":{
-                                "sum":{
-                                    "field":"TotalPacketsCount"
+                            "aggs":{
+                                "1":{
+                                    "sum":{
+                                        "field":"TotalBytesCount"
+                                    }
+                                },
+                                "2":{
+                                    "sum":{
+                                        "field":"TotalPacketsCount"
+                                    }
                                 }
                             }
                         }
