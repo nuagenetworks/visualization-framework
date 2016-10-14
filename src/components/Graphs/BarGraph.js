@@ -32,13 +32,7 @@ export default class BarGraph extends React.Component {
 
     render() {
 
-        const {
-          props: {
-            response,
-            width,
-            height
-          }
-        } = this;
+        const { response, width, height } = this.props;
 
         if (!response || response.error)
             return;
@@ -60,7 +54,6 @@ export default class BarGraph extends React.Component {
           dateHistogram
         } = this.getConfiguredProperties();
 
-
         const vertical = orientation === "vertical";
 
         let xScale, yScale;
@@ -68,15 +61,28 @@ export default class BarGraph extends React.Component {
         if(dateHistogram){
 
             // Handle the case of a vertical date histogram.
-            xScale = d3.scaleTime();
-            yScale = d3.scaleLinear();
+            xScale = d3.scaleTime()
+              .domain(d3.extent(data, function (d){ return d[xColumn]; }));
+            yScale = d3.scaleLinear()
+              .domain([0, d3.max(data, function (d){ return d[yColumn] })]);
+
+        } else if(vertical){
+
+            // Handle the case of a vertical bar chart.
+            xScale = d3.scaleBand()
+              .domain(data.map(function (d){ return d[xColumn]; }))
+              .padding(padding);
+            yScale = d3.scaleLinear()
+              .domain([0, d3.max(data, function (d){ return d[yColumn] })]);
 
         } else {
 
-            // Handle the case of a vertical or horizontal bar chart.
-            xScale = vertical ? d3.scaleBand() : d3.scaleLinear();
-            yScale = vertical ? d3.scaleLinear() : d3.scaleBand();
-
+            // Handle the case of a horizontal bar chart.
+            xScale = d3.scaleLinear()
+              .domain([0, d3.max(data, function (d){ return d[xColumn] })]);
+            yScale = d3.scaleBand()
+              .domain(data.map(function (d){ return d[yColumn]; }))
+              .padding(padding);
         }
 
         const innerWidth = width - left - right;
@@ -85,17 +91,6 @@ export default class BarGraph extends React.Component {
         xScale.range([0, innerWidth]);
         yScale.range([innerHeight, 0]);
 
-        if(vertical){
-            xScale.domain(data.map(function (d){ return d[xColumn]; }));
-            yScale.domain([0, d3.max(data, function (d){ return d[yColumn] })]);
-        } else {
-            xScale.domain([0, d3.max(data, function (d){ return d[xColumn] })]);
-            yScale.domain(data.map(function (d){ return d[yColumn]; }));
-        }
-
-        if(xScale.padding){ xScale.padding(padding); }
-        if(yScale.padding){ yScale.padding(padding); }
-
         const xAxis = d3.axisBottom(xScale)
           .tickSizeInner(xTickGrid ? -innerHeight : xTickSizeInner)
           .tickSizeOuter(xTickSizeOuter);
@@ -103,6 +98,13 @@ export default class BarGraph extends React.Component {
         const yAxis = d3.axisLeft(yScale)
           .tickSizeInner(yTickGrid ? -innerWidth : yTickSizeInner)
           .tickSizeOuter(yTickSizeOuter);
+
+        let barWidth;
+        if(dateHistogram){
+            barWidth = 50;
+        } else if(vertical){
+            barWidth = xScale.bandwidth();
+        }
 
         return (
             <div className="bar-graph">
@@ -123,7 +125,7 @@ export default class BarGraph extends React.Component {
                                     key={ i }
                                     x={ xScale(d[xColumn]) }
                                     y={ yScale(d[yColumn]) }
-                                    width={ xScale.bandwidth() }
+                                    width={ barWidth }
                                     height={ innerHeight - yScale(d[yColumn]) }
                                 />
                             ) : (
