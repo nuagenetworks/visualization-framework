@@ -15,7 +15,9 @@ export default class SimpleTextGraph extends React.Component {
         if (response && !response.isFetching) {
             body = (
                 <div className="SimpleTextGraph">
-                    {response.results.length}
+                    <div className="BigNumber">
+                      {response.results.length}
+                    </div>
                     <br />
                     {queryConfiguration.title}
                 </div>
@@ -29,7 +31,7 @@ export default class SimpleTextGraph extends React.Component {
         }
 
         return (
-            <div className="text-center">
+            <div className="text-center" style={{ height: this.props.height}}>
                 { body }
             </div>
         );
