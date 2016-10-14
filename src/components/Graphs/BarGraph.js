@@ -4,6 +4,39 @@ import tabify from "../../utils/tabify";
 import * as d3 from "d3";
 import "./BarGraph.css";
 
+// TODO split out this time interval log into a utility module.
+
+// Time unit abbreviations from
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#time-units
+// mapping onto D3 time intervals defined ad
+// https://github.com/d3/d3-time#intervals
+const timeAbbreviations = {
+    "y": "utcYear",
+    "M": "utcMonth",
+    "w": "utcWeek",
+    "d": "utcDay",
+    "h": "utcHour",
+    "m": "utcMinute",
+    "s": "utcSecond",
+    "ms": "utcMillisecond"
+};
+
+function computeBarWidth(interval, timeScale) {
+    const step = +interval.substr(0, interval.length - 1);
+
+    // TODO handle case of "ms"
+    const abbreviation = interval.substr(interval.length - 1);
+    const d3Interval = timeAbbreviations[abbreviation];
+
+    // TODO validation and error handling
+    const start = new Date(2000, 0, 0, 0, 0);
+    const end = d3[d3Interval].offset(start, step);
+
+    return timeScale(end) - timeScale(start);
+
+}
+
+
 export default class BarGraph extends React.Component {
     constructor(){
         super();
@@ -19,7 +52,8 @@ export default class BarGraph extends React.Component {
           xTickSizeInner: 6,
           xTickSizeOuter: 0,
           orientation: "vertical",
-          dateHistogram: false
+          dateHistogram: false,
+          interval: "30s"
         };
     }
 
@@ -28,19 +62,6 @@ export default class BarGraph extends React.Component {
     // falling back to defaults for unspecified properties.
     getConfiguredProperties() {
         return Object.assign({}, this.defaults, this.props.configuration.data);
-    }
-
-    computeBarWidth(timeScale) {
-
-        // TODO compute step and interval from the configuration (e.g. 30m)
-        const step = 30;
-        const interval = "utcMinute";
-
-        const start = new Date(2000, 0, 0, 0, 0);
-        const end = d3[interval].offset(start, step);
-
-        return timeScale(end) - timeScale(start);
-
     }
 
     render() {
@@ -64,7 +85,8 @@ export default class BarGraph extends React.Component {
           xTickSizeInner,
           xTickSizeOuter,
           orientation,
-          dateHistogram
+          dateHistogram,
+          interval
         } = this.getConfiguredProperties();
 
         const vertical = orientation === "vertical";
@@ -114,7 +136,7 @@ export default class BarGraph extends React.Component {
 
         let barWidth;
         if(dateHistogram){
-            barWidth = this.computeBarWidth(xScale);
+            barWidth = computeBarWidth(interval, xScale);
         } else if(vertical){
             barWidth = xScale.bandwidth();
         }
