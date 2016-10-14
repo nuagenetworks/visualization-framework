@@ -3,7 +3,6 @@
     "title": "Newly Discovered Applications",
     "query": "newly-discovered-applications",
     "graph": "SimpleTextGraph",
-    "options": {
-
+    "data": {
     }
 }

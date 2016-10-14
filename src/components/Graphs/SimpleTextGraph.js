@@ -10,12 +10,23 @@ import "./SimpleTextGraph.css";
 export default class SimpleTextGraph extends React.Component {
     render() {
         const { response, queryConfiguration } = this.props;
-        let body;
 
+        let numberStyle = {};
+        if(this.props.configuration.data.circle){
+            const side = this.props.width * 0.5;
+            numberStyle = {
+                width: side + "px", 
+                height: side + "px",
+                borderRadius: "50%",
+                background: this.props.configuration.data.circleColor || "gray"
+            };
+        }
+
+        let body;
         if (response && !response.isFetching) {
             body = (
                 <div className="SimpleTextGraph">
-                    <div className="BigNumber">
+                    <div className="BigNumber" style={numberStyle}>
                       {response.results.length}
                     </div>
                     <br />
