@@ -19,7 +19,8 @@ export default class BarGraph extends React.Component {
           xTickGrid: false,
           xTickSizeInner: 6,
           xTickSizeOuter: 0,
-          orientation: "vertical"
+          orientation: "vertical",
+          dateHistogram: false
         };
     }
 
@@ -59,44 +60,48 @@ export default class BarGraph extends React.Component {
           xTickGrid,
           xTickSizeInner,
           xTickSizeOuter,
-          orientation
+          orientation,
+          dateHistogram
         } = this.getConfiguredProperties();
 
 
         const vertical = orientation === "vertical";
-        const bandScale = d3.scaleBand();
-        const linearScale = d3.scaleLinear();
-        const xScale = vertical ? bandScale : linearScale;
-        const yScale = vertical ? linearScale : bandScale;
+
+        let xScale, yScale;
+        
+        if(dateHistogram){
+
+            // Handle the case of a vertical date histogram.
+            xScale = d3.scaleTime();
+            yScale = d3.scaleLinear();
+
+        } else {
+
+            // Handle the case of a vertical or horizontal bar chart.
+            xScale = vertical ? d3.scaleBand() : d3.scaleLinear();
+            yScale = vertical ? d3.scaleLinear() : d3.scaleBand();
+
+        }
+
         const xAxis = d3.axisBottom(xScale);
         const yAxis = d3.axisLeft(yScale);
 
         const innerWidth = width - left - right;
         const innerHeight = height - top - bottom;
 
+        xScale.range([0, innerWidth]);
+        yScale.range([innerHeight, 0]);
+
         if(vertical){
-
-            xScale
-              .domain(data.map(function (d){ return d[xColumn]; }))
-              .range([0, innerWidth])
-
-            yScale
-              .domain([0, d3.max(data, function (d){ return d[yColumn] })])
-              .range([innerHeight, 0]);
-
+            xScale.domain(data.map(function (d){ return d[xColumn]; }));
+            yScale.domain([0, d3.max(data, function (d){ return d[yColumn] })]);
         } else {
-
-            xScale
-              .domain([0, d3.max(data, function (d){ return d[xColumn] })])
-              .range([0, innerWidth])
-
-            yScale
-              .domain(data.map(function (d){ return d[yColumn]; }))
-              .range([innerHeight, 0]);
-
+            xScale.domain([0, d3.max(data, function (d){ return d[xColumn] })]);
+            yScale.domain(data.map(function (d){ return d[yColumn]; }));
         }
 
-        bandScale.padding(padding);
+        if(xScale.padding){ xScale.padding(padding); }
+        if(yScale.padding){ yScale.padding(padding); }
 
         yAxis.tickSizeInner(yTickGrid ? -innerWidth : yTickSizeInner);
         yAxis.tickSizeOuter(yTickSizeOuter);
