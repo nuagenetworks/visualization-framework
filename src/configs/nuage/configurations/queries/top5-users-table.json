@@ -1,60 +1,64 @@
 {
     "id":"top5-users-table",
-    "title":"TBD",
+    "title":"Top 5 Users",
     "service":"elasticsearch",
     "query":{
-        "size":0,
-        "query":{
-            "bool":{
-                "must":[
-                    {
-                        "range":{
-                            "timestamp":{
-                                "gte":"now-24h",
-                                "lte":"now",
-                                "format":"epoch_millis"
+        "index":"{{index:nuage_dpi_flowstats}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
                             }
                         }
-                    }
-                ]
-            }
-        },
-        "aggs":{
-            "5":{
-                "filters":{
+                    ]
+                }
+            },
+            "aggs":{
+                "5":{
                     "filters":{
-                        "Enterprise":{
-                            "query":{
-                                "term":{
-                                    "Enterprise":"test_org"
+                        "filters":{
+                            "Enterprise":{
+                                "query":{
+                                    "term":{
+                                        "EnterpriseName":"{{EnterpriseName:test_org}}"
+                                    }
                                 }
                             }
                         }
-                    }
-                },
-                "aggs":{
-                    "4":{
-                        "terms":{
-                            "field":"SrcIp",
-                            "size":5,
-                            "order":{
-                                "1":"desc"
-                            }
-                        },
-                        "aggs":{
-                            "1":{
-                                "sum":{
-                                    "field":"TotalPacketsCount"
+                    },
+                    "aggs":{
+                        "4":{
+                            "terms":{
+                                "field":"SrcIp",
+                                "size":5,
+                                "order":{
+                                    "TotalPacketsCount":"desc"
                                 }
                             },
-                            "2":{
-                                "sum":{
-                                    "field":"TotalBytesCount"
-                                }
-                            },
-                            "3":{
-                                "sum":{
-                                    "field":"TotalMB"
+                            "aggs":{
+                                "TotalPacketsCount":{
+                                    "sum":{
+                                        "field":"TotalPacketsCount"
+                                    }
+                                },
+                                "TotalBytesCount":{
+                                    "sum":{
+                                        "field":"TotalBytesCount"
+                                    }
+                                },
+                                "TotalMB":{
+                                    "sum":{
+                                        "field":"TotalMB"
+                                    }
                                 }
                             }
                         }
