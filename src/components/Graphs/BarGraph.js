@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 import tabify from "../../utils/tabify";
 import * as d3 from "d3";
@@ -34,11 +33,8 @@ export default class BarGraph extends React.Component {
     render() {
 
         const {
-          defaults,
           props: {
             response,
-            configuration,
-            onBarClick,
             width,
             height
           }
@@ -83,9 +79,6 @@ export default class BarGraph extends React.Component {
 
         }
 
-        const xAxis = d3.axisBottom(xScale);
-        const yAxis = d3.axisLeft(yScale);
-
         const innerWidth = width - left - right;
         const innerHeight = height - top - bottom;
 
@@ -103,10 +96,13 @@ export default class BarGraph extends React.Component {
         if(xScale.padding){ xScale.padding(padding); }
         if(yScale.padding){ yScale.padding(padding); }
 
-        yAxis.tickSizeInner(yTickGrid ? -innerWidth : yTickSizeInner);
-        yAxis.tickSizeOuter(yTickSizeOuter);
-        xAxis.tickSizeInner(xTickGrid ? -innerHeight : xTickSizeInner);
-        xAxis.tickSizeOuter(xTickSizeOuter);
+        const xAxis = d3.axisBottom(xScale)
+          .tickSizeInner(xTickGrid ? -innerHeight : xTickSizeInner)
+          .tickSizeOuter(xTickSizeOuter);
+
+        const yAxis = d3.axisLeft(yScale)
+          .tickSizeInner(yTickGrid ? -innerWidth : yTickSizeInner)
+          .tickSizeOuter(yTickSizeOuter);
 
         return (
             <div className="bar-graph">
