@@ -9,24 +9,41 @@ import "./SimpleTextGraph.css";
 */
 export default class SimpleTextGraph extends React.Component {
     render() {
-        const { response, queryConfiguration } = this.props;
-
-        let numberStyle = {};
-        if(this.props.configuration.data.circle){
-            const side = this.props.width * 0.5;
-            numberStyle = {
-                width: side + "px", 
-                height: side + "px",
-                borderRadius: "50%",
-                background: this.props.configuration.data.circleColor || "gray"
-            };
-        }
+        const {
+            response,
+            queryConfiguration,
+            width,
+            height,
+            configuration: {
+                data: {
+                    circle,
+                    circleColor
+                }
+            }
+        } = this.props;
 
         let body;
         if (response && !response.isFetching) {
             body = (
                 <div className="SimpleTextGraph">
-                    <div className="BigNumber" style={numberStyle}>
+                    {(() => {
+                        if(circle){
+                            const padding = 16;
+                            const side = width * 0.3;
+                            return (
+                                <div style={{
+                                    position: "fixed",
+                                    left: width / 2 - side / 2 + padding,
+                                    width: side + "px", 
+                                    height: side + "px",
+                                    borderRadius: "50%",
+                                    background: circleColor || "gray",
+                                    textAlign: "center"
+                                }}/>
+                            );
+                        }
+                    })()}
+                    <div className="BigNumber">
                       {response.results.length}
                     </div>
                     <br />
@@ -42,7 +59,7 @@ export default class SimpleTextGraph extends React.Component {
         }
 
         return (
-            <div className="text-center" style={{ height: this.props.height}}>
+            <div className="text-center" style={{ height: height}}>
                 { body }
             </div>
         );

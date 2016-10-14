@@ -8,6 +8,7 @@
 }
 
 .SimpleTextGraph .BigNumber{
+    position: relative;
     font-size: 5em;
     color: black;
 }
