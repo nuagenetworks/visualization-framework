@@ -1,0 +1,9 @@
+{
+    "id": "tableExample",
+    "author": "Curran Kelleher",
+    "creationDate": "10/10/2016",
+    "title": "Example Dashboard with Table",
+    "visualizations": [
+        { "id": "top5-app-table", "x": 0, "y": 0, "w": 12, "h": 22, "minW": 2, "minH": 12 }
+    ]
+}

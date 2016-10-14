@@ -1,0 +1,9 @@
+{
+    "id": "dashboard1",
+    "author": "Christophe SERAFIN",
+    "creationDate": "09/15/2016",
+    "title": "Dashboard 1 - The first and unique.",
+    "visualizations": [
+        { "id": "newly-discovered-applications", "x": 6, "y": 0, "w": 6, "h": 22, "minW": 2, "minH": 12 }
+    ]
+}

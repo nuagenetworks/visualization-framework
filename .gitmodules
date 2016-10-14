@@ -1,3 +1,0 @@
-[submodule "src/configs/nuage"]
-        path = src/configs/nuage
-        url = git@github.com:nuagenetworks/visualization-framework-config.git

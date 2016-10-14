@@ -1,0 +1,9 @@
+{
+    "id": "appsOverfiew",
+    "author": "Christophe Serafin and Curran Kelleher",
+    "creationDate": "09/29/2016",
+    "title": "Apps Overview Dashboard",
+    "visualizations": [
+        { "id": "top5-app-vertical-bar", "x": 6, "y": 0, "w": 6, "h": 22, "minW": 2, "minH": 12 }
+    ]
+}

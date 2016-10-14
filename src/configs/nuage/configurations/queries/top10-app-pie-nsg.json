@@ -1,0 +1,55 @@
+{
+    "id":"top10-app-pie-nsg",
+    "title":"TBD",
+    "service":"elasticsearch",
+    "query":{
+        "query":{
+            "bool":{
+                "must":[
+                    {
+                        "range":{
+                            "timestamp":{
+                                "gte":"now-24h",
+                                "lte":"now",
+                                "format":"epoch_millis"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "aggs":{
+            "3":{
+                "filters":{
+                    "filters":{
+                        "Enterprise":{
+                            "query":{
+                                "term":{
+                                    "SourceNSG":"ovs-1"
+                                }
+                            }
+                        }
+                    }
+                },
+                "aggs":{
+                    "Application":{
+                        "terms":{
+                            "field":"Application",
+                            "size":10,
+                            "order":{
+                                "Sum of MB":"desc"
+                            }
+                        },
+                        "aggs":{
+                            "Sum of MB":{
+                                "sum":{
+                                    "field":"TotalMB"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
