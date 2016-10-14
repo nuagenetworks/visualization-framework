@@ -4,5 +4,7 @@
     "query": "newly-discovered-applications",
     "graph": "SimpleTextGraph",
     "data": {
+        "circle": true,
+        "circleColor": "#4097FF"
     }
 }

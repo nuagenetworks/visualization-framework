@@ -9,13 +9,43 @@ import "./SimpleTextGraph.css";
 */
 export default class SimpleTextGraph extends React.Component {
     render() {
-        const { response, queryConfiguration } = this.props;
-        let body;
+        const {
+            response,
+            queryConfiguration,
+            width,
+            height,
+            configuration: {
+                data: {
+                    circle,
+                    circleColor
+                }
+            }
+        } = this.props;
 
+        let body;
         if (response && !response.isFetching) {
             body = (
                 <div className="SimpleTextGraph">
-                    {response.results.length}
+                    {(() => {
+                        if(circle){
+                            const padding = 16;
+                            const side = width * 0.3;
+                            return (
+                                <div style={{
+                                    position: "fixed",
+                                    left: width / 2 - side / 2 + padding,
+                                    width: side + "px", 
+                                    height: side + "px",
+                                    borderRadius: "50%",
+                                    background: circleColor || "gray",
+                                    textAlign: "center"
+                                }}/>
+                            );
+                        }
+                    })()}
+                    <div className="BigNumber">
+                      {response.results.length}
+                    </div>
                     <br />
                     {queryConfiguration.title}
                 </div>
@@ -29,7 +59,7 @@ export default class SimpleTextGraph extends React.Component {
         }
 
         return (
-            <div className="text-center">
+            <div className="text-center" style={{ height: height}}>
                 { body }
             </div>
         );

@@ -1,9 +1,41 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 import tabify from "../../utils/tabify";
 import * as d3 from "d3";
 import "./BarGraph.css";
+
+// TODO split out this time interval log into a utility module.
+
+// Time unit abbreviations from
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#time-units
+// mapping onto D3 time intervals defined ad
+// https://github.com/d3/d3-time#intervals
+const timeAbbreviations = {
+    "y": "utcYear",
+    "M": "utcMonth",
+    "w": "utcWeek",
+    "d": "utcDay",
+    "h": "utcHour",
+    "m": "utcMinute",
+    "s": "utcSecond",
+    "ms": "utcMillisecond"
+};
+
+function computeBarWidth(interval, timeScale) {
+    const step = +interval.substr(0, interval.length - 1);
+
+    // TODO handle case of "ms"
+    const abbreviation = interval.substr(interval.length - 1);
+    const d3Interval = timeAbbreviations[abbreviation];
+
+    // TODO validation and error handling
+    const start = new Date(2000, 0, 0, 0, 0);
+    const end = d3[d3Interval].offset(start, step);
+
+    return timeScale(end) - timeScale(start);
+
+}
+
 
 export default class BarGraph extends React.Component {
     constructor(){
@@ -19,7 +51,9 @@ export default class BarGraph extends React.Component {
           xTickGrid: false,
           xTickSizeInner: 6,
           xTickSizeOuter: 0,
-          orientation: "vertical"
+          orientation: "vertical",
+          dateHistogram: false,
+          interval: "30s"
         };
     }
 
@@ -32,16 +66,7 @@ export default class BarGraph extends React.Component {
 
     render() {
 
-        const {
-          defaults,
-          props: {
-            response,
-            configuration,
-            onBarClick,
-            width,
-            height
-          }
-        } = this;
+        const { response, width, height } = this.props;
 
         if (!response || response.error)
             return;
@@ -59,49 +84,62 @@ export default class BarGraph extends React.Component {
           xTickGrid,
           xTickSizeInner,
           xTickSizeOuter,
-          orientation
+          orientation,
+          dateHistogram,
+          interval
         } = this.getConfiguredProperties();
 
-
         const vertical = orientation === "vertical";
-        const bandScale = d3.scaleBand();
-        const linearScale = d3.scaleLinear();
-        const xScale = vertical ? bandScale : linearScale;
-        const yScale = vertical ? linearScale : bandScale;
-        const xAxis = d3.axisBottom(xScale);
-        const yAxis = d3.axisLeft(yScale);
+
+        let xScale, yScale;
+        
+        if(dateHistogram){
+
+            // Handle the case of a vertical date histogram.
+            xScale = d3.scaleTime()
+              .domain(d3.extent(data, function (d){ return d[xColumn]; }));
+            yScale = d3.scaleLinear()
+              .domain([0, d3.max(data, function (d){ return d[yColumn] })]);
+
+        } else if(vertical){
+
+            // Handle the case of a vertical bar chart.
+            xScale = d3.scaleBand()
+              .domain(data.map(function (d){ return d[xColumn]; }))
+              .padding(padding);
+            yScale = d3.scaleLinear()
+              .domain([0, d3.max(data, function (d){ return d[yColumn] })]);
+
+        } else {
+
+            // Handle the case of a horizontal bar chart.
+            xScale = d3.scaleLinear()
+              .domain([0, d3.max(data, function (d){ return d[xColumn] })]);
+            yScale = d3.scaleBand()
+              .domain(data.map(function (d){ return d[yColumn]; }))
+              .padding(padding);
+        }
 
         const innerWidth = width - left - right;
         const innerHeight = height - top - bottom;
 
-        if(vertical){
+        xScale.range([0, innerWidth]);
+        yScale.range([innerHeight, 0]);
 
-            xScale
-              .domain(data.map(function (d){ return d[xColumn]; }))
-              .range([0, innerWidth])
+        const xAxis = d3.axisBottom(xScale)
+          .tickSizeInner(xTickGrid ? -innerHeight : xTickSizeInner)
+          .tickSizeOuter(xTickSizeOuter);
 
-            yScale
-              .domain([0, d3.max(data, function (d){ return d[yColumn] })])
-              .range([innerHeight, 0]);
+        const yAxis = d3.axisLeft(yScale)
+          .tickSizeInner(yTickGrid ? -innerWidth : yTickSizeInner)
+          .tickSizeOuter(yTickSizeOuter);
 
-        } else {
-
-            xScale
-              .domain([0, d3.max(data, function (d){ return d[xColumn] })])
-              .range([0, innerWidth])
-
-            yScale
-              .domain(data.map(function (d){ return d[yColumn]; }))
-              .range([innerHeight, 0]);
-
+        let barWidth;
+        if(dateHistogram){
+            barWidth = computeBarWidth(interval, xScale);
+        } else if(vertical){
+            barWidth = xScale.bandwidth();
         }
-
-        bandScale.padding(padding);
-
-        yAxis.tickSizeInner(yTickGrid ? -innerWidth : yTickSizeInner);
-        yAxis.tickSizeOuter(yTickSizeOuter);
-        xAxis.tickSizeInner(xTickGrid ? -innerHeight : xTickSizeInner);
-        xAxis.tickSizeOuter(xTickSizeOuter);
 
         return (
             <div className="bar-graph">
@@ -122,7 +160,7 @@ export default class BarGraph extends React.Component {
                                     key={ i }
                                     x={ xScale(d[xColumn]) }
                                     y={ yScale(d[yColumn]) }
-                                    width={ xScale.bandwidth() }
+                                    width={ barWidth }
                                     height={ innerHeight - yScale(d[yColumn]) }
                                 />
                             ) : (
