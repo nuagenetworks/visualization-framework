@@ -5,6 +5,6 @@
     "graph": "SimpleTextGraph",
     "data": {
         "circle": true,
-        "circleColor": "#285FA0"
+        "circleColor": "#4097FF"
     }
 }
