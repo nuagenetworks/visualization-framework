@@ -39,7 +39,7 @@
                         "3":{
                             "date_histogram":{
                                 "field":"timestamp",
-                                "interval":"5m",
+                                "interval":"30m",
                                 "time_zone":"America/Los_Angeles",
                                 "min_doc_count":1,
                                 "extended_bounds":{

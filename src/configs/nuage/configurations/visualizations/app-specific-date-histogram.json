@@ -6,11 +6,8 @@
     "creationDate": "10/14/2016",
     "data": {
         "dateHistogram": true,
-        "columns": [
-            { "column": "key", "label": "App" },
-            { "column": "Sum of MB" },
-            { "column": "doc_count", "label": "Document Count" }
-        ]
+        "xColumn": "key",
+        "yColumn": "1"
     },
     "query": "app-specific-vertical-bar"
 }
