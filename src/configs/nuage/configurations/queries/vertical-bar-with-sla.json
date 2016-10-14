@@ -1,0 +1,23 @@
+{
+    "id":"vertical-bar-with-sla",
+    "title":"TBD",
+    "service":"elasticsearch",
+    "query":{
+        "query":{
+            "term":{
+                "Application":"myApp-3"
+            }
+        },
+        "sort":{
+            "timestamp":{
+                "order":"desc"
+            }
+        },
+        "_source":{
+            "include":[
+                "SlaStatus"
+            ]
+        },
+        "size":1
+    }
+}

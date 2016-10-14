@@ -1,0 +1,16 @@
+{
+    "id": "top5-users-table",
+    "graph": "Table",
+    "title": "Top 5 users",
+    "author": "Ronak Shah",
+    "creationDate": "10/13/2016",
+    "data": {
+        "columns": [
+            { "column": "key", "label": "Source IP" },
+            { "column": "TotalPacketsCount", "label": "Total Packets Count" },
+            { "column": "TotalBytesCount", "label": "Total Bytes Count"},
+            { "column": "TotalMB", "label": "Total MB" } 
+        ]
+    },
+    "query": "top5-users-table"
+}
