@@ -30,6 +30,19 @@ export default class BarGraph extends React.Component {
         return Object.assign({}, this.defaults, this.props.configuration.data);
     }
 
+    computeBarWidth(timeScale) {
+
+        // TODO compute step and interval from the configuration (e.g. 30m)
+        const step = 30;
+        const interval = "utcMinute";
+
+        const start = new Date(2000, 0, 0, 0, 0);
+        const end = d3[interval].offset(start, step);
+
+        return timeScale(end) - timeScale(start);
+
+    }
+
     render() {
 
         const { response, width, height } = this.props;
@@ -101,7 +114,7 @@ export default class BarGraph extends React.Component {
 
         let barWidth;
         if(dateHistogram){
-            barWidth = 50;
+            barWidth = this.computeBarWidth(xScale);
         } else if(vertical){
             barWidth = xScale.bandwidth();
         }

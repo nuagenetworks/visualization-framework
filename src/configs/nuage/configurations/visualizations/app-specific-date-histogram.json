@@ -6,6 +6,7 @@
     "creationDate": "10/14/2016",
     "data": {
         "dateHistogram": true,
+        "interval": "30m",
         "xColumn": "key",
         "yColumn": "1"
     },
