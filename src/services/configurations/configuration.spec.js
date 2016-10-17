@@ -9,7 +9,7 @@ import { fromJS, Map } from "immutable";
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
-describe('ConfigurationService fetch dashboard', () => {
+xdescribe('Configuration Service: fetch configuration', () => {
 
     beforeEach(function() {
         self.expectedConfiguration = {
@@ -88,7 +88,7 @@ describe('ConfigurationService fetch dashboard', () => {
 })
 
 
-describe('ConfigurationService fetchIfNeeded dashboard', () => {
+xdescribe('Configuration Actions: fetchIfNeeded', () => {
 
     beforeEach(() => {
         self.expectedConfiguration = {
@@ -187,3 +187,72 @@ describe('ConfigurationService fetchIfNeeded dashboard', () => {
              })
     });
 })
+
+
+describe('Configuration Reducers: fetchIfNeeded', () => {
+
+    beforeEach(() => {
+        self.expectedConfiguration = {
+            "id": "example",
+            "author": "Christophe SERAFIN",
+            "creationDate": "09/15/2016",
+            "title": "An example",
+            "data": {
+                "layout": [
+                    { "title": "Graph 1", "i": "graph1", "x": 0, "y": 0, "w": 6, "h": 22, "minW": 6, "minH": 22 },
+                    { "title": "Graph 2", "i": "graph2", "x": 6, "y": 0, "w": 6, "h": 22, "minW": 6, "minH": 22 },
+                    { "title": "Graph 3", "i": "graph3", "x": 0, "y": 22, "w": 2, "h": 16, "minW": 2, "minH": 16 },
+                    { "title": "Graph 4", "i": "graph4", "x": 2, "y": 22, "w": 4, "h": 16, "minW": 4, "minH": 16 }
+                ]
+            }
+        };
+        self.configurationID = 'example',
+        self.configurationType = ActionKeyStore.DASHBOARDS;
+    });
+
+    it('should return the initial state', () => {
+        const action = {
+            type: ActionTypes.CONFIG_DID_RECEIVE_RESPONSE,
+            id: self.configurationID,
+            configType: self.configurationType,
+            data: self.expectedConfiguration
+        };
+
+        const expectedState = Map({
+            dashboards: Map({
+                example: Map({
+                    isFetching: false,
+                    data: fromJS(self.expectedConfiguration),
+                    expirationDate: NaN,
+                })
+            }),
+            visualizations: Map(),
+            queries: Map(),
+        })
+
+        expect(configurationsReducer(undefined, action)).toEqual(expectedState)
+    })
+
+    it('should return the initial state', () => {
+        const action = {
+            type: ActionTypes.CONFIG_DID_RECEIVE_RESPONSE,
+            id: self.configurationID,
+            configType: self.configurationType,
+            data: self.expectedConfiguration
+        };
+
+        const expectedState = Map({
+            dashboards: Map({
+                example: Map({
+                    isFetching: false,
+                    data: fromJS(self.expectedConfiguration),
+                    expirationDate: NaN,
+                })
+            }),
+            visualizations: Map(),
+            queries: Map(),
+        })
+
+        expect(configurationsReducer(undefined, action)).toEqual(expectedState)
+    })
+});
