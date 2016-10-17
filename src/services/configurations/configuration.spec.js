@@ -4,14 +4,15 @@ import thunk from 'redux-thunk';
 import { Actions, ActionKeyStore, ActionTypes } from "./redux/actions";
 import { ConfigurationService } from "./index"
 import configurationsReducer from "./redux/reducer";
+import { fromJS, Map } from "immutable";
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
 describe('ConfigurationService fetch dashboard', () => {
 
-    it('should dispatch didStartRequest and didReceiveResponse actions when succesfully load dashboard', () => {
-        const expectedDashboard = {
+    beforeEach(function() {
+        self.expectedConfiguration = {
             "id": "example",
             "author": "Christophe SERAFIN",
             "creationDate": "09/15/2016",
@@ -25,27 +26,33 @@ describe('ConfigurationService fetch dashboard', () => {
                 ]
             }
         };
+        self.configurationID = 'example';
+        self.configurationType = ActionKeyStore.DASHBOARDS;
+
+        self.store = mockStore({ dashboards: {} });
+    });
+
+    it('should dispatch didStartRequest and didReceiveResponse actions when succesfully load dashboard', () => {
 
         ConfigurationService.fetch = jasmine.createSpy("fetch").and.callFake(() => {
-            return Promise.resolve(expectedDashboard);
+            return Promise.resolve(expectedConfiguration);
         });
 
-        const store = mockStore({ dashboards: {} });
-
-        return store.dispatch(Actions.fetch('example', ActionKeyStore.DASHBOARDS))
+        return self.store.dispatch(Actions.fetch(self.configurationID, self.configurationType))
              .then((response) => {
-                 let actions = store.getActions();
+                 let actions = self.store.getActions();
+
                  expect(actions.length).toEqual(2)
                  expect(actions[0]).toEqual({
                      type: ActionTypes.CONFIG_DID_START_REQUEST,
-                     id: 'example',
-                     configType: ActionKeyStore.DASHBOARDS,
+                     id: self.configurationID,
+                     configType: self.configurationType,
                  })
                  expect(actions[1]).toEqual({
                      type: ActionTypes.CONFIG_DID_RECEIVE_RESPONSE,
-                     id: 'example',
-                     configType: ActionKeyStore.DASHBOARDS,
-                     data: expectedDashboard,
+                     id: self.configurationID,
+                     configType: self.configurationType,
+                     data: expectedConfiguration,
                  })
              })
     });
@@ -60,23 +67,123 @@ describe('ConfigurationService fetch dashboard', () => {
             return Promise.reject(expectedError);
         });
 
-        const store = mockStore({ dashboards: {} });
-
-        return store.dispatch(Actions.fetch('example', ActionKeyStore.DASHBOARDS))
+        return self.store.dispatch(Actions.fetch(self.configurationID, self.configurationType))
              .then((response) => {
-                 let actions = store.getActions();
+                 let actions = self.store.getActions();
+
                  expect(actions.length).toEqual(2)
                  expect(actions[0]).toEqual({
                      type: ActionTypes.CONFIG_DID_START_REQUEST,
-                     id: 'example',
-                     configType: ActionKeyStore.DASHBOARDS,
+                     id: self.configurationID,
+                     configType: self.configurationType,
                  })
                  expect(actions[1]).toEqual({
                      type: ActionTypes.CONFIG_DID_RECEIVE_ERROR,
-                     id: 'example',
-                     configType: ActionKeyStore.DASHBOARDS,
+                     id: self.configurationID,
+                     configType: self.configurationType,
                      error: expectedError.message,
                  })
+             })
+    });
+})
+
+
+describe('ConfigurationService fetchIfNeeded dashboard', () => {
+
+    beforeEach(() => {
+        self.expectedConfiguration = {
+            "id": "example",
+            "author": "Christophe SERAFIN",
+            "creationDate": "09/15/2016",
+            "title": "An example",
+            "data": {
+                "layout": [
+                    { "title": "Graph 1", "i": "graph1", "x": 0, "y": 0, "w": 6, "h": 22, "minW": 6, "minH": 22 },
+                    { "title": "Graph 2", "i": "graph2", "x": 6, "y": 0, "w": 6, "h": 22, "minW": 6, "minH": 22 },
+                    { "title": "Graph 3", "i": "graph3", "x": 0, "y": 22, "w": 2, "h": 16, "minW": 2, "minH": 16 },
+                    { "title": "Graph 4", "i": "graph4", "x": 2, "y": 22, "w": 4, "h": 16, "minW": 4, "minH": 16 }
+                ]
+            }
+        };
+        self.configurationID = 'example';
+        self.configurationType = ActionKeyStore.DASHBOARDS;
+    });
+
+    it('should fetch if no dashboard has been previsouly fetched', () => {
+        const store = mockStore({
+            dashboards: Map(),
+            configurations: Map(),
+        });
+
+        ConfigurationService.fetch = jasmine.createSpy("fetch").and.callFake(() => {
+            return Promise.resolve(self.expectedConfiguration);
+        });
+
+        return store.dispatch(Actions.fetchIfNeeded(self.configurationID, self.configurationType))
+             .then((response) => {
+                 expect(ConfigurationService.fetch).toHaveBeenCalledWith(self.configurationID, self.configurationType);
+                 expect(response).toEqual(self.expectedConfiguration);
+             })
+    });
+
+    it('should not fetch dashboard if one is currently fetching', () => {
+        ConfigurationService.fetch = jasmine.createSpy("fetch");
+
+        const store = mockStore({
+            dashboards: Map(),
+            configurations: Map().setIn([self.configurationType, self.configurationID, ActionKeyStore.IS_FETCHING], true),
+        });
+
+        return store.dispatch(Actions.fetchIfNeeded(self.configurationID, self.configurationType))
+             .then((response) => {
+                 expect(ConfigurationService.fetch).not.toHaveBeenCalled();
+                 expect(response).toBeUndefined();
+             })
+    });
+
+    it('should not fetch dashboard if one has been fetched', () => {
+        ConfigurationService.fetch = jasmine.createSpy("fetch");
+
+        const currentDate    = new Date(),
+              expirationDate = currentDate.setTime(currentDate.getTime() + 10000);
+
+        const store = mockStore({
+            dashboards: Map(),
+            configurations: Map()
+                .setIn([self.configurationType, self.configurationID, ActionKeyStore.IS_FETCHING], false)
+                .setIn([self.configurationType, self.configurationID, ActionKeyStore.DATA], self.expectedConfiguration)
+                .setIn([self.configurationType, self.configurationID, ActionKeyStore.EXPIRATION_DATE], expirationDate)
+        });
+
+        return store.dispatch(Actions.fetchIfNeeded(self.configurationID, self.configurationType))
+             .then((response) => {
+                 expect(ConfigurationService.fetch).not.toHaveBeenCalled();
+                 expect(response).toBeUndefined();
+             })
+    });
+
+    it('should not fetch dashboard if one has expired', () => {
+        ConfigurationService.fetch = jasmine.createSpy("fetch");
+
+        const currentDate    = new Date(),
+              expirationDate = currentDate.setTime(currentDate.getTime() - 10000);
+
+        const store = mockStore({
+            dashboards: Map(),
+            configurations: Map()
+                .setIn([self.configurationType, self.configurationID, ActionKeyStore.IS_FETCHING], false)
+                .setIn([self.configurationType, self.configurationID, ActionKeyStore.DATA], fromJS(self.expectedConfiguration))
+                .setIn([self.configurationType, self.configurationID, ActionKeyStore.EXPIRATION_DATE], expirationDate)
+        });
+
+        ConfigurationService.fetch = jasmine.createSpy("fetch").and.callFake(() => {
+            return Promise.resolve(self.expectedConfiguration);
+        });
+
+        return store.dispatch(Actions.fetchIfNeeded(self.configurationID, self.configurationType))
+             .then((response) => {
+                 expect(ConfigurationService.fetch).toHaveBeenCalledWith(self.configurationID, self.configurationType);
+                 expect(response).toEqual(self.expectedConfiguration);
              })
     });
 })
