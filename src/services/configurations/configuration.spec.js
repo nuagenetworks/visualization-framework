@@ -210,9 +210,9 @@ describe('Configuration Reducers: fetchIfNeeded', () => {
         self.configurationType = ActionKeyStore.DASHBOARDS;
     });
 
-    it('should return the initial state', () => {
+    it('should return a fetching status', () => {
         const action = {
-            type: ActionTypes.CONFIG_DID_RECEIVE_RESPONSE,
+            type: ActionTypes.CONFIG_DID_START_REQUEST,
             id: self.configurationID,
             configType: self.configurationType,
             data: self.expectedConfiguration
@@ -221,9 +221,7 @@ describe('Configuration Reducers: fetchIfNeeded', () => {
         const expectedState = Map({
             dashboards: Map({
                 example: Map({
-                    isFetching: false,
-                    data: fromJS(self.expectedConfiguration),
-                    expirationDate: NaN,
+                    isFetching: true,
                 })
             }),
             visualizations: Map(),
@@ -233,7 +231,7 @@ describe('Configuration Reducers: fetchIfNeeded', () => {
         expect(configurationsReducer(undefined, action)).toEqual(expectedState)
     })
 
-    it('should return the initial state', () => {
+    it('should return the received response', () => {
         const action = {
             type: ActionTypes.CONFIG_DID_RECEIVE_RESPONSE,
             id: self.configurationID,
@@ -246,7 +244,32 @@ describe('Configuration Reducers: fetchIfNeeded', () => {
                 example: Map({
                     isFetching: false,
                     data: fromJS(self.expectedConfiguration),
-                    expirationDate: NaN,
+                    expirationDate: NaN, // Don't know why yet...
+                })
+            }),
+            visualizations: Map(),
+            queries: Map(),
+        })
+
+        expect(configurationsReducer(undefined, action)).toEqual(expectedState)
+    })
+
+    it('should return the received error', () => {
+        const action = {
+            type: ActionTypes.CONFIG_DID_RECEIVE_ERROR,
+            id: self.configurationID,
+            configType: self.configurationType,
+            error: {
+                message: "Unknown error",
+            }
+        };
+
+        const expectedState = Map({
+            dashboards: Map({
+                example: Map({
+                    isFetching: false,
+                    data: fromJS([]),
+                    error: fromJS(action.error),
                 })
             }),
             visualizations: Map(),
