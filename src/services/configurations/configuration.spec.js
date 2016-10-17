@@ -9,7 +9,7 @@ import { fromJS, Map } from "immutable";
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
-xdescribe('Configuration Service: fetch configuration', () => {
+describe('Configuration Service: fetch configuration', () => {
 
     beforeEach(function() {
         self.expectedConfiguration = {
@@ -88,7 +88,7 @@ xdescribe('Configuration Service: fetch configuration', () => {
 })
 
 
-xdescribe('Configuration Actions: fetchIfNeeded', () => {
+describe('Configuration Actions: fetchIfNeeded', () => {
 
     beforeEach(() => {
         self.expectedConfiguration = {
