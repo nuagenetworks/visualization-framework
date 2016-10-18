@@ -1,0 +1,13 @@
+{
+    "id": "vss-domain-events-by-type",
+    "graph": "BarGraph",
+    "title": "Count of Security Events by Event Type",
+    "author": "Ronak Shah",
+    "creationDate": "10/18/2016",
+    "data": {
+        "xColumn": "Sum of Value",
+        "yColumn": "key",
+        "orientation": "horizontal"
+    },
+    "query": "vss-domain-events-by-type"
+}

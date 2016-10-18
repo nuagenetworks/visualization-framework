@@ -104,6 +104,11 @@ class MainMenuView extends React.Component {
                         onTouchTap={() => {this.props.goTo("/dashboards/vssDomainTraffic1?startTime=now-900h")}}
                         style={style.listItem}
                         />
+                    <ListItem
+                        primaryText="VSS-Domain-Event"
+                        onTouchTap={() => {this.props.goTo("/dashboards/vssDomainEvent?startTime=now-900h")}}
+                        style={style.listItem}
+                        />
                 </List>
 
                 <Subheader style={style.subHeader}>ENTERPRISES</Subheader>
