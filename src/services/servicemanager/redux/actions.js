@@ -89,7 +89,7 @@ function fetchIfNeeded(query, context, forceCache) {
             return dispatch(fetch(query, context, forceCache));
 
         } else {
-            return Promise.resolve(request.get(ActionKeyStore.RESULTS));
+            return Promise.resolve();
         }
     }
 }
