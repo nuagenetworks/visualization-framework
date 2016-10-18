@@ -39,7 +39,6 @@ function fetch(query, context, forceCache) {
                 return Promise.reject("Provided context does not allow to parameterized query " + query.id);
         }
 
-
         dispatch(didStartRequest(requestID));
 
         return service.fetch(query, getState())
