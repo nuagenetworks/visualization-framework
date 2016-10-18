@@ -7,7 +7,17 @@
   https://github.com/elastic/kibana/blob/master/src/ui/public/agg_response/tabify/tabify.js
 */
 export default function tabify(response) {
-    return collectBucket(response.aggregations);
+    const table = collectBucket(response.aggregations);
+
+    console.log("Results from tabify():");
+
+    // This one shows where there are "undefined" values.
+    console.log(table)
+
+    // This one shows the full structure pretty-printed.
+    console.log(JSON.stringify(table, null, 2))
+
+    return table;
 }
 
 function collectBucket(node) {
