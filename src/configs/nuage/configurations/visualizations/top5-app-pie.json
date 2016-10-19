@@ -5,7 +5,8 @@
     "author": "Curran Kelleher",
     "creationDate": "10/13/2016",
     "data": {
-        "sliceColumn": "Sum of MB"
+        "sliceColumn": "Sum of MB",
+        "labelColumn": "key"
     },
     "query": "top5-app-vertical-bar"
 }

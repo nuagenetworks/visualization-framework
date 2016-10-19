@@ -10,8 +10,12 @@ export default class PieGraph extends React.Component {
         // These properties can be overridden from the configuration.
         // TODO unify these at a base class inherited by both bar chart and line chart.
         this.defaults = {
-            pieInnerRadius: 0, // The inner radius of the pie chart as a percentage of min(width, height)
-            pieOuterRadius: 0.8, // The outer radius of the pie chart as a percentage of min(width, height)
+
+            // The following radius values are as a percentage of min(width, height).
+            pieInnerRadius: 0, // The inner radius of the slices. Make this non-zero for a Donut Chart.
+            pieOuterRadius: 0.8, // The outer radius of the slices.
+            pieLabelRadius: 0.6, // The radius for positioning labels.
+
             sliceStyle: {
                 stroke: "white",
                 strokeWidth: "1px"
@@ -41,8 +45,10 @@ export default class PieGraph extends React.Component {
 
         const {
           sliceColumn,
+          labelColumn,
           pieInnerRadius,
           pieOuterRadius,
+          pieLabelRadius,
           sliceStyle,
           sliceColors
         } = this.getConfiguredProperties();
@@ -50,6 +56,7 @@ export default class PieGraph extends React.Component {
         const side = Math.min(width, height);
         const innerRadius = pieInnerRadius * side / 2;
         const outerRadius = pieOuterRadius * side / 2;
+        const labelRadius = pieLabelRadius * side / 2;
 
         const top = side / 2; // TODO compute top and left
         const left = side / 2;
@@ -65,6 +72,10 @@ export default class PieGraph extends React.Component {
 
         const color = d3.scaleOrdinal(sliceColors);
 
+        const labelArc = d3.arc()
+            .innerRadius(labelRadius)
+            .outerRadius(labelRadius);
+
         return (
             <div className="pie-graph">
                 <svg width={side} height={side}>
@@ -75,6 +86,7 @@ export default class PieGraph extends React.Component {
                                   d={arc(slice)}
                                   style={sliceStyle}
                                   fill={color(i)}
+                                  key={i}
                                 />
                             ))
                         }
