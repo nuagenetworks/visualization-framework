@@ -2,10 +2,19 @@ import { theme } from "../../theme";
 
 const style = {
     card: {
-        border: theme.palette.thinBorder + theme.palette.borderColor,
+        border: theme.palette.thinBorder + theme.palette.greyColor,
         height: "100%",
         width: "100%",
         minHeight: "300px",
+    },
+    cardTitle: {
+        background: theme.palette.greyLightColor,
+        padding: "10px 8px",
+        fontSize: "1.2em",
+        fontWeight: "200",
+    },
+    cardText: {
+        fontSize: "0.85em",
     },
     cardContainer: {
         height: "100%",

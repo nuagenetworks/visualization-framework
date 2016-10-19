@@ -3,6 +3,8 @@ import React from "react";
 import tabify from "../../utils/tabify";
 import * as d3 from "d3";
 
+import { theme } from "../../theme";
+
 export default class PieGraph extends React.Component {
     constructor(){
         super();
@@ -21,7 +23,15 @@ export default class PieGraph extends React.Component {
             },
 
             // From ColorBrewer Scales, Set2 https://bl.ocks.org/mbostock/5577023
-            sliceColors: ["#66c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"]
+            sliceColors: [
+                theme.palette.yellowLightColor,
+                theme.palette.orangeLightColor,
+                theme.palette.blueLightColor,
+                theme.palette.pinkLightColor,
+                theme.palette.greenColor,
+                theme.palette.yellowDarkColor,
+                theme.palette.orangeLighterColor,
+            ]
         };
     }
 

@@ -15,9 +15,6 @@ import {
     ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions"
 
-import { resizeVisualization } from "../../utils/resize"
-
-
 export class DashboardView extends React.Component {
 
     constructor(props) {
@@ -102,6 +99,7 @@ export class DashboardView extends React.Component {
             return (
                 <ResponsiveReactGridLayout
                     rowHeight={10}
+                    margin={[11,11]}
                     onResize={this.onResize.bind(this)}
                     onLayoutChange={this.onResize.bind(this)}
                 >

@@ -2,7 +2,8 @@ import { theme } from "../../theme";
 
 const style = {
     navBar: {
-        fontSize: "14px",
+        fontSize: "12px",
+        fontWeight: 200,
     },
     container: {
         margin: "10px",
