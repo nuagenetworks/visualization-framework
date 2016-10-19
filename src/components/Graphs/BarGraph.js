@@ -1,4 +1,5 @@
 import React from "react";
+import AbstractGraph from "./AbstractGraph";
 
 import tabify from "../../utils/tabify";
 import * as d3 from "d3";
@@ -37,32 +38,20 @@ function computeBarWidth(interval, timeScale) {
 }
 
 
-export default class BarGraph extends React.Component {
-    constructor(){
-        super();
+export default class BarGraph extends AbstractGraph {
+    constructor(props) {
+        super(props);
 
-        // These properties can be overridden from the configuration.
-        this.defaults = {
-          margin: { top: 15, bottom: 20, left: 30, right: 20 },
-          padding: 0.1,
-          yTickGrid: true,
-          yTickSizeInner: 6,
-          yTickSizeOuter: 0,
-          xTickGrid: false,
-          xTickSizeInner: 6,
-          xTickSizeOuter: 0,
-          orientation: "vertical",
-          dateHistogram: false,
-          interval: "30s"
-        };
+        console.error(this.defaults);
     }
 
-    // Gets the object containing all configured properties.
-    // Uses properties from the configuration,
-    // falling back to defaults for unspecified properties.
-    getConfiguredProperties() {
-        return Object.assign({}, this.defaults, this.props.configuration.data);
-    }
+    // // Gets the object containing all configured properties.
+    // // Uses properties from the configuration,
+    // // falling back to defaults for unspecified properties.
+    // getConfiguredProperties() {
+    //     getProperties("BarGraph")
+    //     return Object.assign({}, this.defaults, this.props.configuration.data);
+    // }
 
     render() {
 
@@ -92,7 +81,7 @@ export default class BarGraph extends React.Component {
         const vertical = orientation === "vertical";
 
         let xScale, yScale;
-        
+
         if(dateHistogram){
 
             // Handle the case of a vertical date histogram.
