@@ -13,10 +13,12 @@ export default class PieGraph extends React.Component {
             pieInnerRadius: 0, // The inner radius of the pie chart as a percentage of min(width, height)
             pieOuterRadius: 0.8, // The outer radius of the pie chart as a percentage of min(width, height)
             sliceStyle: {
-                stroke: "black",
-                strokeWidth: "1px",
-                fill: "rgba(0,0,0,0.2"
-            }
+                stroke: "white",
+                strokeWidth: "1px"
+            },
+
+            // From ColorBrewer Scales, Set2 https://bl.ocks.org/mbostock/5577023
+            sliceColors: ["#66c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"]
         };
     }
 
@@ -41,7 +43,8 @@ export default class PieGraph extends React.Component {
           sliceColumn,
           pieInnerRadius,
           pieOuterRadius,
-          sliceStyle
+          sliceStyle,
+          sliceColors
         } = this.getConfiguredProperties();
 
         const side = Math.min(width, height);
@@ -58,15 +61,21 @@ export default class PieGraph extends React.Component {
             .innerRadius(innerRadius)
             .outerRadius(outerRadius);
 
-        const slices = pie(data)
+        const slices = pie(data);
+
+        const color = d3.scaleOrdinal(sliceColors);
 
         return (
             <div className="pie-graph">
                 <svg width={side} height={side}>
                     <g transform={ `translate(${left},${top})` } >
                         {
-                            slices.map((slice) => (
-                                <path d={arc(slice)} style={sliceStyle} />
+                            slices.map((slice, i) => (
+                                <path
+                                  d={arc(slice)}
+                                  style={sliceStyle}
+                                  fill={color(i)}
+                                />
                             ))
                         }
                     </g>
