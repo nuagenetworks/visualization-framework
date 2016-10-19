@@ -8,13 +8,12 @@ export default class PieGraph extends React.Component {
         super();
 
         // These properties can be overridden from the configuration.
-        // TODO unify these at a base class inherited by both bar chart and line chart.
         this.defaults = {
 
             // The following radius values are as a percentage of min(width, height).
             pieInnerRadius: 0, // The inner radius of the slices. Make this non-zero for a Donut Chart.
             pieOuterRadius: 0.8, // The outer radius of the slices.
-            pieLabelRadius: 0.6, // The radius for positioning labels.
+            pieLabelRadius: 0.85, // The radius for positioning labels.
 
             sliceStyle: {
                 stroke: "white",
@@ -53,13 +52,10 @@ export default class PieGraph extends React.Component {
           sliceColors
         } = this.getConfiguredProperties();
 
-        const side = Math.min(width, height);
-        const innerRadius = pieInnerRadius * side / 2;
-        const outerRadius = pieOuterRadius * side / 2;
-        const labelRadius = pieLabelRadius * side / 2;
-
-        const top = side / 2; // TODO compute top and left
-        const left = side / 2;
+        const maxRadius = Math.min(width, height) / 2;
+        const innerRadius = pieInnerRadius * maxRadius;
+        const outerRadius = pieOuterRadius * maxRadius;
+        const labelRadius = pieLabelRadius * maxRadius;
 
         const pie = d3.pie()
             .value(function (d){ return d[sliceColumn] });
@@ -78,20 +74,19 @@ export default class PieGraph extends React.Component {
 
         return (
             <div className="pie-graph">
-                <svg width={side} height={side}>
-                    <g transform={ `translate(${left},${top})` } >
+                <svg width={width} height={height}>
+                    <g transform={ `translate(${ width / 2 }, ${ height / 2 })` } >
                         {
                             slices.map((slice, i) => (
-                                <g>
+                                <g key={i} >
                                     <path
                                       d={arc(slice)}
                                       style={sliceStyle}
                                       fill={color(i)}
-                                      key={i}
                                     />
                                     <text
                                       transform={`translate(${labelArc.centroid(slice)})`}
-                                      textAnchor="middle"
+                                      textAnchor={(slice.startAngle + slice.endAngle) / 2 < Math.PI ? "start" : "end"}
                                       dy=".35em"
                                     >
                                         {slice.data[labelColumn]}
