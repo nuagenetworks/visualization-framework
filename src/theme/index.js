@@ -131,7 +131,7 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
         yellowLighterColor: customTheme.yellowLighterColor,
     },
     drawer: {
-        color: customTheme.greyLightColor,
+        color: customTheme.whiteColor,
     },
     appBar: {
         color: customTheme.greyLightColor,
@@ -140,7 +140,10 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
     },
     subheader: {
         fontWeight: "300",
-        color: customTheme.greyDarkerColor,
+        color: customTheme.blackColor,
+    },
+    avatar: {
+        backgroundColor: customTheme.blackColor,
     }
 });
 

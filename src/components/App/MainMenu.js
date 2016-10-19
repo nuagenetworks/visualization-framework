@@ -2,6 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { push } from "redux-router";
 
+import FontAwesome from "react-fontawesome";
+
+import Avatar from 'material-ui/Avatar';
 import Drawer from "material-ui/Drawer";
 import Subheader from "material-ui/Subheader";
 import { List, ListItem } from "material-ui/List";
@@ -17,8 +20,6 @@ import {
 } from "../../services/servicemanager/redux/actions";
 
 import style from "./styles"
-import Logo from "./logo.png"
-
 
 
 class MainMenuView extends React.Component {
@@ -66,56 +67,112 @@ class MainMenuView extends React.Component {
 
     render() {
         return (
-            <Drawer open={this.props.open} docked={false} onRequestChange={this.props.onRequestChange}>
+            <Drawer open={this.props.open} docked={false} onRequestChange={this.props.onRequestChange} width={300}>
                 <div style={style.menuLogo}>
-                    <img src={Logo} alt="Visualization Framework by Nuage Networks" />
+                    <Avatar>VF</Avatar>
                     <p>Visualizations</p>
                 </div>
+
+
 
                 <Subheader style={style.subHeader}>DEVELOPMENT</Subheader>
                 <List>
                     <ListItem
                         primaryText="AppsOverview"
+                        leftIcon={<FontAwesome
+                            name="area-chart"
+                            style={{ margin: "0", top: "10px", left: "16px" }}
+                            />
+                        }
+                        innerDivStyle={{padding:"10px 40px"}}
                         onTouchTap={() => {this.props.goTo("/dashboards/appsOverview?startTime=now-900h")}}
                         style={style.listItem}
                         />
                     <ListItem
                         primaryText="App Aware Routing"
+                        leftIcon={<FontAwesome
+                            name="area-chart"
+                            style={{ margin: "0", top: "10px", left: "16px" }}
+                            />
+                        }
+                        innerDivStyle={{padding:"10px 40px"}}
                         onTouchTap={() => {this.props.goTo("/dashboards/aarEnterprise?startTime=now-900h")}}
                         style={style.listItem}
                         />
                     <ListItem
                         primaryText="AAR-Enterprise-App-List"
+                        leftIcon={<FontAwesome
+                            name="area-chart"
+                            style={{ margin: "0", top: "10px", left: "16px" }}
+                            />
+                        }
+                        innerDivStyle={{padding:"10px 40px"}}
                         onTouchTap={() => {this.props.goTo("/dashboards/aarEnterpriseAppList?startTime=now-900h")}}
                         style={style.listItem}
                         />
                     <ListItem
                         primaryText="AAR-Domain"
+                        leftIcon={<FontAwesome
+                            name="area-chart"
+                            style={{ margin: "0", top: "10px", left: "16px" }}
+                            />
+                        }
+                        innerDivStyle={{padding:"10px 40px"}}
                         onTouchTap={() => {this.props.goTo("/dashboards/aarDomain?startTime=now-900h")}}
                         style={style.listItem}
                         />
                     <ListItem
                         primaryText="VSS-Enterprise"
+                        leftIcon={<FontAwesome
+                            name="area-chart"
+                            style={{ margin: "0", top: "10px", left: "16px" }}
+                            />
+                        }
+                        innerDivStyle={{padding:"10px 40px"}}
                         onTouchTap={() => {this.props.goTo("/dashboards/vssEnterprise?startTime=now-900h")}}
                         style={style.listItem}
                         />
                     <ListItem
                         primaryText="VSS-Domain-Traffic1"
+                        leftIcon={<FontAwesome
+                            name="area-chart"
+                            style={{ margin: "0", top: "10px", left: "16px" }}
+                            />
+                        }
+                        innerDivStyle={{padding:"10px 40px"}}
                         onTouchTap={() => {this.props.goTo("/dashboards/vssDomainTraffic1?startTime=now-900h")}}
                         style={style.listItem}
                         />
                     <ListItem
                         primaryText="VSS-Domain-Event"
+                        leftIcon={<FontAwesome
+                            name="area-chart"
+                            style={{ margin: "0", top: "10px", left: "16px" }}
+                            />
+                        }
+                        innerDivStyle={{padding:"10px 40px"}}
                         onTouchTap={() => {this.props.goTo("/dashboards/vssDomainEvent?startTime=now-900h")}}
                         style={style.listItem}
                         />
                     <ListItem
                         primaryText="VSS-Domain-ACL"
+                        leftIcon={<FontAwesome
+                            name="area-chart"
+                            style={{ margin: "0", top: "10px", left: "16px" }}
+                            />
+                        }
+                        innerDivStyle={{padding:"10px 40px"}}
                         onTouchTap={() => {this.props.goTo("/dashboards/vssDomainACL?startTime=now-900h")}}
                         style={style.listItem}
                         />
                     <ListItem
                         primaryText="VSS-Domain-Traffic2"
+                        leftIcon={<FontAwesome
+                            name="area-chart"
+                            style={{ margin: "0", top: "10px", left: "16px" }}
+                            />
+                        }
+                        innerDivStyle={{padding:"10px 40px"}}
                         onTouchTap={() => {this.props.goTo("/dashboards/vssDomainTraffic2?startTime=now-900h")}}
                         style={style.listItem}
                         />
