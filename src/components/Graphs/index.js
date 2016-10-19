@@ -1,9 +1,6 @@
 import SimpleTextGraph from "./SimpleTextGraph";
 
-// TODO delete this one.
-import VerticalBarGraph from "./VerticalBarGraph";
-
-import BarGraph from "./BarGraph";
+import BarGraph from "./BarGraph/index";
 import LineGraph from "./LineGraph";
 import Table from "./Table";
 
@@ -12,7 +9,6 @@ import Table from "./Table";
 */
 let registry = {
     SimpleTextGraph,
-    VerticalBarGraph,
     BarGraph,
     LineGraph,
     Table
@@ -36,7 +32,33 @@ const getGraphComponent = function (name) {
 }
 
 
+// Define all default properties for graphs
+const defaults = {
+    margin: {
+        top: 15,
+        bottom: 20,
+        left: 30,
+        right: 20
+    },
+    padding: 0.1,
+    yTickGrid: true,
+    yTickSizeInner: 6,
+    yTickSizeOuter: 0,
+    xTickGrid: false,
+    xTickSizeInner: 6,
+    xTickSizeOuter: 0,
+    orientation: "vertical",
+    dateHistogram: false,
+    interval: "30s"
+}
+
+const getDefaultProperties = (properties) => {
+    return Object.assign({}, defaults, properties);
+};
+
+
 export const GraphManager = {
     register: register,
     getGraphComponent: getGraphComponent,
+    getDefaultProperties: getDefaultProperties,
 }

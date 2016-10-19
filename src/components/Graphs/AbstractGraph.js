@@ -1,14 +1,23 @@
 import React from "react";
 
-import { properties } from "./BarGraph.config.js";
-import { getDefaultProperties } from "../../utils/properties.js";
+import { GraphManager } from "./index";
 
 
 export default class AbstractGraph extends React.Component {
 
     constructor(props) {
         super(props);
-        this.defaults = getDefaultProperties(properties);
+
+        let properties;
+
+        try {
+            properties = require("./" + this.constructor.name + "/default.config.js").properties;
+        }
+        catch (err) {
+            properties = {};
+        }
+
+        this.defaults = GraphManager.getDefaultProperties(properties);
     }
 
     // Gets the object containing all configured properties.

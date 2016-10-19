@@ -1,9 +1,9 @@
 import React from "react";
-import AbstractGraph from "./AbstractGraph";
+import AbstractGraph from "../AbstractGraph"; 
 
-import tabify from "../../utils/tabify";
+import tabify from "../../../utils/tabify";
 import * as d3 from "d3";
-import "./BarGraph.css";
+import "./styles.css";
 
 // TODO split out this time interval log into a utility module.
 
@@ -39,19 +39,6 @@ function computeBarWidth(interval, timeScale) {
 
 
 export default class BarGraph extends AbstractGraph {
-    constructor(props) {
-        super(props);
-
-        console.error(this.defaults);
-    }
-
-    // // Gets the object containing all configured properties.
-    // // Uses properties from the configuration,
-    // // falling back to defaults for unspecified properties.
-    // getConfiguredProperties() {
-    //     getProperties("BarGraph")
-    //     return Object.assign({}, this.defaults, this.props.configuration.data);
-    // }
 
     render() {
 
