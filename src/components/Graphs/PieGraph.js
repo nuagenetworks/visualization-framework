@@ -82,12 +82,21 @@ export default class PieGraph extends React.Component {
                     <g transform={ `translate(${left},${top})` } >
                         {
                             slices.map((slice, i) => (
-                                <path
-                                  d={arc(slice)}
-                                  style={sliceStyle}
-                                  fill={color(i)}
-                                  key={i}
-                                />
+                                <g>
+                                    <path
+                                      d={arc(slice)}
+                                      style={sliceStyle}
+                                      fill={color(i)}
+                                      key={i}
+                                    />
+                                    <text
+                                      transform={`translate(${labelArc.centroid(slice)})`}
+                                      textAnchor="middle"
+                                      dy=".35em"
+                                    >
+                                        {slice.data[labelColumn]}
+                                    </text>
+                                </g>
                             ))
                         }
                     </g>
