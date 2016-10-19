@@ -9,7 +9,7 @@ import { fromJS, Map } from "immutable";
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
-xdescribe('ServiceManager', () => {
+describe('ServiceManager', () => {
     it('should expose certain methods', () => {
         let expectedProperties = [
             "config",
@@ -21,7 +21,7 @@ xdescribe('ServiceManager', () => {
     });
 });
 
-xdescribe('ServiceManager Actions: fetch', () => {
+describe('ServiceManager Actions: fetch', () => {
 
     beforeEach(() => {
         self.serviceName = "mockService";
@@ -114,7 +114,7 @@ xdescribe('ServiceManager Actions: fetch', () => {
 
 });
 
-xdescribe('ServiceManager Actions: fetchIfNeeded', () => {
+describe('ServiceManager Actions: fetchIfNeeded', () => {
 
     beforeEach(() => {
         self.serviceName = "mockService";
@@ -182,7 +182,7 @@ xdescribe('ServiceManager Actions: fetchIfNeeded', () => {
         spyOn(self.mockService, 'fetch')
 
         const currentDate    = new Date(),
-              expirationDate = currentDate.setTime(currentDate.getTime() + 10000);
+              expirationDate = currentDate.setTime(currentDate.getTime() + 10001);
 
         const store = mockStore({
           services: Map({
