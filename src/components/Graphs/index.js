@@ -4,6 +4,7 @@ import SimpleTextGraph from "./SimpleTextGraph";
 import VerticalBarGraph from "./VerticalBarGraph";
 
 import BarGraph from "./BarGraph";
+import PieGraph from "./PieGraph";
 import LineGraph from "./LineGraph";
 import Table from "./Table";
 
@@ -14,6 +15,7 @@ let registry = {
     SimpleTextGraph,
     VerticalBarGraph,
     BarGraph,
+    PieGraph,
     LineGraph,
     Table
 };
