@@ -11,7 +11,12 @@ export default class PieGraph extends React.Component {
         // TODO unify these at a base class inherited by both bar chart and line chart.
         this.defaults = {
             pieInnerRadius: 0, // The inner radius of the pie chart as a percentage of min(width, height)
-            pieOuterRadius: 0.8 // The outer radius of the pie chart as a percentage of min(width, height)
+            pieOuterRadius: 0.8, // The outer radius of the pie chart as a percentage of min(width, height)
+            sliceStyle: {
+                stroke: "black",
+                strokeWidth: "1px",
+                fill: "rgba(0,0,0,0.2"
+            }
         };
     }
 
@@ -35,15 +40,16 @@ export default class PieGraph extends React.Component {
         const {
           sliceColumn,
           pieInnerRadius,
-          pieOuterRadius
+          pieOuterRadius,
+          sliceStyle
         } = this.getConfiguredProperties();
 
         const side = Math.min(width, height);
-        const innerRadius = pieInnerRadius * side;
-        const outerRadius = pieOuterRadius * side;
+        const innerRadius = pieInnerRadius * side / 2;
+        const outerRadius = pieOuterRadius * side / 2;
 
-        const top = 0; // TODO compute top and left
-        const left = 0;
+        const top = side / 2; // TODO compute top and left
+        const left = side / 2;
 
         const pie = d3.pie()
             .value(function (d){ return d[sliceColumn] });
@@ -53,16 +59,14 @@ export default class PieGraph extends React.Component {
             .outerRadius(outerRadius);
 
         const slices = pie(data)
-        console.log(data)
-        console.log(slices)
-        console.log(arc(slices[0]))
+
         return (
             <div className="pie-graph">
                 <svg width={side} height={side}>
                     <g transform={ `translate(${left},${top})` } >
                         {
                             slices.map((slice) => (
-                                <path d={arc(slice)} />
+                                <path d={arc(slice)} style={sliceStyle} />
                             ))
                         }
                     </g>
