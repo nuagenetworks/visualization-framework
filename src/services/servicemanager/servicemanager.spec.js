@@ -174,7 +174,7 @@ xdescribe('ServiceManager Actions: fetchIfNeeded', () => {
         return store.dispatch(Actions.fetchIfNeeded(self.configuration, self.context))
              .then((response) => {
                  expect(self.mockService.fetch).not.toHaveBeenCalled();
-                 expect(response).toBeUndefined();
+                 expect(response).toBeUndefined(); // WARN: ConfigurationManager does not return results from the current state
              })
     });
 
@@ -196,7 +196,7 @@ xdescribe('ServiceManager Actions: fetchIfNeeded', () => {
         return store.dispatch(Actions.fetchIfNeeded(self.configuration, self.context))
              .then((response) => {
                  expect(self.mockService.fetch).not.toHaveBeenCalled();
-                 expect(response).toBeUndefined();
+                 expect(response).toBeUndefined(); // WARN: ConfigurationManager does not return results from the current state
              })
     });
 
@@ -293,8 +293,8 @@ describe('ServiceManager Reducers', () => {
             requests: Map({
                 example: Map({
                     isFetching: false,
-                    error: action.error, // TODO: ConfigurationManager uses fromJS
-                    results: [], // TODO: ConfigurationManager uses fromJS
+                    error: action.error, // WARN: ConfigurationManager uses fromJS
+                    results: [], // WARN: ConfigurationManager uses fromJS
                 })
             })
         })
