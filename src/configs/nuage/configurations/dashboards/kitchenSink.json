@@ -8,8 +8,17 @@
             "id": "top5-app-vertical-bar",
             "x": 0,
             "y": 0,
-            "w": 6,
-            "h": 30,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "top5-app-horizontal-bar",
+            "x": 3,
+            "y": 0,
+            "w": 3,
+            "h": 15,
             "minW": 2,
             "minH": 12
         },
@@ -23,10 +32,19 @@
             "minH": 12
         },
         {
-            "id": "top5-app-horizontal-bar",
-            "x": 6,
+            "id": "top5-app-pie",
+            "x": 0,
             "y": 15,
-            "w": 6,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "top5-app-donut",
+            "x": 3,
+            "y": 15,
+            "w": 3,
             "h": 15,
             "minW": 2,
             "minH": 12
