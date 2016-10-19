@@ -39,7 +39,6 @@ function fetch(query, context, forceCache) {
                 return Promise.reject("Provided context does not allow to parameterized query " + query.id);
         }
 
-
         dispatch(didStartRequest(requestID));
 
         return service.fetch(query, getState())
@@ -90,7 +89,7 @@ function fetchIfNeeded(query, context, forceCache) {
             return dispatch(fetch(query, context, forceCache));
 
         } else {
-            return Promise.resolve(request.get(ActionKeyStore.RESULTS));
+            return Promise.resolve();
         }
     }
 }

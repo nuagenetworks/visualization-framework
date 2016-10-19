@@ -162,7 +162,7 @@ describe('Configuration Actions: fetchIfNeeded', () => {
              })
     });
 
-    it('should not fetch dashboard if one has expired', () => {
+    it('should fetch dashboard if one has expired', () => {
         ConfigurationService.fetch = jasmine.createSpy("fetch");
 
         const currentDate    = new Date(),
