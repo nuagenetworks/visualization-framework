@@ -1,0 +1,12 @@
+{
+    "id": "vss-domain-acl-dpg",
+    "graph": "BarGraph",
+    "title": "ACL Hits by Destination Policy Groups",
+    "author": "Ronak Shah",
+    "creationDate": "10/18/2016",
+    "data": {
+        "xColumn": "key",
+        "yColumn": "SumOf"
+    },
+    "query": "vss-domain-acl-spg"
+}

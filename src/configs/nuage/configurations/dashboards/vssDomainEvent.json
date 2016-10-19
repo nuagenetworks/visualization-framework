@@ -1,0 +1,11 @@
+{
+    "id": "vssDomainEvent",
+    "author": "Ronak Shah",
+    "creationDate": "10/18/2016",
+    "title": "VSS Domain Event Analytics",
+    "visualizations": [
+        { "id": "vss-domain-events-by-type", "x": 6, "y": 0, "w": 6, "h": 22, "minW": 2, "minH": 12},
+        { "id": "vss-domain-events-by-pg", "x": 26, "y": 10, "w": 6, "h": 22, "minW": 2, "minH": 12}
+    ]
+}
+

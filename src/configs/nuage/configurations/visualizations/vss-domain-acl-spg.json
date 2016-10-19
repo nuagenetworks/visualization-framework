@@ -1,0 +1,13 @@
+{
+    "id": "vss-domain-acl-spg",
+    "graph": "BarGraph",
+    "title": "ACL Hits by Source Policy Group",
+    "author": "Ronak Shah",
+    "creationDate": "10/18/2016",
+    "data": {
+        "xColumn": "SumOf",
+        "yColumn": "key",
+        "orientation": "horizontal"
+    },
+    "query": "vss-domain-acl-spg"
+}

@@ -17,29 +17,13 @@ After editing this file, restart ElasticSearch.
 
 `sudo service elasticsearch restart`
 
-## Git Submodules
-
-This project relies on Git submodules. To initialize the project, you'll need to execute the following commands:
-
-```
-git submodule init
-git submodule update
-```
-
-Then every time there is an update to the submodule, you should get the modification using:
-
-```
-git submodule update
-```
-
 ## Installation Procedure
 
     1. Clone the repository https://github.com/nuagenetworks/visualization-framework
     2. Go inside the `visualization-framework` folder
-    3. Initialize the submodule that deals with the configuration `git submodule init`
-    4. Update the submodule to get the lastest sources `git submodule update`
-    5. Install all dependancies using `npm install` (it will take some time, please be patient)
-    6. Run the application using `npm run start` command.
+    3. Install all dependancies using `npm install` (it will take some time, please be patient)
+    4. Run the application using `npm run start` command.
+    5. Launch tests using `npm run test` command.
 
 ## Settings
 

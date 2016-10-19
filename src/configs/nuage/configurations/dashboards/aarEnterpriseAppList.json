@@ -1,0 +1,9 @@
+{
+    "id": "aarEnterprise",
+    "author": "Christophe Serafin and Curran Kelleher",
+    "creationDate": "09/29/2016",
+    "title": "AAR Enterprise Dashboard",
+    "visualizations": [
+        { "id": "top20-talkers-enterprise", "x": 26, "y": 0, "w": 6, "h": 22, "minW": 2, "minH": 12}
+    ]
+}

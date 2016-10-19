@@ -1,0 +1,12 @@
+{
+    "id": "vss-top-sec-events",
+    "graph": "BarGraph",
+    "title": "Top Security Events",
+    "author": "Ronak Shah",
+    "creationDate": "10/17/2016",
+    "data": {
+        "xColumn": "key",
+        "yColumn": "Count of Events"
+    },
+    "query": "vss-top-sec-events"
+}
