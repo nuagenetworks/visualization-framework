@@ -100,7 +100,7 @@ class MainMenuView extends React.Component {
                         style={style.listItem}
                         />
                     <ListItem
-                        primaryText="VSS-Domain"
+                        primaryText="VSS-Domain-Traffic1"
                         onTouchTap={() => {this.props.goTo("/dashboards/vssDomainTraffic1?startTime=now-900h")}}
                         style={style.listItem}
                         />
@@ -112,6 +112,11 @@ class MainMenuView extends React.Component {
                     <ListItem
                         primaryText="VSS-Domain-ACL"
                         onTouchTap={() => {this.props.goTo("/dashboards/vssDomainACL?startTime=now-900h")}}
+                        style={style.listItem}
+                        />
+                    <ListItem
+                        primaryText="VSS-Domain-Traffic2"
+                        onTouchTap={() => {this.props.goTo("/dashboards/vssDomainTraffic2?startTime=now-900h")}}
                         style={style.listItem}
                         />
                 </List>
