@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 
 import { Actions, ActionKeyStore, ActionTypes } from "./redux/actions";
 import { ServiceManager } from "./index"
-import configurationsReducer from "./redux/reducer";
+import servicesReducer from "./redux/reducer";
 import { fromJS, Map } from "immutable";
 
 const middlewares = [thunk];
@@ -222,3 +222,83 @@ xdescribe('ServiceManager Actions: fetchIfNeeded', () => {
              })
     });
 })
+
+
+describe('ServiceManager Reducers', () => {
+
+    beforeEach(() => {
+        self.requestID = "example";
+        self.expectedResults = [{
+            id: 1,
+            name: "Result1",
+        },
+        {
+            id: 2,
+            name: "Result2",
+        }];
+    })
+
+    it('should return a fetching status', () => {
+        const action = {
+            type: ActionTypes.SERVICE_MANAGER_DID_START_REQUEST,
+            requestID: self.requestID,
+        };
+
+        const expectedState = Map({
+            requests: Map({
+                example: Map({
+                    isFetching: true,
+                    error: null,
+                })
+            }),
+        })
+
+        expect(servicesReducer(undefined, action)).toEqual(expectedState)
+    })
+
+    it('should return the received response', () => {
+        const action = {
+            type: ActionTypes.SERVICE_MANAGER_DID_RECEIVE_RESPONSE,
+            requestID: self.requestID,
+            results: self.expectedResults,
+            forceCache: true
+        };
+
+        const currentDate    = new Date(),
+              expirationDate = currentDate.setTime(currentDate.getTime() + 86400000); // 24h
+
+        const expectedState = Map({
+            requests: Map({
+                example: Map({
+                    isFetching: false,
+                    results: self.expectedResults,
+                    expirationDate: expirationDate
+                })
+            }),
+        })
+
+        expect(servicesReducer(undefined, action)).toEqual(expectedState)
+    })
+
+    it('should return the received error', () => {
+        const action = {
+            type: ActionTypes.SERVICE_MANAGER_DID_RECEIVE_ERROR,
+            requestID: self.requestID,
+            error: {
+                message: "Unknown error",
+            }
+        };
+
+        const expectedState = Map({
+            requests: Map({
+                example: Map({
+                    isFetching: false,
+                    error: action.error, // TODO: ConfigurationManager uses fromJS
+                    results: [], // TODO: ConfigurationManager uses fromJS
+                })
+            })
+        })
+
+        expect(servicesReducer(undefined, action)).toEqual(expectedState)
+    })
+});

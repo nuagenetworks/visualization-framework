@@ -31,6 +31,7 @@ function didReceiveError(state, requestID, error) {
         .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.ERROR], error)
         .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS], []);
 }
+
 function servicesReducer(state = initialState, action) {
 
     switch (action.type) {
