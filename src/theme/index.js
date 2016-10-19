@@ -49,7 +49,6 @@ const customTheme = {
     yellowLighterColor: "#f9f7bc",
 }
 
-
 export const lightTheme = getMuiTheme(lightMuiTheme, {
     fontFamily: "Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif",
     spacing: {
@@ -136,6 +135,7 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
     },
     appBar: {
         color: customTheme.greyLightColor,
+        textColor: customTheme.blackColor,
         titleFontWeight: "200",
     },
     subheader: {

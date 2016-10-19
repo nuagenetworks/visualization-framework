@@ -9,12 +9,15 @@ const style = {
     },
     cardTitle: {
         background: theme.palette.greyLightColor,
-        padding: "10px 8px",
+        color: theme.palette.blackColor,
+        padding: "10px",
         fontSize: "1.2em",
         fontWeight: "200",
     },
     cardText: {
+        padding: "10px",
         fontSize: "0.85em",
+        color: theme.palette.blackColor,
     },
     cardContainer: {
         height: "100%",

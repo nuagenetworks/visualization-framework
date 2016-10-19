@@ -21,3 +21,7 @@ body {
 }
 
 /* Bootstrap */
+
+.table th {
+    color: #777d7d;
+}

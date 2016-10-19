@@ -13,7 +13,7 @@ const style = {
         textAlign: "center",
         fontSize: "120%",
         padding: "10px",
-        color: theme.palette.greyDarkerColor,
+        color: theme.palette.blackColor,
     },
     nestedItems: {
         padding: 0,
@@ -25,7 +25,6 @@ const style = {
     listItem: {
     },
     subHeader: {
-        borderBottom: theme.palette.thinBorder + theme.palette.greyDarkerColor,
         height: "35px"
     }
 }
