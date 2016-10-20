@@ -99,7 +99,8 @@ export class DashboardView extends React.Component {
             return (
                 <ResponsiveReactGridLayout
                     rowHeight={10}
-                    margin={[11,11]}
+                    margin={[12,12]}
+                    containerPadding={[10,10]}
                     onResize={this.onResize.bind(this)}
                     onLayoutChange={this.onResize.bind(this)}
                 >
