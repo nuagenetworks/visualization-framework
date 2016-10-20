@@ -6,7 +6,10 @@
     "creationDate": "10/18/2016",
     "data": {
         "xColumn": "key",
-        "yColumn": "SumOf"
+        "yColumn": "SumOf",
+        "colors": [
+             "#fec26a"
+         ]
     },
     "query": "vss-domain-acl-spg"
 }

@@ -1,13 +1,19 @@
 {
     "id": "vss-top-domains-blocked-traffic",
     "graph": "BarGraph",
-    "title": "Top 5 Apps",
+    "title": "Top Domains by blocked traffic",
     "author": "Ronak Shah",
     "creationDate": "10/17/2016",
     "data": {
         "xColumn": "SumOf",
         "yColumn": "key",
-        "orientation": "horizontal"
+        "orientation": "horizontal",
+        "colors": [
+             "#7da3f7",
+             "#fec26a",
+             "#e78ac3",
+             "#f79e99"
+         ]
     },
     "query": "vss-top-domains-blocked-traffic"
 }

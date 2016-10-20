@@ -4,9 +4,9 @@
     "creationDate": "10/17/2016",
     "title": "VSS Enterprise Dashboard",
     "visualizations": [
-        { "id": "vss-ent-acldeny-time", "x": 6, "y": 0, "w": 6, "h": 22, "minW": 2, "minH": 12 },
-        { "id": "vss-top-domains-blocked-traffic", "x": 26, "y": 0, "w": 6, "h": 22, "minW": 2, "minH": 12},
-        { "id": "vss-top-sec-events", "x": 26, "y": 0, "w": 6, "h": 22, "minW": 2, "minH": 12}
+        { "id": "vss-ent-acldeny-time", "x": 0, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12 },
+        { "id": "vss-top-domains-blocked-traffic", "x": 5, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12},
+        { "id": "vss-top-sec-events", "x": 0, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 12}
     ]
 }
 
