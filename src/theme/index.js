@@ -147,7 +147,7 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
         color: customTheme.blackColor,
     },
     avatar: {
-        backgroundColor: customTheme.blackColor,
+        backgroundColor: customTheme.whiteColor,
     }
 });
 
