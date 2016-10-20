@@ -121,7 +121,6 @@ class VisualizationView extends React.Component {
     }
 
     renderVisualizationIfNeeded() {
-
         if (this.shouldShowVisualization()) {
             return this.renderVisualization();
         }
@@ -132,7 +131,6 @@ class VisualizationView extends React.Component {
                     <div style={style.overlayText}>
                         <FontAwesome
                             name="meh-o"
-                            size="3x"
                             />
                         <br></br>
                         Oops, we are missing some parameters here!
@@ -146,7 +144,6 @@ class VisualizationView extends React.Component {
                 <div style={style.text}>
                     <FontAwesome
                         name="circle-o-notch"
-                        size="2x"
                         spin
                         />
                     <br></br>

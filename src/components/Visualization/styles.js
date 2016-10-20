@@ -31,14 +31,15 @@ const style = {
         height: "100%",
         display: "inline-block",
         textAlign: "center",
-        background: theme.palette.greyDarkerColor,
+        background: theme.palette.greyDarkColor,
         opacity: "0.5",
     },
     overlayText: {
         position: "absolute",
         top: "40%",
         width: "100%",
-        fontSize: "150%",
+        fontSize: "1.2em",
+        fontWeight: 300,
         color: theme.palette.whiteColor,
     },
     container: {
@@ -54,7 +55,8 @@ const style = {
         position: "absolute",
         top: "40%",
         width: "100%",
-        fontSize: "150%",
+        fontSize: "1.2em",
+        fontWeight: 300,
     },
 
 };
