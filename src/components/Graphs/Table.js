@@ -19,7 +19,7 @@ export default class Table extends React.Component {
             );
 
         return (
-            <table className="table table-bordered">
+            <table className="table table-striped">
                 <thead>
                     <tr>
                         { columns.map(({column, label}, i) =>(
@@ -31,7 +31,7 @@ export default class Table extends React.Component {
                     { rows.map((row, j) =>(
                         <tr key={j}>
                             { columns.map(({column}, i) =>(
-                                <th key={i}>{ row[column] }</th>
+                                <td key={i}>{ row[column] }</td>
                             )) }
                         </tr>
                     )) }

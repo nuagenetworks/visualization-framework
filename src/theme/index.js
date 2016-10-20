@@ -22,8 +22,8 @@ const customTheme = {
     greenBlindColor: "#009e73",
     greenColor: "#b3d645",
     greenDarkColor: "#36ab65",
-    greenLightColor: "#e0fe83",
-    greenLighterColor: "#ffffcb",
+    greenLightColor: "#c6f182",
+    greenLighterColor: "#e6ffcb",
     greyColor: "#d9d9d9",
     greyDarkColor: "#888888",
     greyDarkerColor: "#333333",
@@ -34,18 +34,23 @@ const customTheme = {
     orangeColor: "#f9b13d",
     orangeLightColor: "#fec26a",
     orangeLighterColor: "#fed291",
+    pinkColor: "#e78ac3",
+    pinkLightColor: "#f7badf",
+    pinkLighterColor: "#f8d8ec",
     redBlindColor: "#d55e00",
     redColor: "#f76159",
     transparentColor: "transparent",
     whiteColor: "#ffffff",
     windowBodyColor: "#f5f5f5",
     yellowBlindColor: "#f0e442",
-    yellowColor: "#eeda54",
+    yellowColor: "#f7f369",
+    yellowDarkColor: "#ffd92f",
+    yellowLightColor: "#faf78e",
+    yellowLighterColor: "#f9f7bc",
 }
 
-
 export const lightTheme = getMuiTheme(lightMuiTheme, {
-    fontFamily: "Arial",
+    fontFamily: "Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif",
     spacing: {
         iconSize: 24,
         desktopGutter: 24,
@@ -74,7 +79,6 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
         accent3Color: customTheme.greyDarkerColor,
 
         canvasColor: customTheme.whiteColor,
-        borderColor: customTheme.greyLightColor,
         disabledColor: customTheme.greyLightColor,
         pickerHeaderColor: customTheme.greyLightColor,
         clockCircleColor: customTheme.greyLightColor,
@@ -112,6 +116,9 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
         orangeColor: customTheme.orangeColor,
         orangeLightColor: customTheme.orangeLightColor,
         orangeLighterColor: customTheme.orangeLighterColor,
+        pinkColor: customTheme.pinkColor,
+        pinkLightColor: customTheme.pinkLightColor,
+        pinkLighterColor: customTheme.pinkLighterColor,
         redBlindColor: customTheme.redBlindColor,
         redColor: customTheme.redColor,
         transparentColor: customTheme.transparentColor,
@@ -119,18 +126,24 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
         windowBodyColor: customTheme.windowBodyColor,
         yellowBlindColor: customTheme.yellowBlindColor,
         yellowColor: customTheme.yellowColor,
-
+        yellowDarkColor: customTheme.yellowDarkColor,
+        yellowLightColor: customTheme.yellowLightColor,
+        yellowLighterColor: customTheme.yellowLighterColor,
     },
     drawer: {
-        color: customTheme.greyLightColor,
+        color: customTheme.whiteColor,
     },
     appBar: {
         color: customTheme.greyLightColor,
-        titleFontWeight: "300",
+        textColor: customTheme.blackColor,
+        titleFontWeight: "200",
     },
     subheader: {
         fontWeight: "300",
-        color: customTheme.greyDarkerColor,
+        color: customTheme.blackColor,
+    },
+    avatar: {
+        backgroundColor: customTheme.blackColor,
     }
 });
 

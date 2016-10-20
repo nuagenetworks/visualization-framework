@@ -34,7 +34,7 @@ export default class SimpleTextGraph extends React.Component {
                                 <div style={{
                                     position: "fixed",
                                     left: width / 2 - side / 2 + padding,
-                                    width: side + "px", 
+                                    width: side + "px",
                                     height: side + "px",
                                     borderRadius: "50%",
                                     background: circleColor || "gray",
@@ -59,7 +59,7 @@ export default class SimpleTextGraph extends React.Component {
         }
 
         return (
-            <div className="text-center" style={{ height: height}}>
+            <div className="text-center" style={{ height: height }}>
                 { body }
             </div>
         );

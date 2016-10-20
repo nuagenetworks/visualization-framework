@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import { push } from "redux-router";
 
-import AppBar from "material-ui/AppBar";
 import {Card,CardText} from 'material-ui/Card';
 
 import { Actions } from "./redux/actions";
@@ -171,11 +170,9 @@ class VisualizationView extends React.Component {
             return;
 
         return (
-            <AppBar
-                title={configuration.get("title")}
-                showMenuIconButton={false}
-                style={style.navBar}
-            />
+            <div style={style.cardTitle}>
+                {configuration.get("title")}
+            </div>
         )
     }
 
@@ -194,7 +191,7 @@ class VisualizationView extends React.Component {
               ref={this.cardTextReference}
             >
                 { this.renderTitleIfNeeded() };
-                <CardText>
+                <CardText style={style.cardText}>
                     { this.renderVisualizationIfNeeded() }
                 </CardText>
             </Card>

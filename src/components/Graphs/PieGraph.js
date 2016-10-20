@@ -3,6 +3,9 @@ import React from "react";
 import tabify from "../../utils/tabify";
 import * as d3 from "d3";
 
+import { theme } from "../../theme";
+import "./PieGraph.css";
+
 export default class PieGraph extends React.Component {
     constructor(){
         super();
@@ -16,12 +19,22 @@ export default class PieGraph extends React.Component {
             pieLabelRadius: 0.85, // The radius for positioning labels.
 
             sliceStyle: {
-                stroke: "white",
+                stroke: theme.palette.whiteColor,
                 strokeWidth: "1px"
             },
 
+            fontColor: theme.palette.blackColor,
+
             // From ColorBrewer Scales, Set2 https://bl.ocks.org/mbostock/5577023
-            sliceColors: ["#66c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"]
+            sliceColors: [
+                theme.palette.yellowLightColor,
+                theme.palette.orangeLightColor,
+                theme.palette.blueLightColor,
+                theme.palette.pinkLightColor,
+                theme.palette.greenColor,
+                theme.palette.yellowDarkColor,
+                theme.palette.orangeLighterColor,
+            ]
         };
     }
 
@@ -49,7 +62,8 @@ export default class PieGraph extends React.Component {
           pieOuterRadius,
           pieLabelRadius,
           sliceStyle,
-          sliceColors
+          sliceColors,
+          fontColor
         } = this.getConfiguredProperties();
 
         const maxRadius = Math.min(width, height) / 2;
@@ -88,6 +102,7 @@ export default class PieGraph extends React.Component {
                                       transform={`translate(${labelArc.centroid(slice)})`}
                                       textAnchor={(slice.startAngle + slice.endAngle) / 2 < Math.PI ? "start" : "end"}
                                       dy=".35em"
+                                      fill={ fontColor }
                                     >
                                         {slice.data[labelColumn]}
                                     </text>

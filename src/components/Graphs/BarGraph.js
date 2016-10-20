@@ -2,6 +2,7 @@ import React from "react";
 
 import tabify from "../../utils/tabify";
 import * as d3 from "d3";
+import { theme } from "../../theme";
 import "./BarGraph.css";
 
 // TODO split out this time interval log into a utility module.
@@ -53,7 +54,8 @@ export default class BarGraph extends React.Component {
           xTickSizeOuter: 0,
           orientation: "vertical",
           dateHistogram: false,
-          interval: "30s"
+          interval: "30s",
+          color: theme.palette.blueColor,
         };
     }
 
@@ -86,13 +88,14 @@ export default class BarGraph extends React.Component {
           xTickSizeOuter,
           orientation,
           dateHistogram,
-          interval
+          interval,
+          color,
         } = this.getConfiguredProperties();
 
         const vertical = orientation === "vertical";
 
         let xScale, yScale;
-        
+
         if(dateHistogram){
 
             // Handle the case of a vertical date histogram.
@@ -135,6 +138,7 @@ export default class BarGraph extends React.Component {
           .tickSizeOuter(yTickSizeOuter);
 
         let barWidth;
+
         if(dateHistogram){
             barWidth = computeBarWidth(interval, xScale);
         } else if(vertical){
@@ -162,6 +166,7 @@ export default class BarGraph extends React.Component {
                                     y={ yScale(d[yColumn]) }
                                     width={ barWidth }
                                     height={ innerHeight - yScale(d[yColumn]) }
+                                    fill={ color }
                                 />
                             ) : (
                                 <rect
@@ -170,6 +175,7 @@ export default class BarGraph extends React.Component {
                                     y={ yScale(d[yColumn]) }
                                     width={ xScale(d[xColumn]) }
                                     height={ yScale.bandwidth() }
+                                    fill={ color }
                                 />
                             )
                         ))}
