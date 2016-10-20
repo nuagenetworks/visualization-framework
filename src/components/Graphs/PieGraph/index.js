@@ -1,50 +1,14 @@
 import React from "react";
 
-import tabify from "../../utils/tabify";
+import AbstractGraph from "../AbstractGraph";
+
+import tabify from "../../../utils/tabify";
 import * as d3 from "d3";
 
-import { theme } from "../../theme";
-import "./PieGraph.css";
+import "./style.css";
 
-export default class PieGraph extends React.Component {
-    constructor(){
-        super();
 
-        // These properties can be overridden from the configuration.
-        this.defaults = {
-
-            // The following radius values are as a percentage of min(width, height).
-            pieInnerRadius: 0, // The inner radius of the slices. Make this non-zero for a Donut Chart.
-            pieOuterRadius: 0.8, // The outer radius of the slices.
-            pieLabelRadius: 0.85, // The radius for positioning labels.
-
-            sliceStyle: {
-                stroke: theme.palette.whiteColor,
-                strokeWidth: "1px"
-            },
-
-            fontColor: theme.palette.blackColor,
-
-            // From ColorBrewer Scales, Set2 https://bl.ocks.org/mbostock/5577023
-            sliceColors: [
-                theme.palette.yellowLightColor,
-                theme.palette.orangeLightColor,
-                theme.palette.blueLightColor,
-                theme.palette.pinkLightColor,
-                theme.palette.greenColor,
-                theme.palette.yellowDarkColor,
-                theme.palette.orangeLighterColor,
-            ]
-        };
-    }
-
-    // Gets the object containing all configured properties.
-    // Uses properties from the configuration,
-    // falling back to defaults for unspecified properties.
-    // TODO move this to a base class
-    getConfiguredProperties() {
-        return Object.assign({}, this.defaults, this.props.configuration.data);
-    }
+export default class PieGraph extends AbstractGraph {
 
     render() {
 
@@ -61,8 +25,7 @@ export default class PieGraph extends React.Component {
           pieInnerRadius,
           pieOuterRadius,
           pieLabelRadius,
-          sliceStyle,
-          sliceColors,
+          stroke,
           fontColor
         } = this.getConfiguredProperties();
 
@@ -80,23 +43,21 @@ export default class PieGraph extends React.Component {
 
         const slices = pie(data);
 
-        const color = d3.scaleOrdinal(sliceColors);
-
         const labelArc = d3.arc()
             .innerRadius(labelRadius)
             .outerRadius(labelRadius);
 
         return (
             <div className="pie-graph">
-                <svg width={width} height={height}>
+                <svg width={ width } height={ height }>
                     <g transform={ `translate(${ width / 2 }, ${ height / 2 })` } >
                         {
                             slices.map((slice, i) => (
                                 <g key={i} >
                                     <path
-                                      d={arc(slice)}
-                                      style={sliceStyle}
-                                      fill={color(i)}
+                                      d={ arc(slice) }
+                                      style={ {strokeWidth: stroke.width, stroke: stroke.color} }
+                                      fill={ this.applyColor(i) }
                                     />
                                     <text
                                       transform={`translate(${labelArc.centroid(slice)})`}
@@ -104,7 +65,7 @@ export default class PieGraph extends React.Component {
                                       dy=".35em"
                                       fill={ fontColor }
                                     >
-                                        {slice.data[labelColumn]}
+                                        { slice.data[labelColumn] }
                                     </text>
                                 </g>
                             ))

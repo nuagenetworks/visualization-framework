@@ -1,5 +1,5 @@
 import React from "react";
-import tabify from "../../utils/tabify";
+import tabify from "../../../utils/tabify";
 
 export default class Table extends React.Component {
     render() {

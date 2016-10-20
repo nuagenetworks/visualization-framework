@@ -1,33 +1,11 @@
 import React from "react";
 
-import tabify from "../../utils/tabify";
+import AbstractGraph from "../AbstractGraph";
+
+import tabify from "../../../utils/tabify";
 import * as d3 from "d3";
 
-export default class LineGraph extends React.Component {
-    constructor(){
-        super();
-
-        // These properties can be overridden from the configuration.
-        // TODO unify these at a base class inherited by both bar chart and line chart.
-        this.defaults = {
-          margin: { top: 15, bottom: 20, left: 30, right: 20 },
-          yTickGrid: true,
-          yTickSizeInner: 6,
-          yTickSizeOuter: 0,
-          xTickGrid: false,
-          xTickSizeInner: 6,
-          xTickSizeOuter: 0,
-          interval: "30s"
-        };
-    }
-
-    // Gets the object containing all configured properties.
-    // Uses properties from the configuration,
-    // falling back to defaults for unspecified properties.
-    // TODO move this to a base class
-    getConfiguredProperties() {
-        return Object.assign({}, this.defaults, this.props.configuration.data);
-    }
+export default class LineGraph extends AbstractGraph {
 
     render() {
 
@@ -48,7 +26,7 @@ export default class LineGraph extends React.Component {
           xTickGrid,
           xTickSizeInner,
           xTickSizeOuter,
-          interval
+          stroke,
         } = this.getConfiguredProperties();
 
         const xScale = d3.scaleTime()
@@ -74,12 +52,12 @@ export default class LineGraph extends React.Component {
           .x(function(d) { return xScale(d[xColumn]); })
           .y(function(d) { return yScale(d[yColumn]); });
 
-        
+
         // TODO see about moving this into configuration.
         const lineStyle = {
             fill: "none",
-            stroke: "black",
-            strokeWidth: "5px"
+            stroke: stroke.color,
+            strokeWidth: stroke.width,
         }
 
         return (
@@ -95,7 +73,7 @@ export default class LineGraph extends React.Component {
                             key="yAxis"
                             ref={ (el) => d3.select(el).call(yAxis) }
                         />
-                        <path style={lineStyle} d={line(data)} />
+                        <path style={ lineStyle } d={ line(data) } />
                     </g>
                 </svg>
             </div>

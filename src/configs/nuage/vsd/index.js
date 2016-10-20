@@ -58,8 +58,6 @@ const getURL = (parameters, api) => {
 }
 
 const makeRequest = (url, token) => {
-    // console.error(url);
-
     // Encapsulates $.get in a Promise to ensure all services are having the same behavior
     return new Promise( (resolve, reject) => {
         $.get({
