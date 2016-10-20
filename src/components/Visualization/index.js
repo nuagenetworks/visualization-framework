@@ -189,7 +189,7 @@ class VisualizationView extends React.Component {
         return (
             <div style={style.cardTitle}>
                 {configuration.get("title")}
-                {descriptionIcon};
+                {descriptionIcon}
             </div>
         )
     }
