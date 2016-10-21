@@ -58,16 +58,10 @@ const style = {
         fontSize: "1.2em",
         fontWeight: 300,
     },
-    overlayDescriptionContainer: {
-        position: "absolute",
-        top: "0",
-        left: "0",
-        width: "100%",
-        height: "100%",
-        display: "inline-block",
+    descriptionContainer: {
         textAlign: "justify",
         background: theme.palette.greyDarkColor,
-        opacity: "0.5",
+        opacity: "0.8",
     },
     descriptionText: {
         padding: "60px 20px 20px 20px",

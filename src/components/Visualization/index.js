@@ -3,7 +3,8 @@ import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import { push } from "redux-router";
 
-import {Card,CardText} from 'material-ui/Card';
+import { CardOverlay } from "../CardOverlay";
+import { Card, CardText } from 'material-ui/Card';
 
 import { Actions } from "./redux/actions";
 import {
@@ -101,7 +102,7 @@ class VisualizationView extends React.Component {
     shouldShowVisualization() {
         const { configuration, response } = this.props;
 
-        return configuration && response && !response.isFetching && !this.state.showDescription;
+        return configuration && response && !response.isFetching;
     }
 
     renderVisualization() {
@@ -110,14 +111,28 @@ class VisualizationView extends React.Component {
         const graphName      = configuration.get("graph"),
               GraphComponent = GraphManager.getGraphComponent(graphName);
 
+        let description;
+
+        if (this.state.showDescription) {
+            description = <CardOverlay
+                                overlayStyle={style.descriptionContainer}
+                                textStyle={style.descriptionText}
+                                text={configuration.get("description")}
+                                onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
+                                />
+        }
+
         return (
-            <GraphComponent
-              response={response}
-              configuration={configuration.toJS()}
-              queryConfiguration={queryConfiguration}
-              width={this.state.width}
-              height={this.state.height}
-            />
+            <div>
+                <GraphComponent
+                  response={response}
+                  configuration={configuration.toJS()}
+                  queryConfiguration={queryConfiguration}
+                  width={this.state.width}
+                  height={this.state.height}
+                />
+                {description}
+            </div>
         )
     }
 
@@ -126,28 +141,23 @@ class VisualizationView extends React.Component {
             return this.renderVisualization();
         }
 
-        if (this.state.showDescription) {
-            const { configuration } = this.props;
-            return (
-                <div style={style.overlayDescriptionContainer} onTouchTap={() => { this.setState({showDescription: false}); }}>
-                    <div style={style.descriptionText}>
-                        {configuration.get("description")}
-                    </div>
-                </div>
-            )
-        }
-
         if (!this.state.parameterizable) {
             return (
-                <div style={style.overlayContainer}>
-                    <div style={style.overlayText}>
-                        <FontAwesome
-                            name="meh-o"
-                            />
-                        <br></br>
-                        Oops, we are missing some parameters here!
-                    </div>
-                </div>
+                <CardOverlay
+                    overlayStyle={style.overlayContainer}
+                    textStyle={style.overlayText}
+                    text={(
+                        <div>
+                            <FontAwesome
+                                name="meh-o"
+                                size="2x"
+                                />
+                            <br></br>
+                            Oops, we are missing some parameters here!
+                        </div>
+                    )}
+                    onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
+                    />
             )
         }
 
