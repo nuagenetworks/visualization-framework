@@ -32,6 +32,7 @@ class VisualizationView extends React.Component {
         this.state = {
             parameterizable: true,
             hasResults: false,
+            showDescription: false,
         }
     }
 
@@ -100,7 +101,7 @@ class VisualizationView extends React.Component {
     shouldShowVisualization() {
         const { configuration, response } = this.props;
 
-        return configuration && response && !response.isFetching;
+        return configuration && response && !response.isFetching && !this.state.showDescription;
     }
 
     renderVisualization() {
@@ -121,9 +122,19 @@ class VisualizationView extends React.Component {
     }
 
     renderVisualizationIfNeeded() {
-
         if (this.shouldShowVisualization()) {
             return this.renderVisualization();
+        }
+
+        if (this.state.showDescription) {
+            const { configuration } = this.props;
+            return (
+                <div style={style.overlayDescriptionContainer} onTouchTap={() => { this.setState({showDescription: false}); }}>
+                    <div style={style.descriptionText}>
+                        {configuration.get("description")}
+                    </div>
+                </div>
+            )
         }
 
         if (!this.state.parameterizable) {
@@ -132,7 +143,6 @@ class VisualizationView extends React.Component {
                     <div style={style.overlayText}>
                         <FontAwesome
                             name="meh-o"
-                            size="3x"
                             />
                         <br></br>
                         Oops, we are missing some parameters here!
@@ -146,14 +156,12 @@ class VisualizationView extends React.Component {
                 <div style={style.text}>
                     <FontAwesome
                         name="circle-o-notch"
-                        size="2x"
                         spin
                         />
                     <br></br>
                     Please wait while loading...
                 </div>
             </div>
-
         )
     }
 
@@ -169,9 +177,19 @@ class VisualizationView extends React.Component {
         if (!this.shouldShowTitle())
             return;
 
+        const descriptionIcon = !configuration.get("description") ? null : (
+            <div className="pull-right">
+                <FontAwesome
+                    name="info-circle"
+                    onTouchTap={() => { this.setState({showDescription: !!configuration.get("description")}); }}
+                    />
+            </div>
+        )
+
         return (
             <div style={style.cardTitle}>
                 {configuration.get("title")}
+                {descriptionIcon}
             </div>
         )
     }

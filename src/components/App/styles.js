@@ -12,6 +12,7 @@ const style = {
     menuLogo: {
         textAlign: "center",
         fontSize: "1.2em",
+        fontWeight: 300,
         padding: "10px",
         color: theme.palette.blackColor,
         background: theme.palette.greyLightColor,

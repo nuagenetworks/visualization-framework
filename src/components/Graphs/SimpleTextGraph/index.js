@@ -2,7 +2,7 @@ import React from "react";
 
 import CircularProgress from "material-ui/CircularProgress";
 
-import "./SimpleTextGraph.css";
+import "./style.css";
 
 /*
     This is a very basic graph that displays a text message

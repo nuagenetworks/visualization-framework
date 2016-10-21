@@ -6,7 +6,11 @@
     "creationDate": "10/17/2016",
     "data": {
         "xColumn": "key",
-        "yColumn": "1"
+        "yColumn": "1",
+        "stroke": {
+          "color": "#f76159",
+          "width": "2px"
+        }
     },
     "query": "vss-ent-acldeny-time"
 }

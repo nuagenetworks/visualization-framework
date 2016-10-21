@@ -4,7 +4,6 @@ import { push } from "redux-router";
 
 import FontAwesome from "react-fontawesome";
 
-import Avatar from 'material-ui/Avatar';
 import Drawer from "material-ui/Drawer";
 import Subheader from "material-ui/Subheader";
 import { List, ListItem } from "material-ui/List";
@@ -19,7 +18,8 @@ import {
     ActionKeyStore as ServiceActionKeyStore
 } from "../../services/servicemanager/redux/actions";
 
-import style from "./styles"
+import style from "./styles";
+import Logo from "./logo.png";
 
 
 class MainMenuView extends React.Component {
@@ -69,7 +69,7 @@ class MainMenuView extends React.Component {
         return (
             <Drawer open={this.props.open} docked={false} onRequestChange={this.props.onRequestChange} width={300}>
                 <div style={style.menuLogo}>
-                    <Avatar>VF</Avatar>
+                    <img src={ Logo } alt="Nuage Networks Visualization" />
                     <p>Visualizations</p>
                 </div>
 

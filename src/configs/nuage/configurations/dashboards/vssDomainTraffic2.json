@@ -2,10 +2,10 @@
     "id": "vssDomainTraffic2",
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
-    "title": "VSS Domain Traffic-2",
+    "title": "VSS Domain Traffic Analytics - II",
     "visualizations": [
-        { "id": "vss-domain-traffic-top-spg", "x": 6, "y": 0, "w": 6, "h": 22, "minW": 2, "minH": 12},
-        { "id": "vss-domain-traffic-top-dpg", "x": 26, "y": 10, "w": 6, "h": 22, "minW": 2, "minH": 12}
+        { "id": "vss-domain-traffic-top-spg", "x": 0, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12},
+        { "id": "vss-domain-traffic-top-dpg", "x": 5, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12}
     ]
 }
 

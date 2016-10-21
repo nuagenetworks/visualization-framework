@@ -39,6 +39,8 @@ const customTheme = {
     pinkLighterColor: "#f8d8ec",
     redBlindColor: "#d55e00",
     redColor: "#f76159",
+    redLightColor: "#f79e99",
+    redLighterColor: "#f7d0ce",
     transparentColor: "transparent",
     whiteColor: "#ffffff",
     windowBodyColor: "#f5f5f5",
@@ -120,6 +122,8 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
         pinkLightColor: customTheme.pinkLightColor,
         pinkLighterColor: customTheme.pinkLighterColor,
         redBlindColor: customTheme.redBlindColor,
+        redLightColor: customTheme.redLightColor,
+        redLighterColor: customTheme.redLighterColor,
         redColor: customTheme.redColor,
         transparentColor: customTheme.transparentColor,
         whiteColor: customTheme.whiteColor,
@@ -143,7 +147,7 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
         color: customTheme.blackColor,
     },
     avatar: {
-        backgroundColor: customTheme.blackColor,
+        backgroundColor: customTheme.whiteColor,
     }
 });
 

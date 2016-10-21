@@ -7,7 +7,12 @@
     "data": {
         "xColumn": "Sum of Value",
         "yColumn": "key",
-        "orientation": "horizontal"
+        "orientation": "horizontal",
+        "colors": [
+            "#ff4d4d",
+            "#ff8533",
+            "#7da3f7"
+         ]
     },
     "query": "vss-domain-events-by-type"
 }

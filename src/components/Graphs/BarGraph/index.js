@@ -1,9 +1,11 @@
 import React from "react";
 
-import tabify from "../../utils/tabify";
+import AbstractGraph from "../AbstractGraph";
+
+import tabify from "../../../utils/tabify";
 import * as d3 from "d3";
-import { theme } from "../../theme";
-import "./BarGraph.css";
+
+import "./style.css";
 
 // TODO split out this time interval log into a utility module.
 
@@ -34,37 +36,10 @@ function computeBarWidth(interval, timeScale) {
     const end = d3[d3Interval].offset(start, step);
 
     return timeScale(end) - timeScale(start);
-
 }
 
 
-export default class BarGraph extends React.Component {
-    constructor(){
-        super();
-
-        // These properties can be overridden from the configuration.
-        this.defaults = {
-          margin: { top: 15, bottom: 20, left: 30, right: 20 },
-          padding: 0.1,
-          yTickGrid: true,
-          yTickSizeInner: 6,
-          yTickSizeOuter: 0,
-          xTickGrid: false,
-          xTickSizeInner: 6,
-          xTickSizeOuter: 0,
-          orientation: "vertical",
-          dateHistogram: false,
-          interval: "30s",
-          color: theme.palette.blueColor,
-        };
-    }
-
-    // Gets the object containing all configured properties.
-    // Uses properties from the configuration,
-    // falling back to defaults for unspecified properties.
-    getConfiguredProperties() {
-        return Object.assign({}, this.defaults, this.props.configuration.data);
-    }
+export default class BarGraph extends AbstractGraph {
 
     render() {
 
@@ -89,14 +64,13 @@ export default class BarGraph extends React.Component {
           orientation,
           dateHistogram,
           interval,
-          color,
         } = this.getConfiguredProperties();
 
         const vertical = orientation === "vertical";
 
         let xScale, yScale;
 
-        if(dateHistogram){
+        if (dateHistogram) {
 
             // Handle the case of a vertical date histogram.
             xScale = d3.scaleTime()
@@ -104,7 +78,7 @@ export default class BarGraph extends React.Component {
             yScale = d3.scaleLinear()
               .domain([0, d3.max(data, function (d){ return d[yColumn] })]);
 
-        } else if(vertical){
+        } else if(vertical) {
 
             // Handle the case of a vertical bar chart.
             xScale = d3.scaleBand()
@@ -166,7 +140,7 @@ export default class BarGraph extends React.Component {
                                     y={ yScale(d[yColumn]) }
                                     width={ barWidth }
                                     height={ innerHeight - yScale(d[yColumn]) }
-                                    fill={ color }
+                                    fill={ this.applyColor(i) }
                                 />
                             ) : (
                                 <rect
@@ -175,7 +149,7 @@ export default class BarGraph extends React.Component {
                                     y={ yScale(d[yColumn]) }
                                     width={ xScale(d[xColumn]) }
                                     height={ yScale.bandwidth() }
-                                    fill={ color }
+                                    fill={ this.applyColor(i) }
                                 />
                             )
                         ))}
