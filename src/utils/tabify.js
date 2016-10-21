@@ -7,7 +7,7 @@
   https://github.com/elastic/kibana/blob/master/src/ui/public/agg_response/tabify/tabify.js
 */
 export default function tabify(response) {
-    const table = collectBucket(response.aggregations);
+    const table = flatten(collectBucket(response.aggregations));
 
     console.log("Results from tabify():");
 
@@ -33,16 +33,16 @@ function collectBucket(node, stack=[]) {
 
         if (typeof value === 'object') {
             if (Array.isArray(value)) {
-                return extractRows(value, [...stack, key]);
+                return extractTree(value, [...stack, key]);
             }
             return collectBucket(value, [...stack, key]);
         }
     }
 }
 
-function extractRows(buckets, stack) {
+function extractTree(buckets, stack) {
     return buckets.map((bucket) => {
-        return Object.keys(bucket).reduce(function (row, key) {
+        return Object.keys(bucket).reduce(function (tree, key) {
             let value = bucket[key];
 
             if (typeof value === "object") {
@@ -57,9 +57,34 @@ function extractRows(buckets, stack) {
                 key = stack[stack.length - 2]
             }
 
-            row[key] = value;
+            tree[key] = value;
 
-            return row;
+            return tree;
         }, {});
     });
+}
+
+function flatten(tree, parentNode={}){
+    return tree
+        .map((childNode) => Object.assign({}, parentNode, childNode))
+        .map((node) => {
+            const childTrees = Object.keys(node)
+                .map((key) => {
+                    const value = node[key];
+                    if (Array.isArray(value)) {
+                        return value;
+                    }
+                })
+                .filter((d) => d);
+
+            switch (childTrees.length) {
+                case 0: // Leaf node case
+                    return [node];
+                case 1: // Non-leaf node case
+                    const childTree = childTrees[0];
+                    return flatten(childTree, node);
+                default:
+                    throw new Error("This case should never happen");
+            }
+        });
 }
