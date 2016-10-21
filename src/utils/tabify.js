@@ -7,7 +7,8 @@
   https://github.com/elastic/kibana/blob/master/src/ui/public/agg_response/tabify/tabify.js
 */
 export default function tabify(response) {
-    const table = flatten(collectBucket(response.aggregations));
+    const tree = collectBucket(response.aggregations);
+    const table = flatten(tree);
 
     console.log("Results from tabify():");
 
@@ -30,7 +31,6 @@ function collectBucket(node, stack=[]) {
     for(let i = 0; i < keys.length; i++) {
         const key = keys[i];
         const value = node[key];
-
         if (typeof value === 'object') {
             if (Array.isArray(value)) {
                 return extractTree(value, [...stack, key]);
@@ -92,8 +92,11 @@ function flatten(tree, parentNode={}){
                 // Non-leaf node case, recurse on the child nodes.
                 case 1:
                     const childTree = childTrees[0];
-                    return flatten(childTree, node);
-
+                    if(childTree.length === 0){
+                        return node;
+                    } else {
+                        return flatten(childTree, node);
+                    }
                 default:
                     throw new Error("This case should never happen");
             }
