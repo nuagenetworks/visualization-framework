@@ -6,7 +6,7 @@
     "creationDate": "10/13/2016",
     "data": {
         "columns": [
-            { "column": "key", "label": "Source IP" },
+            { "column": "SourceIP", "label": "Source IP" },
             { "column": "TotalPacketsCount", "label": "Total Packets Count" },
             { "column": "TotalBytesCount", "label": "Total Bytes Count"},
             { "column": "TotalMB", "label": "Total MB" } 

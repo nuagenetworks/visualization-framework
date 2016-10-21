@@ -6,7 +6,7 @@
     "creationDate": "10/17/2016",
     "data": {
         "xColumn": "SumOf",
-        "yColumn": "key",
+        "yColumn": "domains",
         "orientation": "horizontal",
         "colors": [
              "#7da3f7",

@@ -49,7 +49,7 @@
                                 }
                             },
                             "aggs": {
-                                "3": {
+                                "spg": {
                                     "terms": {
                                         "field": "nuage_metadata.sourcepolicygroups",
                                         "size": 5,

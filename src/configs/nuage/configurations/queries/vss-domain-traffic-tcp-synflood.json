@@ -49,13 +49,13 @@
                                 }
                             },
                             "aggs": {
-                                "3": {
+                                "timestamp": {
                                     "date_histogram": {
                                         "field": "timestamp",
                                         "interval": "1h"
                                     },
                                     "aggs": {
-                                        "1": {
+                                        "SumOf": {
                                             "sum": {
                                                 "field": "value"
                                             }

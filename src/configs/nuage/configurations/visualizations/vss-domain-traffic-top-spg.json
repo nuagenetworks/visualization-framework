@@ -6,7 +6,7 @@
     "creationDate": "10/18/2016",
     "data": {
         "xColumn": "SumOf",
-        "yColumn": "key",
+        "yColumn": "spg",
         "orientation": "horizontal"
     },
     "query": "vss-domain-traffic-top-spg"

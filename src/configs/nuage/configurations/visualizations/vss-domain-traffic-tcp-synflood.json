@@ -5,8 +5,8 @@
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {
-        "xColumn": "key",
-        "yColumn": "1",
+        "xColumn": "timestamp",
+        "yColumn": "SumOf",
         "stroke": {
            "color": "#f76159",
            "width": "2px"

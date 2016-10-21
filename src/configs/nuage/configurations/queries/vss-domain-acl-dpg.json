@@ -1,6 +1,6 @@
 {
-    "id":"vss-domain-acl-spg",
-    "title":"ACL hits by Source PG",
+    "id":"vss-domain-acl-dpg",
+    "title":"ACL hits by Destination PG",
     "service":"elasticsearch",
     "query":{
         "index":"{{index:nuage_flow}}",
@@ -49,7 +49,7 @@
                                 }
                             },
                             "aggs": {
-                                "3": {
+                                "dpg": {
                                     "terms": {
                                         "field": "nuage_metadata.destinationpolicygroups",
                                         "size": 5,

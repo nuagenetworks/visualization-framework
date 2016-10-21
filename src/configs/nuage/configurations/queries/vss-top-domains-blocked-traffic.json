@@ -49,7 +49,7 @@
                                 }
                             },
                             "aggs": {
-                                "3": {
+                                "domains": {
                                     "terms": {
                                         "field": "nuage_metadata.domainName",
                                         "size": 5,
