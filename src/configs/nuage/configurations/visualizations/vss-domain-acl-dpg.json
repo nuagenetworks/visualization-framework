@@ -5,11 +5,11 @@
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {
-        "xColumn": "key",
+        "xColumn": "dpg",
         "yColumn": "SumOf",
         "colors": [
              "#fec26a"
          ]
     },
-    "query": "vss-domain-acl-spg"
+    "query": "vss-domain-acl-dpg"
 }

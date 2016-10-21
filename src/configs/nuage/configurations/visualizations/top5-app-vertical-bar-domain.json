@@ -5,7 +5,7 @@
     "author": "Ronak Shah",
     "creationDate": "10/14/2016",
     "data": {
-        "xColumn": "key",
+        "xColumn": "Application",
         "yColumn": "Sum of MB"
     },
     "query": "top5-app-vertical-bar-domain"

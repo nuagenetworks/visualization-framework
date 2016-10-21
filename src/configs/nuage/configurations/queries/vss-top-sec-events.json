@@ -41,7 +41,7 @@
                                 "field": "value"
                             }
                         },
-                        "3": {
+                        "EventType": {
                             "terms": {
                                 "field": "type",
                                 "size": 5,

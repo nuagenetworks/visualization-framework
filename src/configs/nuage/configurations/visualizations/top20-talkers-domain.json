@@ -6,7 +6,7 @@
     "creationDate": "10/14/2016",
     "data": {
         "columns": [
-            { "column": "key", "label": "Application" },
+            { "column": "Application", "label": "Application" },
             { "column": "L7Classification", "label": "L7-Classification" },
             { "column": "SrcVportName", "label": "Source Vport-Name"},
             { "column": "SourceNSG", "label": "Source-NSG"},
@@ -16,8 +16,8 @@
             { "column": "DstUplink", "label": ""},
             { "column": "DestinationNSG", "label": ""},
             { "column": "DestVportName", "label": ""},
-            { "column": "TotalMB", "label": "Total MB" }, 
-            { "column": "TotalPacketsCount", "label": "Total Packets Count" }
+            { "column": "1", "label": "Total MB" },
+            { "column": "11", "label": "Total Packets Count" }
         ]
     },
     "query": "top20-talkers-domain-table"

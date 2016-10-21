@@ -49,7 +49,7 @@
                                 }
                             },
                             "aggs": {
-                                "3": {
+                                "timestamp": {
                                     "date_histogram": {
                                         "field": "timestamp",
                                         "interval": "1h"

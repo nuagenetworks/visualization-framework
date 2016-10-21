@@ -6,11 +6,11 @@
     "creationDate": "10/14/2016",
     "data": {
         "columns": [
-            { "column": "key", "label": "Application" },
+            { "column": "Application", "label": "Application" },
             { "column": "APMGroup", "label": "APM-Group" },
             { "column": "DomainName", "label": "Domain Name"},
             { "column": "L7Classification", "label": "L7 Classification" },
-            { "column": "TotalMB", "label": "Total MB" } 
+            { "column": "1", "label": "Total MB" }
         ]
     },
     "query": "top20-talkers-enterprise-table"
