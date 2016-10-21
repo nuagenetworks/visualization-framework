@@ -66,8 +66,14 @@ function extractTree(buckets, stack) {
 
 function flatten(tree, parentNode={}){
     return tree
+
+        // Have the child node inherit values from the parent.
         .map((childNode) => Object.assign({}, parentNode, childNode))
+
+        // Each node object here has values inherited from its parent.
         .map((node) => {
+
+            // Detect properties whose values are arrays.
             const childTrees = Object.keys(node)
                 .map((key) => {
                     const value = node[key];
@@ -78,13 +84,21 @@ function flatten(tree, parentNode={}){
                 .filter((d) => d);
 
             switch (childTrees.length) {
-                case 0: // Leaf node case
-                    return [node];
-                case 1: // Non-leaf node case
+
+                // Leaf node case, return the node.
+                case 0:
+                    return node;
+
+                // Non-leaf node case, recurse on the child nodes.
+                case 1:
                     const childTree = childTrees[0];
                     return flatten(childTree, node);
+
                 default:
                     throw new Error("This case should never happen");
             }
-        });
+        })
+
+        // Flatten the nested arrays.
+        .reduce((a, b) => a.concat(b), []);
 }
