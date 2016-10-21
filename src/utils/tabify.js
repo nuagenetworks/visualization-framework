@@ -20,7 +20,7 @@ export default function tabify(response) {
     return table;
 }
 
-function collectBucket(node) {
+function collectBucket(node, stack=[]) {
     if (!node)
         return;
 
@@ -30,16 +30,17 @@ function collectBucket(node) {
     for(let i = 0; i < keys.length; i++) {
         const key = keys[i];
         const value = node[key];
+
         if (typeof value === 'object') {
             if (Array.isArray(value)) {
-                return extractRows(value);
+                return extractRows(value, [...stack, key]);
             }
-            return collectBucket(value);
+            return collectBucket(value, [...stack, key]);
         }
     }
 }
 
-function extractRows(buckets) {
+function extractRows(buckets, stack) {
     return buckets.map((bucket) => {
         return Object.keys(bucket).reduce(function (row, key) {
             let value = bucket[key];
@@ -48,7 +49,12 @@ function extractRows(buckets) {
                 value = value.value;
             }
 
+            if(key === "key"){
+                key = stack[stack.length - 2]
+            }
+
             row[key] = value;
+
             return row;
         }, {});
     });
