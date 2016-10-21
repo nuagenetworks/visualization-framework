@@ -46,7 +46,11 @@ function extractRows(buckets, stack) {
             let value = bucket[key];
 
             if (typeof value === "object") {
-                value = value.value;
+                if("value" in value){
+                    value = value.value;
+                } else {
+                    value = collectBucket(value, [...stack, key]);
+                }
             }
 
             if(key === "key"){
