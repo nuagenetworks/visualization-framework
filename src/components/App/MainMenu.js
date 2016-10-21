@@ -69,7 +69,7 @@ class MainMenuView extends React.Component {
         return (
             <Drawer open={this.props.open} docked={false} onRequestChange={this.props.onRequestChange} width={300}>
                 <div style={style.menuLogo}>
-                    <img src={ Logo } alt="Nuage Visualization Framework" />
+                    <img src={ Logo } alt="Nuage Networks Visualization" />
                     <p>Visualizations</p>
                 </div>
 
