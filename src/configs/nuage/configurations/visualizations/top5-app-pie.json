@@ -6,7 +6,7 @@
     "creationDate": "10/19/2016",
     "data": {
         "sliceColumn": "Sum of MB",
-        "labelColumn": "key"
+        "labelColumn": "Application"
     },
     "query": "top5-app-vertical-bar"
 }

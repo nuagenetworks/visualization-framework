@@ -6,7 +6,7 @@
     "creationDate": "10/10/2016",
     "data": {
         "columns": [
-            { "column": "key", "label": "App" },
+            { "column": "Application", "label": "App" },
             { "column": "Sum of MB" },
             { "column": "doc_count", "label": "Document Count" }
         ]
