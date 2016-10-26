@@ -70,6 +70,7 @@ ChordGraph.propTypes = {
 function ChordDiagram(svg){
 
   // Configuration parameters.
+  // TODO expose all of these in the vis config.
   var width = 450,
       height = 450,
       outerPadding = 50,
@@ -82,9 +83,6 @@ function ChordDiagram(svg){
       // depending on whether or not they are selected.
       defaultOpacity = 0.6,
       fadedOpacity = 0.1,
-
-      outerRadius = width / 2 - outerPadding,
-      innerRadius = outerRadius - arcThickness,
 
       selectedRibbon = null,
       hoveredChordGroup = null,
@@ -120,24 +118,17 @@ function ChordDiagram(svg){
   // DOM Elements.
   var g = svg.append("g"),
       backgroundRect = g.append("rect")
-        .attr("width", width)
-        .attr("height", height)
         .attr("fill", "none")
         .style("pointer-events", "all"),
-      ribbonsG = g.append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")"),
-      chordGroupsG = g.append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+      ribbonsG = g.append("g"),
+      chordGroupsG = g.append("g");
 
   // D3 layouts, shapes and scales.
-  var ribbon = d3.ribbon()
-        .radius(innerRadius),
+  var ribbon = d3.ribbon(),
       chord = d3.chord()
         .padAngle(padAngle),
       color = d3.scaleOrdinal(),
-      arc = d3.arc()
-        .innerRadius(innerRadius)
-        .outerRadius(outerRadius),
+      arc = d3.arc(),
       valueFormat = d3.format(",");
 
   // Compute a color scheme from d3.schemeCategory20 such that
@@ -161,6 +152,21 @@ function ChordDiagram(svg){
   
     // Use the data passed into the .data() accessor.
     if(data){
+
+      // Compute things that depend on width and height.
+      var outerRadius = width / 2 - outerPadding,
+          innerRadius = outerRadius - arcThickness;
+      ribbonsG
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+      chordGroupsG
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+      ribbon.radius(innerRadius);
+      arc
+        .innerRadius(innerRadius)
+        .outerRadius(outerRadius);
+      backgroundRect
+        .attr("width", width)
+        .attr("height", height);
 
       // Pre-process the data and calculate the Chord Diagram layout.
       var matrix = generateMatrix(data),
