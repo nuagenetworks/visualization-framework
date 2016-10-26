@@ -7,8 +7,8 @@
     "data": {
         "dateHistogram": true,
         "interval": "30m",
-        "xColumn": "key",
-        "yColumn": "1"
+        "xColumn": "date-histo",
+        "yColumn": "SumOfPackets"
     },
     "query": "app-specific-vertical-bar"
 }

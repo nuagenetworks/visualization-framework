@@ -1,6 +1,6 @@
 {
-    "id":"app-specific-vertical-bar",
-    "title":"App Specific Vertical Bar",
+    "id":"aar-nsgtop5-talkers-download",
+    "title":"Top 5 talkers (download) per NSG",
     "service":"elasticsearch",
     "query":{
         "index":"{{index:nuage_dpi_flowstats}}",
@@ -23,33 +23,41 @@
                 }
             },
             "aggs":{
-                "4":{
+                "5":{
                     "filters":{
                         "filters":{
-                            "Applications":{
+                            "SourceNSG":{
                                 "query":{
                                     "term":{
-                                        "Application":"{{app:myApp-0}}"
+                                        "DestinationNSG":"{{DestinationNSG:ovs-114}}"
                                     }
                                 }
                             }
                         }
                     },
                     "aggs":{
-                        "date-histo":{
-                            "date_histogram":{
-                                "field":"timestamp",
-                                "interval":"30m"
+                        "SourceIP":{
+                            "terms":{
+                                "field":"SrcIp",
+                                "size":5,
+                                "order":{
+                                    "Packets":"desc"
+                                }
                             },
                             "aggs":{
-                                "SumOfBytes":{
+                                "Packets":{
+                                    "sum":{
+                                        "field":"TotalPacketsCount"
+                                    }
+                                },
+                                "Bytes":{
                                     "sum":{
                                         "field":"TotalBytesCount"
                                     }
                                 },
-                                "SumOfPackets":{
+                                "MBs":{
                                     "sum":{
-                                        "field":"TotalPacketsCount"
+                                        "field":"TotalMB"
                                     }
                                 }
                             }

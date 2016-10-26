@@ -111,6 +111,17 @@ class MainMenuView extends React.Component {
                         style={style.listItem}
                         />
                     <ListItem
+                        primaryText="AAR-Enterprise-App-Detail"
+                        leftIcon={<FontAwesome
+                            name="area-chart"
+                            style={{ margin: "0", top: "10px", left: "16px" }}
+                            />
+                        }
+                        innerDivStyle={{padding:"10px 40px"}}
+                        onTouchTap={() => {this.props.goTo("/dashboards/aarEnterpriseAppDetail?startTime=now-900h")}}
+                        style={style.listItem}
+                        />
+                    <ListItem
                         primaryText="AAR-Domain"
                         leftIcon={<FontAwesome
                             name="area-chart"
@@ -119,6 +130,17 @@ class MainMenuView extends React.Component {
                         }
                         innerDivStyle={{padding:"10px 40px"}}
                         onTouchTap={() => {this.props.goTo("/dashboards/aarDomain?startTime=now-900h")}}
+                        style={style.listItem}
+                        />
+                    <ListItem
+                        primaryText="AAR-NSG"
+                        leftIcon={<FontAwesome
+                            name="area-chart"
+                            style={{ margin: "0", top: "10px", left: "16px" }}
+                            />
+                        }
+                        innerDivStyle={{padding:"10px 40px"}}
+                        onTouchTap={() => {this.props.goTo("/dashboards/aarNSG?startTime=now-900h")}}
                         style={style.listItem}
                         />
                     <ListItem
