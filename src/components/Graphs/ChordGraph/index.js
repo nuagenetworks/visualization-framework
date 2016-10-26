@@ -20,10 +20,12 @@ export default class ChordGraph extends AbstractGraph {
 
     updateChord(props) {
 
-        const { response } = this.props;
+        const { response, width, height } = this.props;
 
         this.chordDiagram
-            .data(tabify(response.results));
+            .data(tabify(response.results))
+            .width(width)
+            .height(height);
     }
 
     render() {
@@ -393,9 +395,9 @@ function ChordDiagram(svg){
     }
   };
 
-  my.data = function (_){
-    data = _;
-  }
+  my.data = (_) => arguments.length ? (data = _, my) : my;
+  my.width = (_) => arguments.length ? (width = _, my) : my;
+  my.height = (_) => arguments.length ? (height = _, my) : my;
 
   return my;
 }
