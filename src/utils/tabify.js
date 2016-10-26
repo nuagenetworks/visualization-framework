@@ -80,6 +80,7 @@ function flatten(tree, parentNode={}){
                     if (Array.isArray(value)) {
                         return value;
                     }
+                    return false;
                 })
                 .filter((d) => d);
 
