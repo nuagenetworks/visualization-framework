@@ -1,8 +1,8 @@
 {
     "id": "vss-domain-flow",
-    "graph": "Table",
+    "graph": "ChordGraph",
     "title": "Flows per Domain",
-    "author": "Ronak Shah",
+    "author": "Ronak Shah and Curran Kelleher",
     "creationDate": "10/25/2016",
     "data": {
         "columns": [
