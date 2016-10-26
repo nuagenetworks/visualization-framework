@@ -24,7 +24,14 @@ export default class ChordGraph extends AbstractGraph {
         const {
             chordWeightColumn,
             chordSourceColumn,
-            chordDestinationColumn
+            chordDestinationColumn,
+            outerPadding,
+            arcThickness,
+            padAngle,
+            labelPadding,
+            transitionDuration,
+            defaultOpacity,
+            fadedOpacity
         } = this.getConfiguredProperties();
 
         // Pass values into the chord diagram via d3-style accessors.
@@ -34,7 +41,14 @@ export default class ChordGraph extends AbstractGraph {
             .height(height)
             .chordWeightColumn(chordWeightColumn)
             .chordSourceColumn(chordSourceColumn)
-            .chordDestinationColumn(chordDestinationColumn);
+            .chordDestinationColumn(chordDestinationColumn)
+            .outerPadding(outerPadding)
+            .arcThickness(arcThickness)
+            .padAngle(padAngle)
+            .labelPadding(labelPadding)
+            .transitionDuration(transitionDuration)
+            .defaultOpacity(defaultOpacity)
+            .fadedOpacity(fadedOpacity);
 
         // Re-render the chord diagram.
         this.chordDiagram();
@@ -125,8 +139,7 @@ function ChordDiagram(svg){
 
   // D3 layouts, shapes and scales.
   var ribbon = d3.ribbon(),
-      chord = d3.chord()
-        .padAngle(padAngle),
+      chord = d3.chord(),
       color = d3.scaleOrdinal(),
       arc = d3.arc(),
       valueFormat = d3.format(",");
@@ -152,6 +165,9 @@ function ChordDiagram(svg){
   
     // Use the data passed into the .data() accessor.
     if(data){
+
+      // Set the pad angle, in case it was reconfigured via its accessor.
+      chord.padAngle(padAngle);
 
       // Compute things that depend on width and height.
       var side = Math.min(width, height),
