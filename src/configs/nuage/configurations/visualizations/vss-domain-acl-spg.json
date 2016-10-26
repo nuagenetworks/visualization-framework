@@ -7,7 +7,13 @@
     "data": {
         "xColumn": "SumOf",
         "yColumn": "spg",
-        "orientation": "horizontal"
+        "orientation": "horizontal",
+        "margin": {
+            "top": 15,
+            "bottom": 20,
+            "left": 80,
+            "right": 40
+        }
     },
     "query": "vss-domain-acl-spg"
 }
