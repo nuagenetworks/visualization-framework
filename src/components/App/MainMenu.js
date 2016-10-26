@@ -144,6 +144,17 @@ class MainMenuView extends React.Component {
                         style={style.listItem}
                         />
                     <ListItem
+                        primaryText="VSS-Domain-Flow"
+                        leftIcon={<FontAwesome
+                            name="area-chart"
+                            style={{ margin: "0", top: "10px", left: "16px" }}
+                            />
+                        }
+                        innerDivStyle={{padding:"10px 40px"}}
+                        onTouchTap={() => {this.props.goTo("/dashboards/vssDomainFlow?startTime=now-900h")}}
+                        style={style.listItem}
+                        />
+                    <ListItem
                         primaryText="VSS-Domain-Event"
                         leftIcon={<FontAwesome
                             name="area-chart"

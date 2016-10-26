@@ -4,6 +4,7 @@ import BarGraph from "./BarGraph/index";
 import LineGraph from "./LineGraph";
 import PieGraph from "./PieGraph";
 import Table from "./Table";
+import ChordGraph from "./ChordGraph";
 
 import { theme } from "../../theme";
 
@@ -16,6 +17,7 @@ let registry = {
     LineGraph,
     Table,
     PieGraph,
+    ChordGraph,
 };
 
 /*

@@ -1,0 +1,13 @@
+{
+    "id": "vss-domain-flow",
+    "graph": "ChordGraph",
+    "title": "Flows per Domain",
+    "author": "Ronak Shah and Curran Kelleher",
+    "creationDate": "10/25/2016",
+    "data": {
+        "chordWeightColumn": "SumOf",
+        "chordSourceColumn": "spg",
+        "chordDestinationColumn": "dpg"
+    },
+    "query": "vss-domain-flow"
+}
