@@ -10,8 +10,16 @@ import "./style.css";
 export default class ChordGraph extends AbstractGraph {
 
     componentDidMount() {
-        console.log(this.svg);
         this.chordDiagram = ChordDiagram(this.svg);
+        this.updateChord(this.props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.updateChord(nextProps);
+    }
+
+    updateChord(props) {
+        console.log("update chord here");
     }
 
     render() {
