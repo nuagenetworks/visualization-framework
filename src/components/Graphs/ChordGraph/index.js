@@ -21,11 +21,23 @@ export default class ChordGraph extends AbstractGraph {
     updateChord(props) {
 
         const { response, width, height } = this.props;
+        const {
+            chordWeightColumn,
+            chordSourceColumn,
+            chordDestinationColumn
+        } = this.getConfiguredProperties();
 
+        // Pass values into the chord diagram via d3-style accessors.
         this.chordDiagram
             .data(tabify(response.results))
             .width(width)
-            .height(height);
+            .height(height)
+            .chordWeightColumn(chordWeightColumn)
+            .chordSourceColumn(chordSourceColumn)
+            .chordDestinationColumn(chordDestinationColumn);
+
+        // Re-render the chord diagram.
+        this.chordDiagram();
     }
 
     render() {
@@ -398,6 +410,9 @@ function ChordDiagram(svg){
   my.data = (_) => arguments.length ? (data = _, my) : my;
   my.width = (_) => arguments.length ? (width = _, my) : my;
   my.height = (_) => arguments.length ? (height = _, my) : my;
+  my.chordWeightColumn = (_) => arguments.length ? (chordWeightColumn = _, my) : my;
+  my.chordSourceColumn = (_) => arguments.length ? (chordSourceColumn = _, my) : my;
+  my.chordDestinationColumn = (_) => arguments.length ? (chordDestinationColumn = _, my) : my;
 
   return my;
 }

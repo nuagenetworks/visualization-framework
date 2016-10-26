@@ -5,11 +5,9 @@
     "author": "Ronak Shah and Curran Kelleher",
     "creationDate": "10/25/2016",
     "data": {
-        "columns": [
-            { "column": "spg", "label": "Source PG" },
-            { "column": "dpg", "label": "Destination PG" },
-            { "column": "SumOf", "label": "Sum of Packets" }
-        ]
+        "chordWeightColumn": "SumOf",
+        "chordSourceColumn": "spg",
+        "chordDestinationColumn": "dpg"
     },
     "query": "vss-domain-flow"
 }
