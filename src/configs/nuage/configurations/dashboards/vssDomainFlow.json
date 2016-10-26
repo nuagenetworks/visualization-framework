@@ -4,7 +4,7 @@
     "creationDate": "10/25/2016",
     "title": "VSS Domain Flow Visualization",
     "visualizations": [
-        { "id": "vss-domain-flow", "x": 0, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12}
+        { "id": "vss-domain-flow", "x": 0, "y": 0, "w": 5, "h": 30, "minW": 2, "minH": 12}
     ]
 }
 

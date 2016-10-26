@@ -73,7 +73,7 @@ function ChordDiagram(svg){
   // TODO expose all of these in the vis config.
   var width = 450,
       height = 450,
-      outerPadding = 50,
+      outerPadding = 30,
       arcThickness = 20,
       padAngle = 0.07,
       labelPadding = 10,
@@ -154,7 +154,8 @@ function ChordDiagram(svg){
     if(data){
 
       // Compute things that depend on width and height.
-      var outerRadius = width / 2 - outerPadding,
+      var side = Math.min(width, height),
+          outerRadius = side / 2 - outerPadding,
           innerRadius = outerRadius - arcThickness;
       ribbonsG
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
@@ -197,27 +198,6 @@ function ChordDiagram(svg){
             destination: matrix.names[d.target.index]
           });
         })
-        .on("mousemove", function (d){
-          var src = matrix.names[d.source.index];
-          var dest = matrix.names[d.target.index];
-          var message = [
-            "<strong>" + src +" to " + dest +"</strong>",
-            valueFormat(d.target.value),
-            "<br><strong>" + dest +" to " + src +"</strong>",
-            valueFormat(d.source.value)
-          ].join("<br>");
-          
-          var coords = d3.mouse(body.node());
-          tooltipContent.node().innerHTML = message;
-          tooltip
-            .style("display", "block")
-            .style("left", coords[0] + "px")
-            .style("top", coords[1] + "px");
-
-        })
-        .on("mouseout", function (){
-          tooltip.style("display", "none");
-        });
       ribbons.exit().remove();
 
       // Scaffold the chord groups.
