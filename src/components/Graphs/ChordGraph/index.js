@@ -400,5 +400,28 @@ function ChordDiagram(svg){
   my.chordSourceColumn = (_) => arguments.length ? (chordSourceColumn = _, my) : my;
   my.chordDestinationColumn = (_) => arguments.length ? (chordDestinationColumn = _, my) : my;
 
+  // This is kind of like a "margin" - the distance from the outer edge
+  // of the circle to the nearest edge of the containing (width, height) rectangle.
+  my.outerPadding = (_) => arguments.length ? (outerPadding = _, my) : my;
+
+  // The thickness of the chord group arcs around the outer ring.
+  my.arcThickness = (_) => arguments.length ? (arcThickness = _, my) : my;
+
+  // The spacing between adjacent chord group arcs.
+  my.padAngle = (_) => arguments.length ? (padAngle = _, my) : my;
+
+  // The distance between the outer ring and the chord group labels.
+  my.labelPadding = (_) => arguments.length ? (labelPadding = _, my) : my;
+
+  // The duration (in milliseconds) of the fading transition when hovering.
+  my.transitionDuration = (_) => arguments.length ? (transitionDuration = _, my) : my;
+
+  // The opacity of the chords under normal circumstances.
+  my.defaultOpacity = (_) => arguments.length ? (defaultOpacity = _, my) : my;
+
+  // The opacity of the chords other than the highlighted one,
+  // the ones that are faded into the background when hovering.
+  my.fadedOpacity = (_) => arguments.length ? (fadedOpacity = _, my) : my;
+
   return my;
 }
