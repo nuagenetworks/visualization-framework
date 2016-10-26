@@ -19,7 +19,11 @@ export default class ChordGraph extends AbstractGraph {
     }
 
     updateChord(props) {
-        console.log("update chord here");
+
+        const { response } = this.props;
+
+        this.chordDiagram
+            .data(tabify(response.results));
     }
 
     render() {
