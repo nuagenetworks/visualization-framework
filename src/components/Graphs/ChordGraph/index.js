@@ -31,7 +31,8 @@ export default class ChordGraph extends AbstractGraph {
             labelPadding,
             transitionDuration,
             defaultOpacity,
-            fadedOpacity
+            fadedOpacity,
+            colors
         } = this.getConfiguredProperties();
 
         // Pass values into the chord diagram via d3-style accessors.
@@ -48,7 +49,8 @@ export default class ChordGraph extends AbstractGraph {
             .labelPadding(labelPadding)
             .transitionDuration(transitionDuration)
             .defaultOpacity(defaultOpacity)
-            .fadedOpacity(fadedOpacity);
+            .fadedOpacity(fadedOpacity)
+            .colors(colors);
 
         // Re-render the chord diagram.
         this.chordDiagram();
@@ -152,7 +154,7 @@ function ChordDiagram(svg){
   var lightColors = d3.schemeCategory20.filter(function(d, i){
     return i % 2;
   });
-  color.range(darkColors.concat(lightColors));
+  var colors = darkColors.concat(lightColors);
 
   // Clear the selected ribbon when clicking on
   // any area other than on a ribbon.
@@ -166,8 +168,9 @@ function ChordDiagram(svg){
     // Use the data passed into the .data() accessor.
     if(data){
 
-      // Set the pad angle, in case it was reconfigured via its accessor.
+      // Set properties that may have been reconfigured via accessors.
       chord.padAngle(padAngle);
+      color.range(colors);
 
       // Compute things that depend on width and height.
       var side = Math.min(width, height),
@@ -438,6 +441,9 @@ function ChordDiagram(svg){
   // The opacity of the chords other than the highlighted one,
   // the ones that are faded into the background when hovering.
   my.fadedOpacity = (_) => arguments.length ? (fadedOpacity = _, my) : my;
+
+  // The array of colors used for the color scale of the chord groups.
+  my.colors = (_) => arguments.length ? (colors = _, my) : my;
 
   return my;
 }
