@@ -8,7 +8,13 @@
         "dateHistogram": true,
         "interval": "30m",
         "xColumn": "date-histo",
-        "yColumn": "SumOfPackets"
+        "yColumn": "SumOfPackets",
+        "margin": {
+            "top": 15,
+            "bottom": 20,
+            "left": 45,
+            "right": 20
+        }
     },
     "query": "app-specific-vertical-bar"
 }
