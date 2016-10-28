@@ -6,7 +6,13 @@
     "creationDate": "10/13/2016",
     "data": {
         "xColumn": "Application",
-        "yColumn": "Sum of MB"
+        "yColumn": "Sum of MB",
+        "navigation": {
+            "redirect": "/dashboards/dateHistogramExample",
+            "params": {
+                "app": "Application"
+            }
+        }
     },
     "query": "top5-app-vertical-bar"
 }
