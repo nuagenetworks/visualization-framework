@@ -43,7 +43,7 @@ export default class BarGraph extends AbstractGraph {
 
     render() {
 
-        const { response, width, height } = this.props;
+        const { response, width, height, onMarkClick } = this.props;
 
         if (!response || response.error)
             return;
@@ -141,6 +141,7 @@ export default class BarGraph extends AbstractGraph {
                                     width={ barWidth }
                                     height={ innerHeight - yScale(d[yColumn]) }
                                     fill={ this.applyColor(i) }
+                                    onClick={ onMarkClick }
                                 />
                             ) : (
                                 <rect
@@ -150,6 +151,7 @@ export default class BarGraph extends AbstractGraph {
                                     width={ xScale(d[xColumn]) }
                                     height={ yScale.bandwidth() }
                                     fill={ this.applyColor(i) }
+                                    onClick={ onMarkClick }
                                 />
                             )
                         ))}
