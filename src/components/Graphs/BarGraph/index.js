@@ -141,7 +141,7 @@ export default class BarGraph extends AbstractGraph {
                                     width={ barWidth }
                                     height={ innerHeight - yScale(d[yColumn]) }
                                     fill={ this.applyColor(i) }
-                                    onClick={ onMarkClick }
+                                    onClick={ () => onMarkClick(d) }
                                 />
                             ) : (
                                 <rect
@@ -151,7 +151,7 @@ export default class BarGraph extends AbstractGraph {
                                     width={ xScale(d[xColumn]) }
                                     height={ yScale.bandwidth() }
                                     fill={ this.applyColor(i) }
-                                    onClick={ onMarkClick }
+                                    onClick={ () => onMarkClick(d) }
                                 />
                             )
                         ))}

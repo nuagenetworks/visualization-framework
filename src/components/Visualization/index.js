@@ -98,23 +98,30 @@ class VisualizationView extends React.Component {
             });
 
             if(configuration.get("listeners")){
-                configuration.get("listeners").forEach((listener) => {
+                this.setState({
+                    listeners: configuration.get("listeners").reduce((listeners, listener) => {
+                        const {
+                            event = "onMarkClick",
+                            redirect = window.location.pathname,
+                            params = {}
+                        } = listener.toJS();
 
-                    const {
-                        event = "onMarkClick",
-                        redirect = window.location.pathname,
-                        params = {}
-                    } = listener.toJS();
-                    
-                    console.log("navigation is configured");
 
-                    console.log(event, redirect, params);
+                        listeners[event] = (d) => {
 
-                    Object.keys(params).forEach((destinationParam) => {
-                        const sourceColumn = params[destinationParam];
-                        console.log("sourceColumn = " + sourceColumn);
-                        console.log("destinationParam = " + destinationParam);
-                    });
+                            console.log("TODO navigate to " + redirect);
+                            console.log(d);
+
+                            Object.keys(params).forEach((destinationParam) => {
+                                const sourceColumn = params[destinationParam];
+                                console.log("sourceColumn = " + sourceColumn);
+                                console.log("destinationParam = " + destinationParam);
+                                console.log(destinationParam + "=" + d[sourceColumn]);
+                            });
+                        };
+
+                        return listeners;
+                    }, {})
                 });
             }
         });
@@ -151,6 +158,7 @@ class VisualizationView extends React.Component {
                   queryConfiguration={queryConfiguration}
                   width={this.state.width}
                   height={this.state.height}
+                  {...this.state.listeners}
                 />
                 {description}
             </div>
