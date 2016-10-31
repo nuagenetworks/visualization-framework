@@ -96,6 +96,10 @@ class VisualizationView extends React.Component {
                     },
                 );
             });
+
+            if(configuration.get("navigation")){
+                console.log("navigation is configured");
+            }
         });
     }
 
