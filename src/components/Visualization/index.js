@@ -97,27 +97,46 @@ class VisualizationView extends React.Component {
                 );
             });
 
+            // Handle configured listeners (e.g. navigate when clicking on a bar).
             if(configuration.get("listeners")){
+
+                // Use this.state.listeners to store the listeners that will be
+                // passed into the visualization components.
                 this.setState({
+
+                    // This will be an object whose keys are event names,
+                    // and whose values are functions that accept the data object
+                    // corresponding to the clicked visual element.
                     listeners: configuration.get("listeners").reduce((listeners, listener) => {
+                        // Use ES6 destructuring with defaults.
                         const {
+
+                            // By default, use the "onMarkClick" event.
                             event = "onMarkClick",
+
+                            // By default, stay on the current route.
                             redirect = window.location.pathname,
+
+                            // By default, specify no additional query params.
                             params = {}
                         } = listener.toJS();
 
-
+                        // Each listener expects the data object `d`,
+                        // which corresponds to a row of data visualized.
                         listeners[event] = (d) => {
 
-                            console.log("TODO navigate to " + redirect);
-
-                            const queryParams = Object.keys(params)
+                            // Compute the query params from the data object.
+                            let queryParams = Object.keys(params)
                                 .reduce((queryParams, destinationParam) => {
                                     const sourceColumn = params[destinationParam];
                                     queryParams[destinationParam] = d[sourceColumn];
                                     return queryParams;
                                 }, {});
 
+                            // Override the existing context with the new params.
+                            queryParams = Object.assign({}, this.props.context, queryParams);
+
+                            // Perform the navigation via react-router.
                             this.props.goTo(redirect, queryParams);
                         };
 
