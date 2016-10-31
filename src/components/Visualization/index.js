@@ -110,14 +110,15 @@ class VisualizationView extends React.Component {
                         listeners[event] = (d) => {
 
                             console.log("TODO navigate to " + redirect);
-                            console.log(d);
 
-                            Object.keys(params).forEach((destinationParam) => {
-                                const sourceColumn = params[destinationParam];
-                                console.log("sourceColumn = " + sourceColumn);
-                                console.log("destinationParam = " + destinationParam);
-                                console.log(destinationParam + "=" + d[sourceColumn]);
-                            });
+                            const queryParams = Object.keys(params)
+                                .reduce((queryParams, destinationParam) => {
+                                    const sourceColumn = params[destinationParam];
+                                    queryParams[destinationParam] = d[sourceColumn];
+                                    return queryParams;
+                                }, {});
+
+                            this.props.goTo(redirect, queryParams);
                         };
 
                         return listeners;
