@@ -101,13 +101,20 @@ class VisualizationView extends React.Component {
                 configuration.get("listeners").forEach((listener) => {
 
                     const {
-                      event = "onMarkClick",
-                      redirect = window.location.pathname,
-                      params = {}
+                        event = "onMarkClick",
+                        redirect = window.location.pathname,
+                        params = {}
                     } = listener.toJS();
                     
                     console.log("navigation is configured");
+
                     console.log(event, redirect, params);
+
+                    Object.keys(params).forEach((destinationParam) => {
+                        const sourceColumn = params[destinationParam];
+                        console.log("sourceColumn = " + sourceColumn);
+                        console.log("destinationParam = " + destinationParam);
+                    });
                 });
             }
         });
