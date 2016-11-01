@@ -21,5 +21,12 @@
             "right": 40
         }
     },
+    "listeners": [
+    {
+        "redirect": "/dashboards/vssDomainACL",
+        "params": {
+            "domainName": "domains"
+        }
+    }],
     "query": "vss-top-domains-blocked-traffic"
 }
