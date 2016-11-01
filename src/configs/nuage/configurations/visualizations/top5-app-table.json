@@ -11,5 +11,11 @@
             { "column": "doc_count", "label": "Document Count" }
         ]
     },
+    "listeners": [{
+      "redirect": "/dashboards/dateHistogramExample",
+      "params": {
+          "app": "Application"
+      }
+    }],
     "query": "top5-app-vertical-bar"
 }
