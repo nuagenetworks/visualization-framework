@@ -11,11 +11,11 @@ export default class Table extends AbstractGraph {
         const columns = properties.columns;
 
         const {
-          border,
-          fontColor,
-          header,
-          padding,
-          width,
+            border,
+            fontColor,
+            header,
+            padding,
+            width
         } = this.getConfiguredProperties();
 
         if (!rows)
@@ -31,7 +31,13 @@ export default class Table extends AbstractGraph {
         return (
             <table style={ {width:width} }>
                 <thead>
-                    <tr style={{color:header.fontColor, borderTop:header.border.top, borderBottom: header.border.bottom, borderLeft:header.border.left, borderRight: header.border.right}}>
+                    <tr style={{
+                        color:header.fontColor,
+                        borderTop:header.border.top,
+                        borderBottom: header.border.bottom,
+                        borderLeft:header.border.left,
+                        borderRight: header.border.right
+                    }}>
                         { columns.map(({column, label}, i) =>(
                             <th key={i} style={{padding:padding}}>{ label || column }</th>
                         )) }
@@ -39,7 +45,14 @@ export default class Table extends AbstractGraph {
                 </thead>
                 <tbody>
                     { rows.map((row, j) =>(
-                        <tr key={j} style={ {color:fontColor, background:this.applyColor(j), borderTop:border.top, borderBottom: border.bottom, borderLeft:border.left, borderRight: border.right} }>
+                        <tr key={j} style={{
+                            color:fontColor,
+                            background:this.applyColor(j),
+                            borderTop:border.top,
+                            borderBottom: border.bottom,
+                            borderLeft:border.left,
+                            borderRight: border.right
+                        }}>
                             { columns.map(({column}, i) =>(
                                 <td key={i} style={{padding:padding}}>{ row[column] }</td>
                             )) }
