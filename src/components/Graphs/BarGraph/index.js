@@ -43,7 +43,7 @@ export default class BarGraph extends AbstractGraph {
 
     render() {
 
-        const { response, width, height } = this.props;
+        const { response, width, height, onMarkClick } = this.props;
 
         if (!response || response.error)
             return;
@@ -132,27 +132,45 @@ export default class BarGraph extends AbstractGraph {
                             key="yAxis"
                             ref={ (el) => d3.select(el).call(yAxis) }
                         />
-                        {data.map((d, i) => (
-                            vertical ? (
-                                <rect
-                                    key={ i }
-                                    x={ xScale(d[xColumn]) }
-                                    y={ yScale(d[yColumn]) }
-                                    width={ barWidth }
-                                    height={ innerHeight - yScale(d[yColumn]) }
-                                    fill={ this.applyColor(i) }
-                                />
-                            ) : (
-                                <rect
-                                    key={ i }
-                                    x={ 0 }
-                                    y={ yScale(d[yColumn]) }
-                                    width={ xScale(d[xColumn]) }
-                                    height={ yScale.bandwidth() }
-                                    fill={ this.applyColor(i) }
-                                />
-                            )
-                        ))}
+                        {data.map((d, i) => {
+
+                            // Compute rectangle depending on orientation (vertical or horizontal).
+                            const { x, y, width, height } = (
+                                vertical ? {
+                                    x: xScale(d[xColumn]),
+                                    y: yScale(d[yColumn]),
+                                    width: barWidth,
+                                    height: innerHeight - yScale(d[yColumn])
+                                } : {
+                                    x: 0,
+                                    y: yScale(d[yColumn]),
+                                    width: xScale(d[xColumn]),
+                                    height: yScale.bandwidth()
+                                }
+                            );
+
+                            // Compute the fill color based on the index.
+                            const fill = this.applyColor(i);
+
+                            // Set up clicking and cursor style.
+                            const { onClick, style } = (
+
+                                // If an "onMarkClick" handler is registered,
+                                onMarkClick ? {
+
+                                    // set it up to be invoked, passing the current data row object.
+                                    onClick: () => onMarkClick(d),
+
+                                    // Make the cursor a pointer on hover, as an affordance for clickability.
+                                    style: { cursor: "pointer" }
+
+                                } : {
+                                    // Otherwise, set onClick and style to "undefined".
+                                }
+                            );
+
+                            return <rect {...{x, y, width, height, fill, onClick, style, key: i}} />;
+                        })}
                     </g>
                 </svg>
             </div>
