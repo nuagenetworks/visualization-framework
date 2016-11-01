@@ -134,10 +134,7 @@ export default class BarGraph extends AbstractGraph {
                         />
                         {data.map((d, i) => {
 
-                            const key = i;
-                            const fill = this.applyColor(i);
-                            const onClick = () => onMarkClick(d);
-
+                            // Compute rectangle depending on orientation (vertical or horizontal).
                             const { x, y, width, height } = (
                                 vertical ? {
                                     x: xScale(d[xColumn]),
@@ -152,15 +149,36 @@ export default class BarGraph extends AbstractGraph {
                                 }
                             );
 
+                            // Compute the fill color based on the index.
+                            const fill = this.applyColor(i);
+
+                            // Set up clicking and cursor style.
+                            const { onClick, style } = (
+
+                                // If an "onMarkClick" handler is registered,
+                                onMarkClick ? {
+
+                                    // set it up to be invoked, passing the current data row object.
+                                    onClick: () => onMarkClick(d),
+
+                                    // Make the cursor a pointer on hover, as an affordance for clickability.
+                                    style: { cursor: "pointer" }
+
+                                } : {
+                                    // Otherwise, set onClick and style to "undefined".
+                                }
+                            );
+
                             return (
                                 <rect
-                                    key={key}
-                                    fill={fill}
-                                    onClick={onClick}
                                     x={x}
                                     y={y}
                                     width={width}
                                     height={height}
+                                    fill={fill}
+                                    onClick={onClick}
+                                    style={style}
+                                    key={i}
                                 />
                             );
                         })}
