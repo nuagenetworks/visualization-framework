@@ -132,29 +132,38 @@ export default class BarGraph extends AbstractGraph {
                             key="yAxis"
                             ref={ (el) => d3.select(el).call(yAxis) }
                         />
-                        {data.map((d, i) => (
-                            vertical ? (
+                        {data.map((d, i) => {
+
+                            const key = i;
+                            const fill = this.applyColor(i);
+                            const onClick = () => onMarkClick(d);
+
+                            const { x, y, width, height } = (
+                                vertical ? {
+                                    x: xScale(d[xColumn]),
+                                    y: yScale(d[yColumn]),
+                                    width: barWidth,
+                                    height: innerHeight - yScale(d[yColumn])
+                                } : {
+                                    x: 0,
+                                    y: yScale(d[yColumn]),
+                                    width: xScale(d[xColumn]),
+                                    height: yScale.bandwidth()
+                                }
+                            );
+
+                            return (
                                 <rect
-                                    key={ i }
-                                    x={ xScale(d[xColumn]) }
-                                    y={ yScale(d[yColumn]) }
-                                    width={ barWidth }
-                                    height={ innerHeight - yScale(d[yColumn]) }
-                                    fill={ this.applyColor(i) }
-                                    onClick={ () => onMarkClick(d) }
+                                    key={key}
+                                    fill={fill}
+                                    onClick={onClick}
+                                    x={x}
+                                    y={y}
+                                    width={width}
+                                    height={height}
                                 />
-                            ) : (
-                                <rect
-                                    key={ i }
-                                    x={ 0 }
-                                    y={ yScale(d[yColumn]) }
-                                    width={ xScale(d[xColumn]) }
-                                    height={ yScale.bandwidth() }
-                                    fill={ this.applyColor(i) }
-                                    onClick={ () => onMarkClick(d) }
-                                />
-                            )
-                        ))}
+                            );
+                        })}
                     </g>
                 </svg>
             </div>
