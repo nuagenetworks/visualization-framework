@@ -3,6 +3,8 @@
     "title":"TBD",
     "service":"elasticsearch",
     "query":{
+        "index":"{{index:nuage_dpi_flowstats}}",
+        "type":"{{type:nuage_doc_type}}",
         "size":0,
         "query":{
             "bool":{

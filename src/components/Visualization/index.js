@@ -108,7 +108,7 @@ class VisualizationView extends React.Component {
             }
 
             // Handle configured listeners (e.g. navigate when clicking on a bar).
-            if(configuration.get("listeners")){
+            if(configuration.get("listeners")) {
 
                 // Use this.state.listeners to store the listeners that will be
                 // passed into the visualization components.
