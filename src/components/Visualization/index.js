@@ -77,25 +77,36 @@ class VisualizationView extends React.Component {
             if (!configuration)
                 return;
 
-            this.props.fetchQueryIfNeeded(configuration.get("query")).then(() => {
-                const { queryConfiguration, executeQueryIfNeeded, context } = this.props;
+            const queryName  = configuration.get("query"),
+                  scriptName = configuration.get("script");
 
-                if (!queryConfiguration)
-                    return;
+            if (scriptName) {
+                const { executeScriptIfNeeded, context } = this.props;
+                executeScriptIfNeeded(scriptName, context);
+            }
 
-                executeQueryIfNeeded(queryConfiguration, context).then(
-                    () => {
-                        this.setState({
-                            parameterizable: true,
-                        });
-                    },
-                    (error) => {
-                        this.setState({
-                            parameterizable: false,
-                        });
-                    },
-                );
-            });
+            if (queryName) {
+                this.props.fetchQueryIfNeeded(queryName).then(() => {
+                    const { queryConfiguration, executeQueryIfNeeded, context } = this.props;
+
+                    if (!queryConfiguration)
+                        return;
+
+                    executeQueryIfNeeded(queryConfiguration, context).then(
+                        () => {
+                            this.setState({
+                                parameterizable: true,
+                            });
+                        },
+                        (error) => {
+                            this.setState({
+                                parameterizable: false,
+                            });
+                        },
+                    );
+                });
+            }
+
         });
     }
 
@@ -265,9 +276,11 @@ const mapStateToProps = (state, ownProps) => {
             ).toJS();
         }
 
+        const scriptName = props.configuration.get("script");
+        
         // Expose received response if it is available
-        if (props.queryConfiguration) {
-            const requestID = ServiceManager.getRequestID(props.queryConfiguration, context);
+        if (props.queryConfiguration || scriptName) {
+            const requestID = ServiceManager.getRequestID(props.queryConfiguration || scriptName, context);
 
             let response = state.services.getIn([
                 ServiceActionKeyStore.REQUESTS,
@@ -309,6 +322,10 @@ const actionCreators = (dispatch) => ({
 
     executeQueryIfNeeded: function(queryConfiguration, context) {
         return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context));
+    },
+
+    executeScriptIfNeeded: function(scriptName, context) {
+        return dispatch(ServiceActions.fetchIfNeeded(scriptName, context));
     }
 
  });

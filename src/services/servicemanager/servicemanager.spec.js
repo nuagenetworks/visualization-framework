@@ -16,6 +16,7 @@ describe('ServiceManager', () => {
             "register",
             "getService",
             "getRequestID",
+            "executeScript"
         ];
         expect(Object.keys(ServiceManager)).toEqual(expectedProperties)
     });
