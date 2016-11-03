@@ -8,5 +8,11 @@
         "sliceColumn": "Sum of MB",
         "labelColumn": "Application"
     },
+    "listeners": [{
+      "redirect": "/dashboards/dateHistogramExample",
+      "params": {
+          "app": "Application"
+      }
+    }],
     "query": "top5-app-vertical-bar"
 }
