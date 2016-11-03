@@ -111,7 +111,7 @@ function ChordDiagram(svg){
       chordDestinationColumn;
 
   // Accessor functions for columns.
-  var weight = function (d){ return chordWeightColumn ? d[chordWeightColumn] : 1; },
+  var weight = chordWeightColumn ? function (d){ return d[chordWeightColumn]; } : null,
       source = function (d){ return d[chordSourceColumn]; },
       destination = function (d){ return d[chordDestinationColumn]; };
 
@@ -380,7 +380,15 @@ function ChordDiagram(svg){
     data.forEach(function (d){
       i = indices[source(d)];
       j = indices[destination(d)];
-      matrix[j][i] = weight(d);
+
+      if(weight){
+        matrix[j][i] = weight(d);
+      } else {
+
+        // Handle the case where no weight column was specified
+        // by making the chord weight fixed on both sides.
+        matrix[j][i] = matrix[i][j] = 1;
+      }
     });
 
     matrix.names = names;

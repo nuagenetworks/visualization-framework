@@ -3,7 +3,7 @@
     "graph": "ChordGraph",
     "title": "Flows per Domain",
     "author": "Ronak Shah and Curran Kelleher",
-    "creationDate": "10/25/2016",
+    "creationDate": "11/3/2016",
     "data": {
         "chordSourceColumn": "spg",
         "chordDestinationColumn": "dpg"
