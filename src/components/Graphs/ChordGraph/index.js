@@ -106,14 +106,12 @@ function ChordDiagram(svg){
       onSelectedRibbonChangeCallback = function (){};
 
   // These "column" variables represent keys in the row objects of the input table.
-  // Kibana's `tabify` happens to give us column names "1", "2", and "3".
-  // These correspond to the Schemas defined for the plugin.
-  var chordWeightColumn = "1",
-      chordSourceColumn = "2",
-      chordDestinationColumn = "3";
+  var chordWeightColumn,
+      chordSourceColumn,
+      chordDestinationColumn;
 
   // Accessor functions for columns.
-  var weight = function (d){ return d[chordWeightColumn]; },
+  var weight = function (d){ return chordWeightColumn ? d[chordWeightColumn] : 1; },
       source = function (d){ return d[chordSourceColumn]; },
       destination = function (d){ return d[chordDestinationColumn]; };
 
