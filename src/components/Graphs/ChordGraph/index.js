@@ -20,7 +20,7 @@ export default class ChordGraph extends AbstractGraph {
 
     updateChord(props) {
 
-        const { response, width, height } = this.props;
+        const { response, width, height, onMarkClick } = this.props;
         const {
             chordWeightColumn,
             chordSourceColumn,
@@ -51,6 +51,19 @@ export default class ChordGraph extends AbstractGraph {
             .defaultOpacity(defaultOpacity)
             .fadedOpacity(fadedOpacity)
             .colors(colors);
+
+        if(onMarkClick){
+            this.chordDiagram.onSelectedRibbonChange((d) => {
+                const selectedRibbon = this.chordDiagram.selectedRibbon();
+                if(selectedRibbon) {
+                    const { source, destination } = selectedRibbon;
+                    onMarkClick({
+                        [chordSourceColumn]: source,
+                        [chordDestinationColumn]: destination
+                    });
+                }
+            });
+        }
 
         // Re-render the chord diagram.
         this.chordDiagram();
