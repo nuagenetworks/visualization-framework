@@ -12,7 +12,7 @@ export default class PieGraph extends AbstractGraph {
 
     render() {
 
-        const { response, width, height } = this.props;
+        const { response, width, height, onMarkClick } = this.props;
 
         if (!response || response.error)
             return;
@@ -52,23 +52,45 @@ export default class PieGraph extends AbstractGraph {
                 <svg width={ width } height={ height }>
                     <g transform={ `translate(${ width / 2 }, ${ height / 2 })` } >
                         {
-                            slices.map((slice, i) => (
-                                <g key={i} >
+                            slices.map((slice, i) => {
+
+                                // Set up clicking and cursor style.
+                                const { onClick, style } = (
+
+                                    // If an "onMarkClick" handler is registered,
+                                    onMarkClick ? {
+
+                                        // set it up to be invoked, passing the current data row object.
+                                        onClick: () => onMarkClick(slice.data),
+
+                                        // Make the cursor a pointer on hover, as an affordance for clickability.
+                                        style: { cursor: "pointer" }
+
+                                    } : {
+                                        // Otherwise, set onClick and style to "undefined".
+                                    }
+                                );
+
+                                return <g key={i} >
                                     <path
                                       d={ arc(slice) }
                                       style={ {strokeWidth: stroke.width, stroke: stroke.color} }
                                       fill={ this.applyColor(i) }
+                                      onClick={ onClick }
+                                      style={ style }
                                     />
                                     <text
                                       transform={`translate(${labelArc.centroid(slice)})`}
                                       textAnchor={(slice.startAngle + slice.endAngle) / 2 < Math.PI ? "start" : "end"}
                                       dy=".35em"
                                       fill={ fontColor }
+                                      onClick={ onClick }
+                                      style={ style }
                                     >
                                         { slice.data[labelColumn] }
                                     </text>
                                 </g>
-                            ))
+                            })
                         }
                     </g>
                 </svg>
