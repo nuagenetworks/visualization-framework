@@ -61,6 +61,11 @@ export default class ChordGraph extends AbstractGraph {
                         [chordSourceColumn]: source,
                         [chordDestinationColumn]: destination
                     });
+                } else {
+                    onMarkClick({
+                        [chordSourceColumn]: undefined,
+                        [chordDestinationColumn]: undefined
+                    });
                 }
             });
         } else {
