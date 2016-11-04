@@ -31,8 +31,6 @@ const style = {
         height: "100%",
         display: "inline-block",
         textAlign: "center",
-        background: theme.palette.greyColor,
-        opacity: "0.5",
     },
     overlayText: {
         position: "absolute",

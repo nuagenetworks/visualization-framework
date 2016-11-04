@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import parse from "json-templates";
+import ReactInterval from 'react-interval';
 
 import { fromJS, Map } from "immutable";
 
@@ -74,7 +75,7 @@ class VisualizationView extends React.Component {
     }
 
     initialize(id) {
-
+        console.error("Initializing " + this.props.id);
         this.props.fetchConfigurationIfNeeded(id).then((c) => {
             const { configuration } = this.props
 
@@ -87,7 +88,7 @@ class VisualizationView extends React.Component {
                 if (!queryConfiguration)
                     return;
 
-                executeQueryIfNeeded(queryConfiguration, context).then(
+                executeQueryIfNeeded(queryConfiguration.toJS(), context).then(
                     () => {
                         this.setState({
                             parameterizable: true,
@@ -154,7 +155,7 @@ class VisualizationView extends React.Component {
     shouldShowVisualization() {
         const { configuration, response } = this.props;
 
-        return configuration && response && !response.isFetching;
+        return configuration && response && !response.get("isFetching");
     }
 
     renderVisualization() {
@@ -163,7 +164,7 @@ class VisualizationView extends React.Component {
         const graphName      = configuration.get("graph"),
               GraphComponent = GraphManager.getGraphComponent(graphName);
 
-        if (response.error) {
+        if (response.get("error")) {
             return (
                 <CardOverlay
                     overlayStyle={style.overlayContainer}
@@ -192,13 +193,19 @@ class VisualizationView extends React.Component {
                                 onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
                                 />
         }
+        const timeout = configuration.get("refreshInterval") || 6000;
 
         return (
             <div>
+                <ReactInterval
+                    enabled={true}
+                    timeout={timeout}
+                    callback={() => { this.initialize(this.props.id) }}
+                    />
                 <GraphComponent
-                  response={response}
+                  response={response.toJS()}
                   configuration={configuration.toJS()}
-                  queryConfiguration={queryConfiguration}
+                  queryConfiguration={queryConfiguration.toJS()}
                   width={this.state.width}
                   height={this.state.height}
                   {...this.state.listeners}
@@ -322,19 +329,19 @@ const mapStateToProps = (state, ownProps) => {
         )) {
             props.queryConfiguration = queryConfiguration.get(
                 ConfigurationsActionKeyStore.DATA
-            ).toJS();
+            );
         }
 
         // Expose received response if it is available
         if (props.queryConfiguration) {
-            const requestID = ServiceManager.getRequestID(props.queryConfiguration, context);
+            const requestID = ServiceManager.getRequestID(props.queryConfiguration.toJS(), context);
 
             let response = state.services.getIn([
                 ServiceActionKeyStore.REQUESTS,
                 requestID
             ]);
             if (response && !response.get(ServiceActionKeyStore.IS_FETCHING))
-                props.response = response.toJS();
+                props.response = response;
         }
     }
 
