@@ -48,16 +48,17 @@ export const getUsedParameters = (configuration, context) => {
     const parameters = parse(configuration).parameters;
     let queryParams = {};
 
-    parameters.every((parameter) => {
+    for (let i in parameters) {
+        let parameter = parameters[i];
+
         if (parameter.key in context) {
             queryParams[parameter.key] = context[parameter.key];
-
         }
         else if ("defaultValue" in parameter) {
             queryParams[parameter.key] = parameter.defaultValue;
         }
         // else ignore the parameter because it is not used in the provided configuration.
-    })
+    }
 
     return queryParams;
 }
