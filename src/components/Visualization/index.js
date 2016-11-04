@@ -213,26 +213,6 @@ class VisualizationView extends React.Component {
             return this.renderVisualization();
         }
 
-        if (!this.state.parameterizable) {
-            return (
-                <CardOverlay
-                    overlayStyle={style.overlayContainer}
-                    textStyle={style.overlayText}
-                    text={(
-                        <div>
-                            <FontAwesome
-                                name="meh-o"
-                                size="2x"
-                                />
-                            <br></br>
-                            Oops, we are missing some parameters here!
-                        </div>
-                    )}
-                    onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
-                    />
-            )
-        }
-
         return (
             <CardOverlay
                 overlayStyle={style.overlayContainer}
@@ -288,6 +268,10 @@ class VisualizationView extends React.Component {
     }
 
     render() {
+
+        if (!this.state.parameterizable)
+            return (<div></div>);
+
         return (
             <Card
               style={style.card}

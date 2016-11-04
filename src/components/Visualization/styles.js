@@ -31,7 +31,7 @@ const style = {
         height: "100%",
         display: "inline-block",
         textAlign: "center",
-        background: theme.palette.greyDarkColor,
+        background: theme.palette.greyColor,
         opacity: "0.5",
     },
     overlayText: {
@@ -40,7 +40,7 @@ const style = {
         width: "100%",
         fontSize: "1.2em",
         fontWeight: 300,
-        color: theme.palette.whiteColor,
+        color: theme.palette.blackColor,
     },
     container: {
         position: "absolute",
