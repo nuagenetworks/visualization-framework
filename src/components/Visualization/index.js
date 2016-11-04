@@ -21,7 +21,6 @@ import {
 } from "../../services/configurations/redux/actions";
 
 import { resizeVisualization } from "../../utils/resize"
-import { shouldUpdateVisualization } from "../../utils/configurations"
 
 import { GraphManager } from "../Graphs/index";
 import { ServiceManager } from "../../services/servicemanager/index";
@@ -350,7 +349,6 @@ const mapStateToProps = (state, ownProps) => {
                 ServiceActionKeyStore.REQUESTS,
                 requestID
             ]);
-
             if (response && !response.get(ServiceActionKeyStore.IS_FETCHING))
                 props.response = response.toJS();
         }

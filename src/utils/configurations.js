@@ -34,3 +34,30 @@ export const parameterizedConfiguration = (configuration, context) => {
 
     return false;
 }
+
+/*
+    Returns a key-value dictionary with all parameters that are really used
+    in the configuration.
+    Arguments:
+    * configuration: the configuration template that needs to be parameterized
+    * context: the context object that contains parameters
+    Returns:
+    An object that gives all parameters
+*/
+export const getUsedParameters = (configuration, context) => {
+    const parameters = parse(configuration).parameters;
+    let queryParams = {};
+
+    parameters.every((parameter) => {
+        if (parameter.key in context) {
+            queryParams[parameter.key] = context[parameter.key];
+
+        }
+        else if ("defaultValue" in parameter) {
+            queryParams[parameter.key] = parameter.defaultValue;
+        }
+        // else ignore the parameter because it is not used in the provided configuration.
+    })
+
+    return queryParams;
+}
