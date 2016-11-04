@@ -1,0 +1,18 @@
+{
+    "id": "aar-domain-probe-path",
+    "graph": "ChordGraph",
+    "title": "Probe Path",
+    "author": "Ronak Shah and Curran Kelleher",
+    "creationDate": "11/02/2016",
+    "data": {
+        "chordSourceColumn": "snsg",
+        "chordDestinationColumn": "dnsg"
+    },
+    "listeners": [{
+      "params": {
+          "snsg": "snsg",
+          "dnsg": "dnsg"
+      }
+    }],
+    "query": "aar-domain-probe-path"
+}
