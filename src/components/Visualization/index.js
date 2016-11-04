@@ -1,5 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import parse from "json-templates";
+
+import { fromJS, Map } from "immutable";
+
 import { connect } from "react-redux";
 import { push } from "redux-router";
 
@@ -17,6 +21,7 @@ import {
 } from "../../services/configurations/redux/actions";
 
 import { resizeVisualization } from "../../utils/resize"
+import { shouldUpdateVisualization } from "../../utils/configurations"
 
 import { GraphManager } from "../Graphs/index";
 import { ServiceManager } from "../../services/servicemanager/index";
@@ -159,6 +164,25 @@ class VisualizationView extends React.Component {
         const graphName      = configuration.get("graph"),
               GraphComponent = GraphManager.getGraphComponent(graphName);
 
+        if (response.error) {
+            return (
+                <CardOverlay
+                    overlayStyle={style.overlayContainer}
+                    textStyle={style.overlayText}
+                    text={(
+                        <div>
+                            <FontAwesome
+                                name="meh-o"
+                                size="2x"
+                                />
+                            <br></br>
+                            Wow, it seems the connection is lost!
+                        </div>
+                    )}
+                    />
+            )
+        }
+
         let description;
 
         if (this.state.showDescription) {
@@ -211,16 +235,20 @@ class VisualizationView extends React.Component {
         }
 
         return (
-            <div style={style.container}>
-                <div style={style.text}>
-                    <FontAwesome
-                        name="circle-o-notch"
-                        spin
-                        />
-                    <br></br>
-                    Please wait while loading...
-                </div>
-            </div>
+            <CardOverlay
+                overlayStyle={style.overlayContainer}
+                textStyle={style.overlayText}
+                text={(
+                    <div>
+                        <FontAwesome
+                            name="circle-o-notch"
+                            spin
+                            />
+                        <br></br>
+                        Please wait while loading
+                    </div>
+                )}
+                />
         )
     }
 
