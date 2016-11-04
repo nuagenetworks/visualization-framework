@@ -6,5 +6,8 @@
     "data": {
         "circle": true,
         "circleColor": "#4097FF"
-    }
+    },
+    "listeners": [{
+      "redirect": "/dashboards/appsOverview"
+    }]
 }
