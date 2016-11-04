@@ -21,6 +21,5 @@ export class CardOverlay extends React.Component {
 
 CardOverlay.propTypes = {
     overlayStyle: React.PropTypes.object,
-    textStyle: React.PropTypes.object,
-    text: React.PropTypes.string,
+    textStyle: React.PropTypes.object
 };

@@ -20,7 +20,7 @@ export default class ChordGraph extends AbstractGraph {
 
     updateChord(props) {
 
-        const { response, width, height } = this.props;
+        const { response, width, height, onMarkClick } = this.props;
         const {
             chordWeightColumn,
             chordSourceColumn,
@@ -51,6 +51,26 @@ export default class ChordGraph extends AbstractGraph {
             .defaultOpacity(defaultOpacity)
             .fadedOpacity(fadedOpacity)
             .colors(colors);
+
+        if(onMarkClick){
+            this.chordDiagram.onSelectedRibbonChange((d) => {
+                const selectedRibbon = this.chordDiagram.selectedRibbon();
+                if(selectedRibbon) {
+                    const { source, destination } = selectedRibbon;
+                    onMarkClick({
+                        [chordSourceColumn]: source,
+                        [chordDestinationColumn]: destination
+                    });
+                } else {
+                    onMarkClick({
+                        [chordSourceColumn]: undefined,
+                        [chordDestinationColumn]: undefined
+                    });
+                }
+            });
+        } else {
+            this.chordDiagram.onSelectedRibbonChange(null);
+        }
 
         // Re-render the chord diagram.
         this.chordDiagram();
@@ -103,14 +123,12 @@ function ChordDiagram(svg){
       selectedRibbon = null,
       hoveredChordGroup = null,
       data = null,
-      onSelectedRibbonChangeCallback = function (){};
+      onSelectedRibbonChangeCallback = null;
 
   // These "column" variables represent keys in the row objects of the input table.
-  // Kibana's `tabify` happens to give us column names "1", "2", and "3".
-  // These correspond to the Schemas defined for the plugin.
-  var chordWeightColumn = "1",
-      chordSourceColumn = "2",
-      chordDestinationColumn = "3";
+  var chordWeightColumn,
+      chordSourceColumn,
+      chordDestinationColumn;
 
   // Accessor functions for columns.
   var weight = function (d){ return d[chordWeightColumn]; },
@@ -208,6 +226,7 @@ function ChordDiagram(svg){
         })
         .style("stroke", "black")
         .style("stroke-opacity", 0.2)
+        .style("cursor", onSelectedRibbonChangeCallback ? "pointer" : "")
         .call(setRibbonOpacity)
         .on("mousedown", function (d){
           my.selectedRibbon({
@@ -382,7 +401,15 @@ function ChordDiagram(svg){
     data.forEach(function (d){
       i = indices[source(d)];
       j = indices[destination(d)];
-      matrix[j][i] = weight(d);
+
+      if(chordWeightColumn){
+        matrix[j][i] = weight(d);
+      } else {
+
+        // Handle the case where no weight column was specified
+        // by making the chord weight fixed on both sides.
+        matrix[j][i] = matrix[i][j] = 1;
+      }
     });
 
     matrix.names = names;
@@ -405,7 +432,9 @@ function ChordDiagram(svg){
   my.selectedRibbon = function (_){
     if(typeof _ !== "undefined"){
       selectedRibbon = _;
-      onSelectedRibbonChangeCallback();
+      if(onSelectedRibbonChangeCallback) {
+        onSelectedRibbonChangeCallback();
+      }
       my();
     } else {
       return selectedRibbon;

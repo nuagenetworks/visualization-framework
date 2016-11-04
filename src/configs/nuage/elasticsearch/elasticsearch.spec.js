@@ -16,15 +16,29 @@ describe('Elastic Search service', () => {
 
 
 describe('Elastic Search getRequestID', () => {
-    it('should return a stringify version of the query', () => {
+    it('should return a stringify version of the query without parameters', () => {
         let query = {
                 id: "ABC"
             },
             context = {
                 enterpriseName: "Nuage Networks"
             };
+        expect(ElasticSearchService.getRequestID(query, context)).toEqual("ABC");
+    });
+
+    it('should return a stringify version of the query with all used parameters', () => {
+        let query = {
+                id: "ABC",
+                query: {
+                    randomFilter: "{{enterpriseName}}"
+                }
+            },
+            context = {
+                enterpriseName: "Nuage Networks"
+            };
         expect(ElasticSearchService.getRequestID(query, context)).toEqual("ABC[{\"enterpriseName\":\"Nuage Networks\"}]");
     });
+
 });
 
 
