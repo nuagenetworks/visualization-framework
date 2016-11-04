@@ -1,5 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import parse from "json-templates";
+
+import { fromJS, Map } from "immutable";
+
 import { connect } from "react-redux";
 import { push } from "redux-router";
 
@@ -159,6 +163,25 @@ class VisualizationView extends React.Component {
         const graphName      = configuration.get("graph"),
               GraphComponent = GraphManager.getGraphComponent(graphName);
 
+        if (response.error) {
+            return (
+                <CardOverlay
+                    overlayStyle={style.overlayContainer}
+                    textStyle={style.overlayText}
+                    text={(
+                        <div>
+                            <FontAwesome
+                                name="meh-o"
+                                size="2x"
+                                />
+                            <br></br>
+                            Wow, it seems the connection is lost!
+                        </div>
+                    )}
+                    />
+            )
+        }
+
         let description;
 
         if (this.state.showDescription) {
@@ -211,16 +234,20 @@ class VisualizationView extends React.Component {
         }
 
         return (
-            <div style={style.container}>
-                <div style={style.text}>
-                    <FontAwesome
-                        name="circle-o-notch"
-                        spin
-                        />
-                    <br></br>
-                    Please wait while loading...
-                </div>
-            </div>
+            <CardOverlay
+                overlayStyle={style.overlayContainer}
+                textStyle={style.overlayText}
+                text={(
+                    <div>
+                        <FontAwesome
+                            name="circle-o-notch"
+                            spin
+                            />
+                        <br></br>
+                        Please wait while loading
+                    </div>
+                )}
+                />
         )
     }
 
@@ -322,7 +349,6 @@ const mapStateToProps = (state, ownProps) => {
                 ServiceActionKeyStore.REQUESTS,
                 requestID
             ]);
-
             if (response && !response.get(ServiceActionKeyStore.IS_FETCHING))
                 props.response = response.toJS();
         }
