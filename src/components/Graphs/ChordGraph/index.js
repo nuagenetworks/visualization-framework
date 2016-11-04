@@ -20,7 +20,7 @@ export default class ChordGraph extends AbstractGraph {
 
     updateChord(props) {
 
-        const { response, width, height } = this.props;
+        const { response, width, height, onMarkClick } = this.props;
         const {
             chordWeightColumn,
             chordSourceColumn,
@@ -51,6 +51,26 @@ export default class ChordGraph extends AbstractGraph {
             .defaultOpacity(defaultOpacity)
             .fadedOpacity(fadedOpacity)
             .colors(colors);
+
+        if(onMarkClick){
+            this.chordDiagram.onSelectedRibbonChange((d) => {
+                const selectedRibbon = this.chordDiagram.selectedRibbon();
+                if(selectedRibbon) {
+                    const { source, destination } = selectedRibbon;
+                    onMarkClick({
+                        [chordSourceColumn]: source,
+                        [chordDestinationColumn]: destination
+                    });
+                } else {
+                    onMarkClick({
+                        [chordSourceColumn]: undefined,
+                        [chordDestinationColumn]: undefined
+                    });
+                }
+            });
+        } else {
+            this.chordDiagram.onSelectedRibbonChange(null);
+        }
 
         // Re-render the chord diagram.
         this.chordDiagram();
@@ -103,7 +123,7 @@ function ChordDiagram(svg){
       selectedRibbon = null,
       hoveredChordGroup = null,
       data = null,
-      onSelectedRibbonChangeCallback = function (){};
+      onSelectedRibbonChangeCallback = null;
 
   // These "column" variables represent keys in the row objects of the input table.
   var chordWeightColumn,
@@ -206,6 +226,7 @@ function ChordDiagram(svg){
         })
         .style("stroke", "black")
         .style("stroke-opacity", 0.2)
+        .style("cursor", onSelectedRibbonChangeCallback ? "pointer" : "")
         .call(setRibbonOpacity)
         .on("mousedown", function (d){
           my.selectedRibbon({
@@ -411,7 +432,9 @@ function ChordDiagram(svg){
   my.selectedRibbon = function (_){
     if(typeof _ !== "undefined"){
       selectedRibbon = _;
-      onSelectedRibbonChangeCallback();
+      if(onSelectedRibbonChangeCallback) {
+        onSelectedRibbonChangeCallback();
+      }
       my();
     } else {
       return selectedRibbon;

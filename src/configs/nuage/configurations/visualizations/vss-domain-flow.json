@@ -9,5 +9,11 @@
         "chordSourceColumn": "spg",
         "chordDestinationColumn": "dpg"
     },
+    "listeners": [{
+      "params": {
+          "spg": "spg",
+          "dpg": "dpg"
+      }
+    }],
     "query": "vss-domain-flow"
 }
