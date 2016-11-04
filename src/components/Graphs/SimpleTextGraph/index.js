@@ -58,15 +58,13 @@ export default class SimpleTextGraph extends React.Component {
             );
         }
 
+        const style = {
+            height: height,
+            cursor: onMarkClick ? "pointer" : undefined
+        };
+
         return (
-            <div
-                className="text-center"
-                style={{
-                    height: height,
-                    cursor: onMarkClick ? "pointer" : undefined
-                }}
-                onClick={ onMarkClick }
-            >
+            <div className="text-center" style={style} onClick={onMarkClick}>
                 { body }
             </div>
         );
