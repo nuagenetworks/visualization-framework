@@ -3,6 +3,11 @@ import ReactDOM from "react-dom";
 import parse from "json-templates";
 import ReactInterval from 'react-interval';
 
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+
 import { fromJS, Map } from "immutable";
 
 import { connect } from "react-redux";
@@ -75,7 +80,6 @@ class VisualizationView extends React.Component {
     }
 
     initialize(id) {
-        console.error("Initializing " + this.props.id);
         this.props.fetchConfigurationIfNeeded(id).then((c) => {
             const { configuration } = this.props
 
@@ -238,31 +242,78 @@ class VisualizationView extends React.Component {
         )
     }
 
-    shouldShowTitle() {
+    shouldShowTitleBar() {
         const { configuration } = this.props;
 
         return configuration && configuration.get("title") && this.state.parameterizable;
     }
 
-    renderTitleIfNeeded() {
+    renderDescriptionIcon() {
         const { configuration } = this.props;
 
-        if (!this.shouldShowTitle())
+        if (!configuration.get("description"))
             return;
 
-        const descriptionIcon = !configuration.get("description") ? null : (
-            <div className="pull-right">
-                <FontAwesome
-                    name="info-circle"
-                    onTouchTap={() => { this.setState({showDescription: !!configuration.get("description")}); }}
-                    />
-            </div>
+        return (
+            <FontAwesome
+                name="info-circle"
+                style={style.cardIconMenu}
+                onTouchTap={() => { this.setState({showDescription: !!configuration.get("description")}); }}
+                />
         )
+    }
+
+    renderFilterOptions() {
+        const { configuration } = this.props;
+
+        const filterOptions = configuration.get("filterOptions");
+
+        if (!filterOptions || filterOptions.length === 0)
+            return;
+
+        return (
+            <IconMenu
+                iconButtonElement={
+                    <FontAwesome
+                        name="ellipsis-v"
+                        style={style.cardIconMenu}
+                        />
+                }
+                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                >
+                {filterOptions.map((option, index) => {
+
+                    let queryParams = Object.assign({}, this.props.context, {
+                        [option.get("parameter")]: option.get("value")
+                    });
+
+                    return (
+                        <MenuItem
+                            key={index}
+                            primaryText={option.get("label")}
+                            style={style.menuItem}
+                            onTouchTap={() => { this.props.goTo(window.location.pathname, queryParams)}}
+                            />
+                    )
+                })}
+            </IconMenu>
+        )
+    }
+
+    renderTitleBarIfNeeded() {
+        const { configuration } = this.props;
+
+        if (!this.shouldShowTitleBar())
+            return;
 
         return (
             <div style={style.cardTitle}>
                 {configuration.get("title")}
-                {descriptionIcon}
+                <div className="pull-right">
+                    {this.renderDescriptionIcon()}
+                    {this.renderFilterOptions()}
+                </div>
             </div>
         )
     }
@@ -285,7 +336,7 @@ class VisualizationView extends React.Component {
               containerStyle={style.cardContainer}
               ref={this.cardTextReference}
             >
-                { this.renderTitleIfNeeded() };
+                { this.renderTitleBarIfNeeded() };
                 <CardText style={style.cardText}>
                     { this.renderVisualizationIfNeeded() }
                 </CardText>

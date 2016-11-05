@@ -14,6 +14,18 @@ const style = {
         fontSize: "1.2em",
         fontWeight: "200",
     },
+    cardIconMenu: {
+        padding: 0,
+        width:16,
+        height:16,
+        textAlign: "center",
+        cursor: "pointer"
+    },
+    menuItem: {
+        minHeight: "26px",
+        lineHeight: "26px",
+        fontSize: "12px",
+    },
     cardText: {
         padding: "10px",
         fontSize: "0.85em",
