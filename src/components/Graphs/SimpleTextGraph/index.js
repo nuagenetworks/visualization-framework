@@ -36,7 +36,8 @@ export default class SimpleTextGraph extends React.Component {
                     circle,
                     circleColor
                 }
-            }
+            },
+            onMarkClick
         } = this.props;
 
         let body;
@@ -69,14 +70,18 @@ export default class SimpleTextGraph extends React.Component {
             );
         }
         else {
-
             body = (
                 <CircularProgress color="#eeeeee" />
             );
         }
 
+        const style = {
+            height: height,
+            cursor: onMarkClick ? "pointer" : undefined
+        };
+
         return (
-            <div className="text-center" style={{ height: height }}>
+            <div className="text-center" style={style} onClick={onMarkClick}>
                 { body }
             </div>
         );
