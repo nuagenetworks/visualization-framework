@@ -4,6 +4,7 @@
     "title": "Top 5 Apps Donut",
     "author": "Curran Kelleher",
     "creationDate": "10/19/2016",
+    "refreshInterval": 10000,
     "data": {
         "sliceColumn": "Sum of MB",
         "labelColumn": "Application",

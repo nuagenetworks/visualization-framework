@@ -4,6 +4,7 @@
     "title": "Flows per Domain",
     "author": "Ronak Shah and Curran Kelleher",
     "creationDate": "10/25/2016",
+    "refreshInterval": 9000,
     "data": {
         "chordWeightColumn": "SumOf",
         "chordSourceColumn": "spg",

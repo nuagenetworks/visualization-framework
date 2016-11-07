@@ -1,6 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import parse from "json-templates";
+import ReactInterval from 'react-interval';
+
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 import { fromJS, Map } from "immutable";
 
@@ -74,7 +80,6 @@ class VisualizationView extends React.Component {
     }
 
     initialize(id) {
-
         this.props.fetchConfigurationIfNeeded(id).then((c) => {
             const { configuration } = this.props
 
@@ -96,7 +101,7 @@ class VisualizationView extends React.Component {
                     if (!queryConfiguration)
                         return;
 
-                    executeQueryIfNeeded(queryConfiguration, context).then(
+                    executeQueryIfNeeded(queryConfiguration.toJS(), context).then(
                         () => {
                             this.setState({
                                 parameterizable: true,
@@ -164,7 +169,7 @@ class VisualizationView extends React.Component {
     shouldShowVisualization() {
         const { configuration, response } = this.props;
 
-        return configuration && response && !response.isFetching;
+        return configuration && response && !response.get("isFetching");
     }
 
     renderVisualization() {
@@ -173,7 +178,7 @@ class VisualizationView extends React.Component {
         const graphName      = configuration.get("graph"),
               GraphComponent = GraphManager.getGraphComponent(graphName);
 
-        if (response.error) {
+        if (response.get("error")) {
             return (
                 <CardOverlay
                     overlayStyle={style.overlayContainer}
@@ -202,13 +207,19 @@ class VisualizationView extends React.Component {
                                 onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
                                 />
         }
+        const timeout = configuration.get("refreshInterval") || 6000;
 
         return (
             <div>
+                <ReactInterval
+                    enabled={true}
+                    timeout={timeout}
+                    callback={() => { this.initialize(this.props.id) }}
+                    />
                 <GraphComponent
-                  response={response}
+                  response={response.toJS()}
                   configuration={configuration.toJS()}
-                  queryConfiguration={queryConfiguration}
+                  queryConfiguration={queryConfiguration.toJS()}
                   width={this.state.width}
                   height={this.state.height}
                   {...this.state.listeners}
@@ -221,26 +232,6 @@ class VisualizationView extends React.Component {
     renderVisualizationIfNeeded() {
         if (this.shouldShowVisualization()) {
             return this.renderVisualization();
-        }
-
-        if (!this.state.parameterizable) {
-            return (
-                <CardOverlay
-                    overlayStyle={style.overlayContainer}
-                    textStyle={style.overlayText}
-                    text={(
-                        <div>
-                            <FontAwesome
-                                name="meh-o"
-                                size="2x"
-                                />
-                            <br></br>
-                            Oops, we are missing some parameters here!
-                        </div>
-                    )}
-                    onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
-                    />
-            )
         }
 
         return (
@@ -261,31 +252,78 @@ class VisualizationView extends React.Component {
         )
     }
 
-    shouldShowTitle() {
+    shouldShowTitleBar() {
         const { configuration } = this.props;
 
         return configuration && configuration.get("title") && this.state.parameterizable;
     }
 
-    renderTitleIfNeeded() {
+    renderDescriptionIcon() {
         const { configuration } = this.props;
 
-        if (!this.shouldShowTitle())
+        if (!configuration.get("description"))
             return;
 
-        const descriptionIcon = !configuration.get("description") ? null : (
-            <div className="pull-right">
-                <FontAwesome
-                    name="info-circle"
-                    onTouchTap={() => { this.setState({showDescription: !!configuration.get("description")}); }}
-                    />
-            </div>
+        return (
+            <FontAwesome
+                name="info-circle"
+                style={style.cardIconMenu}
+                onTouchTap={() => { this.setState({showDescription: !!configuration.get("description")}); }}
+                />
         )
+    }
+
+    renderFilterOptions() {
+        const { configuration } = this.props;
+
+        const filterOptions = configuration.get("filterOptions");
+
+        if (!filterOptions || filterOptions.length === 0)
+            return;
+
+        return (
+            <IconMenu
+                iconButtonElement={
+                    <FontAwesome
+                        name="ellipsis-v"
+                        style={style.cardIconMenu}
+                        />
+                }
+                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                >
+                {filterOptions.map((option, index) => {
+
+                    let queryParams = Object.assign({}, this.props.context, {
+                        [option.get("parameter")]: option.get("value")
+                    });
+
+                    return (
+                        <MenuItem
+                            key={index}
+                            primaryText={option.get("label")}
+                            style={style.menuItem}
+                            onTouchTap={() => { this.props.goTo(window.location.pathname, queryParams)}}
+                            />
+                    )
+                })}
+            </IconMenu>
+        )
+    }
+
+    renderTitleBarIfNeeded() {
+        const { configuration } = this.props;
+
+        if (!this.shouldShowTitleBar())
+            return;
 
         return (
             <div style={style.cardTitle}>
                 {configuration.get("title")}
-                {descriptionIcon}
+                <div className="pull-right">
+                    {this.renderDescriptionIcon()}
+                    {this.renderFilterOptions()}
+                </div>
             </div>
         )
     }
@@ -298,13 +336,17 @@ class VisualizationView extends React.Component {
     }
 
     render() {
+
+        if (!this.state.parameterizable)
+            return (<div></div>);
+
         return (
             <Card
               style={style.card}
               containerStyle={style.cardContainer}
               ref={this.cardTextReference}
             >
-                { this.renderTitleIfNeeded() };
+                { this.renderTitleBarIfNeeded() };
                 <CardText style={style.cardText}>
                     { this.renderVisualizationIfNeeded() }
                 </CardText>
@@ -348,21 +390,21 @@ const mapStateToProps = (state, ownProps) => {
         )) {
             props.queryConfiguration = queryConfiguration.get(
                 ConfigurationsActionKeyStore.DATA
-            ).toJS();
+            );
         }
 
         const scriptName = props.configuration.get("script");
 
         // Expose received response if it is available
         if (props.queryConfiguration || scriptName) {
-            const requestID = ServiceManager.getRequestID(props.queryConfiguration || scriptName, context);
+            const requestID = ServiceManager.getRequestID(props.queryConfiguration.toJS() || scriptName, context);
 
             let response = state.services.getIn([
                 ServiceActionKeyStore.REQUESTS,
                 requestID
             ]);
             if (response && !response.get(ServiceActionKeyStore.IS_FETCHING))
-                props.response = response.toJS();
+                props.response = response;
         }
     }
 

@@ -14,6 +14,18 @@ const style = {
         fontSize: "1.2em",
         fontWeight: "200",
     },
+    cardIconMenu: {
+        padding: 0,
+        width:16,
+        height:16,
+        textAlign: "center",
+        cursor: "pointer"
+    },
+    menuItem: {
+        minHeight: "26px",
+        lineHeight: "26px",
+        fontSize: "12px",
+    },
     cardText: {
         padding: "10px",
         fontSize: "0.85em",
@@ -31,8 +43,6 @@ const style = {
         height: "100%",
         display: "inline-block",
         textAlign: "center",
-        background: theme.palette.greyDarkColor,
-        opacity: "0.5",
     },
     overlayText: {
         position: "absolute",
@@ -40,7 +50,7 @@ const style = {
         width: "100%",
         fontSize: "1.2em",
         fontWeight: 300,
-        color: theme.palette.whiteColor,
+        color: theme.palette.blackColor,
     },
     container: {
         position: "absolute",

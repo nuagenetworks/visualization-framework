@@ -6,8 +6,11 @@
         An object with computed { width, height } for passing to visualizations as props.
 */
 export const resizeVisualization = (gridItem) => {
-    if (!gridItem)
-        return;
+    if (!gridItem || gridItem.childNodes.length == 0 || gridItem.childNodes[0].childNodes.length == 0)
+        return {
+            width: 0,
+            height: 0
+        };
 
     let card          = gridItem.childNodes[0],
         innerCard     = card.childNodes[0].childNodes,
