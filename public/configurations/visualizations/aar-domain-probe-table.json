@@ -1,0 +1,19 @@
+{
+    "id": "aar-domain-probe-table",
+    "graph": "Table",
+    "title": "NSG to NSG Probe Detail",
+    "author": "Ronak Shah",
+    "creationDate": "11/02/2016",
+    "data": {
+        "columns": [
+            { "column": "SrcUplink", "label": "Source Uplink" },
+            { "column": "DstUplink", "label": "Destination Uplink" },
+            { "column": "PerfMonitor", "label": "Perf Monitor" },
+            { "column": "AvgJitter", "label": "Avg Jitter" },
+            { "column": "AvgLatency", "label": "Avg Latency" },
+            { "column": "AvgPacketLoss", "label": "Avg Pkt Loss"},
+            { "column": "timestamp", "label": "Timestamp"}
+        ]
+    },
+    "query": "aar-domain-probe-table"
+}

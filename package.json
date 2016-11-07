@@ -15,7 +15,7 @@
     "fontawesome": "^4.5.0",
     "immutable": "3.7.6",
     "jquery": "3.1.0",
-    "json-templates": "^1.0.0",
+    "json-templates": "1.0.0",
     "material-ui": "^0.15.4",
     "nock": "^8.0.0",
     "react": "^15.3.2",
@@ -41,6 +41,6 @@
     "test": "react-scripts test --env=jsdom"
   },
   "eslintConfig": {
-    "extends": "./node_modules/react-scripts/config/eslint.js"
+    "extends": "./node_modules/react-scripts/node_modules/eslint-config-react-app/index.js"
   }
 }
