@@ -1,14 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import parse from "json-templates";
 import ReactInterval from 'react-interval';
 
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-
-import { fromJS, Map } from "immutable";
 
 import { connect } from "react-redux";
 import { push } from "redux-router";
@@ -111,7 +106,7 @@ class VisualizationView extends React.Component {
                             this.setState({
                                 parameterizable: false,
                             });
-                        },
+                        }
                     );
                 });
             }

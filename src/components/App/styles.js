@@ -6,8 +6,6 @@ const style = {
         fontWeight: 200,
     },
     container: {
-        margin: "10px",
-        position: "relative",
     },
     menuLogo: {
         textAlign: "center",
