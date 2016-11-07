@@ -207,7 +207,7 @@ class VisualizationView extends React.Component {
                                 onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
                                 />
         }
-        const timeout = configuration.get("refreshInterval") || 60000;
+        const timeout = configuration.get("refreshInterval") || 600000;
 
         return (
             <div>
