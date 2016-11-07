@@ -165,10 +165,7 @@ export class DashboardView extends React.Component {
         const links         = configuration.get("links"),
             filterOptions = configuration.get("filterOptions");
 
-        if (!links || links.length === 0)
-            return;
-
-        if (!filterOptions || filterOptions.length === 0)
+        if (!links && !filterOptions)
             return;
 
         return this.renderNavigationBar();
