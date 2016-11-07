@@ -8,6 +8,22 @@ import "./style.css";
     This is a very basic graph that displays a text message
 */
 export default class SimpleTextGraph extends React.Component {
+
+    showTitle() {
+        const {
+            queryConfiguration,
+            configuration,
+        } = this.props;
+
+        if (queryConfiguration && queryConfiguration.title)
+            return queryConfiguration.title;
+
+        if (configuration && configuration.title)
+            return configuration.title;
+
+        return "Untitled";
+    }
+
     render() {
         const {
             response,
@@ -15,11 +31,13 @@ export default class SimpleTextGraph extends React.Component {
             width,
             height,
             configuration: {
+                title,
                 data: {
                     circle,
                     circleColor
                 }
-            }
+            },
+            onMarkClick
         } = this.props;
 
         let body;
@@ -27,7 +45,7 @@ export default class SimpleTextGraph extends React.Component {
             body = (
                 <div className="SimpleTextGraph">
                     {(() => {
-                        if(circle){
+                        if (circle) {
                             const padding = 16;
                             const side = width * 0.3;
                             return (
@@ -47,19 +65,23 @@ export default class SimpleTextGraph extends React.Component {
                       {response.results.length}
                     </div>
                     <br />
-                    {queryConfiguration.title}
+                    {this.showTitle()}
                 </div>
             );
         }
         else {
-
             body = (
                 <CircularProgress color="#eeeeee" />
             );
         }
 
+        const style = {
+            height: height,
+            cursor: onMarkClick ? "pointer" : undefined
+        };
+
         return (
-            <div className="text-center" style={{ height: height }}>
+            <div className="text-center" style={style} onClick={onMarkClick}>
                 { body }
             </div>
         );

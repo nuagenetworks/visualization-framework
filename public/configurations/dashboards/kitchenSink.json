@@ -66,6 +66,15 @@
             "h": 15,
             "minW": 2,
             "minH": 12
+        },
+        {
+            "id": "effective-score",
+            "x": 3,
+            "y": 15,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
         }
     ]
 }
