@@ -163,7 +163,7 @@ export class DashboardView extends React.Component {
         const { configuration } = this.props;
 
         const links         = configuration.get("links"),
-            filterOptions = configuration.get("filterOptions");
+              filterOptions = configuration.get("filterOptions");
 
         if (!links && !filterOptions)
             return;
