@@ -83,7 +83,7 @@ export class DashboardView extends React.Component {
     }
 
     renderNavigationBarIfNeeded() {
-        const { configuration } = this.props;
+        const { configuration, location } = this.props;
 
         const links = configuration.get("links");
 
@@ -94,13 +94,11 @@ export class DashboardView extends React.Component {
             <div style={style.navigationContainer}>
                 <ul className="list-inline" style={style.linksList}>
                     {links.map((link, index) => {
-                        let url     = link.get("url"),
-                            context = location.query;
 
                         return <li key={index}
                                    style={style.link}
                                    >
-                                    <Link to={{ url, context }}>
+                                    <Link to={{ pathname:link.get("url"), query:location.query }}>
                                         {link.get("label")}
                                     </Link>
                                </li>;
