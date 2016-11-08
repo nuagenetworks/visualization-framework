@@ -11,9 +11,13 @@
         "margin": {
             "top": 15,
             "bottom": 20,
-            "left": 80,
+            "left": 40,
             "right": 40
-        }
+        },
+        "xTickGrid": true,
+        "yTickGrid": false,
+        "xTickFormat": ".2s",
+        "xTicks": 5
     },
     "query": "vss-domain-traffic-top-spg"
 }
