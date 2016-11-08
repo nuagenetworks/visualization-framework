@@ -1,16 +1,14 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { push } from "redux-router";
 import { Link } from "react-router";
 
-import IconMenu from "material-ui/IconMenu";
-import MenuItem from "material-ui/MenuItem";
 import CircularProgress from "material-ui/CircularProgress";
 import { Responsive, WidthProvider } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 import Visualization from "../Visualization";
+import FiltersToolBar from "../FiltersToolBar";
 
 import { Actions as AppActions } from "../App/redux/actions";
 
@@ -20,7 +18,6 @@ import {
 } from "../../services/configurations/redux/actions";
 
 import style from "./styles";
-import FontAwesome from "react-fontawesome";
 
 
 export class DashboardView extends React.Component {
@@ -85,19 +82,8 @@ export class DashboardView extends React.Component {
         this.resizeCallbacks.push(callback);
     }
 
-    renderNavigationBar() {
-        return (
-            <div style={style.navigationContainer}>
-                {this.renderNavigationLinks()}
-                <div className="pull-right">
-                    {this.renderFilterOptions()}
-                </div>
-            </div>
-        );
-    }
-
-    renderNavigationLinks() {
-        const { configuration, location } = this.props;
+    renderNavigationBarIfNeeded() {
+        const { configuration } = this.props;
 
         const links = configuration.get("links");
 
@@ -105,74 +91,31 @@ export class DashboardView extends React.Component {
             return;
 
         return (
-            <ul className="list-inline" style={style.linksList}>
-                {links.map((link, index) => {
-                    return <li key={index}
-                               style={style.link}
-                               >
-                                <Link to={link.get("url")} query={location.query}>
-                                    {link.get("label")}
-                                </Link>
-                           </li>;
-                })}
-            </ul>
+            <div style={style.navigationContainer}>
+                <ul className="list-inline" style={style.linksList}>
+                    {links.map((link, index) => {
+                        let url     = link.get("url"),
+                            context = location.query;
+
+                        return <li key={index}
+                                   style={style.link}
+                                   >
+                                    <Link to={{ url, context }}>
+                                        {link.get("label")}
+                                    </Link>
+                               </li>;
+                    })}
+                </ul>
+            </div>
         );
-    }
-
-    renderFilterOptions() {
-        const { configuration, location } = this.props;
-
-        const filterOptions = configuration.get("filterOptions");
-
-        if (!filterOptions || filterOptions.length === 0)
-            return;
-
-        let context = location.query;
-
-        return (
-            <IconMenu
-                iconButtonElement={
-                    <FontAwesome
-                        name="ellipsis-v"
-                        style={style.iconMenu}
-                        />
-                }
-                anchorOrigin={{horizontal: "right", vertical: "top"}}
-                targetOrigin={{horizontal: "right", vertical: "top"}}
-                >
-                {filterOptions.map((option, index) => {
-
-                    let queryParams = Object.assign({}, context, {
-                        [option.get("parameter")]: option.get("value")
-                    });
-
-                    return (
-                        <MenuItem
-                            key={index}
-                            primaryText={option.get("label")}
-                            style={style.menuItem}
-                            onTouchTap={() => { this.props.goTo(window.location.pathname, queryParams);}}
-                            />
-                    );
-                })}
-            </IconMenu>
-        );
-    }
-
-    renderNavigationBarIfNeeded() {
-        const { configuration } = this.props;
-
-        const links         = configuration.get("links"),
-              filterOptions = configuration.get("filterOptions");
-
-        if (!links && !filterOptions)
-            return;
-
-        return this.renderNavigationBar();
     }
 
     render() {
-        const { configuration, error, fetching, location} = this.props;
+        const { configuration,
+                error,
+                fetching,
+                location
+        } = this.props;
 
         if (fetching) {
             return (
@@ -182,17 +125,23 @@ export class DashboardView extends React.Component {
                 </div>
             );
 
-        } else if (error) {
+        }
+
+        if (error) {
             return (
                 <div>{error}</div>
             );
+        }
 
-        } else if (configuration) {
+        if (configuration) {
             const { visualizations } = configuration.toJS();
 
             return (
                 <div>
                     {this.renderNavigationBarIfNeeded()}
+
+                    <FiltersToolBar filterOptions={configuration.get("filterOptions")} context={location.query} />
+
                     <div style={style.gridContainer}>
                         <ResponsiveReactGridLayout
                             rowHeight={10}
@@ -219,9 +168,9 @@ export class DashboardView extends React.Component {
                     </div>
                 </div>
             );
-        } else {
-            return <div>No dashboard</div>;
         }
+
+        return <div>No dashboard</div>;
     }
 }
 
@@ -256,11 +205,7 @@ const actionCreators = (dispatch) => ({
             id,
             ConfigurationsActionKeyStore.DASHBOARDS
         ));
-    },
-
-    goTo: function(link, filters) {
-        dispatch(push({pathname:link, query:filters}));
-    },
+    }
 });
 
 

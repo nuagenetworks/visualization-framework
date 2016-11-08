@@ -1,0 +1,84 @@
+import React from "react";
+
+import { push } from "redux-router";
+import { connect } from "react-redux";
+
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
+
+import style from "./styles";
+
+
+export class FiltersToolBarView extends React.Component {
+
+    render() {
+        const {
+            filterOptions,
+            context
+        } = this.props
+
+        if (!filterOptions || Object.keys(filterOptions).lengh === 0)
+            return (
+                <div></div>
+            );
+
+        return (
+            <div className="text-right">
+                <ul className="list-inline" style={style.list}>
+                {filterOptions.map((configOptions, name) => {
+
+                    let currentValue = context[configOptions.get("parameter")];
+
+                    return (
+                        <li style={style.listItem}>
+                            <DropDownMenu
+                                value={currentValue}
+                                style={style.dropdownMenu}
+                                >
+
+                                {configOptions.get("options").map((option, index) => {
+
+                                    let queryParams = Object.assign({}, context, {
+                                        [configOptions.get("parameter")]: option.get("value")
+                                    });
+
+                                    return (
+                                        <MenuItem
+                                            key={index}
+                                            value={option.get("value")}
+                                            primaryText={option.get("label")}
+                                            style={style.menuItem}
+                                            onTouchTap={() => { this.props.goTo(window.location.pathname, queryParams);}}
+                                            />
+                                    )
+                                })}
+                            </DropDownMenu>
+
+                        </li>
+                    )
+
+                })}
+                </ul>
+            </div>
+        )
+    }
+}
+
+FiltersToolBarView.propTypes = {
+    filterOptions: React.PropTypes.object,
+    context: React.PropTypes.object
+};
+
+const mapStateToProps = (state, ownProps) => ({
+
+})
+
+const actionCreators = (dispatch) => ({
+
+    goTo: function(link, filters) {
+        dispatch(push({pathname:link, query:filters}));
+    }
+
+});
+
+export default connect(mapStateToProps, actionCreators)(FiltersToolBarView);
