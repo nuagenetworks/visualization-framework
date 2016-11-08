@@ -31,29 +31,29 @@
         }
     ],
     "filterOptions": {
-        "ACL": {
-            "parameter": "actionType",
+        "Time interval": {
+            "parameter": "startTime",
             "options": [
                 {
-                    "label": "Deny",
-                    "value": "DENY"
+                    "label": "24h",
+                    "value": "now-24h",
+                    "default": true
                 },
                 {
-                    "label": "Allow",
-                    "value": "ALLOW"
+                    "label": "900h",
+                    "value": "now-900h"
                 }
             ]
         },
-        "Another Option": {
-            "parameter": "anotherOption",
+        "Refresh interval": {
+            "parameter": "refreshInterval",
+            "default": 6000,
+            "disabled": true,
             "options": [
                 {
-                    "label": "Toto",
-                    "value": "TOTO"
-                },
-                {
-                    "label": "Tata",
-                    "value": "TATA"
+                    "label": "60 seconds",
+                    "value": 6000,
+                    "disabled": true
                 }
             ]
         }

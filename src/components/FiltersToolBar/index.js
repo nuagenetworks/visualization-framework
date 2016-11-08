@@ -27,13 +27,18 @@ export class FiltersToolBarView extends React.Component {
                 <ul className="list-inline" style={style.list}>
                 {filterOptions.map((configOptions, name) => {
 
-                    let currentValue = context[configOptions.get("parameter")];
+                    let currentValue = context[configOptions.get("parameter")] || configOptions.get("default");
 
                     return (
                         <li style={style.listItem}>
+                            <label style={style.label} for={name}>
+                                {name}
+                            </label>
                             <DropDownMenu
+                                name={name}
                                 value={currentValue}
                                 style={style.dropdownMenu}
+                                disabled={configOptions.get("disabled")}
                                 >
 
                                 {configOptions.get("options").map((option, index) => {
@@ -48,6 +53,7 @@ export class FiltersToolBarView extends React.Component {
                                             value={option.get("value")}
                                             primaryText={option.get("label")}
                                             style={style.menuItem}
+                                            disabled={option.get("disabled")}
                                             onTouchTap={() => { this.props.goTo(window.location.pathname, queryParams);}}
                                             />
                                     )

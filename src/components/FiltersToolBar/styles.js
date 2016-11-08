@@ -1,10 +1,21 @@
+import { theme } from "../../theme";
 
 const style = {
+    label: {
+        fontWeight: "normal",
+        fontSize: "0.8em",
+        display: "block",
+        margin: 0,
+        padding: "0 0 0 10px",
+        textAlign: "left",
+        color: theme.palette.blackColor,
+    },
     list: {
         margin: 0,
     },
     listItem: {
-        padding: 0,
+        padding: "5px",
+        textAlign: "left",
     },
     dropdownMenu: {
         fontSize: "12px",

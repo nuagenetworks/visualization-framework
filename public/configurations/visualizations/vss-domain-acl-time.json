@@ -19,32 +19,4 @@
         }
     },
     "query": "vss-domain-acl-time",
-    "filterOptions": {
-        "ACL": {
-            "parameter": "actionType",
-            "options": [
-                {
-                    "label": "Deny",
-                    "value": "DENY"
-                },
-                {
-                    "label": "Allow",
-                    "value": "ALLOW"
-                }
-            ]
-        },
-        "Another Option": {
-            "parameter": "anotherOption",
-            "options": [
-                {
-                    "label": "Toto",
-                    "value": "TOTO"
-                },
-                {
-                    "label": "Tata",
-                    "value": "TATA"
-                }
-            ]
-        }
-    }
 }
