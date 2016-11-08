@@ -43,7 +43,7 @@ export default class Table extends AbstractGraph {
                     overflow: "auto"
                 }}
             >
-                <table>
+                <table style={{ width: "100%" }} >
                     <thead>
                         <tr style={{
                             color:header.fontColor,
