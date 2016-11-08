@@ -1,0 +1,68 @@
+{
+    "id":"aar-nsg-app-linechart",
+    "title":"TBD",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_dpi_flowstats}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTimeTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "4": {
+                    "filters": {
+                        "filters": {
+                            "SourceNSG": {
+                                "query": {
+                                    "term": {
+                                        "SourceNSG": "{{snsg:default}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "aggs": {
+                        "ts": {
+                            "date_histogram": {
+                                "field": "timestamp",
+                                "interval": "1h"
+                            },
+                            "aggs": {
+                                "L7Classification": {
+                                    "terms": {
+                                        "field": "L7Classification",
+                                        "size": 5,
+                                        "order": {
+                                            "SumOf": "desc"
+                                        }
+                                    },
+                                    "aggs": {
+                                        "SumOf": {
+                                            "sum": {
+                                                "field": "{{BytesPackets:TotalMB}}"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
