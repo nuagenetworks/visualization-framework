@@ -59,6 +59,7 @@ class MainMenuView extends React.Component {
                             primaryText={domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
+                            onTouchTap={() => { this.props.goTo("/dashboards/kitchenSink", {startTime:"now-900h"})}}
                             leftIcon={
                                 <FontAwesome
                                     name="plane"
@@ -87,6 +88,7 @@ class MainMenuView extends React.Component {
                             primaryText={nsg.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
+                            onTouchTap={() => { this.props.goTo("/dashboards/kitchenSink", {startTime:"now-900h"})}}
                             leftIcon={
                                 <FontAwesome
                                     name="inbox"
@@ -114,6 +116,7 @@ class MainMenuView extends React.Component {
                             key={enterprise.ID}
                             primaryText={enterprise.name}
                             style={style.listItem}
+                            onTouchTap={() => { this.props.goTo("/dashboards/kitchenSink", {startTime:"now-900h"})}}
                             nestedItems={[
                                 <div style={style.nestedItems}>
                                     {this.renderDomainsMenu()}
@@ -161,13 +164,15 @@ const actionCreators = (dispatch) => ({
     onRequestChange: () => {
       dispatch(ComponentActions.toggleMainMenu());
     },
+
     setPageTitle: (aTitle) => {
       dispatch(ComponentActions.updateTitle(aTitle));
     },
-    goTo: (link) => {
-      dispatch(ComponentActions.toggleMainMenu());
-      dispatch(push(link));
+
+    goTo: function(link, filters) {
+        dispatch(push({pathname:link, query:filters}));
     },
+
     fetchEnterprisesIfNeeded: () => {
       let configuration = {
           service: "VSD",
