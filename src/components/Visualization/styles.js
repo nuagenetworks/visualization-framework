@@ -27,7 +27,7 @@ const style = {
         fontSize: "12px",
     },
     cardText: {
-        padding: "10px",
+        padding: "0px",
         fontSize: "0.85em",
         color: theme.palette.blackColor,
     },
