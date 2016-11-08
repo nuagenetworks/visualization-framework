@@ -12,7 +12,7 @@
             { "column": "sourceport", "label": "Source Port" },
             { "column": "destinationport", "label": "Dest Port" },
             { "column": "type", "label": "Type"},
-            { "column": "timestamp", "label": "Timestamp"},
+            { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
             { "column": "packets", "label": "Packets" }
         ]
     },
