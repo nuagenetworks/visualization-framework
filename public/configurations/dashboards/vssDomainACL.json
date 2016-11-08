@@ -31,29 +31,18 @@
         }
     ],
     "filterOptions": {
-        "Time interval": {
-            "parameter": "startTime",
+        "ACL Action": {
+            "parameter": "actionType",
+            "default": "DENY",
             "options": [
                 {
-                    "label": "24h",
-                    "value": "now-24h",
+                    "label": "Deny",
+                    "value": "DENY",
                     "default": true
                 },
                 {
-                    "label": "900h",
-                    "value": "now-900h"
-                }
-            ]
-        },
-        "Refresh interval": {
-            "parameter": "refreshInterval",
-            "default": 6000,
-            "disabled": true,
-            "options": [
-                {
-                    "label": "60 seconds",
-                    "value": 6000,
-                    "disabled": true
+                    "label": "Allow",
+                    "value": "ALLOW"
                 }
             ]
         }
