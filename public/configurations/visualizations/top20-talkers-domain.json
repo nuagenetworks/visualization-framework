@@ -16,7 +16,7 @@
             { "column": "DstUplink", "label": ""},
             { "column": "DestinationNSG", "label": ""},
             { "column": "DestVportName", "label": ""},
-            { "column": "1", "label": "Total MB" },
+            { "column": "1", "label": "Total MB", "format": ",.2f" },
             { "column": "11", "label": "Total Packets Count" }
         ]
     },
