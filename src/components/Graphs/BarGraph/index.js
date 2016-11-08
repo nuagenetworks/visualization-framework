@@ -58,9 +58,11 @@ export default class BarGraph extends AbstractGraph {
           yTickGrid,
           yTickSizeInner,
           yTickSizeOuter,
+          yTickFormat,
           xTickGrid,
           xTickSizeInner,
           xTickSizeOuter,
+          xTickFormat,
           orientation,
           dateHistogram,
           interval,
@@ -108,9 +110,17 @@ export default class BarGraph extends AbstractGraph {
           .tickSizeInner(xTickGrid ? -innerHeight : xTickSizeInner)
           .tickSizeOuter(xTickSizeOuter);
 
+        if(xTickFormat){
+            xAxis.tickFormat(d3.format(xTickFormat));
+        }
+
         const yAxis = d3.axisLeft(yScale)
           .tickSizeInner(yTickGrid ? -innerWidth : yTickSizeInner)
           .tickSizeOuter(yTickSizeOuter);
+
+        if(yTickFormat){
+            yAxis.tickFormat(d3.format(yTickFormat));
+        }
 
         let barWidth;
 
