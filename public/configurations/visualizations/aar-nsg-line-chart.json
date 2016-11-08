@@ -1,0 +1,12 @@
+{
+    "id": "aar-nsg-line-chart",
+    "graph": "LineGraph",
+    "title": "Multi-Line Chart Example",
+    "author": "Curran Kelleher",
+    "creationDate": "11/08/2016",
+    "data": {
+        "xColumn": "key",
+        "yColumn": "1"
+    },
+    "query": "aar-nsg-app-linechart"
+}
