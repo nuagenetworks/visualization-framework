@@ -16,7 +16,8 @@
         },
         "xTickGrid": true,
         "yTickGrid": false,
-        "xTickFormat": ".2s"
+        "xTickFormat": ".2s",
+        "xTicks": 5
     },
     "query": "vss-domain-traffic-top-spg"
 }
