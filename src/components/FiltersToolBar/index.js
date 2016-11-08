@@ -31,7 +31,7 @@ export class FiltersToolBarView extends React.Component {
 
                     return (
                         <li style={style.listItem}>
-                            <label style={style.label} for={name}>
+                            <label style={style.label} htmlFor={name}>
                                 {name}
                             </label>
                             <DropDownMenu
