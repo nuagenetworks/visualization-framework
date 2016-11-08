@@ -16,18 +16,6 @@ const style = {
     link: {
         padding: "0 10px",
     },
-    iconMenu: {
-        padding: 0,
-        width:16,
-        height:16,
-        textAlign: "center",
-        cursor: "pointer"
-    },
-    menuItem: {
-        minHeight: "26px",
-        lineHeight: "26px",
-        fontSize: "12px",
-    },
     gridContainer: {
         margin: "10px",
         position: "relative",

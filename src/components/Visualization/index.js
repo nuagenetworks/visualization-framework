@@ -2,12 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
 
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-
 import { connect } from "react-redux";
 import { push } from "redux-router";
 
+import FiltersToolBar from "../FiltersToolBar";
 import { CardOverlay } from "../CardOverlay";
 import { Card, CardText } from 'material-ui/Card';
 
@@ -168,7 +166,11 @@ class VisualizationView extends React.Component {
     }
 
     renderVisualization() {
-        const { configuration, queryConfiguration, response } = this.props;
+        const { context,
+                configuration,
+                queryConfiguration,
+                response
+        } = this.props;
 
         const graphName      = configuration.get("graph"),
               GraphComponent = GraphManager.getGraphComponent(graphName);
@@ -268,44 +270,6 @@ class VisualizationView extends React.Component {
         )
     }
 
-    renderFilterOptions() {
-        const { configuration } = this.props;
-
-        const filterOptions = configuration.get("filterOptions");
-
-        if (!filterOptions || filterOptions.length === 0)
-            return;
-
-        return (
-            <IconMenu
-                iconButtonElement={
-                    <FontAwesome
-                        name="ellipsis-v"
-                        style={style.cardIconMenu}
-                        />
-                }
-                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                >
-                {filterOptions.map((option, index) => {
-
-                    let queryParams = Object.assign({}, this.props.context, {
-                        [option.get("parameter")]: option.get("value")
-                    });
-
-                    return (
-                        <MenuItem
-                            key={index}
-                            primaryText={option.get("label")}
-                            style={style.menuItem}
-                            onTouchTap={() => { this.props.goTo(window.location.pathname, queryParams)}}
-                            />
-                    )
-                })}
-            </IconMenu>
-        )
-    }
-
     renderTitleBarIfNeeded() {
         const { configuration } = this.props;
 
@@ -317,9 +281,19 @@ class VisualizationView extends React.Component {
                 {configuration.get("title")}
                 <div className="pull-right">
                     {this.renderDescriptionIcon()}
-                    {this.renderFilterOptions()}
                 </div>
             </div>
+        )
+    }
+
+    renderFiltersToolBar() {
+        const { configuration, context } = this.props;
+
+        if (!configuration || !configuration.get("filterOptions"))
+            return;
+
+        return (
+            <FiltersToolBar filterOptions={configuration.get("filterOptions")} context={context} />
         )
     }
 
@@ -331,9 +305,9 @@ class VisualizationView extends React.Component {
     }
 
     render() {
-
         if (!this.state.parameterizable)
             return (<div></div>);
+
 
         return (
             <Card
@@ -341,7 +315,8 @@ class VisualizationView extends React.Component {
               containerStyle={style.cardContainer}
               ref={this.cardTextReference}
             >
-                { this.renderTitleBarIfNeeded() };
+                { this.renderTitleBarIfNeeded() }
+                { this.renderFiltersToolBar() }
                 <CardText style={style.cardText}>
                     { this.renderVisualizationIfNeeded() }
                 </CardText>

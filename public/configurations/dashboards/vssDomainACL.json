@@ -30,16 +30,32 @@
             "url": "/dashboards/vssDomainACL"
         }
     ],
-    "filterOptions": [
-        {
-            "label": "Deny",
-            "parameter": "actionType",
-            "value": "DENY"
+    "filterOptions": {
+        "Time interval": {
+            "parameter": "startTime",
+            "options": [
+                {
+                    "label": "24h",
+                    "value": "now-24h",
+                    "default": true
+                },
+                {
+                    "label": "900h",
+                    "value": "now-900h"
+                }
+            ]
         },
-        {
-            "label": "Allow",
-            "parameter": "actionType",
-            "value": "ALLOW"
+        "Refresh interval": {
+            "parameter": "refreshInterval",
+            "default": 6000,
+            "disabled": true,
+            "options": [
+                {
+                    "label": "60 seconds",
+                    "value": 6000,
+                    "disabled": true
+                }
+            ]
         }
-    ]
+    }
 }
