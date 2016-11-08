@@ -64,6 +64,7 @@ export default class BarGraph extends AbstractGraph {
           orientation,
           dateHistogram,
           interval,
+          stroke
         } = this.getConfiguredProperties();
 
         const vertical = orientation === "vertical";
@@ -169,7 +170,7 @@ export default class BarGraph extends AbstractGraph {
                                 }
                             );
 
-                            return <rect {...{x, y, width, height, fill, onClick, style, key: i}} />;
+                            return <rect {...{x, y, width, height, fill, onClick, style, key: i, stroke:stroke.color}} />;
                         })}
                     </g>
                 </svg>
