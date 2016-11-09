@@ -13,4 +13,8 @@ export const properties = {
         theme.palette.yellowDarkColor,
         theme.palette.orangeLighterColor
     ],
+    stroke: {
+        color: theme.palette.whiteColor,
+        width: "3px"
+    }
 }

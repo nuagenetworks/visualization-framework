@@ -115,7 +115,7 @@ export default class BarGraph extends AbstractGraph {
         if(xTickFormat){
             xAxis.tickFormat(d3.format(xTickFormat));
         }
-        
+
         if(xTicks){
             xAxis.ticks(xTicks);
         }
@@ -190,7 +190,7 @@ export default class BarGraph extends AbstractGraph {
                                 }
                             );
 
-                            return <rect {...{x, y, width, height, fill, onClick, style, key: i, stroke:stroke.color}} />;
+                            return <rect {...{x, y, width, height, fill, onClick, style, key: i, stroke: stroke.color, strokeWidth: stroke.width}} />;
                         })}
                     </g>
                 </svg>
