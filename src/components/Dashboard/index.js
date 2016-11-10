@@ -2,6 +2,7 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { Link } from "react-router";
+import { fromJS } from "immutable";
 
 import CircularProgress from "material-ui/CircularProgress";
 import { Responsive, WidthProvider } from "react-grid-layout";
@@ -16,6 +17,8 @@ import {
     Actions as ConfigurationsActions,
     ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions";
+
+import { defaultFilterOptions } from "./default.js"
 
 import style from "./styles";
 
@@ -134,11 +137,20 @@ export class DashboardView extends React.Component {
         if (configuration) {
             const { visualizations } = configuration.toJS();
 
+            let filterOptions;
+
+            if (configuration.get("filterOptions")) {
+                filterOptions = Object.assign({}, defaultFilterOptions, configuration.get("filterOptions").toJS());
+            }
+            else {
+                filterOptions = defaultFilterOptions;
+            }
+
             return (
                 <div>
                     {this.renderNavigationBarIfNeeded()}
 
-                    <FiltersToolBar filterOptions={configuration.get("filterOptions")} context={location.query} />
+                    <FiltersToolBar filterOptions={fromJS(filterOptions)} context={location.query} />
 
                     <div style={style.gridContainer}>
                         <ResponsiveReactGridLayout
