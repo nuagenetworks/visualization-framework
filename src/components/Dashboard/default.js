@@ -1,6 +1,7 @@
 export const defaultFilterOptions = {
     "Time interval": {
         "parameter": "startTime",
+        "default": "now-24h",
         "options": [
             {
                 "label": "24h",
