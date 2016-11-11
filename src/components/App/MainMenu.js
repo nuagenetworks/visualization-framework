@@ -45,10 +45,16 @@ class MainMenuView extends React.Component {
     }
 
     renderDomainsMenu() {
-        const { domains } = this.props;
+        const {
+            context,
+            domains,
+            visualizationType
+        } = this.props;
 
         if (!domains || domains.length === 0)
             return;
+
+        const targetedDashboard = visualizationType === "VSS" ? "vssDomainACL" : "aarDomain";
 
         return (
             <div>
@@ -59,7 +65,7 @@ class MainMenuView extends React.Component {
                             primaryText={domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo("/dashboards/kitchenSink", {startTime:"now-900h"})}}
+                            onTouchTap={() => { this.props.goTo("/dashboards/" + targetedDashboard, context)}}
                             leftIcon={
                                 <FontAwesome
                                     name="plane"
@@ -74,7 +80,11 @@ class MainMenuView extends React.Component {
     }
 
     renderNSGsMenu() {
-        const { nsgs } = this.props;
+        const {
+            context,
+            nsgs,
+            visualizationType
+        } = this.props;
 
         if (!nsgs || nsgs.length === 0)
             return;
@@ -88,7 +98,7 @@ class MainMenuView extends React.Component {
                             primaryText={nsg.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo("/dashboards/kitchenSink", {startTime:"now-900h"})}}
+                            onTouchTap={() => { this.props.goTo("/dashboards/aarNSG", context)}}
                             leftIcon={
                                 <FontAwesome
                                     name="inbox"
@@ -103,10 +113,16 @@ class MainMenuView extends React.Component {
     }
 
     renderEnterprisesMenu() {
-        const { enterprises } = this.props;
+        const {
+            context,
+            enterprises,
+            visualizationType
+        } = this.props;
 
         if (!enterprises)
             return;
+
+        const targetedDashboard = visualizationType === "VSS" ? "vssEnterprise" : "aarEnterprise";
 
         return (
             <div>
@@ -116,7 +132,7 @@ class MainMenuView extends React.Component {
                             key={enterprise.ID}
                             primaryText={enterprise.name}
                             style={style.listItem}
-                            onTouchTap={() => { this.props.goTo("/dashboards/kitchenSink", {startTime:"now-900h"})}}
+                            onTouchTap={() => { this.props.goTo("/dashboards/" + targetedDashboard, context)}}
                             nestedItems={[
                                 <div style={style.nestedItems}>
                                     {this.renderDomainsMenu()}
