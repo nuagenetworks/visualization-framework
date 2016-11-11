@@ -27,11 +27,9 @@ export default class SimpleTextGraph extends React.Component {
     render() {
         const {
             response,
-            queryConfiguration,
             width,
             height,
             configuration: {
-                title,
                 data: {
                     circle,
                     circleColor

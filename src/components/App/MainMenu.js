@@ -31,7 +31,7 @@ class MainMenuView extends React.Component {
         this.initialize();
     }
 
-    initialize() {
+    initialize() {;
         this.props.fetchEnterprisesIfNeeded().then((enterprises) => {
             if (!enterprises)
                 return;
@@ -47,7 +47,7 @@ class MainMenuView extends React.Component {
     renderDomainsMenu() {
         const { domains } = this.props;
 
-        if (!domains)
+        if (!domains || domains.length === 0)
             return;
 
         return (
@@ -76,7 +76,7 @@ class MainMenuView extends React.Component {
     renderNSGsMenu() {
         const { nsgs } = this.props;
 
-        if (!nsgs)
+        if (!nsgs || nsgs.length === 0)
             return;
 
         return (
@@ -131,11 +131,15 @@ class MainMenuView extends React.Component {
     }
 
     render() {
+        const {
+            visualizationType,
+        } = this.props;
+
         return (
             <Drawer open={this.props.open} docked={false} onRequestChange={this.props.onRequestChange} width={300}>
                 <div style={style.menuLogo}>
                     <img src={ Logo } alt="Nuage Networks Visualization" />
-                    <p>Visualizations</p>
+                    <p>{visualizationType} Visualizations</p>
                 </div>
 
                 <Subheader style={style.subHeader}>ENTERPRISES</Subheader>
@@ -150,15 +154,28 @@ class MainMenuView extends React.Component {
 
 MainMenuView.propTypes = {
   open: React.PropTypes.bool,
-  onRequestChange: React.PropTypes.func,
+  onRequestChange: React.PropTypes.func
 };
 
-const mapStateToProps = (state) => ({
-    open: state.interface.get(ComponentActionKeyStore.MAIN_MENU_OPENED),
-    enterprises: state.services.getIn([ServiceActionKeyStore.REQUESTS, 'enterprises', ServiceActionKeyStore.RESULTS]),
-    domains: state.services.getIn([ServiceActionKeyStore.REQUESTS, 'enterprises/54334da-6507-484e-8d5b-11d44c4a852e/domains', ServiceActionKeyStore.RESULTS]), // TODO: Only for dev
-    nsgs: state.services.getIn([ServiceActionKeyStore.REQUESTS, 'enterprises/54334da-6507-484e-8d5b-11d44c4a852e/nsgateways', ServiceActionKeyStore.RESULTS]), // TODO: Only for dev
-});
+const mapStateToProps = (state) => {
+
+    const props = {
+        context: state.interface.get(ComponentActionKeyStore.CONTEXT),
+        visualizationType: state.interface.get(ComponentActionKeyStore.VISUALIZATION_TYPE),
+        open: state.interface.get(ComponentActionKeyStore.MAIN_MENU_OPENED),
+        enterprises: state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises", ServiceActionKeyStore.RESULTS]),
+    };
+
+    if (props.context && props.context.enterpriseID) {
+        props.domains = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/domains", ServiceActionKeyStore.RESULTS]);
+
+        if (props.visualizationType === "AAR")
+            props.nsgs    = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/nsgateways", ServiceActionKeyStore.RESULTS]);
+    }
+
+    return props;
+
+};
 
 const actionCreators = (dispatch) => ({
     onRequestChange: () => {

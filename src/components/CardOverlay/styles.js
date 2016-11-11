@@ -1,5 +1,3 @@
-import { theme } from "../../theme";
-
 const style = {
     overlayContainer: {
         position: "absolute",
