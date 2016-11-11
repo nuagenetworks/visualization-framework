@@ -3,14 +3,15 @@ import AbstractGraph from "../AbstractGraph";
 import tabify from "../../../utils/tabify";
 
 import {
-    scaleTime,
-    scaleLinear,
-    extent,
     axisBottom,
     axisLeft,
+    extent,
+    format,
     line,
     nest,
-    select
+    scaleLinear,
+    scaleTime,
+    select,
 } from "d3";
 
 export default class LineGraph extends AbstractGraph {
@@ -32,9 +33,13 @@ export default class LineGraph extends AbstractGraph {
           yTickGrid,
           yTickSizeInner,
           yTickSizeOuter,
+          yTickFormat,
+          yTicks,
           xTickGrid,
           xTickSizeInner,
           xTickSizeOuter,
+          xTickFormat,
+          xTicks,
           stroke,
         } = this.getConfiguredProperties();
 
@@ -53,11 +58,28 @@ export default class LineGraph extends AbstractGraph {
           .tickSizeInner(xTickGrid ? -innerHeight : xTickSizeInner)
           .tickSizeOuter(xTickSizeOuter);
 
+        if(xTickFormat){
+            xAxis.tickFormat(format(xTickFormat));
+        }
+
+        if(xTicks){
+            xAxis.ticks(xTicks);
+        }
+
         const yAxis = axisLeft(yScale)
           .tickSizeInner(yTickGrid ? -innerWidth : yTickSizeInner)
           .tickSizeOuter(yTickSizeOuter);
 
+        if(yTickFormat){
+            yAxis.tickFormat(format(yTickFormat));
+        }
+
+        if(yTicks){
+            yAxis.ticks(yTicks);
+        }
+
         const lineGenerator = line()
+
           .x(function(d) { return xScale(d[xColumn]); })
           .y(function(d) { return yScale(d[yColumn]); });
 

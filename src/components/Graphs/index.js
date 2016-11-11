@@ -59,7 +59,7 @@ const defaults = {
     fontColor: theme.palette.blackColor,
     stroke: {
         color: theme.palette.whiteColor,
-        width: "2px"
+        width: "1px"
     },
 }
 

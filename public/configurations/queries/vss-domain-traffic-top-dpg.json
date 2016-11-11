@@ -26,47 +26,62 @@
                 "2": {
                     "filters":{
                         "filters":{
-                            "Domain":{
+                            "Enterprise":{
                                 "query":{
                                     "term":{
-                                        "nuage_metadata.domainName":"{{domainName:chord_domain}}"
+                                        "nuage_metadata.enterpriseName":"{{EnterpriseName:chord_enterprise}}"
                                     }
                                 }
                             }
                         }
                     },
                     "aggs": {
-                      "5": {
-                        "filters": {
-                          "filters": {
-                            "Type": {
-                              "query": {
-                                "term": {
-                                  "type": "{{type:DENY}}"
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "aggs": {
-                        "dpg": {
-                            "terms": {
-                                "field": "nuage_metadata.destinationpolicygroups",
-                                "size": 5,
-                                "order": {
-                                    "SumOf": "desc"
+                        "3": {
+                            "filters":{
+                                "filters":{
+                                    "Domain":{
+                                        "query":{
+                                            "term":{
+                                                "nuage_metadata.domainName":"{{domainName:chord_domain}}"
+                                            }
+                                        }
+                                    }
                                 }
                             },
                             "aggs": {
-                                "SumOf": {
-                                    "sum": {
-                                        "field": "packets"
+                                "5": {
+                                    "filters": {
+                                        "filters": {
+                                            "Type": {
+                                                "query": {
+                                                    "term": {
+                                                        "type": "{{type:DENY}}"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "aggs": {
+                                        "dpg": {
+                                            "terms": {
+                                                "field": "nuage_metadata.destinationpolicygroups",
+                                                "size": 5,
+                                                "order": {
+                                                    "SumOf": "desc"
+                                                }
+                                            },
+                                            "aggs": {
+                                                "SumOf": {
+                                                    "sum": {
+                                                        "field": "packets"
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
-                        }
-                      }
                     }
                 }
             }

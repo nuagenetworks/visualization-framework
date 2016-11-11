@@ -26,51 +26,66 @@
                 "2": {
                     "filters":{
                         "filters":{
-                            "Domain":{
+                            "Enterprise":{
                                 "query":{
                                     "term":{
-                                        "nuage_metadata.domainName":"{{domainName:chord_domain}}"
+                                        "nuage_metadata.enterpriseName":"{{EnterpriseName:chord_enterprise}}"
                                     }
                                 }
                             }
                         }
                     },
                     "aggs": {
-                        "4": {
-                            "filters": {
-                                "filters": {
-                                    "ACLALLOW": {
-                                        "query": {
-                                            "term": {
-                                                "type": "ALLOW"
+                        "3": {
+                            "filters":{
+                                "filters":{
+                                    "Domain":{
+                                        "query":{
+                                            "term":{
+                                                "nuage_metadata.domainName":"{{domainName:chord_domain}}"
                                             }
                                         }
                                     }
                                 }
                             },
                             "aggs": {
-                                "5": {
+                                "4": {
                                     "filters": {
                                         "filters": {
-                                            "Protocol": {
+                                            "ACLALLOW": {
                                                 "query": {
                                                     "term": {
-                                                        "protocol": "TCP"
+                                                        "type": "ALLOW"
                                                     }
                                                 }
                                             }
                                         }
                                     },
                                     "aggs": {
-                                        "timestamp": {
-                                            "date_histogram": {
-                                                "field": "timestamp",
-                                                "interval": "1h"
+                                        "5": {
+                                            "filters": {
+                                                "filters": {
+                                                    "Protocol": {
+                                                        "query": {
+                                                            "term": {
+                                                                "protocol": "TCP"
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             },
                                             "aggs": {
-                                                "SumOf": {
-                                                    "sum": {
-                                                        "field": "packets"
+                                                "timestamp": {
+                                                    "date_histogram": {
+                                                        "field": "timestamp",
+                                                        "interval": "1h"
+                                                    },
+                                                    "aggs": {
+                                                        "SumOf": {
+                                                            "sum": {
+                                                                "field": "packets"
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }

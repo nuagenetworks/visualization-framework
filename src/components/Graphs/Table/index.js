@@ -1,7 +1,9 @@
 import React from "react";
 import tabify from "../../../utils/tabify";
 import AbstractGraph from "../AbstractGraph";
+import { format, timeFormat } from "d3";
 
+const d3 = { format, timeFormat };
 
 export default class Table extends AbstractGraph {
     render() {
@@ -24,6 +26,19 @@ export default class Table extends AbstractGraph {
             header,
             padding
         } = this.getConfiguredProperties();
+
+        // Compute accessor functions that apply number and date formatters.
+        const accessors = columns.map(({ column, format, timeFormat }) => {
+            if(format){
+                const formatter = d3.format(format);
+                return (d) => formatter(d[column]);
+            } else if(timeFormat) {
+                const formatter = d3.timeFormat(timeFormat);
+                return (d) => formatter(new Date(d[column]));
+            } else {
+              return (d) => d[column];
+            }
+        });
 
         if (!data)
             return (
@@ -81,8 +96,10 @@ export default class Table extends AbstractGraph {
                                     }}
                                     onClick={onClick}
                                 >
-                                    { columns.map(({column}, i) =>(
-                                        <td key={i} style={{padding:padding}}>{ d[column] }</td>
+                                    { accessors.map((accessor, i) =>(
+                                        <td key={i} style={{padding:padding}}>
+                                          { accessor(d) }
+                                        </td>
                                     )) }
                                 </tr>
                             );

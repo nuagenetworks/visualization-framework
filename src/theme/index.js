@@ -81,7 +81,7 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
         accent3Color: customTheme.greyDarkerColor,
 
         canvasColor: customTheme.whiteColor,
-        disabledColor: customTheme.greyLightColor,
+        disabledColor: customTheme.greyDarkColor,
         pickerHeaderColor: customTheme.greyLightColor,
         clockCircleColor: customTheme.greyLightColor,
         shadowColor: customTheme.whiteColor,

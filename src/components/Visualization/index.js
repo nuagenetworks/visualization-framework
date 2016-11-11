@@ -20,6 +20,7 @@ import {
 } from "../../services/configurations/redux/actions";
 
 import { resizeVisualization } from "../../utils/resize"
+import { contextualize } from "../../utils/configurations"
 
 import { GraphManager } from "../Graphs/index";
 import { ServiceManager } from "../../services/servicemanager/index";
@@ -166,8 +167,7 @@ class VisualizationView extends React.Component {
     }
 
     renderVisualization() {
-        const { context,
-                configuration,
+        const { configuration,
                 queryConfiguration,
                 response
         } = this.props;
@@ -204,7 +204,7 @@ class VisualizationView extends React.Component {
                                 onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
                                 />
         }
-        const timeout = configuration.get("refreshInterval") || 600000;
+        const timeout = configuration.get("refreshInterval") || 30000;
 
         return (
             <div>
@@ -252,7 +252,17 @@ class VisualizationView extends React.Component {
     shouldShowTitleBar() {
         const { configuration } = this.props;
 
-        return configuration && configuration.get("title") && this.state.parameterizable;
+        return configuration && this.currentTitle && this.state.parameterizable;
+    }
+
+    currentTitle() {
+        const { configuration, context } = this.props;
+        const title = configuration.get("title");
+
+        if (!title)
+            return ;
+
+        return contextualize(title, context);
     }
 
     renderDescriptionIcon() {
@@ -271,14 +281,12 @@ class VisualizationView extends React.Component {
     }
 
     renderTitleBarIfNeeded() {
-        const { configuration } = this.props;
-
         if (!this.shouldShowTitleBar())
             return;
 
         return (
             <div style={style.cardTitle}>
-                {configuration.get("title")}
+                {this.currentTitle()}
                 <div className="pull-right">
                     {this.renderDescriptionIcon()}
                 </div>

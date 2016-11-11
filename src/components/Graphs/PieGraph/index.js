@@ -47,6 +47,11 @@ export default class PieGraph extends AbstractGraph {
             .innerRadius(labelRadius)
             .outerRadius(labelRadius);
 
+        let defaultStyle = {
+            strokeWidth: stroke.width,
+            stroke: stroke.color
+        }
+
         return (
             <div className="pie-graph">
                 <svg width={ width } height={ height }>
@@ -64,7 +69,7 @@ export default class PieGraph extends AbstractGraph {
                                         onClick: () => onMarkClick(slice.data),
 
                                         // Make the cursor a pointer on hover, as an affordance for clickability.
-                                        style: { cursor: "pointer" }
+                                        style: {cursor: "pointer"},
 
                                     } : {
                                         // Otherwise, set onClick and style to "undefined".
@@ -74,10 +79,9 @@ export default class PieGraph extends AbstractGraph {
                                 return <g key={i} >
                                     <path
                                       d={ arc(slice) }
-                                      style={ {strokeWidth: stroke.width, stroke: stroke.color} }
                                       fill={ this.applyColor(i) }
                                       onClick={ onClick }
-                                      style={ style }
+                                      style={ Object.assign({}, defaultStyle, style) }
                                     />
                                     <text
                                       transform={`translate(${labelArc.centroid(slice)})`}

@@ -1,7 +1,7 @@
 {
     "id": "vss-domain-acl-dpg",
     "graph": "BarGraph",
-    "title": "ACL Hits by Destination Policy Groups",
+    "title": "ACL Hits by Destination Policy Groups - {{actionType:DENY}}",
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {
@@ -11,11 +11,14 @@
              "#fec26a"
          ],
         "margin": {
-            "top": 15,
-            "bottom": 20,
+            "top": 20,
+            "bottom": 40,
             "left": 80,
-            "right": 40
-        }
+            "right": 20
+        },
+        "xTickGrid": false,
+        "yTickGrid": true,
+        "yTickFormat": ".2s"
     },
     "query": "vss-domain-acl-dpg"
 }
