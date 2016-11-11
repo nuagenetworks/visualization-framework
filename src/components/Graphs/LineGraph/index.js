@@ -61,12 +61,6 @@ export default class LineGraph extends AbstractGraph {
           .x(function(d) { return xScale(d[xColumn]); })
           .y(function(d) { return yScale(d[yColumn]); });
 
-        const lineStyle = {
-            fill: "none",
-            stroke: stroke.color,
-            strokeWidth: stroke.width,
-        };
-
         const linesData = nest()
           .key((d) => linesColumn ? d[linesColumn] : "Line")
           .entries(data);
@@ -87,7 +81,9 @@ export default class LineGraph extends AbstractGraph {
                         {linesData.map(({key, values}) =>
                             <path
                                 key={ key }
-                                style={ lineStyle }
+                                fill="none"
+                                stroke={ stroke.color }
+                                strokeWidth={ stroke.width }
                                 d={ lineGenerator(values) }
                             />
                         )}
