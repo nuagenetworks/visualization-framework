@@ -55,7 +55,7 @@
                                         "interval": "1h"
                                     },
                                     "aggs": {
-                                        "1": {
+                                        "SumOf": {
                                             "sum": {
                                                 "field": "packets"
                                             }

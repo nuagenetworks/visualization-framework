@@ -1,7 +1,7 @@
 {
     "id": "vss-domain-acl-spg",
     "graph": "BarGraph",
-    "title": "ACL Hits by Source Policy Group",
+    "title": "ACL Hits by Source Policy Group - {{actionType:DENY}}",
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {
@@ -9,11 +9,14 @@
         "yColumn": "spg",
         "orientation": "horizontal",
         "margin": {
-            "top": 15,
-            "bottom": 20,
+            "top": 20,
+            "bottom": 40,
             "left": 80,
-            "right": 40
-        }
+            "right": 20
+        },
+        "xTickGrid": true,
+        "yTickGrid": false,
+        "xTickFormat": ".2s"
     },
     "query": "vss-domain-acl-spg"
 }

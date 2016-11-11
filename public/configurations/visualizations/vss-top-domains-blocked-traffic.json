@@ -19,7 +19,11 @@
             "bottom": 20,
             "left": 70,
             "right": 40
-        }
+        },
+        "xTickGrid": true,
+        "yTickGrid": false,
+        "xTickFormat": ".2s",
+        "xTicks": 5
     },
     "listeners": [
     {

@@ -14,11 +14,15 @@
             "#7da3f7"
         ],
         "margin": {
-            "top": 15,
-            "bottom": 20,
+            "top": 20,
+            "bottom": 40,
             "left": 100,
-            "right": 40
-        }
+            "right": 20
+        },
+        "xTickGrid": true,
+        "yTickGrid": false,
+        "xTickFormat": ".2s",
+        "xTicks": 5
     },
     "query": "vss-domain-events-by-type"
 }
