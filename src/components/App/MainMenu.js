@@ -168,7 +168,9 @@ const mapStateToProps = (state) => {
 
     if (props.context && props.context.enterpriseID) {
         props.domains = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/domains", ServiceActionKeyStore.RESULTS]);
-        props.nsgs    = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/nsgateways", ServiceActionKeyStore.RESULTS]);
+
+        if (props.visualizationType === "AAR")
+            props.nsgs    = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/nsgateways", ServiceActionKeyStore.RESULTS]);
     }
 
     return props;
