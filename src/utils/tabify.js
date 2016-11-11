@@ -73,6 +73,10 @@ function extractTree(buckets, stack) {
 }
 
 function flatten(tree, parentNode={}){
+
+    if (!tree)
+        return [];
+
     return tree
 
         // Have the child node inherit values from the parent.
