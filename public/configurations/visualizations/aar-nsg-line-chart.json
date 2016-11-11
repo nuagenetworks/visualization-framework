@@ -5,8 +5,9 @@
     "author": "Curran Kelleher",
     "creationDate": "11/08/2016",
     "data": {
-        "xColumn": "key",
-        "yColumn": "1"
+        "xColumn": "ts",
+        "yColumn": "SumOf",
+        "linesColumn": "L7Classification"
     },
     "query": "aar-nsg-app-linechart"
 }
