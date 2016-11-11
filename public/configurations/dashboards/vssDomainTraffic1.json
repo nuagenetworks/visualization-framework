@@ -2,7 +2,7 @@
     "id": "vssDomainTraffic1",
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
-    "title": "VSS Domain Traffic Analytics - I",
+    "title": "{{domainName:VSS Domain}} - Traffic Analytics - I",
     "visualizations": [
         { "id": "vss-domain-traffic-tcp-conn", "x": 0, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12},
         { "id": "vss-domain-traffic-tcp-synflood", "x": 5, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12},
