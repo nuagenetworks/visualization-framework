@@ -15,7 +15,7 @@
     "fontawesome": "^4.5.0",
     "immutable": "3.7.6",
     "jquery": "3.1.0",
-    "json-templates": "1.2.0",
+    "json-templates": "1.4.0",
     "material-ui": "^0.15.4",
     "nock": "^8.0.0",
     "react": "^15.3.2",
