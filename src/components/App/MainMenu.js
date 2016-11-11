@@ -67,10 +67,7 @@ class MainMenuView extends React.Component {
                             innerDivStyle={style.innerNestedItem}
                             onTouchTap={() => { this.props.goTo("/dashboards/" + targetedDashboard, context)}}
                             leftIcon={
-                                <FontAwesome
-                                    name="plane"
-                                    style={style.iconMenu}
-                                    />
+                                <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-domain.png"} alt="D" />
                             }
                             />
                     )
@@ -83,7 +80,6 @@ class MainMenuView extends React.Component {
         const {
             context,
             nsgs,
-            visualizationType
         } = this.props;
 
         if (!nsgs || nsgs.length === 0)
@@ -98,12 +94,11 @@ class MainMenuView extends React.Component {
                             primaryText={nsg.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
+                            initiallyOpen={true}
+                            open={true}
                             onTouchTap={() => { this.props.goTo("/dashboards/aarNSG", context)}}
                             leftIcon={
-                                <FontAwesome
-                                    name="inbox"
-                                    style={style.iconMenu}
-                                    />
+                                <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-nsgateway.png"} alt="N" />
                             }
                             />
                     )
@@ -186,7 +181,7 @@ const mapStateToProps = (state) => {
         props.domains = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/domains", ServiceActionKeyStore.RESULTS]);
 
         if (props.visualizationType === "AAR")
-            props.nsgs    = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/nsgateways", ServiceActionKeyStore.RESULTS]);
+            props.nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/nsgateways", ServiceActionKeyStore.RESULTS]);
     }
 
     return props;
