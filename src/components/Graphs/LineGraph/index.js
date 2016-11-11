@@ -19,6 +19,7 @@ export default class LineGraph extends AbstractGraph {
         const {
           xColumn,
           yColumn,
+          linesColumn,
           margin: { top, bottom, left, right },
           yTickGrid,
           yTickSizeInner,
@@ -60,6 +61,10 @@ export default class LineGraph extends AbstractGraph {
             strokeWidth: stroke.width,
         }
 
+        const linesData = d3.nest()
+          .key((d) => linesColumn ? d[linesColumn] : "Line")
+          .entries(data);
+
         return (
             <div className="bar-graph">
                 <svg width={width} height={height}>
@@ -73,7 +78,9 @@ export default class LineGraph extends AbstractGraph {
                             key="yAxis"
                             ref={ (el) => d3.select(el).call(yAxis) }
                         />
-                        <path style={ lineStyle } d={ line(data) } />
+                        {linesData.map(({key, values}) =>
+                            <path key={ key } style={ lineStyle } d={ line(values) } />
+                        )}
                     </g>
                 </svg>
             </div>
