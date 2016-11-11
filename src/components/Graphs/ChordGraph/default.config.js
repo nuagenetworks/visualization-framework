@@ -1,5 +1,3 @@
-import { theme } from "../../../theme";
-
 export const properties = {
     outerPadding: 30,
     arcThickness: 20,

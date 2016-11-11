@@ -4,6 +4,7 @@ import { createHistory } from "history";
 
 import thunkMiddleware from "redux-thunk";
 import createLogger from "redux-logger";
+import { updateContextMiddleware, updateVisualizationTypeMiddleware } from "./middlewares";
 
 import configurationsReducer from "../services/configurations/redux/reducer";
 import interfaceReducer from "../components/App/redux/reducer";
@@ -13,7 +14,6 @@ import VSDReducer from "../configs/nuage/vsd/redux/reducer"
 
 import { Actions as VSDActions, ActionKeyStore as VSDActionKeyStore} from "../configs/nuage/vsd/redux/actions"
 import { Actions as ServiceActions } from "../services/servicemanager/redux/actions";
-
 
 const loggerMiddleware = createLogger();
 
@@ -34,7 +34,9 @@ const createStoreWithRouterAndMiddleware = compose(
     reduxReactRouter({createHistory}),
     applyMiddleware(
         thunkMiddleware,
-        loggerMiddleware
+        loggerMiddleware,
+        updateContextMiddleware,
+        updateVisualizationTypeMiddleware
     )
 )(createStore);
 
