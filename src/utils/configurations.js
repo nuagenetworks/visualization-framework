@@ -62,3 +62,7 @@ export const getUsedParameters = (configuration, context) => {
 
     return queryParams;
 }
+
+export const contextualize = (data, context) => {
+    return parse(data)(context);
+}
