@@ -18,6 +18,8 @@ import {
     ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions";
 
+import { contextualize } from "../../utils/configurations"
+
 import { defaultFilterOptions } from "./default.js"
 
 import style from "./styles";
@@ -57,6 +59,16 @@ export class DashboardView extends React.Component {
         }
     }
 
+    currentTitle() {
+        const { configuration, location } = this.props;
+        const title = configuration.get("title");
+
+        if (!title)
+            return ;
+
+        return contextualize(title, location.query);
+    }
+
     updateTitleIfNecessary(prevProps) {
         const { configuration, setPageTitle } = this.props;
 
@@ -64,7 +76,7 @@ export class DashboardView extends React.Component {
             return;
 
         if (this.shouldUpdateTitle(prevProps)) {
-            setPageTitle(configuration.get("title"));
+            setPageTitle(this.currentTitle());
         }
     }
 
