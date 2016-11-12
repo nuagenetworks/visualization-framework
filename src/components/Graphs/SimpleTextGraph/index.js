@@ -9,14 +9,10 @@ import "./style.css";
 */
 export default class SimpleTextGraph extends React.Component {
 
-    showTitle() {
+    currentTitle() {
         const {
-            queryConfiguration,
             configuration,
         } = this.props;
-
-        if (queryConfiguration && queryConfiguration.title)
-            return queryConfiguration.title;
 
         if (configuration && configuration.title)
             return configuration.title;
@@ -27,11 +23,9 @@ export default class SimpleTextGraph extends React.Component {
     render() {
         const {
             response,
-            queryConfiguration,
             width,
             height,
             configuration: {
-                title,
                 data: {
                     circle,
                     circleColor
@@ -65,7 +59,7 @@ export default class SimpleTextGraph extends React.Component {
                       {response.results.length}
                     </div>
                     <br />
-                    {this.showTitle()}
+                    {this.currentTitle()}
                 </div>
             );
         }
