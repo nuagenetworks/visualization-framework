@@ -2,21 +2,19 @@ import React from "react";
 
 import CircularProgress from "material-ui/CircularProgress";
 
+import AbstractGraph from "../AbstractGraph";
+
 import "./style.css";
 
 /*
     This is a very basic graph that displays a text message
 */
-export default class SimpleTextGraph extends React.Component {
+export default class SimpleTextGraph extends AbstractGraph {
 
-    showTitle() {
+    currentTitle() {
         const {
-            queryConfiguration,
             configuration,
         } = this.props;
-
-        if (queryConfiguration && queryConfiguration.title)
-            return queryConfiguration.title;
 
         if (configuration && configuration.title)
             return configuration.title;
@@ -24,48 +22,63 @@ export default class SimpleTextGraph extends React.Component {
         return "Untitled";
     }
 
+    renderTitleIfNeeded(requestedPosition, currentPosition) {
+        if (requestedPosition !== currentPosition)
+            return;
+
+        return this.currentTitle();
+    }
+
     render() {
         const {
-            response,
-            queryConfiguration,
-            width,
             height,
-            configuration: {
-                title,
-                data: {
-                    circle,
-                    circleColor
-                }
-            },
-            onMarkClick
+            onMarkClick,
+            response,
+            width,
         } = this.props;
+
+        const {
+          borderRadius,
+          colors,
+          fontColor,
+          fontSize,
+          innerHeight,
+          innerWidth,
+          margin,
+          padding,
+          stroke,
+          titlePosition,
+        } = this.getConfiguredProperties();
+
+        console.error([margin.top, margin.right, margin.bottom, margin.left].join(" "));
 
         let body;
         if (response && !response.isFetching) {
             body = (
-                <div className="SimpleTextGraph">
-                    {(() => {
-                        if (circle) {
-                            const padding = 16;
-                            const side = width * 0.3;
-                            return (
-                                <div style={{
-                                    position: "fixed",
-                                    left: width / 2 - side / 2 + padding,
-                                    width: side + "px",
-                                    height: side + "px",
-                                    borderRadius: "50%",
-                                    background: circleColor || "gray",
-                                    textAlign: "center"
-                                }}/>
-                            );
-                        }
-                    })()}
-                    <div className="BigNumber">
-                      {response.results.length}
-                    </div>
-                    <br />
-                    {this.showTitle()}
+                <div style={{
+                        margin: [margin.top, margin.right, margin.bottom, margin.left].join(" "),
+                    }}
+                    >
+                        {this.renderTitleIfNeeded(titlePosition, "top")}
+
+                        <div style={{
+                            width: width * innerWidth,
+                            height: height * innerHeight,
+                            borderRadius: borderRadius,
+                            borderColor: stroke.color,
+                            borderWidth: stroke.width,
+                            background: colors[0],
+                            color: fontColor,
+                            display: "block",
+                            margin: [margin.top, margin.right, margin.bottom, margin.left].join(" "),
+                            padding: [padding.top, padding.right, padding.bottom, padding.left].join(" "),
+                            fontSize: fontSize,
+                            }}
+                          >
+                          {response.results.length}
+                        </div>
+
+                        {this.renderTitleIfNeeded(titlePosition, "bottom")}
                 </div>
             );
         }

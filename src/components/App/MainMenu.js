@@ -31,7 +31,7 @@ class MainMenuView extends React.Component {
         this.initialize();
     }
 
-    initialize() {
+    initialize() {;
         this.props.fetchEnterprisesIfNeeded().then((enterprises) => {
             if (!enterprises)
                 return;
@@ -45,10 +45,16 @@ class MainMenuView extends React.Component {
     }
 
     renderDomainsMenu() {
-        const { domains } = this.props;
+        const {
+            context,
+            domains,
+            visualizationType
+        } = this.props;
 
-        if (!domains)
+        if (!domains || domains.length === 0)
             return;
+
+        const targetedDashboard = visualizationType === "VSS" ? "vssDomainACL" : "aarDomain";
 
         return (
             <div>
@@ -59,14 +65,9 @@ class MainMenuView extends React.Component {
                             primaryText={domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { 
-                                this.props.goTo("/dashboards/aarDomain", {startTime:"now-900h"})
-                            }}
+                            onTouchTap={() => { this.props.goTo("/dashboards/" + targetedDashboard, context)}}
                             leftIcon={
-                                <FontAwesome
-                                    name="plane"
-                                    style={style.iconMenu}
-                                />
+                                <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-domain.png"} alt="D" />
                             }
                         />
                     )
@@ -76,9 +77,12 @@ class MainMenuView extends React.Component {
     }
 
     renderNSGsMenu() {
-        const { nsgs } = this.props;
+        const {
+            context,
+            nsgs,
+        } = this.props;
 
-        if (!nsgs)
+        if (!nsgs || nsgs.length === 0)
             return;
 
         return (
@@ -90,14 +94,11 @@ class MainMenuView extends React.Component {
                             primaryText={nsg.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => {
-                                this.props.goTo("/dashboards/aarNSG", {startTime:"now-900h"})
-                            }}
+                            initiallyOpen={true}
+                            open={true}
+                            onTouchTap={() => { this.props.goTo("/dashboards/aarNSG", context)}}
                             leftIcon={
-                                <FontAwesome
-                                    name="inbox"
-                                    style={style.iconMenu}
-                                />
+                                <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-nsgateway.png"} alt="N" />
                             }
                         />
                     )
@@ -107,10 +108,16 @@ class MainMenuView extends React.Component {
     }
 
     renderEnterprisesMenu() {
-        const { enterprises } = this.props;
+        const {
+            context,
+            enterprises,
+            visualizationType
+        } = this.props;
 
         if (!enterprises)
             return;
+
+        const targetedDashboard = visualizationType === "VSS" ? "vssEnterprise" : "aarEnterprise";
 
         return (
             <div>
@@ -120,9 +127,7 @@ class MainMenuView extends React.Component {
                             key={enterprise.ID}
                             primaryText={enterprise.name}
                             style={style.listItem}
-                            onTouchTap={() => {
-                                this.props.goTo("/dashboards/aarEnterprise", {startTime:"now-900h"})}
-                            }
+                            onTouchTap={() => { this.props.goTo("/dashboards/" + targetedDashboard, context)}}
                             nestedItems={[
                                 <div style={style.nestedItems}>
                                     {this.renderDomainsMenu()}
@@ -137,11 +142,15 @@ class MainMenuView extends React.Component {
     }
 
     render() {
+        const {
+            visualizationType,
+        } = this.props;
+
         return (
             <Drawer open={this.props.open} docked={false} onRequestChange={this.props.onRequestChange} width={300}>
                 <div style={style.menuLogo}>
                     <img src={ Logo } alt="Nuage Networks Visualization" />
-                    <p>Visualizations</p>
+                    <p>{visualizationType} Visualizations</p>
                 </div>
 
                 <Subheader style={style.subHeader}>ENTERPRISES</Subheader>
@@ -156,15 +165,28 @@ class MainMenuView extends React.Component {
 
 MainMenuView.propTypes = {
   open: React.PropTypes.bool,
-  onRequestChange: React.PropTypes.func,
+  onRequestChange: React.PropTypes.func
 };
 
-const mapStateToProps = (state) => ({
-    open: state.interface.get(ComponentActionKeyStore.MAIN_MENU_OPENED),
-    enterprises: state.services.getIn([ServiceActionKeyStore.REQUESTS, 'enterprises', ServiceActionKeyStore.RESULTS]),
-    domains: state.services.getIn([ServiceActionKeyStore.REQUESTS, 'enterprises/54334da-6507-484e-8d5b-11d44c4a852e/domains', ServiceActionKeyStore.RESULTS]), // TODO: Only for dev
-    nsgs: state.services.getIn([ServiceActionKeyStore.REQUESTS, 'enterprises/54334da-6507-484e-8d5b-11d44c4a852e/nsgateways', ServiceActionKeyStore.RESULTS]), // TODO: Only for dev
-});
+const mapStateToProps = (state) => {
+
+    const props = {
+        context: state.interface.get(ComponentActionKeyStore.CONTEXT),
+        visualizationType: state.interface.get(ComponentActionKeyStore.VISUALIZATION_TYPE),
+        open: state.interface.get(ComponentActionKeyStore.MAIN_MENU_OPENED),
+        enterprises: state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises", ServiceActionKeyStore.RESULTS]),
+    };
+
+    if (props.context && props.context.enterpriseID) {
+        props.domains = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/domains", ServiceActionKeyStore.RESULTS]);
+
+        if (props.visualizationType === "AAR")
+            props.nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/nsgateways", ServiceActionKeyStore.RESULTS]);
+    }
+
+    return props;
+
+};
 
 const actionCreators = (dispatch) => ({
     onRequestChange: () => {

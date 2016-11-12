@@ -49,6 +49,10 @@ export const getUsedParameters = (configuration, context) => {
     let queryParams = {};
 
     for (let i in parameters) {
+
+        if (!parameters.hasOwnProperty(i))
+            continue;
+            
         let parameter = parameters[i];
 
         if (parameter.key in context) {

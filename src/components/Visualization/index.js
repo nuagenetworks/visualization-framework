@@ -74,6 +74,7 @@ class VisualizationView extends React.Component {
     }
 
     initialize(id) {
+
         this.props.fetchConfigurationIfNeeded(id).then((c) => {
             const { configuration } = this.props
 
@@ -112,7 +113,6 @@ class VisualizationView extends React.Component {
 
             // Handle configured listeners (e.g. navigate when clicking on a bar).
             if(configuration.get("listeners")) {
-
                 // Use this.state.listeners to store the listeners that will be
                 // passed into the visualization components.
                 this.setState({
@@ -216,7 +216,6 @@ class VisualizationView extends React.Component {
                 <GraphComponent
                   response={response.toJS()}
                   configuration={configuration.toJS()}
-                  queryConfiguration={queryConfiguration.toJS()}
                   width={this.state.width}
                   height={this.state.height}
                   {...this.state.listeners}
@@ -252,7 +251,7 @@ class VisualizationView extends React.Component {
     shouldShowTitleBar() {
         const { configuration } = this.props;
 
-        return configuration && this.currentTitle && this.state.parameterizable;
+        return configuration && this.currentTitle() && this.state.parameterizable;
     }
 
     currentTitle() {
@@ -316,7 +315,6 @@ class VisualizationView extends React.Component {
         if (!this.state.parameterizable)
             return (<div></div>);
 
-
         return (
             <Card
               style={style.card}
@@ -375,7 +373,8 @@ const mapStateToProps = (state, ownProps) => {
 
         // Expose received response if it is available
         if (props.queryConfiguration || scriptName) {
-            const requestID = ServiceManager.getRequestID(props.queryConfiguration.toJS() || scriptName, context);
+            const query = props.queryConfiguration ? props.queryConfiguration.toJS() : scriptName;
+            const requestID = ServiceManager.getRequestID(query, context);
 
             let response = state.services.getIn([
                 ServiceActionKeyStore.REQUESTS,
