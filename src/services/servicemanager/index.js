@@ -1,5 +1,5 @@
-import { ElasticSearchService } from "../../configs/nuage/elasticsearch/index"
-import { VSDService } from "../../configs/nuage/vsd/index"
+import { ElasticSearchService } from "../../configs/nuage/elasticsearch/index";
+import { VSDService } from "../../configs/nuage/vsd/index";
 
 let config = {
     timingCache: 5000,
