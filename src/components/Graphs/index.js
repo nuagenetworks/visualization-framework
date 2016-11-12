@@ -57,10 +57,11 @@ const defaults = {
     interval: "30s",
     colors: [theme.palette.blueColor],
     fontColor: theme.palette.blackColor,
+    fontSize: "1em",
     stroke: {
         color: theme.palette.whiteColor,
         width: "1px"
-    },
+    }
 }
 
 const getDefaultProperties = (properties) => {
