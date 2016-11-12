@@ -48,31 +48,31 @@
                                     }
                                 }
                             },
-							"aggs":{
-								"Sum of MB":{
-									"sum":{
-										"field":"TotalMB"
-									}
-								},
-								"APMGroup":{
-									"terms":{
-										"field":"APMGroup",
-										"size":5,
-										"order":{
-											"Sum of MB":"desc"
-										}
-									},
-									"aggs":{
-										"Sum of MB":{
-											"sum":{
-												"field":"TotalMB"
-											}
-										}
-									}
-								}
-							}
-						}
-					}
+                            "aggs":{
+                                "Sum of MB":{
+                                    "sum":{
+                                        "field":"TotalMB"
+                                     }
+                                },
+                                "APMGroup":{
+                                    "terms":{
+                                        "field":"APMGroup",
+                                        "size":5,
+                                        "order":{
+                                            "Sum of MB":"desc"
+                                        }
+                                    },
+                                    "aggs":{
+                                        "Sum of MB":{
+                                            "sum":{
+                                                "field":"TotalMB"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
