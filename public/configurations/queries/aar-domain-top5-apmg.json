@@ -26,38 +26,53 @@
                 "3":{
                     "filters":{
                         "filters":{
-                            "Domain":{
+                            "Enterprise":{
                                 "query":{
                                     "term":{
-                                        "DomainName":"{{DomainName:Domain1}}"
+                                        "EnterpriseName":"{{EnterpriseName:test_org}}"
                                     }
                                 }
                             }
                         }
                     },
-                    "aggs":{
-                        "Sum of MB":{
-                            "sum":{
-                                "field":"TotalMB"
-                            }
-                        },
-                        "APMGroup":{
-                            "terms":{
-                                "field":"APMGroup",
-                                "size":5,
-                                "order":{
-                                    "Sum of MB":"desc"
-                                }
-                            },
-                            "aggs":{
-                                "Sum of MB":{
-                                    "sum":{
-                                        "field":"TotalMB"
+		    		"aggs":{
+                        "4":{
+                            "filters":{
+                                "filters":{
+                                    "Domain":{
+                                        "query":{
+                                            "term":{
+                                                "DomainName":"{{DomainName:Domain1}}"
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                        }
-                    }
+                            },
+							"aggs":{
+								"Sum of MB":{
+									"sum":{
+										"field":"TotalMB"
+									}
+								},
+								"APMGroup":{
+									"terms":{
+										"field":"APMGroup",
+										"size":5,
+										"order":{
+											"Sum of MB":"desc"
+										}
+									},
+									"aggs":{
+										"Sum of MB":{
+											"sum":{
+												"field":"TotalMB"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
                 }
             }
         }
