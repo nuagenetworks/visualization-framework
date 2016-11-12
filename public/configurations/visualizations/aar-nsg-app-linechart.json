@@ -16,7 +16,8 @@
             "bottom": 20,
             "left": 80,
             "right": 40
-        }
+        },
+        "linesColumn": "L7Classification"
     },
     "query": "aar-nsg-app-linechart"
 }
