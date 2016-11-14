@@ -87,6 +87,8 @@ export default class LineGraph extends AbstractGraph {
           .key((d) => linesColumn ? d[linesColumn] : "Line")
           .entries(data);
 
+        const scale = this.scaleColor(data);
+
         return (
             <div className="bar-graph">
                 <svg width={width} height={height}>
@@ -104,7 +106,7 @@ export default class LineGraph extends AbstractGraph {
                             <path
                                 key={ key }
                                 fill="none"
-                                stroke={ linesColumn ? this.applyColor(i) : stroke.color }
+                                stroke={ linesColumn ? scale(i) : stroke.color }
                                 strokeWidth={ stroke.width }
                                 d={ lineGenerator(values) }
                             />

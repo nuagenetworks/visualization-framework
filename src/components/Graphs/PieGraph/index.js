@@ -52,6 +52,8 @@ export default class PieGraph extends AbstractGraph {
             stroke: stroke.color
         }
 
+        const scale = this.scaleColor(data);
+
         return (
             <div className="pie-graph">
                 <svg width={ width } height={ height }>
@@ -79,7 +81,7 @@ export default class PieGraph extends AbstractGraph {
                                 return <g key={i} >
                                     <path
                                       d={ arc(slice) }
-                                      fill={ this.applyColor(i) }
+                                      fill={ scale(i) }
                                       onClick={ onClick }
                                       style={ Object.assign({}, defaultStyle, style) }
                                     />

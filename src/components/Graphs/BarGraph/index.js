@@ -140,6 +140,8 @@ export default class BarGraph extends AbstractGraph {
             barWidth = xScale.bandwidth();
         }
 
+        const scale = this.scaleColor(data);
+
         return (
             <div className="bar-graph">
                 <svg width={width} height={height}>
@@ -171,7 +173,7 @@ export default class BarGraph extends AbstractGraph {
                             );
 
                             // Compute the fill color based on the index.
-                            const fill = this.applyColor(i);
+                            const fill = scale(i);
 
                             // Set up clicking and cursor style.
                             const { onClick, style } = (

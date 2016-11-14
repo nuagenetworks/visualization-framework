@@ -50,6 +50,8 @@ export default class Table extends AbstractGraph {
                 <p>No columns</p>
             );
 
+        const scale = this.scaleColor(data);
+
         return (
             <div
                 style={{
@@ -87,10 +89,10 @@ export default class Table extends AbstractGraph {
                                     key={j}
                                     style={{
                                         color:fontColor,
-                                        background:this.applyColor(j),
-                                        borderTop:border.top,
+                                        background: scale(j),
+                                        borderTop: border.top,
                                         borderBottom: border.bottom,
-                                        borderLeft:border.left,
+                                        borderLeft: border.left,
                                         borderRight: border.right,
                                         cursor: cursor
                                     }}

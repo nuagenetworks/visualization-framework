@@ -1,6 +1,8 @@
 import React from "react";
+import { scaleOrdinal } from "d3";
 
 import { GraphManager } from "./index";
+
 
 
 export default class AbstractGraph extends React.Component {
@@ -19,14 +21,19 @@ export default class AbstractGraph extends React.Component {
         }
 
         this.defaults = GraphManager.getDefaultProperties(properties);
+        this.scale = null;
     }
 
     getConfiguredProperties() {
         return Object.assign({}, this.defaults, this.props.configuration.data);
     }
 
-    applyColor(index) {
+    scaleColor(data) {
         const { colors } = this.getConfiguredProperties();
-        return colors[index % colors.length];
+
+        const scale = scaleOrdinal(colors);
+        scale.domain(data.map((d, i) => i));
+
+        return scale;
     }
 }
