@@ -2,7 +2,6 @@ import React from "react";
 
 import AbstractGraph from "../AbstractGraph";
 
-import tabify from "../../../utils/tabify";
 import * as d3 from "d3";
 
 import "./style.css";
@@ -20,7 +19,7 @@ export default class ChordGraph extends AbstractGraph {
 
     updateChord(props) {
 
-        const { response, width, height, onMarkClick } = this.props;
+        const { data, width, height, onMarkClick } = this.props;
         const {
             chordWeightColumn,
             chordSourceColumn,
@@ -37,7 +36,7 @@ export default class ChordGraph extends AbstractGraph {
 
         // Pass values into the chord diagram via d3-style accessors.
         this.chordDiagram
-            .data(tabify(response.results))
+            .data(data)
             .width(width)
             .height(height)
             .chordWeightColumn(chordWeightColumn)
@@ -78,12 +77,10 @@ export default class ChordGraph extends AbstractGraph {
 
     render() {
 
-        const { response, width, height } = this.props;
+        const { data, width, height } = this.props;
 
-        if (!response || response.error)
+        if (!data || !data.length)
             return;
-
-        const data = tabify(response.results);
 
         return (
             <div className="pie-graph">
@@ -98,7 +95,7 @@ export default class ChordGraph extends AbstractGraph {
 }
 ChordGraph.propTypes = {
   configuration: React.PropTypes.object,
-  response: React.PropTypes.object
+  data: React.PropTypes.object
 };
 
 
@@ -182,7 +179,7 @@ function ChordDiagram(svg){
 
   // Renders the given data as a chord diagram.
   function my(){
-  
+
     // Use the data passed into the .data() accessor.
     if(data){
 
