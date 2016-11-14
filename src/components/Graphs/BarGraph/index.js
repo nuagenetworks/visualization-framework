@@ -190,7 +190,20 @@ export default class BarGraph extends AbstractGraph {
                                 }
                             );
 
-                            return <rect {...{x, y, width, height, fill, onClick, style, key: i, stroke: stroke.color, strokeWidth: stroke.width}} />;
+                            return (
+                                <rect 
+                                    x={ x }
+                                    y={ y }
+                                    width={ width }
+                                    height={ height }
+                                    fill={ fill }
+                                    onClick={ onClick }
+                                    style={ style }
+                                    key={ i }
+                                    stroke={ stroke.color }
+                                    strokeWidth={ stroke.width }
+                                />
+                            );
                         })}
                     </g>
                 </svg>
