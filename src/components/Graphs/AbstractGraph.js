@@ -21,17 +21,32 @@ export default class AbstractGraph extends React.Component {
 
         this.defaults = GraphManager.getDefaultProperties(properties);
         
+        // Provide tooltips for subclasses.
         const { tooltip } = this.getConfiguredProperties();
         if(tooltip) {
+
+            // Generate accessors that apply number and date formatters.
             const accessors = tooltip.map(columnAccessor);
+
+            // This function is invoked to produce the content of a tooltip.
             this.getTooltipContent = () => {
-                const d = this.hoveredDatum;
-                if(d) {
+
+                // The value of this.hoveredDatum should be set by subclasses
+                // on mouseEnter and mouseMove of visual marks
+                // to the data entry corresponding to the hovered mark.
+                if(this.hoveredDatum) {
                     return (
                         <div>
+                            {/* Display each tooltip column as "label : value". */}
                             {tooltip.map(({column, label}, i) => (
                                 <div key={column}>
-                                    <strong>{label || column}</strong> : {accessors[i](d)}
+                                    <strong>
+                                        {/* Use label if present, fall back to column name. */}
+                                        {label || column}
+                                    </strong> : <span>
+                                        {/* Apply number and date formatting to the value. */}
+                                        {accessors[i](this.hoveredDatum)}
+                                    </span>
                                 </div>
                             ))}
                         </div>
@@ -40,6 +55,7 @@ export default class AbstractGraph extends React.Component {
                     return null;
                 }
             }
+
             // Use a unique tooltip ID per visualization,
             // otherwise there are overlapping tooltips.
             this.tooltipId = Math.random();
