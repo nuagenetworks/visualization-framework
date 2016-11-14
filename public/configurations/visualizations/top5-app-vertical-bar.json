@@ -9,7 +9,7 @@
         "yColumn": "Sum of MB",
         "yTicks": 5,
         "tooltip": [
-            { "column": "L7Classification", "label": "L7Classification" },
+            { "column": "L7Classification", "label": "L7 Classification" },
             { "column": "Sum of MB", "format": ",.1f"}
         ]
     },
