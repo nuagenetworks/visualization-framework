@@ -1,7 +1,6 @@
 import React from "react";
 
 import AbstractGraph from "../AbstractGraph";
-import ReactTooltip from "react-tooltip";
 
 import tabify from "../../../utils/tabify";
 import * as d3 from "d3";
@@ -141,20 +140,6 @@ export default class BarGraph extends AbstractGraph {
             barWidth = xScale.bandwidth();
         }
 
-        // Use a unique tooltip ID per visualization,
-        // otherwise there are overlapping tooltips.
-        const tooltipId = Math.random();
-
-        this.tooltip = (
-            <ReactTooltip
-                id={ tooltipId }
-                place="top"
-                type="dark"
-                effect="float"
-                getContent={this.getTooltipContent.bind(this)}
-            />
-        );
-
         return (
             <div className="bar-graph">
                 {this.tooltip}
@@ -219,7 +204,7 @@ export default class BarGraph extends AbstractGraph {
                                     stroke={ stroke.color }
                                     strokeWidth={ stroke.width }
                                     data-tip
-                                    data-for={ tooltipId }
+                                    data-for={ this.tooltipId }
                                     onMouseEnter={() => this.hoveredDatum = d }
                                     onMouseMove={() => this.hoveredDatum = d }
                                 />

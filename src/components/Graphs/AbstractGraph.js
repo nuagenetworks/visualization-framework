@@ -1,4 +1,5 @@
 import React from "react";
+import ReactTooltip from "react-tooltip";
 
 import { GraphManager } from "./index";
 import columnAccessor from "../../utils/columnAccessor";
@@ -39,6 +40,21 @@ export default class AbstractGraph extends React.Component {
                     return null;
                 }
             }
+            // Use a unique tooltip ID per visualization,
+            // otherwise there are overlapping tooltips.
+            this.tooltipId = Math.random();
+
+            // This JSX object can be used by subclasses to enable tooltips.
+            this.tooltip = (
+                <ReactTooltip
+                    id={ this.tooltipId }
+                    place="top"
+                    type="dark"
+                    effect="float"
+                    getContent={this.getTooltipContent.bind(this)}
+                />
+            );
+
         } else {
             this.getTooltipContent = () => null
         }
