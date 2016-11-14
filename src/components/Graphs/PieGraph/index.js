@@ -54,15 +54,17 @@ export default class PieGraph extends AbstractGraph {
 
         return (
             <div className="pie-graph">
+                {this.tooltip}
                 <svg width={ width } height={ height }>
                     <g transform={ `translate(${ width / 2 }, ${ height / 2 })` } >
                         {
                             slices.map((slice, i) => {
+                                const d = slice.data;
 
                                 // Set up clicking and cursor style.
                                 const { onClick, cursor } = (
                                     onMarkClick ? {
-                                        onClick: () => onMarkClick(slice.data),
+                                        onClick: () => onMarkClick(d),
                                         cursor: "pointer"
                                     } : { }
                                 );
@@ -73,6 +75,10 @@ export default class PieGraph extends AbstractGraph {
                                       fill={ this.applyColor(i) }
                                       onClick={ onClick }
                                       style={ Object.assign({cursor}, defaultStyle) }
+                                      data-tip
+                                      data-for={ this.tooltipId }
+                                      onMouseEnter={() => this.hoveredDatum = d }
+                                      onMouseMove={() => this.hoveredDatum = d }
                                     />
                                     <text
                                       transform={`translate(${labelArc.centroid(slice)})`}
@@ -81,6 +87,10 @@ export default class PieGraph extends AbstractGraph {
                                       fill={ fontColor }
                                       onClick={ onClick }
                                       style={{cursor}}
+                                      data-tip
+                                      data-for={ this.tooltipId }
+                                      onMouseEnter={() => this.hoveredDatum = d }
+                                      onMouseMove={() => this.hoveredDatum = d }
                                     >
                                         { slice.data[labelColumn] }
                                     </text>
