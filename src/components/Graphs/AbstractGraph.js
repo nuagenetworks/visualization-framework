@@ -58,12 +58,12 @@ export default class AbstractGraph extends React.Component {
 
             // Use a unique tooltip ID per visualization,
             // otherwise there are overlapping tooltips.
-            this.tooltipId = Math.random();
+            const tooltipId = Math.random();
 
             // This JSX object can be used by subclasses to enable tooltips.
             this.tooltip = (
                 <ReactTooltip
-                    id={ this.tooltipId }
+                    id={ tooltipId }
                     place="top"
                     type="dark"
                     effect="float"
@@ -71,8 +71,20 @@ export default class AbstractGraph extends React.Component {
                 />
             );
 
+            // Subclasses can enable tooltips on their marks
+            // by spreading over the return value from this function
+            // when invoked with the mark's data element `d` like this:
+            // data.map((d) => <rect { ...this.tooltipProps(d) } />
+            this.tooltipProps = (d) => ({
+                "data-tip": true,
+                "data-for": tooltipId,
+                "onMouseEnter": () => this.hoveredDatum = d,
+                "onMouseMove": () => this.hoveredDatum = d
+            });
+
         } else {
             this.getTooltipContent = () => null
+            this.tooltipProps = () => null
         }
 
     }

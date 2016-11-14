@@ -203,10 +203,7 @@ export default class BarGraph extends AbstractGraph {
                                     key={ i }
                                     stroke={ stroke.color }
                                     strokeWidth={ stroke.width }
-                                    data-tip
-                                    data-for={ this.tooltipId }
-                                    onMouseEnter={() => this.hoveredDatum = d }
-                                    onMouseMove={() => this.hoveredDatum = d }
+                                    { ...this.tooltipProps(d) }
                                 />
                             );
                         })}
