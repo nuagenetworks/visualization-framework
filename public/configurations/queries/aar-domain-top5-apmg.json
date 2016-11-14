@@ -35,14 +35,14 @@
                             }
                         }
                     },
-		    		"aggs":{
+                    "aggs":{
                         "4":{
                             "filters":{
                                 "filters":{
                                     "Domain":{
                                         "query":{
                                             "term":{
-                                                "DomainName":"{{DomainName:Domain1}}"
+                                                "DomainName":"{{domainName:Domain1}}"
                                             }
                                         }
                                     }
