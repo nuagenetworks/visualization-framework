@@ -157,10 +157,14 @@ export default class BarGraph extends AbstractGraph {
             barWidth = xScale.bandwidth();
         }
 
+        // Use a unique tooltip ID per visualization,
+        // otherwise there are overlapping tooltips.
+        const tooltipId = Math.random();
+
         return (
             <div className="bar-graph">
                 <ReactTooltip
-                    id="foo"
+                    id={ tooltipId }
                     place="top"
                     type="dark"
                     effect="float"
@@ -228,7 +232,7 @@ export default class BarGraph extends AbstractGraph {
                                     stroke={ stroke.color }
                                     strokeWidth={ stroke.width }
                                     data-tip
-                                    data-for="foo"
+                                    data-for={ tooltipId }
                                     onMouseEnter={() => this.hoveredDatum = d }
                                 />
                             );
