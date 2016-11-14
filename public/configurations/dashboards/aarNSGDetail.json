@@ -7,8 +7,7 @@
         { "id": "aar-nsg-app-from-nsg", "x": 0, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12},
         { "id": "aar-nsg-app-to-nsg", "x": 5, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12},
         { "id": "aar-nsg-sla-from-nsg", "x": 0, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 12},
-        { "id": "aar-nsg-sla-to-nsg", "x": 5, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 12},
-        { "id": "aar-nsg-app-linechart", "x": 0, "y": 30, "w": 5, "h": 8, "minW": 2, "minH": 12}
+        { "id": "aar-nsg-sla-to-nsg", "x": 5, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 12}
     ],
     "links": [
         {
