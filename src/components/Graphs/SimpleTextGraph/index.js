@@ -50,8 +50,6 @@ export default class SimpleTextGraph extends AbstractGraph {
           titlePosition,
         } = this.getConfiguredProperties();
 
-        console.error([margin.top, margin.right, margin.bottom, margin.left].join(" "));
-
         let body;
         if (response && !response.isFetching) {
             body = (
