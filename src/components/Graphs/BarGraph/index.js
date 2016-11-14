@@ -43,19 +43,21 @@ function computeBarWidth(interval, timeScale) {
 export default class BarGraph extends AbstractGraph {
 
     getTooltipContent() {
-        return (
-            <div>
+        const { tooltip } = this.getConfiguredProperties();
+        const d = this.hoveredDatum;
+        if(tooltip) {
+            return (
                 <div>
-                    <strong>Foo</strong> : bar
+                    {tooltip.map(({column}) => (
+                        <div>
+                            <strong>{column}</strong> : {d[column]}
+                        </div>
+                    ))}
                 </div>
-                <div>
-                    <strong>New</strong> : stuff
-                </div>
-                <pre>
-                    {JSON.stringify(this.hoveredDatum, null, 2)}
-                </pre>
-            </div>
-        );
+            );
+        } else {
+            return null;
+        }
     }
 
     render() {

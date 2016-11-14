@@ -8,7 +8,7 @@
         "xColumn": "L7Classification",
         "yColumn": "Sum of MB",
         "yTicks": 5,
-        "tooltips": [
+        "tooltip": [
             { "column": "L7Classification", "label": "L7Classification" },
             { "column": "Sum of MB" }
         ]
