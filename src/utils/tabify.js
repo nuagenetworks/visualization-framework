@@ -9,11 +9,16 @@
 export default function tabify(response) {
     let table;
 
-    if(response.aggregations) {
+    if (response.aggregations) {
         const tree = collectBucket(response.aggregations);
         table = flatten(tree);
-    } else if(response.hits) {
+
+    } else if (response.hits) {
         table = response.hits.hits.map((d) => d._source);
+
+    } else if (Array.isArray(response)) {
+        table = response;
+
     } else {
         throw new Error("Tabify() invoked with invalid result set. Result set must have either 'aggregations' or 'hits' defined.");
     }
