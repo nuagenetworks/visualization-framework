@@ -1,6 +1,7 @@
 import React from "react";
 
 import AbstractGraph from "../AbstractGraph";
+import ReactTooltip from "react-tooltip";
 
 import tabify from "../../../utils/tabify";
 import * as d3 from "d3";
@@ -142,6 +143,7 @@ export default class BarGraph extends AbstractGraph {
 
         return (
             <div className="bar-graph">
+                <ReactTooltip place="top" type="dark" effect="float"/>
                 <svg width={width} height={height}>
                     <g transform={ `translate(${left},${top})` } >
                         <g
@@ -202,6 +204,7 @@ export default class BarGraph extends AbstractGraph {
                                     key={ i }
                                     stroke={ stroke.color }
                                     strokeWidth={ stroke.width }
+                                    data-tip="React-tooltip"
                                 />
                             );
                         })}
