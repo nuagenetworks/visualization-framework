@@ -6,12 +6,12 @@
     "creationDate": "10/19/2016",
     "data": {
         "sliceColumn": "Sum of MB",
-        "labelColumn": "Application"
+        "labelColumn": "L7Classification"
     },
     "listeners": [{
       "redirect": "/dashboards/dateHistogramExample",
       "params": {
-          "app": "Application"
+          "app": "L7Classification"
       }
     }],
     "query": "top5-app-vertical-bar"

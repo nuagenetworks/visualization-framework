@@ -7,14 +7,18 @@
     "creationDate": "10/13/2016",
     "data": {
         "xColumn": "Sum of MB",
-        "yColumn": "Application",
+        "yColumn": "L7Classification",
         "orientation": "horizontal",
         "colors": [
             "#7da3f7",
             "#fec26a",
             "#e78ac3",
             "#f79e99"
-        ]
+        ],
+        "margin": { "top": 15, "bottom": 20, "left": 60, "right": 20 },
+        "xTicks": 5,
+        "xTickGrid": true,
+        "yTickGrid": false
     },
     "query": "top5-app-vertical-bar"
 }

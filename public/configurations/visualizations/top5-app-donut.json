@@ -7,7 +7,7 @@
     "refreshInterval": 10000,
     "data": {
         "sliceColumn": "Sum of MB",
-        "labelColumn": "Application",
+        "labelColumn": "L7Classification",
         "pieInnerRadius": 0.5
     },
     "query": "top5-app-vertical-bar"
