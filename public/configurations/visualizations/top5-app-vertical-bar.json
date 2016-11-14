@@ -7,7 +7,11 @@
     "data": {
         "xColumn": "L7Classification",
         "yColumn": "Sum of MB",
-        "yTicks": 5
+        "yTicks": 5,
+        "tooltip": [
+            { "column": "L7Classification", "label": "L7 Classification" },
+            { "column": "Sum of MB", "format": ",.1f"}
+        ]
     },
     "listeners": [{
       "redirect": "/dashboards/aarEnterpriseAppDetail",

@@ -6,7 +6,11 @@
     "creationDate": "10/19/2016",
     "data": {
         "sliceColumn": "Sum of MB",
-        "labelColumn": "L7Classification"
+        "labelColumn": "L7Classification",
+        "tooltip": [
+            { "column": "L7Classification", "label": "L7 Classification" },
+            { "column": "Sum of MB", "format": ",.1f"}
+        ]
     },
     "listeners": [{
       "redirect": "/dashboards/dateHistogramExample",

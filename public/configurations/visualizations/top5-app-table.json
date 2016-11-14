@@ -8,7 +8,7 @@
         "columns": [
             { "column": "L7Classification", "label": "L7Classification" },
             { "column": "Sum of MB" },
-            { "column": "doc_count", "label": "Document Count" }
+            { "column": "doc_count", "label": "Document Count", "format": ",.2f" }
         ]
     },
     "listeners": [{
