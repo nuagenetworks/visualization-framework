@@ -28,7 +28,7 @@ export default class Table extends AbstractGraph {
         } = this.getConfiguredProperties();
 
         // Compute accessor functions that apply number and date formatters.
-        const accessors = columns.map(({ column, format, timeFormat }) => {
+        const columnAccessor = ({ column, format, timeFormat }) => {
             if(format){
                 const formatter = d3.format(format);
                 return (d) => formatter(d[column]);
@@ -38,7 +38,9 @@ export default class Table extends AbstractGraph {
             } else {
               return (d) => d[column];
             }
-        });
+        };
+
+        const accessors = columns.map(columnAccessor);
 
         if (!data)
             return (
