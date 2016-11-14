@@ -7,9 +7,8 @@
     "data": {
         "columns": [
             { "column": "SourceIP", "label": "Source IP" },
-            { "column": "TotalPacketsCount", "label": "Total Packets Count" },
-            { "column": "TotalBytesCount", "label": "Total Bytes Count"},
-            { "column": "TotalMB", "label": "Total MB" } 
+            { "column": "TotalPacketsCount", "label": "Total Packets", "format": ",.2s"},
+            { "column": "TotalMB", "label": "Total MB", "format": ",.2f" } 
         ]
     },
     "query": "top5-users-table"

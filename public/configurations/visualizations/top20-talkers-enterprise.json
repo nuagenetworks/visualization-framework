@@ -10,14 +10,14 @@
             { "column": "APMGroup", "label": "APM-Group" },
             { "column": "DomainName", "label": "Domain Name"},
             { "column": "L7Classification", "label": "L7 Classification" },
-            { "column": "1", "label": "Total MB" }
+            { "column": "1", "label": "Total MB", "format": ",.2f" }
         ]
     },
     "listeners": [
     {
         "redirect": "/dashboards/aarEnterpriseAppDetail",
         "params": {
-            "app": "Application"
+            "app": "L7Classification"
         }
     }],
 

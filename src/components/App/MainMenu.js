@@ -69,7 +69,7 @@ class MainMenuView extends React.Component {
                             leftIcon={
                                 <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-domain.png"} alt="D" />
                             }
-                            />
+                        />
                     )
                 })}
             </div>
@@ -100,7 +100,7 @@ class MainMenuView extends React.Component {
                             leftIcon={
                                 <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-nsgateway.png"} alt="N" />
                             }
-                            />
+                        />
                     )
                 })}
             </div>

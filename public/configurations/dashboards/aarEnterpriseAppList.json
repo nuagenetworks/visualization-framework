@@ -5,5 +5,15 @@
     "title": "AAR Enterprise - Application List",
     "visualizations": [
         { "id": "top20-talkers-enterprise", "x": 2, "y": 0, "w": 15, "h": 22, "minW": 2, "minH": 12}
+    ],
+    "links": [
+        {
+            "label": "Dashboard View",
+            "url": "/dashboards/aarEnterprise"
+        },
+        {
+            "label": "Detail View",
+            "url": "/dashboards/aarEnterpriseAppList"
+        }
     ]
 }
