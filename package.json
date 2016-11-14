@@ -2,6 +2,7 @@
   "name": "react-hello-world",
   "version": "0.0.1",
   "private": true,
+  "homepage": "/reports",
   "devDependencies": {
     "enzyme": "^2.4.1",
     "react-addons-test-utils": "^15.3.1",
