@@ -145,16 +145,19 @@ export default class BarGraph extends AbstractGraph {
         // otherwise there are overlapping tooltips.
         const tooltipId = Math.random();
 
+        this.tooltip = (
+            <ReactTooltip
+                id={ tooltipId }
+                place="top"
+                type="dark"
+                effect="float"
+                getContent={this.getTooltipContent.bind(this)}
+            />
+        );
+
         return (
             <div className="bar-graph">
-                <ReactTooltip
-                    id={ tooltipId }
-                    place="top"
-                    type="dark"
-                    effect="float"
-                    getContent={this.getTooltipContent.bind(this)}
-                />
-
+                {this.tooltip}
                 <svg width={width} height={height}>
                     <g transform={ `translate(${left},${top})` } >
                         <g
