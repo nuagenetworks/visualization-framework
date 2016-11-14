@@ -234,6 +234,7 @@ export default class BarGraph extends AbstractGraph {
                                     data-tip
                                     data-for={ tooltipId }
                                     onMouseEnter={() => this.hoveredDatum = d }
+                                    onMouseMove={() => this.hoveredDatum = d }
                                 />
                             );
                         })}
