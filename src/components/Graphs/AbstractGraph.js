@@ -29,4 +29,23 @@ export default class AbstractGraph extends React.Component {
         const { colors } = this.getConfiguredProperties();
         return colors[index % colors.length];
     }
+
+    getTooltipContent() {
+        const { tooltip } = this.getConfiguredProperties();
+        const d = this.hoveredDatum;
+        if(tooltip && d) {
+            return (
+                <div>
+                    {tooltip.map(({column}) => (
+                        <div>
+                            <strong>{column}</strong> : {d[column]}
+                        </div>
+                    ))}
+                </div>
+            );
+        } else {
+            return null;
+        }
+    }
+
 }

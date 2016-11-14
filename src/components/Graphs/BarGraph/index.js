@@ -42,24 +42,6 @@ function computeBarWidth(interval, timeScale) {
 
 export default class BarGraph extends AbstractGraph {
 
-    getTooltipContent() {
-        const { tooltip } = this.getConfiguredProperties();
-        const d = this.hoveredDatum;
-        if(tooltip) {
-            return (
-                <div>
-                    {tooltip.map(({column}) => (
-                        <div>
-                            <strong>{column}</strong> : {d[column]}
-                        </div>
-                    ))}
-                </div>
-            );
-        } else {
-            return null;
-        }
-    }
-
     render() {
 
         const { response, width, height, onMarkClick } = this.props;
