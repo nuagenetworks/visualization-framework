@@ -23,7 +23,8 @@ export const main = function (context) {
     store.dispatch(ConfigurationsActions.fetchIfNeeded(firstQueryID, ConfigurationsActionKeyStore.QUERIES))
         .then(
             () => {
-                const queryConfiguration = store.getState().configurations.getIn([ConfigurationsActionKeyStore.QUERIES, firstQueryID, ConfigurationsActionKeyStore.DATA]).toJS();
+                const configurationState = store.getState().configurations;
+                const queryConfiguration = configurationState.getIn([ConfigurationsActionKeyStore.QUERIES, firstQueryID, ConfigurationsActionKeyStore.DATA]).toJS();
 
                 // Make the query to the correct service and store the information into the redux state
                 store.dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context))
