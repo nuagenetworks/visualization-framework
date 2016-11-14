@@ -37,7 +37,7 @@ export default class AbstractGraph extends React.Component {
             return (
                 <div>
                     {tooltip.map(({column}) => (
-                        <div>
+                        <div key={column}>
                             <strong>{column}</strong> : {d[column]}
                         </div>
                     ))}
