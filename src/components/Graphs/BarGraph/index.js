@@ -42,6 +42,22 @@ function computeBarWidth(interval, timeScale) {
 
 export default class BarGraph extends AbstractGraph {
 
+    getTooltipContent() {
+        return (
+            <div>
+                <div>
+                    <strong>Foo</strong> : bar
+                </div>
+                <div>
+                    <strong>New</strong> : stuff
+                </div>
+                <pre>
+                    {JSON.stringify(this.hoveredDatum, null, 2)}
+                </pre>
+            </div>
+        );
+    }
+
     render() {
 
         const { response, width, height, onMarkClick } = this.props;
@@ -143,7 +159,14 @@ export default class BarGraph extends AbstractGraph {
 
         return (
             <div className="bar-graph">
-                <ReactTooltip place="top" type="dark" effect="float"/>
+                <ReactTooltip
+                    id="foo"
+                    place="top"
+                    type="dark"
+                    effect="float"
+                    getContent={this.getTooltipContent.bind(this)}
+                />
+
                 <svg width={width} height={height}>
                     <g transform={ `translate(${left},${top})` } >
                         <g
@@ -204,7 +227,9 @@ export default class BarGraph extends AbstractGraph {
                                     key={ i }
                                     stroke={ stroke.color }
                                     strokeWidth={ stroke.width }
-                                    data-tip="React-tooltip"
+                                    data-tip
+                                    data-for="foo"
+                                    onMouseEnter={() => this.hoveredDatum = d }
                                 />
                             );
                         })}
