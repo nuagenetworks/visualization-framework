@@ -1,7 +1,7 @@
 import React from "react";
 
 import { GraphManager } from "./index";
-
+import columnAccessor from "../../utils/columnAccessor";
 
 export default class AbstractGraph extends React.Component {
 
@@ -19,6 +19,30 @@ export default class AbstractGraph extends React.Component {
         }
 
         this.defaults = GraphManager.getDefaultProperties(properties);
+        
+        const { tooltip } = this.getConfiguredProperties();
+        if(tooltip) {
+            const accessors = tooltip.map(columnAccessor);
+            this.getTooltipContent = () => {
+                const d = this.hoveredDatum;
+                if(d) {
+                    return (
+                        <div>
+                            {tooltip.map(({column}, i) => (
+                                <div key={column}>
+                                    <strong>{column}</strong> : {accessors[i](d)}
+                                </div>
+                            ))}
+                        </div>
+                    );
+                } else {
+                    return null;
+                }
+            }
+        } else {
+            this.getTooltipContent = () => null
+        }
+
     }
 
     getConfiguredProperties() {
@@ -28,24 +52,6 @@ export default class AbstractGraph extends React.Component {
     applyColor(index) {
         const { colors } = this.getConfiguredProperties();
         return colors[index % colors.length];
-    }
-
-    getTooltipContent() {
-        const { tooltip } = this.getConfiguredProperties();
-        const d = this.hoveredDatum;
-        if(tooltip && d) {
-            return (
-                <div>
-                    {tooltip.map(({column}) => (
-                        <div key={column}>
-                            <strong>{column}</strong> : {d[column]}
-                        </div>
-                    ))}
-                </div>
-            );
-        } else {
-            return null;
-        }
     }
 
 }
