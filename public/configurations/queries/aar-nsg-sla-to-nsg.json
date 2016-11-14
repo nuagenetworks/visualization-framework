@@ -1,0 +1,97 @@
+{
+    "id":"aar-nsg-sla-to-nsg",
+    "title":"TBD",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_dpi_slastats}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTimeTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+           "aggs": {
+                "11": {
+                    "filters": {
+                        "filters": {
+                            "DestinationNSG": {
+                                "query": {
+                                    "term": {
+                                        "DestinationNSG": "{{dnsg:default}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "aggs": {
+                        "ts": {
+                            "terms": {
+                                "field": "timestamp",
+                                "size": 10,
+                                "order": {
+                                    "_count": "desc"
+                                }
+                            },
+                            "aggs": {
+                                "SourceNSG": {
+                                    "terms": {
+                                        "field": "SourceNSG",
+                                        "size": 10,
+                                        "order": {
+                                            "_count": "desc"
+                                        }
+                                    },
+                                    "aggs": {
+                                        "Application": {
+                                            "terms": {
+                                                "field": "Application",
+                                                "size": 10,
+                                                "order": {
+                                                    "_count": "desc"
+                                                }
+                                            },
+                                            "aggs": {
+                                                "APMGroup": {
+                                                    "terms": {
+                                                        "field": "APMGroup",
+                                                        "size": 10,
+                                                        "order": {
+                                                            "_count": "desc"
+                                                        }
+                                                    },
+                                                    "aggs": {
+                                                        "ViolationType": {
+                                                            "terms": {
+                                                                "field": "ViolationType",
+                                                                "size": 10,
+                                                                "order": {
+                                                                    "_count": "desc"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

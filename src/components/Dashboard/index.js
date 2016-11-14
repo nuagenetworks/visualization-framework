@@ -1,19 +1,29 @@
 import React from "react";
-import ReactDOM from "react-dom";
+
 import { connect } from "react-redux";
+import { Link } from "react-router";
+import { fromJS } from "immutable";
 
 import CircularProgress from "material-ui/CircularProgress";
-import { Responsive, WidthProvider } from 'react-grid-layout';
+import { Responsive, WidthProvider } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 import Visualization from "../Visualization";
+import FiltersToolBar from "../FiltersToolBar";
 
 import { Actions as AppActions } from "../App/redux/actions";
 
 import {
     Actions as ConfigurationsActions,
     ActionKeyStore as ConfigurationsActionKeyStore
-} from "../../services/configurations/redux/actions"
+} from "../../services/configurations/redux/actions";
+
+import { contextualize } from "../../utils/configurations"
+
+import { defaultFilterOptions } from "./default.js"
+
+import style from "./styles";
+
 
 export class DashboardView extends React.Component {
 
@@ -49,6 +59,16 @@ export class DashboardView extends React.Component {
         }
     }
 
+    currentTitle() {
+        const { configuration, location } = this.props;
+        const title = configuration.get("title");
+
+        if (!title)
+            return ;
+
+        return contextualize(title, location.query);
+    }
+
     updateTitleIfNecessary(prevProps) {
         const { configuration, setPageTitle } = this.props;
 
@@ -56,7 +76,7 @@ export class DashboardView extends React.Component {
             return;
 
         if (this.shouldUpdateTitle(prevProps)) {
-            setPageTitle(configuration.get("title"));
+            setPageTitle(this.currentTitle());
         }
     }
 
@@ -69,16 +89,46 @@ export class DashboardView extends React.Component {
         fetchConfigurationIfNeeded(params.id);
     }
 
-    onResize(layout) {
-        this.resizeCallbacks.forEach((callback) => callback())
+    onResize() {
+        this.resizeCallbacks.forEach((callback) => callback());
     }
 
     registerResize(callback){
         this.resizeCallbacks.push(callback);
     }
 
+    renderNavigationBarIfNeeded() {
+        const { configuration, location } = this.props;
+
+        const links = configuration.get("links");
+
+        if (!links || links.length === 0)
+            return;
+
+        return (
+            <div style={style.navigationContainer}>
+                <ul className="list-inline" style={style.linksList}>
+                    {links.map((link, index) => {
+
+                        return <li key={index}
+                                   style={style.link}
+                                   >
+                                    <Link to={{ pathname:link.get("url"), query:location.query }}>
+                                        {link.get("label")}
+                                    </Link>
+                               </li>;
+                    })}
+                </ul>
+            </div>
+        );
+    }
+
     render() {
-        const { configuration, error, fetching, location} = this.props
+        const { configuration,
+                error,
+                fetching,
+                location
+        } = this.props;
 
         if (fetching) {
             return (
@@ -88,41 +138,61 @@ export class DashboardView extends React.Component {
                 </div>
             );
 
-        } else if (error) {
+        }
+
+        if (error) {
             return (
                 <div>{error}</div>
             );
+        }
 
-        } else if (configuration) {
+        if (configuration) {
             const { visualizations } = configuration.toJS();
 
+            let filterOptions;
+
+            if (configuration.get("filterOptions")) {
+                filterOptions = Object.assign({}, defaultFilterOptions, configuration.get("filterOptions").toJS());
+            }
+            else {
+                filterOptions = defaultFilterOptions;
+            }
+
             return (
-                <ResponsiveReactGridLayout
-                    rowHeight={10}
-                    margin={[12,12]}
-                    containerPadding={[10,10]}
-                    onResize={this.onResize.bind(this)}
-                    onLayoutChange={this.onResize.bind(this)}
-                >
-                    {
-                        visualizations.map((visualization, index) =>
-                            <div
-                                key={visualization.id}
-                                data-grid={visualization}
-                            >
-                                <Visualization
-                                    id={visualization.id}
-                                    context={location.query}
-                                    registerResize={this.registerResize.bind(this)}
-                                />
-                            </div>
-                        )
-                    }
-                </ResponsiveReactGridLayout>
+                <div>
+                    {this.renderNavigationBarIfNeeded()}
+
+                    <FiltersToolBar filterOptions={fromJS(filterOptions)} context={location.query} />
+
+                    <div style={style.gridContainer}>
+                        <ResponsiveReactGridLayout
+                            rowHeight={10}
+                            margin={[12,12]}
+                            containerPadding={[10, 10]}
+                            onResize={this.onResize.bind(this)}
+                            onLayoutChange={this.onResize.bind(this)}
+                        >
+                            {
+                                visualizations.map((visualization) =>
+                                    <div
+                                        key={visualization.id}
+                                        data-grid={visualization}
+                                    >
+                                        <Visualization
+                                            id={visualization.id}
+                                            context={location.query}
+                                            registerResize={this.registerResize.bind(this)}
+                                        />
+                                    </div>
+                                )
+                            }
+                        </ResponsiveReactGridLayout>
+                    </div>
+                </div>
             );
-        } else {
-            return <div>No dashboard</div>
         }
+
+        return <div>No dashboard</div>;
     }
 }
 
@@ -147,11 +217,11 @@ const mapStateToProps = (state, ownProps) => ({
     ])
 });
 
-
 const actionCreators = (dispatch) => ({
     setPageTitle: (aTitle) => {
         dispatch(AppActions.updateTitle(aTitle));
     },
+
     fetchConfigurationIfNeeded: (id) => {
         return dispatch(ConfigurationsActions.fetchIfNeeded(
             id,

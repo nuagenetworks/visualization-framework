@@ -1,9 +1,0 @@
-{
-    "id": "aarEnterprise",
-    "author": "Christophe Serafin and Curran Kelleher",
-    "creationDate": "09/29/2016",
-    "title": "AAR Enterprise - Application List",
-    "visualizations": [
-        { "id": "top20-talkers-enterprise", "x": 2, "y": 0, "w": 15, "h": 22, "minW": 2, "minH": 12}
-    ]
-}

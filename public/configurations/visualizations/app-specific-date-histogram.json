@@ -1,0 +1,20 @@
+{
+    "id": "app-specific-date-histogram",
+    "graph": "BarGraph",
+    "title": "L7Classification Date Histogram",
+    "author": "Curran Kelleher",
+    "creationDate": "10/14/2016",
+    "data": {
+        "dateHistogram": true,
+        "interval": "30m",
+        "xColumn": "date-histo",
+        "yColumn": "SumOfPackets",
+        "margin": {
+            "top": 15,
+            "bottom": 20,
+            "left": 45,
+            "right": 20
+        }
+    },
+    "query": "app-specific-vertical-bar"
+}

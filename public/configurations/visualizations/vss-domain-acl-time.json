@@ -1,0 +1,25 @@
+{
+    "id": "vss-domain-acl-time",
+    "graph": "LineGraph",
+    "title": "ACL Hits vs Time - {{actionType:DENY}}",
+    "author": "Ronak Shah",
+    "creationDate": "10/18/2016",
+    "data": {
+        "xColumn": "timestamp",
+        "yColumn": "SumOf",
+        "stroke": {
+          "color": "#f76159",
+          "width": "2px"
+        },
+        "margin": {
+            "top": 20,
+            "bottom": 40,
+            "left": 80,
+            "right": 20
+        },
+        "xTickGrid": false,
+        "yTickGrid": true,
+        "yTickFormat": ".2s"
+    },
+    "query": "vss-domain-acl-time"
+}

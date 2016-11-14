@@ -1,5 +1,3 @@
-import { theme } from "../../theme";
-
 const style = {
     overlayContainer: {
         position: "absolute",
@@ -9,8 +7,6 @@ const style = {
         height: "100%",
         display: "inline-block",
         textAlign: "justify",
-        background: theme.palette.greyDarkColor,
-        opacity: "0.5",
     },
     overlayText: {
         position: "absolute",

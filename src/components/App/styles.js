@@ -6,8 +6,6 @@ const style = {
         fontWeight: 200,
     },
     container: {
-        margin: "10px",
-        position: "relative",
     },
     menuLogo: {
         textAlign: "center",
@@ -18,12 +16,20 @@ const style = {
         background: theme.palette.greyLightColor,
     },
     nestedItems: {
-        padding: 0,
+        padding: 0
     },
     nestedItem: {
         fontSize: "1em",
-        paddingLeft: "16px",
         color: theme.palette.blackColor,
+    },
+    innerNestedItem: {
+        paddingLeft: "32px",
+        color: theme.palette.blackColor,
+    },
+    iconMenu: {
+        width: "16px",
+        height: "16px",
+        margin: "16px 8px 8px 8px"
     },
     listItem: {
         color: theme.palette.blackColor,

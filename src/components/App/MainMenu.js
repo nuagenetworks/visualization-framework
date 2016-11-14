@@ -2,8 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { push } from "redux-router";
 
-import FontAwesome from "react-fontawesome";
-
 import Drawer from "material-ui/Drawer";
 import Subheader from "material-ui/Subheader";
 import { List, ListItem } from "material-ui/List";
@@ -20,6 +18,7 @@ import {
 
 import style from "./styles";
 import Logo from "./logo.png";
+import FontAwesome from "react-fontawesome";
 
 
 class MainMenuView extends React.Component {
@@ -32,23 +31,93 @@ class MainMenuView extends React.Component {
         this.initialize();
     }
 
-    initialize() {
+    initialize() {;
         this.props.fetchEnterprisesIfNeeded().then((enterprises) => {
-            // if (!enterprises)
-            //     return;
-            //
-            // for (let index in enterprises) { // eslint-disable-line
-            //     let enterprise = enterprises[index];
-            //     this.props.fetchDomainsIfNeeded(enterprise.ID);
-            // }
+            if (!enterprises)
+                return;
+
+            for (let index in enterprises) { // eslint-disable-line
+                let enterprise = enterprises[index];
+                this.props.fetchDomainsIfNeeded(enterprise.ID);
+                this.props.fetchNSGsIfNeeded(enterprise.ID);
+            }
         });
     }
 
-    renderSubTree() {
-        const { enterprises } = this.props;
+    renderDomainsMenu() {
+        const {
+            context,
+            domains,
+            visualizationType
+        } = this.props;
+
+        if (!domains || domains.length === 0)
+            return;
+
+        const targetedDashboard = visualizationType === "VSS" ? "vssDomainACL" : "aarDomain";
+
+        return (
+            <div>
+                {domains.map((domain) => {
+                    return (
+                        <ListItem
+                            key={domain.ID}
+                            primaryText={domain.name}
+                            style={style.nestedItem}
+                            innerDivStyle={style.innerNestedItem}
+                            onTouchTap={() => { this.props.goTo("/dashboards/" + targetedDashboard, context)}}
+                            leftIcon={
+                                <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-domain.png"} alt="D" />
+                            }
+                        />
+                    )
+                })}
+            </div>
+        )
+    }
+
+    renderNSGsMenu() {
+        const {
+            context,
+            nsgs,
+        } = this.props;
+
+        if (!nsgs || nsgs.length === 0)
+            return;
+
+        return (
+            <div>
+                {nsgs.map((nsg) => {
+                    return (
+                        <ListItem
+                            key={nsg.ID}
+                            primaryText={nsg.name}
+                            style={style.nestedItem}
+                            innerDivStyle={style.innerNestedItem}
+                            initiallyOpen={true}
+                            open={true}
+                            onTouchTap={() => { this.props.goTo("/dashboards/aarNSG", context)}}
+                            leftIcon={
+                                <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-nsgateway.png"} alt="N" />
+                            }
+                        />
+                    )
+                })}
+            </div>
+        )
+    }
+
+    renderEnterprisesMenu() {
+        const {
+            context,
+            enterprises,
+            visualizationType
+        } = this.props;
 
         if (!enterprises)
             return;
+
+        const targetedDashboard = visualizationType === "VSS" ? "vssEnterprise" : "aarEnterprise";
 
         return (
             <div>
@@ -58,6 +127,13 @@ class MainMenuView extends React.Component {
                             key={enterprise.ID}
                             primaryText={enterprise.name}
                             style={style.listItem}
+                            onTouchTap={() => { this.props.goTo("/dashboards/" + targetedDashboard, context)}}
+                            nestedItems={[
+                                <div style={style.nestedItems}>
+                                    {this.renderDomainsMenu()}
+                                    {this.renderNSGsMenu()}
+                                </div>
+                            ]}
                         />
                     )
                 })}
@@ -66,121 +142,20 @@ class MainMenuView extends React.Component {
     }
 
     render() {
+        const {
+            visualizationType,
+        } = this.props;
+
         return (
             <Drawer open={this.props.open} docked={false} onRequestChange={this.props.onRequestChange} width={300}>
                 <div style={style.menuLogo}>
                     <img src={ Logo } alt="Nuage Networks Visualization" />
-                    <p>Visualizations</p>
+                    <p>{visualizationType} Visualizations</p>
                 </div>
-
-
-
-                <Subheader style={style.subHeader}>DEVELOPMENT</Subheader>
-                <List>
-                    <ListItem
-                        primaryText="AppsOverview"
-                        leftIcon={<FontAwesome
-                            name="area-chart"
-                            style={{ margin: "0", top: "10px", left: "16px" }}
-                            />
-                        }
-                        innerDivStyle={{padding:"10px 40px"}}
-                        onTouchTap={() => {this.props.goTo("/dashboards/appsOverview?startTime=now-900h")}}
-                        style={style.listItem}
-                        />
-                    <ListItem
-                        primaryText="App Aware Routing"
-                        leftIcon={<FontAwesome
-                            name="area-chart"
-                            style={{ margin: "0", top: "10px", left: "16px" }}
-                            />
-                        }
-                        innerDivStyle={{padding:"10px 40px"}}
-                        onTouchTap={() => {this.props.goTo("/dashboards/aarEnterprise?startTime=now-900h")}}
-                        style={style.listItem}
-                        />
-                    <ListItem
-                        primaryText="AAR-Enterprise-App-List"
-                        leftIcon={<FontAwesome
-                            name="area-chart"
-                            style={{ margin: "0", top: "10px", left: "16px" }}
-                            />
-                        }
-                        innerDivStyle={{padding:"10px 40px"}}
-                        onTouchTap={() => {this.props.goTo("/dashboards/aarEnterpriseAppList?startTime=now-900h")}}
-                        style={style.listItem}
-                        />
-                    <ListItem
-                        primaryText="AAR-Domain"
-                        leftIcon={<FontAwesome
-                            name="area-chart"
-                            style={{ margin: "0", top: "10px", left: "16px" }}
-                            />
-                        }
-                        innerDivStyle={{padding:"10px 40px"}}
-                        onTouchTap={() => {this.props.goTo("/dashboards/aarDomain?startTime=now-900h")}}
-                        style={style.listItem}
-                        />
-                    <ListItem
-                        primaryText="VSS-Enterprise"
-                        leftIcon={<FontAwesome
-                            name="area-chart"
-                            style={{ margin: "0", top: "10px", left: "16px" }}
-                            />
-                        }
-                        innerDivStyle={{padding:"10px 40px"}}
-                        onTouchTap={() => {this.props.goTo("/dashboards/vssEnterprise?startTime=now-900h")}}
-                        style={style.listItem}
-                        />
-                    <ListItem
-                        primaryText="VSS-Domain-Traffic1"
-                        leftIcon={<FontAwesome
-                            name="area-chart"
-                            style={{ margin: "0", top: "10px", left: "16px" }}
-                            />
-                        }
-                        innerDivStyle={{padding:"10px 40px"}}
-                        onTouchTap={() => {this.props.goTo("/dashboards/vssDomainTraffic1?startTime=now-900h")}}
-                        style={style.listItem}
-                        />
-                    <ListItem
-                        primaryText="VSS-Domain-Event"
-                        leftIcon={<FontAwesome
-                            name="area-chart"
-                            style={{ margin: "0", top: "10px", left: "16px" }}
-                            />
-                        }
-                        innerDivStyle={{padding:"10px 40px"}}
-                        onTouchTap={() => {this.props.goTo("/dashboards/vssDomainEvent?startTime=now-900h")}}
-                        style={style.listItem}
-                        />
-                    <ListItem
-                        primaryText="VSS-Domain-ACL"
-                        leftIcon={<FontAwesome
-                            name="area-chart"
-                            style={{ margin: "0", top: "10px", left: "16px" }}
-                            />
-                        }
-                        innerDivStyle={{padding:"10px 40px"}}
-                        onTouchTap={() => {this.props.goTo("/dashboards/vssDomainACL?startTime=now-900h")}}
-                        style={style.listItem}
-                        />
-                    <ListItem
-                        primaryText="VSS-Domain-Traffic2"
-                        leftIcon={<FontAwesome
-                            name="area-chart"
-                            style={{ margin: "0", top: "10px", left: "16px" }}
-                            />
-                        }
-                        innerDivStyle={{padding:"10px 40px"}}
-                        onTouchTap={() => {this.props.goTo("/dashboards/vssDomainTraffic2?startTime=now-900h")}}
-                        style={style.listItem}
-                        />
-                </List>
 
                 <Subheader style={style.subHeader}>ENTERPRISES</Subheader>
                 <List>
-                    {this.renderSubTree()}
+                    {this.renderEnterprisesMenu()}
                 </List>
             </Drawer>
         );
@@ -190,26 +165,43 @@ class MainMenuView extends React.Component {
 
 MainMenuView.propTypes = {
   open: React.PropTypes.bool,
-  onRequestChange: React.PropTypes.func,
+  onRequestChange: React.PropTypes.func
 };
 
-const mapStateToProps = (state) => ({
-    open: state.interface.get(ComponentActionKeyStore.MAIN_MENU_OPENED),
-    enterprises: state.services.getIn([ServiceActionKeyStore.REQUESTS, 'enterprises', ServiceActionKeyStore.RESULTS]),
-});
+const mapStateToProps = (state) => {
+
+    const props = {
+        context: state.interface.get(ComponentActionKeyStore.CONTEXT),
+        visualizationType: state.interface.get(ComponentActionKeyStore.VISUALIZATION_TYPE),
+        open: state.interface.get(ComponentActionKeyStore.MAIN_MENU_OPENED),
+        enterprises: state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises", ServiceActionKeyStore.RESULTS]),
+    };
+
+    if (props.context && props.context.enterpriseID) {
+        props.domains = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/domains", ServiceActionKeyStore.RESULTS]);
+
+        if (props.visualizationType === "AAR")
+            props.nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/nsgateways", ServiceActionKeyStore.RESULTS]);
+    }
+
+    return props;
+
+};
 
 const actionCreators = (dispatch) => ({
-  onRequestChange: () => {
+    onRequestChange: () => {
       dispatch(ComponentActions.toggleMainMenu());
-  },
-  setPageTitle: (aTitle) => {
+    },
+
+    setPageTitle: (aTitle) => {
       dispatch(ComponentActions.updateTitle(aTitle));
-  },
-  goTo: (link) => {
-      dispatch(ComponentActions.toggleMainMenu());
-      dispatch(push(link));
-  },
-  fetchEnterprisesIfNeeded: () => {
+    },
+
+    goTo: function(link, filters) {
+        dispatch(push({pathname:link, query:filters}));
+    },
+
+    fetchEnterprisesIfNeeded: () => {
       let configuration = {
           service: "VSD",
           query: {
@@ -217,7 +209,31 @@ const actionCreators = (dispatch) => ({
           }
       }
       return dispatch(ServiceActions.fetchIfNeeded(configuration));
-  }
+    },
+
+    fetchDomainsIfNeeded: (enterpriseID) => {
+        let configuration = {
+            service: "VSD",
+            query: {
+                parentResource: "enterprises",
+                parentID: enterpriseID,
+            resource: "domains"
+            }
+        }
+        return dispatch(ServiceActions.fetchIfNeeded(configuration));
+    },
+
+    fetchNSGsIfNeeded: (enterpriseID) => {
+        let configuration = {
+            service: "VSD",
+            query: {
+                parentResource: "enterprises",
+                parentID: enterpriseID,
+            resource: "nsgateways"
+            }
+        }
+        return dispatch(ServiceActions.fetchIfNeeded(configuration));
+    }
 });
 
 

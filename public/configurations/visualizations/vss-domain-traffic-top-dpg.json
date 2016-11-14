@@ -1,0 +1,24 @@
+{
+    "id": "vss-domain-traffic-top-dpg",
+    "graph": "BarGraph",
+    "title": "Top Destination Policy Groups by Count",
+    "author": "Ronak Shah",
+    "creationDate": "10/18/2016",
+    "data": {
+        "xColumn": "dpg",
+        "yColumn": "SumOf",
+        "margin": {
+            "top": 20,
+            "bottom": 40,
+            "left": 80,
+            "right": 20
+        },
+        "colors": [
+             "#fec26a"
+         ],
+        "xTickGrid": false,
+        "yTickGrid": true,
+        "yTickFormat": ".2s"
+    },
+    "query": "vss-domain-traffic-top-dpg"
+}

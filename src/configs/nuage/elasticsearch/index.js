@@ -1,4 +1,5 @@
-import elasticsearch from 'elasticsearch'
+import elasticsearch from 'elasticsearch';
+import { getUsedParameters } from "../../../utils/configurations";
 
 let config = function () {
     return {
@@ -31,8 +32,15 @@ const ping = function (parameters, state) {
     return client.ping(parameters);
 }
 
+/* Computes the request ID based on the parameters that are actually used
+ */
 const getRequestID = function (query, context) {
-    return query.id + "[" + JSON.stringify(context) + "]";
+    const parameters = getUsedParameters(query, context);
+
+    if (Object.keys(parameters).length === 0)
+        return query.id;
+
+    return query.id + "[" + JSON.stringify(parameters) + "]";
 }
 
 export const ElasticSearchService = {

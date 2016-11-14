@@ -1,0 +1,25 @@
+{
+    "id": "vss-ent-acldeny-time",
+    "graph": "LineGraph",
+    "title": "VSS Enterprise ACL Deny vs Time",
+    "author": "Ronak Shah",
+    "creationDate": "10/17/2016",
+    "data": {
+        "xColumn": "timestamp",
+        "yColumn": "SumOf",
+        "stroke": {
+            "color": "#f76159",
+            "width": "2px"
+        },
+        "margin": {
+            "top": 15,
+            "bottom": 20,
+            "left": 50,
+            "right": 40
+        },
+        "xTickGrid": false,
+        "yTickGrid": true,
+        "yTickFormat": ".2s"
+    },
+    "query": "vss-ent-acldeny-time"
+}

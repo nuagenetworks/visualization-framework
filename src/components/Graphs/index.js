@@ -4,6 +4,7 @@ import BarGraph from "./BarGraph/index";
 import LineGraph from "./LineGraph";
 import PieGraph from "./PieGraph";
 import Table from "./Table";
+import ChordGraph from "./ChordGraph";
 
 import { theme } from "../../theme";
 
@@ -16,6 +17,7 @@ let registry = {
     LineGraph,
     Table,
     PieGraph,
+    ChordGraph,
 };
 
 /*
@@ -38,12 +40,7 @@ const getGraphComponent = function (name) {
 
 // Define all default properties for graphs
 const defaults = {
-    margin: {
-        top: 15,
-        bottom: 20,
-        left: 30,
-        right: 20
-    },
+    margin: { top: 15, bottom: 20, left: 30, right: 20 },
     padding: 0.1,
     yTickGrid: true,
     yTickSizeInner: 6,
@@ -55,10 +52,11 @@ const defaults = {
     interval: "30s",
     colors: [theme.palette.blueColor],
     fontColor: theme.palette.blackColor,
+    fontSize: "1em",
     stroke: {
         color: theme.palette.whiteColor,
-        width: "2px"
-    },
+        width: "1px"
+    }
 }
 
 const getDefaultProperties = (properties) => {

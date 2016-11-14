@@ -1,0 +1,33 @@
+{
+    "id": "vssDomainTraffic2",
+    "author": "Ronak Shah",
+    "creationDate": "10/18/2016",
+    "title": "{{domainName:VSS Domain}} - Traffic Analytics - II",
+    "visualizations": [
+        { "id": "vss-domain-traffic-top-spg", "x": 0, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12},
+        { "id": "vss-domain-traffic-top-dpg", "x": 5, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12}
+    ],
+    "links": [
+        {
+            "label": "Traffic Analytics-I",
+            "url": "/dashboards/vssDomainTraffic1"
+        },
+        {
+            "label": "Traffic Analytics-II",
+            "url": "/dashboards/vssDomainTraffic2"
+        },
+        {
+            "label": "Flow Analytics",
+            "url": "/dashboards/vssDomainFlow"
+        },
+        {
+            "label": "Event Analytics",
+            "url": "/dashboards/vssDomainEvent"
+        },
+        {
+            "label": "ACL Analytics",
+            "url": "/dashboards/vssDomainACL"
+        }
+    ]
+}
+

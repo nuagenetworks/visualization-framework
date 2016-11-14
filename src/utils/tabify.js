@@ -7,16 +7,24 @@
   https://github.com/elastic/kibana/blob/master/src/ui/public/agg_response/tabify/tabify.js
 */
 export default function tabify(response) {
-    const tree = collectBucket(response.aggregations);
-    const table = flatten(tree);
+    let table;
 
-    console.log("Results from tabify():");
+    if(response.aggregations) {
+        const tree = collectBucket(response.aggregations);
+        table = flatten(tree);
+    } else if(response.hits) {
+        table = response.hits.hits.map((d) => d._source);
+    } else {
+        throw new Error("Tabify() invoked with invalid result set. Result set must have either 'aggregations' or 'hits' defined.");
+    }
+
+    console.log("Results from tabify (first 3 rows only):");
 
     // This one shows where there are "undefined" values.
     console.log(table)
 
     // This one shows the full structure pretty-printed.
-    console.log(JSON.stringify(table, null, 2))
+    console.log(JSON.stringify(table.slice(0, 3), null, 2))
 
     return table;
 }
@@ -65,6 +73,10 @@ function extractTree(buckets, stack) {
 }
 
 function flatten(tree, parentNode={}){
+
+    if (!tree)
+        return [];
+
     return tree
 
         // Have the child node inherit values from the parent.
@@ -80,6 +92,7 @@ function flatten(tree, parentNode={}){
                     if (Array.isArray(value)) {
                         return value;
                     }
+                    return false;
                 })
                 .filter((d) => d);
 

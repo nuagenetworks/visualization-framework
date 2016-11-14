@@ -55,16 +55,16 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
     fontFamily: "Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif",
     spacing: {
         iconSize: 24,
-        desktopGutter: 24,
+        desktopGutter: 12,
         desktopGutterMore: 32,
-        desktopGutterLess: 16,
-        desktopGutterMini: 8,
+        desktopGutterLess: 12,
+        desktopGutterMini: 6,
         desktopKeylineIncrement: 48,
         desktopDropDownMenuItemHeight: 32,
         desktopDropDownMenuFontSize: 15,
         desktopDrawerMenuItemHeight: 48,
         desktopSubheaderHeight: 48,
-        desktopToolbarHeight: 56,
+        desktopToolbarHeight: 26,
     },
     palette: {
         // Material-UI
@@ -81,7 +81,7 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
         accent3Color: customTheme.greyDarkerColor,
 
         canvasColor: customTheme.whiteColor,
-        disabledColor: customTheme.greyLightColor,
+        disabledColor: customTheme.greyDarkColor,
         pickerHeaderColor: customTheme.greyLightColor,
         clockCircleColor: customTheme.greyLightColor,
         shadowColor: customTheme.whiteColor,

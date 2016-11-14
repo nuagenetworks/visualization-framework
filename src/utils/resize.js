@@ -6,14 +6,16 @@
         An object with computed { width, height } for passing to visualizations as props.
 */
 export const resizeVisualization = (gridItem) => {
-    if (!gridItem)
-        return;
+    if (!gridItem || gridItem.childNodes.length === 0 || gridItem.childNodes[0].childNodes.length === 0)
+        return {
+            width: 0,
+            height: 0
+        };
 
-    let card          = gridItem.childNodes[0],
-        innerCard     = card.childNodes[0].childNodes,
-        muiPadding    = 16, // The padding applied on all sides from Material UI.
-        width         = card.clientWidth - muiPadding * 2,
-        height        = card.clientHeight - muiPadding * 2;
+    const card = gridItem.childNodes[0];
+    const innerCard = card.childNodes[0].childNodes;
+    const width = card.clientWidth;
+    let height = card.clientHeight;
 
     // Handle the case that the title bar is present.
     if (innerCard.length > 1) {

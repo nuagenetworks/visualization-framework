@@ -12,7 +12,7 @@ export default class PieGraph extends AbstractGraph {
 
     render() {
 
-        const { response, width, height } = this.props;
+        const { response, width, height, onMarkClick } = this.props;
 
         if (!response || response.error)
             return;
@@ -47,28 +47,49 @@ export default class PieGraph extends AbstractGraph {
             .innerRadius(labelRadius)
             .outerRadius(labelRadius);
 
+        let defaultStyle = {
+            strokeWidth: stroke.width,
+            stroke: stroke.color
+        }
+
         return (
             <div className="pie-graph">
+                {this.tooltip}
                 <svg width={ width } height={ height }>
                     <g transform={ `translate(${ width / 2 }, ${ height / 2 })` } >
                         {
-                            slices.map((slice, i) => (
-                                <g key={i} >
+                            slices.map((slice, i) => {
+                                const d = slice.data;
+
+                                // Set up clicking and cursor style.
+                                const { onClick, cursor } = (
+                                    onMarkClick ? {
+                                        onClick: () => onMarkClick(d),
+                                        cursor: "pointer"
+                                    } : { }
+                                );
+
+                                return <g key={i} >
                                     <path
                                       d={ arc(slice) }
-                                      style={ {strokeWidth: stroke.width, stroke: stroke.color} }
                                       fill={ this.applyColor(i) }
+                                      onClick={ onClick }
+                                      style={ Object.assign({cursor}, defaultStyle) }
+                                      { ...this.tooltipProps(d) }
                                     />
                                     <text
                                       transform={`translate(${labelArc.centroid(slice)})`}
                                       textAnchor={(slice.startAngle + slice.endAngle) / 2 < Math.PI ? "start" : "end"}
                                       dy=".35em"
                                       fill={ fontColor }
+                                      onClick={ onClick }
+                                      style={{cursor}}
+                                      { ...this.tooltipProps(d) }
                                     >
                                         { slice.data[labelColumn] }
                                     </text>
                                 </g>
-                            ))
+                            })
                         }
                     </g>
                 </svg>

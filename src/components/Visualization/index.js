@@ -1,8 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import ReactInterval from 'react-interval';
+
 import { connect } from "react-redux";
 import { push } from "redux-router";
 
+import FiltersToolBar from "../FiltersToolBar";
 import { CardOverlay } from "../CardOverlay";
 import { Card, CardText } from 'material-ui/Card';
 
@@ -17,6 +20,7 @@ import {
 } from "../../services/configurations/redux/actions";
 
 import { resizeVisualization } from "../../utils/resize"
+import { contextualize } from "../../utils/configurations"
 
 import { GraphManager } from "../Graphs/index";
 import { ServiceManager } from "../../services/servicemanager/index";
@@ -77,71 +81,101 @@ class VisualizationView extends React.Component {
             if (!configuration)
                 return;
 
-            this.props.fetchQueryIfNeeded(configuration.get("query")).then(() => {
-                const { queryConfiguration, executeQueryIfNeeded, context } = this.props;
+            const queryName  = configuration.get("query"),
+                  scriptName = configuration.get("script");
 
-                if (!queryConfiguration)
-                    return;
+            if (scriptName) {
+                const { executeScriptIfNeeded, context } = this.props;
+                executeScriptIfNeeded(scriptName, context);
+            }
 
-                executeQueryIfNeeded(queryConfiguration, context).then(
-                    () => {
-                        this.setState({
-                            parameterizable: true,
-                        });
-                    },
-                    (error) => {
-                        this.setState({
-                            parameterizable: false,
-                        });
-                    },
-                );
-            });
+            if (queryName) {
+                this.props.fetchQueryIfNeeded(queryName).then(() => {
+                    const { queryConfiguration, executeQueryIfNeeded, context } = this.props;
+
+                    if (!queryConfiguration)
+                        return;
+
+                    executeQueryIfNeeded(queryConfiguration.toJS(), context).then(
+                        () => {
+                            this.setState({
+                                parameterizable: true,
+                            });
+                        },
+                        (error) => {
+                            this.setState({
+                                parameterizable: false,
+                            });
+                        }
+                    );
+                });
+            }
+
+            // Handle configured listeners (e.g. navigate when clicking on a bar).
+            if(configuration.get("listeners")) {
+                // Use this.state.listeners to store the listeners that will be
+                // passed into the visualization components.
+                this.setState({
+
+                    // This will be an object whose keys are event names,
+                    // and whose values are functions that accept the data object
+                    // corresponding to the clicked visual element.
+                    listeners: configuration.get("listeners").reduce((listeners, listener) => {
+                        // Use ES6 destructuring with defaults.
+                        const {
+
+                            // By default, use the "onMarkClick" event.
+                            event = "onMarkClick",
+
+                            // By default, stay on the current route.
+                            redirect = window.location.pathname,
+
+                            // By default, specify no additional query params.
+                            params = {}
+                        } = listener.toJS();
+
+                        // Each listener expects the data object `d`,
+                        // which corresponds to a row of data visualized.
+                        listeners[event] = (d) => {
+
+                            // Compute the query params from the data object.
+                            let queryParams = Object.keys(params)
+                                .reduce((queryParams, destinationParam) => {
+                                    const sourceColumn = params[destinationParam];
+                                    queryParams[destinationParam] = d[sourceColumn];
+                                    return queryParams;
+                                }, {});
+
+                            // Override the existing context with the new params.
+                            queryParams = Object.assign({}, this.props.context, queryParams);
+
+                            // Perform the navigation via react-router.
+                            this.props.goTo(redirect, queryParams);
+                        };
+
+                        return listeners;
+                    }, {})
+                });
+            }
         });
     }
 
     shouldShowVisualization() {
         const { configuration, response } = this.props;
 
-        return configuration && response && !response.isFetching;
+        return configuration && response && !response.get("isFetching");
     }
 
     renderVisualization() {
-        const { configuration, queryConfiguration, response } = this.props;
+        const { configuration,
+                queryConfiguration,
+                response
+        } = this.props;
 
         const graphName      = configuration.get("graph"),
               GraphComponent = GraphManager.getGraphComponent(graphName);
 
-        let description;
-
-        if (this.state.showDescription) {
-            description = <CardOverlay
-                                overlayStyle={style.descriptionContainer}
-                                textStyle={style.descriptionText}
-                                text={configuration.get("description")}
-                                onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
-                                />
-        }
-
-        return (
-            <div>
-                <GraphComponent
-                  response={response}
-                  configuration={configuration.toJS()}
-                  queryConfiguration={queryConfiguration}
-                  width={this.state.width}
-                  height={this.state.height}
-                />
-                {description}
-            </div>
-        )
-    }
-
-    renderVisualizationIfNeeded() {
-        if (this.shouldShowVisualization()) {
-            return this.renderVisualization();
-        }
-
-        if (!this.state.parameterizable) {
+        if (response.get("error")) {
             return (
                 <CardOverlay
                     overlayStyle={style.overlayContainer}
@@ -153,54 +187,120 @@ class VisualizationView extends React.Component {
                                 size="2x"
                                 />
                             <br></br>
-                            Oops, we are missing some parameters here!
+                            Wow, it seems the connection is lost!
                         </div>
                     )}
-                    onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
                     />
             )
         }
 
+        let description;
+
+        if (this.state.showDescription) {
+            description = <CardOverlay
+                                overlayStyle={style.descriptionContainer}
+                                textStyle={style.descriptionText}
+                                text={configuration.get("description")}
+                                onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
+                                />
+        }
+        const timeout = configuration.get("refreshInterval") || 30000;
+
         return (
-            <div style={style.container}>
-                <div style={style.text}>
-                    <FontAwesome
-                        name="circle-o-notch"
-                        spin
-                        />
-                    <br></br>
-                    Please wait while loading...
+            <div>
+                <ReactInterval
+                    enabled={true}
+                    timeout={timeout}
+                    callback={() => { this.initialize(this.props.id) }}
+                    />
+                <GraphComponent
+                  response={response.toJS()}
+                  configuration={configuration.toJS()}
+                  width={this.state.width}
+                  height={this.state.height}
+                  {...this.state.listeners}
+                />
+                {description}
+            </div>
+        )
+    }
+
+    renderVisualizationIfNeeded() {
+        if (this.shouldShowVisualization()) {
+            return this.renderVisualization();
+        }
+
+        return (
+            <CardOverlay
+                overlayStyle={style.overlayContainer}
+                textStyle={style.overlayText}
+                text={(
+                    <div>
+                        <FontAwesome
+                            name="circle-o-notch"
+                            spin
+                            />
+                        <br></br>
+                        Please wait while loading
+                    </div>
+                )}
+                />
+        )
+    }
+
+    shouldShowTitleBar() {
+        const { configuration } = this.props;
+
+        return configuration && this.currentTitle() && this.state.parameterizable;
+    }
+
+    currentTitle() {
+        const { configuration, context } = this.props;
+        const title = configuration.get("title");
+
+        if (!title)
+            return ;
+
+        return contextualize(title, context);
+    }
+
+    renderDescriptionIcon() {
+        const { configuration } = this.props;
+
+        if (!configuration.get("description"))
+            return;
+
+        return (
+            <FontAwesome
+                name="info-circle"
+                style={style.cardIconMenu}
+                onTouchTap={() => { this.setState({showDescription: !!configuration.get("description")}); }}
+                />
+        )
+    }
+
+    renderTitleBarIfNeeded() {
+        if (!this.shouldShowTitleBar())
+            return;
+
+        return (
+            <div style={style.cardTitle}>
+                {this.currentTitle()}
+                <div className="pull-right">
+                    {this.renderDescriptionIcon()}
                 </div>
             </div>
         )
     }
 
-    shouldShowTitle() {
-        const { configuration } = this.props;
+    renderFiltersToolBar() {
+        const { configuration, context } = this.props;
 
-        return configuration && configuration.get("title") && this.state.parameterizable;
-    }
-
-    renderTitleIfNeeded() {
-        const { configuration } = this.props;
-
-        if (!this.shouldShowTitle())
+        if (!configuration || !configuration.get("filterOptions"))
             return;
 
-        const descriptionIcon = !configuration.get("description") ? null : (
-            <div className="pull-right">
-                <FontAwesome
-                    name="info-circle"
-                    onTouchTap={() => { this.setState({showDescription: !!configuration.get("description")}); }}
-                    />
-            </div>
-        )
-
         return (
-            <div style={style.cardTitle}>
-                {configuration.get("title")}
-                {descriptionIcon}
-            </div>
+            <FiltersToolBar filterOptions={configuration.get("filterOptions")} context={context} />
         )
     }
 
@@ -212,13 +312,17 @@ class VisualizationView extends React.Component {
     }
 
     render() {
+        if (!this.state.parameterizable)
+            return (<div></div>);
+
         return (
             <Card
               style={style.card}
               containerStyle={style.cardContainer}
               ref={this.cardTextReference}
             >
-                { this.renderTitleIfNeeded() };
+                { this.renderTitleBarIfNeeded() }
+                { this.renderFiltersToolBar() }
                 <CardText style={style.cardText}>
                     { this.renderVisualizationIfNeeded() }
                 </CardText>
@@ -262,20 +366,22 @@ const mapStateToProps = (state, ownProps) => {
         )) {
             props.queryConfiguration = queryConfiguration.get(
                 ConfigurationsActionKeyStore.DATA
-            ).toJS();
+            );
         }
 
+        const scriptName = props.configuration.get("script");
+
         // Expose received response if it is available
-        if (props.queryConfiguration) {
-            const requestID = ServiceManager.getRequestID(props.queryConfiguration, context);
+        if (props.queryConfiguration || scriptName) {
+            const query = props.queryConfiguration ? props.queryConfiguration.toJS() : scriptName;
+            const requestID = ServiceManager.getRequestID(query, context);
 
             let response = state.services.getIn([
                 ServiceActionKeyStore.REQUESTS,
                 requestID
             ]);
-
             if (response && !response.get(ServiceActionKeyStore.IS_FETCHING))
-                props.response = response.toJS();
+                props.response = response;
         }
     }
 
@@ -309,6 +415,10 @@ const actionCreators = (dispatch) => ({
 
     executeQueryIfNeeded: function(queryConfiguration, context) {
         return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context));
+    },
+
+    executeScriptIfNeeded: function(scriptName, context) {
+        return dispatch(ServiceActions.fetchIfNeeded(scriptName, context));
     }
 
  });

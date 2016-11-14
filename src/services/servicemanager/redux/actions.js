@@ -15,6 +15,27 @@ export const ActionKeyStore = {
     EXPIRATION_DATE: "expirationDate",
 };
 
+// TODO: Temporary - Replace this part in the middleware
+function executeScript(scriptName, context) {
+
+    const requestID = ServiceManager.getRequestID(scriptName, context);
+
+    return (dispatch) => {
+        dispatch(didStartRequest(requestID));
+
+        return ServiceManager.executeScript(scriptName, context)
+            .then(
+            (results) => {
+                dispatch(didReceiveResponse(requestID, results));
+                return Promise.resolve(results);
+            },
+            (error) => {
+                dispatch(didReceiveError(requestID, error));
+                return Promise.resolve();
+            });
+    }
+}
+
 
 /*
     Make a query on the service based on the service name.
@@ -75,8 +96,16 @@ function shouldFetch(request) {
 
 function fetchIfNeeded(query, context, forceCache) {
 
-    let service   = ServiceManager.getService(query.service),
+    // TODO: Temporary - Replace this part in the middleware
+    const isScript = typeof(query) === "string";
+    let requestID;
+
+    if (isScript)
+        requestID = ServiceManager.getRequestID(query, context);
+    else {
+        let service = ServiceManager.getService(query.service);
         requestID = service.getRequestID(query, context);
+    }
 
     return (dispatch, getState) => {
         if (!requestID)
@@ -86,7 +115,10 @@ function fetchIfNeeded(query, context, forceCache) {
               request = state.services.getIn([ActionKeyStore.REQUESTS, requestID]);
 
         if (shouldFetch(request)) {
-            return dispatch(fetch(query, context, forceCache));
+            if (isScript)
+                return dispatch(executeScript(query, context, forceCache));
+            else
+                return dispatch(fetch(query, context, forceCache));
 
         } else {
             return Promise.resolve();

@@ -1,0 +1,17 @@
+{
+    "id": "aar-nsg-sla-to-nsg",
+    "graph": "Table",
+    "title": "SLA- To NSG",
+    "author": "Ronak Shah",
+    "creationDate": "11/08/2016",
+    "data": {
+        "columns": [
+            { "column": "ts", "label": "Timestamp" },
+            { "column": "SourceNSG", "label": "Source NSG" },
+            { "column": "Application", "label": "Application" },
+            { "column": "APMGroup", "label": "APM Group" },
+            { "column": "ViolationType", "label": "Violation Type" }
+        ]
+    },
+    "query": "aar-nsg-sla-to-nsg"
+}

@@ -1,0 +1,23 @@
+{
+    "id": "aar-nsg-app-linechart",
+    "graph": "LineGraph",
+    "title": "Application vs Time",
+    "author": "Ronak Shah",
+    "creationDate": "11/07/2016",
+    "data": {
+        "xColumn": "ts",
+        "yColumn": "SumOf",
+        "stroke": {
+          "color": "#f76159",
+          "width": "2px"
+        },
+        "margin": {
+            "top": 15,
+            "bottom": 20,
+            "left": 80,
+            "right": 40
+        },
+        "linesColumn": "L7Classification"
+    },
+    "query": "aar-nsg-app-linechart"
+}

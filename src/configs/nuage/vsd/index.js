@@ -116,21 +116,37 @@ const getMockResponse = (requestID) => {
                 throw new Error("You should set a default value for requestID = " + requestID);
         }
     } else {
-        // case of enterprises/id/domains
-        return [
-            {
-                ID: "12345-1232-3432",
-                name: "Domain 1",
-            },
-            {
-                ID: "432980-432432-89343",
-                name: "Domain 2",
-            },
-            {
-                ID: "54365-4387-948305",
-                name: "Domain 3",
-            }
-        ]
+        switch (params[params.length - 1]) {
+            case "nsgateways":
+                // case of enterprises/id/domains
+                return [
+                    {
+                        ID: "98545-1232-3432",
+                        name: "NSG 1",
+                    },
+                    {
+                        ID: "906767-432432-89343",
+                        name: "NSG 2",
+                    }
+                ]
+            default:
+                // case of enterprises/id/domains
+                return [
+                    {
+                        ID: "12345-1232-3432",
+                        name: "Domain 1",
+                    },
+                    {
+                        ID: "432980-432432-89343",
+                        name: "Domain 2",
+                    },
+                    {
+                        ID: "54365-4387-948305",
+                        name: "Domain 3",
+                    }
+                ]
+        }
+
     }
 }
 

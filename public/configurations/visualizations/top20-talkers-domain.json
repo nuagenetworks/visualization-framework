@@ -1,0 +1,24 @@
+{
+    "id": "top20-talkers-domain",
+    "graph": "Table",
+    "title": "Top 20 Talkers",
+    "author": "Ronak Shah",
+    "creationDate": "10/14/2016",
+    "data": {
+        "columns": [
+            { "column": "Application", "label": "Application" },
+            { "column": "L7Classification", "label": "L7-Classification" },
+            { "column": "SrcVportName", "label": "Source Vport-Name"},
+            { "column": "SourceNSG", "label": "Source-NSG"},
+            { "column": "SrcUplink", "label": "Source Uplink"},
+            { "column": "SrcUplinkRole", "label": ""},
+            { "column": "DstUplinkRole", "label": ""},
+            { "column": "DstUplink", "label": ""},
+            { "column": "DestinationNSG", "label": ""},
+            { "column": "DestVportName", "label": ""},
+            { "column": "1", "label": "Total MB", "format": ",.2f" },
+            { "column": "11", "label": "Total Packets Count", "format": "," }
+        ]
+    },
+    "query": "top20-talkers-domain-table"
+}

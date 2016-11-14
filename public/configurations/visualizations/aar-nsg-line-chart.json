@@ -1,0 +1,13 @@
+{
+    "id": "aar-nsg-line-chart",
+    "graph": "LineGraph",
+    "title": "Multi-Line Chart Example",
+    "author": "Curran Kelleher",
+    "creationDate": "11/08/2016",
+    "data": {
+        "xColumn": "ts",
+        "yColumn": "SumOf",
+        "linesColumn": "L7Classification"
+    },
+    "query": "aar-nsg-app-linechart"
+}
