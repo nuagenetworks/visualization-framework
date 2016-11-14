@@ -6,7 +6,8 @@
     "creationDate": "10/13/2016",
     "data": {
         "xColumn": "L7Classification",
-        "yColumn": "Sum of MB"
+        "yColumn": "Sum of MB",
+        "yTicks": 5
     },
     "listeners": [{
       "redirect": "/dashboards/aarEnterpriseAppDetail",
