@@ -33,7 +33,7 @@ export default class SimpleTextGraph extends AbstractGraph {
         const {
             height,
             onMarkClick,
-            response,
+            data,
             width,
         } = this.props;
 
@@ -47,17 +47,22 @@ export default class SimpleTextGraph extends AbstractGraph {
           margin,
           padding,
           stroke,
+          textAlign,
           titlePosition,
         } = this.getConfiguredProperties();
 
-        console.error([margin.top, margin.right, margin.bottom, margin.left].join(" "));
+        if (!data || !data.length)
+            return;
 
-        let body;
-        if (response && !response.isFetching) {
-            body = (
-                <div style={{
+        const cursor = onMarkClick ? "pointer" : undefined
+
+        return (
+                <div
+                    style={{
                         margin: [margin.top, margin.right, margin.bottom, margin.left].join(" "),
+                        textAlign: textAlign
                     }}
+                    onClick={onMarkClick}
                     >
                         {this.renderTitleIfNeeded(titlePosition, "top")}
 
@@ -73,35 +78,20 @@ export default class SimpleTextGraph extends AbstractGraph {
                             margin: [margin.top, margin.right, margin.bottom, margin.left].join(" "),
                             padding: [padding.top, padding.right, padding.bottom, padding.left].join(" "),
                             fontSize: fontSize,
+                            cursor:cursor,
                             }}
                           >
-                          {response.results.length}
+                          {data.length}
                         </div>
 
                         {this.renderTitleIfNeeded(titlePosition, "bottom")}
                 </div>
-            );
-        }
-        else {
-            body = (
-                <CircularProgress color="#eeeeee" />
-            );
-        }
-
-        const style = {
-            height: height,
-            cursor: onMarkClick ? "pointer" : undefined
-        };
-
-        return (
-            <div className="text-center" style={style} onClick={onMarkClick}>
-                { body }
-            </div>
         );
+
     }
 }
 
 SimpleTextGraph.propTypes = {
   configuration: React.PropTypes.object,
-  response: React.PropTypes.object
+  data: React.PropTypes.object
 };
