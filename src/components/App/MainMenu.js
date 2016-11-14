@@ -18,7 +18,6 @@ import {
 
 import style from "./styles";
 import Logo from "./logo.png";
-import FontAwesome from "react-fontawesome";
 
 
 class MainMenuView extends React.Component {
