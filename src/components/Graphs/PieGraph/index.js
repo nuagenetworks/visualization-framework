@@ -60,20 +60,11 @@ export default class PieGraph extends AbstractGraph {
                             slices.map((slice, i) => {
 
                                 // Set up clicking and cursor style.
-                                const { onClick, style } = (
-
-                                    // If an "onMarkClick" handler is registered,
+                                const { onClick, cursor } = (
                                     onMarkClick ? {
-
-                                        // set it up to be invoked, passing the current data row object.
                                         onClick: () => onMarkClick(slice.data),
-
-                                        // Make the cursor a pointer on hover, as an affordance for clickability.
-                                        style: {cursor: "pointer"},
-
-                                    } : {
-                                        // Otherwise, set onClick and style to "undefined".
-                                    }
+                                        cursor: "pointer"
+                                    } : { }
                                 );
 
                                 return <g key={i} >
@@ -81,7 +72,7 @@ export default class PieGraph extends AbstractGraph {
                                       d={ arc(slice) }
                                       fill={ this.applyColor(i) }
                                       onClick={ onClick }
-                                      style={ Object.assign({}, defaultStyle, style) }
+                                      style={ Object.assign({cursor}, defaultStyle) }
                                     />
                                     <text
                                       transform={`translate(${labelArc.centroid(slice)})`}
@@ -89,7 +80,7 @@ export default class PieGraph extends AbstractGraph {
                                       dy=".35em"
                                       fill={ fontColor }
                                       onClick={ onClick }
-                                      style={ style }
+                                      style={{cursor}}
                                     >
                                         { slice.data[labelColumn] }
                                     </text>
