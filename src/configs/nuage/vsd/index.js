@@ -5,6 +5,7 @@ import { parameterizedConfiguration } from "../../../utils/configurations";
 
 const config = {
     api_version: "4.0",
+    end_point: "/nuage/api/",
     headers: {
         "Accept": "*/*",
         "Content-Type": "application/json",
@@ -52,7 +53,10 @@ export const getRequestID = (configuration, context) => {
 }
 
 const getURL = (parameters, api) => {
-    let base_url = api + "v" + config.api_version.replace(".", "_") + "/";
+    const lastIndex = api.length - 1;
+
+    let base_url = api[lastIndex] === "/" ? api.substring(0, lastIndex) : api;
+    base_url += config.end_point + "v" + config.api_version.replace(".", "_") + "/";
 
     return base_url + getRequestID(parameters);
 }
@@ -159,7 +163,7 @@ const fetch = (parameters, state) => {
     let token = state.VSD.get(ActionKeyStore.TOKEN),
           api = state.VSD.get(ActionKeyStore.API) || process.env.REACT_APP_VSD_API_ENDPOINT;
 
-    if (!api)
+    if (!api || !token)
         return Promise.reject("No API endpoint specified");
 
     const url = VSDServiceTest.getURL(parameters, api);
