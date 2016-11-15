@@ -4,8 +4,7 @@ const style = {
     card: {
         border: theme.palette.thinBorder + theme.palette.greyColor,
         height: "100%",
-        width: "100%",
-        minHeight: "300px",
+        width: "100%"
     },
     cardTitle: {
         background: theme.palette.greyLightColor,
