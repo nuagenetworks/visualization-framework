@@ -23,6 +23,7 @@ export default class LineGraph extends AbstractGraph {
             return;
 
         const {
+          colorColumn,
           xColumn,
           yColumn,
           linesColumn,
@@ -99,11 +100,11 @@ export default class LineGraph extends AbstractGraph {
                             key="yAxis"
                             ref={ (el) => select(el).call(yAxis) }
                         />
-                        {linesData.map(({key, values}, i) =>
+                        {linesData.map(({key, values}) =>
                             <path
                                 key={ key }
                                 fill="none"
-                                stroke={ linesColumn ? scale(i) : stroke.color }
+                                stroke={ linesColumn ? scale(values[colorColumn]) : stroke.color }
                                 strokeWidth={ stroke.width }
                                 d={ lineGenerator(values) }
                             />

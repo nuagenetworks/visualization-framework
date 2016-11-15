@@ -95,10 +95,13 @@ export default class AbstractGraph extends React.Component {
     }
 
     scaleColor(data) {
-        const { colors } = this.getConfiguredProperties();
+        const {
+            colors,
+            colorColumn,
+        } = this.getConfiguredProperties();
 
         const scale = scaleOrdinal(colors);
-        scale.domain(data.map((d, i) => i));
+        scale.domain(data.map((d) => d[colorColumn]));
 
         return scale;
     }

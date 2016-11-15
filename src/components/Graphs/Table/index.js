@@ -21,6 +21,7 @@ export default class Table extends AbstractGraph {
 
         const {
             border,
+            colorColumn,
             fontColor,
             header,
             padding
@@ -51,10 +52,10 @@ export default class Table extends AbstractGraph {
                 <table style={{ width: "100%" }} >
                     <thead>
                         <tr style={{
-                            color:header.fontColor,
-                            borderTop:header.border.top,
+                            color: header.fontColor,
+                            borderTop: header.border.top,
                             borderBottom: header.border.bottom,
-                            borderLeft:header.border.left,
+                            borderLeft: header.border.left,
                             borderRight: header.border.right
                         }}>
                             { columns.map(({column, label}, i) =>(
@@ -77,7 +78,7 @@ export default class Table extends AbstractGraph {
                                     key={j}
                                     style={{
                                         color:fontColor,
-                                        background: scale(j),
+                                        background: scale(d[colorColumn]),
                                         borderTop: border.top,
                                         borderBottom: border.bottom,
                                         borderLeft: border.left,

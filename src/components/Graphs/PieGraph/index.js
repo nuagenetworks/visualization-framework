@@ -17,6 +17,7 @@ export default class PieGraph extends AbstractGraph {
             return;
 
         const {
+          colorColumn,
           sliceColumn,
           labelColumn,
           pieInnerRadius,
@@ -71,7 +72,7 @@ export default class PieGraph extends AbstractGraph {
                                 return <g key={i} >
                                     <path
                                       d={ arc(slice) }
-                                      fill={ scale(i) }
+                                      fill={ scale(d[colorColumn]) }
                                       onClick={ onClick }
                                       style={ Object.assign({cursor}, defaultStyle) }
                                       { ...this.tooltipProps(d) }

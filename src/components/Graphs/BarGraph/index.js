@@ -48,6 +48,7 @@ export default class BarGraph extends AbstractGraph {
             return;
 
         const {
+          colorColumn,
           xColumn,
           yColumn,
           margin: { top, bottom, left, right },
@@ -171,7 +172,7 @@ export default class BarGraph extends AbstractGraph {
                             );
 
                             // Compute the fill color based on the index.
-                            const fill = scale(i);
+                            const fill = scale(d[colorColumn]);
 
                             // Set up clicking and cursor style.
                             const { onClick, style } = (
@@ -191,7 +192,7 @@ export default class BarGraph extends AbstractGraph {
                             );
 
                             return (
-                                <rect 
+                                <rect
                                     x={ x }
                                     y={ y }
                                     width={ width }
@@ -214,5 +215,5 @@ export default class BarGraph extends AbstractGraph {
 }
 BarGraph.propTypes = {
   configuration: React.PropTypes.object,
-  data: React.PropTypes.object
+  data: React.PropTypes.arrayOf(React.PropTypes.object),
 };
