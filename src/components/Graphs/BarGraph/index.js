@@ -62,6 +62,9 @@ export default class BarGraph extends AbstractGraph {
           xTickSizeOuter,
           xTickFormat,
           xTicks,
+          xLabel,
+          xLabelOffset,
+          xLabelSize,
           orientation,
           dateHistogram,
           interval,
@@ -141,6 +144,18 @@ export default class BarGraph extends AbstractGraph {
             <div className="bar-graph">
                 {this.tooltip}
                 <svg width={width} height={height}>
+                    { xLabel ? (
+                        <text
+                            className="axis-label"
+                            x={ left + (innerWidth / 2) }
+                            y={ height - xLabelOffset }
+                            textAnchor="middle"
+                            fontSize={xLabelSize + "px"}
+                        >
+                          { xLabel }
+                        </text>
+                      ) : null
+                    }
                     <g transform={ `translate(${left},${top})` } >
                         <g
                             key="xAxis"
