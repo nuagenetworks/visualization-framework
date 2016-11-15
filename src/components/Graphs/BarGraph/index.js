@@ -1,6 +1,6 @@
 import React from "react";
 
-import AbstractGraph from "../AbstractGraph";
+import XYGraph from "../XYGraph";
 
 import * as d3 from "d3";
 
@@ -38,7 +38,7 @@ function computeBarWidth(interval, timeScale) {
 }
 
 
-export default class BarGraph extends AbstractGraph {
+export default class BarGraph extends XYGraph {
 
     render() {
 
