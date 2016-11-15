@@ -57,6 +57,9 @@ export default class BarGraph extends AbstractGraph {
           yTickSizeOuter,
           yTickFormat,
           yTicks,
+          yLabel,
+          yLabelOffset,
+          yLabelSize,
           xTickGrid,
           xTickSizeInner,
           xTickSizeOuter,
@@ -152,7 +155,24 @@ export default class BarGraph extends AbstractGraph {
                             textAnchor="middle"
                             fontSize={xLabelSize + "px"}
                         >
-                          { xLabel }
+                          { xLabel === true ? xColumn : xLabel}
+                        </text>
+                      ) : null
+                    }
+                    { yLabel ? (
+                        <text
+                            className="axis-label"
+                            transform={[
+                              "translate(",
+                              yLabelOffset,
+                              ",",
+                              top + innerHeight / 2,
+                              ") rotate(-90)"
+                            ].join("")}
+                            textAnchor="middle"
+                            fontSize={yLabelSize + "px"}
+                        >
+                          { yLabel === true ? yColumn : yLabel}
                         </text>
                       ) : null
                     }
