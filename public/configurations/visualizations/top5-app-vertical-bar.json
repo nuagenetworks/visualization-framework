@@ -6,13 +6,16 @@
     "creationDate": "10/13/2016",
     "data": {
         "xColumn": "L7Classification",
+        "xLabel": "L7 Classification",
         "yColumn": "Sum of MB",
-        "colorColumn": "L7Classification",
+        "yLabel": true,
         "yTicks": 5,
+        "colorColumn": "L7Classification",
         "tooltip": [
             { "column": "L7Classification", "label": "L7 Classification" },
             { "column": "Sum of MB", "format": ",.1f"}
-        ]
+        ],
+        "margin": { "top": 15, "bottom": 40, "left": 50, "right": 20 }
     },
     "listeners": [{
       "redirect": "/dashboards/aarEnterpriseAppDetail",

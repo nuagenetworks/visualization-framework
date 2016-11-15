@@ -1,5 +1,5 @@
 import React from "react";
-import AbstractGraph from "../AbstractGraph";
+import XYGraph from "../XYGraph";
 
 import {
     axisBottom,
@@ -13,7 +13,7 @@ import {
     select,
 } from "d3";
 
-export default class LineGraph extends AbstractGraph {
+export default class LineGraph extends XYGraph {
 
     render() {
 
@@ -90,6 +90,7 @@ export default class LineGraph extends AbstractGraph {
         return (
             <div className="bar-graph">
                 <svg width={width} height={height}>
+                    {this.axisLabels()}
                     <g transform={ `translate(${left},${top})` } >
                         <g
                             key="xAxis"
