@@ -166,10 +166,15 @@ const fetch = (parameters, state) => {
     return VSDServiceTest.makeRequest(url, token);
 }
 
+const tabify = (results) => {
+    return results;
+}
+
 export const VSDService = {
     id: "VSD",
     config: config,
     getRequestID: getRequestID,
     getMockResponse: getMockResponse,
-    fetch: fetch
+    fetch: fetch,
+    tabify: tabify
 }
