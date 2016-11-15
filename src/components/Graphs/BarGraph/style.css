@@ -7,13 +7,10 @@
     font-size: 0.75em;
 }
 
-.axis-label {
-    font-size: 0.9em;
-}
-
-.tick text {
+.tick text, .axis-label{
     fill: #6b6b6b;
 }
+
 
 .tick line {
   fill: none;
