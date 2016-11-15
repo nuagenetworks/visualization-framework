@@ -48,19 +48,6 @@
                                     }
                                 }
                             },
-                            "aggs": {
-                                "5": {
-                                    "filters": {
-                                        "filters": {
-                                            "Type": {
-                                                "query": {
-                                                    "term": {
-                                                        "type": "{{type:DENY}}"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
                                     "aggs": {
                                         "spg": {
                                             "terms": {
@@ -79,8 +66,6 @@
                                             }
                                         }
                                     }
-                                }
-                            }
                         }
                     }
                 }

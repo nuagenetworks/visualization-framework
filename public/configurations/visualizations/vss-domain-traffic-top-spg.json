@@ -16,7 +16,9 @@
         },
         "xTickGrid": true,
         "yTickGrid": false,
-        "xTickFormat": ".2s"
+        "xTickFormat": ".2s",
+        "xLabel": "Total # of Packets",
+        "yLabel": "Source Policy Groups"
     },
     "query": "vss-domain-traffic-top-spg"
 }

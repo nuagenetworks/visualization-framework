@@ -19,7 +19,9 @@
         },
         "xTickGrid": false,
         "yTickGrid": true,
-        "yTickFormat": ".2s"
+        "yTickFormat": ".2s",
+        "xLabel": "Time",
+        "yLabel": "Total # of TCP SYN-FLOOD"
     },
     "query": "vss-domain-traffic-tcp-synflood"
 }
