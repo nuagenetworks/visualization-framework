@@ -21,6 +21,7 @@ import {
 
 import { resizeVisualization } from "../../utils/resize"
 import { contextualize } from "../../utils/configurations"
+import tabify from "../../utils/tabify";
 
 import { GraphManager } from "../Graphs/index";
 import { ServiceManager } from "../../services/servicemanager/index";
@@ -166,32 +167,44 @@ class VisualizationView extends React.Component {
         return configuration && response && !response.get("isFetching");
     }
 
+    renderCardWithInfo(message, iconName, spin = false) {
+        return (
+            <CardOverlay
+                overlayStyle={style.overlayContainer}
+                textStyle={style.overlayText}
+                text={(
+                    <div>
+                        <FontAwesome
+                            name={iconName}
+                            size="2x"
+                            spin={spin}
+                            />
+                        <br></br>
+                        {message}
+                    </div>
+                )}
+                />
+        )
+    }
+
     renderVisualization() {
         const { configuration,
-                queryConfiguration,
                 response
         } = this.props;
 
         const graphName      = configuration.get("graph"),
               GraphComponent = GraphManager.getGraphComponent(graphName);
 
-        if (response.get("error")) {
-            return (
-                <CardOverlay
-                    overlayStyle={style.overlayContainer}
-                    textStyle={style.overlayText}
-                    text={(
-                        <div>
-                            <FontAwesome
-                                name="meh-o"
-                                size="2x"
-                                />
-                            <br></br>
-                            Wow, it seems the connection is lost!
-                        </div>
-                    )}
-                    />
-            )
+        const currentResponse = response.toJS();
+
+        if (currentResponse.error) {
+            return this.renderCardWithInfo("Oops, " + currentResponse.error, "meh-o");
+        }
+
+        const data = tabify(currentResponse.results);
+
+        if (!data || !data.length) {
+            return this.renderCardWithInfo("No data to visualize", "bar-chart");
         }
 
         let description;
@@ -204,6 +217,7 @@ class VisualizationView extends React.Component {
                                 onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
                                 />
         }
+
         const timeout = configuration.get("refreshInterval") || 30000;
 
         return (
@@ -214,7 +228,7 @@ class VisualizationView extends React.Component {
                     callback={() => { this.initialize(this.props.id) }}
                     />
                 <GraphComponent
-                  response={response.toJS()}
+                  data={data}
                   configuration={configuration.toJS()}
                   width={this.state.width}
                   height={this.state.height}
@@ -230,22 +244,7 @@ class VisualizationView extends React.Component {
             return this.renderVisualization();
         }
 
-        return (
-            <CardOverlay
-                overlayStyle={style.overlayContainer}
-                textStyle={style.overlayText}
-                text={(
-                    <div>
-                        <FontAwesome
-                            name="circle-o-notch"
-                            spin
-                            />
-                        <br></br>
-                        Please wait while loading
-                    </div>
-                )}
-                />
-        )
+        return this.renderCardWithInfo("Please wait while loading", "circle-o-notch", true);
     }
 
     shouldShowTitleBar() {

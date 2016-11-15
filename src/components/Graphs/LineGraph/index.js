@@ -1,6 +1,5 @@
 import React from "react";
 import AbstractGraph from "../AbstractGraph";
-import tabify from "../../../utils/tabify";
 
 import {
     axisBottom,
@@ -18,12 +17,10 @@ export default class LineGraph extends AbstractGraph {
 
     render() {
 
-        const { response, width, height } = this.props;
+        const { data, width, height } = this.props;
 
-        if (!response || response.error)
+        if (!data || !data.length)
             return;
-
-        const data = tabify(response.results);
 
         const {
           xColumn,

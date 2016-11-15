@@ -1,5 +1,4 @@
 import React from "react";
-import tabify from "../../../utils/tabify";
 import AbstractGraph from "../AbstractGraph";
 import columnAccessor from "../../../utils/columnAccessor";
 
@@ -7,14 +6,16 @@ export default class Table extends AbstractGraph {
     render() {
 
         const {
-            response,
+            data,
             configuration,
             onMarkClick,
             width,
             height
         } = this.props;
 
-        const data = tabify(response.results);
+        if (!data || !data.length)
+            return;
+
         const properties = configuration.data;
         const columns = properties.columns;
 

@@ -2,7 +2,6 @@ import React from "react";
 
 import AbstractGraph from "../AbstractGraph";
 
-import tabify from "../../../utils/tabify";
 import * as d3 from "d3";
 
 import "./style.css";
@@ -43,12 +42,10 @@ export default class BarGraph extends AbstractGraph {
 
     render() {
 
-        const { response, width, height, onMarkClick } = this.props;
+        const { data, width, height, onMarkClick } = this.props;
 
-        if (!response || response.error)
+        if (!data || !data.length)
             return;
-
-        const data = tabify(response.results);
 
         const {
           xColumn,
@@ -217,5 +214,5 @@ export default class BarGraph extends AbstractGraph {
 }
 BarGraph.propTypes = {
   configuration: React.PropTypes.object,
-  response: React.PropTypes.object
+  data: React.PropTypes.object
 };

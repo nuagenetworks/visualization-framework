@@ -3,6 +3,7 @@ import { theme } from "../../../theme";
 export const properties = {
     borderRadius: "50%",
     titlePosition: "top",
+    textAlign: "center",
     margin: {
         top: "15px",
         bottom: "5px",
