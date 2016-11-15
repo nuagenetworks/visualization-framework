@@ -57,17 +57,11 @@ export default class BarGraph extends XYGraph {
           yTickSizeOuter,
           yTickFormat,
           yTicks,
-          yLabel,
-          yLabelOffset,
-          yLabelSize,
           xTickGrid,
           xTickSizeInner,
           xTickSizeOuter,
           xTickFormat,
           xTicks,
-          xLabel,
-          xLabelOffset,
-          xLabelSize,
           orientation,
           dateHistogram,
           interval,
@@ -147,35 +141,7 @@ export default class BarGraph extends XYGraph {
             <div className="bar-graph">
                 {this.tooltip}
                 <svg width={width} height={height}>
-                    { xLabel ? (
-                        <text
-                            className="axis-label"
-                            x={ left + (innerWidth / 2) }
-                            y={ height - xLabelOffset }
-                            textAnchor="middle"
-                            fontSize={xLabelSize + "px"}
-                        >
-                          { xLabel === true ? xColumn : xLabel}
-                        </text>
-                      ) : null
-                    }
-                    { yLabel ? (
-                        <text
-                            className="axis-label"
-                            transform={[
-                              "translate(",
-                              yLabelOffset,
-                              ",",
-                              top + innerHeight / 2,
-                              ") rotate(-90)"
-                            ].join("")}
-                            textAnchor="middle"
-                            fontSize={yLabelSize + "px"}
-                        >
-                          { yLabel === true ? yColumn : yLabel}
-                        </text>
-                      ) : null
-                    }
+                    {this.axisLabels()}
                     <g transform={ `translate(${left},${top})` } >
                         <g
                             key="xAxis"
