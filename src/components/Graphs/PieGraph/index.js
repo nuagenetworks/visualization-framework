@@ -2,7 +2,6 @@ import React from "react";
 
 import AbstractGraph from "../AbstractGraph";
 
-import tabify from "../../../utils/tabify";
 import * as d3 from "d3";
 
 import "./style.css";
@@ -12,12 +11,10 @@ export default class PieGraph extends AbstractGraph {
 
     render() {
 
-        const { response, width, height, onMarkClick } = this.props;
+        const { data, width, height, onMarkClick } = this.props;
 
-        if (!response || response.error)
+        if (!data || !data.length)
             return;
-
-        const data = tabify(response.results);
 
         const {
           sliceColumn,
@@ -54,26 +51,19 @@ export default class PieGraph extends AbstractGraph {
 
         return (
             <div className="pie-graph">
+                {this.tooltip}
                 <svg width={ width } height={ height }>
                     <g transform={ `translate(${ width / 2 }, ${ height / 2 })` } >
                         {
                             slices.map((slice, i) => {
+                                const d = slice.data;
 
                                 // Set up clicking and cursor style.
-                                const { onClick, style } = (
-
-                                    // If an "onMarkClick" handler is registered,
+                                const { onClick, cursor } = (
                                     onMarkClick ? {
-
-                                        // set it up to be invoked, passing the current data row object.
-                                        onClick: () => onMarkClick(slice.data),
-
-                                        // Make the cursor a pointer on hover, as an affordance for clickability.
-                                        style: {cursor: "pointer"},
-
-                                    } : {
-                                        // Otherwise, set onClick and style to "undefined".
-                                    }
+                                        onClick: () => onMarkClick(d),
+                                        cursor: "pointer"
+                                    } : { }
                                 );
 
                                 return <g key={i} >
@@ -81,7 +71,8 @@ export default class PieGraph extends AbstractGraph {
                                       d={ arc(slice) }
                                       fill={ this.applyColor(i) }
                                       onClick={ onClick }
-                                      style={ Object.assign({}, defaultStyle, style) }
+                                      style={ Object.assign({cursor}, defaultStyle) }
+                                      { ...this.tooltipProps(d) }
                                     />
                                     <text
                                       transform={`translate(${labelArc.centroid(slice)})`}
@@ -89,7 +80,8 @@ export default class PieGraph extends AbstractGraph {
                                       dy=".35em"
                                       fill={ fontColor }
                                       onClick={ onClick }
-                                      style={ style }
+                                      style={{cursor}}
+                                      { ...this.tooltipProps(d) }
                                     >
                                         { slice.data[labelColumn] }
                                     </text>
@@ -104,5 +96,5 @@ export default class PieGraph extends AbstractGraph {
 }
 PieGraph.propTypes = {
   configuration: React.PropTypes.object,
-  response: React.PropTypes.object
+  data: React.PropTypes.object
 };

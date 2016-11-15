@@ -2,7 +2,6 @@ import React from "react";
 
 import AbstractGraph from "../AbstractGraph";
 
-import tabify from "../../../utils/tabify";
 import * as d3 from "d3";
 
 import "./style.css";
@@ -43,12 +42,10 @@ export default class BarGraph extends AbstractGraph {
 
     render() {
 
-        const { response, width, height, onMarkClick } = this.props;
+        const { data, width, height, onMarkClick } = this.props;
 
-        if (!response || response.error)
+        if (!data || !data.length)
             return;
-
-        const data = tabify(response.results);
 
         const {
           xColumn,
@@ -142,6 +139,7 @@ export default class BarGraph extends AbstractGraph {
 
         return (
             <div className="bar-graph">
+                {this.tooltip}
                 <svg width={width} height={height}>
                     <g transform={ `translate(${left},${top})` } >
                         <g
@@ -190,7 +188,21 @@ export default class BarGraph extends AbstractGraph {
                                 }
                             );
 
-                            return <rect {...{x, y, width, height, fill, onClick, style, key: i, stroke: stroke.color, strokeWidth: stroke.width}} />;
+                            return (
+                                <rect 
+                                    x={ x }
+                                    y={ y }
+                                    width={ width }
+                                    height={ height }
+                                    fill={ fill }
+                                    onClick={ onClick }
+                                    style={ style }
+                                    key={ i }
+                                    stroke={ stroke.color }
+                                    strokeWidth={ stroke.width }
+                                    { ...this.tooltipProps(d) }
+                                />
+                            );
                         })}
                     </g>
                 </svg>
@@ -200,5 +212,5 @@ export default class BarGraph extends AbstractGraph {
 }
 BarGraph.propTypes = {
   configuration: React.PropTypes.object,
-  response: React.PropTypes.object
+  data: React.PropTypes.object
 };
