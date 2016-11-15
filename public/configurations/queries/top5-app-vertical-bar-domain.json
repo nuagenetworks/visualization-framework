@@ -26,28 +26,43 @@
                 "3":{
                     "filters":{
                         "filters":{
-                            "Domain":{
+                            "Enterprise":{
                                 "query":{
                                     "term":{
-                                        "DomainName":"{{DomainName:Domain1}}"
+                                        "EnterpriseName":"{{EnterpriseName:test_org}}"
                                     }
                                 }
                             }
                         }
                     },
                     "aggs":{
-                        "Application":{
-                            "terms":{
-                                "field":"Application",
-                                "size":5,
-                                "order":{
-                                    "Sum of MB":"desc"
+                        "3":{
+                            "filters":{
+                                "filters":{
+                                    "Domain":{
+                                        "query":{
+                                            "term":{
+                                                "DomainName":"{{domainName:Domain1}}"
+                                            }
+                                        }
+                                    }
                                 }
                             },
                             "aggs":{
-                                "Sum of MB":{
-                                    "sum":{
-                                        "field":"TotalMB"
+                                "Application":{
+                                    "terms":{
+                                        "field":"Application",
+                                        "size":5,
+                                        "order":{
+                                            "Sum of MB":"desc"
+                                        }
+                                    },
+                                    "aggs":{
+                                        "Sum of MB":{
+                                            "sum":{
+                                                "field":"TotalMB"
+                                            }
+                                        }
                                     }
                                 }
                             }
