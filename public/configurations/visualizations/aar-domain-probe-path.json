@@ -6,7 +6,8 @@
     "creationDate": "11/02/2016",
     "data": {
         "chordSourceColumn": "snsg",
-        "chordDestinationColumn": "dnsg"
+        "chordDestinationColumn": "dnsg",
+        "colorColumn": "snsg"
     },
     "listeners": [{
       "params": {

@@ -5,10 +5,11 @@
     "author": "Ronak Shah",
     "creationDate": "10/13/2016",
     "data": {
+        "colorColumn": "SourceIP",
         "columns": [
             { "column": "SourceIP", "label": "Source IP" },
             { "column": "TotalPacketsCount", "label": "Total Packets", "format": ",.2s"},
-            { "column": "TotalMB", "label": "Total MB", "format": ",.2f" } 
+            { "column": "TotalMB", "label": "Total MB", "format": ",.2f" }
         ]
     },
     "query": "top5-users-table"

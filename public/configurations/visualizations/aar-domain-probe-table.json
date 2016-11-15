@@ -5,6 +5,7 @@
     "author": "Ronak Shah",
     "creationDate": "11/02/2016",
     "data": {
+        "colorColumn": "SrcUplink",
         "columns": [
             { "column": "SrcUplink", "label": "Source Uplink" },
             { "column": "DstUplink", "label": "Destination Uplink" },

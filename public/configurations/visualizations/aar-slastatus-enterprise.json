@@ -6,7 +6,8 @@
     "creationDate": "10/19/2016",
     "data": {
         "sliceColumn": "doc_count",
-        "labelColumn": "slastatus"
+        "labelColumn": "slastatus",
+        "colorColumn": "slastatus"
     },
     "query": "aar-slastatus-enterprise"
 }

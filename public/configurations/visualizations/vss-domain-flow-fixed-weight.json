@@ -6,7 +6,8 @@
     "creationDate": "11/3/2016",
     "data": {
         "chordSourceColumn": "spg",
-        "chordDestinationColumn": "dpg"
+        "chordDestinationColumn": "dpg",
+        "colorColumn": "spg",
     },
     "query": "vss-domain-flow"
 }

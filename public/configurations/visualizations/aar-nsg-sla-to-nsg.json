@@ -5,6 +5,7 @@
     "author": "Ronak Shah",
     "creationDate": "11/08/2016",
     "data": {
+        "colorColumn": "APMGroup",
         "columns": [
             { "column": "ts", "label": "Timestamp" },
             { "column": "SourceNSG", "label": "Source NSG" },

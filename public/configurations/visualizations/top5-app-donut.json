@@ -8,6 +8,7 @@
     "data": {
         "sliceColumn": "Sum of MB",
         "labelColumn": "L7Classification",
+        "colorColumn": "L7Classification",
         "pieInnerRadius": 0.5
     },
     "query": "top5-app-vertical-bar"

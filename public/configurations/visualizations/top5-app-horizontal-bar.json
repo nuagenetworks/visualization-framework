@@ -8,6 +8,7 @@
     "data": {
         "xColumn": "Sum of MB",
         "yColumn": "L7Classification",
+        "colorColumn": "L7Classification",
         "orientation": "horizontal",
         "colors": [
             "#7da3f7",

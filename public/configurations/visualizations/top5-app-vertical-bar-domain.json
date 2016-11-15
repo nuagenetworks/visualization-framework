@@ -6,7 +6,8 @@
     "creationDate": "10/14/2016",
     "data": {
         "xColumn": "Application",
-        "yColumn": "Sum of MB"
+        "yColumn": "Sum of MB",
+        "colorColumn": "Sum of MB"
     },
     "query": "top5-app-vertical-bar-domain"
 }

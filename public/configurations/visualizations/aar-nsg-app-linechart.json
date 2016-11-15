@@ -7,6 +7,7 @@
     "data": {
         "xColumn": "ts",
         "yColumn": "SumOf",
+        "colorColumn": "ts",
         "stroke": {
           "color": "#f76159",
           "width": "2px"

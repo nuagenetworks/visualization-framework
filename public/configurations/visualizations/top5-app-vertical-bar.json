@@ -7,6 +7,7 @@
     "data": {
         "xColumn": "L7Classification",
         "yColumn": "Sum of MB",
+        "colorColumn": "L7Classification",
         "yTicks": 5,
         "tooltip": [
             { "column": "L7Classification", "label": "L7 Classification" },

@@ -7,7 +7,8 @@
     "data": {
         "xColumn": "ts",
         "yColumn": "SumOf",
-        "linesColumn": "L7Classification"
+        "linesColumn": "L7Classification",
+        "colorColumn": "L7Classification"
     },
     "query": "aar-nsg-app-linechart"
 }
