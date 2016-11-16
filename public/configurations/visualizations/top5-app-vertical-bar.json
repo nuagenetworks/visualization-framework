@@ -6,13 +6,21 @@
     "creationDate": "10/13/2016",
     "data": {
         "xColumn": "L7Classification",
-        "xLabel": "L7 Classification",
+        "xLabel": "Application",
         "yColumn": "Sum of MB",
-        "yLabel": true,
+        "yLabel": "Total Usage",
         "yTicks": 5,
+        "yTickFormat": ".2s",
+        "colors": [
+            "#7da3f7",
+            "#b3d645",
+            "#fec26a",
+            "#e78ac3",
+            "#f79e99"
+        ],
         "tooltip": [
             { "column": "L7Classification", "label": "L7 Classification" },
-            { "column": "Sum of MB", "format": ",.1f"}
+            { "column": "Sum of MB", "format": ",.2s"}
         ],
         "margin": { "top": 15, "bottom": 40, "left": 50, "right": 20 }
     },

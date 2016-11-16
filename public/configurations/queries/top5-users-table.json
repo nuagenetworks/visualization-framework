@@ -52,14 +52,30 @@
                                 },
                                 "TotalBytesCount":{
                                     "sum":{
-                                        "field":"TotalBytesCount"
+                                        "field":"TotalBytessCount"
                                     }
                                 },
-                                "TotalMB":{
-                                    "sum":{
-                                        "field":"TotalMB"
+                                "SourceNSG":{
+                                    "terms":{
+                                        "field":"SourceNSG",
+                                        "size":5,
+                                        "order":{
+                                            "TotalPacketsCount":"desc"
+                                        }
+                                    },
+                                "aggs":{
+                                    "TotalPacketsCount":{
+                                        "sum":{
+                                            "field":"TotalPacketsCount"
+                                        }
+                                    },
+                                    "TotalBytesCount":{
+                                        "sum":{
+                                            "field":"TotalBytesCount"
+                                        }
                                     }
                                 }
+                              }
                             }
                         }
                     }
