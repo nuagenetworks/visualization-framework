@@ -29,7 +29,7 @@
                             "Enterprise":{
                                 "query":{
                                     "term":{
-                                        "SourceNSG":"{{SourceNSG:ovs-114}}"
+                                        "SourceNSG":"{{snsg:ovs-114}}"
                                     }
                                 }
                             }

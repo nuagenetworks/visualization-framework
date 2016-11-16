@@ -1,14 +1,15 @@
 {
     "id": "top5-users-table",
     "graph": "Table",
-    "title": "Top 5 users",
+    "title": "Top 5 Users",
     "author": "Ronak Shah",
     "creationDate": "10/13/2016",
     "data": {
         "columns": [
             { "column": "SourceIP", "label": "Source IP" },
+            { "column": "SourceNSG", "label": "Source NSG" },
             { "column": "TotalPacketsCount", "label": "Total Packets", "format": ",.2s"},
-            { "column": "TotalMB", "label": "Total MB", "format": ",.2f" }
+            { "column": "TotalBytesCount", "label": "Total Bytes", "format": ",.2s" } 
         ]
     },
     "query": "top5-users-table"
