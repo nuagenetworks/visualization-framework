@@ -39,7 +39,8 @@ class MainMenuView extends React.Component {
             licenses,
             fetchEnterprisesIfNeeded,
             fetchDomainsIfNeeded,
-            fetchNSGsIfNeeded
+            fetchNSGsIfNeeded,
+            visualizationType
         } = this.props;
 
         if (!licenses || !licenses.length)
@@ -52,7 +53,9 @@ class MainMenuView extends React.Component {
             for (let index in enterprises) { // eslint-disable-line
                 let enterprise = enterprises[index];
                 fetchDomainsIfNeeded(enterprise.ID);
-                fetchNSGsIfNeeded(enterprise.ID);
+
+                if (visualizationType === "AAR")
+                    fetchNSGsIfNeeded(enterprise.ID);
             }
         });
     }
