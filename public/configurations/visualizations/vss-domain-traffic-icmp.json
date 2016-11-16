@@ -2,6 +2,7 @@
     "id": "vss-domain-traffic-icmp",
     "graph": "LineGraph",
     "title": "ICMP vs Time",
+    "description": "This line graph represents total no of ICMP Packets received for this domain over a period of specified time. By default it shows allowed traffic. One can select other deny action i.e from the drop down menu on this dashboard to show denied traffic.",
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {

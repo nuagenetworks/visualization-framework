@@ -3,6 +3,7 @@
     "graph": "LineGraph",
     "title": "UDP vs Time",
     "author": "Ronak Shah",
+    "description": "This line graph represents total no of UDP Packets received for this domain over a period of specified time. By default it shows allowed traffic. One can select other deny action i.e from the drop down menu on this dashboard to show denied traffic.",
     "creationDate": "10/18/2016",
     "data": {
         "xColumn": "timestamp",

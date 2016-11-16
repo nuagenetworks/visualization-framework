@@ -2,6 +2,7 @@
     "id": "vss-domain-traffic-top-dpg",
     "graph": "BarGraph",
     "title": "Top Destination Policy Groups by Count",
+    "description": "This barchart represents top 5 destination policy groups by total no of packets registered in a given time.",
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {
