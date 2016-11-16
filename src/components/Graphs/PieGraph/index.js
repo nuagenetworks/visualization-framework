@@ -6,9 +6,14 @@ import * as d3 from "d3";
 
 import "./style.css";
 
+import {properties} from "./default.config"
 
 export default class PieGraph extends AbstractGraph {
 
+    constructor(props) {
+        super(props, properties);
+    }
+    
     render() {
 
         const { data, width, height, onMarkClick } = this.props;

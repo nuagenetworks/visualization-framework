@@ -6,21 +6,11 @@ import columnAccessor from "../../utils/columnAccessor";
 
 export default class AbstractGraph extends React.Component {
 
-    constructor(props) {
+    constructor(props, properties = {}) {
         super(props);
 
-        let properties;
-
-        try {
-            // TODO: Make sure the name is not going to change in the build
-            properties = require("./" + this.constructor.name + "/default.config.js").properties;
-        }
-        catch (err) {
-            properties = {};
-        }
-
         this.defaults = GraphManager.getDefaultProperties(properties);
-        
+
         // Provide tooltips for subclasses.
         const { tooltip } = this.getConfiguredProperties();
         if(tooltip) {

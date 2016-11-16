@@ -1,16 +1,20 @@
 import React from "react";
 
-import CircularProgress from "material-ui/CircularProgress";
-
 import AbstractGraph from "../AbstractGraph";
 
 import "./style.css";
+
+import {properties} from "./default.config"
 
 /*
     This is a very basic graph that displays a text message
 */
 export default class SimpleTextGraph extends AbstractGraph {
 
+    constructor(props) {
+        super(props, properties);
+    }
+    
     currentTitle() {
         const {
             configuration,

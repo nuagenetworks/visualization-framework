@@ -6,6 +6,8 @@ import * as d3 from "d3";
 
 import "./style.css";
 
+import {properties} from "./default.config"
+
 // TODO split out this time interval log into a utility module.
 
 // Time unit abbreviations from
@@ -39,6 +41,10 @@ function computeBarWidth(interval, timeScale) {
 
 
 export default class BarGraph extends AbstractGraph {
+
+    constructor(props) {
+        super(props, properties);
+    }
 
     render() {
 
@@ -189,7 +195,7 @@ export default class BarGraph extends AbstractGraph {
                             );
 
                             return (
-                                <rect 
+                                <rect
                                     x={ x }
                                     y={ y }
                                     width={ width }
