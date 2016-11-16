@@ -5,7 +5,8 @@
     "title": "{{domainName:VSS Domain}} - Event Analytics",
     "visualizations": [
         { "id": "vss-domain-events-by-type", "x": 0, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12},
-        { "id": "vss-domain-events-by-pg", "x": 5, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12}
+        { "id": "vss-domain-events-by-pg", "x": 5, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12},
+        { "id": "vss-domain-events-detail", "x": 0, "y": 15, "w": 10, "h": 15, "minW": 2, "minH": 12}
     ],
     "links": [
         {
