@@ -19,7 +19,9 @@
         },
         "xTickGrid": false,
         "yTickGrid": true,
-        "yTickFormat": ".2s"
+        "yTickFormat": ".2s",
+        "xLabel": "Time",
+        "yLabel": "Total # ACL Hits"
     },
     "query": "vss-domain-acl-time"
 }

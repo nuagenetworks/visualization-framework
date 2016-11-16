@@ -22,7 +22,14 @@
         "xTickGrid": true,
         "yTickGrid": false,
         "xTickFormat": ".2s",
-        "xTicks": 5
+        "xTicks": 5,
+        "xLabel": "Total # of Events",
+        "yLabel": "Event Type"
     },
+    "listeners": [{
+      "params": {
+          "eventType": "EventType"
+      }
+    }],
     "query": "vss-domain-events-by-type"
 }
