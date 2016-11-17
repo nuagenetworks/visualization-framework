@@ -113,6 +113,9 @@ function flatten(tree, parentNode={}){
     if (!tree)
         return [];
 
+    if (!Array.isArray(tree))
+        tree = [tree];
+
     return tree
 
         // Have the child node inherit values from the parent.
