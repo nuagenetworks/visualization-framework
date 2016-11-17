@@ -38,7 +38,7 @@ export default class LineGraph extends XYGraph {
           xTickSizeOuter,
           xTickFormat,
           xTicks,
-          stroke,
+          stroke
         } = this.getConfiguredProperties();
 
         const xScale = scaleTime()
@@ -85,7 +85,7 @@ export default class LineGraph extends XYGraph {
           .key((d) => linesColumn ? d[linesColumn] : "Line")
           .entries(data);
 
-        const scale = this.scaleColor(data);
+        const scale = this.scaleColor(data, linesColumn);
 
         return (
             <div className="bar-graph">
@@ -105,7 +105,7 @@ export default class LineGraph extends XYGraph {
                             <path
                                 key={ key }
                                 fill="none"
-                                stroke={ linesColumn ? scale(values[colorColumn]) : stroke.color }
+                                stroke={ scale ? scale(values[colorColumn], linesColumn) : stroke.color }
                                 strokeWidth={ stroke.width }
                                 d={ lineGenerator(values) }
                             />
