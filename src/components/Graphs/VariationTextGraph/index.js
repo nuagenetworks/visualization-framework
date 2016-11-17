@@ -26,9 +26,6 @@ export default class VariationTextGraph extends AbstractGraph {
                 previousInfo = d;
         })
 
-        lastInfo[target.field] = 2;
-        previousInfo[target.field] = 5;
-
         const variation = lastInfo[target.field] - previousInfo[target.field];
 
         return {
