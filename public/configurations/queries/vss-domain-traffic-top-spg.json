@@ -51,7 +51,7 @@
                                     "aggs": {
                                         "spg": {
                                             "terms": {
-                                                "field": "nuage_metadata.sourcepolicygroups",
+                                                "field": "nuage_metadata.spgName",
                                                 "size": 5,
                                                 "order": {
                                                     "SumOf": "desc"

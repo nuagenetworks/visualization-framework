@@ -51,7 +51,7 @@
                                     "aggs": {
                                         "dpg": {
                                             "terms": {
-                                                "field": "nuage_metadata.destinationpolicygroups",
+                                                "field": "nuage_metadata.dpgName",
                                                 "size": 5,
                                                 "order": {
                                                     "SumOf": "desc"

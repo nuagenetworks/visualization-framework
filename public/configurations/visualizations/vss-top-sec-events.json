@@ -8,7 +8,7 @@
     "data": {
         "sliceColumn": "SumOf",
         "labelColumn": "EventType",
-        "colorColumn": "EventType",
+        "colorColumn": "EventType"
     },
     "query": "vss-top-sec-events"
 }
