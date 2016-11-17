@@ -48,6 +48,8 @@ export default class BarGraph extends XYGraph {
             return;
 
         const {
+          colorColumn,
+          colors,
           xColumn,
           yColumn,
           margin: { top, bottom, left, right },
@@ -137,6 +139,8 @@ export default class BarGraph extends XYGraph {
             barWidth = xScale.bandwidth();
         }
 
+        const scale = this.scaleColor(data, vertical ? yColumn : xColumn);
+
         return (
             <div className="bar-graph">
                 {this.tooltip}
@@ -170,7 +174,7 @@ export default class BarGraph extends XYGraph {
                             );
 
                             // Compute the fill color based on the index.
-                            const fill = this.applyColor(i);
+                            const fill = scale ? scale(d[colorColumn || (vertical ? yColumn : xColumn)]) : colors[0];
 
                             // Set up clicking and cursor style.
                             const { onClick, style } = (
@@ -190,7 +194,7 @@ export default class BarGraph extends XYGraph {
                             );
 
                             return (
-                                <rect 
+                                <rect
                                     x={ x }
                                     y={ y }
                                     width={ width }
@@ -213,5 +217,5 @@ export default class BarGraph extends XYGraph {
 }
 BarGraph.propTypes = {
   configuration: React.PropTypes.object,
-  data: React.PropTypes.object
+  data: React.PropTypes.arrayOf(React.PropTypes.object),
 };

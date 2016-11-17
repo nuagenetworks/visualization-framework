@@ -3,7 +3,7 @@ import { theme } from "../../../theme";
 export const properties = {
     width: "100%",
     padding: 8,
-    colors: [theme.palette.whiteColor, theme.palette.greyLightColor],
+    colors: [theme.palette.greyLighterColor, theme.palette.whiteColor],
     fontColor: theme.palette.blackLightColor,
     border: {
         top: "solid 1px " + theme.palette.greyLightColor,

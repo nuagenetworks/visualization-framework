@@ -14,7 +14,7 @@
             { "column": "SrcUplinkRole", "label": "Source Uplink Role" },
             { "column": "SourceNSG", "label": "Source NSG" },
             { "column": "SumofPackets", "label": "Total Packets", "format": ","},
-            { "column": "SumofMB", "label": "Total MB", "format": ",.2f" } 
+            { "column": "SumofMB", "label": "Total MB", "format": ",.2f" }
         ]
     },
     "query": "aar-nsg-app-to-nsg"

@@ -9,6 +9,7 @@
         "interval": "30m",
         "xColumn": "date-histo",
         "yColumn": "SumOfPackets",
+        "colorColumn": "date-histo",
         "margin": {
             "top": 15,
             "bottom": 20,
