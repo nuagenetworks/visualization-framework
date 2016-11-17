@@ -2,7 +2,12 @@
     "id": "vss-enterprise-flows-metric",
     "title": "# Packets",
     "query": "vss-enterprise-flows-metric",
-    "graph": "SimpleTextGraph",
+    "graph": "VariationTextGraph",
     "data": {
+        "target":{
+            "column": "timezones",
+            "value": "Last 24",
+            "field": "value"
+        }
     }
 }

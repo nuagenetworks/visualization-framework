@@ -2,7 +2,12 @@
     "id": "vss-enterprise-acldeny-metric",
     "title": "# ACL-Deny",
     "query": "vss-enterprise-acldeny-metric",
-    "graph": "SimpleTextGraph",
+    "graph": "VariationTextGraph",
     "data": {
+        "target":{
+            "column": "timezones",
+            "value": "Last 24",
+            "field": "doc_count"
+        }
     }
 }

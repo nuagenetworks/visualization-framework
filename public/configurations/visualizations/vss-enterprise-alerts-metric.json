@@ -2,7 +2,12 @@
     "id": "vss-enterprise-alerts-metric",
     "title": "# TCA Alerts",
     "query": "vss-enterprise-alerts-metric",
-    "graph": "SimpleTextGraph",
+    "graph": "VariationTextGraph",
     "data": {
+        "target":{
+            "column": "timezones",
+            "value": "Last 24",
+            "field": "doc_count"
+        }
     }
 }
