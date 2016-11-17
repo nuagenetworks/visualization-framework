@@ -55,7 +55,7 @@
                                             "ACLALLOW": {
                                                 "query": {
                                                     "term": {
-                                                        "type": "ALLOW"
+                                                        "type": "{{actionType:ALLOW}}"
                                                     }
                                                 }
                                             }

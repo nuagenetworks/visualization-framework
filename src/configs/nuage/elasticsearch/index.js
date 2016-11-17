@@ -1,4 +1,5 @@
-import elasticsearch from 'elasticsearch';
+import elasticsearch from "elasticsearch";
+import tabify from "./tabify";
 import { getUsedParameters } from "../../../utils/configurations";
 
 let config = function () {
@@ -48,4 +49,5 @@ export const ElasticSearchService = {
     fetch: fetch,
     ping: ping,
     getRequestID: getRequestID,
+    tabify: tabify
 }

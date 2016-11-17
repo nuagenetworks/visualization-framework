@@ -2,11 +2,13 @@
     "id": "vss-domain-events-by-type",
     "graph": "BarGraph",
     "title": "Count of Security Events by Event Type",
+    "description": "This horizontal barchart represents top 5 security events per total count of events registered, for this domain over a given period of time. When any of the bar is clicked, the table showing detail information (in reverse chronological order) about that event appears on this dashboard.",
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {
         "xColumn": "Sum of Value",
         "yColumn": "EventType",
+        "colorColumn": "EventType",
         "orientation": "horizontal",
         "colors": [
             "#ff4d4d",

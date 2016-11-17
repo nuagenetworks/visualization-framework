@@ -1,12 +1,14 @@
 {
     "id": "vss-top-domains-blocked-traffic",
     "graph": "BarGraph",
-    "title": "Top Domains by blocked traffic",
+    "title": "Top 5 Domains by blocked traffic",
+    "description": "Top 5 domains per enterprise based on blocked (acl-deny) traffic for given period. When clicked on a given domain bar, it will redirect to that domain's dashboard page.",
     "author": "Ronak Shah",
     "creationDate": "10/17/2016",
     "data": {
         "xColumn": "SumOf",
         "yColumn": "domains",
+        "colorColumn": "domains",
         "orientation": "horizontal",
         "colors": [
              "#7da3f7",

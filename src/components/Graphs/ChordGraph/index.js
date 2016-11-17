@@ -161,10 +161,9 @@ function ChordDiagram(svg){
 
   // D3 layouts, shapes and scales.
   var ribbon = d3.ribbon(),
-      chord = d3.chord(),
-      color = d3.scaleOrdinal(),
-      arc = d3.arc(),
-      valueFormat = d3.format(",");
+      chord  = d3.chord(),
+      color  = d3.scaleOrdinal(),
+      arc    = d3.arc();
 
   // Compute a color scheme from d3.schemeCategory20 such that
   // distinct dark colors come first, then light colors later.
