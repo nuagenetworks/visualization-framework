@@ -7,13 +7,16 @@
     "data": {
         "xColumn": "ts",
         "yColumn": "SumOf",
+        "yTickFormat": ".2s",
+        "xLabel": "Time",
+        "yLabel": "Total Bytes",
         "stroke": {
           "color": "#f76159",
           "width": "2px"
         },
         "margin": {
             "top": 15,
-            "bottom": 20,
+            "bottom": 40,
             "left": 80,
             "right": 40
         },
