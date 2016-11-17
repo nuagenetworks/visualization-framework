@@ -52,7 +52,7 @@
                                 "timestamp": {
                                     "date_histogram": {
                                         "field": "timestamp",
-                                        "interval": "1h"
+                                        "interval": "1m"
                                     },
                                     "aggs": {
                                         "SumOf": {
