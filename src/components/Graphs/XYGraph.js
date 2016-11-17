@@ -2,6 +2,11 @@ import React from "react";
 import AbstractGraph from "./AbstractGraph";
 
 export default class XYGraph extends AbstractGraph {
+
+    constructor(props, properties = {}) {
+        super(props);
+    }
+    
     axisLabels() {
 
         const { width, height } = this.props;

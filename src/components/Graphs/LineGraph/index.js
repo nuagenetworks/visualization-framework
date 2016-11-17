@@ -13,7 +13,13 @@ import {
     select,
 } from "d3";
 
+import {properties} from "./default.config"
+
 export default class LineGraph extends XYGraph {
+
+    constructor(props) {
+        super(props, properties);
+    }
 
     render() {
 

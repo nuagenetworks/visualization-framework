@@ -23,13 +23,15 @@ export default function tabify(response) {
         throw new Error("Tabify() invoked with invalid result set. Result set must have either 'aggregations' or 'hits' defined.");
     }
 
-    console.log("Results from tabify (first 3 rows only):");
+    if (process.env.NODE_ENV === "development") {
+        console.log("Results from tabify (first 3 rows only):");
 
-    // This one shows where there are "undefined" values.
-    console.log(table)
+        // This one shows where there are "undefined" values.
+        console.log(table)
 
-    // This one shows the full structure pretty-printed.
-    console.log(JSON.stringify(table.slice(0, 3), null, 2))
+        // This one shows the full structure pretty-printed.
+        console.log(JSON.stringify(table.slice(0, 3), null, 2))
+    }
 
     return table;
 }

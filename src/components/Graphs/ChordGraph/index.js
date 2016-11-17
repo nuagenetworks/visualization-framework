@@ -5,9 +5,14 @@ import AbstractGraph from "../AbstractGraph";
 import * as d3 from "d3";
 
 import "./style.css";
+import {properties} from "./default.config"
 
 export default class ChordGraph extends AbstractGraph {
 
+    constructor(props) {
+        super(props, properties);
+    }
+    
     componentDidMount() {
         this.chordDiagram = ChordDiagram(this.svg);
         this.updateChord(this.props);

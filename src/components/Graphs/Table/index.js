@@ -2,7 +2,14 @@ import React from "react";
 import AbstractGraph from "../AbstractGraph";
 import columnAccessor from "../../../utils/columnAccessor";
 
+import {properties} from "./default.config"
+
 export default class Table extends AbstractGraph {
+
+    constructor(props) {
+        super(props, properties);
+    }
+
     render() {
 
         const {
