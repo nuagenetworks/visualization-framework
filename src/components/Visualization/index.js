@@ -21,7 +21,6 @@ import {
 
 import { resizeVisualization } from "../../utils/resize"
 import { contextualize } from "../../utils/configurations"
-import tabify from "../../utils/tabify";
 
 import { GraphManager } from "../Graphs/index";
 import { ServiceManager } from "../../services/servicemanager/index";
@@ -189,6 +188,7 @@ class VisualizationView extends React.Component {
 
     renderVisualization() {
         const { configuration,
+                queryConfiguration,
                 response
         } = this.props;
 
@@ -201,7 +201,7 @@ class VisualizationView extends React.Component {
             return this.renderCardWithInfo("Oops, " + currentResponse.error, "meh-o");
         }
 
-        const data = tabify(currentResponse.results);
+        const data = ServiceManager.tabify(queryConfiguration, currentResponse.results);
 
         if (!data || !data.length) {
             return this.renderCardWithInfo("No data to visualize", "bar-chart");

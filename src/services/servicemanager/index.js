@@ -43,12 +43,32 @@ const getService = function (serviceName) {
 const getRequestID = function (queryConfiguration, context) {
 
     // TODO: Temporary - Replace this part in the middleware
+    // Note: It should actually be its own service !
     const isScript = typeof(queryConfiguration) === "string";
+
     if (isScript)
         return queryConfiguration + "[" + JSON.stringify(context) + "]";
+    // End TODO
 
     const service = getService(queryConfiguration.service)
     return service.getRequestID(queryConfiguration, context);
+}
+
+/*
+    Tabify the results according to the service that has been used
+
+    Arguments:
+    * serviceName: the service name
+    * response: the response results
+
+    Returns:
+        An array of results
+*/
+const tabify = function (queryConfiguration, response) {
+    const serviceName = queryConfiguration ? queryConfiguration.get("service") : "VSD"; // In case of scripts...
+
+    const service = getService(serviceName)
+    return service.tabify(response);
 }
 
 
@@ -71,5 +91,6 @@ export const ServiceManager = {
     register: register,
     getService: getService,
     getRequestID: getRequestID,
-    executeScript: executeScript
+    executeScript: executeScript,
+    tabify: tabify,
 }

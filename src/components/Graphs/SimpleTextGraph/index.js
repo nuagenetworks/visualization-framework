@@ -27,6 +27,16 @@ export default class SimpleTextGraph extends AbstractGraph {
         return this.currentTitle();
     }
 
+    displayText(data, targetedColumn) {
+        if (!data)
+            return
+
+        if (!targetedColumn)
+            return data.length
+
+        return data[0][targetedColumn];
+    }
+
     render() {
         const {
             height,
@@ -47,6 +57,7 @@ export default class SimpleTextGraph extends AbstractGraph {
           stroke,
           textAlign,
           titlePosition,
+          targetedColumn,
         } = this.getConfiguredProperties();
 
         if (!data || !data.length)
@@ -79,7 +90,7 @@ export default class SimpleTextGraph extends AbstractGraph {
                             cursor:cursor,
                             }}
                           >
-                          {data.length}
+                          {this.displayText(data, targetedColumn)}
                         </div>
 
                         {this.renderTitleIfNeeded(titlePosition, "bottom")}
