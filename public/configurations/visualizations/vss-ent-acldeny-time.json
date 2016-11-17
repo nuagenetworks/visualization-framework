@@ -2,6 +2,7 @@
     "id": "vss-ent-acldeny-time",
     "graph": "LineGraph",
     "title": "VSS Enterprise ACL Deny vs Time",
+    "description": "This line graph represents total no of ACL deny received for this enterprise over a period of specified time.",
     "author": "Ronak Shah",
     "creationDate": "10/17/2016",
     "data": {
@@ -12,14 +13,16 @@
             "width": "2px"
         },
         "margin": {
-            "top": 15,
-            "bottom": 20,
-            "left": 50,
-            "right": 40
+            "top": 20,
+            "bottom": 40,
+            "left": 60,
+            "right": 20
         },
         "xTickGrid": false,
         "yTickGrid": true,
-        "yTickFormat": ".2s"
+        "yTickFormat": ".2s",
+        "xLabel": "Time",
+        "yLabel": "Total # ACL Deny"
     },
     "query": "vss-ent-acldeny-time"
 }

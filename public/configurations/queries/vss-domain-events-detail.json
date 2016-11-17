@@ -1,0 +1,24 @@
+{
+    "id":"vss-domain-events-detail",
+    "title":"Event Information",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_event}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+          "sort": [
+            { "timestamp": { "order": "desc" } }
+          ],
+          "query": {
+            "bool": {
+                "must": [
+                {"term": {"nuage_metadata.enterpriseName": "{{EnterpriseName}}"} },
+                {"term": {"nuage_metadata.domainName": "{{domainName}}"} },
+                {"term": {"type": "{{eventType}}"} },
+                {"range": { "timestamp": { "gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
+              ]
+            }
+          }
+        }
+    }
+}

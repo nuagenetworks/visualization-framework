@@ -198,7 +198,7 @@ class VisualizationView extends React.Component {
         const currentResponse = response.toJS();
 
         if (currentResponse.error) {
-            return this.renderCardWithInfo("Wow, it seems the connection is lost!", "meh-o");
+            return this.renderCardWithInfo("Oops, " + currentResponse.error, "meh-o");
         }
 
         const data = tabify(currentResponse.results);

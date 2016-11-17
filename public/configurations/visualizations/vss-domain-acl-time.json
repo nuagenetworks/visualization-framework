@@ -2,6 +2,7 @@
     "id": "vss-domain-acl-time",
     "graph": "LineGraph",
     "title": "ACL Hits vs Time - {{actionType:DENY}}",
+    "description": "This line graph represents total no of ACL deny received for this domain over a period of specified time. By default it shows ACL Deny hits. One can select other ACL actions i.e from the drop down menu on this dashboard.",
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {
@@ -19,7 +20,9 @@
         },
         "xTickGrid": false,
         "yTickGrid": true,
-        "yTickFormat": ".2s"
+        "yTickFormat": ".2s",
+        "xLabel": "Time",
+        "yLabel": "Total # ACL Hits"
     },
     "query": "vss-domain-acl-time"
 }

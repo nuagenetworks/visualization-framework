@@ -2,6 +2,7 @@
     "id": "vss-domain-acl-dpg",
     "graph": "BarGraph",
     "title": "ACL Hits by Destination Policy Groups - {{actionType:DENY}}",
+    "description": "This barchart represents top 5 destination policygroups per ACL hits for a given period of time. By default its aggregated on deny hits count. One can select other ACL actions i.e from the drop down menu on this dashboard.",
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {
@@ -18,7 +19,9 @@
         },
         "xTickGrid": false,
         "yTickGrid": true,
-        "yTickFormat": ".2s"
+        "yTickFormat": ".2s",
+        "xLabel": "Destination Policy Groups",
+        "yLabel": "Total # of ACL Hits"
     },
     "query": "vss-domain-acl-dpg"
 }

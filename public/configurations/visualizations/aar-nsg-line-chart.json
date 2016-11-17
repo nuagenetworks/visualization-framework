@@ -6,8 +6,12 @@
     "creationDate": "11/08/2016",
     "data": {
         "xColumn": "ts",
+        "xLabel": "Time",
         "yColumn": "SumOf",
-        "linesColumn": "L7Classification"
+        "yLabel": "Total MB",
+        "linesColumn": "L7Classification",
+        "yTicks": 5,
+        "margin": { "top": 15, "bottom": 40, "left": 40, "right": 20 }
     },
     "query": "aar-nsg-app-linechart"
 }

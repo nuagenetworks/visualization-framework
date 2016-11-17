@@ -15,7 +15,14 @@
         },
         "xTickGrid": false,
         "yTickGrid": true,
-        "yTickFormat": ".2s"
+        "yTickFormat": ".2s",
+        "xLabel": "Source Policy Groups",
+        "yLabel": "Total # of Events"
     },
+    "listeners": [{
+      "params": {
+          "spg": "PG"
+      }
+    }],
     "query": "vss-domain-events-by-pg"
 }

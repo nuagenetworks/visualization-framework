@@ -1,7 +1,8 @@
 {
     "id": "vss-top-domains-blocked-traffic",
     "graph": "BarGraph",
-    "title": "Top Domains by blocked traffic",
+    "title": "Top 5 Domains by blocked traffic",
+    "description": "Top 5 domains per enterprise based on blocked (acl-deny) traffic for given period. When clicked on a given domain bar, it will redirect to that domain's dashboard page.",
     "author": "Ronak Shah",
     "creationDate": "10/17/2016",
     "data": {
@@ -15,15 +16,17 @@
              "#f79e99"
         ],
         "margin": {
-            "top": 15,
-            "bottom": 20,
-            "left": 70,
+            "top": 20,
+            "bottom": 40,
+            "left": 80,
             "right": 40
         },
         "xTickGrid": true,
         "yTickGrid": false,
         "xTickFormat": ".2s",
-        "xTicks": 5
+        "xTicks": 5,
+        "xLabel": "Total # ACL Deny",
+        "yLabel": "Domains"
     },
     "listeners": [
     {

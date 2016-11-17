@@ -15,7 +15,6 @@
     },
     "listeners": [
     {
-        "redirect": "/dashboards/aarEnterpriseAppDetail",
         "params": {
             "app": "L7Classification"
         }
