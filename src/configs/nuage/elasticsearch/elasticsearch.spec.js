@@ -8,6 +8,7 @@ describe('Elastic Search service', () => {
             "fetch",
             "ping",
             "getRequestID",
+            "tabify"
         ];
         expect(Object.keys(ElasticSearchService)).toEqual(expectedProperties)
         expect(ElasticSearchService.id).toEqual("elasticsearch")
