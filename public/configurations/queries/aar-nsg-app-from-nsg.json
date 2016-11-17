@@ -36,9 +36,9 @@
                         }
                     },
                     "aggs": {
-                        "SumofMB": {
+                        "SumofBytes": {
                             "sum": {
-                                "field": "TotalMB"
+                                "field": "TotalBytesCount"
                             }
                         },
                         "SumofPackets": {
@@ -51,13 +51,13 @@
                                 "field": "APMGroup",
                                 "size": 5,
                                 "order": {
-                                    "SumofMB": "desc"
+                                    "SumofBytes": "desc"
                                 }
                             },
                             "aggs": {
-                                "SumofMB": {
+                                "SumofBytes": {
                                     "sum": {
-                                        "field": "TotalMB"
+                                        "field": "TotalBytesCount"
                                     }
                                 },
                                 "SumofPackets": {
@@ -70,13 +70,13 @@
                                         "field": "Application",
                                         "size": 5,
                                         "order": {
-                                            "SumofMB": "desc"
+                                            "SumofBytes": "desc"
                                         }
                                     },
                                     "aggs": {
-                                        "SumofMB": {
+                                        "SumofBytes": {
                                             "sum": {
-                                                "field": "TotalMB"
+                                                "field": "TotalBytesCount"
                                             }
                                         },
                                         "SumofPackets": {
@@ -89,13 +89,13 @@
                                                 "field": "L7Classification",
                                                 "size": 5,
                                                 "order": {
-                                                    "SumofMB": "desc"
+                                                    "SumofBytes": "desc"
                                                 }
                                             },
                                             "aggs": {
-                                                "SumofMB": {
+                                                "SumofBytes": {
                                                     "sum": {
-                                                        "field": "TotalMB"
+                                                        "field": "TotalBytesCount"
                                                     }
                                                 },
                                                 "SumofPackets": {
@@ -108,13 +108,13 @@
                                                         "field": "SrcVportName",
                                                         "size": 5,
                                                         "order": {
-                                                            "SumofMB": "desc"
+                                                            "SumofBytes": "desc"
                                                         }
                                                     },
                                                     "aggs": {
-                                                        "SumofMB": {
+                                                        "SumofBytes": {
                                                             "sum": {
-                                                                "field": "TotalMB"
+                                                                "field": "TotalBytesCount"
                                                             }
                                                         },
                                                         "SumofPackets": {
@@ -127,13 +127,13 @@
                                                                 "field": "SrcUplink",
                                                                 "size": 5,
                                                                 "order": {
-                                                                    "SumofMB": "desc"
+                                                                    "SumofBytes": "desc"
                                                                 }
                                                             },
                                                             "aggs": {
-                                                                "SumofMB": {
+                                                                "SumofBytes": {
                                                                     "sum": {
-                                                                        "field": "TotalMB"
+                                                                        "field": "TotalBytesCount"
                                                                     }
                                                                 },
                                                                 "SumofPackets": {
@@ -146,13 +146,13 @@
                                                                         "field": "SrcUplinkRole",
                                                                         "size": 5,
                                                                         "order": {
-                                                                            "SumofMB": "desc"
+                                                                            "SumofBytes": "desc"
                                                                         }
                                                                     },
                                                                     "aggs": {
-                                                                        "SumofMB": {
+                                                                        "SumofBytes": {
                                                                             "sum": {
-                                                                                "field": "TotalMB"
+                                                                                "field": "TotalBytesCount"
                                                                             }
                                                                         },
                                                                         "SumofPackets": {
@@ -165,13 +165,13 @@
                                                                                 "field": "DestinationNSG",
                                                                                 "size": 5,
                                                                                 "order": {
-                                                                                    "SumofMB": "desc"
+                                                                                    "SumofBytes": "desc"
                                                                                 }
                                                                             },
                                                                             "aggs": {
-                                                                                "SumofMB": {
+                                                                                "SumofBytes": {
                                                                                     "sum": {
-                                                                                        "field": "TotalMB"
+                                                                                        "field": "TotalBytesCount"
                                                                                     }
                                                                                 },
                                                                                 "SumofPackets": {
