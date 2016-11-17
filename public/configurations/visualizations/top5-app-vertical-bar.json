@@ -16,11 +16,13 @@
         ],
         "margin": { "top": 15, "bottom": 40, "left": 50, "right": 20 }
     },
-    "listeners": [{
-      "redirect": "/dashboards/aarEnterpriseAppDetail",
-      "params": {
-          "app": "L7Classification"
-      }
-    }],
+    "listeners": [
+        {
+            "redirect": "/dashboards/aarEnterpriseAppDetail",
+            "params": {
+                "app": "L7Classification"
+            }
+        }
+    ],
     "query": "top5-app-vertical-bar"
 }
