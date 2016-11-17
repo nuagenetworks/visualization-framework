@@ -47,17 +47,16 @@ store.subscribe(function() {
 
     if (state.router && state.router.location.query.token && state.router.location.query.token !== state.VSD.get(VSDActionKeyStore.TOKEN)) {
         store.dispatch(VSDActions.setSettings(state.router.location.query.token, state.router.location.query.api));
-
-        // Fetch licenses if necessary
-        let configuration = {
-            service: "VSD",
-            query: {
-                parentResource: "licenses",
-            }
-        }
-        store.dispatch(ServiceActions.fetchIfNeeded(configuration, null, true)) // No context and force cache
-
     }
+
+    // Fetch licenses if necessary
+    let configuration = {
+        service: "VSD",
+        query: {
+            parentResource: "licenses",
+        }
+    }
+    store.dispatch(ServiceActions.fetchIfNeeded(configuration, null, true)) // No context and force cache
 });
 
 export default store;
