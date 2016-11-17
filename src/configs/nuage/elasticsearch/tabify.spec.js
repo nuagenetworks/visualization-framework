@@ -2,7 +2,7 @@ import tabify from './tabify';
 
 
 describe('ElasticSearch', () => {
-    it('should tabify list of objects', () => {
+    xit('should tabify list of objects', () => {
         const response = {
             "took": 8,
             "timed_out": false,
@@ -87,7 +87,7 @@ describe('ElasticSearch', () => {
     });
 
 
-    it('should tabify list of single object', () => {
+    xit('should tabify list of single object', () => {
         const response =   {
             "took": 6,
             "timed_out": false,
@@ -143,7 +143,69 @@ describe('ElasticSearch', () => {
         expect(tabify(response)).toEqual(expectedResults);
     });
 
-    it('should tabify an empty list', () => {
+    it('should tabify a weird thing', () => {
+        const response =   {
+            "took": 12,
+            "timed_out": false,
+            "_shards": {
+                "total": 5,
+                "successful": 5,
+                "failed": 0
+            },
+            "hits": {
+                "total": 144000,
+                "max_score": 0,
+                "hits": []
+            },
+            "aggregations": {
+                "2": {
+                    "buckets": {
+                        "Enterprise": {
+                            "doc_count": 144000,
+                            "SumOf": {
+                                "value": 2158541661
+                            },
+                            "EventType": {
+                                "doc_count_error_upper_bound": 0,
+                                "sum_other_doc_count": 0,
+                                "buckets": [
+                                    {
+                                        "key": "TCA_EVENT",
+                                        "doc_count": 59040,
+                                        "SumOf": {
+                                            "value": 884851403
+                                        }
+                                    },
+                                    {
+                                        "key": "ACL_DENY",
+                                        "doc_count": 47520,
+                                        "SumOf": {
+                                            "value": 712882070
+                                        }
+                                    },
+                                    {
+                                        "key": "TCP_SYN_FLOOD",
+                                        "doc_count": 37440,
+                                        "SumOf": {
+                                            "value": 560808188
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        const expectedResults = [
+            {"value": 2158541661}
+        ]
+
+        expect(tabify(response)).toEqual(expectedResults);
+    });
+
+    xit('should tabify an empty list', () => {
         const response = {
             "took": 14,
             "timed_out": false,
@@ -178,7 +240,7 @@ describe('ElasticSearch', () => {
         expect(tabify(response)).toEqual(expectedResults);
     });
 
-    it('should tabify an object', () => {
+    xit('should tabify an object', () => {
         const response =   {
             "took": 4,
             "timed_out": false,
