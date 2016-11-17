@@ -53,7 +53,7 @@
                                     "aggs": {
                                         "SumOf": {
                                             "sum": {
-                                                "field": "{{BytesPackets:TotalMB}}"
+                                                "field": "TotalBytesCount"
                                             }
                                         }
                                     }

@@ -29,7 +29,7 @@
                             "SourceNSG":{
                                 "query":{
                                     "term":{
-                                        "SourceNSG":"{{SourceNSG:ovs-114}}"
+                                        "SourceNSG":"{{snsg:ovs-114}}"
                                     }
                                 }
                             }
@@ -47,19 +47,35 @@
                             "aggs":{
                                 "Packets":{
                                     "sum":{
-                                        "field":"TotalPacketsCount"
+                                        "field":"IngressPackets"
                                     }
                                 },
                                 "Bytes":{
                                     "sum":{
-                                        "field":"TotalBytesCount"
+                                        "field":"IngressBytes"
                                     }
                                 },
-                                "MBs":{
-                                    "sum":{
-                                        "field":"TotalMB"
+                                "DomainName":{
+                                    "terms":{
+                                        "field":"Domain",
+                                        "size":5,
+                                        "order":{
+                                            "Packets":"desc"
+                                        }
+                                    },
+                                "aggs":{
+                                    "Packets":{
+                                        "sum":{
+                                            "field":"IngressPackets"
+                                        }
+                                    },
+                                    "Bytes":{
+                                        "sum":{
+                                            "field":"IngressBytes"
+                                        }
                                     }
                                 }
+                              }
                             }
                         }
                     }
