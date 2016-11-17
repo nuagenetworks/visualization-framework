@@ -8,7 +8,7 @@
         "chordWeightColumn": "SumOf",
         "chordSourceColumn": "spg",
         "chordDestinationColumn": "dpg",
-        "colorColumn": "spg",
+        "colorColumn": "spg"
     },
     "listeners": [{
       "params": {
