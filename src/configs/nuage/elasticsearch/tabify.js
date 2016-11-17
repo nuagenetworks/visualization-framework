@@ -44,13 +44,44 @@ function collectBucket(node, stack=[]) {
     for(let i = 0; i < keys.length; i++) {
         const key = keys[i];
         const value = node[key];
+
         if (typeof value === 'object') {
             if (Array.isArray(value)) {
                 return extractTree(value, [...stack, key]);
             }
-            return collectBucket(value, [...stack, key]);
+
+            // Here we are sure to have an object
+            if (key === "buckets" && Object.keys(value).length > 1)
+            {
+                return extractBuckets(value, [...stack, key]);
+            }
+            else {
+                return collectBucket(value, [...stack, key]);
+            }
         }
     }
+
+    return node;
+}
+
+function extractBuckets(buckets, stack) {
+    const keys = Object.keys(buckets);
+    let results = [];
+
+    for(let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const value = buckets[key];
+
+        let currentObject = collectBucket({[key]: value});
+
+        if (!currentObject)
+            continue;
+
+        currentObject[stack[stack.length - 2]] = key;
+        results.push(currentObject)
+    }
+
+    return results;
 }
 
 function extractTree(buckets, stack) {

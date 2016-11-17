@@ -204,7 +204,7 @@ describe('ElasticSearch', () => {
                                         "types": {
                                             "buckets": {
                                                 "type": {
-                                                    "doc_count": 0
+                                                    "doc_count": 10
                                                 }
                                             }
                                         }
@@ -214,7 +214,7 @@ describe('ElasticSearch', () => {
                                         "types": {
                                             "buckets": {
                                                 "type": {
-                                                    "doc_count": 0
+                                                    "doc_count": 20
                                                 }
                                             }
                                         }
@@ -228,8 +228,8 @@ describe('ElasticSearch', () => {
         }
 
         const expectedResults = [
-            { "timezones": "Prev 24", "doc_count": 0 },
-            { "timezones": "Last 24", "doc_count": 0 }
+            { "timezones": "Prev 24", "doc_count": 10 },
+            { "timezones": "Last 24", "doc_count": 20 }
         ]
 
         expect(tabify(response)).toEqual(expectedResults);
