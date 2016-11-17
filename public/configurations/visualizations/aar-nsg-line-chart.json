@@ -11,7 +11,6 @@
         "yLabel": "Total MB",
         "yTicks": 5,
         "linesColumn": "L7Classification",
-        "colorColumn": "L7Classification",
         "margin": { "top": 15, "bottom": 40, "left": 40, "right": 20 }
     },
     "query": "aar-nsg-app-linechart"

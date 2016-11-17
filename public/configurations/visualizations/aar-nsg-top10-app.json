@@ -7,7 +7,6 @@
     "data": {
         "sliceColumn": "Sum of MB",
         "labelColumn": "Application",
-        "colorColumn": "Application",
         "pieInnerRadius": 0.5
     },
     "query": "aar-nsg-top10-app"

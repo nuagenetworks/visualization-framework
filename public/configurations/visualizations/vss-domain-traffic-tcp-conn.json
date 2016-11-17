@@ -7,7 +7,6 @@
     "data": {
         "xColumn": "timestamp",
         "yColumn": "SumOf",
-        "colorColumn": "timestamp",
         "stroke": {
             "color": "#b3d645",
             "width": "2px"

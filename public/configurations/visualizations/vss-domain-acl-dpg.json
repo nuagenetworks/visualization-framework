@@ -7,7 +7,6 @@
     "data": {
         "xColumn": "dpg",
         "yColumn": "SumOf",
-        "colorColumn": "dpg",
         "colors": [
              "#fec26a"
          ],

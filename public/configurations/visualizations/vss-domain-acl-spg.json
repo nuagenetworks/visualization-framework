@@ -7,7 +7,6 @@
     "data": {
         "xColumn": "SumOf",
         "yColumn": "spg",
-        "colorColumn": "spg",
         "orientation": "horizontal",
         "margin": {
             "top": 20,

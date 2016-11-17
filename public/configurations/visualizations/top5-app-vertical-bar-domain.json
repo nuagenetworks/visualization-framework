@@ -7,7 +7,6 @@
     "data": {
         "xColumn": "Application",
         "yColumn": "Sum of MB",
-        "colorColumn": "Sum of MB"
     },
     "query": "top5-app-vertical-bar-domain"
 }

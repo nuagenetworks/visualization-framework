@@ -49,6 +49,7 @@ export default class BarGraph extends XYGraph {
 
         const {
           colorColumn,
+          colors,
           xColumn,
           yColumn,
           margin: { top, bottom, left, right },
@@ -138,7 +139,7 @@ export default class BarGraph extends XYGraph {
             barWidth = xScale.bandwidth();
         }
 
-        const scale = this.scaleColor(data);
+        const scale = this.scaleColor(data, vertical ? yColumn : xColumn);
 
         return (
             <div className="bar-graph">
@@ -173,7 +174,7 @@ export default class BarGraph extends XYGraph {
                             );
 
                             // Compute the fill color based on the index.
-                            const fill = scale(d[colorColumn]);
+                            const fill = scale ? scale(d[colorColumn || (vertical ? yColumn : xColumn)]) : colors[0];
 
                             // Set up clicking and cursor style.
                             const { onClick, style } = (
