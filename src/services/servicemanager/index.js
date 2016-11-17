@@ -68,6 +68,10 @@ const tabify = function (queryConfiguration, response) {
     const serviceName = queryConfiguration ? queryConfiguration.get("service") : "VSD"; // In case of scripts...
 
     const service = getService(serviceName)
+
+    if (!service || !service.hasOwnProperty("tabify"))
+        return response;
+
     return service.tabify(response);
 }
 

@@ -17,8 +17,7 @@ describe('VSD service', () => {
             "config",
             "getRequestID",
             "getMockResponse",
-            "fetch",
-            "tabify",
+            "fetch"
         ];
         expect(Object.keys(VSDService)).toEqual(expectedProperties)
         expect(VSDService.id).toEqual("VSD")
