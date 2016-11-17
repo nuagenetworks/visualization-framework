@@ -6,6 +6,8 @@ import Drawer from "material-ui/Drawer";
 import Subheader from "material-ui/Subheader";
 import { List, ListItem } from "material-ui/List";
 
+import { ServiceManager } from "../../services/servicemanager/index";
+
 import {
     Actions as ComponentActions,
     ActionKeyStore as ComponentActionKeyStore
@@ -30,15 +32,29 @@ class MainMenuView extends React.Component {
         this.initialize();
     }
 
-    initialize() {;
-        this.props.fetchEnterprisesIfNeeded().then((enterprises) => {
+    initialize() {
+
+        const {
+            licenses,
+            fetchEnterprisesIfNeeded,
+            fetchDomainsIfNeeded,
+            fetchNSGsIfNeeded,
+            visualizationType
+        } = this.props;
+
+        if (!licenses || !licenses.length)
+            return;
+
+        fetchEnterprisesIfNeeded().then((enterprises) => {
             if (!enterprises)
                 return;
 
             for (let index in enterprises) { // eslint-disable-line
                 let enterprise = enterprises[index];
-                this.props.fetchDomainsIfNeeded(enterprise.ID);
-                this.props.fetchNSGsIfNeeded(enterprise.ID);
+                fetchDomainsIfNeeded(enterprise.ID);
+
+                if (visualizationType === "AAR")
+                    fetchNSGsIfNeeded(enterprise.ID);
             }
         });
     }
@@ -168,12 +184,19 @@ MainMenuView.propTypes = {
 };
 
 const mapStateToProps = (state) => {
+    const queryConfiguration = {
+        service: "VSD",
+        query: {
+            parentResource: "licenses",
+        }
+    };
 
     const props = {
         context: state.interface.get(ComponentActionKeyStore.CONTEXT),
         visualizationType: state.interface.get(ComponentActionKeyStore.VISUALIZATION_TYPE),
         open: state.interface.get(ComponentActionKeyStore.MAIN_MENU_OPENED),
         enterprises: state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises", ServiceActionKeyStore.RESULTS]),
+        licenses: state.services.getIn([ServiceActionKeyStore.REQUESTS, ServiceManager.getRequestID(queryConfiguration), ServiceActionKeyStore.RESULTS]) || [],
     };
 
     if (props.context && props.context.enterpriseID) {

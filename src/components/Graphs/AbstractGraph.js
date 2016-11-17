@@ -1,26 +1,18 @@
 import React from "react";
+import { scaleOrdinal } from "d3";
 import ReactTooltip from "react-tooltip";
 
 import { GraphManager } from "./index";
 import columnAccessor from "../../utils/columnAccessor";
 
+
 export default class AbstractGraph extends React.Component {
 
-    constructor(props) {
+    constructor(props, properties = {}) {
         super(props);
 
-        let properties;
-
-        try {
-            // TODO: Make sure the name is not going to change in the build
-            properties = require("./" + this.constructor.name + "/default.config.js").properties;
-        }
-        catch (err) {
-            properties = {};
-        }
-
         this.defaults = GraphManager.getDefaultProperties(properties);
-        
+
         // Provide tooltips for subclasses.
         const { tooltip } = this.getConfiguredProperties();
         if(tooltip) {
@@ -86,16 +78,25 @@ export default class AbstractGraph extends React.Component {
             this.getTooltipContent = () => null
             this.tooltipProps = () => null
         }
-
     }
 
     getConfiguredProperties() {
         return Object.assign({}, this.defaults, this.props.configuration.data);
     }
 
-    applyColor(index) {
-        const { colors } = this.getConfiguredProperties();
-        return colors[index % colors.length];
+    scaleColor(data, defaultColumn) {
+        const {
+            colors,
+            colorColumn,
+        } = this.getConfiguredProperties();
+        
+        if (!colorColumn && !defaultColumn)
+            return;
+
+        const scale = scaleOrdinal(colors);
+        scale.domain(data.map((d) => d[colorColumn || defaultColumn]));
+
+        return scale;
     }
 
 }

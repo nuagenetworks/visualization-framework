@@ -7,7 +7,8 @@
     "creationDate": "10/17/2016",
     "data": {
         "sliceColumn": "SumOf",
-        "labelColumn": "EventType"
+        "labelColumn": "EventType",
+        "colorColumn": "EventType",
     },
     "query": "vss-top-sec-events"
 }

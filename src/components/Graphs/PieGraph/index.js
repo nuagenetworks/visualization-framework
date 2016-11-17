@@ -6,9 +6,14 @@ import * as d3 from "d3";
 
 import "./style.css";
 
+import {properties} from "./default.config"
 
 export default class PieGraph extends AbstractGraph {
 
+    constructor(props) {
+        super(props, properties);
+    }
+    
     render() {
 
         const { data, width, height, onMarkClick } = this.props;
@@ -17,6 +22,7 @@ export default class PieGraph extends AbstractGraph {
             return;
 
         const {
+          colorColumn,
           sliceColumn,
           labelColumn,
           pieInnerRadius,
@@ -49,6 +55,8 @@ export default class PieGraph extends AbstractGraph {
             stroke: stroke.color
         }
 
+        const scale = this.scaleColor(data, labelColumn);
+
         return (
             <div className="pie-graph">
                 {this.tooltip}
@@ -69,7 +77,7 @@ export default class PieGraph extends AbstractGraph {
                                 return <g key={i} >
                                     <path
                                       d={ arc(slice) }
-                                      fill={ this.applyColor(i) }
+                                      fill={ scale ? scale(d[colorColumn || labelColumn]) : null }
                                       onClick={ onClick }
                                       style={ Object.assign({cursor}, defaultStyle) }
                                       { ...this.tooltipProps(d) }

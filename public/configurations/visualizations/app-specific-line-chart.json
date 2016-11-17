@@ -6,7 +6,8 @@
     "creationDate": "10/14/2016",
     "data": {
         "xColumn": "key",
-        "yColumn": "1"
+        "yColumn": "1",
+        "colorColumn": "key"
     },
     "query": "app-specific-vertical-bar"
 }

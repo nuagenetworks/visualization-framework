@@ -13,7 +13,13 @@ import {
     select,
 } from "d3";
 
+import {properties} from "./default.config"
+
 export default class LineGraph extends XYGraph {
+
+    constructor(props) {
+        super(props, properties);
+    }
 
     render() {
 
@@ -23,6 +29,7 @@ export default class LineGraph extends XYGraph {
             return;
 
         const {
+          colorColumn,
           xColumn,
           yColumn,
           linesColumn,
@@ -37,7 +44,7 @@ export default class LineGraph extends XYGraph {
           xTickSizeOuter,
           xTickFormat,
           xTicks,
-          stroke,
+          stroke
         } = this.getConfiguredProperties();
 
         const xScale = scaleTime()
@@ -84,6 +91,8 @@ export default class LineGraph extends XYGraph {
           .key((d) => linesColumn ? d[linesColumn] : "Line")
           .entries(data);
 
+        const scale = this.scaleColor(data, linesColumn);
+
         return (
             <div className="bar-graph">
                 <svg width={width} height={height}>
@@ -98,11 +107,11 @@ export default class LineGraph extends XYGraph {
                             key="yAxis"
                             ref={ (el) => select(el).call(yAxis) }
                         />
-                        {linesData.map(({key, values}, i) =>
+                        {linesData.map(({key, values}) =>
                             <path
                                 key={ key }
                                 fill="none"
-                                stroke={ linesColumn ? this.applyColor(i) : stroke.color }
+                                stroke={ scale ? scale(values[colorColumn], linesColumn) : stroke.color }
                                 strokeWidth={ stroke.width }
                                 d={ lineGenerator(values) }
                             />
