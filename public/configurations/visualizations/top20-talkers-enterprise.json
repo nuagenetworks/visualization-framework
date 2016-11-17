@@ -5,7 +5,6 @@
     "author": "Ronak Shah",
     "creationDate": "10/14/2016",
     "data": {
-        "colorColumn": "Application",
         "columns": [
             { "column": "Application", "label": "Application" },
             { "column": "APMGroup", "label": "APM-Group" },

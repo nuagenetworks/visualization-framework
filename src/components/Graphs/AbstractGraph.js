@@ -99,7 +99,7 @@ export default class AbstractGraph extends React.Component {
             colors,
             colorColumn,
         } = this.getConfiguredProperties();
-
+        
         if (!colorColumn && !defaultColumn)
             return;
 

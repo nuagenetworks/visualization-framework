@@ -5,7 +5,6 @@
     "author": "Ronak Shah",
     "creationDate": "10/13/2016",
     "data": {
-        "colorColumn": "SourceIP",
         "columns": [
             { "column": "SourceIP", "label": "Source IP" },
             { "column": "TotalPacketsCount", "label": "Total Packets", "format": ",.2s"},

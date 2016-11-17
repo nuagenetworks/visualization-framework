@@ -24,7 +24,8 @@ export default class Table extends AbstractGraph {
             colorColumn,
             fontColor,
             header,
-            padding
+            padding,
+            colors
         } = this.getConfiguredProperties();
 
         const accessors = columns.map(columnAccessor);
@@ -78,7 +79,7 @@ export default class Table extends AbstractGraph {
                                     key={j}
                                     style={{
                                         color:fontColor,
-                                        background: scale(d[colorColumn]),
+                                        background: scale ? scale(d[colorColumn]) : colors[j % 2],
                                         borderTop: border.top,
                                         borderBottom: border.bottom,
                                         borderLeft: border.left,

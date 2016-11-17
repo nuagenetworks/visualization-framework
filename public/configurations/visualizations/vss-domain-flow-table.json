@@ -5,7 +5,6 @@
     "author": "Ronak Shah",
     "creationDate": "11/02/2016",
     "data": {
-        "colorColumn": "sourceip",
         "columns": [
             { "column": "sourceip", "label": "Source IP" },
             { "column": "destinationip", "label": "Destination IP" },
