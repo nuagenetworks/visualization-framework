@@ -1,7 +1,7 @@
 {
     "id": "aar-nsg-app-linechart",
     "graph": "LineGraph",
-    "title": "Application vs Time",
+    "title": "Application Usage Over Time",
     "author": "Ronak Shah",
     "creationDate": "11/07/2016",
     "data": {

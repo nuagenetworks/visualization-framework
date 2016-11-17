@@ -26,19 +26,19 @@
                 "5":{
                     "filters":{
                         "filters":{
-                            "SourceNSG":{
+                            "DestinationNSG":{
                                 "query":{
                                     "term":{
-                                        "DestinationNSG":"{{DestinationNSG:ovs-114}}"
+                                        "DestinationNSG":"{{snsg:ovs-114}}"
                                     }
                                 }
                             }
                         }
                     },
                     "aggs":{
-                        "SourceIP":{
+                        "DestinationIP":{
                             "terms":{
-                                "field":"SrcIp",
+                                "field":"DstIp",
                                 "size":5,
                                 "order":{
                                     "Packets":"desc"
@@ -47,19 +47,35 @@
                             "aggs":{
                                 "Packets":{
                                     "sum":{
-                                        "field":"TotalPacketsCount"
+                                        "field":"EgressPackets"
                                     }
                                 },
                                 "Bytes":{
                                     "sum":{
-                                        "field":"TotalBytesCount"
+                                        "field":"EgressBytes"
                                     }
                                 },
-                                "MBs":{
-                                    "sum":{
-                                        "field":"TotalMB"
+                                "DomainName":{
+                                    "terms":{
+                                        "field":"Domain",
+                                        "size":5,
+                                        "order":{
+                                            "Packets":"desc"
+                                        }
+                                    },
+                                "aggs":{
+                                    "Packets":{
+                                        "sum":{
+                                            "field":"EgressPackets"
+                                        }
+                                    },
+                                    "Bytes":{
+                                        "sum":{
+                                            "field":"EgressBytes"
+                                        }
                                     }
                                 }
+                              }
                             }
                         }
                     }
