@@ -36,10 +36,11 @@ class MainMenuView extends React.Component {
     initialize() {
 
         const {
-            licenses,
-            fetchEnterprisesIfNeeded,
             fetchDomainsIfNeeded,
+            fetchEnterprisesIfNeeded,
+            fetchL2DomainsIfNeeded,
             fetchNSGsIfNeeded,
+            licenses,
             visualizationType
         } = this.props;
 
@@ -53,6 +54,7 @@ class MainMenuView extends React.Component {
             for (let index in enterprises) { // eslint-disable-line
                 let enterprise = enterprises[index];
                 fetchDomainsIfNeeded(enterprise.ID);
+                fetchL2DomainsIfNeeded(enterprise.ID);
 
                 if (visualizationType === "AAR")
                     fetchNSGsIfNeeded(enterprise.ID);
@@ -81,9 +83,41 @@ class MainMenuView extends React.Component {
                             primaryText={domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo("/dashboards/" + targetedDashboard, context)}}
+                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, context)}}
                             leftIcon={
                                 <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-domain.png"} alt="D" />
+                            }
+                        />
+                    )
+                })}
+            </div>
+        )
+    }
+
+    renderL2DomainsMenu() {
+        const {
+            context,
+            l2Domains,
+            visualizationType
+        } = this.props;
+
+        if (!l2Domains || l2Domains.length === 0)
+            return;
+
+        const targetedDashboard = visualizationType === "VSS" ? "vssL2DomainACL" : "aarL2Domain";
+
+        return (
+            <div>
+                {l2Domains.map((l2Domain) => {
+                    return (
+                        <ListItem
+                            key={l2Domain.ID}
+                            primaryText={l2Domain.name}
+                            style={style.nestedItem}
+                            innerDivStyle={style.innerNestedItem}
+                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, context)}}
+                            leftIcon={
+                                <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-l2domain.png"} alt="L2D" />
                             }
                         />
                     )
@@ -112,7 +146,7 @@ class MainMenuView extends React.Component {
                             innerDivStyle={style.innerNestedItem}
                             initiallyOpen={true}
                             open={true}
-                            onTouchTap={() => { this.props.goTo("/dashboards/aarNSG", context)}}
+                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/aarNSG", context)}}
                             leftIcon={
                                 <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-nsgateway.png"} alt="N" />
                             }
@@ -143,10 +177,11 @@ class MainMenuView extends React.Component {
                             key={enterprise.ID}
                             primaryText={enterprise.name}
                             style={style.listItem}
-                            onTouchTap={() => { this.props.goTo("/dashboards/" + targetedDashboard, context)}}
+                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, context)}}
                             nestedItems={[
                                 <div style={style.nestedItems}>
                                     {this.renderDomainsMenu()}
+                                    {this.renderL2DomainsMenu()}
                                     {this.renderNSGsMenu()}
                                 </div>
                             ]}
@@ -202,6 +237,7 @@ const mapStateToProps = (state) => {
 
     if (props.context && props.context.enterpriseID) {
         props.domains = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/domains", ServiceActionKeyStore.RESULTS]);
+        props.l2Domains = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/l2domains", ServiceActionKeyStore.RESULTS]);
 
         if (props.visualizationType === "AAR")
             props.nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/nsgateways", ServiceActionKeyStore.RESULTS]);
@@ -241,6 +277,18 @@ const actionCreators = (dispatch) => ({
                 parentResource: "enterprises",
                 parentID: enterpriseID,
             resource: "domains"
+            }
+        }
+        return dispatch(ServiceActions.fetchIfNeeded(configuration));
+    },
+
+    fetchL2DomainsIfNeeded: (enterpriseID) => {
+        let configuration = {
+            service: "VSD",
+            query: {
+                parentResource: "enterprises",
+                parentID: enterpriseID,
+            resource: "l2domains"
             }
         }
         return dispatch(ServiceActions.fetchIfNeeded(configuration));
