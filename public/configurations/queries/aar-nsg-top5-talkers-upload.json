@@ -6,7 +6,7 @@
         "index":"{{index:nuage_dpi_flowstats}}",
         "type":"{{type:nuage_doc_type}}",
         "body":{
-            "size":1000,
+            "size":0,
             "query":{
                 "bool":{
                     "must":[
@@ -29,7 +29,7 @@
                             "SourceNSG":{
                                 "query":{
                                     "term":{
-                                        "SourceNSG":"{{snsg:ovs-114}}"
+                                        "SourceNSG":"{{SourceNSG:ovs-114}}"
                                     }
                                 }
                             }
