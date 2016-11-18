@@ -54,13 +54,13 @@
                                         "field":"Application",
                                         "size":5,
                                         "order":{
-                                            "Sum of MB":"desc"
+                                            "SumofBytes":"desc"
                                         }
                                     },
                                     "aggs":{
-                                        "Sum of MB":{
+                                        "SumofBytes":{
                                             "sum":{
-                                                "field":"TotalMB"
+                                                "field":"TotalBytesCount"
                                             }
                                         }
                                     }
