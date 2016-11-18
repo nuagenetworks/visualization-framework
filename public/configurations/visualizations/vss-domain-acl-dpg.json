@@ -11,6 +11,10 @@
         "colors": [
              "#fec26a"
          ],
+        "tooltip": [
+            { "column": "dpg", "label": "PG" },
+            { "column": "SumOf", "label": "ACL Hits", "format": ",.1f"}
+        ],
         "margin": {
             "top": 20,
             "bottom": 40,
