@@ -74,7 +74,7 @@
                                                     "aggs": {
                                                         "ViolationType": {
                                                             "terms": {
-                                                                "field": "slaViolationType",
+                                                                "field": "ViolationType",
                                                                 "size": 10,
                                                                 "order": {
                                                                     "_count": "desc"
