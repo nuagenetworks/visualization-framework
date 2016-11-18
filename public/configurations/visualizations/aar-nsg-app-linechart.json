@@ -22,5 +22,22 @@
         },
         "linesColumn": "L7Classification"
     },
+    "filterOptions": {
+        "Metric": {
+            "parameter": "Metric",
+            "default": "TotalBytesCount",
+            "options": [
+                {
+                    "label": "TotalBytes",
+                    "value": "TotalBytesCount",
+                    "default": true
+                },
+                {
+                    "label": "TotalPackets",
+                    "value": "TotalPacketsCount"
+                }
+            ]
+        }
+    },
     "query": "aar-nsg-app-linechart"
 }
