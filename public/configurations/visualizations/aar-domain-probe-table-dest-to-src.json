@@ -1,5 +1,5 @@
 {
-    "id": "aar-domain-probe-table",
+    "id": "aar-domain-probe-table-dest-to-src",
     "graph": "Table",
     "title": "{{dnsg}} to {{snsg}} Probe Detail",
     "author": "Ronak Shah",
