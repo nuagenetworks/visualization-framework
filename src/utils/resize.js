@@ -19,7 +19,9 @@ export const resizeVisualization = (gridItem) => {
 
     // Handle the case that the title bar is present.
     if (innerCard.length > 1) {
-        height -= innerCard[0].clientHeight;
+        
+        for (var i = 0; i < innerCard.length - 1; i++)
+            height -= innerCard[i].clientHeight;
     }
 
     return {
