@@ -47,7 +47,7 @@
                         "aggs":{
                             "1":{
                                 "sum":{
-                                    "field":"TotalMB"
+                                    "field":"TotalBytesCount"
                                 }
                             },
                             "APMGroup":{
@@ -61,12 +61,12 @@
                                 "aggs":{
                                     "1":{
                                         "sum":{
-                                            "field":"TotalMB"
+                                            "field":"TotalBytesCount"
                                         }
                                     },
                                     "DomainName":{
                                         "terms":{
-                                            "field":"DomainName",
+                                            "field":"Domain",
                                             "size":20,
                                             "order":{
                                                 "1":"desc"
@@ -75,7 +75,7 @@
                                         "aggs":{
                                             "1":{
                                                 "sum":{
-                                                    "field":"TotalMB"
+                                                    "field":"TotalBytesCount"
                                                 }
                                             },
                                             "L7Classification":{
@@ -89,7 +89,7 @@
                                                 "aggs":{
                                                     "1":{
                                                         "sum":{
-                                                            "field":"TotalMB"
+                                                            "field":"TotalBytesCount"
                                                         }
                                                     }
                                                 }

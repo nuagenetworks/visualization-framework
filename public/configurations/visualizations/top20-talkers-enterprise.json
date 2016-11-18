@@ -8,9 +8,9 @@
         "columns": [
             { "column": "Application", "label": "Application" },
             { "column": "APMGroup", "label": "APM-Group" },
-            { "column": "DomainName", "label": "Domain Name"},
+            { "column": "DomainName", "label": "Domain"},
             { "column": "L7Classification", "label": "L7 Classification" },
-            { "column": "1", "label": "Total MB", "format": ",.2f" }
+            { "column": "1", "label": "Total Bytes", "format": ",.2s" }
         ]
     },
     "listeners": [
