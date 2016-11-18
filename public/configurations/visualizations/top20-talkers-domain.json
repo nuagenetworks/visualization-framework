@@ -11,7 +11,6 @@
             { "column": "SrcVportName", "label": "Source Vport-Name"},
             { "column": "SourceNSG", "label": "Source-NSG"},
             { "column": "DestinationNSG", "label": ""},
-            { "column": "DestVportName", "label": ""},
             { "column": "1", "label": "Total Bytes", "format": ",.2s" },
             { "column": "11", "label": "Total Packets", "format": ",.2s" }
         ]
