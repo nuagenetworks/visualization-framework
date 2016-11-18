@@ -47,7 +47,7 @@
                             "aggs":{
                                 "Sum of MB":{
                                     "sum":{
-                                        "field":"TotalMB"
+                                        "field":"TotalBytesCount"
                                     }
                                 }
                             }
