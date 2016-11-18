@@ -4,7 +4,12 @@ const d3 = { format, timeFormat };
 // Compute accessor functions that apply number and date formatters.
 // Useful for presenting numbers in tables or tooltips.
 const columnAccessor = ({ column, format, timeFormat }) => {
-    const value = (d) => d[column];
+
+    // Generate the accessor for nested values (e.g. "foo.bar").
+    const keys = column.split(".");
+    const value = (d) => keys.reduce((d, key) => d[key], d);
+
+    // Apply number and date formatters.
     if(format){
         const formatter = d3.format(format);
         return (d) => formatter(value(d));

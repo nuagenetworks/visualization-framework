@@ -16,4 +16,14 @@ describe('Util:columnAccessor', () => {
         const d = { foo: 1479465567343 };
         expect(accessor(d)).toEqual('11/18/2016');
     });
+    it('should access an object value', () => {
+        const accessor = columnAccessor({ column: 'foo.bar' });
+        const d = { foo: { bar: 5 } };
+        expect(accessor(d)).toEqual(5);
+    });
+    it('should access a nested value', () => {
+        const accessor = columnAccessor({ column: 'foo.bar.baz' });
+        const d = { foo: { bar: { baz: 6 } } };
+        expect(accessor(d)).toEqual(6);
+    });
 });
