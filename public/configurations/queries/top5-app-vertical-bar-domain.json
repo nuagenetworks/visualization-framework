@@ -29,7 +29,7 @@
                             "Enterprise":{
                                 "query":{
                                     "term":{
-                                        "EnterpriseName":"{{EnterpriseName:test_org}}"
+                                        "EnterpriseName":"{{EnterpriseName:test_organization}}"
                                     }
                                 }
                             }
@@ -42,7 +42,7 @@
                                     "Domain":{
                                         "query":{
                                             "term":{
-                                                "DomainName":"{{domainName:Domain1}}"
+                                                "Domain":"{{domainName:ncpeDomain1}}"
                                             }
                                         }
                                     }

@@ -15,17 +15,17 @@
                 {
                   "bool": {
                     "must": [
-                      {
+                      { 
                         "term": 
-                          {"SourceNSG": "{{snsg}}" }
+                          {"SourceNSG": "{{dnsg}}"} 
                       },
-                      { "term": 
-                          {"DestinationNSG": "{{dnsg}}"} 
+                      { 
+                        "term": {"DestinationNSG": "{{snsg}}"}
                       },
                       { "range": { 
-                          "timestamp": { 
-                            "gte": "{{startTime:now-24h}}", 
-                            "lte": "{{endTime:now}}", 
+                          "timestamp": {
+                            "gte": "{{startTime:now-24h}}",
+                            "lte": "{{endTime:now}}",
                             "format":"epoch_millis"
                           } 
                         }
