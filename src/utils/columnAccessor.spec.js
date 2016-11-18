@@ -11,4 +11,9 @@ describe('Util:columnAccessor', () => {
         const d = { foo: 10000 };
         expect(accessor(d)).toEqual('10k');
     });
+    it('should apply a date formatter', () => {
+        const accessor = columnAccessor({ column: 'foo', timeFormat: '%x' });
+        const d = { foo: 1479465567343 };
+        expect(accessor(d)).toEqual('11/18/2016');
+    });
 });
