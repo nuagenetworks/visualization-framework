@@ -29,7 +29,7 @@
                             "SourceNSG":{
                                 "query":{
                                     "term":{
-                                        "DestinationNSG":"{{snsg:ovs-114}}"
+                                        "DestinationNSG":"{{DestinationNSG:ovs-114}}"
                                     }
                                 }
                             }
