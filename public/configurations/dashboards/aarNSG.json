@@ -18,5 +18,22 @@
             "label": "Detail View",
             "url": "/dashboards/aarNSGDetail"
         }
-    ]
+    ],
+    "filterOptions": {
+        "Metric": {
+            "parameter": "Metric",
+            "default": "TotalBytesCount",
+            "options": [
+                {
+                    "label": "TotalBytes",
+                    "value": "TotalBytesCount",
+                    "default": true
+                },
+                {
+                    "label": "TotalPackets",
+                    "value": "TotalPacketsCount"
+                }
+            ]
+        }
+    }
 }
