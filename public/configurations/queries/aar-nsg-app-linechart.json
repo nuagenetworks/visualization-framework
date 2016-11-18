@@ -53,7 +53,7 @@
                                     "aggs": {
                                         "SumOf": {
                                             "sum": {
-                                                "field": "TotalBytesCount"
+                                                "field": "{{Metric:TotalBytesCount}}"
                                             }
                                         }
                                     }
