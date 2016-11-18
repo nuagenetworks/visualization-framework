@@ -15,8 +15,8 @@
         	    {
            	    "bool": {
              	    "must": [
-                    {"term": {"nuage_metadata.sourcepolicygroups": "{{spg}}"} },
-                    { "term": {"nuage_metadata.destinationpolicygroups": "{{dpg}}"} },
+                    {"term": {"nuage_metadata.spgName": "{{spg}}"} },
+                    { "term": {"nuage_metadata.dpgName": "{{dpg}}"} },
                     {"range": { "timestamp": { "gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
                   ]
                 }
@@ -24,8 +24,8 @@
               {
                 "bool": {
                   "must": [
-                    { "term": {"nuage_metadata.sourcepolicygroups": "{{dpg}}"} },
-                    { "term": {"nuage_metadata.destinationpolicygroups": "{{spg}}"} },
+                    { "term": {"nuage_metadata.spgName": "{{dpg}}"} },
+                    { "term": {"nuage_metadata.dpgName": "{{spg}}"} },
                     {"range": { "timestamp": {"gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
                   ] 
                 }
