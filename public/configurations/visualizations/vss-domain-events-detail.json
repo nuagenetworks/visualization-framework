@@ -9,8 +9,8 @@
         "columns": [
             { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
             { "column": "value", "label": "Value" },
-            { "column": "nuage_metadata['sourcepolicygroups']", "label": "Source PG" },
-            { "column": "nuage_metadata['destinationpolicygroups']", "label": "Destination PG" }
+            { "column": "nuage_metadata['subnetName']", "label": "Subnet Name" },
+            { "column": "nuage_metadata['zoneName']", "label": "Zone Name" }
         ]
     },
     "query": "vss-domain-events-detail"

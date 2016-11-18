@@ -7,7 +7,6 @@
     "data": {
         "xColumn": "PG",
         "yColumn": "Sum of Value",
-        "colorColumn": "PG",
         "margin": {
             "top": 20,
             "bottom": 40,
