@@ -1,13 +1,11 @@
 {
-    "id": "top20-talkers-enterprise",
+    "id": "top20-talkers-enterprise-defaultapp-table",
     "graph": "Table",
-    "title": "Top 20 talkers in Enterprise",
+    "title": "Top 20 talkers in Enterprise (Default Application)",
     "author": "Ronak Shah",
     "creationDate": "10/14/2016",
     "data": {
         "columns": [
-            { "column": "Application", "label": "Application" },
-            { "column": "APMGroup", "label": "APM-Group" },
             { "column": "DomainName", "label": "Domain"},
             { "column": "L7Classification", "label": "L7 Classification" },
             { "column": "1", "label": "Total Bytes", "format": ",.2s" }
@@ -20,5 +18,5 @@
         }
     }],
 
-    "query": "top20-talkers-enterprise-table"
+    "query": "top20-talkers-enterprise-defaultapp-table"
 }

@@ -1,5 +1,5 @@
 {
-    "id":"top20-talkers-enterprise-table",
+    "id":"top20-talkers-enterprise-defaultapp-table",
     "title":"Top 20 Talkers in Enterprise",
     "service":"elasticsearch",
     "query": {
@@ -41,10 +41,8 @@
                             "filters":{
                                 "AppName":{
                                     "query":{
-                                        "not":{
-                                            "term":{
-                                                "Application":"Default Application"
-                                            }
+                                        "term":{
+                                            "Application":"Default Application"
                                         }
                                     }
                                 }
