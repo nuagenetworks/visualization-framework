@@ -6,7 +6,11 @@
     "creationDate": "10/19/2016",
     "data": {
         "sliceColumn": "doc_count",
-        "labelColumn": "slastatus"
+        "labelColumn": "slastatus",
+        "tooltip": [
+            { "column": "slastatus", "label": "SLA Status" },
+            { "column": "doc_count", "label": "Count", "format": ",.2s"}
+        ]
     },
     "query": "aar-slastatus-enterprise"
 }

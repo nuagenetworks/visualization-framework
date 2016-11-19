@@ -7,7 +7,11 @@
     "data": {
         "sliceColumn": "Sum of MB",
         "labelColumn": "Application",
-        "pieInnerRadius": 0.5
+        "pieInnerRadius": 0.5,
+        "tooltip": [
+            { "column": "Application", "label": "Application" },
+            { "column": "Sum of MB", "label": "Total MB", "format": ",.2f"}
+        ]
     },
     "query": "aar-nsg-top10-app"
 }
