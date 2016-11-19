@@ -9,6 +9,10 @@
         "sliceColumn": "SumOf",
         "labelColumn": "EventType",
         "colorColumn": "EventType",
+        "tooltip": [
+            { "column": "EventType", "label": "Event" },
+            { "column": "SumOf", "label": "Count", "format": ",.1f"}
+        ]
     },
     "query": "vss-top-sec-events"
 }

@@ -9,10 +9,13 @@
         "interval": "30m",
         "xColumn": "date-histo",
         "yColumn": "SumOfPackets",
+        "yTickFormat": ".2s",
         "colorColumn": "date-histo",
+        "xLabel": "Time",
+        "yLabel": "Total Packets",
         "margin": {
             "top": 15,
-            "bottom": 20,
+            "bottom": 40,
             "left": 45,
             "right": 20
         }

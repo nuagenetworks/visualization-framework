@@ -1,23 +1,43 @@
 {
     "id": "aar-nsg-app-linechart",
     "graph": "LineGraph",
-    "title": "Application vs Time",
+    "title": "Application Usage Over Time",
     "author": "Ronak Shah",
     "creationDate": "11/07/2016",
     "data": {
         "xColumn": "ts",
         "yColumn": "SumOf",
+        "yTickFormat": ".2s",
+        "xLabel": "Time",
+        "yLabel": "Total Bytes",
         "stroke": {
           "color": "#f76159",
           "width": "2px"
         },
         "margin": {
             "top": 15,
-            "bottom": 20,
+            "bottom": 40,
             "left": 80,
             "right": 40
         },
         "linesColumn": "L7Classification"
+    },
+    "filterOptions": {
+        "Metric": {
+            "parameter": "Metric",
+            "default": "TotalBytesCount",
+            "options": [
+                {
+                    "label": "TotalBytes",
+                    "value": "TotalBytesCount",
+                    "default": true
+                },
+                {
+                    "label": "TotalPackets",
+                    "value": "TotalPacketsCount"
+                }
+            ]
+        }
     },
     "query": "aar-nsg-app-linechart"
 }

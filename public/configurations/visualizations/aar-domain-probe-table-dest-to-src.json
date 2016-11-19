@@ -1,7 +1,7 @@
 {
-    "id": "aar-domain-probe-table",
+    "id": "aar-domain-probe-table-dest-to-src",
     "graph": "Table",
-    "title": "{{snsg}} to {{dnsg}} Probe Detail",
+    "title": "{{dnsg}} to {{snsg}} Probe Detail",
     "author": "Ronak Shah",
     "creationDate": "11/02/2016",
     "data": {
@@ -15,5 +15,5 @@
             { "column": "AvgPktLoss", "label": "Avg Pkt Loss", "format": ",.2f"}
         ]
     },
-    "query": "aar-domain-probe-table"
+    "query": "aar-domain-probe-table-dest-to-src"
 }

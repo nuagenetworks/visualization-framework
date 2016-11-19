@@ -29,7 +29,7 @@
                             "DestinationNSG": {
                                 "query": {
                                     "term": {
-                                        "DestinationNSG": "{{dnsg:default}}"
+                                        "DestinationNSG": "{{snsg:default}}"
                                     }
                                 }
                             }

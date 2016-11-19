@@ -16,6 +16,10 @@
             "left": 80,
             "right": 20
         },
+        "tooltip": [
+            { "column": "spg", "label": "PG" },
+            { "column": "SumOf", "label": "Packets", "format": ",.1f"}
+        ],
         "xTickGrid": true,
         "yTickGrid": false,
         "xTickFormat": ".2s",

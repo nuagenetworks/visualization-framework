@@ -30,6 +30,7 @@ export default class LineGraph extends XYGraph {
 
         const {
           colorColumn,
+          colors,
           xColumn,
           yColumn,
           linesColumn,
@@ -111,7 +112,7 @@ export default class LineGraph extends XYGraph {
                             <path
                                 key={ key }
                                 fill="none"
-                                stroke={ scale ? scale(values[colorColumn], linesColumn) : stroke.color }
+                                stroke={ scale ? scale(values[colorColumn] || key) : stroke.color || colors[0] }
                                 strokeWidth={ stroke.width }
                                 d={ lineGenerator(values) }
                             />

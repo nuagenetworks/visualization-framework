@@ -2,7 +2,7 @@ import { theme } from "../../../theme"
 
 export const properties = {
     stroke: {
-        color: theme.palette.blueLightColor,
+        color: "red",
         width: "4px"
     },
     colors: [

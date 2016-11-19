@@ -4,9 +4,9 @@ import AbstractGraph from "./AbstractGraph";
 export default class XYGraph extends AbstractGraph {
 
     constructor(props, properties = {}) {
-        super(props);
+        super(props, properties);
     }
-    
+
     axisLabels() {
 
         const { width, height } = this.props;

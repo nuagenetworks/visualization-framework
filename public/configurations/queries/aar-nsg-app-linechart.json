@@ -22,38 +22,53 @@
                     ]
                 }
             },
-            "aggs": {
-                "4": {
-                    "filters": {
-                        "filters": {
-                            "SourceNSG": {
-                                "query": {
-                                    "term": {
-                                        "SourceNSG": "{{snsg:default}}"
+            "aggs":{
+                "5":{
+                    "filters":{
+                        "filters":{
+                            "Enterprise":{
+                                "query":{
+                                    "term":{
+                                        "EnterpriseName":"{{EnterpriseName:test_organization}}"
                                     }
                                 }
                             }
                         }
                     },
                     "aggs": {
-                        "ts": {
-                            "date_histogram": {
-                                "field": "timestamp",
-                                "interval": "1h"
+                        "4": {
+                            "filters": {
+                                "filters": {
+                                    "SourceNSG": {
+                                        "query": {
+                                            "term": {
+                                                "SourceNSG": "{{snsg:default}}"
+                                            }
+                                        }
+                                    }
+                                }
                             },
                             "aggs": {
-                                "L7Classification": {
-                                    "terms": {
-                                        "field": "L7Classification",
-                                        "size": 5,
-                                        "order": {
-                                            "SumOf": "desc"
-                                        }
+                                "ts": {
+                                    "date_histogram": {
+                                        "field": "timestamp",
+                                        "interval": "1h"
                                     },
                                     "aggs": {
-                                        "SumOf": {
-                                            "sum": {
-                                                "field": "{{BytesPackets:TotalMB}}"
+                                        "L7Classification": {
+                                            "terms": {
+                                                "field": "L7Classification",
+                                                "size": 5,
+                                                "order": {
+                                                    "SumOf": "desc"
+                                                }
+                                            },
+                                            "aggs": {
+                                                "SumOf": {
+                                                    "sum": {
+                                                        "field": "{{Metric:TotalBytesCount}}"
+                                                    }
+                                                }
                                             }
                                         }
                                     }

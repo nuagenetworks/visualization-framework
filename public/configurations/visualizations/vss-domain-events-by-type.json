@@ -15,6 +15,10 @@
             "#ff8533",
             "#7da3f7"
         ],
+        "tooltip": [
+            { "column": "EventType", "label": "Event" },
+            { "column": "Sum of Value", "label": "Count", "format": ",.1f"}
+        ],
         "margin": {
             "top": 20,
             "bottom": 40,

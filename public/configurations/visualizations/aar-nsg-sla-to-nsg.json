@@ -6,7 +6,7 @@
     "creationDate": "11/08/2016",
     "data": {
         "columns": [
-            { "column": "ts", "label": "Timestamp" },
+            { "column": "ts", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
             { "column": "SourceNSG", "label": "Source NSG" },
             { "column": "Application", "label": "Application" },
             { "column": "APMGroup", "label": "APM Group" },

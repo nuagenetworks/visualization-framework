@@ -10,6 +10,10 @@
         "yColumn": "domains",
         "colorColumn": "domains",
         "orientation": "horizontal",
+        "tooltip": [
+            { "column": "domains", "label": "Domain" },
+            { "column": "SumOf", "label": "# ACL Deny", "format": ",.1f"}
+        ],
         "colors": [
              "#7da3f7",
              "#fec26a",
