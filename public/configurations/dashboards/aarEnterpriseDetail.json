@@ -2,7 +2,7 @@
     "id": "aarEnterpriseDetail",
     "author": "Ronak Shah",
     "creationDate": "09/29/2016",
-    "title": "AAR Enterprise({{EnterpriseName}}) - L7Classification Detail",
+    "title": "AAR Enterprise({{enterpriseName}}) - L7Classification Detail",
     "visualizations": [
         { "id": "top20-talkers-enterprise", "x": 0, "y": 0, "w": 10, "h": 15, "minW": 2, "minH": 12},
         { "id": "top20-talkers-enterprise-defaultapp", "x": 0, "y": 15, "w": 10, "h": 15, "minW": 2, "minH": 12},

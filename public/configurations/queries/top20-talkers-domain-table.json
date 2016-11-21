@@ -29,7 +29,7 @@
                             "Enterprise": {
                                 "query": {
                                     "term": {
-                                        "EnterpriseName": "{{EnterpriseName:test_org}}"
+                                        "EnterpriseName": "{{enterpriseName:test_org}}"
                                     }
                                 }
                             }
