@@ -2,6 +2,8 @@ import React from "react";
 import AbstractGraph from "../AbstractGraph";
 import columnAccessor from "../../../utils/columnAccessor";
 
+import "./style.css";
+
 import {properties} from "./default.config"
 
 export default class Table extends AbstractGraph {
@@ -71,7 +73,10 @@ export default class Table extends AbstractGraph {
                             )) }
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody
+                        style={{
+                            height:height - 30 // Set from style.css
+                        }}>
                         { data.map((d, j) => {
 
                             // Set up clicking and cursor style.
