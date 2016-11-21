@@ -41,7 +41,22 @@ Here is a list of environment variable that can be set to configure the visualiz
     yellow open nuage_dpi_flowstats_2016_10_12 5 1  1846654 0 673.3mb 673.3mb
 
     $ curl localhost:9200/nuage_dpi_flowstats_2016_10_12/_search?pretty
-    > Locate enterpriseName and sourceNSG
+    > Locate enterpriseName and sourceNSG (snsg)
 
-    Open your browser with the following URL:
-    `http://localhost:3000/dashboards/kitchenSink?startTime=now-90d&snsg={sourceNSG:ovs-17}&EnterpriseName={enterpriseName:test_org}`
+
+    | Name   |  Graph  |     parameters     |
+    |--------|:-------------:|------:|
+    | Top 5 apps          | Vertical Bar Chart   | startTime=now-90d                                                 |
+    | Top 5 apps          | Horizontal Bar Chart | startTime=now-90d                                                 |
+    | Top 5 apps          | Table                | startTime=now-90d                                                 |
+    | Top 5 apps          | Pie Chart            | startTime=now-90d                                                 |
+    | Top 5 apps          | Donut Chart          | startTime=now-90d                                                 |
+    | Flows per domain    | Chord diagram        | startTime=now-90d                                                 |
+    | Flows per domain    | Chord diagram        | startTime=now-90d                                                 |
+    | Effective Score     | Simple text Graph    | startTime=now-90d                                                 |
+    | ACL Hits vs Time    | Line Graph           | startTime=now-90d                                                 |
+    | Multi-line Example  | Line Graph           | startTime=now-90d&enterpriseName=test_org&domainName=chord_domain |
+
+URL Examples:
+-   http://localhost:3000/dashboards/kitchenSink?startTime=now-90d
+-   http://localhost:3000/dashboards/kitchenSink?startTime=now-90d&snsg=ovs-17&enterpriseName=test_org
