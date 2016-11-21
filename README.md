@@ -31,3 +31,17 @@ Here is a list of environment variable that can be set to configure the visualiz
 
     * `REACT_APP_ELASTICSEARACH_HOST` allows you to specify the Elastic Search server (ex: http://localhost:9200)
     * `REACT_APP_VSD_API_ENDPOINT` allows to specify the VSD API endpoint (ex:https://vsd.com:8443/nuage/api/)
+
+
+## kitchenSink
+
+    $ curl http://localhost:9200/_cat/indices?pretty
+    yellow open nuage_event                    5 1 10224000 0 547.5mb 547.5mb
+    yellow open nuage_flow                     5 1 10224000 0   1.3gb   1.3gb
+    yellow open nuage_dpi_flowstats_2016_10_12 5 1  1846654 0 673.3mb 673.3mb
+
+    $ curl localhost:9200/nuage_dpi_flowstats_2016_10_12/_search?pretty
+    > Locate enterpriseName and sourceNSG
+
+    Open your browser with the following URL:
+    `http://localhost:3000/dashboards/kitchenSink?startTime=now-90d&snsg={sourceNSG:ovs-17}&EnterpriseName={enterpriseName:test_org}`
