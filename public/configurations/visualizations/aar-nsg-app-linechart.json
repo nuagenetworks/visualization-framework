@@ -14,6 +14,9 @@
           "color": "#f76159",
           "width": "2px"
         },
+        "tooltip": [
+            { "column": "L7Classification" }
+        ],
         "margin": {
             "top": 15,
             "bottom": 40,
