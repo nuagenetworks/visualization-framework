@@ -5,12 +5,18 @@ import AbstractGraph from "../AbstractGraph";
 import FontAwesome from "react-fontawesome";
 import "./style.css";
 
+import {properties} from "./default.config"
+
 /*
     This graph will present the variation between 2 values:
      - Last value
      - Variation between previous value and last value
 */
 export default class VariationTextGraph extends AbstractGraph {
+
+    constructor(props) {
+        super(props, properties);
+    }
 
     computeValues(data, target) {
         if (!data || !target)
@@ -33,6 +39,14 @@ export default class VariationTextGraph extends AbstractGraph {
             previousValue: previousInfo[target.field],
             variation: variation !== 0 ? variation * 100 / previousInfo[target.field] : 0,
         }
+    }
+
+    numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    decimals(x, nb = 2) {
+        return x.toFixed(nb)
     }
 
     renderValues() {
@@ -75,7 +89,7 @@ export default class VariationTextGraph extends AbstractGraph {
                             marginRight:"3px"
                         }}
                         >
-                        {values.lastValue}
+                        {this.numberWithCommas(values.lastValue)}
                     </span>
                     <span
                         style={{
@@ -84,7 +98,7 @@ export default class VariationTextGraph extends AbstractGraph {
                         }}
                         >
 
-                        {values.variation}%
+                        {this.decimals(values.variation)}%
                         <FontAwesome
                             name={variationIconName}
                             />
