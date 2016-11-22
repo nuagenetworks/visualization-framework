@@ -164,7 +164,7 @@ const fetch = (parameters, state) => {
           api = state.VSD.get(ActionKeyStore.API) || process.env.REACT_APP_VSD_API_ENDPOINT;
 
     if (!api || !token)
-        return Promise.reject("No API endpoint specified");
+        return Promise.reject("No VSD API endpoint specified. To configure the VSD API endpoint, provide the endpoint URL via the environment variable REACT_APP_VSD_API_ENDPOINT at compile time. For a development environment, you can set an invalid value, which will cause the system to provide mock data for testing. For example, you can add the following line to your .bashrc or .profile startup script: 'export REACT_APP_VSD_API_ENDPOINT=http://something.invalid'");
 
     const url = VSDServiceTest.getURL(parameters, api);
     return VSDServiceTest.makeRequest(url, token);
