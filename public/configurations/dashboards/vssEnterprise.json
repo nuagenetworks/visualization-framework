@@ -2,7 +2,7 @@
     "id": "vssEnterprise",
     "author": "Ronak Shah",
     "creationDate": "10/17/2016",
-    "title": "{{EnterpriseName:VSS Enterprise}} Visualization Dashboard",
+    "title": "{{enterpriseName:VSS Enterprise}} Visualization Dashboard",
     "visualizations": [
         { "id": "vss-ent-acldeny-time", "x": 0, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12 },
         { "id": "vss-top-domains-blocked-traffic", "x": 5, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12},
