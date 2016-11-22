@@ -250,7 +250,7 @@ class VisualizationView extends React.Component {
     shouldShowTitleBar() {
         const { configuration } = this.props;
 
-        return configuration && this.currentTitle() && this.state.parameterizable;
+        return configuration && this.currentTitle() && this.state.parameterizable && configuration.get("showTitleBar") !== false;
     }
 
     currentTitle() {

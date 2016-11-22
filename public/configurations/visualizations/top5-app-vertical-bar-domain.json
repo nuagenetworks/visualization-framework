@@ -18,6 +18,10 @@
             "left": 80,
             "right": 20
         },
+        "tooltip": [
+            { "column": "Application", "label": "Application" },
+            { "column": "SumofBytes", "label": "Total Bytes", "format": ",.2s"}
+        ],
         "xLabel": "Application",
         "yLabel": "Total Bytes",
         "yTickFormat": ".2s",

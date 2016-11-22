@@ -5,6 +5,10 @@
     "author": "Ronak Shah",
     "creationDate": "10/26/2016",
     "data": {
+        "tooltip": [
+            { "column": "APMGroup", "label": "APMGroup" },
+            { "column": "Sum of MB", "label": "Total Bytes(MB)", "format": ",.2f"}
+        ],
         "sliceColumn": "Sum of MB",
         "labelColumn": "APMGroup",
         "colorColumn": "APMGroup"

@@ -14,7 +14,7 @@ export default class SimpleTextGraph extends AbstractGraph {
     constructor(props) {
         super(props, properties);
     }
-    
+
     currentTitle() {
         const {
             configuration,
@@ -107,6 +107,5 @@ export default class SimpleTextGraph extends AbstractGraph {
 }
 
 SimpleTextGraph.propTypes = {
-  configuration: React.PropTypes.object,
-  data: React.PropTypes.object
+  configuration: React.PropTypes.object
 };

@@ -47,6 +47,11 @@ export class FiltersToolBarView extends React.Component {
                                         [configOptions.get("parameter")]: option.get("value")
                                     });
 
+                                    let forceOptions = option.get("forceOptions");
+
+                                    if (forceOptions)
+                                        queryParams = Object.assign({}, queryParams, forceOptions.toJS());
+
                                     return (
                                         <MenuItem
                                             key={index}

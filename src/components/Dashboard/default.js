@@ -6,15 +6,24 @@ export const defaultFilterOptions = {
             {
                 "label": "Last 15 min",
                 "value": "now-15m",
+                "forceOptions": {
+                    "interval": "1m"
+                }
             },
             {
                 "label": "Last 24h",
                 "value": "now-24h",
-                "default": true
+                "default": true,
+                "forceOptions": {
+                    "interval": "1h"
+                }
             },
             {
                 "label": "Last 7 days",
-                "value": "now-7d"
+                "value": "now-7d",
+                "forceOptions": {
+                    "interval": "12h"
+                }
             }
         ]
     },
