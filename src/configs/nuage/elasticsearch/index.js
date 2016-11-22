@@ -22,8 +22,9 @@ export const getCurrentConfig = function (state) {
 let ESClient = function (state) {
     var config = getCurrentConfig(state);
 
-    if (!config.host)
-        return;
+    if (!config.host){
+        throw new Error("The ElasticSearch host is not configured. You can configure the ElasticSearch host by setting the environment variable REACT_APP_ELASTICSEARCH_HOST at compile time. For development with a local ElasticSearch instance running on the default port, you can put the following in your .bashrc or .profile startup script: 'export REACT_APP_ELASTICSEARCH_HOST=http://localhost:9200'");
+    }
 
     return new elasticsearch.Client(config);
 }
