@@ -1,0 +1,31 @@
+{
+    "id": "number-of-npms",
+    "title": "NPMs",
+    "query": "number-of-npms",
+    "graph": "SimpleTextGraph",
+    "showTitleBar": false,
+    "data": {
+        "borderRadius": "0",
+        "titlePosition": "bottom",
+        "textAlign": "center",
+        "margin": {
+            "top": "10px",
+            "bottom": "0",
+            "left": "auto",
+            "right": "auto"
+        },
+        "padding": {
+            "top": "0",
+            "bottom": "0",
+            "left": "5px",
+            "right": "5px"
+        },
+        "fontSize": "4em",
+        "fontColor": "#6b6b6b",
+        "innerWidth": 1,
+        "innerHeight": 0.6,
+        "colors": [
+            "#ffffff"
+        ]
+    }
+}
