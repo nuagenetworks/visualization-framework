@@ -1,0 +1,10 @@
+{
+    "id":"number-of-performance-monitors",
+    "title":"Performance Monitors",
+    "service":"VSD",
+    "query":{
+        "parentResource":"enterprises",
+        "parentID":"{{enterpriseID}}",
+        "resource":"performancemonitors"
+    }
+}
