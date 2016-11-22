@@ -14,7 +14,7 @@ let config = function () {
 export const getCurrentConfig = function (state) {
     let currentConfig = config()
 
-    currentConfig.host = state.ES.get(ActionKeyStore.ES_HOST) || process.env.REACT_APP_ELASTICSEARACH_HOST;
+    currentConfig.host = state.ES.get(ActionKeyStore.ES_HOST) || process.env.REACT_APP_ELASTICSEARCH_HOST;
 
     return currentConfig;
 }
