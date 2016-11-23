@@ -18,19 +18,24 @@ export default class ChordGraph extends AbstractGraph {
         this.chordDiagram = ChordDiagram(this.svg);
         this.updateChord(this.props);
 
-        this.hoveredDatum = {
-            SumOf: 3400
+        // This function is invoked to produce the content of a tooltip.
+        // Override the implementation in AbstractGraph to work with Chord data structure.
+        this.getTooltipContent = () => {
+            if(this.hoveredDatum) {
+                return (
+                    <pre>
+                        { JSON.stringify(this.hoveredDatum, null, 2) }
+                    </pre>
+                );
+            } else {
+                return null;
+            }
         }
 
         this.chordDiagram.onChordHover((d) => {
-            console.log(d);
-        });
-
-        setTimeout(() => {
+            this.hoveredDatum = d;
             ReactTooltip.show(this.tooltipDiv)
-            console.log("should show tooltip");
-            console.log(this.tooltipDiv);
-        }, 1000)
+        });
     }
 
     componentWillReceiveProps(nextProps) {
