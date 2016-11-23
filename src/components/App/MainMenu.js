@@ -72,7 +72,7 @@ class MainMenuView extends React.Component {
         if (!domains || domains.length === 0)
             return;
 
-        const targetedDashboard = visualizationType === "VSS" ? "vssDomainACL" : "aarDomain";
+        const targetedDashboard = visualizationType === "VSS" ? "vssDomainFlow" : "aarDomain";
 
         return (
             <div>
@@ -104,7 +104,7 @@ class MainMenuView extends React.Component {
         if (!l2Domains || l2Domains.length === 0)
             return;
 
-        const targetedDashboard = visualizationType === "VSS" ? "vssL2DomainACL" : "aarL2Domain";
+        const targetedDashboard = visualizationType === "VSS" ? "vssL2DomainFlow" : "aarL2Domain";
 
         return (
             <div>
