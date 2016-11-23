@@ -62,6 +62,13 @@ class MainMenuView extends React.Component {
         });
     }
 
+    cleanupContext(context) {
+        delete context["domainName"];
+        delete context["l2domainName"];
+        delete context["snsg"];
+        delete context["dnsg"];
+    }
+
     renderDomainsMenu() {
         const {
             context,
@@ -74,16 +81,22 @@ class MainMenuView extends React.Component {
 
         const targetedDashboard = visualizationType === "VSS" ? "vssDomainACL" : "aarDomain";
 
+        this.cleanupContext(context);
+
         return (
             <div>
                 {domains.map((domain) => {
+
+
+                    let queryParams = Object.assign({}, context, {domainName: domain.name});
+
                     return (
                         <ListItem
                             key={domain.ID}
                             primaryText={domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, context)}}
+                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, queryParams)}}
                             leftIcon={
                                 <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-domain.png"} alt="D" />
                             }
@@ -106,16 +119,21 @@ class MainMenuView extends React.Component {
 
         const targetedDashboard = visualizationType === "VSS" ? "vssL2DomainACL" : "aarL2Domain";
 
+        this.cleanupContext(context);
+
         return (
             <div>
                 {l2Domains.map((l2Domain) => {
+
+                    let queryParams = Object.assign({}, context, {l2domainName: l2Domain.name});
+
                     return (
                         <ListItem
                             key={l2Domain.ID}
                             primaryText={l2Domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, context)}}
+                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, queryParams)}}
                             leftIcon={
                                 <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-l2domain.png"} alt="L2D" />
                             }
@@ -135,9 +153,14 @@ class MainMenuView extends React.Component {
         if (!nsgs || nsgs.length === 0)
             return;
 
+        this.cleanupContext(context);
+
         return (
             <div>
                 {nsgs.map((nsg) => {
+
+                    let queryParams = Object.assign({}, context, {snsg: nsg.name, dnsg: nsg.name});
+
                     return (
                         <ListItem
                             key={nsg.ID}
@@ -146,7 +169,7 @@ class MainMenuView extends React.Component {
                             innerDivStyle={style.innerNestedItem}
                             initiallyOpen={true}
                             open={true}
-                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/aarNSG", context)}}
+                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/aarNSG", queryParams)}}
                             leftIcon={
                                 <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-nsgateway.png"} alt="N" />
                             }
