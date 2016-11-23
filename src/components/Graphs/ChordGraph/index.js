@@ -34,29 +34,20 @@ export default class ChordGraph extends AbstractGraph {
                     <div>
                         <div>
                             <strong>{`${destination} to ${source}:`}</strong>
-                            <span>{sourceValue}</span>
+                            <span> {sourceValue}</span>
                         </div>
                         <div>
                             <strong>{`${source} to ${destination}:`}</strong>
-                            <span>{destinationValue}</span>
+                            <span> {destinationValue}</span>
                         </div>
                     </div>
                 );
             } else {
-                return null;
+                return <div>Hover over a chord to see flow details.</div>;
             }
         }
 
-        this.chordDiagram.onChordHover((d) => {
-            this.hoveredDatum = d;
-            //const element = this.svg.node();
-            //if(d){
-            //    this.hoveredDatum = d;
-            //    ReactTooltip.show(element);
-            //} else {
-            //    ReactTooltip.hide(element);
-            //}
-        });
+        this.chordDiagram.onChordHover((d) => this.hoveredDatum = d );
     }
 
     componentWillReceiveProps(nextProps) {
