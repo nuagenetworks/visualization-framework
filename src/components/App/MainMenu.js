@@ -36,8 +36,9 @@ class MainMenuView extends React.Component {
     initialize() {
 
         const {
+            context,
             fetchDomainsIfNeeded,
-            fetchEnterprisesIfNeeded,
+            fetchEnterpriseIfNeeded,
             fetchL2DomainsIfNeeded,
             fetchNSGsIfNeeded,
             licenses,
@@ -47,7 +48,7 @@ class MainMenuView extends React.Component {
         if (!licenses || !licenses.length)
             return;
 
-        fetchEnterprisesIfNeeded().then((enterprises) => {
+        fetchEnterpriseIfNeeded(context.enterpriseID).then((enterprises) => {
             if (!enterprises)
                 return;
 
@@ -231,11 +232,11 @@ const mapStateToProps = (state) => {
         context: state.interface.get(ComponentActionKeyStore.CONTEXT),
         visualizationType: state.interface.get(ComponentActionKeyStore.VISUALIZATION_TYPE),
         open: state.interface.get(ComponentActionKeyStore.MAIN_MENU_OPENED),
-        enterprises: state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises", ServiceActionKeyStore.RESULTS]),
         licenses: state.services.getIn([ServiceActionKeyStore.REQUESTS, ServiceManager.getRequestID(queryConfiguration), ServiceActionKeyStore.RESULTS]) || [],
     };
 
     if (props.context && props.context.enterpriseID) {
+        props.enterprises = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID, ServiceActionKeyStore.RESULTS]);
         props.domains = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/domains", ServiceActionKeyStore.RESULTS]);
         props.l2Domains = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/l2domains", ServiceActionKeyStore.RESULTS]);
 
@@ -260,11 +261,12 @@ const actionCreators = (dispatch) => ({
         dispatch(push({pathname:link, query:filters}));
     },
 
-    fetchEnterprisesIfNeeded: () => {
+    fetchEnterpriseIfNeeded: (enterpriseID) => {
       let configuration = {
           service: "VSD",
           query: {
               parentResource: "enterprises",
+              parentID: enterpriseID
           }
       }
       return dispatch(ServiceActions.fetchIfNeeded(configuration));
