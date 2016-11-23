@@ -78,7 +78,7 @@
                                                 "timestamp": {
                                                     "date_histogram": {
                                                         "field": "timestamp",
-                                                        "interval": "1h"
+                                                        "interval": "{{interval:1h}}"
                                                     },
                                                     "aggs": {
                                                         "SumOf": {
