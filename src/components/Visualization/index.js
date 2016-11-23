@@ -150,7 +150,7 @@ class VisualizationView extends React.Component {
                             queryParams = Object.assign({}, this.props.context, queryParams);
 
                             // Perform the navigation via react-router.
-                            this.props.goTo(redirect, queryParams);
+                            this.props.goTo(process.env.PUBLIC_URL + redirect, queryParams);
                         };
 
                         return listeners;
