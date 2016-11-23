@@ -21,16 +21,10 @@ export default class ChordGraph extends AbstractGraph {
 
         const { tooltip } = this.getConfiguredProperties();
 
-        const accessor = (
+        const { accessor, label } = (
             (tooltip && tooltip.length === 1)
-            ? columnAccessor(tooltip[0])
-            : (d) => d.value
-        );
-
-        const label = (
-            (tooltip && tooltip.length === 1)
-            ? tooltip[0].label
-            : undefined
+            ? { accessor: columnAccessor(tooltip[0]), label: tooltip[0].label }
+            : { accessor: (d) => d.value, label: undefined }
         );
 
         // This function is invoked to produce the content of a tooltip.
