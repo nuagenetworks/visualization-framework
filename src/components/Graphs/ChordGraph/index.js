@@ -22,10 +22,25 @@ export default class ChordGraph extends AbstractGraph {
         // Override the implementation in AbstractGraph to work with Chord data structure.
         this.getTooltipContent = () => {
             if(this.hoveredDatum) {
+
+                const {
+                    source,
+                    destination,
+                    sourceValue,
+                    destinationValue
+                } = this.hoveredDatum;
+
                 return (
-                    <pre>
-                        { JSON.stringify(this.hoveredDatum, null, 2) }
-                    </pre>
+                    <div>
+                        <div>
+                            <strong>{`${source} to ${destination}:`}</strong>
+                            <span>{destinationValue}</span>
+                        </div>
+                        <div>
+                            <strong>{`${destination} to ${source}:`}</strong>
+                            <span>{sourceValue}</span>
+                        </div>
+                    </div>
                 );
             } else {
                 return null;
@@ -33,8 +48,12 @@ export default class ChordGraph extends AbstractGraph {
         }
 
         this.chordDiagram.onChordHover((d) => {
-            this.hoveredDatum = d;
-            ReactTooltip.show(this.tooltipDiv)
+            if(d){
+                this.hoveredDatum = d;
+                ReactTooltip.show(this.tooltipDiv);
+            } else {
+                ReactTooltip.hide(this.tooltipDiv);
+            }
         });
     }
 
