@@ -62,7 +62,7 @@ export default class AbstractGraph extends React.Component {
                     place="top"
                     type="dark"
                     effect="float"
-                    getContent={() => this.getTooltipContent() }
+                    getContent={[() => this.getTooltipContent(), 200]}
                 />
             );
 

@@ -33,12 +33,12 @@ export default class ChordGraph extends AbstractGraph {
                 return (
                     <div>
                         <div>
-                            <strong>{`${source} to ${destination}:`}</strong>
-                            <span>{destinationValue}</span>
-                        </div>
-                        <div>
                             <strong>{`${destination} to ${source}:`}</strong>
                             <span>{sourceValue}</span>
+                        </div>
+                        <div>
+                            <strong>{`${source} to ${destination}:`}</strong>
+                            <span>{destinationValue}</span>
                         </div>
                     </div>
                 );
@@ -48,12 +48,14 @@ export default class ChordGraph extends AbstractGraph {
         }
 
         this.chordDiagram.onChordHover((d) => {
-            if(d){
-                this.hoveredDatum = d;
-                ReactTooltip.show(this.tooltipDiv);
-            } else {
-                ReactTooltip.hide(this.tooltipDiv);
-            }
+            this.hoveredDatum = d;
+            //const element = this.svg.node();
+            //if(d){
+            //    this.hoveredDatum = d;
+            //    ReactTooltip.show(element);
+            //} else {
+            //    ReactTooltip.hide(element);
+            //}
         });
     }
 
@@ -133,11 +135,8 @@ export default class ChordGraph extends AbstractGraph {
                   width={ width }
                   height={ height }
                   ref={(svg) => this.svg = d3.select(svg)}
-                />
-                <div
                   data-tip
                   data-for={ this.tooltipId }
-                  ref={(div) => this.tooltipDiv = div}
                 />
             </div>
         );
