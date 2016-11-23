@@ -1,6 +1,7 @@
 import React from "react";
 
 import AbstractGraph from "../AbstractGraph";
+import ReactTooltip from "react-tooltip";
 
 import * as d3 from "d3";
 
@@ -16,6 +17,16 @@ export default class ChordGraph extends AbstractGraph {
     componentDidMount() {
         this.chordDiagram = ChordDiagram(this.svg);
         this.updateChord(this.props);
+
+        this.hoveredDatum = {
+            SumOf: 3400
+        }
+
+        setTimeout(() => {
+            ReactTooltip.show(this.tooltipDiv)
+            console.log("should show tooltip");
+            console.log(this.tooltipDiv);
+        }, 1000)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -89,10 +100,16 @@ export default class ChordGraph extends AbstractGraph {
 
         return (
             <div className="pie-graph">
+                {this.tooltip}
                 <svg
                   width={ width }
                   height={ height }
                   ref={(svg) => this.svg = d3.select(svg)}
+                />
+                <div
+                  data-tip
+                  data-for={ this.tooltipId }
+                  ref={(div) => this.tooltipDiv = div}
                 />
             </div>
         );
