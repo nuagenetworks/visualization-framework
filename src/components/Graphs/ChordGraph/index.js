@@ -22,6 +22,10 @@ export default class ChordGraph extends AbstractGraph {
             SumOf: 3400
         }
 
+        this.chordDiagram.onChordHover((d) => {
+            console.log(d);
+        });
+
         setTimeout(() => {
             ReactTooltip.show(this.tooltipDiv)
             console.log("should show tooltip");
@@ -142,7 +146,8 @@ function ChordDiagram(svg){
       selectedRibbon = null,
       hoveredChordGroup = null,
       data = null,
-      onSelectedRibbonChangeCallback = null;
+      onSelectedRibbonChangeCallback = null,
+      onChordHover = null;
 
   // These "column" variables represent keys in the row objects of the input table.
   var chordWeightColumn,
@@ -247,14 +252,26 @@ function ChordDiagram(svg){
         .style("cursor", onSelectedRibbonChangeCallback ? "pointer" : "")
         .call(setRibbonOpacity)
         .on("mousedown", function (d){
-          my.selectedRibbon({
-            sourceIndex: d.source.index,
-            targetIndex: d.target.index,
-            source: matrix.names[d.source.index],
-            destination: matrix.names[d.target.index]
-          });
+          my.selectedRibbon(ribbonData(d));
         })
+        .on("mouseover", function (d){
+          if(onChordHover) onChordHover(ribbonData(d));
+        })
+        .on("mouseout", function (d){
+          if(onChordHover) onChordHover(null);
+        });
       ribbons.exit().remove();
+
+      function ribbonData(d) {
+        return {
+          sourceIndex: d.source.index,
+          targetIndex: d.target.index,
+          source: matrix.names[d.source.index],
+          destination: matrix.names[d.target.index],
+          sourceValue: d.source.value,
+          destinationValue: d.target.value
+        };
+      }
 
       // Scaffold the chord groups.
       var chordGroups = chordGroupsG.selectAll("g").data(chords.groups);
@@ -491,6 +508,11 @@ function ChordDiagram(svg){
 
   // The array of colors used for the color scale of the chord groups.
   my.colors = (_) => arguments.length ? (colors = _, my) : my;
+
+  // A callback invoked when hovering over a chord.
+  // On mouseover, an object representing the hovered chord is passed.
+  // On mouseout, null is passed to the callback.
+  my.onChordHover = (_) => arguments.length ? (onChordHover = _, my) : my;
 
   return my;
 }
