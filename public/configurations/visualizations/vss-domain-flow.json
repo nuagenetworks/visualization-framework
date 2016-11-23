@@ -9,7 +9,10 @@
         "chordWeightColumn": "SumOf",
         "chordSourceColumn": "spg",
         "chordDestinationColumn": "dpg",
-        "colorColumn": "spg"
+        "colorColumn": "spg",
+        "tooltip": [
+            { "column": "value", "format": ",", "label": "MB"}
+        ]
     },
     "listeners": [{
       "params": {

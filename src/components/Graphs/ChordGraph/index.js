@@ -1,6 +1,8 @@
 import React from "react";
 
 import AbstractGraph from "../AbstractGraph";
+import ReactTooltip from "react-tooltip";
+import columnAccessor from "../../../utils/columnAccessor";
 
 import * as d3 from "d3";
 
@@ -16,6 +18,47 @@ export default class ChordGraph extends AbstractGraph {
     componentDidMount() {
         this.chordDiagram = ChordDiagram(this.svg);
         this.updateChord(this.props);
+
+        const { tooltip } = this.getConfiguredProperties();
+
+        const { accessor, label } = (
+            (tooltip && tooltip.length === 1)
+            ? { accessor: columnAccessor(tooltip[0]), label: tooltip[0].label }
+            : { accessor: (d) => d.value, label: undefined }
+        );
+
+        // This function is invoked to produce the content of a tooltip.
+        // Override the implementation in AbstractGraph to work with Chord data structure.
+        this.getTooltipContent = () => {
+            if(this.hoveredDatum) {
+
+                const {
+                    source,
+                    destination,
+                    sourceValue,
+                    destinationValue
+                } = this.hoveredDatum;
+
+                return (
+                    <div>
+                        <div>
+                            <strong>{`${destination} to ${source}:`}</strong>
+                            <span> {accessor({ value: sourceValue})}</span>
+                            { label ? <span> {label}</span>:null }
+                        </div>
+                        <div>
+                            <strong>{`${source} to ${destination}:`}</strong>
+                            <span> {accessor({ value: destinationValue})}</span>
+                            { label ? <span> {label}</span>:null }
+                        </div>
+                    </div>
+                );
+            } else {
+                return <div>Hover over a chord to see flow details.</div>;
+            }
+        }
+
+        this.chordDiagram.onChordHover((d) => this.hoveredDatum = d );
     }
 
     componentWillReceiveProps(nextProps) {
@@ -89,10 +132,13 @@ export default class ChordGraph extends AbstractGraph {
 
         return (
             <div className="pie-graph">
+                {this.tooltip}
                 <svg
                   width={ width }
                   height={ height }
                   ref={(svg) => this.svg = d3.select(svg)}
+                  data-tip
+                  data-for={ this.tooltipId }
                 />
             </div>
         );
@@ -125,7 +171,8 @@ function ChordDiagram(svg){
       selectedRibbon = null,
       hoveredChordGroup = null,
       data = null,
-      onSelectedRibbonChangeCallback = null;
+      onSelectedRibbonChangeCallback = null,
+      onChordHover = null;
 
   // These "column" variables represent keys in the row objects of the input table.
   var chordWeightColumn,
@@ -230,14 +277,26 @@ function ChordDiagram(svg){
         .style("cursor", onSelectedRibbonChangeCallback ? "pointer" : "")
         .call(setRibbonOpacity)
         .on("mousedown", function (d){
-          my.selectedRibbon({
-            sourceIndex: d.source.index,
-            targetIndex: d.target.index,
-            source: matrix.names[d.source.index],
-            destination: matrix.names[d.target.index]
-          });
+          my.selectedRibbon(ribbonData(d));
         })
+        .on("mouseover", function (d){
+          if(onChordHover) onChordHover(ribbonData(d));
+        })
+        .on("mouseout", function (d){
+          if(onChordHover) onChordHover(null);
+        });
       ribbons.exit().remove();
+
+      function ribbonData(d) {
+        return {
+          sourceIndex: d.source.index,
+          targetIndex: d.target.index,
+          source: matrix.names[d.source.index],
+          destination: matrix.names[d.target.index],
+          sourceValue: d.source.value,
+          destinationValue: d.target.value
+        };
+      }
 
       // Scaffold the chord groups.
       var chordGroups = chordGroupsG.selectAll("g").data(chords.groups);
@@ -474,6 +533,11 @@ function ChordDiagram(svg){
 
   // The array of colors used for the color scale of the chord groups.
   my.colors = (_) => arguments.length ? (colors = _, my) : my;
+
+  // A callback invoked when hovering over a chord.
+  // On mouseover, an object representing the hovered chord is passed.
+  // On mouseout, null is passed to the callback.
+  my.onChordHover = (_) => arguments.length ? (onChordHover = _, my) : my;
 
   return my;
 }

@@ -52,6 +52,9 @@ export default class AbstractGraph extends React.Component {
             // otherwise there are overlapping tooltips.
             const tooltipId = Math.random();
 
+            // Expose tooltipId in case subclasses need it.
+            this.tooltipId = tooltipId;
+
             // This JSX object can be used by subclasses to enable tooltips.
             this.tooltip = (
                 <ReactTooltip
@@ -59,7 +62,7 @@ export default class AbstractGraph extends React.Component {
                     place="top"
                     type="dark"
                     effect="float"
-                    getContent={this.getTooltipContent.bind(this)}
+                    getContent={[() => this.getTooltipContent(), 200]}
                 />
             );
 
