@@ -83,16 +83,6 @@ const getMockResponse = (requestID) => {
 
     if (nbParams === 1) {
         switch (requestID) {
-            case "licenses":
-                return [
-                    {
-                        "ID": "83cee4da-6507-484e-8d5b-11d44c4a852e",
-                        "lastUpdatedBy":"3321e4da-6507-484e-8d5b-11d44c4a852e",
-                        "provider":"Nuage Networks",
-                        "city":"Mountain View",
-                    }
-                ];
-
             case "enterprises":
                 return [
                     {

@@ -41,11 +41,11 @@ class MainMenuView extends React.Component {
             fetchEnterpriseIfNeeded,
             fetchL2DomainsIfNeeded,
             fetchNSGsIfNeeded,
-            licenses,
+            isConnected,
             visualizationType
         } = this.props;
 
-        if (!licenses || !licenses.length)
+        if (!isConnected)
             return;
 
         fetchEnterpriseIfNeeded(context.enterpriseID).then((enterprises) => {
@@ -247,7 +247,7 @@ const mapStateToProps = (state) => {
     const queryConfiguration = {
         service: "VSD",
         query: {
-            parentResource: "licenses",
+            parentResource: "enterprises",
         }
     };
 
@@ -255,7 +255,7 @@ const mapStateToProps = (state) => {
         context: state.interface.get(ComponentActionKeyStore.CONTEXT),
         visualizationType: state.interface.get(ComponentActionKeyStore.VISUALIZATION_TYPE),
         open: state.interface.get(ComponentActionKeyStore.MAIN_MENU_OPENED),
-        licenses: state.services.getIn([ServiceActionKeyStore.REQUESTS, ServiceManager.getRequestID(queryConfiguration), ServiceActionKeyStore.RESULTS]) || [],
+        isConnected: state.services.getIn([ServiceActionKeyStore.REQUESTS, ServiceManager.getRequestID(queryConfiguration), ServiceActionKeyStore.RESULTS]),
     };
 
     if (props.context && props.context.enterpriseID) {
