@@ -27,6 +27,12 @@ export default class ChordGraph extends AbstractGraph {
             : (d) => d.value
         );
 
+        const label = (
+            (tooltip && tooltip.length === 1)
+            ? tooltip[0].label
+            : undefined
+        );
+
         // This function is invoked to produce the content of a tooltip.
         // Override the implementation in AbstractGraph to work with Chord data structure.
         this.getTooltipContent = () => {
@@ -44,10 +50,12 @@ export default class ChordGraph extends AbstractGraph {
                         <div>
                             <strong>{`${destination} to ${source}:`}</strong>
                             <span> {accessor({ value: sourceValue})}</span>
+                            { label ? <span> {label}</span>:null }
                         </div>
                         <div>
                             <strong>{`${source} to ${destination}:`}</strong>
                             <span> {accessor({ value: destinationValue})}</span>
+                            { label ? <span> {label}</span>:null }
                         </div>
                     </div>
                 );
