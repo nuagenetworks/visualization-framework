@@ -110,10 +110,12 @@ export class DashboardView extends React.Component {
                 <ul className="list-inline" style={style.linksList}>
                     {links.map((link, index) => {
 
+                        let targetURL = process.env.PUBLIC_URL + link.get("url");
+
                         return <li key={index}
                                    style={style.link}
                                    >
-                                    <Link to={{ pathname:link.get("url"), query:location.query }}>
+                                    <Link to={{ pathname:targetURL, query:location.query }}>
                                         {link.get("label")}
                                     </Link>
                                </li>;
