@@ -127,8 +127,7 @@ class VisualizationView extends React.Component {
                             // By default, use the "onMarkClick" event.
                             event = "onMarkClick",
 
-                            // By default, stay on the current route.
-                            redirect = window.location.pathname,
+                            redirect,
 
                             // By default, specify no additional query params.
                             params = {}
@@ -149,8 +148,16 @@ class VisualizationView extends React.Component {
                             // Override the existing context with the new params.
                             queryParams = Object.assign({}, this.props.context, queryParams);
 
+                            let url;
+
+                            // By default, stay on the current route.
+                            if (!redirect)
+                                url = window.location.pathname;
+                            else
+                                url = process.env.PUBLIC_URL + redirect;
+
                             // Perform the navigation via react-router.
-                            this.props.goTo(process.env.PUBLIC_URL + redirect, queryParams);
+                            this.props.goTo(url, queryParams);
                         };
 
                         return listeners;
