@@ -2,6 +2,7 @@
     "id": "aar-domain-probe-table-dest-to-src",
     "graph": "Table",
     "title": "{{dnsg}} to {{snsg}} Probe Detail",
+    "description": "Domain level local NSG (destination) to remote NSG (sources) Path Performance Measurements. Computation: Order by time in descending order.",
     "author": "Ronak Shah",
     "creationDate": "11/02/2016",
     "data": {

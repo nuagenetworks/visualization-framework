@@ -2,6 +2,7 @@
     "id": "aar-nsg-top5-talkers-upload",
     "graph": "Table",
     "title": "Top 5 talkers (Upload)",
+    "description": "NSG level top 5 users (IP addresses) sending traffic to the network. Computation: Sum of ingress Bytes destined to remote NSGs in descending order.",
     "author": "Ronak Shah",
     "creationDate": "10/26/2016",
     "data": {

@@ -2,6 +2,7 @@
     "id": "top5-app-vertical-bar",
     "graph": "BarGraph",
     "title": "Top 5 Apps",
+    "description": "Enterprise level top 5 discovered applications. Computation: Sum of total Bytes sent and/or received in descending order.",
     "author": "Curran Kelleher",
     "creationDate": "10/13/2016",
     "data": {
