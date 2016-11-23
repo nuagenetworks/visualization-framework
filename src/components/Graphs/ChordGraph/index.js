@@ -2,6 +2,7 @@ import React from "react";
 
 import AbstractGraph from "../AbstractGraph";
 import ReactTooltip from "react-tooltip";
+import columnAccessor from "../../../utils/columnAccessor";
 
 import * as d3 from "d3";
 
@@ -17,6 +18,14 @@ export default class ChordGraph extends AbstractGraph {
     componentDidMount() {
         this.chordDiagram = ChordDiagram(this.svg);
         this.updateChord(this.props);
+
+        const { tooltip } = this.getConfiguredProperties();
+
+        const accessor = (
+            (tooltip && tooltip.length === 1)
+            ? columnAccessor(tooltip[0])
+            : (d) => d.value
+        );
 
         // This function is invoked to produce the content of a tooltip.
         // Override the implementation in AbstractGraph to work with Chord data structure.
@@ -34,11 +43,11 @@ export default class ChordGraph extends AbstractGraph {
                     <div>
                         <div>
                             <strong>{`${destination} to ${source}:`}</strong>
-                            <span> {sourceValue}</span>
+                            <span> {accessor({ value: sourceValue})}</span>
                         </div>
                         <div>
                             <strong>{`${source} to ${destination}:`}</strong>
-                            <span> {destinationValue}</span>
+                            <span> {accessor({ value: destinationValue})}</span>
                         </div>
                     </div>
                 );

@@ -11,7 +11,7 @@
         "chordDestinationColumn": "dpg",
         "colorColumn": "spg",
         "tooltip": [
-            { "column": "SumOf", "format": ",.2s", "label": "Sum of MB"}
+            { "column": "value", "format": ",", "label": "MB"}
         ]
     },
     "listeners": [{
