@@ -39,27 +39,26 @@ export default class PieGraph extends AbstractGraph {
         const outerRadius = pieOuterRadius * maxRadius;
         const labelRadius = pieLabelRadius * maxRadius;
 
-
-        const value = (d) => d[sliceColumn];
-        const label = (d) => d[labelColumn];
-
-        const pie = d3.pie().value(value);
-
         const arc = d3.arc()
             .innerRadius(innerRadius)
             .outerRadius(outerRadius);
 
-        const slices = pie(data);
-
-        const percentageFormat = d3.format(percentagesFormat || ",.2%");
-        const sum = d3.sum(data, value);
-        const percentage = (d) => percentageFormat(value(d) / sum);
-
-        const labelText = (d) => percentages ? percentage(d) : label(d);
-
         const labelArc = d3.arc()
             .innerRadius(labelRadius)
             .outerRadius(labelRadius);
+
+        const value = (d) => d[sliceColumn];
+        const pie = d3.pie().value(value);
+        const slices = pie(data);
+
+        const labelText = (() => {
+            if(percentages){
+                const percentageFormat = d3.format(percentagesFormat || ",.2%");
+                const sum = d3.sum(data, value);
+                return (d) => percentageFormat(value(d) / sum);
+            }
+            return (d) => d[labelColumn];
+        })();
 
         let defaultStyle = {
             strokeWidth: stroke.width,
