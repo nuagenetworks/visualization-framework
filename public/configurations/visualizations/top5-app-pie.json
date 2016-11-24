@@ -11,7 +11,8 @@
             { "column": "L7Classification", "label": "L7 Classification" },
             { "column": "Sum of MB", "format": ",.1f"}
         ],
-        "percentages": true
+        "percentages": true,
+        "percentagesFormat": ",.1%"
     },
     "listeners": [{
       "redirect": "/dashboards/dateHistogramExample",
