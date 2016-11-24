@@ -46,6 +46,8 @@ export default class PieGraph extends AbstractGraph {
 
         const slices = pie(data);
 
+        const labelText = (d) => d[labelColumn];
+
         const labelArc = d3.arc()
             .innerRadius(labelRadius)
             .outerRadius(labelRadius);
@@ -91,7 +93,7 @@ export default class PieGraph extends AbstractGraph {
                                       style={{cursor}}
                                       { ...this.tooltipProps(d) }
                                     >
-                                        { slice.data[labelColumn] }
+                                        { labelText(slice.data) }
                                     </text>
                                 </g>
                             })
