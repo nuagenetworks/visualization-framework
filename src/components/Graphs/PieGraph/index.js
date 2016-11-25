@@ -94,6 +94,12 @@ export default class PieGraph extends AbstractGraph {
                                     } : { }
                                 );
 
+                                const textAnchor = (
+                                  (pieLabelRadius > pieOuterRadius)
+                                  ? ((slice.startAngle + slice.endAngle) / 2 < Math.PI ? "start" : "end")
+                                  : "middle"
+                                );
+
                                 return <g key={i} >
                                     <path
                                       d={ arc(slice) }
@@ -104,7 +110,7 @@ export default class PieGraph extends AbstractGraph {
                                     />
                                     <text
                                       transform={`translate(${labelArc.centroid(slice)})`}
-                                      textAnchor={(slice.startAngle + slice.endAngle) / 2 < Math.PI ? "start" : "end"}
+                                      textAnchor={ textAnchor }
                                       dy=".35em"
                                       fill={ fontColor }
                                       onClick={ onClick }
