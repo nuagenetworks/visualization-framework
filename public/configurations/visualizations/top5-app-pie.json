@@ -13,8 +13,8 @@
         ],
         "percentages": true,
         "percentagesFormat": ",.1%",
-        "pieLabelRadius": 0.6,
-        "pieOuterRadius": 0.9,
+        "pieLabelRadius": 0.55,
+        "pieOuterRadius": 0.95,
         "colorLegend": true
     },
     "listeners": [{
