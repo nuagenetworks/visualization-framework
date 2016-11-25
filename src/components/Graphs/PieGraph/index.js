@@ -31,7 +31,8 @@ export default class PieGraph extends AbstractGraph {
           stroke,
           fontColor,
           percentages,
-          percentagesFormat
+          percentagesFormat,
+          colorLegend
         } = this.getConfiguredProperties();
 
         const maxRadius = Math.min(width, height) / 2;
