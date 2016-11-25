@@ -49,6 +49,8 @@ export default class PieGraph extends AbstractGraph {
             .outerRadius(labelRadius);
 
         const value = (d) => d[sliceColumn];
+        const label = (d) => d[labelColumn];
+
         const pie = d3.pie().value(value);
         const slices = pie(data);
 
@@ -58,7 +60,7 @@ export default class PieGraph extends AbstractGraph {
                 const sum = d3.sum(data, value);
                 return (d) => percentageFormat(value(d) / sum);
             }
-            return (d) => d[labelColumn];
+            return label;
         })();
 
         let defaultStyle = {
@@ -67,6 +69,8 @@ export default class PieGraph extends AbstractGraph {
         }
 
         const scale = this.scaleColor(data, labelColumn);
+
+        const getColor = (d) => scale ? scale(d[colorColumn || labelColumn]) : null;
 
         return (
             <div className="pie-graph">
@@ -88,7 +92,7 @@ export default class PieGraph extends AbstractGraph {
                                 return <g key={i} >
                                     <path
                                       d={ arc(slice) }
-                                      fill={ scale ? scale(d[colorColumn || labelColumn]) : null }
+                                      fill={ getColor(d) }
                                       onClick={ onClick }
                                       style={ Object.assign({cursor}, defaultStyle) }
                                       { ...this.tooltipProps(d) }
@@ -106,6 +110,21 @@ export default class PieGraph extends AbstractGraph {
                                     </text>
                                 </g>
                             })
+                        }
+                    </g>
+                    <g>
+                        {
+                            data.map((d) => (
+                                <g>
+                                    <circle
+                                        r="10"
+                                        fill={ getColor(d) }
+                                    />
+                                    <text>
+                                        {label(d)}
+                                    </text>
+                                </g>
+                            ))
                         }
                     </g>
                 </svg>
