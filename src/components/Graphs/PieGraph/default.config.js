@@ -19,6 +19,8 @@ export const properties = {
         width: "3px"
     },
     colorLegend: false, // Whether or not to show a color legend.
-    colorLegendHeight: 50, // The height of the color legend area, in pixels.
-    colorLegendSpacing: 100 // The space between items in the color legend.
+    colorLegendHeight: 30, // The height of the color legend area, in pixels.
+    colorLegendSpacing: 85, // The space between items in the color legend.
+    colorLegendCircleSize: 10, // The radius of colored circles in the legend.
+    colorLegendLabelOffsetX: 2 // The text X offset in pixels from the circle.
 }

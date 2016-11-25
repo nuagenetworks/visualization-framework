@@ -34,7 +34,9 @@ export default class PieGraph extends AbstractGraph {
           percentagesFormat,
           colorLegend,
           colorLegendHeight,
-          colorLegendSpacing
+          colorLegendSpacing,
+          colorLegendCircleSize,
+          colorLegendLabelOffsetX
         } = this.getConfiguredProperties();
 
         const innerHeight = height - (colorLegend ? colorLegendHeight : 0);
@@ -116,16 +118,27 @@ export default class PieGraph extends AbstractGraph {
                         }
                     </g>
                     <g>
-                        {data.map((d, i) => {
-                            const x = width / 2;
-                            const y = height - colorLegendHeight;
+                        {colorLegend ? data.map((d, i) => {
+                            const x = width/2 - (data.length * colorLegendSpacing)/2 + (i * colorLegendSpacing);
+                            const y = height - colorLegendHeight / 2;
                             return (
                                 <g transform={ `translate(${x}, ${y})` }>
-                                    <circle r="10" fill={ getColor(d) } />
-                                    <text fill={ fontColor }> {label(d)} </text>
+
+                                    <circle
+                                      r={ colorLegendCircleSize }
+                                      fill={ getColor(d) }
+                                    />
+
+                                    <text
+                                      fill={ fontColor }
+                                      alignmentBaseline="central"
+                                      x={ colorLegendCircleSize + colorLegendLabelOffsetX }
+                                    >
+                                        { label(d) }
+                                    </text>
                                 </g>
                             );
-                        })}
+                        }) : null }
                     </g>
                 </svg>
             </div>
