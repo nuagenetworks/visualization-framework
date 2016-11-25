@@ -32,10 +32,13 @@ export default class PieGraph extends AbstractGraph {
           fontColor,
           percentages,
           percentagesFormat,
-          colorLegend
+          colorLegend,
+          colorLegendHeight,
+          colorLegendSpacing
         } = this.getConfiguredProperties();
 
-        const maxRadius = Math.min(width, height) / 2;
+        const innerHeight = height - (colorLegend ? colorLegendHeight : 0);
+        const maxRadius = Math.min(width, innerHeight) / 2;
         const innerRadius = pieInnerRadius * maxRadius;
         const outerRadius = pieOuterRadius * maxRadius;
         const labelRadius = pieLabelRadius * maxRadius;
@@ -76,7 +79,7 @@ export default class PieGraph extends AbstractGraph {
             <div className="pie-graph">
                 {this.tooltip}
                 <svg width={ width } height={ height }>
-                    <g transform={ `translate(${ width / 2 }, ${ height / 2 })` } >
+                    <g transform={ `translate(${ width / 2 }, ${ innerHeight / 2 })` } >
                         {
                             slices.map((slice, i) => {
                                 const d = slice.data;
@@ -113,19 +116,16 @@ export default class PieGraph extends AbstractGraph {
                         }
                     </g>
                     <g>
-                        {
-                            data.map((d) => (
-                                <g>
-                                    <circle
-                                        r="10"
-                                        fill={ getColor(d) }
-                                    />
-                                    <text>
-                                        {label(d)}
-                                    </text>
+                        {data.map((d, i) => {
+                            const x = width / 2;
+                            const y = height - colorLegendHeight;
+                            return (
+                                <g transform={ `translate(${x}, ${y})` }>
+                                    <circle r="10" fill={ getColor(d) } />
+                                    <text fill={ fontColor }> {label(d)} </text>
                                 </g>
-                            ))
-                        }
+                            );
+                        })}
                     </g>
                 </svg>
             </div>
