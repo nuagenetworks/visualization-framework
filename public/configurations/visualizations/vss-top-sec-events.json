@@ -12,7 +12,12 @@
         "tooltip": [
             { "column": "EventType", "label": "Event" },
             { "column": "SumOf", "label": "Count", "format": ",.1f"}
-        ]
+        ],
+        "percentages": true,
+        "percentagesFormat": ",.1%",
+        "pieLabelRadius": 0.55,
+        "pieOuterRadius": 0.95,
+        "colorLegend": true
     },
     "query": "vss-top-sec-events"
 }
