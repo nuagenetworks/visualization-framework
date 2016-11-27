@@ -31,10 +31,16 @@ export default class PieGraph extends AbstractGraph {
           stroke,
           fontColor,
           percentages,
-          percentagesFormat
+          percentagesFormat,
+          colorLegend,
+          colorLegendHeight,
+          colorLegendSpacing,
+          colorLegendCircleSize,
+          colorLegendLabelOffsetX
         } = this.getConfiguredProperties();
 
-        const maxRadius = Math.min(width, height) / 2;
+        const innerHeight = height - (colorLegend ? colorLegendHeight : 0);
+        const maxRadius = Math.min(width, innerHeight) / 2;
         const innerRadius = pieInnerRadius * maxRadius;
         const outerRadius = pieOuterRadius * maxRadius;
         const labelRadius = pieLabelRadius * maxRadius;
@@ -48,6 +54,8 @@ export default class PieGraph extends AbstractGraph {
             .outerRadius(labelRadius);
 
         const value = (d) => d[sliceColumn];
+        const label = (d) => d[labelColumn];
+
         const pie = d3.pie().value(value);
         const slices = pie(data);
 
@@ -57,7 +65,7 @@ export default class PieGraph extends AbstractGraph {
                 const sum = d3.sum(data, value);
                 return (d) => percentageFormat(value(d) / sum);
             }
-            return (d) => d[labelColumn];
+            return label;
         })();
 
         let defaultStyle = {
@@ -67,11 +75,13 @@ export default class PieGraph extends AbstractGraph {
 
         const scale = this.scaleColor(data, labelColumn);
 
+        const getColor = (d) => scale ? scale(d[colorColumn || labelColumn]) : null;
+
         return (
             <div className="pie-graph">
                 {this.tooltip}
                 <svg width={ width } height={ height }>
-                    <g transform={ `translate(${ width / 2 }, ${ height / 2 })` } >
+                    <g transform={ `translate(${ width / 2 }, ${ innerHeight / 2 })` } >
                         {
                             slices.map((slice, i) => {
                                 const d = slice.data;
@@ -84,17 +94,23 @@ export default class PieGraph extends AbstractGraph {
                                     } : { }
                                 );
 
+                                const textAnchor = (
+                                  (pieLabelRadius > pieOuterRadius)
+                                  ? ((slice.startAngle + slice.endAngle) / 2 < Math.PI ? "start" : "end")
+                                  : "middle"
+                                );
+
                                 return <g key={i} >
                                     <path
                                       d={ arc(slice) }
-                                      fill={ scale ? scale(d[colorColumn || labelColumn]) : null }
+                                      fill={ getColor(d) }
                                       onClick={ onClick }
                                       style={ Object.assign({cursor}, defaultStyle) }
                                       { ...this.tooltipProps(d) }
                                     />
                                     <text
                                       transform={`translate(${labelArc.centroid(slice)})`}
-                                      textAnchor={(slice.startAngle + slice.endAngle) / 2 < Math.PI ? "start" : "end"}
+                                      textAnchor={ textAnchor }
                                       dy=".35em"
                                       fill={ fontColor }
                                       onClick={ onClick }
@@ -106,6 +122,29 @@ export default class PieGraph extends AbstractGraph {
                                 </g>
                             })
                         }
+                    </g>
+                    <g>
+                        {colorLegend ? data.map((d, i) => {
+                            const x = width/2 - (data.length * colorLegendSpacing)/2 + (i * colorLegendSpacing);
+                            const y = height - colorLegendHeight / 2;
+                            return (
+                                <g transform={ `translate(${x}, ${y})` }>
+
+                                    <circle
+                                      r={ colorLegendCircleSize }
+                                      fill={ getColor(d) }
+                                    />
+
+                                    <text
+                                      fill={ fontColor }
+                                      alignmentBaseline="central"
+                                      x={ colorLegendCircleSize + colorLegendLabelOffsetX }
+                                    >
+                                        { label(d) }
+                                    </text>
+                                </g>
+                            );
+                        }) : null }
                     </g>
                 </svg>
             </div>

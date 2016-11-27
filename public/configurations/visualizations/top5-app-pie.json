@@ -12,7 +12,10 @@
             { "column": "Sum of MB", "format": ",.1f"}
         ],
         "percentages": true,
-        "percentagesFormat": ",.1%"
+        "percentagesFormat": ",.1%",
+        "pieLabelRadius": 0.55,
+        "pieOuterRadius": 0.95,
+        "colorLegend": true
     },
     "listeners": [{
       "redirect": "/dashboards/dateHistogramExample",
