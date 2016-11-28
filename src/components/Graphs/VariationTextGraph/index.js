@@ -18,6 +18,24 @@ export default class VariationTextGraph extends AbstractGraph {
         super(props, properties);
     }
 
+    currentTitle() {
+        const {
+            configuration,
+        } = this.props;
+
+        if (configuration && configuration.title)
+            return configuration.title;
+
+        return "Untitled";
+    }
+
+    renderTitleIfNeeded(requestedPosition, currentPosition) {
+        if (requestedPosition !== currentPosition)
+            return;
+
+        return this.currentTitle();
+    }
+
     computeValues(data, target) {
         if (!data || !target)
             return;
@@ -111,12 +129,13 @@ export default class VariationTextGraph extends AbstractGraph {
     render() {
         const {
             onMarkClick,
-            data,
+            data
         } = this.props;
 
         const {
           margin,
           textAlign,
+          titlePosition
         } = this.getConfiguredProperties();
 
         if (!data || !data.length)
@@ -125,6 +144,7 @@ export default class VariationTextGraph extends AbstractGraph {
         const cursor = onMarkClick ? "pointer" : undefined
 
         return (
+
                 <div
                     style={{
                         margin: [margin.top, margin.right, margin.bottom, margin.left].join(" "),
@@ -134,7 +154,12 @@ export default class VariationTextGraph extends AbstractGraph {
                     }}
                     onClick={onMarkClick}
                     >
-                        {this.renderValues()}
+
+                    {this.renderTitleIfNeeded(titlePosition, "top")}
+
+                    {this.renderValues()}
+
+                    {this.renderTitleIfNeeded(titlePosition, "bottom")}
                 </div>
         );
 

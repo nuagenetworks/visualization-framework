@@ -318,12 +318,18 @@ class VisualizationView extends React.Component {
     }
 
     render() {
-        if (!this.state.parameterizable)
+        if (!this.state.parameterizable || !this.props.configuration)
             return (<div></div>);
+
+        const {
+            configuration
+        } = this.props;
+
+        var configStyle = configuration.get("styles") ? configuration.get("styles").toJS() : {};
 
         return (
             <Card
-              style={style.card}
+              style={Object.assign({}, style.card, configStyle.card)}
               containerStyle={style.cardContainer}
               ref={this.cardTextReference}
             >
