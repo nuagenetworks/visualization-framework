@@ -2,7 +2,7 @@
     "id": "vssEnterprise",
     "author": "Ronak Shah",
     "creationDate": "10/17/2016",
-    "title": "{{EnterpriseName:VSS Enterprise}} Visualization Dashboard",
+    "title": "{{enterpriseName:VSS Enterprise}} Visualization Dashboard",
     "visualizations": [
         { "id": "vss-enterprise-alerts-metric", "x": 0, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5},
         { "id": "vss-enterprise-acldeny-metric", "x": 2, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5},

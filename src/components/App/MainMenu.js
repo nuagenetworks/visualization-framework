@@ -35,18 +35,19 @@ class MainMenuView extends React.Component {
     initialize() {
 
         const {
+            context,
             fetchDomainsIfNeeded,
-            fetchEnterprisesIfNeeded,
+            fetchEnterpriseIfNeeded,
             fetchL2DomainsIfNeeded,
             fetchNSGsIfNeeded,
-            licenses,
+            isConnected,
             visualizationType
         } = this.props;
 
-        if (!licenses || !licenses.length)
+        if (!isConnected)
             return;
 
-        fetchEnterprisesIfNeeded().then((enterprises) => {
+        fetchEnterpriseIfNeeded(context.enterpriseID).then((enterprises) => {
             if (!enterprises)
                 return;
 
@@ -61,6 +62,13 @@ class MainMenuView extends React.Component {
         });
     }
 
+    cleanupContext(context) {
+        delete context["domainName"];
+        delete context["l2domainName"];
+        delete context["snsg"];
+        delete context["dnsg"];
+    }
+
     renderDomainsMenu() {
         const {
             context,
@@ -71,18 +79,24 @@ class MainMenuView extends React.Component {
         if (!domains || domains.length === 0)
             return;
 
-        const targetedDashboard = visualizationType === "VSS" ? "vssDomainACL" : "aarDomain";
+        const targetedDashboard = visualizationType === "VSS" ? "vssDomainFlow" : "aarDomain";
+
+        this.cleanupContext(context);
 
         return (
             <div>
                 {domains.map((domain) => {
+
+
+                    let queryParams = Object.assign({}, context, {domainName: domain.name});
+
                     return (
                         <ListItem
                             key={domain.ID}
                             primaryText={domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, context)}}
+                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, queryParams)}}
                             leftIcon={
                                 <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-domain.png"} alt="D" />
                             }
@@ -103,18 +117,23 @@ class MainMenuView extends React.Component {
         if (!l2Domains || l2Domains.length === 0)
             return;
 
-        const targetedDashboard = visualizationType === "VSS" ? "vssL2DomainACL" : "aarL2Domain";
+        const targetedDashboard = visualizationType === "VSS" ? "vssL2DomainFlow" : "aarL2Domain";
+
+        this.cleanupContext(context);
 
         return (
             <div>
                 {l2Domains.map((l2Domain) => {
+
+                    let queryParams = Object.assign({}, context, {l2domainName: l2Domain.name});
+
                     return (
                         <ListItem
                             key={l2Domain.ID}
                             primaryText={l2Domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, context)}}
+                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, queryParams)}}
                             leftIcon={
                                 <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-l2domain.png"} alt="L2D" />
                             }
@@ -134,9 +153,14 @@ class MainMenuView extends React.Component {
         if (!nsgs || nsgs.length === 0)
             return;
 
+        this.cleanupContext(context);
+
         return (
             <div>
                 {nsgs.map((nsg) => {
+
+                    let queryParams = Object.assign({}, context, {snsg: nsg.name, dnsg: nsg.name});
+
                     return (
                         <ListItem
                             key={nsg.ID}
@@ -145,7 +169,7 @@ class MainMenuView extends React.Component {
                             innerDivStyle={style.innerNestedItem}
                             initiallyOpen={true}
                             open={true}
-                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/aarNSG", context)}}
+                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/aarNSG", queryParams)}}
                             leftIcon={
                                 <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-nsgateway.png"} alt="N" />
                             }
@@ -222,7 +246,7 @@ const mapStateToProps = (state) => {
     const queryConfiguration = {
         service: "VSD",
         query: {
-            parentResource: "licenses",
+            parentResource: "enterprises",
         }
     };
 
@@ -230,11 +254,11 @@ const mapStateToProps = (state) => {
         context: state.interface.get(ComponentActionKeyStore.CONTEXT),
         visualizationType: state.interface.get(ComponentActionKeyStore.VISUALIZATION_TYPE),
         open: state.interface.get(ComponentActionKeyStore.MAIN_MENU_OPENED),
-        enterprises: state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises", ServiceActionKeyStore.RESULTS]),
-        licenses: state.services.getIn([ServiceActionKeyStore.REQUESTS, ServiceManager.getRequestID(queryConfiguration), ServiceActionKeyStore.RESULTS]) || [],
+        isConnected: state.services.getIn([ServiceActionKeyStore.REQUESTS, ServiceManager.getRequestID(queryConfiguration), ServiceActionKeyStore.RESULTS]),
     };
 
     if (props.context && props.context.enterpriseID) {
+        props.enterprises = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID, ServiceActionKeyStore.RESULTS]);
         props.domains = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/domains", ServiceActionKeyStore.RESULTS]);
         props.l2Domains = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/l2domains", ServiceActionKeyStore.RESULTS]);
 
@@ -259,11 +283,12 @@ const actionCreators = (dispatch) => ({
         dispatch(push({pathname:link, query:filters}));
     },
 
-    fetchEnterprisesIfNeeded: () => {
+    fetchEnterpriseIfNeeded: (enterpriseID) => {
       let configuration = {
           service: "VSD",
           query: {
               parentResource: "enterprises",
+              parentID: enterpriseID
           }
       }
       return dispatch(ServiceActions.fetchIfNeeded(configuration));

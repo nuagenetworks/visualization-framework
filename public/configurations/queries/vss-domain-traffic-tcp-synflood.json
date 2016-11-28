@@ -29,7 +29,7 @@
                             "Enterprise":{
                                 "query":{
                                     "term":{
-                                        "nuage_metadata.enterpriseName":"{{EnterpriseName:chord_enterprise}}"
+                                        "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
                                     }
                                 }
                             }
@@ -65,7 +65,7 @@
                                         "timestamp": {
                                             "date_histogram": {
                                                 "field": "timestamp",
-                                                "interval": "1h"
+                                                "interval": "{{interval:1h}}"
                                             },
                                             "aggs": {
                                                 "SumOf": {

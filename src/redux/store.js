@@ -57,11 +57,11 @@ store.subscribe(function() {
             store.dispatch(ESActions.setSettings(state.router.location.query.eshost));
     }
 
-    // Fetch licenses if necessary
+    // Try to fetch the enterprises to verify the given token
     let configuration = {
         service: "VSD",
         query: {
-            parentResource: "licenses",
+            parentResource: "enterprises",
         }
     }
     store.dispatch(ServiceActions.fetchIfNeeded(configuration, null, true)) // No context and force cache

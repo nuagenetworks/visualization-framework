@@ -30,7 +30,7 @@ class AppContainerView extends React.Component {
     }
 
     shouldShowApplication() {
-        return this.state.initializing || (this.props.licenses && this.props.licenses.length > 0);
+        return this.state.initializing || (this.props.isConnected);
     }
 
     renderErrorMessage() {
@@ -89,12 +89,12 @@ const mapStateToProps = (state, ownProps) => {
     const queryConfiguration = {
         service: "VSD",
         query: {
-            parentResource: "licenses",
+            parentResource: "enterprises",
         }
     };
 
     return {
-        licenses: state.services.getIn([ServiceActionKeyStore.REQUESTS, ServiceManager.getRequestID(queryConfiguration), ServiceActionKeyStore.RESULTS]) || [],
+        isConnected: state.services.getIn([ServiceActionKeyStore.REQUESTS, ServiceManager.getRequestID(queryConfiguration), ServiceActionKeyStore.RESULTS]),
     };
 };
 

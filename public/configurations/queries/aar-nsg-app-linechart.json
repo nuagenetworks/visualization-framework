@@ -29,7 +29,7 @@
                             "Enterprise":{
                                 "query":{
                                     "term":{
-                                        "EnterpriseName":"{{EnterpriseName:test_organization}}"
+                                        "EnterpriseName":"{{enterpriseName:test_organization}}"
                                     }
                                 }
                             }
@@ -52,7 +52,7 @@
                                 "ts": {
                                     "date_histogram": {
                                         "field": "timestamp",
-                                        "interval": "1h"
+                                        "interval": "{{interval:1h}}"
                                     },
                                     "aggs": {
                                         "L7Classification": {

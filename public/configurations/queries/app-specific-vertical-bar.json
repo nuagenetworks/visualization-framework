@@ -39,7 +39,7 @@
                         "date-histo":{
                             "date_histogram":{
                                 "field":"timestamp",
-                                "interval":"30m"
+                                "interval":"{{interval:1h}}"
                             },
                             "aggs":{
                                 "SumOfBytes":{

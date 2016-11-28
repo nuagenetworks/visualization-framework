@@ -1,0 +1,38 @@
+## How to get your information
+
+$ curl localhost:9200/_cat/indices?pretty
+yellow open nuage_event                    5 1 10224000 0 547.5mb 547.5mb
+yellow open nuage_flow                     5 1 10224000 0   1.3gb   1.3gb
+yellow open nuage_dpi_flowstats_2016_10_12 5 1 12105696 0   3.6gb   3.6gb
+
+then:
+$ curl localhost:9200/nuage_flow/_search?pretty
+
+
+
+### Step 1. Remove all indexes (Optional)
+curl -XDELETE localhost:9200/nuage_flow?pretty
+curl -XDELETE localhost:9200/nuage_event?pretty
+
+
+### Step 2. Create a special ES template such that the index and the data is retrievable in a proper manner.
+sh init_template.sh
+
+### Step 3. insight.yml by defaults create 10 PGs and 2 VPorts each per PGs. Change that value as you like. Than run:
+python flowGenerator.py
+
+Expects following kind of output:
+Writing flow information between PG6-VPort1 and PG4-VPort1
+Writing flow information between PG4-VPort1 and PG7-VPort1
+Writing flow information between PG10-VPort2 and PG3-VPort2
+Writing flow information between PG6-VPort2 and PG4-VPort2
+
+About the script:
+
+Script basically create a simulation between randomly picked 2 ports and its data and generated flow data for last 24 hours.
+It does that for total no of vports to generate randomized data.
+
+This scheme should suffice for the basic unit testing. For specific cases, we will change the script later on as required.
+
+python flowGenerator.py
+python eventGenerator.py

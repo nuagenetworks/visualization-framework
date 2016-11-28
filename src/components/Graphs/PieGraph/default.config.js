@@ -5,13 +5,14 @@ export const properties = {
     pieOuterRadius: 0.8, // The outer radius of the slices.
     pieLabelRadius: 0.85, // The radius for positioning labels.
     colors: [
-        theme.palette.yellowLightColor,
-        theme.palette.orangeLightColor,
-        theme.palette.blueLightColor,
-        theme.palette.pinkLightColor,
+        theme.palette.blueColor,
+        theme.palette.pinkColor,
+        theme.palette.orangeColor,
         theme.palette.greenColor,
         theme.palette.yellowDarkColor,
-        theme.palette.orangeLighterColor
+        theme.palette.mauveColor,
+        theme.palette.redColor,
+        theme.palette.greyColor
     ],
     stroke: {
         color: theme.palette.whiteColor,

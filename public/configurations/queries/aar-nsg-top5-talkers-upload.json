@@ -41,7 +41,7 @@
                                 "field":"SrcIp",
                                 "size":5,
                                 "order":{
-                                    "Packets":"desc"
+                                    "Bytes":"desc"
                                 }
                             },
                             "aggs":{
@@ -60,7 +60,7 @@
                                         "field":"Domain",
                                         "size":5,
                                         "order":{
-                                            "Packets":"desc"
+                                            "Bytes":"desc"
                                         }
                                     },
                                 "aggs":{

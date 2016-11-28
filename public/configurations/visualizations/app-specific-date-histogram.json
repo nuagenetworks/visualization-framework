@@ -1,7 +1,7 @@
 {
     "id": "app-specific-date-histogram",
     "graph": "BarGraph",
-    "title": "L7Classification({{app}}) Date Histogram",
+    "title": "L7Classification ({{app}}) Date Histogram",
     "author": "Curran Kelleher",
     "creationDate": "10/14/2016",
     "data": {

@@ -69,12 +69,31 @@
         },
         {
             "id": "effective-score",
+            "x": 0,
+            "y": 15,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "vss-domain-acl-time",
             "x": 3,
             "y": 15,
             "w": 3,
             "h": 15,
             "minW": 2,
             "minH": 12
+        },
+        {
+            "id": "aar-nsg-line-chart",
+            "x": 6,
+            "y": 15,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
         }
+
     ]
 }
