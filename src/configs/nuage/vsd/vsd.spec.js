@@ -6,6 +6,8 @@ import { VSDService, VSDServiceTest } from "./index";
 import { Map } from "immutable";
 import nock from 'nock';
 
+import { ActionKeyStore } from "./redux/actions";
+
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
@@ -86,6 +88,13 @@ describe('VSDService fetch', () => {
             }
         };
 
+        const headers = {
+            "Accept": "*/*",
+            "Authorization": "XREST 1234",
+            "Content-Type": "application/json",
+            "X-Nuage-Organization": "csp"
+        }
+
         const fakeState = {
             VSD: Map({
                 token: "1234",
@@ -99,7 +108,45 @@ describe('VSDService fetch', () => {
         return VSDService.fetch(configuration, fakeState).then(
             (results) => {
                 expect(VSDServiceTest.makeRequest).toHaveBeenCalled();
-                expect(VSDServiceTest.makeRequest).toHaveBeenCalledWith("http://localhost:8001/v4_0/enterprises/1234/domains", "1234");
+                expect(VSDServiceTest.makeRequest).toHaveBeenCalledWith("http://localhost:8001/nuage/api/v4_0/enterprises/1234/domains", headers);
+            }
+        );
+    });
+
+
+    it('should update the organization if provided', () => {
+        process.env.REACT_APP_VSD_API_ENDPOINT = "http://localhost:8001/";
+
+        let configuration = {
+            query: {
+                parentResource: "enterprises",
+                parentID: "1234",
+                resource: "domains"
+            }
+        };
+
+        const headers = {
+            "Accept": "*/*",
+            "Authorization": "XREST 1234",
+            "Content-Type": "application/json",
+            "X-Nuage-Organization": "enterprise"
+        }
+
+        const fakeState = {
+            VSD: Map({
+                token: "1234",
+                [ActionKeyStore.ORGANIZATION]: "enterprise"
+            })
+        };
+
+        VSDServiceTest.makeRequest = jasmine.createSpy("makeRequest").and.callFake(() => {
+            return Promise.resolve();
+        });
+
+        return VSDService.fetch(configuration, fakeState).then(
+            (results) => {
+                expect(VSDServiceTest.makeRequest).toHaveBeenCalled();
+                expect(VSDServiceTest.makeRequest).toHaveBeenCalledWith("http://localhost:8001/nuage/api/v4_0/enterprises/1234/domains", headers);
             }
         );
     });

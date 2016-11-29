@@ -13,11 +13,14 @@ const config = {
     }
 }
 
-const getHeaders = (token, filter, orderBy, page, proxyUser) => {
+const getHeaders = (token, organization, filter, orderBy, page, proxyUser) => {
     let headers = config.headers;
 
     if (token)
         headers["Authorization"] = "XREST " + token
+
+    if (organization)
+        headers["X-Nuage-Organization"] = organization
 
     if (filter)
         headers["X-Nuage-Filter"] = filter
@@ -61,12 +64,12 @@ const getURL = (parameters, api) => {
     return base_url + getRequestID(parameters);
 }
 
-const makeRequest = (url, token) => {
+const makeRequest = (url, headers) => {
     // Encapsulates $.get in a Promise to ensure all services are having the same behavior
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         $.get({
             url: url,
-            headers: getHeaders(token)
+            headers: headers
         })
         .done((response) => {
             return resolve(response)
@@ -146,18 +149,21 @@ const getMockResponse = (requestID) => {
 
 export const VSDServiceTest = {
     makeRequest: makeRequest,
-    getURL: getURL,
+    getURL: getURL
 }
 
 const fetch = (parameters, state) => {
-    let token = state.VSD.get(ActionKeyStore.TOKEN),
-          api = state.VSD.get(ActionKeyStore.API) || process.env.REACT_APP_VSD_API_ENDPOINT;
+    let token          = state.VSD.get(ActionKeyStore.TOKEN),
+          api          = state.VSD.get(ActionKeyStore.API) || process.env.REACT_APP_VSD_API_ENDPOINT,
+          organization = state.VSD.get(ActionKeyStore.ORGANIZATION);
 
     if (!api || !token)
         return Promise.reject("No VSD API endpoint specified. To configure the VSD API endpoint, provide the endpoint URL via the environment variable REACT_APP_VSD_API_ENDPOINT at compile time. For a development environment, you can set an invalid value, which will cause the system to provide mock data for testing. For example, you can add the following line to your .bashrc or .profile startup script: 'export REACT_APP_VSD_API_ENDPOINT=http://something.invalid'");
 
-    const url = VSDServiceTest.getURL(parameters, api);
-    return VSDServiceTest.makeRequest(url, token);
+    const url     = VSDServiceTest.getURL(parameters, api),
+          headers = getHeaders(token, organization);
+
+    return VSDServiceTest.makeRequest(url, headers);
 }
 
 export const VSDService = {

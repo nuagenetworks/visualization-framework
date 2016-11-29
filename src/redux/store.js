@@ -51,7 +51,7 @@ store.subscribe(function() {
     if (state.router) {
 
         if (state.router.location.query.token && state.router.location.query.token !== state.VSD.get(VSDActionKeyStore.TOKEN))
-            store.dispatch(VSDActions.setSettings(state.router.location.query.token, state.router.location.query.api));
+            store.dispatch(VSDActions.setSettings(state.router.location.query.token, state.router.location.query.api, state.router.location.query.org));
 
         if (state.router.location.query.eshost && state.router.location.query.eshost !== state.ES.get(ESActionKeyStore.ES_HOST))
             store.dispatch(ESActions.setSettings(state.router.location.query.eshost));
