@@ -147,7 +147,6 @@ export class DashboardView extends React.Component {
                     This dashboard component is loading the configuration file...
                 </div>
             );
-
         }
 
         if (error) {
@@ -181,7 +180,7 @@ export class DashboardView extends React.Component {
                             containerPadding={[10, 10]}
                             onResize={this.onResize.bind(this)}
                             onLayoutChange={this.onResize.bind(this)}
-                        >
+                            >
                             {
                                 visualizations.map((visualization) =>
                                     <div

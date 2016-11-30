@@ -32,7 +32,15 @@ export class FiltersToolBarView extends React.Component {
                 <ul className="list-inline" style={style.list}>
                 {filterOptions.map((configOptions, name) => {
 
-                    let currentValue = context[configOptions.get("parameter")] || configOptions.get("default");
+                    let currentValue = context[configOptions.get("parameter")];
+
+                    if (!currentValue) {
+                        this.props.updateContext({
+                            [configOptions.get("parameter")]: configOptions.get("default")
+                        });
+
+                        currentValue = configOptions.get("default");
+                    }
 
                     return (
                         <li style={style.listItem}>
@@ -93,6 +101,10 @@ const actionCreators = (dispatch) => ({
     goTo: function(link, context) {
         dispatch(InterfaceActions.updateContext(context));
         dispatch(push({pathname:link}));
+    },
+
+    updateContext: function(context) {
+        dispatch(InterfaceActions.updateContext(context));
     }
 
 });
