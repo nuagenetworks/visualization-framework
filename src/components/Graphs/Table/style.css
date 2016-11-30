@@ -12,8 +12,7 @@ tr:after {
 }
 
 thead th {
-    height: 30px;
-    /*text-align: left;*/
+    height: 45px;
 }
 
 tbody {
@@ -26,6 +25,5 @@ thead {
 
 
 tbody td, thead th {
-    width: 19.2%;
     float: left;
 }

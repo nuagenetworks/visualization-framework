@@ -50,6 +50,7 @@ export default class Table extends AbstractGraph {
             );
 
         const scale = this.scaleColor(data);
+        const columnWidth = (100 / columns.length) + "%";
 
         return (
             <div
@@ -69,13 +70,21 @@ export default class Table extends AbstractGraph {
                             borderRight: header.border.right
                         }}>
                             { columns.map(({column, label}, i) =>(
-                                <th key={i} style={{padding:padding}}>{ label || column }</th>
+                                <th
+                                    key={i}
+                                    style={{
+                                        padding:padding,
+                                        width: columnWidth
+                                    }}
+                                    >
+                                    { label || column }
+                                </th>
                             )) }
                         </tr>
                     </thead>
                     <tbody
                         style={{
-                            height:height - 30 // Set from style.css
+                            height:height - 45 // Set from style.css
                         }}>
                         { data.map((d, j) => {
 
@@ -101,7 +110,12 @@ export default class Table extends AbstractGraph {
                                     onClick={onClick}
                                 >
                                     { accessors.map((accessor, i) =>(
-                                        <td key={i} style={{padding:padding}}>
+                                        <td
+                                            key={i}
+                                            style={{
+                                                padding: padding,
+                                                width: columnWidth
+                                            }}>
                                           { accessor(d) }
                                         </td>
                                     )) }
