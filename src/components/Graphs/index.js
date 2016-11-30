@@ -1,4 +1,5 @@
 import SimpleTextGraph from "./SimpleTextGraph";
+import VariationTextGraph from "./VariationTextGraph";
 
 import BarGraph from "./BarGraph/index";
 import LineGraph from "./LineGraph";
@@ -18,6 +19,7 @@ let registry = {
     Table,
     PieGraph,
     ChordGraph,
+    VariationTextGraph,
 };
 
 /*

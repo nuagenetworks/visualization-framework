@@ -1,0 +1,66 @@
+{
+    "id":"vss-enterprise-acldeny-metric",
+    "title":"ACL Deny count per enterprise",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_event}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{    
+            "size": 0,
+            "aggs": {
+                "2": {
+                    "filters":{
+                        "filters":{
+                            "Domain":{
+                                "query":{
+                                    "term":{
+                                        "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "aggs": {
+                        "timezones": {
+                            "filters": {
+                                "filters": {
+                                    "Prev 24": {
+                                        "range": {
+                                            "timestamp": {
+                                                "gte": "now-48h",
+                                                "lte": "now-24h"
+                                            }
+                                        }
+                                    },
+                                    "Last 24": {
+                                        "range": {
+                                            "timestamp": {
+                                                "gte": "now-24h",
+                                                "lte": "now"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "aggs": {
+                                "types": {
+                                    "filters": {
+                                        "filters": {
+                                            "type": {
+                                                "query": {
+                                                    "term": {
+                                                        "type": "ACL_DENY"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

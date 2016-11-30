@@ -22,7 +22,6 @@ import style from "./styles";
 import Logo from "./logo.png";
 
 
-
 class MainMenuView extends React.Component {
 
     componentWillMount() {
