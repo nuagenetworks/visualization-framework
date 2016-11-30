@@ -29,6 +29,7 @@ const style = {
         padding: "0px",
         fontSize: "0.85em",
         color: theme.palette.blackColor,
+        position: "relative"
     },
     cardContainer: {
         height: "100%",
@@ -62,20 +63,21 @@ const style = {
     },
     text: {
         position: "absolute",
-        top: "40%",
+        top: "35%",
         width: "100%",
         fontSize: "1.2em",
         fontWeight: 300,
     },
     descriptionContainer: {
         textAlign: "justify",
-        background: theme.palette.greyDarkColor,
+        background: theme.palette.greyLighterColor,
         opacity: "0.8",
+        cursor: "pointer"
     },
     descriptionText: {
         padding: "60px 20px 20px 20px",
         fontSize: "1.1em",
-        color: theme.palette.whiteColor,
+        color: theme.palette.blackColor,
     }
 
 };
