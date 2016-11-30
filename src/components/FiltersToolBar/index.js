@@ -6,6 +6,11 @@ import { connect } from "react-redux";
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 
+import {
+    Actions as InterfaceActions,
+    ActionKeyStore as InterfaceActionKeyStore
+} from "../App/redux/actions";
+
 import style from "./styles";
 
 
@@ -76,18 +81,18 @@ export class FiltersToolBarView extends React.Component {
 }
 
 FiltersToolBarView.propTypes = {
-    filterOptions: React.PropTypes.object,
-    context: React.PropTypes.object
+    filterOptions: React.PropTypes.object
 };
 
 const mapStateToProps = (state, ownProps) => ({
-
+    context: state.interface.get(InterfaceActionKeyStore.CONTEXT)
 })
 
 const actionCreators = (dispatch) => ({
 
-    goTo: function(link, filters) {
-        dispatch(push({pathname:link, query:filters}));
+    goTo: function(link, context) {
+        dispatch(InterfaceActions.updateContext(context));
+        dispatch(push({pathname:link}));
     }
 
 });

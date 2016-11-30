@@ -14,10 +14,16 @@ import {
     Actions as ServiceActions,
     ActionKeyStore as ServiceActionKeyStore
 } from "../../services/servicemanager/redux/actions";
+
 import {
     Actions as ConfigurationsActions,
     ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions";
+
+import {
+    Actions as InterfaceActions,
+    ActionKeyStore as InterfaceActionKeyStore,
+} from "../App/redux/actions";
 
 import { resizeVisualization } from "../../utils/resize"
 import { contextualize } from "../../utils/configurations"
@@ -288,13 +294,13 @@ class VisualizationView extends React.Component {
     }
 
     renderFiltersToolBar() {
-        const { configuration, context } = this.props;
+        const { configuration } = this.props;
 
         if (!configuration || !configuration.get("filterOptions"))
             return;
 
         return (
-            <FiltersToolBar filterOptions={configuration.get("filterOptions")} context={context} />
+            <FiltersToolBar filterOptions={configuration.get("filterOptions")} />
         )
     }
 
@@ -310,7 +316,7 @@ class VisualizationView extends React.Component {
             configuration
         } = this.props;
 
-        if (!this.state.parameterizable)
+        if (!this.state.parameterizable || !configuration)
             return (<div></div>);
 
         let description;
@@ -330,9 +336,11 @@ class VisualizationView extends React.Component {
             height: this.state.height}
         );
 
+        const configStyle = configuration.get("styles") ? configuration.get("styles").toJS() : {};
+
         return (
             <Card
-              style={style.card}
+              style={Object.assign({}, style.card, configStyle.card)}
               containerStyle={style.cardContainer}
               ref={this.cardTextReference}
             >
@@ -350,7 +358,7 @@ class VisualizationView extends React.Component {
 const mapStateToProps = (state, ownProps) => {
 
     const configurationID = ownProps.id || ownProps.params.id,
-          context         = ownProps.context || ownProps.location.query;
+          context         = state.interface.get(InterfaceActionKeyStore.CONTEXT);
 
     const props = {
         id: configurationID,
@@ -410,8 +418,9 @@ const actionCreators = (dispatch) => ({
         dispatch(Actions.updateTitle(aTitle));
     },
 
-    goTo: function(link, filters) {
-        dispatch(push({pathname:link, query:filters}));
+    goTo: function(link, context) {
+        dispatch(InterfaceActions.updateContext(context));
+        dispatch(push({pathname:link}));
     },
 
     fetchConfigurationIfNeeded: function(id) {
