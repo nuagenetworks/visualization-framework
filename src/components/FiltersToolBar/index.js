@@ -16,6 +16,28 @@ import style from "./styles";
 
 export class FiltersToolBarView extends React.Component {
 
+    componentDidMount() {
+        const {
+            filterOptions,
+            context,
+            updateContext
+        } = this.props;
+
+        for(let name in filterOptions) {
+            if (filterOptions.hasOwnProperty(name)) {
+                let configOptions = filterOptions[name],
+                    currentValue  = context[configOptions.parameter];
+
+                if (!currentValue) {
+                    // Update context with default value if not found
+                    updateContext({
+                        [configOptions.parameter]: configOptions.default
+                    });
+                }
+            }
+        };
+    }
+
     render() {
         const {
             filterOptions,
@@ -30,58 +52,53 @@ export class FiltersToolBarView extends React.Component {
         return (
             <div className="text-right">
                 <ul className="list-inline" style={style.list}>
-                {filterOptions.map((configOptions, name) => {
+                {
+                    Object.keys(filterOptions).map((name, i) => {
 
-                    let currentValue = context[configOptions.get("parameter")];
+                        let configOptions = filterOptions[name],
+                            currentValue  = context[configOptions.parameter] || configOptions.default;
 
-                    if (!currentValue) {
-                        this.props.updateContext({
-                            [configOptions.get("parameter")]: configOptions.get("default")
-                        });
+                        return (
+                            <li
+                                key={i}
+                                style={style.listItem}>
+                                <label style={style.label} htmlFor={name}>
+                                    {name}
+                                </label>
+                                <DropDownMenu
+                                    name={name}
+                                    value={currentValue}
+                                    style={style.dropdownMenu}
+                                    disabled={configOptions.disabled}
+                                    >
 
-                        currentValue = configOptions.get("default");
-                    }
+                                    {configOptions.options.map((option, index) => {
 
-                    return (
-                        <li style={style.listItem}>
-                            <label style={style.label} htmlFor={name}>
-                                {name}
-                            </label>
-                            <DropDownMenu
-                                name={name}
-                                value={currentValue}
-                                style={style.dropdownMenu}
-                                disabled={configOptions.get("disabled")}
-                                >
+                                        let queryParams = Object.assign({}, context, {
+                                            [configOptions.parameter]: option.value
+                                        });
 
-                                {configOptions.get("options").map((option, index) => {
+                                        let forceOptions = option.forceOptions;
 
-                                    let queryParams = Object.assign({}, context, {
-                                        [configOptions.get("parameter")]: option.get("value")
-                                    });
+                                        if (forceOptions)
+                                            queryParams = Object.assign({}, queryParams, forceOptions);
 
-                                    let forceOptions = option.get("forceOptions");
+                                        return (
+                                            <MenuItem
+                                                key={index}
+                                                value={option.value}
+                                                primaryText={option.label}
+                                                style={style.menuItem}
+                                                disabled={option.disabled}
+                                                onTouchTap={() => { this.props.goTo(window.location.pathname, queryParams);}}
+                                                />
+                                        )
+                                    })}
+                                </DropDownMenu>
 
-                                    if (forceOptions)
-                                        queryParams = Object.assign({}, queryParams, forceOptions.toJS());
-
-                                    return (
-                                        <MenuItem
-                                            key={index}
-                                            value={option.get("value")}
-                                            primaryText={option.get("label")}
-                                            style={style.menuItem}
-                                            disabled={option.get("disabled")}
-                                            onTouchTap={() => { this.props.goTo(window.location.pathname, queryParams);}}
-                                            />
-                                    )
-                                })}
-                            </DropDownMenu>
-
-                        </li>
-                    )
-
-                })}
+                            </li>
+                        )
+                    })}
                 </ul>
             </div>
         )
