@@ -200,9 +200,11 @@ class VisualizationView extends React.Component {
     }
 
     renderVisualization() {
-        const { configuration,
-                queryConfiguration,
-                response
+        const {
+            configuration,
+            context,
+            queryConfiguration,
+            response
         } = this.props;
 
         const graphName      = configuration.get("graph"),
@@ -220,12 +222,14 @@ class VisualizationView extends React.Component {
             return this.renderCardWithInfo("No data to visualize", "bar-chart");
         }
 
-        const timeout = configuration.get("refreshInterval") || 30000;
+        const refreshInterval = context.refreshInterval,
+              timeout         = configuration.get("refreshInterval") || refreshInterval,
+              enabled         = refreshInterval > 0;
 
         return (
             <div>
                 <ReactInterval
-                    enabled={true}
+                    enabled={enabled}
                     timeout={timeout}
                     callback={() => { this.initialize(this.props.id) }}
                     />
@@ -300,7 +304,7 @@ class VisualizationView extends React.Component {
             return;
 
         return (
-            <FiltersToolBar filterOptions={configuration.get("filterOptions")} />
+            <FiltersToolBar filterOptions={configuration.get("filterOptions").toJS()} />
         )
     }
 
