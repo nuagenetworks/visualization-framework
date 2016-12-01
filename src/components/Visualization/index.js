@@ -220,17 +220,6 @@ class VisualizationView extends React.Component {
             return this.renderCardWithInfo("No data to visualize", "bar-chart");
         }
 
-        let description;
-
-        if (this.state.showDescription) {
-            description = <CardOverlay
-                                overlayStyle={style.descriptionContainer}
-                                textStyle={style.descriptionText}
-                                text={configuration.get("description")}
-                                onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
-                                />
-        }
-
         const timeout = configuration.get("refreshInterval") || 30000;
 
         return (
@@ -247,7 +236,6 @@ class VisualizationView extends React.Component {
                   height={this.state.height}
                   {...this.state.listeners}
                 />
-                {description}
             </div>
         )
     }
@@ -286,7 +274,7 @@ class VisualizationView extends React.Component {
             <FontAwesome
                 name="info-circle"
                 style={style.cardIconMenu}
-                onTouchTap={() => { this.setState({showDescription: !!configuration.get("description")}); }}
+                onTouchTap={() => { this.setState({showDescription: !this.state.showDescription}); }}
                 />
         )
     }
@@ -324,14 +312,31 @@ class VisualizationView extends React.Component {
     }
 
     render() {
-        if (!this.state.parameterizable || !this.props.configuration)
-            return (<div></div>);
-
         const {
             configuration
         } = this.props;
 
-        var configStyle = configuration.get("styles") ? configuration.get("styles").toJS() : {};
+        if (!this.state.parameterizable || !configuration)
+            return (<div></div>);
+
+        let description;
+
+        if (this.state.showDescription) {
+            description = <CardOverlay
+                                overlayStyle={style.descriptionContainer}
+                                textStyle={style.descriptionText}
+                                text={configuration.get("description")}
+                                onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
+                                />
+        }
+
+
+        let cardText = Object.assign({}, style.cardText, {
+            width: this.state.width,
+            height: this.state.height}
+        );
+
+        const configStyle = configuration.get("styles") ? configuration.get("styles").toJS() : {};
 
         return (
             <Card
@@ -341,8 +346,9 @@ class VisualizationView extends React.Component {
             >
                 { this.renderTitleBarIfNeeded() }
                 { this.renderFiltersToolBar() }
-                <CardText style={style.cardText}>
+                <CardText style={cardText}>
                     { this.renderVisualizationIfNeeded() }
+                    {description}
                 </CardText>
             </Card>
         );
@@ -405,7 +411,6 @@ const mapStateToProps = (state, ownProps) => {
 
     return props;
 };
-
 
 const actionCreators = (dispatch) => ({
 
