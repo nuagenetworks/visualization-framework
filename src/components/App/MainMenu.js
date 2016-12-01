@@ -9,8 +9,8 @@ import { List, ListItem } from "material-ui/List";
 import { ServiceManager } from "../../services/servicemanager/index";
 
 import {
-    Actions as ComponentActions,
-    ActionKeyStore as ComponentActionKeyStore
+    Actions as InterfaceActions,
+    ActionKeyStore as InterfaceActionKeyStore
 } from "./redux/actions";
 
 import {
@@ -20,7 +20,6 @@ import {
 
 import style from "./styles";
 import Logo from "./logo.png";
-
 
 
 class MainMenuView extends React.Component {
@@ -252,9 +251,9 @@ const mapStateToProps = (state) => {
     };
 
     const props = {
-        context: state.interface.get(ComponentActionKeyStore.CONTEXT),
-        visualizationType: state.interface.get(ComponentActionKeyStore.VISUALIZATION_TYPE),
-        open: state.interface.get(ComponentActionKeyStore.MAIN_MENU_OPENED),
+        context: state.interface.get(InterfaceActionKeyStore.CONTEXT),
+        visualizationType: state.interface.get(InterfaceActionKeyStore.VISUALIZATION_TYPE),
+        open: state.interface.get(InterfaceActionKeyStore.MAIN_MENU_OPENED),
         isConnected: state.services.getIn([ServiceActionKeyStore.REQUESTS, ServiceManager.getRequestID(queryConfiguration), ServiceActionKeyStore.RESULTS]),
     };
 
@@ -273,15 +272,16 @@ const mapStateToProps = (state) => {
 
 const actionCreators = (dispatch) => ({
     onRequestChange: () => {
-      dispatch(ComponentActions.toggleMainMenu());
+      dispatch(InterfaceActions.toggleMainMenu());
     },
 
     setPageTitle: (aTitle) => {
-      dispatch(ComponentActions.updateTitle(aTitle));
+      dispatch(InterfaceActions.updateTitle(aTitle));
     },
 
-    goTo: function(link, filters) {
-        dispatch(push({pathname:link, query:filters}));
+    goTo: function(link, context) {
+        dispatch(InterfaceActions.updateContext(context))
+        dispatch(push({pathname:link}));
     },
 
     fetchEnterpriseIfNeeded: (enterpriseID) => {

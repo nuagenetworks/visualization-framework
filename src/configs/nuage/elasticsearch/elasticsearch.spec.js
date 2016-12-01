@@ -1,4 +1,6 @@
 import { ElasticSearchService, getCurrentConfig } from "./index";
+import { Map } from "immutable";
+import { ActionKeyStore } from "./redux/actions";
 
 
 describe('Elastic Search service', () => {
@@ -44,15 +46,38 @@ describe('Elastic Search getRequestID', () => {
 
 
 describe('Elastic Search config', () => {
-    it('should fetch information from the default host', () => {
-        delete process.env.REACT_APP_ELASTICSEARACH_HOST;
-        let config = getCurrentConfig();
-        expect(config.host).toEqual("http://localhost:9200");
+    it('should have no default host', () => {
+
+        const fakeState = {
+            ES: new Map()
+        };
+
+        delete process.env.REACT_APP_ELASTICSEARCH_HOST;
+        let config = getCurrentConfig(fakeState);
+        expect(config.host).toEqual(undefined);
     });
 
     it('should fetch information from the environment variable host', () => {
-        process.env.REACT_APP_ELASTICSEARACH_HOST = "https://www.google.com";
-        let config = getCurrentConfig();
+        process.env.REACT_APP_ELASTICSEARCH_HOST = "https://www.google.com";
+
+        const fakeState = {
+            ES: new Map()
+        };
+
+        let config = getCurrentConfig(fakeState);
         expect(config.host).toEqual("https://www.google.com");
+    });
+
+    it('should fetch information from the specified context', () => {
+        process.env.REACT_APP_ELASTICSEARCH_HOST = "https://www.google.com";
+
+        const fakeState = {
+            ES: Map({
+                [ActionKeyStore.ES_HOST]: "http://eshost:9200"
+            })
+        };
+
+        let config = getCurrentConfig(fakeState);
+        expect(config.host).toEqual("http://eshost:9200");
     });
 });

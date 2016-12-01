@@ -18,6 +18,10 @@ import {
     ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions";
 
+import {
+    ActionKeyStore as InterfaceActionKeyStore
+} from "../App/redux/actions";
+
 import { contextualize } from "../../utils/configurations"
 
 import { defaultFilterOptions } from "./default.js"
@@ -60,13 +64,16 @@ export class DashboardView extends React.Component {
     }
 
     currentTitle() {
-        const { configuration, location } = this.props;
+        const {
+            configuration,
+            context
+        } = this.props;
         const title = configuration.get("title");
 
         if (!title)
             return ;
 
-        return contextualize(title, location.query);
+        return contextualize(title, context);
     }
 
     updateTitleIfNecessary(prevProps) {
@@ -98,7 +105,9 @@ export class DashboardView extends React.Component {
     }
 
     renderNavigationBarIfNeeded() {
-        const { configuration, location } = this.props;
+        const {
+            configuration
+        } = this.props;
 
         const links = configuration.get("links");
 
@@ -115,7 +124,7 @@ export class DashboardView extends React.Component {
                         return <li key={index}
                                    style={style.link}
                                    >
-                                    <Link to={{ pathname:targetURL, query:location.query }}>
+                                    <Link to={{ pathname:targetURL }}>
                                         {link.get("label")}
                                     </Link>
                                </li>;
@@ -128,8 +137,7 @@ export class DashboardView extends React.Component {
     render() {
         const { configuration,
                 error,
-                fetching,
-                location
+                fetching
         } = this.props;
 
         if (fetching) {
@@ -139,7 +147,6 @@ export class DashboardView extends React.Component {
                     This dashboard component is loading the configuration file...
                 </div>
             );
-
         }
 
         if (error) {
@@ -164,7 +171,7 @@ export class DashboardView extends React.Component {
                 <div>
                     {this.renderNavigationBarIfNeeded()}
 
-                    <FiltersToolBar filterOptions={fromJS(filterOptions)} context={location.query} />
+                    <FiltersToolBar filterOptions={filterOptions} />
 
                     <div style={style.gridContainer}>
                         <ResponsiveReactGridLayout
@@ -173,7 +180,7 @@ export class DashboardView extends React.Component {
                             containerPadding={[10, 10]}
                             onResize={this.onResize.bind(this)}
                             onLayoutChange={this.onResize.bind(this)}
-                        >
+                            >
                             {
                                 visualizations.map((visualization) =>
                                     <div
@@ -182,7 +189,6 @@ export class DashboardView extends React.Component {
                                     >
                                         <Visualization
                                             id={visualization.id}
-                                            context={location.query}
                                             registerResize={this.registerResize.bind(this)}
                                         />
                                     </div>
@@ -200,6 +206,8 @@ export class DashboardView extends React.Component {
 
 
 const mapStateToProps = (state, ownProps) => ({
+    context: state.interface.get(InterfaceActionKeyStore.CONTEXT),
+
     configuration: state.configurations.getIn([
         ConfigurationsActionKeyStore.DASHBOARDS,
         ownProps.params.id,

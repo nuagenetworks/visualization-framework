@@ -5,14 +5,16 @@ export const ActionTypes = {
 export const ActionKeyStore = {
     TOKEN: "token",
     API: "api",
+    ORGANIZATION: "organization",
 };
 
 export const Actions = {
-    setSettings: function(token, API) {
+    setSettings: function(token, API, organization) {
         return {
             type: ActionTypes.VSD_ACTION_SET_SETTINGS,
             token: token,
-            API: API
+            API: API,
+            organization: organization
         }
     }
 };

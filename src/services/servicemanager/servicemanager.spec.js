@@ -2,7 +2,7 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 
 import { Actions, ActionKeyStore, ActionTypes } from "./redux/actions";
-import { ServiceManager } from "./index"
+import { ServiceManager } from "./index";
 import servicesReducer from "./redux/reducer";
 import { fromJS, Map } from "immutable";
 
