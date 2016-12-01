@@ -20,7 +20,7 @@
     "fontawesome": "^4.5.0",
     "immutable": "3.7.6",
     "jquery": "3.1.0",
-    "json-templates": "1.4.0",
+    "json-templates": "1.5.0",
     "material-ui": "0.15.4",
     "react": "15.3.2",
     "react-dom": "15.3.2",
