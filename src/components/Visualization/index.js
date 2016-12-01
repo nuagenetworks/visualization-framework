@@ -316,7 +316,7 @@ class VisualizationView extends React.Component {
             return;
 
         return (
-            <FiltersToolBar filterOptions={configuration.get("filterOptions")} />
+            <FiltersToolBar filterOptions={configuration.get("filterOptions").toJS()} />
         )
     }
 

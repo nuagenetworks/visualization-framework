@@ -171,7 +171,7 @@ export class DashboardView extends React.Component {
                 <div>
                     {this.renderNavigationBarIfNeeded()}
 
-                    <FiltersToolBar filterOptions={fromJS(filterOptions)} />
+                    <FiltersToolBar filterOptions={filterOptions} />
 
                     <div style={style.gridContainer}>
                         <ResponsiveReactGridLayout
