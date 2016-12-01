@@ -50,7 +50,7 @@ export default class AbstractGraph extends React.Component {
 
             // Use a unique tooltip ID per visualization,
             // otherwise there are overlapping tooltips.
-            const tooltipId = Math.random();
+            const tooltipId = String(Math.random());
 
             // Expose tooltipId in case subclasses need it.
             this.tooltipId = tooltipId;
@@ -92,7 +92,7 @@ export default class AbstractGraph extends React.Component {
             colors,
             colorColumn,
         } = this.getConfiguredProperties();
-        
+
         if (!colorColumn && !defaultColumn)
             return;
 

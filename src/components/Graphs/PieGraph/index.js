@@ -13,7 +13,7 @@ export default class PieGraph extends AbstractGraph {
     constructor(props) {
         super(props, properties);
     }
-    
+
     render() {
 
         const { data, width, height, onMarkClick } = this.props;
@@ -128,7 +128,9 @@ export default class PieGraph extends AbstractGraph {
                             const x = width/2 - (data.length * colorLegendSpacing)/2 + (i * colorLegendSpacing);
                             const y = height - colorLegendHeight / 2;
                             return (
-                                <g transform={ `translate(${x}, ${y})` }>
+                                <g
+                                    key={i}
+                                    transform={ `translate(${x}, ${y})` }>
 
                                     <circle
                                       r={ colorLegendCircleSize }
@@ -153,5 +155,5 @@ export default class PieGraph extends AbstractGraph {
 }
 PieGraph.propTypes = {
   configuration: React.PropTypes.object,
-  data: React.PropTypes.object
+  data: React.PropTypes.array
 };
