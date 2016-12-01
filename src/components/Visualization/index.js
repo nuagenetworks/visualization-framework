@@ -87,8 +87,8 @@ class VisualizationView extends React.Component {
             if (!configuration)
                 return;
 
-            const queryName  = configuration.get("query"),
-                  scriptName = configuration.get("script");
+            const queryName  = configuration.query,
+                  scriptName = configuration.script;
 
             if (scriptName) {
                 const { executeScriptIfNeeded, context } = this.props;
@@ -102,7 +102,7 @@ class VisualizationView extends React.Component {
                     if (!queryConfiguration)
                         return;
 
-                    executeQueryIfNeeded(queryConfiguration.toJS(), context).then(
+                    executeQueryIfNeeded(queryConfiguration, context).then(
                         () => {
                             this.setState({
                                 parameterizable: true,
@@ -118,7 +118,7 @@ class VisualizationView extends React.Component {
             }
 
             // Handle configured listeners (e.g. navigate when clicking on a bar).
-            if(configuration.get("listeners")) {
+            if(configuration.listeners) {
                 // Use this.state.listeners to store the listeners that will be
                 // passed into the visualization components.
                 this.setState({
@@ -126,7 +126,7 @@ class VisualizationView extends React.Component {
                     // This will be an object whose keys are event names,
                     // and whose values are functions that accept the data object
                     // corresponding to the clicked visual element.
-                    listeners: configuration.get("listeners").reduce((listeners, listener) => {
+                    listeners: configuration.listeners.reduce((listeners, listener) => {
                         // Use ES6 destructuring with defaults.
                         const {
 
@@ -137,7 +137,7 @@ class VisualizationView extends React.Component {
 
                             // By default, specify no additional query params.
                             params = {}
-                        } = listener.toJS();
+                        } = listener;
 
                         // Each listener expects the data object `d`,
                         // which corresponds to a row of data visualized.
@@ -176,7 +176,7 @@ class VisualizationView extends React.Component {
     shouldShowVisualization() {
         const { configuration, response } = this.props;
 
-        return configuration && response && !response.get("isFetching");
+        return configuration && response && !response.isFetching;
     }
 
     renderCardWithInfo(message, iconName, spin = false) {
@@ -207,23 +207,21 @@ class VisualizationView extends React.Component {
             response
         } = this.props;
 
-        const graphName      = configuration.get("graph"),
+        const graphName      = configuration.graph,
               GraphComponent = GraphManager.getGraphComponent(graphName);
 
-        const currentResponse = response.toJS();
-
-        if (currentResponse.error) {
-            return this.renderCardWithInfo("Oops, " + currentResponse.error, "meh-o");
+        if (response.error) {
+            return this.renderCardWithInfo("Oops, " + response.error, "meh-o");
         }
 
-        const data = ServiceManager.tabify(queryConfiguration, currentResponse.results);
+        const data = ServiceManager.tabify(queryConfiguration, response.results);
 
         if (!data || !data.length) {
             return this.renderCardWithInfo("No data to visualize", "bar-chart");
         }
 
         const refreshInterval = context.refreshInterval,
-              timeout         = configuration.get("refreshInterval") || refreshInterval,
+              timeout         = configuration.refreshInterval || refreshInterval,
               enabled         = refreshInterval > 0;
 
         return (
@@ -235,7 +233,7 @@ class VisualizationView extends React.Component {
                     />
                 <GraphComponent
                   data={data}
-                  configuration={configuration.toJS()}
+                  configuration={configuration}
                   width={this.state.width}
                   height={this.state.height}
                   {...this.state.listeners}
@@ -255,23 +253,13 @@ class VisualizationView extends React.Component {
     shouldShowTitleBar() {
         const { configuration } = this.props;
 
-        return configuration && this.currentTitle() && this.state.parameterizable && configuration.get("showTitleBar") !== false;
-    }
-
-    currentTitle() {
-        const { configuration, context } = this.props;
-        const title = configuration.get("title");
-
-        if (!title)
-            return ;
-
-        return contextualize(title, context);
+        return configuration && configuration.title && this.state.parameterizable && configuration.showTitleBar !== false;
     }
 
     renderDescriptionIcon() {
         const { configuration } = this.props;
 
-        if (!configuration.get("description"))
+        if (!configuration.description)
             return;
 
         return (
@@ -289,7 +277,7 @@ class VisualizationView extends React.Component {
 
         return (
             <div style={style.cardTitle}>
-                {this.currentTitle()}
+                {this.props.configuration.title}
                 <div className="pull-right">
                     {this.renderDescriptionIcon()}
                 </div>
@@ -300,11 +288,11 @@ class VisualizationView extends React.Component {
     renderFiltersToolBar() {
         const { configuration } = this.props;
 
-        if (!configuration || !configuration.get("filterOptions"))
+        if (!configuration || !configuration.filterOptions)
             return;
 
         return (
-            <FiltersToolBar filterOptions={configuration.get("filterOptions").toJS()} />
+            <FiltersToolBar filterOptions={configuration.filterOptions} />
         )
     }
 
@@ -329,7 +317,7 @@ class VisualizationView extends React.Component {
             description = <CardOverlay
                                 overlayStyle={style.descriptionContainer}
                                 textStyle={style.descriptionText}
-                                text={configuration.get("description")}
+                                text={configuration.description}
                                 onTouchTapOverlay={() => { this.setState({showDescription: false}); }}
                                 />
         }
@@ -340,7 +328,7 @@ class VisualizationView extends React.Component {
             height: this.state.height}
         );
 
-        const configStyle = configuration.get("styles") ? configuration.get("styles").toJS() : {};
+        const configStyle = configuration.styles || {};
 
         return (
             <Card
@@ -362,17 +350,17 @@ class VisualizationView extends React.Component {
 const mapStateToProps = (state, ownProps) => {
 
     const configurationID = ownProps.id || ownProps.params.id,
-          context         = state.interface.get(InterfaceActionKeyStore.CONTEXT);
+          context         = state.interface.get(InterfaceActionKeyStore.CONTEXT),
+          configuration   = state.configurations.getIn([
+              ConfigurationsActionKeyStore.VISUALIZATIONS,
+              configurationID,
+              ConfigurationsActionKeyStore.DATA
+          ]);
 
     const props = {
         id: configurationID,
         context: context,
-
-        configuration: state.configurations.getIn([
-            ConfigurationsActionKeyStore.VISUALIZATIONS,
-            configurationID,
-            ConfigurationsActionKeyStore.DATA
-        ]),
+        configuration: configuration ? contextualize(configuration.toJS(), context) : null,
 
         error: state.configurations.getIn([
             ConfigurationsActionKeyStore.VISUALIZATIONS,
@@ -383,25 +371,27 @@ const mapStateToProps = (state, ownProps) => {
     };
 
     // Expose the query template as a JS object if it is available.
-    if (props.configuration) {
-        const queryConfiguration = state.configurations.getIn([
+    if (configuration) {
+        let queryConfiguration = state.configurations.getIn([
             ConfigurationsActionKeyStore.QUERIES,
-            props.configuration.get("query")
+            configuration.get("query")
         ]);
 
         if (queryConfiguration && !queryConfiguration.get(
             ConfigurationsActionKeyStore.IS_FETCHING
         )) {
-            props.queryConfiguration = queryConfiguration.get(
+            queryConfiguration = queryConfiguration.get(
                 ConfigurationsActionKeyStore.DATA
             );
+
+            props.queryConfiguration = queryConfiguration ? queryConfiguration.toJS() : null;
         }
 
-        const scriptName = props.configuration.get("script");
+        const scriptName = configuration.get("script");
 
         // Expose received response if it is available
         if (props.queryConfiguration || scriptName) {
-            const query = props.queryConfiguration ? props.queryConfiguration.toJS() : scriptName;
+            const query = props.queryConfiguration ? props.queryConfiguration : scriptName;
             const requestID = ServiceManager.getRequestID(query, context);
 
             let response = state.services.getIn([
@@ -409,7 +399,7 @@ const mapStateToProps = (state, ownProps) => {
                 requestID
             ]);
             if (response && !response.get(ServiceActionKeyStore.IS_FETCHING))
-                props.response = response;
+                props.response = response.toJS();
         }
     }
 
