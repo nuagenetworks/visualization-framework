@@ -227,7 +227,7 @@ class VisualizationView extends React.Component {
             <div>
                 <ReactInterval
                     enabled={enabled}
-                    timeout={timeout}
+                    timeout={parseInt(timeout, 10)}
                     callback={() => { this.initialize(this.props.id) }}
                     />
                 <GraphComponent
