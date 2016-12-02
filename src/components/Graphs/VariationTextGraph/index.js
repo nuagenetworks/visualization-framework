@@ -168,5 +168,5 @@ export default class VariationTextGraph extends AbstractGraph {
 
 VariationTextGraph.propTypes = {
   configuration: React.PropTypes.object,
-  data: React.PropTypes.object
+  data: React.PropTypes.array
 };
