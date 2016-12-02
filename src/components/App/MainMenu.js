@@ -64,7 +64,6 @@ class MainMenuView extends React.Component {
 
     cleanupContext(context) {
         delete context["domainName"];
-        delete context["l2domainName"];
         delete context["snsg"];
         delete context["dnsg"];
     }
@@ -80,7 +79,7 @@ class MainMenuView extends React.Component {
             return;
 
         const targetedDashboard = visualizationType === "VSS" ? "vssDomainFlow" : "aarDomain";
-
+        const domainType = "nuage_metadata.domainName"
         this.cleanupContext(context);
 
         return (
@@ -88,7 +87,7 @@ class MainMenuView extends React.Component {
                 {domains.map((domain) => {
 
 
-                    let queryParams = Object.assign({}, context, {domainName: domain.name});
+                    let queryParams = Object.assign({}, context, {domainName: domain.name, domainType: domainType});
 
                     return (
                         <ListItem
@@ -118,14 +117,14 @@ class MainMenuView extends React.Component {
             return;
 
         const targetedDashboard = visualizationType === "VSS" ? "vssL2DomainFlow" : "aarL2Domain";
-
+        const domainType = "nuage_metadata.l2domainName"
         this.cleanupContext(context);
 
         return (
             <div>
                 {l2Domains.map((l2Domain) => {
 
-                    let queryParams = Object.assign({}, context, {l2domainName: l2Domain.name});
+                    let queryParams = Object.assign({}, context, {domainName: l2Domain.name, domainType: domainType});
 
                     return (
                         <ListItem
