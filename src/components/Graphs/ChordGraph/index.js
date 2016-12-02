@@ -1,7 +1,6 @@
 import React from "react";
 
 import AbstractGraph from "../AbstractGraph";
-import ReactTooltip from "react-tooltip";
 import columnAccessor from "../../../utils/columnAccessor";
 
 import * as d3 from "d3";

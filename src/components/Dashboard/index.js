@@ -2,7 +2,6 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { Link } from "react-router";
-import { fromJS } from "immutable";
 
 import CircularProgress from "material-ui/CircularProgress";
 import { Responsive, WidthProvider } from "react-grid-layout";
