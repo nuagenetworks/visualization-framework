@@ -21,7 +21,6 @@ import {
 } from "../../services/configurations/redux/actions";
 
 import {
-    Actions as InterfaceActions,
     ActionKeyStore as InterfaceActionKeyStore,
 } from "../App/redux/actions";
 
@@ -413,8 +412,7 @@ const actionCreators = (dispatch) => ({
     },
 
     goTo: function(link, context) {
-        dispatch(InterfaceActions.updateContext(context));
-        dispatch(push({pathname:link}));
+        dispatch(push({pathname:link, query:context}));
     },
 
     fetchConfigurationIfNeeded: function(id) {

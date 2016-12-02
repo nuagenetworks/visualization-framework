@@ -29,15 +29,15 @@ export const defaultFilterOptions = {
     },
     "Refresh interval": {
         "parameter": "refreshInterval",
-        "default": -1,
+        "default": "-1",
         "options": [
             {
                 "label": "Inactive",
-                "value": -1,
+                "value": "-1",
             },
             {
                 "label": "30 seconds",
-                "value": 3000,
+                "value": "3000",
             }
         ]
     }
