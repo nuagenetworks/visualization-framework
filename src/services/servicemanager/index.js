@@ -65,7 +65,7 @@ const getRequestID = function (queryConfiguration, context) {
         An array of results
 */
 const tabify = function (queryConfiguration, response) {
-    const serviceName = queryConfiguration ? queryConfiguration.get("service") : "VSD"; // In case of scripts...
+    const serviceName = queryConfiguration ? queryConfiguration.service : "VSD"; // In case of scripts...
 
     const service = getService(serviceName)
 
