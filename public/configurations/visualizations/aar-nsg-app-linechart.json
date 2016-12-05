@@ -15,6 +15,16 @@
           "color": "#f76159",
           "width": "2px"
         },
+        "colors": [
+            "#6b94ec",
+            "#e78ac3",
+            "#f9b13d",
+            "#b3d645",
+            "#ffd92f",
+            "#aa97f2",
+            "#f76159",
+            "#d9d9d9"
+        ],
         "tooltip": [
             { "column": "L7Classification" }
         ],
