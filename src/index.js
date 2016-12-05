@@ -4,6 +4,9 @@ import { Provider as ReduxProvider } from "react-redux";
 
 import store from "./redux/store";
 
+import injectTapEventPlugin from "react-tap-event-plugin";
+injectTapEventPlugin();
+
 import App from "./App";
 
 import "./index.css"
