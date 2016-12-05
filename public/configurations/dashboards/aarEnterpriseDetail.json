@@ -4,9 +4,9 @@
     "creationDate": "09/29/2016",
     "title": "AAR Enterprise({{enterpriseName}}) - L7Classification Detail",
     "visualizations": [
-        { "id": "top20-talkers-enterprise", "x": 0, "y": 0, "w": 12, "h": 15, "minW": 8, "minH": 12, "static": true},
-        { "id": "top20-talkers-enterprise-defaultapp", "x": 0, "y": 15, "w": 12, "h": 15, "minW": 2, "minH": 12, "static": true},
-        { "id": "app-specific-date-histogram", "x": 0, "y": 30, "w": 12, "h": 15, "minW": 8, "minH": 12, "static": true}
+        { "id": "top20-talkers-enterprise",             "x": 0, "y": 0,  "w": 12, "h": 15, "minW": 8, "minH": 12, "static": true},
+        { "id": "top20-talkers-enterprise-defaultapp",  "x": 0, "y": 15, "w": 12, "h": 15, "minW": 2, "minH": 12, "static": true},
+        { "id": "app-specific-date-histogram",          "x": 0, "y": 30, "w": 12, "h": 15, "minW": 8, "minH": 12, "static": true}
     ],
     "links": [
         {
