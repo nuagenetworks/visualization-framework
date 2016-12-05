@@ -4,10 +4,10 @@
     "creationDate": "10/26/2016",
     "title": "AAR NSG",
     "visualizations": [
-        { "id": "aar-nsg-app-from-nsg", "x": 0, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12},
-        { "id": "aar-nsg-app-to-nsg", "x": 5, "y": 0, "w": 5, "h": 15, "minW": 2, "minH": 12},
-        { "id": "aar-nsg-sla-from-nsg", "x": 0, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 12},
-        { "id": "aar-nsg-sla-to-nsg", "x": 5, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 12}
+        { "id": "aar-nsg-app-from-nsg", "x": 0, "y": 0,  "w": 6, "h": 15, "minW": 5, "minH": 12, "static": true},
+        { "id": "aar-nsg-app-to-nsg",   "x": 6, "y": 0,  "w": 6, "h": 15, "minW": 5, "minH": 12, "static": true},
+        { "id": "aar-nsg-sla-from-nsg", "x": 0, "y": 15, "w": 6, "h": 15, "minW": 5, "minH": 12, "static": true},
+        { "id": "aar-nsg-sla-to-nsg",   "x": 6, "y": 15, "w": 6, "h": 15, "minW": 5, "minH": 12, "static": true}
     ],
     "links": [
         {
