@@ -7,7 +7,8 @@ export const defaultFilterOptions = {
                 "label": "Last 15 min",
                 "value": "now-15m",
                 "forceOptions": {
-                    "interval": "1m"
+                    "interval": "1m",
+                    "prevStartTime": "now-30m"
                 }
             },
             {
@@ -15,14 +16,16 @@ export const defaultFilterOptions = {
                 "value": "now-24h",
                 "default": true,
                 "forceOptions": {
-                    "interval": "1h"
+                    "interval": "1h",
+                    "prevStartTime": "now-48h"
                 }
             },
             {
                 "label": "Last 7 days",
                 "value": "now-7d",
                 "forceOptions": {
-                    "interval": "12h"
+                    "interval": "12h",
+                    "prevStartTime": "now-14d"
                 }
             }
         ]
