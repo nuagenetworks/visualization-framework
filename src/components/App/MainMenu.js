@@ -62,12 +62,6 @@ class MainMenuView extends React.Component {
         });
     }
 
-    cleanupContext(context) {
-        delete context["domainName"];
-        delete context["snsg"];
-        delete context["dnsg"];
-    }
-
     renderDomainsMenu() {
         const {
             context,
@@ -80,7 +74,6 @@ class MainMenuView extends React.Component {
 
         const targetedDashboard = visualizationType === "VSS" ? "vssDomainFlow" : "aarDomain";
         const domainType = "nuage_metadata.domainName"
-        this.cleanupContext(context);
 
         return (
             <div>
@@ -118,7 +111,6 @@ class MainMenuView extends React.Component {
 
         const targetedDashboard = visualizationType === "VSS" ? "vssL2DomainFlow" : "aarL2Domain";
         const domainType = "nuage_metadata.l2domainName"
-        this.cleanupContext(context);
 
         return (
             <div>
@@ -151,8 +143,6 @@ class MainMenuView extends React.Component {
 
         if (!nsgs || nsgs.length === 0)
             return;
-
-        this.cleanupContext(context);
 
         return (
             <div>
