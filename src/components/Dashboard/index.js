@@ -49,19 +49,6 @@ export class DashboardView extends React.Component {
         this.updateConfiguration();
     }
 
-    shouldUpdateTitle(prevProps){
-        if (!prevProps.configuration) {
-            return true;
-
-        } else {
-            return (
-                this.props.configuration.get("title")
-                !==
-                prevProps.configuration.get("title")
-            );
-        }
-    }
-
     currentTitle() {
         const {
             configuration,
@@ -81,9 +68,7 @@ export class DashboardView extends React.Component {
         if (!configuration)
             return;
 
-        if (this.shouldUpdateTitle(prevProps)) {
-            setPageTitle(this.currentTitle());
-        }
+        setPageTitle(this.currentTitle());
     }
 
     updateConfiguration() {
@@ -105,7 +90,8 @@ export class DashboardView extends React.Component {
 
     renderNavigationBarIfNeeded() {
         const {
-            configuration
+            configuration,
+            context
         } = this.props;
 
         const links = configuration.get("links");
@@ -123,7 +109,7 @@ export class DashboardView extends React.Component {
                         return <li key={index}
                                    style={style.link}
                                    >
-                                    <Link to={{ pathname:targetURL }}>
+                                    <Link to={{ pathname:targetURL, query: context}}>
                                         {link.get("label")}
                                     </Link>
                                </li>;
