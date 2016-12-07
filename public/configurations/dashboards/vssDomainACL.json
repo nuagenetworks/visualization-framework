@@ -10,12 +10,8 @@
     ],
     "links": [
         {
-            "label": "Traffic Analytics-I",
-            "url": "/dashboards/vssDomainTraffic1"
-        },
-        {
-            "label": "Traffic Analytics-II",
-            "url": "/dashboards/vssDomainTraffic2"
+            "label": "Traffic Analytics",
+            "url": "/dashboards/vssDomainTraffic"
         },
         {
             "label": "Flow Analytics",
