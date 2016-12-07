@@ -191,7 +191,7 @@ class MainMenuView extends React.Component {
                             style={style.listItem}
                             onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, context)}}
                             nestedItems={[
-                                <div style={style.nestedItems}>
+                                <div key={"sub-enterprise" + enterprise.ID} style={style.nestedItems}>
                                     {this.renderDomainsMenu()}
                                     {this.renderL2DomainsMenu()}
                                     {this.renderNSGsMenu()}

@@ -110,7 +110,7 @@ export class DashboardView extends React.Component {
 
         const links = configuration.get("links");
 
-        if (!links || links.length === 0)
+        if (!links || links.count() === 0)
             return;
 
         return (
