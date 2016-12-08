@@ -2,7 +2,7 @@ import tabify from './tabify';
 
 
 describe('ElasticSearch', () => {
-    xit('should tabify list of objects', () => {
+    it('should tabify list of objects', () => {
         const response = {
             "took": 8,
             "timed_out": false,
@@ -87,7 +87,7 @@ describe('ElasticSearch', () => {
     });
 
 
-    xit('should tabify list of single object', () => {
+    it('should tabify list of single object', () => {
         const response =   {
             "took": 6,
             "timed_out": false,
@@ -205,7 +205,7 @@ describe('ElasticSearch', () => {
         expect(tabify(response)).toEqual(expectedResults);
     });
 
-    xit('should tabify an empty list', () => {
+    it('should tabify an empty list', () => {
         const response = {
             "took": 14,
             "timed_out": false,
@@ -240,7 +240,7 @@ describe('ElasticSearch', () => {
         expect(tabify(response)).toEqual(expectedResults);
     });
 
-    xit('should tabify an object', () => {
+    it('should tabify an object', () => {
         const response =   {
             "took": 4,
             "timed_out": false,
