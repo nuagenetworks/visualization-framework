@@ -1,7 +1,7 @@
 {
     "id": "aar-domain-probe-path",
     "graph": "ChordGraph",
-    "title": "Probe Path",
+    "title": "Path Performance Measurements",
     "description": "Domain level top 10 NSG Path Performance Measurements. Computation: Count of NSGs with highest counts of probe records for the displayed time span.",
     "author": "Ronak Shah and Curran Kelleher",
     "creationDate": "11/02/2016",
