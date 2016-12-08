@@ -48,6 +48,13 @@ function collectBucket(node, stack=[]) {
         const value = node[key];
 
         if (typeof value === 'object') {
+
+            if ("hits" in value && Array.isArray(value.hits)) {
+                return {
+                  hits: value.hits.map((d) => d._source)
+                };
+            }
+
             if (Array.isArray(value)) {
                 return extractTree(value, [...stack, key]);
             }
@@ -57,9 +64,7 @@ function collectBucket(node, stack=[]) {
             {
                 return extractBuckets(value, [...stack, key]);
             }
-            else {
-                return collectBucket(value, [...stack, key]);
-            }
+            return collectBucket(value, [...stack, key]);
         }
     }
 
