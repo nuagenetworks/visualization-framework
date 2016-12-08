@@ -1,8 +1,8 @@
 {
     "id": "top5-app-vertical-bar",
     "graph": "BarGraph",
-    "title": "Top 5 Apps",
-    "description": "Enterprise level top 5 discovered applications. Computation: Sum of total Bytes sent and/or received in descending order.",
+    "title": "Top 5 Discovered Applications",
+    "description": "Enterprise level top 5 discovered applications. Computation: Sum of total Bytes sent and/or received in descending order across all domains.",
     "author": "Curran Kelleher",
     "creationDate": "10/13/2016",
     "data": {
@@ -20,7 +20,7 @@
             "#f79e99"
         ],
         "tooltip": [
-            { "column": "L7Classification", "label": "L7 Classification" },
+            { "column": "L7Classification", "label": "L7 Signature" },
             { "column": "Sum of MB", "format": ",.2s"}
         ],
         "margin": { "top": 15, "bottom": 40, "left": 50, "right": 20 }

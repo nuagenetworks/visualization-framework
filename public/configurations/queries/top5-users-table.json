@@ -41,7 +41,7 @@
                                 "field":"SrcIp",
                                 "size":5,
                                 "order":{
-                                    "TotalPacketsCount":"desc"
+                                    "TotalBytesCount":"desc"
                                 }
                             },
                             "aggs":{
@@ -52,7 +52,7 @@
                                 },
                                 "TotalBytesCount":{
                                     "sum":{
-                                        "field":"TotalBytessCount"
+                                        "field":"TotalBytesCount"
                                     }
                                 },
                                 "SourceNSG":{
@@ -60,7 +60,7 @@
                                         "field":"SourceNSG",
                                         "size":5,
                                         "order":{
-                                            "TotalPacketsCount":"desc"
+                                            "TotalBytesCount":"desc"
                                         }
                                     },
                                 "aggs":{

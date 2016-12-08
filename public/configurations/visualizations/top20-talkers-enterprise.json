@@ -1,7 +1,7 @@
 {
     "id": "top20-talkers-enterprise",
     "graph": "Table",
-    "title": "Top 20 talkers in Enterprise",
+    "title": "Top 20 Applications",
     "description": "Enterprise level top 20 applications. Computation: Sum of total Bytes sent and/or received in descending order.",
     "author": "Ronak Shah",
     "creationDate": "10/14/2016",
