@@ -51,7 +51,7 @@ function collectBucket(node, stack=[]) {
 
             if ("hits" in value && Array.isArray(value.hits)) {
                 return {
-                  hits: value.hits.map((d) => d._source)
+                    hits: value.hits.map((d) => d._source)
                 };
             }
 
@@ -153,9 +153,8 @@ function flatten(tree, parentNode={}){
                     const childTree = childTrees[0];
                     if(childTree.length === 0){
                         return node;
-                    } else {
-                        return flatten(childTree, node);
                     }
+                    return flatten(childTree, node);
                 default:
                     throw new Error("This case should never happen");
             }
