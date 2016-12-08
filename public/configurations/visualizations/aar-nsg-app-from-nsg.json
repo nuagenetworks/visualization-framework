@@ -2,7 +2,7 @@
     "id": "aar-nsg-app-from-nsg",
     "graph": "Table",
     "title": "Application - From NSG",
-    "description": "NSG level report of applications connected to local (this) NSG sending traffic to remote NSGs. Computation: Sum of ingress Bytes in descending order.",
+    "description": "This graph shows application usage per path between source and destination NSG. Computation: Sum of ingress Bytes in descending order",
     "author": "Ronak Shah",
     "creationDate": "10/13/2016",
     "data": {
