@@ -49,10 +49,8 @@ function collectBucket(node, stack=[]) {
 
         if (typeof value === 'object') {
 
-            if ("hits" in value && Array.isArray(value.hits)) {
-                return {
-                    hits: value.hits.map((d) => d._source)
-                };
+            if ("hits" in value && Array.isArray(value.hits) && value.hits.length === 1) {
+                return value.hits[0]._source;
             }
 
             if (Array.isArray(value)) {

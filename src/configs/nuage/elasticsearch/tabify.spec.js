@@ -412,66 +412,6 @@ describe('ElasticSearch', () => {
                                   ]
                                 }
                               }
-                            },
-                            {
-                              "key": "043b32dc-3e8b-486c-ace0-49ce44af1911",
-                              "doc_count": 5760,
-                              "top-acl-hits": {
-                                "hits": {
-                                  "total": 5760,
-                                  "max_score": null,
-                                  "hits": [
-                                    {
-                                      "_index": "nuage_flow",
-                                      "_type": "nuage_doc_type",
-                                      "_id": "AVeZYR7Vc3SvEs9LGNt5",
-                                      "_score": null,
-                                      "_source": {
-                                        "destinationport": 3,
-                                        "sourceport": 1,
-                                        "protocol": "UDP",
-                                        "nuage_metadata": {
-                                          "dpgName": "PG8",
-                                          "spgName": "PG10"
-                                        }
-                                      },
-                                      "sort": [
-                                        1000
-                                      ]
-                                    }
-                                  ]
-                                }
-                              }
-                            },
-                            {
-                              "key": "182abd52-9d10-45f0-9ee0-fff4a41da53f",
-                              "doc_count": 5760,
-                              "top-acl-hits": {
-                                "hits": {
-                                  "total": 5760,
-                                  "max_score": null,
-                                  "hits": [
-                                    {
-                                      "_index": "nuage_flow",
-                                      "_type": "nuage_doc_type",
-                                      "_id": "AVeZXx-Fc3SvEs9LFvUe",
-                                      "_score": null,
-                                      "_source": {
-                                        "destinationport": 4,
-                                        "sourceport": 4,
-                                        "protocol": "TCP",
-                                        "nuage_metadata": {
-                                          "dpgName": "PG13",
-                                          "spgName": "PG20"
-                                        }
-                                      },
-                                      "sort": [
-                                        1000
-                                      ]
-                                    }
-                                  ]
-                                }
-                              }
                             }
                           ]
                         }
@@ -484,94 +424,48 @@ describe('ElasticSearch', () => {
             }
           }
         };
-
+        
         const expectedResults = [
           {
             "top-acls": "55cd911d-aa9b-4647-b4dc-68a63122aa7c",
             "doc_count": 10080,
             "top-acl-hits": {
-              "hits": [
-                {
-                  "destinationport": 3,
-                  "sourceport": 5,
-                  "protocol": "TCP",
-                  "nuage_metadata": {
-                    "dpgName": "PG15",
-                    "spgName": "PG9"
-                  }
-                }
-              ]
+              "destinationport": 3,
+              "sourceport": 5,
+              "protocol": "TCP",
+              "nuage_metadata": {
+                "dpgName": "PG15",
+                "spgName": "PG9"
+              }
             }
           },
           {
             "top-acls": "ba6ee261-3aa1-439f-be90-102136300472",
             "doc_count": 7200,
             "top-acl-hits": {
-              "hits": [
-                {
-                  "destinationport": 1,
-                  "sourceport": 4,
-                  "protocol": "UDP",
-                  "nuage_metadata": {
-                    "dpgName": "PG15",
-                    "spgName": "PG18"
-                  }
-                }
-              ]
+              "destinationport": 1,
+              "sourceport": 4,
+              "protocol": "UDP",
+              "nuage_metadata": {
+                "dpgName": "PG15",
+                "spgName": "PG18"
+              }
             }
           },
           {
             "top-acls": "fd4ba772-608c-4ea2-84cc-701214385856",
             "doc_count": 7200,
             "top-acl-hits": {
-              "hits": [
-                {
-                  "destinationport": 3,
-                  "sourceport": 3,
-                  "protocol": "TCP",
-                  "nuage_metadata": {
-                    "dpgName": "PG8",
-                    "spgName": "PG9"
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "top-acls": "043b32dc-3e8b-486c-ace0-49ce44af1911",
-            "doc_count": 5760,
-            "top-acl-hits": {
-              "hits": [
-                {
-                  "destinationport": 3,
-                  "sourceport": 1,
-                  "protocol": "UDP",
-                  "nuage_metadata": {
-                    "dpgName": "PG8",
-                    "spgName": "PG10"
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "top-acls": "182abd52-9d10-45f0-9ee0-fff4a41da53f",
-            "doc_count": 5760,
-            "top-acl-hits": {
-              "hits": [
-                {
-                  "destinationport": 4,
-                  "sourceport": 4,
-                  "protocol": "TCP",
-                  "nuage_metadata": {
-                    "dpgName": "PG13",
-                    "spgName": "PG20"
-                  }
-                }
-              ]
+              "destinationport": 3,
+              "sourceport": 3,
+              "protocol": "TCP",
+              "nuage_metadata": {
+                "dpgName": "PG8",
+                "spgName": "PG9"
+              }
             }
           }
-        ]
+        ];
 
         expect(tabify(response)).toEqual(expectedResults);
     });
