@@ -48,6 +48,11 @@ function collectBucket(node, stack=[]) {
         const value = node[key];
 
         if (typeof value === 'object') {
+
+            if ("hits" in value && Array.isArray(value.hits) && value.hits.length === 1) {
+                return value.hits[0]._source;
+            }
+
             if (Array.isArray(value)) {
                 return extractTree(value, [...stack, key]);
             }
@@ -57,9 +62,7 @@ function collectBucket(node, stack=[]) {
             {
                 return extractBuckets(value, [...stack, key]);
             }
-            else {
-                return collectBucket(value, [...stack, key]);
-            }
+            return collectBucket(value, [...stack, key]);
         }
     }
 
@@ -148,9 +151,8 @@ function flatten(tree, parentNode={}){
                     const childTree = childTrees[0];
                     if(childTree.length === 0){
                         return node;
-                    } else {
-                        return flatten(childTree, node);
                     }
+                    return flatten(childTree, node);
                 default:
                     throw new Error("This case should never happen");
             }
