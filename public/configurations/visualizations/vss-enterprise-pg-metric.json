@@ -1,7 +1,7 @@
 {
-    "id": "vss-enterprise-flows-metric",
-    "title": "# Packets",
-    "query": "vss-enterprise-flows-metric",
+    "id": "vss-enterprise-pg-metric",
+    "title": "# PGs",
+    "query": "vss-enterprise-pg-metric",
     "graph": "VariationTextGraph",
     "showTitleBar": false,
     "data": {

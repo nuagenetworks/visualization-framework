@@ -23,13 +23,13 @@
         "margin": {
             "top": 20,
             "bottom": 40,
-            "left": 80,
-            "right": 40
+            "left": 130,
+            "right": 20
         },
         "xTickGrid": true,
         "yTickGrid": false,
         "xTickFormat": ".2s",
-        "xTicks": 5,
+        "xTicks": 8,
         "xLabel": "Total # ACL Deny",
         "yLabel": "Domains"
     },

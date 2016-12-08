@@ -32,7 +32,7 @@ def populateVPorts():
 			VPORTS.append(vport_prop)
 			vport_prop = {}
 
-def generateFlowStats(domain_id):
+def generateFlowStats(domain_id, type="l3"):
 	for i in range(len(VPORTS)):
 		es_data = {}
 		flow_data = random.sample(VPORTS, 2)
@@ -68,6 +68,13 @@ def generateFlowStats(domain_id):
                         'zoneName': CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-zone",
                         'aclId': flow_data[0]['uuid']
 		}
+                if type=="l3":
+                    es_data['nuage_metadata']['domainName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id)
+                    es_data['nuage_metadata']['subnetName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-sub"
+                    es_data['nuage_metadata']['zoneName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-zone"
+                else:
+                    es_data['nuage_metadata']['l2domainName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-l2"
+
 		print ("Writing flow information between " + flow_data[0]['name'] + " and " + flow_data[1]['name'])
 		writeToES(es_data)
 
@@ -104,4 +111,8 @@ if __name__ == "__main__":
             populateData()
 	    #print PGS
 	    #print VPORTS
-	    generateFlowStats(i)
+	    generateFlowStats(i, type="l2")
+        
+        for i in range(1, CONFIG_DICT['no_of_l2domains']+1):
+            generateFlowStats(i, type='l2') 
+        

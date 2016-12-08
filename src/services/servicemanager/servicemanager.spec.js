@@ -267,19 +267,27 @@ describe('ServiceManager Reducers', () => {
         };
 
         const currentDate    = new Date(),
-              expirationDate = currentDate.setTime(currentDate.getTime() + 86400000); // 24h
+              expectedExpirationDate = currentDate.setTime(currentDate.getTime() + 86400000); // 24h
 
         const expectedState = Map({
             requests: Map({
                 example: Map({
                     isFetching: false,
                     results: self.expectedResults,
-                    expirationDate: expirationDate
                 })
             }),
         })
 
-        expect(servicesReducer(undefined, action)).toEqual(expectedState)
+        const fullState = servicesReducer(undefined, action);
+        const expirationDate = fullState.getIn(["requests", "example", "expirationDate"]);
+
+        const state = fullState.deleteIn(["requests", "example", "expirationDate"]);
+
+        expect(state).toEqual(expectedState)
+
+        // As there may be a slight delay between the creation of the two
+        // current dates being created, allow for a max difference of 2 ms.
+        expect(expirationDate - expectedExpirationDate < 2).toEqual(true);
     })
 
     it('should return the received error', () => {

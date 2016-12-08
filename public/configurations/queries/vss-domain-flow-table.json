@@ -15,6 +15,8 @@
         	    {
            	    "bool": {
              	    "must": [
+                    {"term": {"nuage_metadata.enterpriseName": "{{enterpriseName}}"} },
+                    {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
                     {"term": {"nuage_metadata.spgName": "{{spg}}"} },
                     { "term": {"nuage_metadata.dpgName": "{{dpg}}"} },
                     {"range": { "timestamp": { "gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
@@ -24,6 +26,8 @@
               {
                 "bool": {
                   "must": [
+                    {"term": {"nuage_metadata.enterpriseName": "{{enterpriseName}}"} },
+                    {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
                     { "term": {"nuage_metadata.spgName": "{{dpg}}"} },
                     { "term": {"nuage_metadata.dpgName": "{{spg}}"} },
                     {"range": { "timestamp": {"gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}

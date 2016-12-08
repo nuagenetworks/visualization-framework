@@ -1,7 +1,7 @@
 {
-    "id": "vss-enterprise-flows-metric",
-    "title": "# Packets",
-    "query": "vss-enterprise-flows-metric",
+    "id": "vss-enterprise-events-metric",
+    "title": "# Events",
+    "query": "vss-enterprise-events-metric",
     "graph": "VariationTextGraph",
     "showTitleBar": false,
     "data": {
@@ -9,7 +9,7 @@
         "target":{
             "column": "timezones",
             "value": "Last 24",
-            "field": "value"
+            "field": "doc_count"
         }
     }
 }

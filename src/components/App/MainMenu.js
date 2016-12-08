@@ -62,13 +62,6 @@ class MainMenuView extends React.Component {
         });
     }
 
-    cleanupContext(context) {
-        delete context["domainName"];
-        delete context["l2domainName"];
-        delete context["snsg"];
-        delete context["dnsg"];
-    }
-
     renderDomainsMenu() {
         const {
             context,
@@ -80,15 +73,14 @@ class MainMenuView extends React.Component {
             return;
 
         const targetedDashboard = visualizationType === "VSS" ? "vssDomainFlow" : "aarDomain";
-
-        this.cleanupContext(context);
+        const domainType = "nuage_metadata.domainName"
 
         return (
             <div>
                 {domains.map((domain) => {
 
 
-                    let queryParams = Object.assign({}, context, {domainName: domain.name});
+                    let queryParams = Object.assign({}, context, {domainName: domain.name, domainType: domainType});
 
                     return (
                         <ListItem
@@ -118,14 +110,13 @@ class MainMenuView extends React.Component {
             return;
 
         const targetedDashboard = visualizationType === "VSS" ? "vssL2DomainFlow" : "aarL2Domain";
-
-        this.cleanupContext(context);
+        const domainType = "nuage_metadata.l2domainName"
 
         return (
             <div>
                 {l2Domains.map((l2Domain) => {
 
-                    let queryParams = Object.assign({}, context, {l2domainName: l2Domain.name});
+                    let queryParams = Object.assign({}, context, {domainName: l2Domain.name, domainType: domainType});
 
                     return (
                         <ListItem
@@ -152,8 +143,6 @@ class MainMenuView extends React.Component {
 
         if (!nsgs || nsgs.length === 0)
             return;
-
-        this.cleanupContext(context);
 
         return (
             <div>
@@ -202,7 +191,7 @@ class MainMenuView extends React.Component {
                             style={style.listItem}
                             onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, context)}}
                             nestedItems={[
-                                <div style={style.nestedItems}>
+                                <div key={"sub-enterprise" + enterprise.ID} style={style.nestedItems}>
                                     {this.renderDomainsMenu()}
                                     {this.renderL2DomainsMenu()}
                                     {this.renderNSGsMenu()}
@@ -280,8 +269,7 @@ const actionCreators = (dispatch) => ({
     },
 
     goTo: function(link, context) {
-        dispatch(InterfaceActions.updateContext(context))
-        dispatch(push({pathname:link}));
+        dispatch(push({pathname:link, query:context}));
     },
 
     fetchEnterpriseIfNeeded: (enterpriseID) => {

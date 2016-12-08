@@ -1,7 +1,6 @@
 import React from "react";
 
 import AbstractGraph from "../AbstractGraph";
-import ReactTooltip from "react-tooltip";
 import columnAccessor from "../../../utils/columnAccessor";
 
 import * as d3 from "d3";
@@ -14,7 +13,7 @@ export default class ChordGraph extends AbstractGraph {
     constructor(props) {
         super(props, properties);
     }
-    
+
     componentDidMount() {
         this.chordDiagram = ChordDiagram(this.svg);
         this.updateChord(this.props);
@@ -146,7 +145,7 @@ export default class ChordGraph extends AbstractGraph {
 }
 ChordGraph.propTypes = {
   configuration: React.PropTypes.object,
-  data: React.PropTypes.object
+  data: React.PropTypes.array
 };
 
 

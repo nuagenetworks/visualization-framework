@@ -116,8 +116,7 @@ const mapStateToProps = (state, ownProps) => ({
 const actionCreators = (dispatch) => ({
 
     goTo: function(link, context) {
-        dispatch(InterfaceActions.updateContext(context));
-        dispatch(push({pathname:link}));
+        dispatch(push({pathname:link, query:context}));
     },
 
     updateContext: function(context) {

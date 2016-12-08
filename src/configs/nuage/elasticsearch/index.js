@@ -33,18 +33,30 @@ const fetch = function (parameters, state) {
     var client = ESClient(state) // eslint-disable-line
 
     if (!client)
-        return;
+        return Promise.reject();
 
-    return client.search(parameters.query);
+    return new Promise((resolve, reject) => {
+        client.search(parameters.query).then(function (body) {
+            resolve(body);
+        }, function (error) {
+            reject(error.body.error.reason + ": " + error.body.error["resource.id"]);
+        });
+    });
 }
 
 const ping = function (parameters, state) {
     var client = ESClient(); // eslint-disable-line
 
     if (!client)
-        return;
+        return Promise.reject();
 
-    return client.ping(parameters);
+    return new Promise((resolve, reject) => {
+        client.search(parameters.query).then(function (body) {
+            resolve(body);
+        }, function (error) {
+            reject(error.body.error.reason + ": " + error.body.error["resource.id"]);
+        });
+    });
 }
 
 /* Computes the request ID based on the parameters that are actually used
