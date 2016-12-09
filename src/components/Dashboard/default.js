@@ -40,7 +40,7 @@ export const defaultFilterOptions = {
             },
             {
                 "label": "30 seconds",
-                "value": "3000",
+                "value": "30000",
             }
         ]
     }
