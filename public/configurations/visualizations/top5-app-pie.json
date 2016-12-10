@@ -15,7 +15,14 @@
         "percentagesFormat": ",.1%",
         "pieLabelRadius": 0.55,
         "pieOuterRadius": 0.95,
-        "colorLegend": true
+        "legend": {
+            "show": true,
+            "orientation": "horizontal",
+            "circleSize": 4,
+            "labelOffset": 2,
+            "charToPixel": 8,
+            "circleToPixel": 3
+        }
     },
     "listeners": [{
       "redirect": "/dashboards/dateHistogramExample",

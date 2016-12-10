@@ -42,7 +42,7 @@ const getGraphComponent = function (name) {
 
 // Define all default properties for graphs
 const defaults = {
-    margin: { top: 15, bottom: 20, left: 30, right: 20 },
+    margin: { top: 10, bottom: 10, left: 10, right: 10 },
     padding: 0.1,
     yTickGrid: true,
     yTickSizeInner: 6,
