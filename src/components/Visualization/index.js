@@ -201,7 +201,6 @@ class VisualizationView extends React.Component {
     renderVisualization() {
         const {
             configuration,
-            context,
             queryConfiguration,
             response
         } = this.props;
@@ -219,25 +218,14 @@ class VisualizationView extends React.Component {
             return this.renderCardWithInfo("No data to visualize", "bar-chart");
         }
 
-        const refreshInterval = context.refreshInterval,
-              timeout         = configuration.refreshInterval || refreshInterval,
-              enabled         = refreshInterval > 0;
-
         return (
-            <div>
-                <ReactInterval
-                    enabled={enabled}
-                    timeout={parseInt(timeout, 10)}
-                    callback={() => { this.initialize(this.props.id) }}
-                    />
-                <GraphComponent
-                  data={data}
-                  configuration={configuration}
-                  width={this.state.width}
-                  height={this.state.height}
-                  {...this.state.listeners}
-                />
-            </div>
+            <GraphComponent
+              data={data}
+              configuration={configuration}
+              width={this.state.width}
+              height={this.state.height}
+              {...this.state.listeners}
+            />
         )
     }
 
@@ -304,7 +292,8 @@ class VisualizationView extends React.Component {
 
     render() {
         const {
-            configuration
+            configuration,
+            context
         } = this.props;
 
         if (!this.state.parameterizable || !configuration)
@@ -324,10 +313,14 @@ class VisualizationView extends React.Component {
 
         let cardText = Object.assign({}, style.cardText, {
             width: this.state.width,
-            height: this.state.height}
-        );
+            height: this.state.height
+        });
 
         const configStyle = configuration.styles || {};
+
+        let refreshInterval = context.refreshInterval,
+            timeout         = parseInt(configuration.refreshInterval || refreshInterval, 10),
+            enabled         = refreshInterval > 0;
 
         return (
             <Card
@@ -340,6 +333,11 @@ class VisualizationView extends React.Component {
                 <CardText style={cardText}>
                     { this.renderVisualizationIfNeeded() }
                     {description}
+                    <ReactInterval
+                        enabled={enabled}
+                        timeout={timeout}
+                        callback={() => { this.initialize(this.props.id) }}
+                        />
                 </CardText>
             </Card>
         );
