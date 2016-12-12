@@ -46,9 +46,10 @@ def generateEventStats(domain_id):
 			'domainName': CONFIG_DICT['domain.name'] + "-" + str(domain_id),
 			'enterpriseName': CONFIG_DICT['enterprise.name'],
                         'subnetName': CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-subnet",
-                        'zoneName': CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-zone", 
+                        'zoneName': CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-zone",
+                        'vportId': flow_data[0]['uuid']
 		}
-		print ("Writing flow information between " + flow_data[0]['name'] + " and " + flow_data[1]['name'])
+		print ("Writing event information between " + flow_data[0]['name'] + " and " + flow_data[1]['name'])
 		writeToES(es_data)
 
 def writeToES(es_data):
