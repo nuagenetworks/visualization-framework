@@ -9,11 +9,11 @@
         "dateHistogram": true,
         "interval": "30m",
         "xColumn": "date-histo",
-        "yColumn": "SumOfPackets",
+        "yColumn": "SumOfBytes",
         "yTickFormat": ".2s",
         "colorColumn": "date-histo",
         "xLabel": "Time",
-        "yLabel": "Total Packets",
+        "yLabel": "Total Bytes",
         "margin": {
             "top": 15,
             "bottom": 40,
