@@ -46,11 +46,6 @@
                                     "sum":{
                                         "field":"TotalBytesCount"
                                     }
-                                },
-                                "SumOfPackets":{
-                                    "sum":{
-                                        "field":"TotalPacketsCount"
-                                    }
                                 }
                             }
                         }
