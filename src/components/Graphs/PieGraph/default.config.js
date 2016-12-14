@@ -17,13 +17,5 @@ export const properties = {
     stroke: {
         color: theme.palette.whiteColor,
         width: "3px"
-    },
-    legend: {
-        show: true,                 // Show or not the legend style
-        orientation: 'vertical',    // Orientation between 'vertical' and 'horizontal'
-        circleSize: 4,              // Size in pixel of the circle
-        labelOffset: 2,             // Space in pixels between the circle and the label,
-        charToPixel: 8,             // Default value to convert a char to pixel
-        circleToPixel: 3,           // Default value to convert the circle to pixel
     }
 }

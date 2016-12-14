@@ -54,29 +54,64 @@ export default class BarGraph extends XYGraph {
             return;
 
         const {
+          chartHeightToPixel,
+          chartWidthToPixel,
+          circleToPixel,
           colorColumn,
           colors,
-          xColumn,
-          yColumn,
-          margin: { top, bottom, left, right },
-          padding,
-          yTickGrid,
-          yTickSizeInner,
-          yTickSizeOuter,
-          yTickFormat,
-          yTicks,
-          xTickGrid,
-          xTickSizeInner,
-          xTickSizeOuter,
-          xTickFormat,
-          xTicks,
-          orientation,
           dateHistogram,
           interval,
-          stroke
+          legend,
+          margin,
+          orientation,
+          padding,
+          stroke,
+          xColumn,
+          xLabel,
+          xTickFormat,
+          xTickGrid,
+          xTicks,
+          xTickSizeInner,
+          xTickSizeOuter,
+          yColumn,
+          yTickFormat,
+          yTickGrid,
+          yTicks,
+          yTickSizeInner,
+          yTickSizeOuter,
         } = this.getConfiguredProperties();
 
-        const vertical = orientation === "vertical";
+        const vertical         = orientation        === "vertical";
+        const isVerticalLegend = legend.orientation === 'vertical';
+        const xLabelFn         = (d) => d[xColumn];
+        const yLabelFn         = (d) => d[yColumn];
+        const label            = vertical ? xLabelFn : yLabelFn;
+        const scale            = this.scaleColor(data, vertical ? yColumn : xColumn);
+        const getColor         = (d) => scale ? scale(d[colorColumn || (vertical ? yColumn : xColumn)]) : colors[0];
+
+        let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
+        let xAxisLabelWidth   = this.longestLabelLength(data, xLabelFn, xTickFormat) * chartWidthToPixel;
+        let yAxisLabelWidth   = this.longestLabelLength(data, yLabelFn, yTickFormat) * chartWidthToPixel;
+        let leftMargin        = margin.left + yAxisLabelWidth;
+        let availableWidth    = width - (margin.left + margin.right + yAxisLabelWidth);
+        let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
+
+        if (legend.show)
+        {
+            legend.width = vertical ? xAxisLabelWidth : yAxisLabelWidth;
+
+            // Compute the available space considering a legend
+            if (isVerticalLegend)
+            {
+                leftMargin      +=  legend.width;
+                availableWidth  -=  legend.width;
+            }
+            else {
+                const nbElementsPerLine  = parseInt(availableWidth / legend.width, 10);
+                const nbLines            = parseInt(data.length / nbElementsPerLine, 10);
+                availableHeight         -= nbLines * legend.circleSize * circleToPixel + chartHeightToPixel;
+            }
+        }
 
         let xScale, yScale;
 
@@ -84,37 +119,34 @@ export default class BarGraph extends XYGraph {
 
             // Handle the case of a vertical date histogram.
             xScale = d3.scaleTime()
-              .domain(d3.extent(data, function (d){ return d[xColumn]; }));
+              .domain(d3.extent(data, xLabelFn));
             yScale = d3.scaleLinear()
-              .domain([0, d3.max(data, function (d){ return d[yColumn] })]);
+              .domain([0, d3.max(data, yLabelFn)]);
 
-        } else if(vertical) {
+        } else if (vertical) {
 
             // Handle the case of a vertical bar chart.
             xScale = d3.scaleBand()
-              .domain(data.map(function (d){ return d[xColumn]; }))
+              .domain(data.map(xLabelFn))
               .padding(padding);
             yScale = d3.scaleLinear()
-              .domain([0, d3.max(data, function (d){ return d[yColumn] })]);
+              .domain([0, d3.max(data, yLabelFn)]);
 
         } else {
 
             // Handle the case of a horizontal bar chart.
             xScale = d3.scaleLinear()
-              .domain([0, d3.max(data, function (d){ return d[xColumn] })]);
+              .domain([0, d3.max(data, xLabelFn)]);
             yScale = d3.scaleBand()
-              .domain(data.map(function (d){ return d[yColumn]; }))
+              .domain(data.map(yLabelFn))
               .padding(padding);
         }
 
-        const innerWidth = width - left - right;
-        const innerHeight = height - top - bottom;
-
-        xScale.range([0, innerWidth]);
-        yScale.range([innerHeight, 0]);
+        xScale.range([0, availableWidth]);
+        yScale.range([availableHeight, 0]);
 
         const xAxis = d3.axisBottom(xScale)
-          .tickSizeInner(xTickGrid ? -innerHeight : xTickSizeInner)
+          .tickSizeInner(xTickGrid ? -availableHeight : xTickSizeInner)
           .tickSizeOuter(xTickSizeOuter);
 
         if(xTickFormat){
@@ -126,7 +158,7 @@ export default class BarGraph extends XYGraph {
         }
 
         const yAxis = d3.axisLeft(yScale)
-          .tickSizeInner(yTickGrid ? -innerWidth : yTickSizeInner)
+          .tickSizeInner(yTickGrid ? -availableWidth : yTickSizeInner)
           .tickSizeOuter(yTickSizeOuter);
 
         if(yTickFormat){
@@ -145,32 +177,49 @@ export default class BarGraph extends XYGraph {
             barWidth = xScale.bandwidth();
         }
 
-        const scale = this.scaleColor(data, vertical ? yColumn : xColumn);
+        let xTitlePosition = {
+            left: leftMargin + availableWidth / 2,
+            top: margin.top + availableHeight + chartHeightToPixel + xAxisHeight
+        }
+        let yTitlePosition = {
+            // We use chartWidthToPixel to compensate the rotation of the title
+            left: margin.left + chartWidthToPixel + (isVerticalLegend ? legend.width : 0),
+            top: margin.top + availableHeight / 2
+        }
 
         return (
             <div className="bar-graph">
                 {this.tooltip}
-                <svg width={width} height={height}>
-                    {this.axisLabels()}
-                    <g transform={ `translate(${left},${top})` } >
+                <svg
+                    style={{
+                        width: width,
+                        height: height
+                    }}
+                    >
+                    {this.axisTitles(xTitlePosition, yTitlePosition)}
+                    <g transform={ `translate(${leftMargin},${margin.top})` } >
                         <g
                             key="xAxis"
                             ref={ (el) => d3.select(el).call(xAxis) }
-                            transform={ `translate(0,${innerHeight})` }
+                            transform={ `translate(0, ${availableHeight})` }
                         />
                         <g
                             key="yAxis"
                             ref={ (el) => d3.select(el).call(yAxis) }
                         />
                         {data.map((d, i) => {
-
                             // Compute rectangle depending on orientation (vertical or horizontal).
-                            const { x, y, width, height } = (
+                            const {
+                                x,
+                                y,
+                                width,
+                                height
+                            } = (
                                 vertical ? {
                                     x: xScale(d[xColumn]),
                                     y: yScale(d[yColumn]),
                                     width: barWidth,
-                                    height: innerHeight - yScale(d[yColumn])
+                                    height: availableHeight - yScale(d[yColumn])
                                 } : {
                                     x: 0,
                                     y: yScale(d[yColumn]),
@@ -178,9 +227,6 @@ export default class BarGraph extends XYGraph {
                                     height: yScale.bandwidth()
                                 }
                             );
-
-                            // Compute the fill color based on the index.
-                            const fill = scale ? scale(d[colorColumn || (vertical ? yColumn : xColumn)]) : colors[0];
 
                             // Set up clicking and cursor style.
                             const { onClick, style } = (
@@ -205,7 +251,7 @@ export default class BarGraph extends XYGraph {
                                     y={ y }
                                     width={ width }
                                     height={ height }
-                                    fill={ fill }
+                                    fill={ getColor(d) }
                                     onClick={ onClick }
                                     style={ style }
                                     key={ i }
@@ -216,6 +262,7 @@ export default class BarGraph extends XYGraph {
                             );
                         })}
                     </g>
+                    {this.renderLegend(data, legend, getColor, label)}
                 </svg>
             </div>
         );

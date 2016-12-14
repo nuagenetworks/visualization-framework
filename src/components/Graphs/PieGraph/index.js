@@ -15,97 +15,6 @@ export default class PieGraph extends AbstractGraph {
         super(props, properties);
     }
 
-    renderLegend(legend, getColor, label) {
-
-        if (!legend.show)
-            return;
-
-        const {
-            data,
-            width,
-            height
-        } = this.props;
-
-        const {
-          margin,
-          fontColor,
-        } = this.getConfiguredProperties();
-
-        const isVertical = legend.orientation === 'vertical';
-        const lineHeight = legend.circleSize * legend.circleToPixel;
-
-        if (isVertical)
-        {
-            // Place the legends in the bottom left corner
-            let left = margin.left;
-            let top  = height - (margin.bottom + ((data.length - 1) * lineHeight));
-
-            return (
-                <g>
-                    {data.map((d, i) => {
-                        const x = left;
-                        const y = top + (i *  lineHeight);
-                        return (
-                            <g
-                                key={i}
-                                transform={ `translate(${x}, ${y})` }>
-
-                                <circle
-                                  r={ legend.circleSize }
-                                  fill={ getColor(d) }
-                                />
-
-                                <text
-                                  fill={ fontColor }
-                                  alignmentBaseline="central"
-                                  x={ legend.circleSize + legend.labelOffset }
-                                >
-                                    { label(d) }
-                                </text>
-                            </g>
-                        );
-                    })}
-                </g>
-            );
-        }
-
-        // Place legends horizontally
-        const availableWidth    = width - margin.left - margin.right;
-        const labelWidth        = legend.longestLabel.length * legend.charToPixel;
-        const nbElementsPerLine = parseInt(availableWidth / labelWidth, 10);
-        const nbLines           = parseInt(data.length / nbElementsPerLine, 10);
-        const left              = margin.left;
-        const top               = height - (margin.bottom + (nbLines * lineHeight));
-
-        return (
-            <g>
-                {data.map((d, i) => {
-                    const x = left + ((i % nbElementsPerLine) * labelWidth);
-                    const y = top + parseInt(i / nbElementsPerLine, 10) * lineHeight;
-                    return (
-                        <g
-                            key={i}
-                            transform={ `translate(${x}, ${y})` }>
-
-                            <circle
-                              r={ legend.circleSize }
-                              fill={ getColor(d) }
-                            />
-
-                            <text
-                              fill={ fontColor }
-                              alignmentBaseline="central"
-                              x={ legend.circleSize + legend.labelOffset }
-                            >
-                                { label(d) }
-                            </text>
-                        </g>
-                    );
-                })}
-            </g>
-        );
-    }
-
     render() {
 
         const {
@@ -119,6 +28,8 @@ export default class PieGraph extends AbstractGraph {
             return;
 
         const {
+          chartWidthToPixel,
+          circleToPixel,
           colorColumn,
           sliceColumn,
           labelColumn,
@@ -146,15 +57,13 @@ export default class PieGraph extends AbstractGraph {
         {
             // Extract the longest legend
             // Store the info in legend for convenience
-            legend.longestLabel = label(data.reduce((a, b) => {
-                return label(a).length > label(b).length ? a : b;
-            }));
+            legend.width = this.longestLabelLength(data, label) * chartWidthToPixel;
 
             // Compute the available space considering a legend
             if (isVerticalLegend)
-                availableWidth -= legend.longestLabel.length * legend.charToPixel;
+                availableWidth -= legend.width;
             else
-                availableHeight -= (data.length - 1) * legend.circleSize * legend.circleToPixel;
+                availableHeight -= (data.length - 1) * legend.circleSize * circleToPixel;
         }
 
         const maxRadius   = Math.min(availableWidth, availableHeight) / 2;
@@ -234,7 +143,7 @@ export default class PieGraph extends AbstractGraph {
                         }
                     </g>
 
-                    {this.renderLegend(legend, getColor, label)}
+                    {this.renderLegend(data, legend, getColor, label)}
                 </svg>
             </div>
         );

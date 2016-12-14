@@ -7,32 +7,32 @@ export default class XYGraph extends AbstractGraph {
         super(props, properties);
     }
 
-    axisLabels() {
+    writeYLabel(x, y) {
 
-        const { width, height } = this.props;
+    }
+
+    writeXLabel(x, y) {
+
+    }
+
+    axisTitles(xLabelPosition, yLabelPosition) {
 
         const {
-          margin: { top, bottom, left, right },
           xColumn,
           xLabel,
-          xLabelOffset,
           xLabelSize,
           yColumn,
           yLabel,
-          yLabelOffset,
           yLabelSize,
         } = this.getConfiguredProperties();
-
-        const innerWidth = width - left - right;
-        const innerHeight = height - top - bottom;
 
         return (
             <g>
                 { xLabel ? (
                     <text
                         className="axis-label"
-                        x={ left + (innerWidth / 2) }
-                        y={ height - xLabelOffset }
+                        x={ xLabelPosition.left }
+                        y={ xLabelPosition.top }
                         textAnchor="middle"
                         fontSize={xLabelSize + "px"}
                     >
@@ -45,9 +45,9 @@ export default class XYGraph extends AbstractGraph {
                         className="axis-label"
                         transform={[
                           "translate(",
-                          yLabelOffset,
+                          yLabelPosition.left ,
                           ",",
-                          top + innerHeight / 2,
+                          yLabelPosition.top,
                           ") rotate(-90)"
                         ].join("")}
                         textAnchor="middle"
