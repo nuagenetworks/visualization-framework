@@ -19,9 +19,7 @@
             "show": true,
             "orientation": "horizontal",
             "circleSize": 4,
-            "labelOffset": 2,
-            "charToPixel": 8,
-            "circleToPixel": 3
+            "labelOffset": 2
         }
     },
     "listeners": [{
