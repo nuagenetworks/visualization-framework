@@ -100,7 +100,7 @@ Here is the list of options:
     - **show** `true` to display legend. `false` otherwise. Default is `false`
     - **orientation** `vertical` or `horizontal` legend. Default is `vertical`
     - **circleSize** size of a legend circle. Default is `4` pixels
-    - **labelOffset** space in pixel between the legend circle and its label
+    - **labelOffset** space in pixel between the legend circle and its label. Default is `2`
   - **tooltip** list of tooltip parameters
 - **listeners** list of listener to register to interact with the visualization
   - **redirect** url to another dashboard
@@ -118,8 +118,18 @@ Here is the list of options:
     "creationDate": "12/14/2016",
     "query": "top5statistics",
     "data": {
-        // See specific data below
-    }
+        "margin": { "top": 10, "bottom": 10, "left": 10, "right": 10 },
+        "padding": { "top": 8, "bottom": 8, "left": 8, "right": 8 },
+        "colors": ["#1f77b4", "#ff7f0e", "#9467bd", "#e377c2"],
+        "legend": {
+            "show": true,
+            "orientation": "vertical",
+            "circleSize": 4,
+            "labelOffset": 2
+        },
+        "tooltip": "See tooltip section",
+    },
+    "listeners": "See listeners section"
 }
 ```
 
@@ -130,7 +140,7 @@ The Visualization Framework comes with pre-defined graphs. Each graphs has its o
 ##### BarGraph
 Display vertical or horizontal bar charts
 
-![Horizontal BarGraph](https://github.com/nuagenetworks/visualization-framework/tree/master/docs/img/horizontal-bar.png "Horizontal BarGraph")
+![Horizontal BarGraph](https://github.com/nuagenetworks/visualization-framework/blob/documentation/docs/img/horizontal-bar.png "Horizontal BarGraph")
 
 
 - **orientation** orientation of the graph. Default is `vertical`. Set to `horizontal` to have an horizontal bar chart.
@@ -169,7 +179,7 @@ See x-axis and y-axis sections in BarGraph for more information
 ##### PieGraph
 Display nice Pie or Donut graphs
 
-![Donut Graph](https://github.com/nuagenetworks/visualization-framework/tree/master/docs/img/donut.png "DonutGraph")
+![Donut Graph](https://github.com/nuagenetworks/visualization-framework/blob/documentation/docs/img/donut.png "DonutGraph")
 
 - **pieInnerRadius** inner radius of the slices. Make this non-zero for a Donut Chart
 - **pieOuterRadius** outer radius of the slices
