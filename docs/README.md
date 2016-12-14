@@ -57,7 +57,7 @@ Here is the list of all the parameters
   - **static** `false` to create a resizable visualization, `true` if you want a static one. Default is `false`.
 
 #### Example
-```json
+```javascript
 {
     "id": "myFirstDashboard",
     "author": "Christophe SERAFIN",
@@ -116,7 +116,7 @@ Here is the list of options:
 
 
 #### Example
-```json
+```javascript
 {
     "id": "statisticsBar1",
     "graph": "BarGraph",
@@ -236,8 +236,80 @@ This graph shows a value and its variation from the previous one.
 - **fontColor** font color
 
 ### Query configuration
-[TODO]
+The query configuration allows the Visualization to know which [service](#services) it should use and what is the query it should trigger.
+
+- **id** identifier, also used as the filename
+- **title** title of the query
+- **service** name of the service that has been registered
+- **query** query object that will be "contextualized" and then sent to your service
+
+```javascript
+{
+    "id":"top5statistics",
+    "title":"Top 5 Statistics",
+    "service":"elasticsearch",
+    "query":{
+        // The query information here depends on your service
+    }
+}
+```
+
+Important note: The visualization framework is using a `context` to determine all the information needed.
+If you need to pass a specific parameter, check out this example:
+
+```javascript
+{
+    "id":"top5statistics",
+    "title":"Top 5 Statistics",
+    "service":"elasticsearch",
+    "query":{
+        "resourceName": "{{resourceName:defaultName}}"
+    }
+}
+```
+
+The query configuration will be "contextualized" which means:
+
+- if the `context` contains a parameter named `resourceName`, the query will send its value
+- if the `context` does NOT contain `resourceName`, the value sent will be `defaultName`
+
+Visualization Framework is using [json-templates](https://github.com/datavis-tech/json-templates) thanks to [@curran](https://github.com/curran),
 
 
 ## Services
-[TODO]
+A service is a Javascript Object that defines how to access a remote resource.
+For instance, we have created a service named `elasticsearch` that allows us to make some query to our Elastic Search server.
+
+
+### How it works ?
+Each service must define some methods and expose them.
+
+As an example, here is the structure of our `elasticsearch` service
+
+```javascript
+export const ElasticSearchService = {
+    id: "elasticsearch",
+    fetch: fetch,
+    getRequestID: getRequestID,
+    tabify: tabify
+}
+```
+
+- **id*** identifier of the service
+- **fetch(queryConfiguration, state)*** fetch is the method that will make the XHR request to the remote service. It takes two arguments:
+  - `queryConfiguration` is the contextualized query configuration
+  - `state` is the redux state. It will allow you to define some [redux thunks](https://github.com/gaearon/redux-thunk)
+- **getRequestID(queryConfiguration, context)*** method that computes a unique string representing a request. The result will be stored in the redux state given this identifier.
+- **tabify(response)** transformes your service responses into a tabified result. If no tabify method is defined, the response will be treated as it is.
+
+
+### How to use my service ?
+Once you have created your service, you will need to let the Visualization Framework how to use it.
+Just tell `ServiceManager` that you want to register the service using the following syntax:
+
+```javascript
+    import { ServiceManager } from "opensource-vf";
+    ServiceManager.register(ElasticSearchService, "elasticsearch");
+```
+
+The second argument is optional. If you do not provide a name, the service identifier will be automatically used.
