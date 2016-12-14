@@ -89,6 +89,7 @@ Here is the list of options:
 - **description*** a description of the visualization
 - **query*** identifier of the query to execute for this visualization
 - **data** an object that helps you configure your visualization. (See below to find graphs specific data).
+  - **colorColumn** attribute name in your results to use for color
   - **padding**
      - **top** set top padding in pixels
     - **bottom** set bottom padding in pixels
@@ -151,7 +152,6 @@ Display vertical or horizontal bar charts
 
 
 - **orientation** orientation of the graph. Default is `vertical`. Set to `horizontal` to have an horizontal bar chart.
-- **colorColumn** attribute name in your results to use for color
 - **dateHistogram** [TO COMPLETE]
 - **interval** [TO COMPLETE - looks related to dateHistogram]
 
@@ -178,7 +178,6 @@ __y-axis__
 
 ##### LineGraph
 - **linesColumn** attribute name in your results to display line value
-- **colorColumn** attribute name in your results to use for color
 
 See x-axis and y-axis sections in BarGraph for more information
 
