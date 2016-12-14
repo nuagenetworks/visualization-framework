@@ -2,6 +2,8 @@ import React from "react";
 import { scaleOrdinal } from "d3";
 import ReactTooltip from "react-tooltip";
 
+import * as d3 from "d3";
+
 import { GraphManager } from "./index";
 import columnAccessor from "../../utils/columnAccessor";
 
@@ -100,6 +102,117 @@ export default class AbstractGraph extends React.Component {
         scale.domain(data.map((d) => d[colorColumn || defaultColumn]));
 
         return scale;
+    }
+
+    longestLabelLength(data, label, formatter) {
+        // Basic function if none provided
+        if (!label)
+            label = (d) => d;
+
+        let format = (d) => d;
+
+        if (formatter)
+            format = d3.format(formatter);
+
+
+        // Extract the longest legend according to the label function
+        const longestLabel = label(data.reduce((a, b) => {
+            return format(label(a).toString()).length > format(label(b).toString()).length ? a : b;
+        })).toString();
+
+        // and return its length + 1 to ensure we have enough space
+        return format(longestLabel).length + 1;
+    }
+
+    renderLegend(data, legend, getColor, label) {
+
+        if (!legend.show)
+            return;
+
+        const {
+            width,
+            height
+        } = this.props;
+
+        const {
+          margin,
+          fontColor,
+          circleToPixel,
+        } = this.getConfiguredProperties();
+
+        const isVertical = legend.orientation === 'vertical';
+        const lineHeight = legend.circleSize * circleToPixel;
+
+        if (isVertical)
+        {
+            // Place the legends in the bottom left corner
+            let left = margin.left;
+            let top  = height - (margin.bottom + ((data.length - 1) * lineHeight));
+
+            return (
+                <g>
+                    {data.map((d, i) => {
+                        const x = left;
+                        const y = top + (i *  lineHeight);
+                        return (
+                            <g
+                                key={i}
+                                transform={ `translate(${x}, ${y})` }>
+
+                                <circle
+                                  r={ legend.circleSize }
+                                  fill={ getColor(d) }
+                                />
+
+                                <text
+                                  fill={ fontColor }
+                                  alignmentBaseline="central"
+                                  x={ legend.circleSize + legend.labelOffset }
+                                >
+                                    { label(d) }
+                                </text>
+                            </g>
+                        );
+                    })}
+                </g>
+            );
+        }
+
+        // Place legends horizontally
+        const availableWidth    = width - margin.left - margin.right;
+        const legendWidth       = legend.width + legend.circleSize + 2 * legend.labelOffset;
+        const nbElementsPerLine = parseInt(availableWidth / legendWidth, 10);
+        const nbLines           = parseInt(data.length / nbElementsPerLine, 10);
+        const left              = margin.left;
+        const top               = height - (margin.bottom + (nbLines * lineHeight));
+
+        return (
+            <g>
+                {data.map((d, i) => {
+                    const x = left + ((i % nbElementsPerLine) * legendWidth);
+                    const y = top + parseInt(i / nbElementsPerLine, 10) * lineHeight;
+                    return (
+                        <g
+                            key={i}
+                            transform={ `translate(${x}, ${y})` }>
+
+                            <circle
+                              r={ legend.circleSize }
+                              fill={ getColor(d) }
+                            />
+
+                            <text
+                              fill={ fontColor }
+                              alignmentBaseline="central"
+                              x={ legend.circleSize + legend.labelOffset }
+                            >
+                                { label(d) }
+                            </text>
+                        </g>
+                    );
+                })}
+            </g>
+        );
     }
 
 }

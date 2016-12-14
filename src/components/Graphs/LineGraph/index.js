@@ -23,44 +23,85 @@ export default class LineGraph extends XYGraph {
 
     render() {
 
-        const { data, width, height } = this.props;
+        const {
+            data,
+            width,
+            height
+        } = this.props;
 
         if (!data || !data.length)
             return;
 
         const {
+          chartHeightToPixel,
+          chartWidthToPixel,
+          circleToPixel,
           colorColumn,
           colors,
-          xColumn,
-          yColumn,
+          legend,
           linesColumn,
-          margin: { top, bottom, left, right },
-          yTickGrid,
-          yTickSizeInner,
-          yTickSizeOuter,
-          yTickFormat,
-          yTicks,
+          margin,
+          stroke,
+          xColumn,
+          xLabel,
+          xTickFormat,
           xTickGrid,
+          xTicks,
           xTickSizeInner,
           xTickSizeOuter,
-          xTickFormat,
-          xTicks,
-          stroke
+          yColumn,
+          yTickFormat,
+          yTickGrid,
+          yTicks,
+          yTickSizeInner,
+          yTickSizeOuter
         } = this.getConfiguredProperties();
 
+        const isVerticalLegend = legend.orientation === 'vertical';
+        const xLabelFn         = (d) => d[xColumn];
+        const yLabelFn         = (d) => d[yColumn];
+        const legendFn         = (d) => d[linesColumn];
+        const label            = (d) => d["key"];
+        const scale            = this.scaleColor(data, linesColumn);
+        const getColor         = (d) => scale ? scale(d[colorColumn] || d[linesColumn] || d["key"]) : stroke.color || colors[0];
+
+        const linesData = nest()
+            .key((d) => linesColumn ? d[linesColumn] : "Line")
+            .entries(data);
+
+        let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
+        let legendWidth       = this.longestLabelLength(data, legendFn) * chartWidthToPixel;
+        let leftMargin        = margin.left + legendWidth;
+        let availableWidth    = width - (margin.left + margin.right + legendWidth);
+        let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
+
+        if (legend.show)
+        {
+            legend.width = legendWidth;
+
+            // Compute the available space considering a legend
+            if (isVerticalLegend)
+            {
+                leftMargin      +=  legend.width;
+                availableWidth  -=  legend.width;
+            }
+            else {
+                const nbElementsPerLine  = parseInt(availableWidth / legend.width, 10);
+                const nbLines            = parseInt(linesData.length / nbElementsPerLine, 10);
+                availableHeight         -= nbLines * legend.circleSize * circleToPixel + chartHeightToPixel;
+            }
+        }
+
         const xScale = scaleTime()
-          .domain(extent(data, function (d){ return d[xColumn]; }));
+          .domain(extent(data, xLabelFn));
         const yScale = scaleLinear()
-          .domain(extent(data, function (d){ return d[yColumn] }));
+          .domain(extent(data, yLabelFn));
 
-        const innerWidth = width - left - right;
-        const innerHeight = height - top - bottom;
-
-        xScale.range([0, innerWidth]);
-        yScale.range([innerHeight, 0]);
+        xScale.range([0, availableWidth]);
+        yScale.range([availableHeight, 0]);
 
         const xAxis = axisBottom(xScale)
-          .tickSizeInner(xTickGrid ? -innerHeight : xTickSizeInner)
+          .tickSizeInner(xTickGrid ? -availableHeight : xTickSizeInner)
           .tickSizeOuter(xTickSizeOuter);
 
         if(xTickFormat){
@@ -72,7 +113,7 @@ export default class LineGraph extends XYGraph {
         }
 
         const yAxis = axisLeft(yScale)
-          .tickSizeInner(yTickGrid ? -innerWidth : yTickSizeInner)
+          .tickSizeInner(yTickGrid ? -availableWidth : yTickSizeInner)
           .tickSizeOuter(yTickSizeOuter);
 
         if(yTickFormat){
@@ -84,40 +125,44 @@ export default class LineGraph extends XYGraph {
         }
 
         const lineGenerator = line()
-
           .x(function(d) { return xScale(d[xColumn]); })
           .y(function(d) { return yScale(d[yColumn]); });
 
-        const linesData = nest()
-          .key((d) => linesColumn ? d[linesColumn] : "Line")
-          .entries(data);
-
-        const scale = this.scaleColor(data, linesColumn);
+        let xTitlePosition = {
+            left: leftMargin + availableWidth / 2,
+            top: margin.top + availableHeight + chartHeightToPixel + xAxisHeight
+        }
+        let yTitlePosition = {
+            // We use chartWidthToPixel to compensate the rotation of the title
+            left: margin.left + chartWidthToPixel + (isVerticalLegend ? legend.width : 0),
+            top: margin.top + availableHeight / 2
+        }
 
         return (
             <div className="bar-graph">
                 <svg width={width} height={height}>
-                    {this.axisLabels()}
-                    <g transform={ `translate(${left},${top})` } >
+                    {this.axisTitles(xTitlePosition, yTitlePosition)}
+                    <g transform={ `translate(${leftMargin},${margin.top})` } >
                         <g
                             key="xAxis"
                             ref={ (el) => select(el).call(xAxis) }
-                            transform={ `translate(0,${innerHeight})` }
+                            transform={ `translate(0,${availableHeight})` }
                         />
                         <g
                             key="yAxis"
                             ref={ (el) => select(el).call(yAxis) }
                         />
-                        {linesData.map(({key, values}) =>
+                        {linesData.map((d) =>
                             <path
-                                key={ key }
+                                key={ d.key }
                                 fill="none"
-                                stroke={ scale ? scale(values[colorColumn] || key) : stroke.color || colors[0] }
+                                stroke={ getColor(d) }
                                 strokeWidth={ stroke.width }
-                                d={ lineGenerator(values) }
+                                d={ lineGenerator(d.values) }
                             />
                         )}
                     </g>
+                    {this.renderLegend(linesData, legend, getColor, label)}
                 </svg>
             </div>
         );

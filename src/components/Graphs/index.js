@@ -42,19 +42,19 @@ const getGraphComponent = function (name) {
 
 // Define all default properties for graphs
 const defaults = {
-    margin: { top: 15, bottom: 20, left: 30, right: 20 },
+    margin: { top: 10, bottom: 10, left: 10, right: 10 },
     padding: 0.1,
     yTickGrid: true,
     yTickSizeInner: 6,
     yTickSizeOuter: 0,
     yLabel: false,
-    yLabelOffset: 17,
+    xColumnLabelPosition: 17,
     yLabelSize: 14,
     xTickGrid: false,
     xTickSizeInner: 6,
     xTickSizeOuter: 0,
     xLabel: false,
-    xLabelOffset: 5,
+    yColumnLabelPosition: 5,
     xLabelSize: 14,
     dateHistogram: false,
     interval: "30s",
@@ -64,6 +64,15 @@ const defaults = {
     stroke: {
         color: theme.palette.whiteColor,
         width: "1px"
+    },
+    chartWidthToPixel: 6,           // Default value to convert a character's width into pixel
+    chartHeightToPixel: 14,         // Default value to convert a character's height into pixel
+    circleToPixel: 3,               // Default value to convert the circle to pixel
+    legend: {
+        show: true,                 // Show or not the legend style
+        orientation: 'vertical',    // Orientation between 'vertical' and 'horizontal'
+        circleSize: 4,              // Size in pixel of the circle
+        labelOffset: 2,             // Space in pixels between the circle and the label
     }
 }
 
