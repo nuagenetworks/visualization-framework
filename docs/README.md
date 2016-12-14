@@ -10,6 +10,13 @@ The philosophy of the Visualization Framework is to provide a library to quickly
 - [Configuration files](#configuration-files)
   - [Dashboard configuration](#dashboard-configuration)
   - [Visualization configuration](#dashboard-configuration)
+    - [BarGraph](#bar-graph)
+    - [LineGraph](#line-graph)
+    - [PieGraph](#[pie-graph)
+    - [Table](#table-graph)
+    - [ChordGraph](#chord-graph)
+    - [SimpleTextGraph](#simple-text-graph)
+    - [VariationTextGraph](#variation-text-graph)
   - [Query configuration](#dashboard-configuration)
 - [Services](#services)
 
