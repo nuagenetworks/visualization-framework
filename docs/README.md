@@ -73,13 +73,7 @@ Here is the list of all the parameters
 }
 ```
 
-
-
-
-
-
-#### Notes / Tips
-Try to find a way to quickly understand what the dashboard or visualization configuration is about by choosing a clear file name. When dealing with huge configuration files, it can be tricky to find the one you are looking for.
+> Try to find a way to quickly understand what the dashboard or visualization configuration is about by choosing a clear file name. When dealing with huge configuration files, it can be tricky to find the one you are looking for.
 
 - Use a prefix to ensure the configuration is used for a specific feature.
 - Don't hesitate to put the type of visualization in its identifier to know if you are dealing with a line chart or a bar chart.
@@ -179,7 +173,7 @@ You want to add tooltips on an existing visualization ? Update its configuration
 }
 ```
 
-_Note: The example above will display will display a tooltip with 2 lines (See picture below)_
+> The example above will display will display a tooltip with 2 lines (See picture below)
 ![tooltip](https://cloud.githubusercontent.com/assets/1447243/21205464/492fbc8c-c211-11e6-94f4-e22e96299fcf.png)
 
 
@@ -205,6 +199,11 @@ Listeners are pretty basic. It allows you to define:
 }
 ```
 
+> Do you want your user to navigate to a new page or stay in the current dashboard ?
+> Adapt your listeners depending on what you want to achieve.
+- Provide `redirect` if you want to go to another page or dashboard.
+- If you want to update the context in order to display a new graph that was previously hidden, do not use `redirect`. Use `params` to update the current `context`.
+- Provide `params` and `redirect` if you want to change to another page and update the current `context`
 
 
 #### Supported Graphs
