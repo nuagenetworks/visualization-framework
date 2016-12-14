@@ -148,7 +148,7 @@ The Visualization Framework comes with pre-defined graphs. Each graphs has its o
 ##### BarGraph
 Display vertical or horizontal bar charts
 
-![Horizontal BarGraph](https://github.com/nuagenetworks/visualization-framework/blob/documentation/docs/img/horizontal-bar.png "Horizontal BarGraph")
+![horizontal-bar](https://cloud.githubusercontent.com/assets/1447243/21204889/568e166a-c20e-11e6-8c8e-5da32f5d9966.png)
 
 
 - **orientation** orientation of the graph. Default is `vertical`. Set to `horizontal` to have an horizontal bar chart.
@@ -185,7 +185,7 @@ See x-axis and y-axis sections in BarGraph for more information
 ##### PieGraph
 Display nice Pie or Donut graphs
 
-![Donut Graph](https://github.com/nuagenetworks/visualization-framework/blob/documentation/docs/img/donut.png "DonutGraph")
+![donut](https://cloud.githubusercontent.com/assets/1447243/21204886/5327c232-c20e-11e6-95ca-cdab285c749e.png)
 
 - **pieInnerRadius** inner radius of the slices. Make this non-zero for a Donut Chart
 - **pieOuterRadius** outer radius of the slices
