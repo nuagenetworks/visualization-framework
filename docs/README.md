@@ -58,6 +58,17 @@ Here is the list of all the parameters
   - **minH** minimum height of the visualization if not static
   - **minW** minimum width of the visualization if not static
   - **static** `false` to create a resizable visualization, `true` if you want a static one. Default is `false`.
+ - **links** allows you to specify a list of links to navigate to another page
+   - **labeL** label of the link
+   - **url** url of the link
+ - **filterOptions** allows you to specify a list of filters. Filters will be displayed as a dropdown list. Each time the user clicks on a link, it updates the `context` based on the information provided.
+   - **name** name of the filter. In the example below, name is "Time interval"
+     - **parameter** name of the parameter in the `context`
+     - **default** default value to set in the `context`
+     - **disabled** `true` to disable the dropdown list. Default is `false`
+     - **options** a list of options that will be displayed in the dropdown list
+       - **label** label of the item in the dropdown menu
+       - **value** value associated to the  **parameter** when item option is clicked
 
 #### Example
 ```javascript
@@ -69,7 +80,33 @@ Here is the list of all the parameters
     "visualizations": [
         { "id": "statisticsLine1",    "x": 0, "y": 0,  "w": 12, "h": 15, "minW": 2, "minH": 12, "static": true},
         { "id": "statisticsBar1",     "x": 0, "y": 15, "w": 6,  "h": 15, "minW": 2, "minH": 12, "static": true}
-    ]
+    ],
+    "links": [
+        {
+            "label": "First Dasbhoard",
+            "url": "/dashboards/myFirstDashboard"
+        },
+        {
+            "label": "Second Dashboard",
+            "url": "/dashboards/mySecondDashboard"
+        }
+    ],
+    "filterOptions": {
+        "Time interval": {
+            "parameter": "startTime",
+            "default": "now-24h",
+            "options": [
+                {
+                    "label": "Last 15 min",
+                    "value": "now-15m"
+                },
+                {
+                    "label": "Last 24h",
+                    "value": "now-24h"
+                }
+            ]
+        }
+    }
 }
 ```
 
@@ -115,6 +152,7 @@ Here is the list of options:
 - **listeners** list of listener to register to interact with the visualization
   - **redirect** url to another dashboard
   - **params** parameters to pass into the context of the next dashboard
+- **filterOptions** allows to set filters on the visualization. See dashboard configuration for more information as it is working the same way!
 
 
 #### Example
