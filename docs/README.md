@@ -1,7 +1,7 @@
 Welcome to the documentation!
 
 The philosophy of the Visualization Framework is to provide a library to quickly shows your dashboards.
-**Dashboards** are splitted into multiple Visualizations. Each **Visualization** is making a **Query** to retrieve and display its data.
+**Dashboards** are split into multiple Visualizations. Each **Visualization** is making a **Query** to retrieve and display its data.
 
 
 ## Table of Contents
@@ -10,13 +10,16 @@ The philosophy of the Visualization Framework is to provide a library to quickly
 - [Configuration files](#configuration-files)
   - [Dashboard configuration](#dashboard-configuration)
   - [Visualization configuration](#visualization-configuration)
-    - [BarGraph](#bargraph)
-    - [LineGraph](#linegraph)
-    - [PieGraph](#[piegraph)
-    - [Table](#tablegraph)
-    - [ChordGraph](#chordgraph)
-    - [SimpleTextGraph](#simpletextgraph)
-    - [VariationTextGraph](#variationtextgraph)
+    - [Tooltips](#tooltips)
+    - [Listeners](#listeners)
+    - [Supported Graphs](#supported-graphs)
+      - [BarGraph](#bargraph)
+      - [LineGraph](#linegraph)
+      - [PieGraph](#[piegraph)
+      - [Table](#tablegraph)
+      - [ChordGraph](#chordgraph)
+      - [SimpleTextGraph](#simpletextgraph)
+      - [VariationTextGraph](#variationtextgraph)
   - [Query configuration](#query-configuration)
 - [Services](#services)
 
@@ -69,6 +72,11 @@ Here is the list of all the parameters
     ]
 }
 ```
+
+
+
+
+
 
 #### Notes / Tips
 Try to find a way to quickly understand what the dashboard or visualization configuration is about by choosing a clear file name. When dealing with huge configuration files, it can be tricky to find the one you are looking for.
@@ -141,6 +149,64 @@ Here is the list of options:
 }
 ```
 
+
+#### Tooltips
+Visualization Framework supports tooltips on the following components:
+- BarGraph
+- PieGraph
+- LineGraph [TO COMPLETE]
+- Table [TO COMPLETE]
+- ChordGraph [TO COMPLETE]
+
+You want to add tooltips on an existing visualization ? Update its configuration:
+
+- **tooltip** list of tooltip options
+  - **column*** attribute name to use to display the value
+  - **label** tooltip label. If not specified, column will be used.
+  - **format** [d3 format](https://github.com/d3/d3-format) style to display the column value
+
+```javascript
+{
+    // ...
+    "data": {
+        // ...
+        "tooltip": [
+            { "column": "L7Classification", "label": "L7 Signature" },
+            { "column": "Sum of MB", "format": ",.2s"}
+        ]
+    }
+    // ...
+}
+```
+
+_Note: The example above will display will display a tooltip with 2 lines (See picture below)_
+![tooltip](https://cloud.githubusercontent.com/assets/1447243/21205464/492fbc8c-c211-11e6-94f4-e22e96299fcf.png)
+
+
+#### Listeners
+If you want to allow your users to interact with your dashboards, you will need to set some listeners.
+
+Listeners are pretty basic. It allows you to define:
+- **redirect** url to go to when you click on a graph
+- **params** parameters to pass to the `context`
+
+```javascript
+{
+    // ...
+    "data": {}
+    "listeners": [
+        {
+            "redirect": "/dashboards/mySecondDashboard",
+            "params": {
+                "app": "L7Classification"
+            }
+        }
+    ]
+}
+```
+
+
+
 #### Supported Graphs
 The Visualization Framework comes with pre-defined graphs. Each graphs has its own parameters
 
@@ -177,6 +243,10 @@ __y-axis__
 
 
 ##### LineGraph
+Display one or multiple lines
+
+![multiline-chart](https://cloud.githubusercontent.com/assets/1447243/21205460/4672e4a6-c211-11e6-88a5-269bc32d2140.png)
+
 - **linesColumn** attribute name in your results to display line value
 
 See x-axis and y-axis sections in BarGraph for more information
@@ -300,7 +370,7 @@ export const ElasticSearchService = {
   - `queryConfiguration` is the contextualized query configuration
   - `state` is the redux state. It will allow you to define some [redux thunks](https://github.com/gaearon/redux-thunk)
 - **getRequestID(queryConfiguration, context)*** method that computes a unique string representing a request. The result will be stored in the redux state given this identifier.
-- **tabify(response)** transformes your service responses into a tabified result. If no tabify method is defined, the response will be treated as it is.
+- **tabify(response)** transforms your service responses into a array-like result. If no tabify method is defined, the response will be treated as it is.
 
 
 ### How to use my service ?
