@@ -127,6 +127,7 @@ Here is the list of options:
 - **title*** title of the visualization
 - **description*** a description of the visualization
 - **query*** identifier of the query to execute for this visualization
+- **refreshInterval** set the time interval in `ms` between two refresh. Use `-1` to deactivate refresh.
 - **data** an object that helps you configure your visualization. (See below to find graphs specific data).
   - **colorColumn** attribute name in your results to use for color
   - **padding**
@@ -323,6 +324,7 @@ Display nice Pie or Donut graphs
 ##### SimpleTextGraph
 This graph allows you to display a simple text information. Text ba
 
+- **targetedColumn** name of the attribute to use to display the value. If not specified, this graph will display the length of the result
 - **titlePosition** position title on `top` or at the `bottom` of the graph
 - **textAlign** align text on `left`, `center` or `right`. Default is `center`
 - **fontSize** font size
