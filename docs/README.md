@@ -1,0 +1,227 @@
+Welcome to the documentation!
+
+The philosophy of the Visualization Framework is to provide a library to quickly shows your dashboards.
+**Dashboards** are splitted into multiple Visualizations. Each **Visualization** is making a **Query** to retrieve and display its data.
+
+
+## Table of Contents
+
+- [File structure](#file-structure)
+- [Configuration files](#configuration-files)
+  - [Dashboard configuration](#dashboard-configuration)
+  - [Visualization configuration](#dashboard-configuration)
+  - [Query configuration](#dashboard-configuration)
+- [Services](#services)
+
+
+## File structure
+This source is organized thanks to the great [create-react-app](https://github.com/facebookincubator/create-react-app) boilerplate.
+The file structure follows the guide lines as suggested by the library:
+
+- `/src` contains all sources
+- `/public` contains static assets as well as configuration files
+
+
+## Configuration files
+
+Configuration files are placed within the `public` folder. Each file contains JSON description.
+
+There are 3 types of configurations:
+
+1. Dashboard configuration files
+2. Visualization configuration files
+3. Query configuration files
+
+
+### Dashboard configuration
+
+Here is the list of all the parameters
+
+- **id*** dashboard identifier, also used as the filename
+- **author** name of the author
+- **creationDate** creation date
+- **title*** title of the dashboard
+- **visualizations*** list of visualizations to display within the dashboard
+  - **id*** identifier of the visualization
+  - **x*** x position of the visualization within the 12-columns grid dashboard
+  - **y*** y position of the visualization within the dashboard
+  - **minH** minimum height of the visualization if not static
+  - **minW** minimum width of the visualization if not static
+  - **static** `false` to create a resizable visualization, `true` if you want a static one. Default is `false`.
+
+#### Example
+```json
+{
+    "id": "myFirstDashboard",
+    "author": "Christophe SERAFIN",
+    "creationDate": "12/14/2016",
+    "title": "My First Dashboard",
+    "visualizations": [
+        { "id": "statisticsLine1",    "x": 0, "y": 0,  "w": 12, "h": 15, "minW": 2, "minH": 12, "static": true},
+        { "id": "statisticsBar1",     "x": 0, "y": 15, "w": 6,  "h": 15, "minW": 2, "minH": 12, "static": true}
+    ]
+}
+```
+
+#### Notes / Tips
+Try to find a way to quickly understand what the dashboard or visualization configuration is about by choosing a clear file name. When dealing with huge configuration files, it can be tricky to find the one you are looking for.
+
+- Use a prefix to ensure the configuration is used for a specific feature.
+- Don't hesitate to put the type of visualization in its identifier to know if you are dealing with a line chart or a bar chart.
+
+
+### Visualization configuration
+Visualiation configuration is a little more complex as it has more options. But it is working the same way, so don't worry :)
+
+Here is the list of options:
+- **id*** identifier, also used as the filename
+- **graph*** the type of graph the visualization should be (See below to find all supported graphs)
+- **author** name of the author
+- **creationDate** creation date
+- **title*** title of the visualization
+- **description*** a description of the visualization
+- **query*** identifier of the query to execute for this visualization
+- **data** an object that helps you configure your visualization. (See below to find graphs specific data).
+  - **padding**
+     - **top** set top padding in pixels
+    - **bottom** set bottom padding in pixels
+    - **right** set right padding in pixels
+    - **left** set left padding in pixels
+  - **margin**
+    - **top** set top margin in pixels
+    - **bottom** set bottom margin in pixels
+    - **right** set right margin in pixels
+    - **left** set left margin in pixels
+  - **colors** list of colors to use to render the visualization
+  - **stroke**
+    - **width** define stroke width
+    - **color** define stroke color
+  - **legend**
+    - **show** `true` to display legend. `false` otherwise. Default is `false`
+    - **orientation** `vertical` or `horizontal` legend. Default is `vertical`
+    - **circleSize** size of a legend circle. Default is `4` pixels
+    - **labelOffset** space in pixel between the legend circle and its label
+  - **tooltip** list of tooltip parameters
+- **listeners** list of listener to register to interact with the visualization
+  - **redirect** url to another dashboard
+  - **params** parameters to pass into the context of the next dashboard
+
+
+#### Example
+```json
+{
+    "id": "statisticsBar1",
+    "graph": "BarGraph",
+    "title": "Top 5 statistics",
+    "description": "Shows top 5 statistics",
+    "author": "Christophe SERAFIN",
+    "creationDate": "12/14/2016",
+    "query": "top5statistics",
+    "data": {
+        // See specific data below
+    }
+}
+```
+
+#### Supported Graphs
+The Visualization Framework comes with pre-defined graphs. Each graphs has its own parameters
+
+
+##### BarGraph
+Display vertical or horizontal bar charts
+
+![Horizontal BarGraph](https://github.com/nuagenetworks/visualization-framework/tree/master/docs/img/horizontal-bar.png "Horizontal BarGraph")
+
+
+- **orientation** orientation of the graph. Default is `vertical`. Set to `horizontal` to have an horizontal bar chart.
+- **colorColumn** attribute name in your results to use for color
+- **dateHistogram** [TO COMPLETE]
+- **interval** [TO COMPLETE - looks related to dateHistogram]
+
+__x-axis__
+
+- **xColumn*** attribute name in your results to use for x-axis
+- **xLabel** x-axis title
+- **xTicks** number of ticks to use for x-axis
+- **xTickFormat** [d3 format](https://github.com/d3/d3-format) style to display x-axis labels
+- **xTickGrid** [TO COMPLETE]
+- **xTickSizeInner** [TO COMPLETE]
+- **xTickSizeOuter** [TO COMPLETE]
+
+__y-axis__
+
+- **yColumn*** attribute name in your results to use for y-axis
+- **yLabel** y-axis title
+- **yTicks** number of ticks to use on y-axis
+- **yTickFormat** [d3 format](https://github.com/d3/d3-format) style to display y-axis labels
+- **yTickGrid** [TO COMPLETE]
+- **yTickSizeInner** [TO COMPLETE]
+- **yTickSizeOuter** [TO COMPLETE]
+
+
+##### LineGraph
+- **linesColumn** attribute name in your results to display line value
+- **colorColumn** attribute name in your results to use for color
+
+See x-axis and y-axis sections in BarGraph for more information
+
+
+##### PieGraph
+Display nice Pie or Donut graphs
+
+![Donut Graph](https://github.com/nuagenetworks/visualization-framework/tree/master/docs/img/donut.png "DonutGraph")
+
+- **pieInnerRadius** inner radius of the slices. Make this non-zero for a Donut Chart
+- **pieOuterRadius** outer radius of the slices
+- **pieLabelRadius** radius for positioning labels
+
+
+##### Table
+- **width** width of the table. Default is `100%`
+- **border**
+  - **top** set top border. Default is `solid 1px #ccc`
+  - **bottom** set bottom border. Default is `0`
+  - **right** set right border. Default is `0`
+  - **left** set left border. Default is `0`
+- **header** header specific parameters includes
+  - **border** same as before
+  - **fontColor** color of the header text
+
+
+##### ChordGraph
+- **outerPadding** [TO COMPLETE]. Default is `30`
+- **arcThickness** [TO COMPLETE]. Default is `20`
+- **padAngle** [TO COMPLETE]. Default is `0.07`
+- **labelPadding**: [TO COMPLETE]. Default is `10`
+- **transitionDuration** [TO COMPLETE]. Default is `500`
+- **defaultOpacity**  [TO COMPLETE]. Default is `0.6`
+- **fadedOpacity** [TO COMPLETE]. Default is `0.1`
+
+##### SimpleTextGraph
+This graph allows you to display a simple text information. Text ba
+
+- **titlePosition** position title on `top` or at the `bottom` of the graph
+- **textAlign** align text on `left`, `center` or `right`. Default is `center`
+- **fontSize** font size
+- **fontColor** font color
+- **borderRadius** Set a radius if you want to display your text in a square or rounded area. Default is `50%`
+- **innerWidth** define the percentage of the width for the area. `1` means 100% of the width. Default is `0.3`
+- **innerHeight** define the percentage of the height for the area. `1` means 100% of the width. Default is `0.4`
+
+
+##### VariationTextGraph
+This graph shows a value and its variation from the previous one.
+
+- **drawColor** color in case there is no variation
+- **negativeColor** color in case the variation is lower than 0
+- **positiveColor** color in case the variation is geater than 0
+- **textAlign** align text on `left`, `center` or `right`. Default is `center`
+- **fontSize** font size
+- **fontColor** font color
+
+### Query configuration
+[TODO]
+
+
+## Services
+[TODO]
