@@ -5,6 +5,9 @@ export const properties = {
         color: "red",
         width: "4px"
     },
+    legend: {
+        show: false
+    },
     colors: [
         theme.palette.orangeLightColor,
         theme.palette.blueLightColor,
