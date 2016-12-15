@@ -175,6 +175,7 @@ export class DashboardView extends React.Component {
                                         <Visualization
                                             id={visualization.id}
                                             registerResize={this.registerResize.bind(this)}
+                                            showInDashboard={true}
                                         />
                                     </div>
                                 )
