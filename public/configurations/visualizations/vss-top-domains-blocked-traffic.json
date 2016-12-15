@@ -20,12 +20,6 @@
              "#e78ac3",
              "#f79e99"
         ],
-        "margin": {
-            "top": 20,
-            "bottom": 40,
-            "left": 130,
-            "right": 20
-        },
         "xTickGrid": true,
         "yTickGrid": false,
         "xTickFormat": ".2s",
