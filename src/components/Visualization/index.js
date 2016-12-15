@@ -21,6 +21,7 @@ import {
 } from "../../services/configurations/redux/actions";
 
 import {
+    Actions as InterfaceActions,
     ActionKeyStore as InterfaceActionKeyStore,
 } from "../App/redux/actions";
 
@@ -50,14 +51,34 @@ class VisualizationView extends React.Component {
         this.initialize(this.props.id);
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
+        const {
+            registerResize,
+            showInDashboard
+        } = this.props;
+
         this.updateSize();
 
         // If present, register the resize callback
         // to respond to interactive resizes from react-grid-layout.
-        if (this.props.registerResize) {
-            this.props.registerResize(this.updateSize.bind(this))
+        if (registerResize) {
+            registerResize(this.updateSize.bind(this))
         }
+
+        // If we show the visualization only,
+        // we need to listen to window events for resizing the graph
+        if (!showInDashboard)
+            window.addEventListener("resize", this.updateSize);
+    }
+
+    componentWillUnmount = () => {
+        const {
+            showInDashboard
+        } = this.props;
+
+        // Don't forget to remove the listener here
+        if (!showInDashboard)
+            window.removeEventListener("resize", this.updateSize);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -68,9 +89,14 @@ class VisualizationView extends React.Component {
         this.updateSize();
     }
 
-    updateSize() {
+    updateSize = () => {
+        const {
+            context,
+            showInDashboard
+        } = this.props;
+
         if (this._element) {
-            const { width, height } = resizeVisualization(this._element);
+            const { width, height } = resizeVisualization(this._element, showInDashboard, context && context.hasOwnProperty("full"));
 
             if (width !== this.state.width || height !== this.state.height) {
                 this.setState({ width, height });
@@ -81,10 +107,17 @@ class VisualizationView extends React.Component {
     initialize(id) {
 
         this.props.fetchConfigurationIfNeeded(id).then((c) => {
-            const { configuration } = this.props
+            const {
+                configuration,
+                showInDashboard,
+                setPageTitle
+            } = this.props;
 
             if (!configuration)
                 return;
+
+            if (!showInDashboard)
+                setPageTitle("Visualization");
 
             const queryName  = configuration.query,
                   scriptName = configuration.script;
@@ -406,7 +439,7 @@ const mapStateToProps = (state, ownProps) => {
 const actionCreators = (dispatch) => ({
 
     setPageTitle: function(aTitle) {
-        dispatch(Actions.updateTitle(aTitle));
+        dispatch(InterfaceActions.updateTitle(aTitle));
     },
 
     goTo: function(link, context) {
