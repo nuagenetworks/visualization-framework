@@ -144,8 +144,8 @@ describe('Configuration Actions: fetchIfNeeded', () => {
     it('should not fetch dashboard if one has been fetched', () => {
         ConfigurationService.fetch = jasmine.createSpy("fetch");
 
-        const currentDate    = new Date(),
-              expirationDate = currentDate.setTime(currentDate.getTime() + 10000);
+        const currentDate    = Date.now(),
+              expirationDate = currentDate + 10000;
 
         const store = mockStore({
             dashboards: Map(),
@@ -165,8 +165,8 @@ describe('Configuration Actions: fetchIfNeeded', () => {
     it('should fetch dashboard if one has expired', () => {
         ConfigurationService.fetch = jasmine.createSpy("fetch");
 
-        const currentDate    = new Date(),
-              expirationDate = currentDate.setTime(currentDate.getTime() - 10000);
+        const currentDate    = Date.now(),
+              expirationDate = currentDate - 10000;
 
         const store = mockStore({
             dashboards: Map(),
@@ -243,15 +243,18 @@ describe('Configuration Reducers: fetchIfNeeded', () => {
             dashboards: Map({
                 example: Map({
                     isFetching: false,
-                    data: fromJS(self.expectedConfiguration),
-                    expirationDate: NaN, // Don't know why yet...
+                    data: fromJS(self.expectedConfiguration)
                 })
             }),
             visualizations: Map(),
             queries: Map(),
         })
 
-        expect(configurationsReducer(undefined, action)).toEqual(expectedState)
+        const fullState = configurationsReducer(undefined, action);
+        const expirationDate = fullState.getIn(["dashboards", "example", "expirationDate"]);
+        const state = fullState.deleteIn(["dashboards", "example", "expirationDate"]);
+
+        expect(state).toEqual(expectedState);
     })
 
     it('should return the received error', () => {

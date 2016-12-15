@@ -183,8 +183,8 @@ describe('ServiceManager Actions: fetchIfNeeded', () => {
     it('should not fetch results if it has been already fetched', () => {
         spyOn(self.mockService, 'fetch')
 
-        const currentDate    = new Date(),
-              expirationDate = currentDate.setTime(currentDate.getTime() + 10001);
+        const currentDate    = Date.now(),
+              expirationDate = currentDate + 10001;
 
         const store = mockStore({
           services: Map({
@@ -205,8 +205,8 @@ describe('ServiceManager Actions: fetchIfNeeded', () => {
     it('should fetch results if it has expired', () => {
         spyOn(self.mockService, 'fetch').and.callThrough();
 
-        const currentDate    = new Date(),
-              expirationDate = currentDate.setTime(currentDate.getTime() - 10000);
+        const currentDate    = Date.now(),
+              expirationDate = currentDate - 10000;
 
         const store = mockStore({
           services: Map({
@@ -266,8 +266,8 @@ describe('ServiceManager Reducers', () => {
             forceCache: true
         };
 
-        const currentDate    = new Date(),
-              expectedExpirationDate = currentDate.setTime(currentDate.getTime() + 86400000); // 24h
+        const currentDate    = Date.now(),
+              expectedExpirationDate = currentDate + 86400000; // 24h
 
         const expectedState = Map({
             requests: Map({
@@ -280,7 +280,6 @@ describe('ServiceManager Reducers', () => {
 
         const fullState = servicesReducer(undefined, action);
         const expirationDate = fullState.getIn(["requests", "example", "expirationDate"]);
-
         const state = fullState.deleteIn(["requests", "example", "expirationDate"]);
 
         expect(state).toEqual(expectedState)

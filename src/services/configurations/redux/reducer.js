@@ -15,8 +15,8 @@ function didStartRequest(state, id, configType) {
 }
 
 function didReceiveResponse(state, id, configType, data) {
-    const currentDate    = new Date(),
-          expirationDate = currentDate.setTime(currentDate.getTime() + ConfigurationService.config.timingCache);
+    const currentDate    = Date.now(),
+          expirationDate = currentDate + ConfigurationService.config.cachingTime;
 
     return state
       .setIn([configType, id, ActionKeyStore.IS_FETCHING], false)
