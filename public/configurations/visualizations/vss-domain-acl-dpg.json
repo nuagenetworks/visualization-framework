@@ -15,12 +15,6 @@
             { "column": "dpg", "label": "PG" },
             { "column": "SumOf", "label": "ACL Hits", "format": ",.1f"}
         ],
-        "margin": {
-            "top": 20,
-            "bottom": 40,
-            "left": 80,
-            "right": 20
-        },
         "xTickGrid": false,
         "yTickGrid": true,
         "yTickFormat": ".2s",

@@ -10,12 +10,6 @@
         "yColumn": "spg",
         "colorColumn": "spg",
         "orientation": "horizontal",
-        "margin": {
-            "top": 20,
-            "bottom": 40,
-            "left": 80,
-            "right": 20
-        },
         "tooltip": [
             { "column": "spg", "label": "PG" },
             { "column": "SumOf", "label": "Packets", "format": ",.1f"}

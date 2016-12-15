@@ -19,12 +19,6 @@
             { "column": "EventType", "label": "Event" },
             { "column": "Sum of Value", "label": "Count", "format": ",.1f"}
         ],
-        "margin": {
-            "top": 20,
-            "bottom": 40,
-            "left": 100,
-            "right": 20
-        },
         "xTickGrid": true,
         "yTickGrid": false,
         "xTickFormat": ".2s",

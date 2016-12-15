@@ -28,12 +28,6 @@
         "tooltip": [
             { "column": "L7Classification" }
         ],
-        "margin": {
-            "top": 15,
-            "bottom": 40,
-            "left": 80,
-            "right": 40
-        },
         "linesColumn": "L7Classification"
     },
     "filterOptions": {

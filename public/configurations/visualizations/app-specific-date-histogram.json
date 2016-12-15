@@ -13,13 +13,7 @@
         "yTickFormat": ".2s",
         "colorColumn": "date-histo",
         "xLabel": "Time",
-        "yLabel": "Total Bytes",
-        "margin": {
-            "top": 15,
-            "bottom": 40,
-            "left": 45,
-            "right": 20
-        }
+        "yLabel": "Total Bytes"
     },
     "query": "app-specific-vertical-bar"
 }

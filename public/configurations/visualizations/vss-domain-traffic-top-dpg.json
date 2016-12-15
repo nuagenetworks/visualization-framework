@@ -9,12 +9,6 @@
         "xColumn": "dpg",
         "yColumn": "SumOf",
         "colorColumn": "dpg",
-        "margin": {
-            "top": 20,
-            "bottom": 40,
-            "left": 80,
-            "right": 20
-        },
         "colors": [
              "#fec26a"
          ],

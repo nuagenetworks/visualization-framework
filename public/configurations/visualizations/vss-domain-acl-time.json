@@ -12,12 +12,6 @@
           "color": "#f76159",
           "width": "2px"
         },
-        "margin": {
-            "top": 20,
-            "bottom": 40,
-            "left": 80,
-            "right": 20
-        },
         "xTickGrid": false,
         "yTickGrid": true,
         "yTickFormat": ".2s",
