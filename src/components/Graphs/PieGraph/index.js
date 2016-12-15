@@ -53,7 +53,7 @@ export default class PieGraph extends AbstractGraph {
         const scale            = this.scaleColor(data, labelColumn);
         const getColor         = (d) => scale ? scale(d[colorColumn || labelColumn]) : null;
 
-        if (legend.show)
+        if (legend.show && data.length > 1)
         {
             // Extract the longest legend
             // Store the info in legend for convenience
