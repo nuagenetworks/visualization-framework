@@ -1,6 +1,6 @@
 {
     "id": "vss-enterprise-alerts-metric",
-    "title": "# TCA Alerts",
+    "title": "# TCA Alerts (24h)",
     "query": "vss-enterprise-alerts-metric",
     "graph": "VariationTextGraph",
     "showTitleBar": false,
