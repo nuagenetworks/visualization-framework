@@ -39,7 +39,10 @@ const fetch = function (parameters, state) {
         client.search(parameters.query).then(function (body) {
             resolve(body);
         }, function (error) {
-            reject(error.body.error.reason + ": " + error.body.error["resource.id"]);
+            if (!error.body)
+                reject("no active Elastic Search host");
+            else
+                reject(error.body.error.reason + ": " + error.body.error["resource.id"]);
         });
     });
 }
@@ -54,7 +57,10 @@ const ping = function (parameters, state) {
         client.search(parameters.query).then(function (body) {
             resolve(body);
         }, function (error) {
-            reject(error.body.error.reason + ": " + error.body.error["resource.id"]);
+            if (!error.body)
+                reject("no active Elastic Search host");
+            else
+                reject(error.body.error.reason + ": " + error.body.error["resource.id"]);
         });
     });
 }
