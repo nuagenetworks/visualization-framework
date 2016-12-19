@@ -16,7 +16,7 @@ class NavBarView extends React.Component {
             context
         } = this.props;
 
-        if (context && context.hasOwnProperty('full'))
+        if (context && context.hasOwnProperty("fullScreen"))
             return (<div></div>);
 
         return (

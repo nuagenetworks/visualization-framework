@@ -96,7 +96,7 @@ class VisualizationView extends React.Component {
         } = this.props;
 
         if (this._element) {
-            const { width, height } = resizeVisualization(this._element, showInDashboard, context && context.hasOwnProperty("full"));
+            const { width, height } = resizeVisualization(this._element, showInDashboard, context && context.hasOwnProperty("fullScreen"));
 
             if (width !== this.state.width || height !== this.state.height) {
                 this.setState({ width, height });
