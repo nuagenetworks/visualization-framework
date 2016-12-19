@@ -13,12 +13,14 @@ const style = {
         fontSize: "1.2em",
         fontWeight: "200",
     },
-    cardIconMenu: {
+    cardTitleIcon: {
         padding: 0,
+        margin: "0 0 0 2px",
         width:16,
         height:16,
         textAlign: "center",
-        cursor: "pointer"
+        cursor: "pointer",
+        color: theme.palette.blackColor,
     },
     menuItem: {
         minHeight: "26px",

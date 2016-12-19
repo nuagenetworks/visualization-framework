@@ -3,13 +3,13 @@ import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
 
 import { connect } from "react-redux";
+import { Link } from "react-router";
 import { push } from "redux-router";
 
 import FiltersToolBar from "../FiltersToolBar";
 import { CardOverlay } from "../CardOverlay";
 import { Card, CardText } from 'material-ui/Card';
 
-import { Actions } from "./redux/actions";
 import {
     Actions as ServiceActions,
     ActionKeyStore as ServiceActionKeyStore
@@ -285,11 +285,33 @@ class VisualizationView extends React.Component {
         return (
             <FontAwesome
                 name="info-circle"
-                style={style.cardIconMenu}
+                style={style.cardTitleIcon}
                 onTouchTap={() => { this.setState({showDescription: !this.state.showDescription}); }}
                 />
         )
     }
+
+    renderFullScreenIcon() {
+        const {
+            configuration,
+            context
+        } = this.props;
+
+        if (!configuration || context.hasOwnProperty("fullScreen"))
+            return;
+
+            return (
+                <Link
+                    style={style.cardTitleIcon}
+                    to={{ pathname:"/visualizations/" + configuration.id, query: Object.assign({}, context, {fullScreen:null}) }}
+                    target="_blank"
+                    >
+                        <FontAwesome name="external-link-square" />
+                </Link>
+            );
+    }
+
+
 
     renderTitleBarIfNeeded() {
         if (!this.shouldShowTitleBar())
@@ -300,6 +322,7 @@ class VisualizationView extends React.Component {
                 {this.props.configuration.title}
                 <div className="pull-right">
                     {this.renderDescriptionIcon()}
+                    {this.renderFullScreenIcon()}
                 </div>
             </div>
         )
