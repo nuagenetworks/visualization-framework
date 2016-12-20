@@ -10,7 +10,7 @@
         "yColumn": "SumOf",
         "yTickFormat": ".2s",
         "xLabel": "Time",
-        "yLabel": "Total Bytes",
+        "yLabel": "{{Metric:Total Bytes}}",
         "stroke": {
           "color": "#f76159",
           "width": "2px"
@@ -36,12 +36,12 @@
             "default": "TotalBytesCount",
             "options": [
                 {
-                    "label": "TotalBytes",
+                    "label": "Total Bytes",
                     "value": "TotalBytesCount",
                     "default": true
                 },
                 {
-                    "label": "TotalPackets",
+                    "label": "Total Packets",
                     "value": "TotalPacketsCount"
                 }
             ]
