@@ -117,7 +117,16 @@ export default class AbstractGraph extends React.Component {
 
         // Extract the longest legend according to the label function
         const longestLabel = label(data.reduce((a, b) => {
-            return format(label(a).toString()).length > format(label(b).toString()).length ? a : b;
+            let labelA = label(a);
+            let labelB = label(b);
+
+            if (!labelA)
+                return b;
+
+            if (!labelB)
+                return a;
+
+            return format(labelA.toString()).length > format(labelB.toString()).length ? a : b;
         })).toString();
 
         // and return its length + 1 to ensure we have enough space
