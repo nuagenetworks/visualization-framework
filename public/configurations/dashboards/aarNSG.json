@@ -21,7 +21,7 @@
     ],
     "filterOptions": {
         "Metric": {
-            "parameter": "Metric",
+            "parameter": "metric",
             "default": "TotalBytesCount",
             "options": [
                 {

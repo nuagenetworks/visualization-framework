@@ -10,7 +10,7 @@
         "yColumn": "SumOf",
         "yTickFormat": ".2s",
         "xLabel": "Time",
-        "yLabel": "{{Metric:Total Bytes}}",
+        "yLabel": "{{metric:Total Bytes}}",
         "stroke": {
           "color": "#f76159",
           "width": "2px"
@@ -32,7 +32,7 @@
     },
     "filterOptions": {
         "Metric": {
-            "parameter": "Metric",
+            "parameter": "metric",
             "default": "TotalBytesCount",
             "options": [
                 {
