@@ -2,6 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
 
+import $ from "jquery";
+import CopyToClipboard from 'react-copy-to-clipboard';
+
 import { connect } from "react-redux";
 import { Link } from "react-router";
 import { push } from "redux-router";
@@ -44,6 +47,7 @@ class VisualizationView extends React.Component {
             parameterizable: true,
             hasResults: false,
             showDescription: false,
+            showSharingOptions: false
         }
     }
 
@@ -284,14 +288,14 @@ class VisualizationView extends React.Component {
 
         return (
             <FontAwesome
-                name="info-circle"
+                name="info"
                 style={style.cardTitleIcon}
                 onTouchTap={() => { this.setState({showDescription: !this.state.showDescription}); }}
                 />
         )
     }
 
-    renderFullScreenIcon() {
+    renderShareIcon() {
         const {
             configuration,
             context
@@ -300,18 +304,14 @@ class VisualizationView extends React.Component {
         if (!configuration || context.hasOwnProperty("fullScreen"))
             return;
 
-            return (
-                <Link
-                    style={style.cardTitleIcon}
-                    to={{ pathname:"/visualizations/" + configuration.id, query: Object.assign({}, context, {fullScreen:null}) }}
-                    target="_blank"
-                    >
-                        <FontAwesome name="external-link-square" />
-                </Link>
-            );
+        return (
+            <FontAwesome
+                name="share-alt"
+                style={style.cardTitleIcon}
+                onTouchTap={() => { this.setState({showSharingOptions: !this.state.showSharingOptions}); }}
+                />
+        )
     }
-
-
 
     renderTitleBarIfNeeded() {
         if (!this.shouldShowTitleBar())
@@ -322,20 +322,63 @@ class VisualizationView extends React.Component {
                 {this.props.configuration.title}
                 <div className="pull-right">
                     {this.renderDescriptionIcon()}
-                    {this.renderFullScreenIcon()}
+                    {this.renderShareIcon()}
                 </div>
             </div>
         )
     }
 
     renderFiltersToolBar() {
-        const { configuration } = this.props;
+        const {
+            configuration
+        } = this.props;
 
         if (!configuration || !configuration.filterOptions)
             return;
 
         return (
             <FiltersToolBar filterOptions={configuration.filterOptions} />
+        )
+    }
+
+    renderSharingOptions () {
+        if (!this.state.showSharingOptions)
+            return;
+
+        const {
+            configuration,
+            context
+        } = this.props;
+
+
+        const queryParams = Object.assign({}, context, {fullScreen:null});
+        const queryString = $.param(queryParams);
+        const iframeText = "<iframe src=\"" + window.location.origin + "/visualizations/" + configuration.id + "?" + queryString + "\" width=\"800\" height=\"600\"></iframe>";
+
+        return (
+            <div
+                className="text-center"
+                style={style.sharingOptionsContainer}
+                >
+                <CopyToClipboard
+                    text={iframeText}
+                    style={style.copyContainer}
+                    >
+                    <button className="btn btn-default btn-xs">
+                         <FontAwesome name="copy" /> Copy iframe source
+                    </button>
+                </CopyToClipboard>&nbsp;
+
+                <Link
+                    style={style.cardTitleIcon}
+                    to={{ pathname:"/visualizations/" + configuration.id, query: queryParams }}
+                    target="_blank"
+                    >
+                    <button className="btn btn-default btn-xs">
+                         <FontAwesome name="external-link" /> Open new window
+                    </button>
+                </Link>
+            </div>
         )
     }
 
@@ -386,6 +429,7 @@ class VisualizationView extends React.Component {
             >
                 { this.renderTitleBarIfNeeded() }
                 { this.renderFiltersToolBar() }
+                { this.renderSharingOptions() }
                 <CardText style={cardText}>
                     { this.renderVisualizationIfNeeded() }
                     {description}

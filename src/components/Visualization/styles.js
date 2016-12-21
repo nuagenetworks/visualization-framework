@@ -13,14 +13,22 @@ const style = {
         fontSize: "1.2em",
         fontWeight: "200",
     },
+    copyContainer: {
+        marginTop: "1px"
+    },
     cardTitleIcon: {
         padding: 0,
-        margin: "0 0 0 2px",
+        margin: "0 0 0 1px",
         width:16,
         height:16,
+        fontSize: "0.75em",
         textAlign: "center",
         cursor: "pointer",
         color: theme.palette.blackColor,
+    },
+    sharingOptionsContainer: {
+        padding: "2px",
+        background: theme.palette.greyColor
     },
     menuItem: {
         minHeight: "26px",
