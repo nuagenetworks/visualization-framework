@@ -48,7 +48,12 @@ export default class BarGraph extends XYGraph {
 
     render() {
 
-        const { data, width, height, onMarkClick } = this.props;
+        const {
+            data,
+            width,
+            height,
+            onMarkClick
+        } = this.props;
 
         if (!data || !data.length)
             return;
