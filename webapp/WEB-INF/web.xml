@@ -27,20 +27,4 @@
         </cookie-config>
         <tracking-mode>COOKIE</tracking-mode>
     </session-config>
-    <servlet>
-        <servlet-name>dashboards</servlet-name>
-        <jsp-file>/reports/index.html</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>dashboards</servlet-name>
-        <url-pattern>/reports/dashboards/*</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>visualizations</servlet-name>
-        <jsp-file>/reports/index.html</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>visualizations</servlet-name>
-        <url-pattern>/reports/visualizations/*</url-pattern>
-    </servlet-mapping>
 </web-app>
