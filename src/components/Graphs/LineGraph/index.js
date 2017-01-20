@@ -181,6 +181,8 @@ export default class LineGraph extends XYGraph {
                                   stroke="gray"
                                   strokeWidth="1px"
                                   d={ d == null ? null : "M" + d.join("L") + "Z" }
+                                  style={{"pointer-events": "all"}}
+                                  { ...this.tooltipProps(d.data) }
                               />
                           )}
                         </g>

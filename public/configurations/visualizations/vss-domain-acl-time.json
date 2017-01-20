@@ -16,7 +16,13 @@
         "yTickGrid": true,
         "yTickFormat": ".2s",
         "xLabel": "Time",
-        "yLabel": "Total # ACL Hits"
+        "yLabel": "Total # ACL Hits",
+        "xColumn": "timestamp",
+        "yColumn": "SumOf",
+        "tooltip": [
+            { "column": "SumOf", "label": "Total # ACL Hits" },
+            { "column": "timestamp", "label": "Time" }
+        ]
     },
     "query": "vss-domain-acl-time"
 }
