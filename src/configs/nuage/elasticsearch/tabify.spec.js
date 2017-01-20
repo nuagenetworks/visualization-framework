@@ -424,7 +424,7 @@ describe('ElasticSearch', () => {
             }
           }
         };
-        
+
         const expectedResults = [
           {
             "top-acls": "55cd911d-aa9b-4647-b4dc-68a63122aa7c",
@@ -433,6 +433,7 @@ describe('ElasticSearch', () => {
               "destinationport": 3,
               "sourceport": 5,
               "protocol": "TCP",
+              "sort": 1000,
               "nuage_metadata": {
                 "dpgName": "PG15",
                 "spgName": "PG9"
@@ -446,6 +447,7 @@ describe('ElasticSearch', () => {
               "destinationport": 1,
               "sourceport": 4,
               "protocol": "UDP",
+              "sort": 1000,
               "nuage_metadata": {
                 "dpgName": "PG15",
                 "spgName": "PG18"
@@ -459,6 +461,7 @@ describe('ElasticSearch', () => {
               "destinationport": 3,
               "sourceport": 3,
               "protocol": "TCP",
+              "sort": 1000,
               "nuage_metadata": {
                 "dpgName": "PG8",
                 "spgName": "PG9"
