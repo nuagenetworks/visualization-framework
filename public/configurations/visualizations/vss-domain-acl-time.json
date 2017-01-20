@@ -20,8 +20,8 @@
         "xColumn": "timestamp",
         "yColumn": "SumOf",
         "tooltip": [
-            { "column": "SumOf", "label": "Total # ACL Hits" },
-            { "column": "timestamp", "label": "Time" }
+            { "column": "SumOf", "label": "Total # ACL Hits", "format": ".2s" },
+            { "column": "timestamp", "label": "Time", "timeFormat": "%b %d, %y %X" }
         ]
     },
     "query": "vss-domain-acl-time"

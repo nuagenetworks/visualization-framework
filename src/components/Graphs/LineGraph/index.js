@@ -178,8 +178,7 @@ export default class LineGraph extends XYGraph {
                           {tooltipOverlay.map((d) =>
                               <path
                                   fill="none"
-                                  stroke="gray"
-                                  strokeWidth="1px"
+                                  stroke="none"
                                   d={ d == null ? null : "M" + d.join("L") + "Z" }
                                   style={{"pointer-events": "all"}}
                                   { ...this.tooltipProps(d.data) }
