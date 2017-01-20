@@ -55,13 +55,13 @@ export const getRequestID = (configuration, context) => {
     return url;
 }
 
-const getURL = (parameters, api) => {
+const getURL = (queryConfiguration, api) => {
     const lastIndex = api.length - 1;
 
     let base_url = api[lastIndex] === "/" ? api.substring(0, lastIndex) : api;
     base_url += config.end_point + "v" + config.api_version.replace(".", "_") + "/";
 
-    return base_url + getRequestID(parameters);
+    return base_url + getRequestID(queryConfiguration);
 }
 
 const makeRequest = (url, headers) => {
@@ -152,7 +152,7 @@ export const VSDServiceTest = {
     getURL: getURL
 }
 
-const fetch = (parameters, state) => {
+const fetch = (queryConfiguration, state) => {
     let token          = state.VSD.get(ActionKeyStore.TOKEN),
           api          = state.VSD.get(ActionKeyStore.API) || process.env.REACT_APP_VSD_API_ENDPOINT,
           organization = state.VSD.get(ActionKeyStore.ORGANIZATION);
@@ -160,7 +160,7 @@ const fetch = (parameters, state) => {
     if (!api || !token)
         return Promise.reject("No VSD API endpoint specified. To configure the VSD API endpoint, provide the endpoint URL via the environment variable REACT_APP_VSD_API_ENDPOINT at compile time. For a development environment, you can set an invalid value, which will cause the system to provide mock data for testing. For example, you can add the following line to your .bashrc or .profile startup script: 'export REACT_APP_VSD_API_ENDPOINT=http://something.invalid'");
 
-    const url     = VSDServiceTest.getURL(parameters, api),
+    const url     = VSDServiceTest.getURL(queryConfiguration, api),
           headers = getHeaders(token, organization);
 
     return VSDServiceTest.makeRequest(url, headers);

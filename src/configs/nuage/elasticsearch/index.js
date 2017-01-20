@@ -29,14 +29,14 @@ let ESClient = function (state) {
     return new elasticsearch.Client(config);
 }
 
-const fetch = function (parameters, state) {
+const fetch = function (queryConfiguration, state) {
     var client = ESClient(state) // eslint-disable-line
 
     if (!client)
         return Promise.reject();
 
     return new Promise((resolve, reject) => {
-        client.search(parameters.query).then(function (body) {
+        client.search(queryConfiguration.query).then(function (body) {
             resolve(body);
         }, function (error) {
             if (!error.body)
@@ -47,14 +47,14 @@ const fetch = function (parameters, state) {
     });
 }
 
-const ping = function (parameters, state) {
+const ping = function (queryConfiguration, state) {
     var client = ESClient(); // eslint-disable-line
 
     if (!client)
         return Promise.reject();
 
     return new Promise((resolve, reject) => {
-        client.search(parameters.query).then(function (body) {
+        client.search(queryConfiguration.query).then(function (body) {
             resolve(body);
         }, function (error) {
             if (!error.body)
@@ -65,15 +65,15 @@ const ping = function (parameters, state) {
     });
 }
 
-/* Computes the request ID based on the parameters that are actually used
+/* Computes the request ID based on the queryConfiguration that are actually used
  */
-const getRequestID = function (query, context) {
-    const parameters = getUsedParameters(query, context);
+const getRequestID = function (queryConfiguration, context) {
+    const parameters = getUsedParameters(queryConfiguration, context);
 
     if (Object.keys(parameters).length === 0)
-        return query.id;
+        return queryConfiguration.id;
 
-    return query.id + "[" + JSON.stringify(parameters) + "]";
+    return queryConfiguration.id + "[" + JSON.stringify(parameters) + "]";
 }
 
 export const ElasticSearchService = {
