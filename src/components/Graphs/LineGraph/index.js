@@ -11,6 +11,8 @@ import {
     scaleLinear,
     scaleTime,
     select,
+    voronoi,
+    merge
 } from "d3";
 
 import {properties} from "./default.config"
@@ -140,8 +142,15 @@ export default class LineGraph extends XYGraph {
             top: margin.top + availableHeight / 2
         }
 
+        let tooltipOverlay = voronoi()
+            .x(function(d) { return xScale(d[xColumn]); })
+            .y(function(d) { return yScale(d[yColumn]); })
+            .extent([[-leftMargin, -margin.top], [width + margin.right, height + margin.bottom]])
+            .polygons(merge(linesData.map(function(d) { return d.values; })));
+
         return (
             <div className="bar-graph">
+                {this.tooltip}
                 <svg width={width} height={height}>
                     {this.axisTitles(xTitlePosition, yTitlePosition)}
                     <g transform={ `translate(${leftMargin},${margin.top})` } >
@@ -154,15 +163,27 @@ export default class LineGraph extends XYGraph {
                             key="yAxis"
                             ref={ (el) => select(el).call(yAxis) }
                         />
-                        {linesData.map((d) =>
-                            <path
-                                key={ d.key }
-                                fill="none"
-                                stroke={ getColor(d) }
-                                strokeWidth={ stroke.width }
-                                d={ lineGenerator(d.values) }
-                            />
-                        )}
+                        <g>
+                          {linesData.map((d) =>
+                              <path
+                                  key={ d.key }
+                                  fill="none"
+                                  stroke={ getColor(d) }
+                                  strokeWidth={ stroke.width }
+                                  d={ lineGenerator(d.values) }
+                              />
+                          )}
+                        </g>
+                        <g>
+                          {tooltipOverlay.map((d) =>
+                              <path
+                                  fill="none"
+                                  stroke="gray"
+                                  strokeWidth="1px"
+                                  d={ d == null ? null : "M" + d.join("L") + "Z" }
+                              />
+                          )}
+                        </g>
                     </g>
                     {this.renderLegend(linesData, legend, getColor, label)}
                 </svg>
