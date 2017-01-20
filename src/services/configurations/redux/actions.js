@@ -63,8 +63,9 @@ function shouldFetch(configuration) {
     if (!configuration)
         return true;
 
-    let currentDate = new Date(),
-        expireDate  = new Date(configuration.get(ActionKeyStore.EXPIRATION_DATE));
+    let currentDate = Date.now(),
+        expireDate  = configuration.get(ActionKeyStore.EXPIRATION_DATE);
+
 
     return !configuration.get(ActionKeyStore.IS_FETCHING) && currentDate > expireDate;
 }

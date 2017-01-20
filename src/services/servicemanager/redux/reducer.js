@@ -16,8 +16,8 @@ function didStartRequest(state, requestID) {
 function didReceiveResponse(state, requestID, results, forceCache) {
 
     const timingCache    = forceCache ? 86400000 : ServiceManager.config.timingCache, // forceCache equals to 24h
-          currentDate    = new Date(),
-          expirationDate = currentDate.setTime(currentDate.getTime() + timingCache);
+          currentDate    = Date.now(),
+          expirationDate = currentDate + timingCache;
 
     return state
       .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], false)

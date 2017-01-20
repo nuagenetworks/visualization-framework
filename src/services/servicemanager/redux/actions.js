@@ -88,8 +88,8 @@ function shouldFetch(request) {
     if (!request)
         return true;
 
-    let currentDate = new Date(),
-        expireDate  = new Date(request.get(ActionKeyStore.EXPIRATION_DATE));
+    let currentDate = Date.now(),
+        expireDate  = request.get(ActionKeyStore.EXPIRATION_DATE);
 
     return !request.get(ActionKeyStore.IS_FETCHING) && currentDate > expireDate;
 }

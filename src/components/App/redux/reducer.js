@@ -5,6 +5,7 @@ import { ActionTypes, ActionKeyStore } from "./actions"
 let initialState = Map(); // eslint-disable-line
 initialState = initialState.set(ActionKeyStore.MAIN_MENU_OPENED, false);
 initialState = initialState.set(ActionKeyStore.NAV_BAR_TITLE, "");
+initialState = initialState.set(ActionKeyStore.CONTEXT, {});
 
 function toggleMainMenu(state) {
     return state.set(ActionKeyStore.MAIN_MENU_OPENED,  !state.get(ActionKeyStore.MAIN_MENU_OPENED));

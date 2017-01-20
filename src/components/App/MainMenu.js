@@ -47,6 +47,9 @@ class MainMenuView extends React.Component {
         if (!isConnected)
             return;
 
+        if (!context.enterpriseID)
+            return;
+
         fetchEnterpriseIfNeeded(context.enterpriseID).then((enterprises) => {
             if (!enterprises)
                 return;

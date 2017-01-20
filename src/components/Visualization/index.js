@@ -2,14 +2,17 @@ import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
 
+import $ from "jquery";
+import CopyToClipboard from 'react-copy-to-clipboard';
+
 import { connect } from "react-redux";
+import { Link } from "react-router";
 import { push } from "redux-router";
 
 import FiltersToolBar from "../FiltersToolBar";
 import { CardOverlay } from "../CardOverlay";
 import { Card, CardText } from 'material-ui/Card';
 
-import { Actions } from "./redux/actions";
 import {
     Actions as ServiceActions,
     ActionKeyStore as ServiceActionKeyStore
@@ -21,6 +24,7 @@ import {
 } from "../../services/configurations/redux/actions";
 
 import {
+    Actions as InterfaceActions,
     ActionKeyStore as InterfaceActionKeyStore,
 } from "../App/redux/actions";
 
@@ -43,6 +47,7 @@ class VisualizationView extends React.Component {
             parameterizable: true,
             hasResults: false,
             showDescription: false,
+            showSharingOptions: false
         }
     }
 
@@ -50,14 +55,34 @@ class VisualizationView extends React.Component {
         this.initialize(this.props.id);
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
+        const {
+            registerResize,
+            showInDashboard
+        } = this.props;
+
         this.updateSize();
 
         // If present, register the resize callback
         // to respond to interactive resizes from react-grid-layout.
-        if (this.props.registerResize) {
-            this.props.registerResize(this.updateSize.bind(this))
+        if (registerResize) {
+            registerResize(this.updateSize.bind(this))
         }
+
+        // If we show the visualization only,
+        // we need to listen to window events for resizing the graph
+        if (!showInDashboard)
+            window.addEventListener("resize", this.updateSize);
+    }
+
+    componentWillUnmount = () => {
+        const {
+            showInDashboard
+        } = this.props;
+
+        // Don't forget to remove the listener here
+        if (!showInDashboard)
+            window.removeEventListener("resize", this.updateSize);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -68,9 +93,14 @@ class VisualizationView extends React.Component {
         this.updateSize();
     }
 
-    updateSize() {
+    updateSize = () => {
+        const {
+            context,
+            showInDashboard
+        } = this.props;
+
         if (this._element) {
-            const { width, height } = resizeVisualization(this._element);
+            const { width, height } = resizeVisualization(this._element, showInDashboard, context && context.hasOwnProperty("fullScreen"));
 
             if (width !== this.state.width || height !== this.state.height) {
                 this.setState({ width, height });
@@ -81,10 +111,17 @@ class VisualizationView extends React.Component {
     initialize(id) {
 
         this.props.fetchConfigurationIfNeeded(id).then((c) => {
-            const { configuration } = this.props
+            const {
+                configuration,
+                showInDashboard,
+                setPageTitle
+            } = this.props;
 
             if (!configuration)
                 return;
+
+            if (!showInDashboard)
+                setPageTitle("Visualization");
 
             const queryName  = configuration.query,
                   scriptName = configuration.script;
@@ -251,9 +288,27 @@ class VisualizationView extends React.Component {
 
         return (
             <FontAwesome
-                name="info-circle"
-                style={style.cardIconMenu}
+                name="info"
+                style={style.cardTitleIcon}
                 onTouchTap={() => { this.setState({showDescription: !this.state.showDescription}); }}
+                />
+        )
+    }
+
+    renderShareIcon() {
+        const {
+            configuration,
+            context
+        } = this.props;
+
+        if (!configuration || context.hasOwnProperty("fullScreen"))
+            return;
+
+        return (
+            <FontAwesome
+                name="share-alt"
+                style={style.cardTitleIcon}
+                onTouchTap={() => { this.setState({showSharingOptions: !this.state.showSharingOptions}); }}
                 />
         )
     }
@@ -267,19 +322,63 @@ class VisualizationView extends React.Component {
                 {this.props.configuration.title}
                 <div className="pull-right">
                     {this.renderDescriptionIcon()}
+                    {this.renderShareIcon()}
                 </div>
             </div>
         )
     }
 
     renderFiltersToolBar() {
-        const { configuration } = this.props;
+        const {
+            configuration
+        } = this.props;
 
         if (!configuration || !configuration.filterOptions)
             return;
 
         return (
             <FiltersToolBar filterOptions={configuration.filterOptions} />
+        )
+    }
+
+    renderSharingOptions () {
+        if (!this.state.showSharingOptions)
+            return;
+
+        const {
+            configuration,
+            context
+        } = this.props;
+
+
+        const queryParams = Object.assign({}, context, {fullScreen:null});
+        const queryString = $.param(queryParams);
+        const iframeText = "<iframe src=\"" + window.location.origin + "/visualizations/" + configuration.id + "?" + queryString + "\" width=\"800\" height=\"600\"></iframe>";
+
+        return (
+            <div
+                className="text-center"
+                style={style.sharingOptionsContainer}
+                >
+                <CopyToClipboard
+                    text={iframeText}
+                    style={style.copyContainer}
+                    >
+                    <button className="btn btn-default btn-xs">
+                         <FontAwesome name="copy" /> Copy iframe source
+                    </button>
+                </CopyToClipboard>&nbsp;
+
+                <Link
+                    style={style.cardTitleIcon}
+                    to={{ pathname:"/visualizations/" + configuration.id, query: queryParams }}
+                    target="_blank"
+                    >
+                    <button className="btn btn-default btn-xs">
+                         <FontAwesome name="external-link" /> Open new window
+                    </button>
+                </Link>
+            </div>
         )
     }
 
@@ -330,6 +429,7 @@ class VisualizationView extends React.Component {
             >
                 { this.renderTitleBarIfNeeded() }
                 { this.renderFiltersToolBar() }
+                { this.renderSharingOptions() }
                 <CardText style={cardText}>
                     { this.renderVisualizationIfNeeded() }
                     {description}
@@ -406,7 +506,7 @@ const mapStateToProps = (state, ownProps) => {
 const actionCreators = (dispatch) => ({
 
     setPageTitle: function(aTitle) {
-        dispatch(Actions.updateTitle(aTitle));
+        dispatch(InterfaceActions.updateTitle(aTitle));
     },
 
     goTo: function(link, context) {
