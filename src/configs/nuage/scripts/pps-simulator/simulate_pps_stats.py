@@ -530,7 +530,7 @@ class SimulateSLAStats(object):
                         while d_nsg_ind == s_nsg_ind:
                             d_nsg_ind = random.randrange(0, len(nsgs) - 1)
                         for appgrp in app_grps:
-                            applist = app_grps["app_list"]
+                            applist = appgrp["app_list"]
                             app = random.choice(applist)
                             l4_class = get_random_with_prob(self.sla_prob)
                             # if ( get_random_with_prob(self.sla_prob) ):
