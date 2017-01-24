@@ -142,11 +142,16 @@ export default class LineGraph extends XYGraph {
             top: margin.top + availableHeight / 2
         }
 
-        let tooltipOverlay = voronoi()
+        const tooltipOverlay = voronoi()
             .x(function(d) { return xScale(d[xColumn]); })
             .y(function(d) { return yScale(d[yColumn]); })
             .extent([[-leftMargin, -margin.top], [width + margin.right, height + margin.bottom]])
             .polygons(merge(linesData.map(function(d) { return d.values; })));
+
+        const tooltipOffset = (d) => JSON.stringify({
+          'bottom': margin.top + yScale(d[yColumn]),
+          'right': xScale(d[xColumn]) + leftMargin
+        });
 
         return (
             <div className="bar-graph">
@@ -176,13 +181,33 @@ export default class LineGraph extends XYGraph {
                         </g>
                         <g>
                           {tooltipOverlay.map((d) =>
-                              <path
-                                  fill="none"
-                                  stroke="none"
-                                  d={ d == null ? null : "M" + d.join("L") + "Z" }
-                                  style={{"pointer-events": "all"}}
+                              <g
                                   { ...this.tooltipProps(d.data) }
-                              />
+                                  data-offset={tooltipOffset(d.data)}
+                                  data-effect="solid"
+                              >
+
+                                  /*
+                                    This rectangle is a hack
+                                    to position tooltips correctly.
+                                    Due to this rectangle, the boundingClientRect
+                                    used by ReactTooltip for positioning the tooltips
+                                    has an upper left corner at (0, 0).
+                                  */
+                                  <rect
+                                      x={-leftMargin}
+                                      y={-margin.top}
+                                      width="1"
+                                      height="1"
+                                      fill="none"
+                                  />
+
+                                  <path
+                                      fill="none"
+                                      d={ d == null ? null : "M" + d.join("L") + "Z" }
+                                      style={{"pointer-events": "all"}}
+                                  />
+                              </g>
                           )}
                         </g>
                     </g>
