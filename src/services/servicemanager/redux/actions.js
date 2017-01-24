@@ -70,7 +70,7 @@ function fetch(query, context, forceCache) {
             },
             (error) => {
                 if (process.env.NODE_ENV === "development" && service.hasOwnProperty("getMockResponse")) {
-                    const response = service.getMockResponse(requestID);
+                    const response = service.getMockResponse(query);
                     dispatch(didReceiveResponse(requestID, response, forceCache));
                     return Promise.resolve(response);
                 }
