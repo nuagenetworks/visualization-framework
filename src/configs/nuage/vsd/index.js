@@ -5,7 +5,7 @@ import { parameterizedConfiguration } from "../../../utils/configurations";
 
 const config = {
     api_version: "4.0",
-    end_point: "/nuage/api/",
+    end_point_prefix: "/nuage/api/",
     headers: {
         "Accept": "*/*",
         "Content-Type": "application/json",
@@ -38,40 +38,40 @@ const getHeaders = (token, organization, filter, page, orderBy, proxyUser) => {
     return headers
 }
 
-export const getRequestURL = (query) => {
+export const getURLEndpoint = (configuration) => {
 
-    let url = query.parentResource;
+    let url = configuration.query.parentResource;
 
-    if (query.hasOwnProperty("parentID"))
-        url += "/" + query.parentID;
+    if (configuration.query.hasOwnProperty("parentID"))
+        url += "/" + configuration.query.parentID;
 
-    if (query.hasOwnProperty("resource"))
-        url += "/" + query.resource;
+    if (configuration.query.hasOwnProperty("resource"))
+        url += "/" + configuration.query.resource;
 
     return url;
 }
 
 export const getRequestID = (configuration, context) => {
-    const query = parameterizedConfiguration(configuration.query, context);
+    const tmpConfiguration = parameterizedConfiguration(configuration, context);
 
-    if (!query)
+    if (!tmpConfiguration)
         return;
 
-    let URL = getRequestURL(query);
+    let URL = getURLEndpoint(tmpConfiguration);
 
-    if (!query.filter)
+    if (!tmpConfiguration.query.filter)
         return URL;
 
-    return URL + "-" + query.filter;
+    return URL + "-" + tmpConfiguration.query.filter;
 }
 
 const getURL = (configuration, api) => {
     const lastIndex = api.length - 1;
 
     let base_url = api[lastIndex] === "/" ? api.substring(0, lastIndex) : api;
-    base_url += config.end_point + "v" + config.api_version.replace(".", "_") + "/";
+    base_url += config.end_point_prefix + "v" + config.api_version.replace(".", "_") + "/";
 
-    return base_url + getRequestURL(configuration);
+    return base_url + getURLEndpoint(configuration);
 }
 
 const makeRequest = (url, headers) => {
@@ -90,12 +90,14 @@ const makeRequest = (url, headers) => {
     });
 }
 
-const getMockResponse = (requestID) => {
-    let params = requestID.split("/"),
-        nbParams = params.length;
+const getMockResponse = (configuration) => {
 
-    if (nbParams === 1) {
-        switch (requestID) {
+    let parent   = configuration.query.parentResource,
+        parentID = configuration.query.parentID,
+        resource = configuration.query.resource;
+
+    if (!resource && !parentID) {
+        switch (parent) {
             case "enterprises":
                 return [
                     {
@@ -105,55 +107,56 @@ const getMockResponse = (requestID) => {
                     }
                 ];
             default:
-                throw new Error("You should set a default value for requestID = " + requestID);
+                throw new Error("You should set a default value for = " + parent);
             }
     }
 
-    else if (nbParams === 2) {
+    if (!resource) {
         // case of type enterprises/id
-        switch (params[0]) {
+        switch (parent) {
             case "enterprises":
                 return [
                     {
-                        ID: params[1],
+                        ID: parentID,
                         name: "Enterprise Test",
                     }
                 ]
             default:
-                throw new Error("You should set a default value for requestID = " + requestID);
+                throw new Error("You should set a default value for = " + parent);
         }
-    } else {
-        switch (params[params.length - 1]) {
-            case "nsgateways":
-                // case of enterprises/id/domains
-                return [
-                    {
-                        ID: "98545-1232-3432",
-                        name: "NSG 1",
-                    },
-                    {
-                        ID: "906767-432432-89343",
-                        name: "NSG 2",
-                    }
-                ]
-            default:
-                // case of enterprises/id/domains
-                return [
-                    {
-                        ID: "12345-1232-3432",
-                        name: "Domain 1",
-                    },
-                    {
-                        ID: "432980-432432-89343",
-                        name: "Domain 2",
-                    },
-                    {
-                        ID: "54365-4387-948305",
-                        name: "Domain 3",
-                    }
-                ]
-        }
+    }
 
+    switch (resource) {
+        case "nsgateways":
+            // case of enterprises/id/domains
+            return [
+                {
+                    ID: "98545-1232-3432",
+                    name: "NSG 1",
+                    personality: "NSG"
+                },
+                {
+                    ID: "906767-432432-89343",
+                    name: "NSG 2",
+                    personality: "NSG"
+                }
+            ]
+        default:
+            // case of enterprises/id/domains
+            return [
+                {
+                    ID: "12345-1232-3432",
+                    name: "Domain 1",
+                },
+                {
+                    ID: "432980-432432-89343",
+                    name: "Domain 2",
+                },
+                {
+                    ID: "54365-4387-948305",
+                    name: "Domain 3",
+                }
+            ]
     }
 }
 
