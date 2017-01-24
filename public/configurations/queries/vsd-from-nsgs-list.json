@@ -1,0 +1,11 @@
+{
+    "id":"vsd-from-nsgs-list",
+    "title":"Applications",
+    "service":"VSD",
+    "query":{
+        "parentResource":"enterprises",
+        "parentID":"{{enterpriseID}}",
+        "resource":"nsgateways",
+        "filter": "personality == {{fromPersonality:NSG}}"
+    }
+}

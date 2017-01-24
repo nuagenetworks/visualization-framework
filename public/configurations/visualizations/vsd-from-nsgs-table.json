@@ -1,0 +1,35 @@
+{
+    "id": "vsd-from-nsgs-table",
+    "graph": "Table",
+    "title": "From {{fromPersonality}}",
+    "author": "Christophe SERAFIN",
+    "creationDate": "23/01/2016",
+    "data": {
+        "columns": [
+            { "column": "ID"},
+            { "column": "name" }
+        ]
+    },
+    "listeners": [{
+      "params": {
+          "fromNSG": "ID"
+      }
+    }],
+    "filterOptions": {
+        "Personality": {
+            "parameter": "fromPersonality",
+            "default": "NSG",
+            "options": [
+                {
+                    "label": "NSG",
+                    "value": "NSG"
+                },
+                {
+                    "label": "NSG-UBR",
+                    "value": "NSGUBR"
+                }
+            ]
+        }
+    },
+    "query": "vsd-from-nsgs-list"
+}

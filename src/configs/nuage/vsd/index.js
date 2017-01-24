@@ -13,7 +13,7 @@ const config = {
     }
 }
 
-const getHeaders = (token, organization, filter, orderBy, page, proxyUser) => {
+const getHeaders = (token, organization, filter, page, orderBy, proxyUser) => {
     let headers = config.headers;
 
     if (token)
@@ -38,30 +38,40 @@ const getHeaders = (token, organization, filter, orderBy, page, proxyUser) => {
     return headers
 }
 
-export const getRequestID = (configuration, context) => {
-    const pQuery = parameterizedConfiguration(configuration.query, context);
+export const getRequestURL = (query) => {
 
-    if (!pQuery)
-        return;
+    let url = query.parentResource;
 
-    let url = pQuery.parentResource;
+    if (query.hasOwnProperty("parentID"))
+        url += "/" + query.parentID;
 
-    if (pQuery.hasOwnProperty("parentID"))
-        url += "/" + pQuery.parentID;
-
-    if (pQuery.hasOwnProperty("resource"))
-        url += "/" + pQuery.resource;
+    if (query.hasOwnProperty("resource"))
+        url += "/" + query.resource;
 
     return url;
 }
 
-const getURL = (queryConfiguration, api) => {
+export const getRequestID = (configuration, context) => {
+    const query = parameterizedConfiguration(configuration.query, context);
+
+    if (!query)
+        return;
+
+    let URL = getRequestURL(query);
+
+    if (!query.filter)
+        return URL;
+
+    return URL + "-" + query.filter;
+}
+
+const getURL = (configuration, api) => {
     const lastIndex = api.length - 1;
 
     let base_url = api[lastIndex] === "/" ? api.substring(0, lastIndex) : api;
     base_url += config.end_point + "v" + config.api_version.replace(".", "_") + "/";
 
-    return base_url + getRequestID(queryConfiguration);
+    return base_url + getRequestURL(configuration);
 }
 
 const makeRequest = (url, headers) => {
@@ -152,7 +162,7 @@ export const VSDServiceTest = {
     getURL: getURL
 }
 
-const fetch = (queryConfiguration, state) => {
+const fetch = (configuration, state) => {
     let token          = state.VSD.get(ActionKeyStore.TOKEN),
           api          = state.VSD.get(ActionKeyStore.API) || process.env.REACT_APP_VSD_API_ENDPOINT,
           organization = state.VSD.get(ActionKeyStore.ORGANIZATION);
@@ -160,7 +170,7 @@ const fetch = (queryConfiguration, state) => {
     if (!api || !token)
         return Promise.reject("No VSD API endpoint specified. To configure the VSD API endpoint, provide the endpoint URL via the environment variable REACT_APP_VSD_API_ENDPOINT at compile time. For a development environment, you can set an invalid value, which will cause the system to provide mock data for testing. For example, you can add the following line to your .bashrc or .profile startup script: 'export REACT_APP_VSD_API_ENDPOINT=http://something.invalid'");
 
-    const url     = VSDServiceTest.getURL(queryConfiguration, api),
+    const url     = VSDServiceTest.getURL(configuration, api),
           headers = getHeaders(token, organization);
 
     return VSDServiceTest.makeRequest(url, headers);
