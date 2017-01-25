@@ -5,17 +5,17 @@ import { parameterizedConfiguration } from "../../../utils/configurations";
 
 const config = {
     api_version: "4.0",
-    end_point_prefix: "/nuage/api/",
-    headers: {
-        "Accept": "*/*",
-        "Content-Type": "application/json",
-        "X-Nuage-Organization":"csp",
-    }
+    end_point_prefix: "/nuage/api/"
 }
 
 const getHeaders = (token, organization, filter, page, orderBy, proxyUser) => {
 
-    let headers = config.headers;
+    // Default headers
+    let headers = {
+        "Accept": "*/*",
+        "Content-Type": "application/json",
+        "X-Nuage-Organization":"csp",
+    }
 
     if (token)
         headers["Authorization"] = "XREST " + token
