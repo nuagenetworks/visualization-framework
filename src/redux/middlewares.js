@@ -22,14 +22,16 @@ export const updateVisualizationTypeMiddleware = store => next => action => {
     const result = next(action),
           state  = store.getState();
 
-    if (action.type === "@@reduxReactRouter/routerDidChange" && state.router && 'dashboards' in state.router.location)
+    if (action.type === "@@reduxReactRouter/routerDidChange" && state.router && state.router.location.pathname.indexOf('dashboards') !== -1)
     {
-        const id = state.router.params.id;
+        const id           = state.router.params.id,
+              previousType = state.interface.get("visualizationType"),
+              nextType     = id && id.length > 3 ? id.substr(0, 3).toUpperCase() : null;
 
-        if (id && id.length > 3) {
+        if (nextType && nextType !== previousType) {
             const action = {
                 type: "ACTION_UPDATE_VISUALIZATION_TYPE",
-                visualizationType: id.substr(0, 3).toUpperCase()
+                visualizationType: nextType
             };
             store.dispatch(action);
         }
