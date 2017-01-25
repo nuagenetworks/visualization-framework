@@ -1,0 +1,22 @@
+{
+    "id": "aarNetworkPerformance",
+    "author": "Christophe SERAFIN",
+    "creationDate": "01/24/2016",
+    "title": "AAR NetworkPerformance",
+    "links": [
+        {
+            "label": "Applications",
+            "url": "/dashboards/aarDomain"
+        },
+        {
+            "label": "Network Performance",
+            "url": "/dashboards/aarNetworkPerformance"
+        }
+    ],
+    "visualizations": [
+        { "id": "vsd-from-nsgs-table",  "x": 0, "y": 0, "w": 6, "h": 12, "minW": 2, "minH": 12, "static": true},
+        { "id": "vsd-to-nsgs-table",    "x": 6, "y": 0, "w": 6, "h": 12, "minW": 2, "minH": 12, "static": true},
+        { "id": "aar-domain-probe-table",             "x": 0, "y": 15, "w": 6,  "h": 15, "minW": 2, "minH": 12, "static": true},
+        { "id": "aar-domain-probe-table-dest-to-src", "x": 6, "y": 15, "w": 6,  "h": 15, "minW": 2, "minH": 12, "static": true}
+    ]
+}
