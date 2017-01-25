@@ -13,7 +13,8 @@
     },
     "listeners": [{
       "params": {
-          "toNSG": "ID"
+          "dnsg": "name",
+          "dPersonality": "personality"
       }
     }],
     "filterOptions": {
