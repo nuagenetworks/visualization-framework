@@ -1,8 +1,8 @@
 {
     "id": "top20-talkers-enterprise-defaultapp-table",
     "graph": "Table",
-    "title": "Top 20 Discovered Applications (Default Application)",
-    "description": "Enterprise level top 20 discovered applications. Computation: Sum of total Bytes sent and/or received in descending order.",
+    "title": "Top 20 Discovered Applications (Default Application Group)",
+    "description": "Enterprise level top 20 discovered applications. Computation: Sum of total Bytes sent and/or received in descending order. Click on a row to load the date histogram for this application.",
     "author": "Ronak Shah",
     "creationDate": "10/14/2016",
     "data": {
