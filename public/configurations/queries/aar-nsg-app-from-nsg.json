@@ -97,9 +97,9 @@
                                                         "field": "TotalPacketsCount"
                                                     }
                                                 },
-                                                "L7Classification": {
+                                                "L7ClassEnhanced": {
                                                     "terms": {
-                                                        "field": "L7Classification",
+                                                        "field": "L7ClassEnhanced",
                                                         "size": 5,
                                                         "order": {
                                                             "SumofBytes": "desc"

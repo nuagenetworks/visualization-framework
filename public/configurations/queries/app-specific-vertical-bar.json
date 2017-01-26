@@ -26,10 +26,10 @@
                 "4":{
                     "filters":{
                         "filters":{
-                            "L7Classification":{
+                            "L7ClassEnhanced":{
                                 "query":{
                                     "term":{
-                                        "L7Classification":"{{app}}"
+                                        "L7ClassEnhanced":"{{app}}"
                                     }
                                 }
                             }
