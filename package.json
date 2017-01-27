@@ -16,6 +16,7 @@
     "bootstrap": "^3.3.7",
     "d3": "^4.2.6",
     "elasticsearch": "^11.0.1",
+    "es-tabify": "^0.1.0",
     "font-awesome": "^4.6.3",
     "fontawesome": "^4.5.0",
     "immutable": "3.7.6",
