@@ -29,7 +29,7 @@
                             "L7Classification":{
                                 "query":{
                                     "term":{
-                                        "L7Classification":"{{app}}"
+                                        "L7ClassEnhanced":"{{app}}"
                                     }
                                 }
                             }
