@@ -28,38 +28,62 @@
     "filterOptions": {
         "Source Field": {
             "parameter": "source_field",
-            "default": "nuage_metadata.spgName",
+            "default": "pg",
             "options": [
                 {
+                    "label": "Endpoint's Domain",
+                    "value": "endpoint-domain"
+                },
+                {
+                    "label": "Endpoint's Subnet",
+                    "value": "endpoint-subnet"
+                },
+                {
+                    "label": "Endpoint's Zone",
+                    "value": "endpoint-zone"
+                },
+                {
                     "label": "Subnet",
-                    "value": "nuage_metadata.subnetName"
+                    "value": "subnet"
                 },
                 {
                     "label": "Zone",
-                    "value": "nuage_metadata.zoneName"
+                    "value": "zone"
                 },
                 {
                     "label": "PG",
-                    "value": "nuage_metadata.spgName",
+                    "value": "pg",
                     "default": true
                 }
             ]
         },
         "Destination Field": {
             "parameter": "destination_field",
-            "default": "nuage_metadata.dpgName",
+            "default": "pg",
             "options": [
                 {
+                    "label": "Endpoint's Domain",
+                    "value": "endpoint-domain"
+                },
+                {
+                    "label": "Endpoint's Subnet",
+                    "value": "endpoint-subnet"
+                },
+                {
+                    "label": "Endpoint's Zone",
+                    "value": "endpoint-zone"
+                },
+                {
                     "label": "Subnet",
-                    "value": "nuage_metadata.subnetName"
+                    "value": "subnet"
                 },
                 {
                     "label": "Zone",
-                    "value": "nuage_metadata.zoneName"
+                    "value": "zone"
                 },
                 {
                     "label": "PG",
-                    "value": "nuage_metadata.dpgName",
+                    "value": "pg",
                     "default": true
                 }
             ]

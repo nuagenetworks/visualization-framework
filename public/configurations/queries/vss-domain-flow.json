@@ -49,32 +49,62 @@
                                 }
                             },
                             "aggs": {
-                                "spg": {
-                                    "terms": {
-                                        "field": "{{source_field:nuage_metadata.spgName}}",
-                                        "size": 5,
-                                        "order": {
-                                            "SumOf": "desc"
-                                        }   
+                                "4": {
+                                    "filters":{
+                                        "filters":{
+                                            "SourceType":{
+                                                "query":{
+                                                    "term":{
+                                                        "nuage_metadata.acl_source_type":"{{source_field:pg}}"
+                                                    }
+                                                }
+                                            }
+                                        }
                                     },
                                     "aggs": {
-                                        "SumOf": {
-                                            "sum": {
-                                                "field": "packets"
-                                            }
-                                        },
-                                        "dpg": {
-                                            "terms": {
-                                                "field": "{{destination_field:nuage_metadata.dpgName}}",
-                                                "size": 5,
-                                                "order": {
-                                                    "SumOf": "desc"
+                                        "5": {
+                                            "filters":{
+                                                "filters":{
+                                                    "DestinationType":{
+                                                        "query":{
+                                                            "term":{
+                                                                "nuage_metadata.acl_destination_type":"{{destination_field:pg}}"
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             },
                                             "aggs": {
-                                                "SumOf": {
-                                                    "sum": {
-                                                        "field": "packets"
+                                                "source": {
+                                                    "terms": {
+                                                        "field": "nuage_metadata.acl_source_name",
+                                                        "size": 5,
+                                                        "order": {
+                                                            "SumOf": "desc"
+                                                        }   
+                                                    },
+                                                    "aggs": {
+                                                        "SumOf": {
+                                                            "sum": {
+                                                                "field": "packets"
+                                                            }
+                                                        },
+                                                        "destination": {
+                                                            "terms": {
+                                                                "field": "nuage_metadata.acl_destination_name",
+                                                                "size": 5,
+                                                                "order": {
+                                                                    "SumOf": "desc"
+                                                                }
+                                                            },
+                                                            "aggs": {
+                                                                "SumOf": {
+                                                                    "sum": {
+                                                                        "field": "packets"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }

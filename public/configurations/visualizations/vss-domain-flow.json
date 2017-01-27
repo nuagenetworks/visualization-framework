@@ -7,17 +7,17 @@
     "creationDate": "10/25/2016",
     "data": {
         "chordWeightColumn": "SumOf",
-        "chordSourceColumn": "spg",
-        "chordDestinationColumn": "dpg",
-        "colorColumn": "spg",
+        "chordSourceColumn": "source",
+        "chordDestinationColumn": "destination",
+        "colorColumn": "source",
         "tooltip": [
             { "column": "value", "format": ",", "label": "MB"}
         ]
     },
     "listeners": [{
       "params": {
-          "spg": "spg",
-          "dpg": "dpg"
+          "source": "source",
+          "destination": "destination"
       }
     }],
     "query": "vss-domain-flow"
