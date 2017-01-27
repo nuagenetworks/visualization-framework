@@ -1,5 +1,5 @@
 import elasticsearch from "elasticsearch";
-import tabify from "./tabify";
+import tabify from "es-tabify";
 import { ActionKeyStore } from "./redux/actions";
 import { getUsedParameters } from "../../../utils/configurations";
 
