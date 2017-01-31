@@ -2,7 +2,7 @@
     "id": "top20-talkers-enterprise",
     "graph": "Table",
     "title": "Top 20 Applications",
-    "description": "Enterprise level top 20 applications. Computation: Sum of total Bytes sent and/or received in descending order. Click on a row to load the date histogram for this application.",
+    "description": "Enterprise level top 20 applications. Layer-7 Classification includes discovered applications including Common Name in TLS certificates when available. Computation: Sum of total Bytes sent and/or received in descending order. Click on a row to load the date histogram for this application.",
     "author": "Ronak Shah",
     "creationDate": "10/14/2016",
     "data": {
