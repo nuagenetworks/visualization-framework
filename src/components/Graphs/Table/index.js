@@ -122,43 +122,6 @@ export default class Table extends AbstractGraph {
                                 </tr>
                             );
                         })}
-
-                        { data.map((d, j) => {
-
-                            // Set up clicking and cursor style.
-                            let onClick, cursor;
-                            if(onMarkClick){
-                                onClick = () => onMarkClick(d);
-                                cursor = "pointer";
-                            }
-
-                            return (
-                                <tr
-                                    key={j}
-                                    style={{
-                                        color:fontColor,
-                                        background: scale ? scale(d[colorColumn]) : colors[j % 2],
-                                        borderTop: border.top,
-                                        borderBottom: border.bottom,
-                                        borderLeft: border.left,
-                                        borderRight: border.right,
-                                        cursor: cursor
-                                    }}
-                                    onClick={onClick}
-                                >
-                                    { accessors.map((accessor, i) =>(
-                                        <td
-                                            key={i}
-                                            style={{
-                                                padding: padding,
-                                                width: columnWidth
-                                            }}>
-                                          { accessor(d) }
-                                        </td>
-                                    )) }
-                                </tr>
-                            );
-                        })}
                     </tbody>
                 </table>
             </div>
