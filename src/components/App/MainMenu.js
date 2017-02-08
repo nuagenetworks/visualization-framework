@@ -112,7 +112,7 @@ class MainMenuView extends React.Component {
         if (!l2Domains || l2Domains.length === 0)
             return;
 
-        const targetedDashboard = visualizationType === "VSS" ? "vssL2DomainFlow" : "aarL2Domain";
+        const targetedDashboard = visualizationType === "VSS" ? "vssDomainFlow" : "aarDomain";
         const domainType = "nuage_metadata.l2domainName"
 
         return (
