@@ -1,5 +1,7 @@
 import React from "react";
 import XYGraph from "../XYGraph";
+import { Actions } from "../../App/redux/actions";
+import { connect } from "react-redux";
 
 import {
     axisBottom,
@@ -17,9 +19,9 @@ import {
     event
 } from "d3";
 
-import {properties} from "./default.config"
+import {properties} from "./default.config";
 
-export default class LineGraph extends XYGraph {
+class LineGraph extends XYGraph {
 
     constructor(props) {
         super(props, properties);
@@ -150,11 +152,9 @@ export default class LineGraph extends XYGraph {
             .on("end", () => {
                 // If there is a brushed region...
                 if(event.selection){
-                    const [
-                      startTime,
-                      endTime
-                    ] = event.selection.map(xScale.invert, xScale);
-                    console.log(startTime, endTime);
+                    this.props.setTimeInterval(event.selection
+                      .map(xScale.invert, xScale) // Convert from pixel coords to Date objects.
+                      .map((date) => date.getTime())); // Convert from Date to epoch milliseconds.
                 }
             });
 
@@ -241,3 +241,11 @@ LineGraph.propTypes = {
   configuration: React.PropTypes.object,
   response: React.PropTypes.object
 };
+
+const actionCreators = (dispatch) => ({
+    setTimeInterval: ([startTime, endTime]) => {
+        dispatch(Actions.updateContext({ startTime, endTime }));
+    }
+});
+
+export default connect(null, actionCreators)(LineGraph);
