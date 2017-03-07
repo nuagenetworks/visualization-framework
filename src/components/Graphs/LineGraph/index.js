@@ -13,7 +13,8 @@ import {
     select,
     brushX,
     voronoi,
-    merge
+    merge,
+    event
 } from "d3";
 
 import {properties} from "./default.config"
@@ -146,8 +147,15 @@ export default class LineGraph extends XYGraph {
 
         this.brush
             .extent([[0, 0], [availableWidth, availableHeight]])
-            .on("brush end", () => {
-                console.log("Brushed");
+            .on("end", () => {
+                // If there is a brushed region...
+                if(event.selection){
+                    const [
+                      startTime,
+                      endTime
+                    ] = event.selection.map(xScale.invert, xScale);
+                    console.log(startTime, endTime);
+                }
             });
 
         const tooltipOverlay = voronoi()
