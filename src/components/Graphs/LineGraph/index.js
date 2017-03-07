@@ -11,6 +11,7 @@ import {
     scaleLinear,
     scaleTime,
     select,
+    brushX
 } from "d3";
 
 import {properties} from "./default.config"
@@ -19,6 +20,7 @@ export default class LineGraph extends XYGraph {
 
     constructor(props) {
         super(props, properties);
+        this.brush = brushX();
     }
 
     render() {
@@ -140,6 +142,12 @@ export default class LineGraph extends XYGraph {
             top: margin.top + availableHeight / 2
         }
 
+        this.brush
+            .extent([[0, 0], [availableWidth, availableHeight]])
+            .on("brush end", () => {
+                console.log("Brushed");
+            });
+
         return (
             <div className="bar-graph">
                 <svg width={width} height={height}>
@@ -163,6 +171,10 @@ export default class LineGraph extends XYGraph {
                                 d={ lineGenerator(d.values) }
                             />
                         )}
+                        <g
+                            key="brush"
+                            ref={ (el) => select(el).call(this.brush) }
+                        />
                     </g>
                     {this.renderLegend(linesData, legend, getColor, label)}
                 </svg>
