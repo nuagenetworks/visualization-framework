@@ -84,7 +84,7 @@ export default class Table extends AbstractGraph {
                     </thead>
                     <tbody
                         style={{
-                            height:height - 45 // Set from style.css
+                            height:height - 50 // Set from style.css
                         }}>
                         { data.map((d, j) => {
 

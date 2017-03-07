@@ -99,7 +99,7 @@
                                                 },
                                                 "L7Classification": {
                                                     "terms": {
-                                                        "field": "L7Classification",
+                                                        "field": "L7ClassEnhanced",
                                                         "size": 5,
                                                         "order": {
                                                             "SumofBytes": "desc"

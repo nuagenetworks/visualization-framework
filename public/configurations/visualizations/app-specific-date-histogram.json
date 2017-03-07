@@ -2,7 +2,7 @@
     "id": "app-specific-date-histogram",
     "graph": "BarGraph",
     "title": "L7Classification ({{app}}) Date Histogram",
-    "description": "Bandwidth usage per application across domains. Computation: Sum of total Bytes sent and/or received for a given interval displayed over the configured timespan. Possible values are: If time span = Last 15 minutes: interval is 1 minute, If time span = Last 24 hours: interval is 1 hour, If time span = Last 7 days: interval is 12 hours",
+    "description": "Bandwidth usage per application across domains. Layer-7 Classification includes discovered applications including Common Name in TLS certificates when available. Computation: Sum of total Bytes sent and/or received for a given interval displayed over the configured timespan. Possible values are: If time span = Last 15 minutes: interval is 1 minute, If time span = Last 24 hours: interval is 1 hour, If time span = Last 7 days: interval is 12 hours",
     "author": "Curran Kelleher",
     "creationDate": "10/14/2016",
     "data": {

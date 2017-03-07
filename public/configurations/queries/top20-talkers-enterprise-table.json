@@ -95,7 +95,7 @@
                                                     },
                                                     "L7Classification":{
                                                         "terms":{
-                                                            "field":"L7Classification",
+                                                            "field":"L7ClassEnhanced",
                                                             "size":20,
                                                             "order":{
                                                                 "1":"desc"

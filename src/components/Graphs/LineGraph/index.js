@@ -11,7 +11,9 @@ import {
     scaleLinear,
     scaleTime,
     select,
-    brushX
+    brushX,
+    voronoi,
+    merge
 } from "d3";
 
 import {properties} from "./default.config"
@@ -148,8 +150,20 @@ export default class LineGraph extends XYGraph {
                 console.log("Brushed");
             });
 
+        const tooltipOverlay = voronoi()
+            .x(function(d) { return xScale(d[xColumn]); })
+            .y(function(d) { return yScale(d[yColumn]); })
+            .extent([[-leftMargin, -margin.top], [width + margin.right, height + margin.bottom]])
+            .polygons(merge(linesData.map(function(d) { return d.values; })));
+
+        const tooltipOffset = (d) => JSON.stringify({
+          'bottom': margin.top + yScale(d[yColumn]),
+          'right': xScale(d[xColumn]) + leftMargin
+        });
+
         return (
             <div className="bar-graph">
+                {this.tooltip}
                 <svg width={width} height={height}>
                     {this.axisTitles(xTitlePosition, yTitlePosition)}
                     <g transform={ `translate(${leftMargin},${margin.top})` } >
@@ -162,15 +176,48 @@ export default class LineGraph extends XYGraph {
                             key="yAxis"
                             ref={ (el) => select(el).call(yAxis) }
                         />
-                        {linesData.map((d) =>
-                            <path
-                                key={ d.key }
-                                fill="none"
-                                stroke={ getColor(d) }
-                                strokeWidth={ stroke.width }
-                                d={ lineGenerator(d.values) }
-                            />
-                        )}
+                        <g>
+                          {linesData.map((d) =>
+                              <path
+                                  key={ d.key }
+                                  fill="none"
+                                  stroke={ getColor(d) }
+                                  strokeWidth={ stroke.width }
+                                  d={ lineGenerator(d.values) }
+                              />
+                          )}
+                        </g>
+                        <g>
+                          {tooltipOverlay.map((d) =>
+                              <g
+                                  { ...this.tooltipProps(d.data) }
+                                  data-offset={tooltipOffset(d.data)}
+                                  data-effect="solid"
+                              >
+
+                                  /*
+                                    This rectangle is a hack
+                                    to position tooltips correctly.
+                                    Due to this rectangle, the boundingClientRect
+                                    used by ReactTooltip for positioning the tooltips
+                                    has an upper left corner at (0, 0).
+                                  */
+                                  <rect
+                                      x={-leftMargin}
+                                      y={-margin.top}
+                                      width="1"
+                                      height="1"
+                                      fill="none"
+                                  />
+
+                                  <path
+                                      fill="none"
+                                      d={ d == null ? null : "M" + d.join("L") + "Z" }
+                                      style={{"pointer-events": "all"}}
+                                  />
+                              </g>
+                          )}
+                        </g>
                         <g
                             key="brush"
                             ref={ (el) => select(el).call(this.brush) }

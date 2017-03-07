@@ -17,8 +17,11 @@
              	    "must": [
                     {"term": {"nuage_metadata.enterpriseName": "{{enterpriseName:chord_enterprise}}"} },
                     {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
-                    {"term": {"nuage_metadata.spgName": "{{spg}}"} },
-                    { "term": {"nuage_metadata.dpgName": "{{dpg}}"} },
+                    {"term": {"nuage_metadata.acl_source_type": "{{source_field}}"} },
+                    {"term": {"nuage_metadata.acl_destination_type": "{{destination_field}}"} },
+                    {"term": {"nuage_metadata.acl_destination_name": "{{destination}}"} },
+                    {"term": {"nuage_metadata.acl_source_name": "{{source}}"} },
+                    {"term": {"nuage_metadata.acl_destination_name": "{{destination}}"} },
                     {"range": { "timestamp": { "gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
                   ]
                 }
@@ -28,8 +31,10 @@
                   "must": [
                     {"term": {"nuage_metadata.enterpriseName": "{{enterpriseName:chord_enterprise}}"} },
                     {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
-                    { "term": {"nuage_metadata.spgName": "{{dpg}}"} },
-                    { "term": {"nuage_metadata.dpgName": "{{spg}}"} },
+                    {"term": {"nuage_metadata.acl_source_type": "{{source_field}}"} },
+                    {"term": {"nuage_metadata.acl_destination_type": "{{destination_field}}"} },
+                    { "term": {"nuage_metadata.acl_source_name": "{{destination}}"} },
+                    { "term": {"nuage_metadata.acl_destination_name": "{{source}}"} },
                     {"range": { "timestamp": {"gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
                   ]
                 }

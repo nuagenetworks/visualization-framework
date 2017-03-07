@@ -10,7 +10,7 @@
             { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
             { "column": "SrcUplink", "label": "Source Uplink" },
             { "column": "DstUplink", "label": "Destination Uplink" },
-            { "column": "UnderlayId", "label": "Underlay Id" },
+            { "column": "UnderlayName", "label": "Underlay Name" },
             { "column": "PerfMonitor", "label": "Perf Monitor" },
             { "column": "AvgJitter", "label": "Avg Jitter", "format": ",.2f" },
             { "column": "AvgDelay", "label": "Avg Latency", "format": ",.2f" },
