@@ -1,4 +1,5 @@
-import tabify from 'es-tabify';
+import tabify from './tabify';
+
 
 describe('ElasticSearch', () => {
     it('should tabify list of objects', () => {
