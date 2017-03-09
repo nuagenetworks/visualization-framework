@@ -10,14 +10,14 @@
             { "column": "Application", "label": "Application" },
             { "column": "APMGroup", "label": "APM-Group" },
             { "column": "DomainName", "label": "Domain"},
-            { "column": "L7Classification", "label": "L7 Classification" },
+            { "column": "L7ClassEnhanced", "label": "L7 ClassEnhanced" },
             { "column": "1", "label": "Total Bytes", "format": ",.2s" }
         ]
     },
     "listeners": [
     {
         "params": {
-            "app": "L7Classification"
+            "app": "L7ClassEnhanced"
         }
     }],
 

@@ -91,7 +91,7 @@
                                                             "field":"TotalBytesCount"
                                                         }
                                                     },
-                                                    "L7Classification":{
+                                                    "L7ClassEnhanced":{
                                                         "terms":{
                                                             "field":"L7ClassEnhanced",
                                                             "size":20,

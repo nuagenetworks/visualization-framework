@@ -8,7 +8,7 @@
     "data": {
         "columns": [
             { "column": "Application", "label": "Application" },
-            { "column": "L7Classification", "label": "L7-Classification" },
+            { "column": "L7ClassEnhanced", "label": "L7ClassEnhanced" },
             { "column": "SrcVportName", "label": "Source Vport-Name"},
             { "column": "SourceNSG", "label": "Source-NSG"},
             { "column": "DestinationNSG", "label": ""},

@@ -9,7 +9,7 @@
         "columns": [
             { "column": "APMGroup", "label": "APM Group" },
             { "column": "Application", "label": "Application" },
-            { "column": "L7Classification", "label": "L7 Classification" },
+            { "column": "L7ClassEnahnced", "label": "L7 ClassEnhanced" },
             { "column": "SrcVportName", "label": "Source Vport" },
             { "column": "SrcUplink", "label": "Source Uplink" },
             { "column": "SrcUplinkRole", "label": "Source Uplink Role" },
