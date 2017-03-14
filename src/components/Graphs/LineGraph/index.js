@@ -196,8 +196,9 @@ class LineGraph extends XYGraph {
                           )}
                         </g>
                         <g>
-                          {tooltipOverlay.map((d) =>
+                          {tooltipOverlay.map((d, i) =>
                               <g
+                                  key={ i }
                                   { ...this.tooltipProps(d.data) }
                                   data-offset={tooltipOffset(d.data)}
                                   data-effect="solid"
