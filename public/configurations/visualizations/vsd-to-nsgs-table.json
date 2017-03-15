@@ -1,14 +1,13 @@
 {
     "id": "vsd-to-nsgs-table",
     "graph": "Table",
-    "title": "To {{toPersonality}}",
+    "title": "To {{toTitlePersonality}}",
     "author": "Christophe SERAFIN",
     "creationDate": "23/01/2016",
     "data": {
         "columns": [
             { "column": "ID"},
-            { "column": "name" },
-            { "column": "personality" }
+            { "column": "name" }
         ]
     },
     "listeners": [{
@@ -24,15 +23,24 @@
             "options": [
                 {
                     "label": "NSG",
-                    "value": "NSG"
+                    "value": "NSG",
+                    "forceOptions": {
+						"toTitlePersonality": "NSG"
+					}
                 },
                 {
                     "label": "NSG-BR",
-                    "value": "NSGBR"
+                    "value": "NSGBR",
+                    "forceOptions": {
+						"toTitlePersonality": "NSG-BR"
+					}
                 },
                 {
                     "label": "NSG-UBR",
-                    "value": "NSGDUC"
+                    "value": "NSGDUC",
+                    "forceOptions": {
+						"toTitlePersonality": "NSG-UBR"
+					}
                 }
             ]
         }
