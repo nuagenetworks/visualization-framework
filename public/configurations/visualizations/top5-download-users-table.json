@@ -8,10 +8,10 @@
     "data": {
         "columns": [
             { "column": "DstIP", "label": "Client IP" },
-            { "column": "DestinationNSG", "label": "Destination NSG" },
+            { "column": "DestinationNSG", "label": "NSG" },
             { "column": "DomainName", "label": "Domain" },
-            { "column": "EgressPackets", "label": "Egress Packets", "format": ",.2s"},
-            { "column": "EgressBytes", "label": "Egress Bytes", "format": ",.2s" } 
+            { "column": "EgressPackets", "label": "Packets", "format": ",.2s"},
+            { "column": "EgressBytes", "label": "Bytes", "format": ",.2s" }
         ]
     },
     "query": "top5-download-users-table"

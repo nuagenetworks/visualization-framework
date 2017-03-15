@@ -8,10 +8,10 @@
     "data": {
         "columns": [
             { "column": "SourceIP", "label": "Client IP" },
-            { "column": "SourceNSG", "label": "Source NSG" },
+            { "column": "SourceNSG", "label": "NSG" },
             { "column": "DomainName", "label": "Domain" },
-            { "column": "IngressPackets", "label": "Ingress Packets", "format": ",.2s"},
-            { "column": "IngressBytes", "label": "Ingress Bytes", "format": ",.2s" } 
+            { "column": "IngressPackets", "label": "Packets", "format": ",.2s"},
+            { "column": "IngressBytes", "label": "Bytes", "format": ",.2s" }
         ]
     },
     "query": "top5-upload-users-table"
