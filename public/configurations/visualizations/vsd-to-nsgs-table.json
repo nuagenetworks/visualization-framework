@@ -25,22 +25,22 @@
                     "label": "NSG",
                     "value": "NSG",
                     "forceOptions": {
-						"toTitlePersonality": "NSG"
-					}
+                        "toTitlePersonality": "NSG"
+                    }
                 },
                 {
                     "label": "NSG-BR",
                     "value": "NSGBR",
                     "forceOptions": {
-						"toTitlePersonality": "NSG-BR"
-					}
+                        "toTitlePersonality": "NSG-BR"
+                    }
                 },
                 {
                     "label": "NSG-UBR",
                     "value": "NSGDUC",
                     "forceOptions": {
-						"toTitlePersonality": "NSG-UBR"
-					}
+                        "toTitlePersonality": "NSG-UBR"
+                    }
                 }
             ]
         }
