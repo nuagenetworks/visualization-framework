@@ -19,6 +19,13 @@
                                 }
                             }
                         }
+                    ],
+                    "must_not":[
+                        {
+                            "term":{
+                                "EgressBytes": 0
+                            }
+                        }
                     ]
                 }
             },
@@ -47,12 +54,12 @@
                             "aggs":{
                                 "Packets":{
                                     "sum":{
-                                        "field":"IngressPackets"
+                                        "field":"EgressPackets"
                                     }
                                 },
                                 "Bytes":{
                                     "sum":{
-                                        "field":"IngressBytes"
+                                        "field":"EgressBytes"
                                     }
                                 },
                                 "DomainName":{
@@ -66,12 +73,12 @@
                                 "aggs":{
                                     "Packets":{
                                         "sum":{
-                                            "field":"IngressPackets"
+                                            "field":"EgressPackets"
                                         }
                                     },
                                     "Bytes":{
                                         "sum":{
-                                            "field":"IngressBytes"
+                                            "field":"EgressBytes"
                                         }
                                     }
                                 }

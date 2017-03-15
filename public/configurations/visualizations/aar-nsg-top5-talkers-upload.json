@@ -2,12 +2,12 @@
     "id": "aar-nsg-top5-talkers-upload",
     "graph": "Table",
     "title": "Top 5 Users (Upload)",
-    "description": "NSG level top 5 users (IP addresses) sending traffic to the network. Computation: Sum of ingress Bytes destined to remote NSGs in descending order.",
+    "description": "NSG level top 5 users (IP addresses) sending traffic to the network. Computation: Sum of ingress Bytes sourced from this client IP to any destination in descending order.",
     "author": "Ronak Shah",
     "creationDate": "10/26/2016",
     "data": {
         "columns": [
-            { "column": "SourceIP", "label": "Source IP" },
+            { "column": "SourceIP", "label": "Client IP" },
             { "column": "DomainName", "label": "Domain" },
             { "column": "Packets", "label": "Packets", "format": ",.2s" },
             { "column": "Bytes", "label": "Bytes", "format": ",.2s" }

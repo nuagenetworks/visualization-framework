@@ -1,0 +1,18 @@
+{
+    "id": "top5-download-users-table",
+    "graph": "Table",
+    "title": "Top 5 Download Users",
+    "description": "Enterprise level top 5 download users (IP addresses). Computation: Sum of Egress Bytes for any traffic destined to this Client IP in descending order.",
+    "author": "Ronak Shah",
+    "creationDate": "10/13/2016",
+    "data": {
+        "columns": [
+            { "column": "DstIP", "label": "Client IP" },
+            { "column": "DestinationNSG", "label": "Destination NSG" },
+            { "column": "DomainName", "label": "Domain" },
+            { "column": "EgressPackets", "label": "Egress Packets", "format": ",.2s"},
+            { "column": "EgressBytes", "label": "Egress Bytes", "format": ",.2s" } 
+        ]
+    },
+    "query": "top5-download-users-table"
+}

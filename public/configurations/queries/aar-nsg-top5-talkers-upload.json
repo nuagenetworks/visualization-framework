@@ -19,6 +19,13 @@
                                 }
                             }
                         }
+                    ],
+                    "must_not":[
+                        {
+                            "term":{
+                                "IngressBytes":0
+                            }
+                        }
                     ]
                 }
             },
