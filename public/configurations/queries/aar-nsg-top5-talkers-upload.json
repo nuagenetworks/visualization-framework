@@ -18,12 +18,10 @@
                                     "format":"epoch_millis"
                                 }
                             }
-                        }
-                    ],
-                    "must_not":[
+                        },
                         {
                             "term":{
-                                "IngressBytes":0
+                                "EgressBytes":0
                             }
                         }
                     ]

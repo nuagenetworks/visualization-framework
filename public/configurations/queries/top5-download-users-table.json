@@ -1,6 +1,6 @@
 {
     "id": "top5-download-users-table",
-    "title": "Top 5 Upload Users",
+    "title": "Top 5 Downlod Users",
     "service": "elasticsearch",
     "query": {
         "index": "{{index:nuage_dpi_flowstats}}",
@@ -21,7 +21,7 @@
                         },
                         {
                             "term": {
-                                "SourceNSG": ""
+                                "IngressBytes": 0
                             }
                         }
                     ]
