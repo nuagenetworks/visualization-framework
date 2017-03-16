@@ -39,7 +39,7 @@
                     "label": "NSG-UBR",
                     "value": "NSGDUC",
                     "forceOptions": {
-                        "fromTitlePersonality": "NSG-BR"
+                        "fromTitlePersonality": "NSG-UBR"
                     }
                 }
             ]
