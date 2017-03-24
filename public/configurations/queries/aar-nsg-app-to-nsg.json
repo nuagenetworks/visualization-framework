@@ -116,9 +116,9 @@
                                                                 "field": "TotalPacketsCount"
                                                             }
                                                         },
-                                                        "SrcVportName": {
+                                                        "DestVportName": {
                                                             "terms": {
-                                                                "field": "SrcVportName",
+                                                                "field": "DestVportName",
                                                                 "size": 5,
                                                                 "order": {
                                                                     "SumofBytes": "desc"
@@ -135,9 +135,9 @@
                                                                         "field": "TotalPacketsCount"
                                                                     }
                                                                 },
-                                                                "SrcUplink": {
+                                                                "DstUplink": {
                                                                     "terms": {
-                                                                        "field": "SrcUplink",
+                                                                        "field": "DstUplink",
                                                                         "size": 5,
                                                                         "order": {
                                                                             "SumofBytes": "desc"
@@ -154,9 +154,9 @@
                                                                                 "field": "TotalPacketsCount"
                                                                             }
                                                                         },
-                                                                        "SrcUplinkRole": {
+                                                                        "DstUplinkRole": {
                                                                             "terms": {
-                                                                                "field": "SrcUplinkRole",
+                                                                                "field": "DstUplinkRole",
                                                                                 "size": 5,
                                                                                 "order": {
                                                                                     "SumofBytes": "desc"
@@ -173,9 +173,9 @@
                                                                                         "field": "TotalPacketsCount"
                                                                                     }
                                                                                 },
-                                                                                "SourceNSG": {
+                                                                                "DestinationNSG": {
                                                                                     "terms": {
-                                                                                        "field": "SourceNSG",
+                                                                                        "field": "DestinationNSG",
                                                                                         "size": 5,
                                                                                         "order": {
                                                                                             "SumofBytes": "desc"
