@@ -1,0 +1,51 @@
+{
+    "id":"vss-sample",
+    "title":"Samples",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_samples}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+                                            "aggs": {
+                                                "timestamp": {
+                                                    "date_histogram": {
+                                                        "field": "timestamp",
+                                                        "interval": "{{interval:30s}}"
+                                                    },
+                                                    "aggs": {
+                                                        "SumOf": {
+                                                            "sum": {
+                                                                "field": "packets"
+                                                            }
+                                                        },
+                                                        "MovAvg": {
+                                                           "moving_avg": {
+                              "buckets_path": "SumOf",
+                              "window": 10,
+                              "model": "ewma",
+                              "gap_policy": "insert_zeros",
+                              "settings": { "alpha": 0.98 }
+                                                           }
+                                                        }
+                                                    }
+                                                }
+                                            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "id": "wifi-branch-ssid-signal-lastseen",
+    "graph": "Table",
+    "title": "User Information - {{ SSID }}",
+    "description": "TBD",
+    "author": "Ronak Shah",
+    "creationDate": "04/07/2017",
+    "data": {
+        "columns": [
+            { "column": "username", "label": "User"},
+            { "column": "signal", "label": "Signal (dB)" },
+            { "column": "connected_time", "label": "Last Seen" }
+        ]
+    },
+    "query": "wifi-branch-ssid-signal-lastseen"
+}

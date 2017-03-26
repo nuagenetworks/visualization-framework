@@ -1,0 +1,23 @@
+{
+    "id": "wifi-branch-table",
+    "graph": "Table",
+    "title": "Wifi Branch Table",
+    "description": "TBD",
+    "author": "Ronak Shah",
+    "creationDate": "04/07/2017",
+    "data": {
+        "columns": [
+            { "column": "SSID", "label": "SSID"},
+            { "column": "Client", "label": "Client" },
+            { "column": "MAC", "label": "MAC" },
+            { "column": "IP", "label": "IP" },
+            { "column": "SumofBytes", "label": "Total Usage" }
+        ]
+    },
+    "listeners": [{
+      "params": {
+          "SSID": "SSID"
+      }
+    }],
+    "query": "wifi-branch-table"
+}
