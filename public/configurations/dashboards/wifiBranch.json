@@ -1,0 +1,35 @@
+{
+    "id": "wifiBranch",
+    "author": "Ronak Shah",
+    "creationDate": "04/07/2017",
+    "title": "WIFI Branch",
+    "visualizations": [
+        { 
+          "id": "wifi-branch-table", 
+          "x": 0,
+          "y": 0,
+          "w": 6,
+          "h": 12,
+          "minW": 6,
+          "minH": 12
+        },
+        {
+          "id": "wifi-branch-ssid-linechart",
+          "x": 0,
+          "y": 12,
+          "w": 10,
+          "h": 12,
+          "minW": 10,
+          "minH": 12
+        },
+        {
+          "id": "wifi-branch-ssid-signal-lastseen",
+          "x": 6,
+          "y": 0,
+          "w": 4,
+          "h": 12,
+          "minW": 4,
+          "minH": 12
+        }
+    ]
+}
