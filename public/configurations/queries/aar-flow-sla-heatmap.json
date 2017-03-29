@@ -1,0 +1,53 @@
+{
+    "id": "aar-flow-sla-heatmap",
+    "title": "Flows Sla HeatMap",
+    "service": "elasticsearch",
+    "query": {
+        "index": "{{index:nuage_dpi_flowstats}}",
+        "type": "{{type:nuage_doc_type}}",
+        "body": {
+            "size": 0,
+            "sort": [
+                {
+                    "timestamp": {
+                        "order": "desc"
+                    }
+                }
+            ],
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "range": {
+                                "timestamp": {
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTimeTime:now}}",                                    
+                                    "format": "epoch_millis"
+                                }
+                            }
+                        }
+                    ],
+                    "filter": {
+                        "term": {
+                            "Application": "{{app:myApp-0}}"
+                        }
+                    }
+                }
+            },
+            "aggs": {
+                "group_by_ts": {
+                    "terms": {
+                        "field": "timestamp"
+                    },
+                    "aggs": {
+                        "slastatus": {
+                            "terms": {
+                                "field": "SlaStatus"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
