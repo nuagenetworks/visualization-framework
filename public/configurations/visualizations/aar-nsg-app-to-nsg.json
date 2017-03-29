@@ -10,10 +10,10 @@
             { "column": "APMGroup", "label": "APM Group" },
             { "column": "Application", "label": "Application" },
             { "column": "L7Classification", "label": "L7 Classification" },
-            { "column": "SrcVportName", "label": "Source Vport" },
-            { "column": "SrcUplink", "label": "Source Uplink" },
-            { "column": "SrcUplinkRole", "label": "Source Uplink Role" },
-            { "column": "SourceNSG", "label": "Source NSG" },
+            { "column": "DestVportName", "label": "Destination Vport" },
+            { "column": "DstUplink", "label": "Destination Uplink" },
+            { "column": "DstUplinkRole", "label": "Destination Uplink Role" },
+            { "column": "DestinationNSG", "label": "Destination NSG" },
             { "column": "SumofPackets", "label": "Total Packets", "format": ",.2s"},
             { "column": "SumofBytes", "label": "Total Bytes", "format": ",.2s" } 
         ]
