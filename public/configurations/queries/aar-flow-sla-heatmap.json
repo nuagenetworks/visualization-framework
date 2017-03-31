@@ -29,7 +29,7 @@
                     ],
                     "filter": {
                         "term": {
-                            "Application": "{{app:myApp-0}}"
+                            "SourceNSG": "{{snsg:ovs-1}}"
                         }
                     }
                 }
@@ -40,14 +40,21 @@
                         "field": "timestamp"
                     },
                     "aggs": {
-                        "slastatus": {
+                        "application": {
                             "terms": {
-                                "field": "SlaStatus"
+                                "field": "Application"
+                            },
+                            "aggs": {
+                                "slastatus": {
+                                    "terms": {
+                                        "field": "SlaStatus"
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
-        }
+		}
     }
 }
