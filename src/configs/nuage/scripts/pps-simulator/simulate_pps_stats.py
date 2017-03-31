@@ -123,6 +123,10 @@ class SimulateFlowData(object):
             i += 1
         return appids
 
+    def getOutSlaApps(self):
+        outslas = ["myApp-0", "myApp-1"]
+        return outslas
+
     def getVsdAppIds(self):
         # appids = ["af007046-e083-4e2e-bded-40817a991e0d",
         #           "fa1cfa0a-a4d1-4b60-861d-9e485ef0d4e4",
@@ -653,6 +657,7 @@ def main():
     sla_prob = 0.05
     hasswitchedpath = ["false", "true"]
     ducgrpids = simData.getDucGrpIds()
+    outslaApps = simData.getOutSlaApps()
 
     pre_flows = create_pre_defined_flows(appgrpids=appgrpids, l7s=l7s,
                                          protos=protos,
@@ -661,6 +666,7 @@ def main():
     sla_flows = []
     es = Elasticsearch(es_server)
     flow_cnt = 0
+    sla_prob_new = 0.6
     with open('/var/log/flowstats_new.log', 'w') as flowstats:
         timestamp = startTime
         t_increment = 0
@@ -671,6 +677,7 @@ def main():
             # print timestamp
             flow_record = {}
             i = 0
+            sla_status_ts = get_random_with_prob(sla_prob_new)
             for flow_entry in pre_flows:
                 # flow_entry = pre_flows[flow]
                 # svport =  randint(0, 9)
@@ -694,11 +701,6 @@ def main():
                 proto = flow_entry["Proto"]
                 srcUp = randint(0, 1)
                 destUp = randint(0, 1)
-                sla_status = get_random_with_prob(sla_prob)
-                if slastatus[sla_status] == "OutSla":
-                    flow_entry["timestamp"] = timestamp
-                    sla_flows.append(flow_entry)
-
                 l7 = flow_entry["l7_class"]
                 appid = flow_entry["app_id"]
                 appname = flow_entry["app_name"]
@@ -715,6 +717,15 @@ def main():
                     inpkts = randint(0, 10)
                 ingressMB = float(inbytes) / 1048576
                 underlayId = random.randrange(0, 10)
+                if slastatus[sla_status_ts] == "OutSla":
+                    if appname in outslaApps:
+                        flow_entry["timestamp"] = timestamp
+                        sla_flows.append(flow_entry)
+                        sla_status = 1
+                    else:
+                        sla_status = 0
+                elif slastatus[sla_status_ts] == "InSla":
+                    sla_status = 0
 
                 # flow record tuples
                 i += 1
