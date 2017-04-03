@@ -46,6 +46,7 @@ class SimulateFlowData(object):
         self.dest_ip_prefix = defData["dest_ip_prefix"]
         self.npm_count = defData["npm_count"]
         self.perf_mon_count = defData["perf_mon_count"]
+        self.duc_count = defData["duc_count"]
 
     def getRandomCidrPrefix(self):
         blockOne = random.randrange(1, 255, 1)
@@ -122,6 +123,10 @@ class SimulateFlowData(object):
             i += 1
         return appids
 
+    def getOutSlaApps(self):
+        outslas = ["myApp-0", "myApp-1"]
+        return outslas
+
     def getVsdAppIds(self):
         # appids = ["af007046-e083-4e2e-bded-40817a991e0d",
         #           "fa1cfa0a-a4d1-4b60-861d-9e485ef0d4e4",
@@ -154,6 +159,20 @@ class SimulateFlowData(object):
             appGrps.append(app_grp)
             i += 1
         return appGrps
+
+    def getDucGrpIds(self):
+        duc_prefix = "duc-"
+        i = 0
+        ducgrpids = []
+        while i < self.duc_count:
+            duc_id = str(uuid.uuid4())
+            duc = {
+                "duc_id": duc_id,
+                "duc_name": duc_prefix + str(i)
+            }
+            ducgrpids.append(duc)
+            i += 1
+        return ducgrpids
 
     def getNPMGrps(self, perfmons):
         i = 0
@@ -305,7 +324,6 @@ class SimulateFlowData(object):
         destUplink = ["primary1", "secondary2"]
         return destUplink
 
-
 def json_serial(obj):
     """JSON serializer for objects not serializable by default json code"""
 
@@ -399,6 +417,7 @@ class SimulateProbeStats(object):
         self.es_index_prefix = flowData["es_index_prefix"]
         self.npm_grps = flowData["npm_grps"]
         self.contro_states = ["Null", "Connecting", "Up", "Down", "Started"]
+        self.duc_grps = flowData["duc_grps"]
 
     def generate_probe_stats(self, startTime, endTime):
         nsgs = self.nsgs
@@ -435,6 +454,7 @@ class SimulateProbeStats(object):
                         #     0, len(app_grps) - 1, 1)
                         # app_grp = app_grps[app_grp_index]
                         npm_grp = random.choice(npm_grps)
+                        duc_grp = random.choice(self.duc_grps)
                         perf_mon = npm_grp["perf_monitor"]
                         avg_latency = random.uniform(0.01, 1000)
                         avg_jitter = random.uniform(0.01, 100)
@@ -458,6 +478,13 @@ class SimulateProbeStats(object):
                         probe_record["Domain"] = domains[domain]
                         probe_record["EnterpriseName"] = self.def_ent_name
                         probe_record["ControlSessionState"] = self.contro_states[0]
+                        underlayId = random.randrange(0, 10)
+                        probe_record["UnderlayID"] = underlayId
+                        probe_record["UnderlayName"] = "Underlay"+str(
+                            underlayId)
+                        probe_record["DUCGroupID"] = duc_grp["duc_id"]
+                        probe_record["DUCGroup"] = duc_grp["duc_name"]
+
                         if firstTS and initPacket == 1:
                             probe_record["ControlSessionState"] = self.contro_states[2]
                             probe_record["AvgDelay"] = "Null"
@@ -507,65 +534,72 @@ class SimulateSLAStats(object):
         self.es = flowData["es"]
         self.es_index_prefix = flowData["es_index_prefix"]
 
-    def generate_sla_stats(self, startTime, endTime):
+    def generate_sla_stats(self, sla_flows):
         nsgs = self.nsgs
-        app_grps = self.appgrps
         srcuplinks = self.srcUplinks
         destuplinks = self.destUplinks
-        domains = self.domains
         l4class = self.l4class
         sla_cnt = 0
 
         with open('/var/log/slastats_new.log', 'w') as slastats:
-            timestamp = startTime
-            t_increment = 0
-            # t_increment = 30
-            while timestamp != endTime:
-                # timestamp = startTime + datetime.timedelta(0, t_increment)
-                timestamp = startTime + t_increment * 1000
-                probe_record = {}
-                for s_nsg_ind, src_nsg in enumerate(nsgs):
-                    if s_nsg_ind % 2:
-                        d_nsg_ind = s_nsg_ind
-                        while d_nsg_ind == s_nsg_ind:
-                            d_nsg_ind = random.randrange(0, len(nsgs) - 1)
-                        for appgrp in app_grps:
-                            applist = appgrp["app_list"]
-                            app = random.choice(applist)
-                            l4_class = get_random_with_prob(self.sla_prob)
-                            # if ( get_random_with_prob(self.sla_prob) ):
-                            #     slastatus = 0
-                            # else:
-                            #     slastatus = 1
-                            sla_type = random.randint(0, len(self.slatype) - 1)
-                            violation = self.slatype[sla_type]
-                            dest_nsg = nsgs[d_nsg_ind]
-                            srcUp = randint(0, 1)
-                            destUp = randint(0, 1)
-                            domain = randint(0, len(domains) - 1)
-                            probe_record["timestamp"] = long(timestamp)
-                            probe_record["SrcNSG"] = src_nsg["nsg_id"]
-                            probe_record["SourceNSG"] = src_nsg["nsg_name"]
-                            probe_record["DstNSG"] = dest_nsg["nsg_id"]
-                            probe_record["DestinationNSG"] = dest_nsg["nsg_name"]
-                            probe_record["SrcUplink"] = srcuplinks[srcUp]
-                            probe_record["DstUplink"] = destuplinks[destUp]
-                            probe_record["AppGroupID"] = appgrp["appgrp_id"]
-                            probe_record["APMGroup"] = appgrp["appgrp_name"]
-                            probe_record["Application"] = app["app_name"]
-                            # probe_record["slaStatus"] = slastatus
-                            probe_record["L4Classification"] = l4class[l4_class]
-                            probe_record["ViolationType"] = violation
-                            probe_record["Domain"] = domains[domain]
-                            probe_record["EnterpriseName"] = self.def_ent_name
-                            json.dump(probe_record, slastats,
-                                      default=json_serial)
-                            slastats.write("\n")
-                            index_name = "nuage_dpi_slastats" + '_' + self.es_index_prefix
-                            self.es.index(index=index_name, doc_type='nuage_doc_type', body=probe_record)
-                            sla_cnt += 1
-                t_increment += 30
+            sla_record = {}
+            for flow_entry in sla_flows:
+                s_vport = flow_entry["src_vport"]
+                d_vport = flow_entry["dest_vport"]
+                dom = s_vport["domain"]
+                src_nsgid = s_vport["nsg_id"]
+                src_nsgname = s_vport["nsg_name"]
 
+                while True:
+                    dest_nsg = random.choice(nsgs)
+                    if dest_nsg["nsg_name"] != src_nsgname:
+                        break
+                src_ip = s_vport["vport_ip"]
+                src_port = s_vport["port"]
+                dest_ip = d_vport["vport_ip"]
+                dest_port = d_vport["port"]
+
+                srcUp = randint(0, 1)
+                destUp = randint(0, 1)
+
+                appid = flow_entry["app_id"]
+                appname = flow_entry["app_name"]
+                appgrpid = flow_entry["app_grp"]
+                appgrpname = flow_entry["app_grp_name"]
+                l4_class = get_random_with_prob(self.sla_prob)
+                sla_type = random.randint(0, len(self.slatype) - 1)
+                violation = self.slatype[sla_type]
+
+                # sla record tuples
+
+                sla_record["timestamp"] = long(flow_entry["timestamp"])
+                sla_record["SrcNSG"] = src_nsgid
+                sla_record["SourceNSG"] = src_nsgname
+                sla_record["DstNSG"] = dest_nsg["nsg_id"]
+                sla_record["DestinationNSG"] = dest_nsg["nsg_name"]
+                sla_record["SrcUplink"] = srcuplinks[srcUp]
+                sla_record["DstUplink"] = destuplinks[destUp]
+                sla_record["AppGroupID"] = appgrpid
+                sla_record["APMGroup"] = appgrpname
+                sla_record["Application"] = appname
+                sla_record["AppID"] = appid
+                sla_record["L4Classification"] = l4class[l4_class]
+                sla_record["ViolationType"] = violation
+                sla_record["Domain"] = dom
+                sla_record["EnterpriseName"] = self.def_ent_name
+                sla_record["SrcIp"] = src_ip
+                sla_record["SrcPort"] = src_port
+                sla_record["DstIp"] = dest_ip
+                sla_record["DstPort"] = dest_port
+
+
+                json.dump(sla_record, slastats,
+                          default=json_serial)
+                slastats.write("\n")
+                index_name = "nuage_dpi_slastats" + '_' + self.es_index_prefix
+                self.es.index(index=index_name, doc_type='nuage_doc_type',
+                              body=sla_record)
+                sla_cnt += 1
         print "sla_cnt = " + str(sla_cnt)
 
 
@@ -584,6 +618,9 @@ def main():
     defData["domain_count"] = config.getint('default', 'domain_count')
     defData["npm_count"] = config.getint('default', 'npm_count')
     defData["perf_mon_count"] = config.getint('default', 'perf_mon_count')
+    print config.getint('default', 'duc_count')
+    defData["duc_count"] = config.getint('default', 'duc_count')
+    print defData["duc_count"]
 
     def_ent_name = config.get('default', 'def_ent_name')
     es_server = config.get('default', 'es_server')
@@ -619,13 +656,17 @@ def main():
     slastatus = ["InSla", "OutSla", "Unmonitored"]
     sla_prob = 0.05
     hasswitchedpath = ["false", "true"]
+    ducgrpids = simData.getDucGrpIds()
+    outslaApps = simData.getOutSlaApps()
 
     pre_flows = create_pre_defined_flows(appgrpids=appgrpids, l7s=l7s,
                                          protos=protos,
                                          domains=domains, nsgs=nsgs,
                                          simData=simData)
+    sla_flows = []
     es = Elasticsearch(es_server)
     flow_cnt = 0
+    sla_prob_new = 0.6
     with open('/var/log/flowstats_new.log', 'w') as flowstats:
         timestamp = startTime
         t_increment = 0
@@ -636,6 +677,7 @@ def main():
             # print timestamp
             flow_record = {}
             i = 0
+            sla_status_ts = get_random_with_prob(sla_prob_new)
             for flow_entry in pre_flows:
                 # flow_entry = pre_flows[flow]
                 # svport =  randint(0, 9)
@@ -659,7 +701,6 @@ def main():
                 proto = flow_entry["Proto"]
                 srcUp = randint(0, 1)
                 destUp = randint(0, 1)
-                sla_status = get_random_with_prob(sla_prob)
                 l7 = flow_entry["l7_class"]
                 appid = flow_entry["app_id"]
                 appname = flow_entry["app_name"]
@@ -675,6 +716,16 @@ def main():
                 else:
                     inpkts = randint(0, 10)
                 ingressMB = float(inbytes) / 1048576
+                underlayId = random.randrange(0, 10)
+                if slastatus[sla_status_ts] == "OutSla":
+                    if appname in outslaApps:
+                        flow_entry["timestamp"] = timestamp
+                        sla_flows.append(flow_entry)
+                        sla_status = 1
+                    else:
+                        sla_status = 0
+                elif slastatus[sla_status_ts] == "InSla":
+                    sla_status = 0
 
                 # flow record tuples
                 i += 1
@@ -711,11 +762,15 @@ def main():
                 flow_record["DestinationNSG"] = src_nsgname
                 flow_record["SlaStatus"] = slastatus[sla_status]
                 flow_record["HasSwitchedPaths"] = hasswitchedpath[sla_status]
+                flow_record["L7ClassEnhanced"] = l7s[l7]
+                flow_record["UnderlayID"] = underlayId
+                flow_record["UnderlayName"] = "Underlay"+str(underlayId)
 
                 json.dump(flow_record, flowstats, default=json_serial)
                 flowstats.write("\n")
                 index_name = "nuage_dpi_flowstats" + '_' + es_index_prefix
-                es.index(index=index_name, doc_type='nuage_doc_type', body=flow_record)
+                es.index(index=index_name, doc_type='nuage_doc_type',
+                          body=flow_record)
                 flow_cnt += 1
             t_increment += 30
 
@@ -729,13 +784,15 @@ def main():
         "def_ent_name": def_ent_name,
         "es": es,
         "es_index_prefix": es_index_prefix,
-        "npm_grps": npm_grps
+        "npm_grps": npm_grps,
+        "duc_grps": ducgrpids
     }
     probe_stats = SimulateProbeStats(flowData)
     probe_stats.generate_probe_stats(startTime, endTime)
 
     sla_stats = SimulateSLAStats(flowData)
-    sla_stats.generate_sla_stats(startTime, endTime)
+    sla_stats.generate_sla_stats(sla_flows)
+
 
 if __name__ == '__main__':
     main()
