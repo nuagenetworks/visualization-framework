@@ -35,9 +35,10 @@
                 }
             },
             "aggs": {
-                "group_by_ts": {
-                    "terms": {
-                        "field": "timestamp"
+                "date_histo": {
+                    "date_histogram": {
+                        "field": "timestamp",
+                        "interval": "{{interval:1h}}"
                     },
                     "aggs": {
                         "application": {
