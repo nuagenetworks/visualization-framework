@@ -7,8 +7,9 @@
         { "id": "vss-domain-traffic-tcp-conn", "x": 0, "y": 0, "w": 6, "h": 15, "minW": 2, "minH": 12},
         { "id": "vss-domain-traffic-udp", "x": 6, "y": 0, "w": 6, "h": 15, "minW": 2, "minH": 12},
         { "id": "vss-domain-traffic-icmp", "x": 0, "y": 15, "w": 6, "h": 15, "minW": 2, "minH": 12},
-        { "id": "vss-domain-traffic-top-spg", "x": 6, "y": 15, "w": 6, "h": 15, "minW": 2, "minH": 12},
-        { "id": "vss-domain-traffic-top-dpg", "x": 0, "y": 30, "w": 6, "h": 15, "minW": 2, "minH": 12}
+        { "id": "vss-domain-traffic-tcp-syn", "x": 6, "y": 15, "w": 6, "h": 15, "minW": 2, "minH": 12},
+        { "id": "vss-domain-traffic-top-spg", "x": 0, "y": 35, "w": 6, "h": 15, "minW": 2, "minH": 12},
+        { "id": "vss-domain-traffic-top-dpg", "x": 6, "y": 30, "w": 6, "h": 15, "minW": 2, "minH": 12}
     ],
     "links": [
         {
