@@ -1,0 +1,57 @@
+{
+    "id": "vss-domain-traffic-tcp-syn",
+    "graph": "LineGraph",
+    "title": "TCP-{{flagtype}} vs Time",
+    "description": "This line graph represents total no of TCP SYN Packets received for this domain over a period of specified time. By default it shows allowed traffic. One can select other deny action i.e from the drop down menu on this dashboard to show denied traffic.",
+    "author": "Ronak Shah",
+    "creationDate": "2/28/2016",
+    "data": {
+        "xColumn": "timestamp",
+        "yColumn": "flag",
+        "stroke": {
+            "color": "#fec26a",
+            "width": "2px"
+        },
+        "xTickGrid": false,
+        "yTickGrid": true,
+        "yTickFormat": ".2s",
+        "xLabel": "Time",
+        "yLabel": "Total # of TCP-{{flagtype}} Packets"
+    },
+    "filterOptions": {
+        "Flag-Type": {
+            "parameter": "flagtype",
+            "default": "SYN",
+            "options": [
+                {
+                    "label": "SYN",
+                    "value": "SYN",
+                    "default": true
+                },
+                {
+                    "label": "SYN-ACK",
+                    "value": "SYN-ACK"
+                },
+                {
+                    "label": "FIN",
+                    "value": "FIN",
+                    "default": true
+                },
+                {
+                    "label": "FIN-ACK",
+                    "value": "FIN-ACK"
+                },
+                {
+                    "label": "NULL",
+                    "value": "NULL",
+                    "default": true
+                },
+                {
+                    "label": "RST",
+                    "value": "RST"
+                }
+            ]
+        }
+    },
+    "query": "vss-domain-traffic-tcp-syn"
+}
