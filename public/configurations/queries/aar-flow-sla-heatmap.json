@@ -48,6 +48,7 @@
                             "aggs": {
                                 "slastatus": {
                                     "terms": {
+                                        "size": 1,
                                         "field": "SlaStatus"
                                     }
                                 }
