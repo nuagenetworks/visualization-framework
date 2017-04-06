@@ -6,6 +6,7 @@ import LineGraph from "./LineGraph";
 import PieGraph from "./PieGraph";
 import Table from "./Table";
 import ChordGraph from "./ChordGraph";
+import HeatmapGraph from "./HeatmapGraph";
 
 import { theme } from "../../theme";
 
@@ -20,6 +21,7 @@ let registry = {
     PieGraph,
     ChordGraph,
     VariationTextGraph,
+    HeatmapGraph
 };
 
 /*
