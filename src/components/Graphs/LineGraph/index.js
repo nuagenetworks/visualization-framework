@@ -73,7 +73,7 @@ export default class LineGraph extends XYGraph {
 
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
         let legendWidth       = legend.show && linesData.length > 1 ? this.longestLabelLength(data, legendFn) * chartWidthToPixel : 0;
-        let xLabelWidth       = this.longestLabelLength(data, xLabelFn) * chartWidthToPixel;
+
         let yLabelWidth       = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
         let leftMargin        = margin.left + yLabelWidth;
         let availableWidth    = width - (margin.left + margin.right + yLabelWidth);

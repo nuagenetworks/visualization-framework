@@ -6,13 +6,10 @@ import {
     axisLeft,
     extent,
     format,
-    line,
     nest,
     scaleBand,
     scaleTime,
     select,
-    voronoi,
-    merge,
     map,
     min
 } from "d3";
@@ -58,8 +55,7 @@ export default class HeatmapGraph extends XYGraph {
           yTicks,
           yTickSizeInner,
           yTickSizeOuter,
-          legendColumn,
-          cellColumn
+          legendColumn
         } = this.getConfiguredProperties();
 
 
@@ -78,7 +74,6 @@ export default class HeatmapGraph extends XYGraph {
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
         let legendWidth       = legend.show && cellColumnsData.length > 1 ? this.longestLabelLength(data, legendFn) * chartWidthToPixel : 0;
 
-        let xLabelWidth       = this.longestLabelLength(data, xLabelFn) * chartWidthToPixel;
         let yLabelWidth       = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
 
         let leftMargin        = margin.left + yLabelWidth;
