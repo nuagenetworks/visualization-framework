@@ -11,7 +11,8 @@ import {
     scaleTime,
     select,
     map,
-    min
+    min,
+    utcHour
 } from "d3";
 
 import {properties} from "./default.config"
@@ -103,8 +104,10 @@ export default class HeatmapGraph extends XYGraph {
             .domain(map(data, xLabelFn).keys().sort());
         xBandScale.rangeRound([0, availableWidth]);
 
+        let xValues = extent(data, xLabelFn);
+
         const xScale = scaleTime()
-          .domain(extent(data, xLabelFn));
+          .domain([xValues[0], utcHour.offset(xValues[1], 1)]);
 
         const yScale = scaleBand()
           .domain(map(data, yLabelFn).keys().sort());
