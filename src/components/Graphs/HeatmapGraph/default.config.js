@@ -8,9 +8,9 @@ export const properties = {
     legend: {
         show: false
     },
-    colors: [
-        theme.palette.greenColor,
-        theme.palette.yellowDarkColor,
-        theme.palette.blueLightColor
-    ]
+    mapColors: {
+        'InSla': theme.palette.greenColor,
+        'OutSla': theme.palette.redColor,
+        'UnMonitored': theme.palette.yellowLightColor
+    }
 }

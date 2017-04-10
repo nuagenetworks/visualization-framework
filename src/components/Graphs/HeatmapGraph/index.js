@@ -65,7 +65,7 @@ export default class HeatmapGraph extends XYGraph {
         const yLabelFn         = (d) => d[yColumn];
         const legendFn         = (d) => d[legendColumn];
         const label            = (d) => d["key"];
-        const scale            = this.scaleColor(data, legendColumn);
+        const scale            = this.getMappedScaleColor(data, legendColumn);
         const getColor         = (d) => scale ? scale(d[colorColumn] || d[legendColumn] || d["key"]) : stroke.color || colors[0];
 
         const cellColumnsData  = nest()
