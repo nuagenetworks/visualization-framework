@@ -93,6 +93,15 @@
             "h": 15,
             "minW": 2,
             "minH": 12
+        },
+        {
+            "id": "aar-nsg-gauge-chart",
+            "x": 6,
+            "y": 15,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
         }
 
     ]
