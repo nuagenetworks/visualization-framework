@@ -1,9 +1,6 @@
-.pie-graph {
-  width: 100%;
-  height: 100%;
-}
-
-.pie-graph text {
-  font-size: 0.75em;
-  font-family: "Helvetica Neue";
+.gauge-graph g text {
+    text-anchor: middle;
+    font-size: 12px;
+    /* font-weight: bold; */
+    fill: #666;
 }

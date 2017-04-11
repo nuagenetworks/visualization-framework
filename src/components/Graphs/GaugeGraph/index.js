@@ -23,29 +23,28 @@ export default class GaugeGraph extends AbstractGraph {
         const {
             data,
             width,
-            height,
-            onMarkClick
+            height
         } = this.props;
 
         if (!data || !data.length)
             return;
 
         const {
-            chartWidthToPixel,
             minColumn,
             maxColumn,
             currentColumn,
             margin,
-            gauzePtrWidth,
-            gauzePtrTailLength,
-            gauzePtrHeadLengthPercent,
-            gauzePtrTransition,
-            gauzeLabelInset,
-            gauzeTicks,
-            gauzeRingInset,
-            gauzeRingWidth,
-            stroke,
-            fontColor
+            gaugePtrWidth,
+            gaugePtrTailLength,
+            gaugePtrHeadLengthPercent,
+            gaugeLabelInset,
+            gaugePtrColor,
+            gaugeTicks,
+            gaugeRingInset,
+            gaugeRingWidth,
+            labelFormat,
+            fontColor,
+            colors
         } = this.getConfiguredProperties();
 
         const angles = {
@@ -58,12 +57,16 @@ export default class GaugeGraph extends AbstractGraph {
 
         const minValue         = data[minColumn] ? data[minColumn] : 0;
         const maxValue         = data[maxColumn] ? data[maxColumn] : 100;
-        const currentValue     = data[currentColumn] ? data[currentColumn] : 0;
+        const currentValue     = data[currentColumn] ? data[currentColumn] : 20;
 
         const minRadius   = Math.min(availableWidth, availableHeight) / 2;
 
-        const innerRadius = minRadius - gauzeRingInset - gauzeRingWidth;
-        const outerRadius = minRadius - gauzeRingInset - gauzeRingWidth;
+        const innerRadius = minRadius - gaugeRingInset - gaugeRingWidth;
+        const outerRadius = minRadius - gaugeRingInset;
+
+        const pointerHeadLength = Math.round(minRadius * gaugePtrHeadLengthPercent);
+
+        const arcColor = d3.interpolateHsl(d3.rgb(colors[0] ? colors[0] : '#e8e2ca'), d3.rgb(colors[1] ? colors[1] : '#3e6c0a'))
 
         const range = angles.max - angles.min;
 
@@ -74,46 +77,58 @@ export default class GaugeGraph extends AbstractGraph {
     				    return this.deg2rad(angles.min + (d * i * range));
     			  })
     			  .endAngle((d, i) => {
-    				    return this.deg2rad(angles.max + (d * (i + 1) * range));
+    				    return this.deg2rad(angles.min + (d * (i + 1) * range));
     			  });
 
         let scale = d3.scaleLinear()
     			  .range([0,1])
     			  .domain([minValue, maxValue]);
 
-    		let ticks = scale.ticks(gauzeTicks);
-        let tickData = d3.range(gauzeTicks).map(function() {return 1 / gauzeTicks;});
-        console.log(ticks, tickData);
-        /*const arc = d3.arc()
-            .innerRadius(innerRadius)
-            .outerRadius(outerRadius);
+    		let ticks = scale.ticks(gaugeTicks);
+        let tickData = d3.range(gaugeTicks).map(function() {return 1 / gaugeTicks;});
 
-        const labelArc = d3.arc()
-            .innerRadius(labelRadius)
-            .outerRadius(labelRadius);
+        const textLabel = ((d) => {
+            const formatter = d3.format(labelFormat || ",.2s");
+            return formatter(d);
+        });
 
-        const pie    = d3.pie().value(value);
-        const slices = pie(data);
+        const transformText = ((d, i) => {
+            return `rotate(${angles.min + (scale(d) * range)}) translate(0, ${gaugeLabelInset - minRadius})`;
+        });
 
-        const labelText = (() => {
-            if (percentages) {
-                const percentageFormat = d3.format(percentagesFormat || ",.2%");
-                const sum              = d3.sum(data, value);
-                return (d) => percentageFormat(value(d) / sum);
-            }
-            return label;
-        })();
+        const lineData = [ [gaugePtrWidth / 2, 0],
+    						[0, -pointerHeadLength],
+    						[-(gaugePtrWidth / 2), 0],
+    						[0, gaugePtrTailLength],
+    						[gaugePtrWidth / 2, 0] ];
 
-        let strokeStyle = {
-            strokeWidth: stroke.width,
-            stroke: stroke.color
-        }*/
+        const pointerLine = d3.line()
+            .curve(d3.curveMonotoneX);
 
         return (
             <div className="gauge-graph">
                 <svg width={ width } height={ height }>
-                    <g transform={ `translate(${ width / 2 }, ${ height / 2 })` } >
-
+                    <g transform={ `translate(${ width / 2 }, ${ (height * 2) / 3 })` } >
+                        {
+                            tickData.map((tick, i) => {
+                                return <g key={i} >
+                                    <path
+                                      d={ arc(tick, i) }
+                                      fill={ arcColor(tick * i) }
+                                    />
+                                </g>
+                            })
+                        }
+                        {
+                            ticks.map((tick, i) => {
+                                return <g key={i} >
+                                    <text transform={ transformText(tick, i) } fill={ fontColor }>
+                                        {textLabel(tick)}
+                                    </text>
+                                </g>
+                            })
+                        }
+                        <path d={ pointerLine(lineData) } fill={ gaugePtrColor } transform={ `rotate(${angles.min + (scale(currentValue) * range)})` } />
                     </g>
                 </svg>
             </div>
@@ -121,7 +136,7 @@ export default class GaugeGraph extends AbstractGraph {
     }
 }
 
-GauzeGraph.propTypes = {
+GaugeGraph.propTypes = {
   configuration: React.PropTypes.object,
   data: React.PropTypes.array
 };
