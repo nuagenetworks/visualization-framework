@@ -61,7 +61,8 @@ class LineGraph extends XYGraph {
           yTickGrid,
           yTicks,
           yTickSizeInner,
-          yTickSizeOuter
+          yTickSizeOuter,
+          brushEnabled
         } = this.getConfiguredProperties();
 
         const isVerticalLegend = legend.orientation === 'vertical';
@@ -147,16 +148,18 @@ class LineGraph extends XYGraph {
             top: margin.top + availableHeight / 2
         }
 
-        this.brush
-            .extent([[0, 0], [availableWidth, availableHeight]])
-            .on("end", () => {
-                // If there is a brushed region...
-                if(event.selection){
-                    this.props.setTimeInterval(event.selection
-                      .map(xScale.invert, xScale) // Convert from pixel coords to Date objects.
-                      .map((date) => date.getTime())); // Convert from Date to epoch milliseconds.
-                }
-            });
+        if(brushEnabled){
+            this.brush
+                .extent([[0, 0], [availableWidth, availableHeight]])
+                .on("end", () => {
+                    // If there is a brushed region...
+                    if(event.selection){
+                        this.props.setTimeInterval(event.selection
+                          .map(xScale.invert, xScale) // Convert from pixel coords to Date objects.
+                          .map((date) => date.getTime())); // Convert from Date to epoch milliseconds.
+                    }
+                });
+        }
 
         const tooltipOverlay = voronoi()
             .x(function(d) { return xScale(d[xColumn]); })
@@ -227,10 +230,13 @@ class LineGraph extends XYGraph {
                               </g>
                           )}
                         </g>
-                        <g
-                            key="brush"
-                            ref={ (el) => select(el).call(this.brush) }
-                        />
+                        {
+                            brushEnabled &&
+                            <g
+                                key="brush"
+                                ref={ (el) => select(el).call(this.brush) }
+                            />
+                        }
                     </g>
                     {this.renderLegend(linesData, legend, getColor, label)}
                 </svg>
