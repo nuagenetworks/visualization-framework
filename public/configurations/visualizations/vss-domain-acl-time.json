@@ -19,7 +19,7 @@
         "yLabel": "Total # ACL Hits",
         "xColumn": "timestamp",
         "yColumn": "SumOf",
-        "brushEnabled": true
+        "brushEnabled": false
     },
     "query": "vss-domain-acl-time"
 }
