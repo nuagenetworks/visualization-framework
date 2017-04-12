@@ -71,20 +71,20 @@ export default class GaugeGraph extends AbstractGraph {
         const range = angles.max - angles.min;
 
         const arc = d3.arc()
-    			  .innerRadius(innerRadius)
-    			  .outerRadius(outerRadius)
-    			  .startAngle((d, i) => {
-    				    return this.deg2rad(angles.min + (d * i * range));
+            .innerRadius(innerRadius)
+            .outerRadius(outerRadius)
+            .startAngle((d, i) => {
+    			      return this.deg2rad(angles.min + (d * i * range));
     			  })
-    			  .endAngle((d, i) => {
-    				    return this.deg2rad(angles.min + (d * (i + 1) * range));
+            .endAngle((d, i) => {
+                return this.deg2rad(angles.min + (d * (i + 1) * range));
     			  });
 
         let scale = d3.scaleLinear()
-    			  .range([0,1])
-    			  .domain([minValue, maxValue]);
+            .range([0,1])
+            .domain([minValue, maxValue]);
 
-    		let ticks = scale.ticks(gaugeTicks);
+        let ticks = scale.ticks(gaugeTicks);
         let tickData = d3.range(gaugeTicks).map(function() {return 1 / gaugeTicks;});
 
         const textLabel = ((d) => {
@@ -97,10 +97,10 @@ export default class GaugeGraph extends AbstractGraph {
         });
 
         const lineData = [ [gaugePtrWidth / 2, 0],
-    						[0, -pointerHeadLength],
-    						[-(gaugePtrWidth / 2), 0],
-    						[0, gaugePtrTailLength],
-    						[gaugePtrWidth / 2, 0] ];
+            [0, -pointerHeadLength],
+            [-(gaugePtrWidth / 2), 0],
+            [0, gaugePtrTailLength],
+            [gaugePtrWidth / 2, 0] ];
 
         const pointerLine = d3.line()
             .curve(d3.curveMonotoneX);
@@ -113,9 +113,9 @@ export default class GaugeGraph extends AbstractGraph {
                             tickData.map((tick, i) => {
                                 return <g key={i} >
                                     <path
-                                      d={ arc(tick, i) }
-                                      fill={ arcColor(tick * i) }
-                                    />
+                                        d={ arc(tick, i) }
+                                        fill={ arcColor(tick * i) }
+                                        />
                                 </g>
                             })
                         }
@@ -137,6 +137,6 @@ export default class GaugeGraph extends AbstractGraph {
 }
 
 GaugeGraph.propTypes = {
-  configuration: React.PropTypes.object,
-  data: React.PropTypes.array
+    configuration: React.PropTypes.object,
+    data: React.PropTypes.array
 };

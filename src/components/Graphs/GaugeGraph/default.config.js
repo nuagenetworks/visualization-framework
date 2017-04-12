@@ -18,7 +18,7 @@ export const properties = {
 
     colors                    : ['#e8e2ca', '#b3d645'],
     labelFormat               : '.2s',
-    
+
     stroke: {
         color: theme.palette.whiteColor,
         width: "3px"
