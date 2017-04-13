@@ -32,8 +32,26 @@ Here is a list of environment variable that can be set to configure the visualiz
     * `REACT_APP_ELASTICSEARCH_HOST` (**required**) allows you to specify the Elastic Search server (ex: http://localhost:9200)
     * `REACT_APP_VSD_API_ENDPOINT` allows to specify the VSD API endpoint (ex:https://vsd.com:8443/nuage/api/)
 
+## Running the Kitchen Sink
 
-## kitchenSink
+In order to run the "kitchen sink" dashboard page, which serves as a set of visual unit tests, you'll first need to run the data generation scripts to populate your ElasticSearch instance with the sample data required to run the examples.
+
+To run these scripts, follow these steps:
+
+ * Ensure ElasticSearch is running. On Linux, you can start ElasticSearch with `sudo service elasticsearch restart`
+ * `cd src/configs/nuage/scripts/pps-simulator`
+ * `sh init_template.sh` This prepares ElasticSearch for running the PPS data generation script.
+ * `sudo python simulate_pps_stats.py` This script populates the data. It runs indefinitely, so you'll need to stop this script after about 5 minutes using CTRL+C.
+ * `cd ../vss-simulator/`
+ * `sh init_template.sh` This prepares ElasticSearch for running the VSS data generation script.
+ * `python eventGenerator.py`
+ * `python flowGenerator.py`
+ 
+After running these scripts, you should be able to access the "kitchen sink" dashboard at http://localhost:3000/dashboards/kitchenSink?startTime=now-90d
+
+Note: the `now-90d` portion of the URL is so that the queries return values, even if the data was imported up to 90 days ago. If one day the queries start coming up empty, try increasing the value to something like `now-200d`.
+
+The following commands let you inspect the contents of your ElasticSearch instance:
 
     $ curl http://localhost:9200/_cat/indices?pretty
     yellow open nuage_event                    5 1 10224000 0 547.5mb 547.5mb
