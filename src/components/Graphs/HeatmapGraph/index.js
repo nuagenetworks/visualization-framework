@@ -34,29 +34,29 @@ export default class HeatmapGraph extends XYGraph {
             return;
 
         const {
-          chartHeightToPixel,
-          chartWidthToPixel,
-          circleToPixel,
-          colorColumn,
-          colors,
-          legend,
-          margin,
-          padding,
-          stroke,
-          xColumn,
-          xLabel,
-          xTickFormat,
-          xTickGrid,
-          xTicks,
-          xTickSizeInner,
-          xTickSizeOuter,
-          yColumn,
-          yTickFormat,
-          yTickGrid,
-          yTicks,
-          yTickSizeInner,
-          yTickSizeOuter,
-          legendColumn
+            chartHeightToPixel,
+            chartWidthToPixel,
+            circleToPixel,
+            colorColumn,
+            colors,
+            legend,
+            margin,
+            padding,
+            stroke,
+            xColumn,
+            xLabel,
+            xTickFormat,
+            xTickGrid,
+            xTicks,
+            xTickSizeInner,
+            xTickSizeOuter,
+            yColumn,
+            yTickFormat,
+            yTickGrid,
+            yTicks,
+            yTickSizeInner,
+            yTickSizeOuter,
+            legendColumn
         } = this.getConfiguredProperties();
 
 
@@ -92,7 +92,8 @@ export default class HeatmapGraph extends XYGraph {
                 leftMargin      +=  legend.width;
                 availableWidth  -=  legend.width;
             }
-            else {
+            else
+            {
                 const nbElementsPerLine  = parseInt(availableWidth / legend.width, 10);
                 const nbLines            = parseInt(cellColumnsData.length / nbElementsPerLine, 10);
                 availableHeight         -= nbLines * legend.circleSize * circleToPixel + chartHeightToPixel;
@@ -107,17 +108,17 @@ export default class HeatmapGraph extends XYGraph {
         let xValues = extent(data, xLabelFn);
 
         const xScale = scaleTime()
-          .domain([xValues[0], utcHour.offset(xValues[1], 1)]);
+            .domain([xValues[0], utcHour.offset(xValues[1], 1)]);
 
         const yScale = scaleBand()
-          .domain(map(data, yLabelFn).keys().sort());
+            .domain(map(data, yLabelFn).keys().sort());
 
         xScale.range([0, availableWidth], 0.1);
         yScale.rangeRound([availableHeight, 0]).padding(padding);
 
         const xAxis = axisBottom(xScale)
-          .tickSizeInner(xTickGrid ? -availableHeight : xTickSizeInner)
-          .tickSizeOuter(xTickSizeOuter);
+            .tickSizeInner(xTickGrid ? -availableHeight : xTickSizeInner)
+            .tickSizeOuter(xTickSizeOuter);
 
         if(xTickFormat){
             xAxis.tickFormat(format(xTickFormat));
@@ -128,8 +129,8 @@ export default class HeatmapGraph extends XYGraph {
         }
 
         const yAxis = axisLeft(yScale)
-          .tickSizeInner(yTickGrid ? -availableWidth : yTickSizeInner)
-          .tickSizeOuter(yTickSizeOuter);
+            .tickSizeInner(yTickGrid ? -availableWidth : yTickSizeInner)
+            .tickSizeOuter(yTickSizeOuter);
 
         if(yTickFormat){
             yAxis.tickFormat(format(yTickFormat));
@@ -183,22 +184,22 @@ export default class HeatmapGraph extends XYGraph {
                             );
 
                             return (
-                              <g
-                                  { ...this.tooltipProps(d) }
-                                  data-effect="solid"
-                              >
-                                <rect
-                                    x={ x }
-                                    y={ y }
-                                    width={ width }
-                                    height={ height }
-                                    fill={ getColor(d) }
-                                    key={ i }
-                                    stroke={ stroke.color }
-                                    strokeWidth={ stroke.width }
+                                <g
                                     { ...this.tooltipProps(d) }
-                                />
-                              </g>
+                                    data-effect="solid"
+                                >
+                                    <rect
+                                        x={ x }
+                                        y={ y }
+                                        width={ width }
+                                        height={ height }
+                                        fill={ getColor(d) }
+                                        key={ i }
+                                        stroke={ stroke.color }
+                                        strokeWidth={ stroke.width }
+                                        { ...this.tooltipProps(d) }
+                                    />
+                                </g>
                             );
                         })}
                     </g>
@@ -210,6 +211,6 @@ export default class HeatmapGraph extends XYGraph {
 }
 
 HeatmapGraph.propTypes = {
-  configuration: React.PropTypes.object,
-  response: React.PropTypes.object
+    configuration: React.PropTypes.object,
+    response: React.PropTypes.object
 };

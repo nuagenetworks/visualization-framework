@@ -104,7 +104,7 @@ export default class AbstractGraph extends React.Component {
         let propColors = [];
         domainData.map((d) => {
             if(mapColors[d]) {
-              propColors.push(mapColors[d]);
+                propColors.push(mapColors[d]);
             }
         })
         propColors = propColors.concat(colors);
