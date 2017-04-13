@@ -261,6 +261,7 @@ class VisualizationView extends React.Component {
               configuration={configuration}
               width={this.state.width}
               height={this.state.height}
+              goTo={this.props.goTo}
               {...this.state.listeners}
             />
         )
