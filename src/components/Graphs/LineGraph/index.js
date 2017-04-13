@@ -1,5 +1,7 @@
 import React from "react";
 import XYGraph from "../XYGraph";
+import { Actions } from "../../App/redux/actions";
+import { connect } from "react-redux";
 
 import {
     axisBottom,
@@ -11,16 +13,19 @@ import {
     scaleLinear,
     scaleTime,
     select,
+    brushX,
     voronoi,
-    merge
+    merge,
+    event
 } from "d3";
 
-import {properties} from "./default.config"
+import {properties} from "./default.config";
 
-export default class LineGraph extends XYGraph {
+class LineGraph extends XYGraph {
 
     constructor(props) {
         super(props, properties);
+        this.brush = brushX();
     }
 
     render() {
@@ -56,7 +61,8 @@ export default class LineGraph extends XYGraph {
           yTickGrid,
           yTicks,
           yTickSizeInner,
-          yTickSizeOuter
+          yTickSizeOuter,
+          brushEnabled
         } = this.getConfiguredProperties();
 
         const isVerticalLegend = legend.orientation === 'vertical';
@@ -142,6 +148,21 @@ export default class LineGraph extends XYGraph {
             top: margin.top + availableHeight / 2
         }
 
+        if(brushEnabled){
+            this.brush
+                .extent([[0, 0], [availableWidth, availableHeight]])
+                .on("end", () => {
+                    // If there is a brushed region...
+                    if(event.selection){
+                        const [startTime, endTime] = event.selection
+                          .map(xScale.invert, xScale) // Convert from pixel coords to Date objects.
+                          .map((date) => date.getTime()); // Convert from Date to epoch milliseconds.
+                        const queryParams = Object.assign({}, this.props.context, { startTime, endTime });
+                        this.props.goTo(window.location.pathname, queryParams);
+                    }
+                });
+        }
+
         const tooltipOverlay = voronoi()
             .x(function(d) { return xScale(d[xColumn]); })
             .y(function(d) { return yScale(d[yColumn]); })
@@ -180,8 +201,9 @@ export default class LineGraph extends XYGraph {
                           )}
                         </g>
                         <g>
-                          {tooltipOverlay.map((d) =>
+                          {tooltipOverlay.map((d, i) =>
                               <g
+                                  key={ i }
                                   { ...this.tooltipProps(d.data) }
                                   data-offset={tooltipOffset(d.data)}
                                   data-effect="solid"
@@ -210,6 +232,13 @@ export default class LineGraph extends XYGraph {
                               </g>
                           )}
                         </g>
+                        {
+                            brushEnabled &&
+                            <g
+                                key="brush"
+                                ref={ (el) => select(el).call(this.brush) }
+                            />
+                        }
                     </g>
                     {this.renderLegend(linesData, legend, getColor, label)}
                 </svg>
@@ -221,3 +250,8 @@ LineGraph.propTypes = {
   configuration: React.PropTypes.object,
   response: React.PropTypes.object
 };
+
+const actionCreators = (dispatch) => ({
+});
+
+export default connect(null, actionCreators)(LineGraph);
