@@ -26,10 +26,17 @@ export default class GaugeGraph extends AbstractGraph {
             height
         } = this.props;
 
-        if (!data || !data.length)
+        let cData = data;
+
+        if (!data)
             return;
 
+        if(data.length)
+            cData = data[0];
+
         const {
+            minValue,
+            maxValue,
             minColumn,
             maxColumn,
             currentColumn,
@@ -47,6 +54,7 @@ export default class GaugeGraph extends AbstractGraph {
             colors
         } = this.getConfiguredProperties();
 
+        console.log('Data', this.getConfiguredProperties(), data);
         const angles = {
             min: -90,
             max: 90
@@ -55,9 +63,10 @@ export default class GaugeGraph extends AbstractGraph {
         let availableWidth     = width - (margin.left + margin.right);
         let availableHeight    = height - (margin.top + margin.bottom);
 
-        const minValue         = data[minColumn] ? data[minColumn] : 0;
-        const maxValue         = data[maxColumn] ? data[maxColumn] : 100;
-        const currentValue     = data[currentColumn] ? data[currentColumn] : 20;
+
+        const minRange         = cData[minColumn] ? cData[minColumn] : (minValue ? minValue : 0);
+        const maxRange         = cData[maxColumn] ? cData[maxColumn] : (maxValue ? maxValue : 100);
+        const currentValue     = cData[currentColumn] ? cData[currentColumn] : 20;
 
         const minRadius   = Math.min(availableWidth, availableHeight) / 2;
 
@@ -82,7 +91,7 @@ export default class GaugeGraph extends AbstractGraph {
 
         let scale = d3.scaleLinear()
             .range([0,1])
-            .domain([minValue, maxValue]);
+            .domain([minRange, maxRange]);
 
         let ticks = scale.ticks(gaugeTicks);
         let tickData = d3.range(gaugeTicks).map(function() {return 1 / gaugeTicks;});

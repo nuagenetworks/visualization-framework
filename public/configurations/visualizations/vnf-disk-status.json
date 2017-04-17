@@ -7,7 +7,7 @@
     "creationDate": "04/13/2017",
     "data": {
           "maxValue": "100",
-          "currentValue": "disk",
+          "currentColumn": "disk",
           "gauzeTicks": "10"
     },
     "query": "vnf-status"

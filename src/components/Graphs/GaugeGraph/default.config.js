@@ -15,6 +15,8 @@ export const properties = {
     minColumn                 : 'minColumn',
     maxColumn                 : 'maxValue',
     currentColumn             : 'currentValue',
+    minValue                  : '0',
+    maxValue                  : '100',
 
     colors                    : ['#e8e2ca', '#b3d645'],
     labelFormat               : '.2s',
