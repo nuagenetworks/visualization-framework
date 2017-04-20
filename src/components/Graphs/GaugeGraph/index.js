@@ -19,11 +19,47 @@ export default class GaugeGraph extends AbstractGraph {
         return deg * Math.PI / 180;
     }
 
+    componentDidMount() {
+        const {
+            configuration
+        } = this.props;
+
+        const {
+            gaugePtrTransition,
+            gaugeCtrFormat
+        } = this.getConfiguredProperties();
+
+        const format = d3.format(gaugeCtrFormat);
+        const currentValue = this.currentValue;
+        const minValue = this.minValue;
+
+        d3.timeout(() => {
+            d3.select(`#gauge-needle-${configuration.id}`)
+                .transition()
+                .ease(d3.easeLinear)
+    			      .duration(gaugePtrTransition)
+    			      .attr('transform', 'rotate(' + this.angle +')');
+
+            d3.select(`#gauge-counter-${configuration.id}`)
+                .transition()
+                    .duration(gaugePtrTransition)
+                    .on("start", function repeat() {
+                        d3.active(this)
+                            .tween("text", function() {
+                                var that = d3.select(this),
+                                i = d3.interpolateNumber(minValue, currentValue);
+                                return function(t) { that.text(format(i(t) / 100)); };
+                             });
+                    });
+        }, 500);
+    }
+
     render() {
         const {
             data,
             width,
-            height
+            height,
+            configuration
         } = this.props;
 
         let cData = data;
@@ -49,6 +85,8 @@ export default class GaugeGraph extends AbstractGraph {
             gaugeTicks,
             gaugeRingInset,
             gaugeRingWidth,
+            gaugeCtrColor,
+            gaugeCtrFontSize,
             labelFormat,
             fontColor,
             colors
@@ -114,10 +152,22 @@ export default class GaugeGraph extends AbstractGraph {
         const pointerLine = d3.line()
             .curve(d3.curveMonotoneX);
 
+        this.angle        = angles.min + (scale(currentValue) * range);
+        this.minValue     = minValue
+        this.currentValue = currentValue;
+
+        let needle = <path id={`gauge-needle-${configuration.id}`} d={ pointerLine(lineData) } fill={ gaugePtrColor } transform={ `rotate(${angles.min})` } />;
+
+        let counterStyle = {
+            fontSize: gaugeCtrFontSize
+        };
+
+        let counterText = <text id={`gauge-counter-${configuration.id}`} fill={ gaugeCtrColor } style={ counterStyle } transform={ `translate(0, ${height * (1 / 5)})` } > { minRange } </text>;
+
         return (
             <div className="gauge-graph">
                 <svg width={ width } height={ height }>
-                    <g transform={ `translate(${ width / 2 }, ${ (height * 2) / 3 })` } >
+                    <g transform={ `translate(${ width / 2 }, ${ height * (3 / 5) })` } >
                         {
                             tickData.map((tick, i) => {
                                 return <g key={i} >
@@ -137,7 +187,13 @@ export default class GaugeGraph extends AbstractGraph {
                                 </g>
                             })
                         }
-                        <path d={ pointerLine(lineData) } fill={ gaugePtrColor } transform={ `rotate(${angles.min + (scale(currentValue) * range)})` } />
+                        {
+                          needle
+                        }
+
+                        {
+                          counterText
+                        }
                     </g>
                 </svg>
             </div>
