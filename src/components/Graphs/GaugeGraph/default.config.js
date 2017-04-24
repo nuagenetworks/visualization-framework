@@ -4,8 +4,12 @@ export const properties = {
     gaugePtrWidth				      : 10,
     gaugePtrTailLength        : 5,
     gaugePtrHeadLengthPercent	: 0.90,
-    gaugePtrTransition        : 4000,
-    gaugePtrColor             : '#f9b13d',
+    gaugePtrTransition        : 2000,
+    gaugePtrColor             : '#937171',
+
+    gaugeCtrColor             : '#000000',
+    gaugeCtrFontSize          : 20,
+    gaugeCtrFormat            : '.0%',
 
     gaugeRingInset            : 10,
     gaugeRingWidth            : 30,
@@ -18,8 +22,8 @@ export const properties = {
     minValue                  : '0',
     maxValue                  : '100',
 
-    colors                    : ['#e8e2ca', '#b3d645'],
-    labelFormat               : '.2s',
+    colors                    : ['#fc5f5f', '#8fc496'],
+    labelFormat               : '.0s',
 
     stroke: {
         color: theme.palette.whiteColor,

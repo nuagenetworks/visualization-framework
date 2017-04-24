@@ -21,7 +21,7 @@
                             "range": {
                                 "timestamp": {
                                     "gte":"{{startTime:now-24h}}",
-                                    "lte":"{{endTimeTime:now}}",                                    
+                                    "lte":"{{endTimeTime:now}}",
                                     "format": "epoch_millis"
                                 }
                             }
@@ -29,7 +29,7 @@
                     ],
                     "filter": {
                         "term": {
-                            "SourceNSG": "{{snsg:ovs-1}}"
+                            "SourceNSG": "{{snsg:ovs-238}}"
                         }
                     }
                 }

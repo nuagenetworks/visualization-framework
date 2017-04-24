@@ -30,7 +30,7 @@ def populateVNFData():
 
 
 def writeToES(es_data):
-	es = Elasticsearch("192.168.100.200")
+	es = Elasticsearch("localhost:9200")
 	write_data = []
 	# Create counters on the fly everytime
 	# Write data for a day every minute

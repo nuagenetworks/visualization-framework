@@ -29,7 +29,7 @@
                             "Enterprise":{
                                 "query":{
                                     "term":{
-                                        "EnterpriseName":"{{enterpriseName:test_organization}}"
+                                        "EnterpriseName":"{{enterpriseName:test_org}}"
                                     }
                                 }
                             }
@@ -42,7 +42,7 @@
                                     "SourceNSG": {
                                         "query": {
                                             "term": {
-                                                "SourceNSG": "{{snsg:default}}"
+                                                "SourceNSG": "{{snsg:ovs-5}}"
                                             }
                                         }
                                     }
@@ -57,7 +57,7 @@
                                     "aggs": {
                                         "L7Classification": {
                                             "terms": {
-                                                "field": "L7ClassEnhanced",
+                                                "field": "L7Classification",
                                                 "size": 5,
                                                 "order": {
                                                     "SumOf": "desc"
