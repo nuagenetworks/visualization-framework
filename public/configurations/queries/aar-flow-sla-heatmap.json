@@ -29,7 +29,7 @@
                     ],
                     "filter": {
                         "term": {
-                            "SourceNSG": "{{snsg:ovs-238}}"
+                            "SourceNSG": "{{snsg:ovs-1}}"
                         }
                     }
                 }
