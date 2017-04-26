@@ -9,7 +9,8 @@ export const properties = {
 
     gaugeCtrColor             : '#000000',
     gaugeCtrFontSize          : 20,
-    gaugeCtrFormat            : '.0%',
+    gaugeCtrFormat            : '.0f',
+    gaugeCtrSuffix            : '%',
 
     gaugeRingInset            : 10,
     gaugeRingWidth            : 30,
