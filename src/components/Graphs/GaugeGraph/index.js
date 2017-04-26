@@ -26,7 +26,8 @@ export default class GaugeGraph extends AbstractGraph {
 
         const {
             gaugePtrTransition,
-            gaugeCtrFormat
+            gaugeCtrFormat,
+            gaugeCtrSuffix
         } = this.getConfiguredProperties();
 
         const format = d3.format(gaugeCtrFormat);
@@ -48,7 +49,7 @@ export default class GaugeGraph extends AbstractGraph {
                             .tween("text", function() {
                                 var that = d3.select(this),
                                 i = d3.interpolateNumber(minValue, currentValue);
-                                return function(t) { that.text(format(i(t) / 100)); };
+                                return function(t) { that.text(format(i(t)) + (gaugeCtrSuffix ? ' ' + gaugeCtrSuffix : '')); };
                              });
                     });
         }, 500);

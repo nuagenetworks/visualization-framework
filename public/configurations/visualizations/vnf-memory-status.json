@@ -8,7 +8,8 @@
     "data": {
           "maxValue": "100",
           "currentColumn": "memory",
-          "gauzeTicks": "10"
+          "gauzeTicks": "10",
+          "gaugeCtrSuffix": ""
     },
     "query": "vnf-status"
 }
