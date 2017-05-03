@@ -1,6 +1,6 @@
 {
     "id": "vnf-status-linechart",
-    "graph": "LineGraph",
+    "graph": "MultiLineGraph",
     "title": "VNF Utilization vs time",
     "description": "Memory, disk and CPU utilization over a period of time",
     "author": "Ronak Shah",
@@ -8,10 +8,22 @@
     "data": {
         "xColumn": "ts",
         "xLabel": "Time",
-        "yColumn": "CPU",
+        "yColumn": ["CPU", "MEMORY",  "DISK"],
+        "yTickFormat": ",.0f",
         "yLabel": "",
         "yTicks": 5,
-        "linesColumn": "CPU"
+        "linesColumn": ["CPU", "MEMORY",  "DISK"],
+        "legend": {
+            "orientation": "vertical",
+            "show": true,
+            "circleSize": 5,
+            "labelOffset": 5
+        },
+        "tooltip": [
+            { "column": "columnType", "label": "Type"},
+            { "column": "yColumn", "label": "Value", "format": "0.2f"},
+            { "column": "ts", "label": "Timestamp"}
+        ]
     },
     "query": "vnf-status-linechart"
 }
