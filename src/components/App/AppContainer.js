@@ -100,7 +100,7 @@ const mapStateToProps = (state, ownProps) => {
 
 
 const actionCreators = (dispatch) => ({
- });
+});
 
 
 export default connect(mapStateToProps, actionCreators)(AppContainerView);
