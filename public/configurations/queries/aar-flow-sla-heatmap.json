@@ -21,7 +21,7 @@
                             "range": {
                                 "timestamp": {
                                     "gte":"{{startTime:now-24h}}",
-                                    "lte":"{{endTimeTime:now}}",                                    
+                                    "lte":"{{endTimeTime:now}}",
                                     "format": "epoch_millis"
                                 }
                             }

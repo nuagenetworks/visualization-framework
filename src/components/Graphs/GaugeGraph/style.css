@@ -1,0 +1,5 @@
+.gauge-graph g text {
+    text-anchor: middle;
+    font-size: 12px;
+    fill: #666;
+}
