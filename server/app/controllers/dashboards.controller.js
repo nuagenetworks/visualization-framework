@@ -14,7 +14,7 @@ class DashboardsController extends BaseController {
 
     try {
       let fileContent = fs.readFileSync(
-        path.resolve(__dirname, configPath, dashboardDir, `${dashboard}.json`),
+        path.resolve(configPath, dashboardDir, `${dashboard}.json`),
         'utf8');
 
       let dasboardData = JSON.parse(fileContent);
@@ -22,7 +22,7 @@ class DashboardsController extends BaseController {
       if(dasboardData.visualizations) {
         dasboardData.visualizations.forEach((visualization, index, array) => {
           let visualizationData = fs.readFileSync(
-            path.resolve(__dirname, configPath, visualizationDir, `${visualization.id}.json`),
+            path.resolve(configPath, visualizationDir, `${visualization.id}.json`),
             'utf8');
           dasboardData.visualizations[index].detail = JSON.parse(visualizationData);
         });
