@@ -1,4 +1,5 @@
 import BaseController from './base.controller';
+import Constants from '../config/constants';
 
 import fs from 'fs';
 import path from 'path';
@@ -7,7 +8,7 @@ class DashboardsController extends BaseController {
   index = async (req, res, next) => {
     let { dashboard } = req.params;
 
-    const configPath = '../../../public/configurations';
+    const configPath = `${Constants.baseDir}/../public/configurations`;
     const dashboardDir = 'dashboards';
     const visualizationDir = 'visualizations';
 

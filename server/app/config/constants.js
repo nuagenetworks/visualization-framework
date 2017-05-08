@@ -1,7 +1,5 @@
 import path from 'path';
-import merge from 'lodash/merge';
 
-// Default configuations applied to all environments
 const defaultConfig = {
   env: process.env.NODE_ENV,
   get envs() {
@@ -11,16 +9,12 @@ const defaultConfig = {
       production: process.env.NODE_ENV === 'production',
     };
   },
-
-  version: require('../../package.json').version,
-  root: path.normalize(__dirname + '/../../..'),
   port: process.env.PORT || 8010,
   ip: process.env.IP || '0.0.0.0',
+  release: require('../../package.json').version,
+  baseDir: path.normalize(__dirname + '/../..'),
+
   apiPrefix: '/api',
 };
 
-// Environment specific overrides
-const environmentConfigs = {};
-
-// Recursively merge configurations
-export default merge(defaultConfig, environmentConfigs[process.env.NODE_ENV] || {});
+export default defaultConfig;

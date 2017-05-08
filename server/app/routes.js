@@ -1,13 +1,13 @@
 import { Router } from 'express';
 
-import MetaController from './controllers/meta.controller';
+import IndexController from './controllers/index.controller';
 import DashboardsController from './controllers/dashboards.controller';
 
 import errorHandler from './middleware/error-handler';
 
 const routes = new Router();
 
-routes.get('/', MetaController.index);
+routes.get('/', IndexController.index);
 
 // Users
 routes.get('/dashboards/:dashboard', DashboardsController.index);
