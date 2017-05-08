@@ -32,6 +32,15 @@ Here is a list of environment variable that can be set to configure the visualiz
     * `REACT_APP_ELASTICSEARCH_HOST` (**required**) allows you to specify the Elastic Search server (ex: http://localhost:9200)
     * `REACT_APP_VSD_API_ENDPOINT` allows to specify the VSD API endpoint (ex:https://vsd.com:8443/nuage/api/)
 
+## Middleware Setup
+
+    1. Go inside the `visualization-framework/server` folder
+    2. Install all dependancies using `npm install` (it will take some time, please be patient)
+    3. Run the application using `npm start` command.
+    4. Run the lint using `npm run lint` command.
+
+## Middleware APIs
+    1. Dashboard Confirguration: http://HOSTNAME/api/dashboards/:dashboardname
 
 ## kitchenSink
 
