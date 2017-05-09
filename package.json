@@ -37,6 +37,7 @@
     "redux-logger": "2.7.4",
     "redux-router": "2.1.2",
     "redux-thunk": "2.1.0",
+    "taffydb": "^2.7.3",
     "whatwg-fetch": "^1.0.0"
   },
   "scripts": {
