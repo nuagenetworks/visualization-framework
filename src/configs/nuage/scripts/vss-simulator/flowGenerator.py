@@ -54,12 +54,12 @@ def generateFlowStats(domain_id, type="l3"):
 		es_data['type'] =  random.sample(ACL_ACTION, 1)[0]
 
 		es_data['nuage_metadata'] ={
-			'inport': random.randint(1,5), 
+			'inport': random.randint(1,5),
 			'flowid': random.randint(10000,15000),
 			'outport': random.randint(1,5),
 			'domainName': CONFIG_DICT['domain.name'] + "-" + str(domain_id),
 			'dpgName': flow_data[1]['pg'],
-			'enterpriseName': CONFIG_DICT['enterprise.name'], 
+			'enterpriseName': CONFIG_DICT['enterprise.name'],
 			'sourcevport': flow_data[0]['uuid'],
 			'destinationvport': flow_data[1]['uuid'],
 			'spgName': flow_data[0]['pg'],
@@ -84,7 +84,7 @@ def generateFlowStats(domain_id, type="l3"):
 		writeToES(es_data)
 
 def writeToES(es_data):
-	es = Elasticsearch("192.168.100.200")
+	es = Elasticsearch("http://localhost:9200")
 	write_data = []
 	# Create counters on the fly everytime
 	# Write data for a day every minute
@@ -99,7 +99,7 @@ def writeToES(es_data):
 	helpers.bulk(es, iter(write_data), request_timeout=50)
 
 def populateData():
-	populatePGs()	
+	populatePGs()
 	populateVPorts()
 
 def configRead():
@@ -117,7 +117,6 @@ if __name__ == "__main__":
 	    #print PGS
 	    #print VPORTS
 	    generateFlowStats(i, type="l2")
-        
+
         for i in range(1, CONFIG_DICT['no_of_l2domains']+1):
-            generateFlowStats(i, type='l2') 
-        
+            generateFlowStats(i, type='l2')
