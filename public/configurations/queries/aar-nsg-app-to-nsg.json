@@ -19,7 +19,10 @@
                                 }
                             }
                         }
-                    ]
+                    ],
+                    "must_not": {
+                        "term" : { "EgressBytes" : 0 }
+                    }
                 }
             },
             "aggs":{
@@ -51,12 +54,12 @@
                             "aggs": {
                                 "SumofBytes": {
                                     "sum": {
-                                        "field": "TotalBytesCount"
+                                        "field": "EgressBytes"
                                     }
                                 },
                                 "SumofPackets": {
                                     "sum": {
-                                        "field": "TotalPacketsCount"
+                                        "field": "EgressPackets"
                                     }
                                 },
                                 "APMGroup": {
@@ -70,12 +73,12 @@
                                     "aggs": {
                                         "SumofBytes": {
                                             "sum": {
-                                                "field": "TotalBytesCount"
+                                                "field": "EgressBytes"
                                             }
                                         },
                                         "SumofPackets": {
                                             "sum": {
-                                                "field": "TotalPacketsCount"
+                                                "field": "EgressPackets"
                                             }
                                         },
                                         "Application": {
@@ -89,12 +92,12 @@
                                             "aggs": {
                                                 "SumofBytes": {
                                                     "sum": {
-                                                        "field": "TotalBytesCount"
+                                                        "field": "EgressBytes"
                                                     }
                                                 },
                                                 "SumofPackets": {
                                                     "sum": {
-                                                        "field": "TotalPacketsCount"
+                                                        "field": "EgressPackets"
                                                     }
                                                 },
                                                 "L7Classification": {
@@ -108,12 +111,12 @@
                                                     "aggs": {
                                                         "SumofBytes": {
                                                             "sum": {
-                                                                "field": "TotalBytesCount"
+                                                                "field": "EgressBytes"
                                                             }
                                                         },
                                                         "SumofPackets": {
                                                             "sum": {
-                                                                "field": "TotalPacketsCount"
+                                                                "field": "EgressPackets"
                                                             }
                                                         },
                                                         "DestVportName": {
@@ -127,75 +130,12 @@
                                                             "aggs": {
                                                                 "SumofBytes": {
                                                                     "sum": {
-                                                                        "field": "TotalBytesCount"
+                                                                        "field": "EgressBytes"
                                                                     }
                                                                 },
                                                                 "SumofPackets": {
                                                                     "sum": {
-                                                                        "field": "TotalPacketsCount"
-                                                                    }
-                                                                },
-                                                                "DstUplink": {
-                                                                    "terms": {
-                                                                        "field": "DstUplink",
-                                                                        "size": 5,
-                                                                        "order": {
-                                                                            "SumofBytes": "desc"
-                                                                        }
-                                                                    },
-                                                                    "aggs": {
-                                                                        "SumofBytes": {
-                                                                            "sum": {
-                                                                                "field": "TotalBytesCount"
-                                                                            }
-                                                                        },
-                                                                        "SumofPackets": {
-                                                                            "sum": {
-                                                                                "field": "TotalPacketsCount"
-                                                                            }
-                                                                        },
-                                                                        "DstUplinkRole": {
-                                                                            "terms": {
-                                                                                "field": "DstUplinkRole",
-                                                                                "size": 5,
-                                                                                "order": {
-                                                                                    "SumofBytes": "desc"
-                                                                                }
-                                                                            },
-                                                                            "aggs": {
-                                                                                "SumofBytes": {
-                                                                                    "sum": {
-                                                                                        "field": "TotalBytesCount"
-                                                                                    }
-                                                                                },
-                                                                                "SumofPackets": {
-                                                                                    "sum": {
-                                                                                        "field": "TotalPacketsCount"
-                                                                                    }
-                                                                                },
-                                                                                "DestinationNSG": {
-                                                                                    "terms": {
-                                                                                        "field": "DestinationNSG",
-                                                                                        "size": 5,
-                                                                                        "order": {
-                                                                                            "SumofBytes": "desc"
-                                                                                        }
-                                                                                    },
-                                                                                    "aggs": {
-                                                                                        "SumofBytes": {
-                                                                                            "sum": {
-                                                                                                "field": "TotalBytesCount"
-                                                                                            }
-                                                                                        },
-                                                                                        "SumofPackets": {
-                                                                                            "sum": {
-                                                                                                "field": "TotalPacketsCount"
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
+                                                                        "field": "EgressPackets"
                                                                     }
                                                                 }
                                                             }
