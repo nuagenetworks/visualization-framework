@@ -465,7 +465,6 @@ const mapStateToProps = (state, ownProps) => {
             configurationID,
             ConfigurationsActionKeyStore.ERROR
         ])
-
     };
 
     // Expose the query template as a JS object if it is available.

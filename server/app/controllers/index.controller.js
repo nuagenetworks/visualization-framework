@@ -1,5 +1,5 @@
 import BaseController from './base.controller';
-import Constants from '../config/constants';
+import Constants from '../configurations/constants';
 
 class IndexController extends BaseController {
   index(req, res) {

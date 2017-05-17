@@ -6,7 +6,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 
 import routes from './routes';
-import Constants from './config/constants';
+import Constants from './configurations/constants';
 
 const app = express();
 

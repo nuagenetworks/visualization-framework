@@ -31,7 +31,6 @@ let ESClient = function (state) {
 
 const fetch = function (queryConfiguration, state) {
     var client = ESClient(state) // eslint-disable-line
-
     if (!client)
         return Promise.reject();
 
@@ -69,7 +68,6 @@ const ping = function (queryConfiguration, state) {
  */
 const getRequestID = function (queryConfiguration, context) {
     const parameters = getUsedParameters(queryConfiguration, context);
-
     if (Object.keys(parameters).length === 0)
         return queryConfiguration.id;
 

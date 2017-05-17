@@ -1,30 +1,19 @@
 import BaseController from './base.controller';
-import Constants from '../config/constants';
+import {DirectoryTypes, FetchManager} from '../lib/fetch';
 
-import fs from 'fs';
-import path from 'path';
 
 class DashboardsController extends BaseController {
   index = async (req, res, next) => {
     let { dashboard } = req.params;
 
-    const configPath = `${Constants.baseDir}/../public/configurations`;
-    const dashboardDir = 'dashboards';
-    const visualizationDir = 'visualizations';
-
     try {
-      let fileContent = fs.readFileSync(
-        path.resolve(configPath, dashboardDir, `${dashboard}.json`),
-        'utf8');
-
-      let dasboardData = JSON.parse(fileContent);
+      let dasboardData = FetchManager.fetchAndParseJSON(dashboard, DirectoryTypes.DASHBOARD);
 
       if(dasboardData.visualizations) {
         dasboardData.visualizations.forEach((visualization, index, array) => {
-          let visualizationData = fs.readFileSync(
-            path.resolve(configPath, visualizationDir, `${visualization.id}.json`),
-            'utf8');
-          dasboardData.visualizations[index].detail = JSON.parse(visualizationData);
+          dasboardData.visualizations[index].visualization = FetchManager.fetchAndParseJSON(visualization.id, DirectoryTypes.VISUALIZATION);
+          if(dasboardData.visualizations[index].visualization.query)
+            dasboardData.visualizations[index].query = FetchManager.fetchAndParseJSON(dasboardData.visualizations[index].visualization.query, DirectoryTypes.QUERY);
         });
       }
 
