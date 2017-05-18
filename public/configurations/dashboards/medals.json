@@ -1,0 +1,42 @@
+{
+    "id": "medals",
+    "author": "Christophe SERAFIN",
+    "creationDate": "12/13/2016",
+    "title": "Olympic Medals",
+    "visualizations": [
+        { "id": "medalsEvolution",            "x": 0, "y": 0,   "w": 12, "h": 15, "minW": 4, "minH": 12, "static": true },
+        { "id": "medalsTable",                "x": 0, "y": 15,  "w": 6, "h": 15, "minW": 4, "minH": 12 },
+        { "id": "top5Countries",              "x": 6, "y": 15,  "w": 6, "h": 15, "minW": 4, "minH": 12 }
+    ],
+    "links": [
+        {
+            "label": "Overview",
+            "url": "/dashboards/medals"
+        },
+        {
+            "label": "Detailed View",
+            "url": "/dashboards/medalsPerCountry"
+        }
+    ],
+    "filterOptions": {
+        "Medal": {
+            "parameter": "medalType",
+            "default": "Gold",
+            "disabled": false,
+            "options": [
+                {
+                    "label": "Gold",
+                    "value": "Gold"
+                },
+                {
+                    "label": "Silver",
+                    "value": "Silver"
+                },
+                {
+                    "label": "Bronze",
+                    "value": "Bronze"
+                }
+            ]
+        }
+    }
+}

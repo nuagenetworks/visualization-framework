@@ -1,0 +1,37 @@
+{
+    "id": "medalsTable",
+    "graph": "Table",
+    "title": "Medals the olympic games {{year:2012}}",
+    "description": "Shows all medals of the olympic games of the year",
+    "author": "Christophe SERAFIN",
+    "creationDate": "12/21/2016",
+    "query": "medalsTable",
+    "data": {
+        "columns": [
+            { "column": "country", "label": "Country"},
+            { "column": "nbMedals", "label": "Medals" },
+            { "column": "medalType", "label": "Medal" }
+        ]
+    },
+    "filterOptions": {
+        "Medal": {
+            "parameter": "medalType",
+            "default": "Gold",
+            "options": [
+                {
+                    "label": "Gold",
+                    "value": "Gold"
+                },
+                {
+                    "label": "Silver",
+                    "value": "Silver"
+                },
+                {
+                    "label": "Bronze",
+                    "value": "Bronze",
+                    "disabled": true
+                }
+            ]
+        }
+    }
+}
