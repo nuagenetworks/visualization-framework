@@ -1,0 +1,18 @@
+{
+    "id": "aar-nsg-sla-from-nsg",
+    "graph": "Table",
+    "title": "SLA - From NSG",
+    "description": "All SLA violation during the last time interval, that caused a path from this NSG to switch. Computation: Ordered by time in descending order.",
+    "author": "Ronak Shah",
+    "creationDate": "11/08/2016",
+    "data": {
+        "columns": [
+            { "column": "ts", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+            { "column": "DestinationNSG", "label": "Destination NSG" },
+            { "column": "Application", "label": "Application" },
+            { "column": "APMGroup", "label": "APM Group" },
+            { "column": "ViolationType", "label": "Violation Type" }
+        ]
+    },
+    "query": "aar-nsg-sla-from-nsg"
+}

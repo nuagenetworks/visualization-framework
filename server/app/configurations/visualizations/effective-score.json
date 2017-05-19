@@ -1,0 +1,13 @@
+{
+    "id": "effective-score",
+    "graph": "SimpleTextGraph",
+    "title": "Effective Score",
+    "author": "Christophe SERAFIN",
+    "creationDate": "11/01/2016",
+    "script": "effective-score",
+    "data": {
+        "circle": true,
+        "circleColor": "#4097FF",
+        "targetedColumn": "name"
+    }
+}

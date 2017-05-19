@@ -1,0 +1,26 @@
+{
+    "id": "vss-domain-traffic-top-dpg",
+    "graph": "BarGraph",
+    "title": "Top Destination Policy Groups by Count",
+    "description": "This barchart represents top 5 destination policy groups by total no of packets registered in a given time.",
+    "author": "Ronak Shah",
+    "creationDate": "10/18/2016",
+    "data": {
+        "xColumn": "dpg",
+        "yColumn": "SumOf",
+        "colorColumn": "dpg",
+        "colors": [
+             "#fec26a"
+         ],
+        "tooltip": [
+            { "column": "dpg", "label": "PG" },
+            { "column": "SumOf", "label": "Packets", "format": ",.1f"}
+        ],
+        "xTickGrid": false,
+        "yTickGrid": true,
+        "yTickFormat": ".2s",
+        "xLabel": "Destination Policy Groups",
+        "yLabel": "Total # of Packets"
+    },
+    "query": "vss-domain-traffic-top-dpg"
+}

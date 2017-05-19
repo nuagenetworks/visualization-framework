@@ -1,0 +1,22 @@
+{
+    "id": "aar-nsg-app-from-nsg",
+    "graph": "Table",
+    "title": "Application - From NSG",
+    "description": "This graph shows application usage per path between source and destination NSG. Computation: Sum of ingress Bytes in descending order",
+    "author": "Ronak Shah",
+    "creationDate": "10/13/2016",
+    "data": {
+        "columns": [
+            { "column": "APMGroup", "label": "APM Group" },
+            { "column": "Application", "label": "Application" },
+            { "column": "L7Classification", "label": "L7 Classification" },
+            { "column": "SrcVportName", "label": "Source Vport" },
+            { "column": "SrcUplink", "label": "Source Uplink" },
+            { "column": "SrcUplinkRole", "label": "Source Uplink Role" },
+            { "column": "DestinationNSG", "label": "Destination NSG" },
+            { "column": "SumofPackets", "label": "Total Packets", "format": ",.2s"},
+            { "column": "SumofBytes", "label": "Total Bytes", "format": ",.2s" } 
+        ]
+    },
+    "query": "aar-nsg-app-from-nsg"
+}

@@ -1,5 +1,5 @@
 import BaseController from './base.controller';
-import {DirectoryTypes, FetchManager} from '../lib/fetch';
+import {DirectoryTypes, FetchManager} from '../lib/utils/fetch';
 
 
 class DashboardsController extends BaseController {

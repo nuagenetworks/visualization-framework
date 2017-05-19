@@ -1,0 +1,32 @@
+{
+    "id": "top5-app-pie",
+    "graph": "PieGraph",
+    "title": "Top 5 Apps Pie",
+    "author": "Curran Kelleher",
+    "creationDate": "10/19/2016",
+    "data": {
+        "sliceColumn": "Sum of MB",
+        "labelColumn": "L7Classification",
+        "tooltip": [
+            { "column": "L7Classification", "label": "L7 Classification" },
+            { "column": "Sum of MB", "format": ",.1f"}
+        ],
+        "percentages": true,
+        "percentagesFormat": ",.1%",
+        "pieLabelRadius": 0.55,
+        "pieOuterRadius": 0.95,
+        "legend": {
+            "show": true,
+            "orientation": "horizontal",
+            "circleSize": 4,
+            "labelOffset": 2
+        }
+    },
+    "listeners": [{
+      "redirect": "/dashboards/dateHistogramExample",
+      "params": {
+          "app": "L7Classification"
+      }
+    }],
+    "query": "top5-app-vertical-bar"
+}

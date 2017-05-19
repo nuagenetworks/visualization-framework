@@ -1,0 +1,18 @@
+{
+    "id": "aar-domain-top5-apmg",
+    "graph": "PieGraph",
+    "title": "Top 5 Application Groups (Mbps)",
+    "description": "Domain level top 5 Application Performance Management Groups. Computation: Sum of total Bytes sent and/or received in descending order.",
+    "author": "Ronak Shah",
+    "creationDate": "10/26/2016",
+    "data": {
+        "tooltip": [
+            { "column": "APMGroup", "label": "APMGroup" },
+            { "column": "Sum of MB", "label": "Total Bytes(MB)", "format": ",.2f"}
+        ],
+        "sliceColumn": "Sum of MB",
+        "labelColumn": "APMGroup",
+        "colorColumn": "APMGroup"
+    },
+    "query": "aar-domain-top5-apmg"
+}

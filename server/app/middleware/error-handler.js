@@ -1,6 +1,10 @@
 import Constants from '../configurations/constants';
 
 export default function errorHandler(err, req, res, next) {
+  if (res.headersSent) {
+    return next(err)
+  }
+
   if (!err) {
     return res.sendStatus(500);
   }

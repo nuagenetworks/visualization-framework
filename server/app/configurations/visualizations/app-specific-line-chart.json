@@ -1,0 +1,13 @@
+{
+    "id": "app-specific-line-chart",
+    "graph": "LineGraph",
+    "title": "App-specific Line Chart",
+    "author": "Curran Kelleher",
+    "creationDate": "10/14/2016",
+    "data": {
+        "xColumn": "key",
+        "yColumn": "1",
+        "colorColumn": "key"
+    },
+    "query": "app-specific-vertical-bar"
+}

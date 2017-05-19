@@ -1,0 +1,216 @@
+{
+    "id":"aar-nsg-app-to-nsg",
+    "title":"TBD",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_dpi_flowstats}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTimeTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs":{
+                "12":{
+                    "filters":{
+                        "filters":{
+                            "Enterprise":{
+                                "query":{
+                                    "term":{
+                                        "EnterpriseName":"{{enterpriseName:test_organization}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "aggs": {
+                        "11": {
+                            "filters": {
+                                "filters": {
+                                    "DestinationNSG": {
+                                        "query": {
+                                            "term": {
+                                                "DestinationNSG": "{{snsg:default}}"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "aggs": {
+                                "SumofBytes": {
+                                    "sum": {
+                                        "field": "TotalBytesCount"
+                                    }
+                                },
+                                "SumofPackets": {
+                                    "sum": {
+                                        "field": "TotalPacketsCount"
+                                    }
+                                },
+                                "APMGroup": {
+                                    "terms": {
+                                        "field": "APMGroup",
+                                        "size": 5,
+                                        "order": {
+                                            "SumofBytes": "desc"
+                                        }
+                                    },
+                                    "aggs": {
+                                        "SumofBytes": {
+                                            "sum": {
+                                                "field": "TotalBytesCount"
+                                            }
+                                        },
+                                        "SumofPackets": {
+                                            "sum": {
+                                                "field": "TotalPacketsCount"
+                                            }
+                                        },
+                                        "Application": {
+                                            "terms": {
+                                                "field": "Application",
+                                                "size": 5,
+                                                "order": {
+                                                    "SumofBytes": "desc"
+                                                }
+                                            },
+                                            "aggs": {
+                                                "SumofBytes": {
+                                                    "sum": {
+                                                        "field": "TotalBytesCount"
+                                                    }
+                                                },
+                                                "SumofPackets": {
+                                                    "sum": {
+                                                        "field": "TotalPacketsCount"
+                                                    }
+                                                },
+                                                "L7Classification": {
+                                                    "terms": {
+                                                        "field": "L7ClassEnhanced",
+                                                        "size": 5,
+                                                        "order": {
+                                                            "SumofBytes": "desc"
+                                                        }
+                                                    },
+                                                    "aggs": {
+                                                        "SumofBytes": {
+                                                            "sum": {
+                                                                "field": "TotalBytesCount"
+                                                            }
+                                                        },
+                                                        "SumofPackets": {
+                                                            "sum": {
+                                                                "field": "TotalPacketsCount"
+                                                            }
+                                                        },
+                                                        "DestVportName": {
+                                                            "terms": {
+                                                                "field": "DestVportName",
+                                                                "size": 5,
+                                                                "order": {
+                                                                    "SumofBytes": "desc"
+                                                                }
+                                                            },
+                                                            "aggs": {
+                                                                "SumofBytes": {
+                                                                    "sum": {
+                                                                        "field": "TotalBytesCount"
+                                                                    }
+                                                                },
+                                                                "SumofPackets": {
+                                                                    "sum": {
+                                                                        "field": "TotalPacketsCount"
+                                                                    }
+                                                                },
+                                                                "DstUplink": {
+                                                                    "terms": {
+                                                                        "field": "DstUplink",
+                                                                        "size": 5,
+                                                                        "order": {
+                                                                            "SumofBytes": "desc"
+                                                                        }
+                                                                    },
+                                                                    "aggs": {
+                                                                        "SumofBytes": {
+                                                                            "sum": {
+                                                                                "field": "TotalBytesCount"
+                                                                            }
+                                                                        },
+                                                                        "SumofPackets": {
+                                                                            "sum": {
+                                                                                "field": "TotalPacketsCount"
+                                                                            }
+                                                                        },
+                                                                        "DstUplinkRole": {
+                                                                            "terms": {
+                                                                                "field": "DstUplinkRole",
+                                                                                "size": 5,
+                                                                                "order": {
+                                                                                    "SumofBytes": "desc"
+                                                                                }
+                                                                            },
+                                                                            "aggs": {
+                                                                                "SumofBytes": {
+                                                                                    "sum": {
+                                                                                        "field": "TotalBytesCount"
+                                                                                    }
+                                                                                },
+                                                                                "SumofPackets": {
+                                                                                    "sum": {
+                                                                                        "field": "TotalPacketsCount"
+                                                                                    }
+                                                                                },
+                                                                                "DestinationNSG": {
+                                                                                    "terms": {
+                                                                                        "field": "DestinationNSG",
+                                                                                        "size": 5,
+                                                                                        "order": {
+                                                                                            "SumofBytes": "desc"
+                                                                                        }
+                                                                                    },
+                                                                                    "aggs": {
+                                                                                        "SumofBytes": {
+                                                                                            "sum": {
+                                                                                                "field": "TotalBytesCount"
+                                                                                            }
+                                                                                        },
+                                                                                        "SumofPackets": {
+                                                                                            "sum": {
+                                                                                                "field": "TotalPacketsCount"
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
