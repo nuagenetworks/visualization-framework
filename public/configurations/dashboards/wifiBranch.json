@@ -5,9 +5,27 @@
     "title": "WIFI Branch",
     "visualizations": [
         { 
-          "id": "wifi-branch-table", 
+          "id": "wifi-branch-active-ssids", 
           "x": 0,
           "y": 0,
+          "w": 2,
+          "h": 5,
+          "minW": 2,
+          "minH": 5
+        },      
+        {
+          "id": "wifi-branch-active-clients",
+          "x": 2,
+          "y": 0,
+          "w": 2,
+          "h": 5,
+          "minW": 2,
+          "minH": 5
+        },
+        { 
+          "id": "wifi-branch-table", 
+          "x": 0,
+          "y": 5,
           "w": 6,
           "h": 12,
           "minW": 6,
@@ -16,7 +34,7 @@
         {
           "id": "wifi-branch-ssid-linechart",
           "x": 0,
-          "y": 12,
+          "y": 17,
           "w": 10,
           "h": 12,
           "minW": 10,
@@ -25,10 +43,10 @@
         {
           "id": "wifi-branch-ssid-signal-lastseen",
           "x": 6,
-          "y": 0,
-          "w": 4,
+          "y": 5,
+          "w": 6,
           "h": 12,
-          "minW": 4,
+          "minW": 6,
           "minH": 12
         }
     ]
