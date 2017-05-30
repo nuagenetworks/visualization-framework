@@ -6,7 +6,8 @@ import path from 'path';
 export const DirectoryTypes = {
   DASHBOARD: 'dashboards',
   QUERY: 'queries',
-  VISUALIZATION: 'visualizations'
+  VISUALIZATION: 'visualizations',
+  MEMORY: 'memory'
 }
 
 const configPath = `${Constants.baseDir}/app/configurations`;

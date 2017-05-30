@@ -1,5 +1,5 @@
 {
-    "id": "medalsPerCountryPerCountry",
+    "id": "medalsEvolutionPerCountry",
     "graph": "LineGraph",
     "title": "Medals Evolution for {{country:country}} since 1896",
     "description": "Evolution of medals since the beggining of the olympic games",

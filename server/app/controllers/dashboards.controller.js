@@ -1,5 +1,5 @@
 import BaseController from './base.controller';
-import {DirectoryTypes, FetchManager} from '../lib/utils/fetch';
+import { DirectoryTypes, FetchManager } from '../lib/utils/fetch';
 
 import { ServiceManager } from "../lib/servicemanager/index"
 

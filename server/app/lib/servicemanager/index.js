@@ -1,5 +1,6 @@
 import { ElasticSearchService } from "../services/elasticsearch/index";
 import { VSDService } from "../services/vsd/index";
+import { MemoryService } from "../services/memory/index";
 
 let config = {
     timingCache: 5000,
@@ -11,6 +12,7 @@ let config = {
 let services = {
     elasticsearch: ElasticSearchService,
     VSD: VSDService,
+    memory: MemoryService
 };
 
 /*

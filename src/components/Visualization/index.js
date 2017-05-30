@@ -52,7 +52,7 @@ class VisualizationView extends React.Component {
     }
 
     componentWillMount() {
-        this.initialize(this.props.id);
+
     }
 
     componentDidMount = () => {
@@ -61,6 +61,7 @@ class VisualizationView extends React.Component {
             showInDashboard
         } = this.props;
 
+        this.initialize(this.props.id);
         this.updateSize();
 
         // If present, register the resize callback
