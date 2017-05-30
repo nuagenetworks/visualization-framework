@@ -237,7 +237,7 @@ class LineGraph extends XYGraph {
                             }
                         </g>
                         <g>
-                          /*{tooltipOverlay.map((d, i) =>
+                          {tooltipOverlay.map((d, i) =>
                               <g
                                   key={ i }
                                   { ...this.tooltipProps(d.data) }
@@ -252,7 +252,7 @@ class LineGraph extends XYGraph {
                                     used by ReactTooltip for positioning the tooltips
                                     has an upper left corner at (0, 0).
                                   */
-                                  /*<rect
+                                  <rect
                                       x={-leftMargin}
                                       y={-margin.top}
                                       width="1"
@@ -266,7 +266,7 @@ class LineGraph extends XYGraph {
                                       style={{"pointer-events": "all"}}
                                   />
                               </g>
-                          )}*/
+                          )}
                         </g>
                         {
                             brushEnabled &&
