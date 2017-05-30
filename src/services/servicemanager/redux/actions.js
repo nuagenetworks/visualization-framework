@@ -1,5 +1,4 @@
 import { ServiceManager } from "../index"
-import { parameterizedConfiguration } from "../../../utils/configurations";
 
 export const ActionTypes = {
     SERVICE_MANAGER_DID_START_REQUEST: "SERVICE_MANAGER_DID_START_REQUEST",
@@ -15,28 +14,6 @@ export const ActionKeyStore = {
     EXPIRATION_DATE: "expirationDate",
 };
 
-// TODO: Temporary - Replace this part in the middleware
-function executeScript(scriptName, context) {
-
-    const requestID = ServiceManager.getRequestID(scriptName, context);
-
-    return (dispatch) => {
-        dispatch(didStartRequest(requestID));
-
-        return ServiceManager.executeScript(scriptName, context)
-            .then(
-            (results) => {
-                dispatch(didReceiveResponse(requestID, results));
-                return Promise.resolve(results);
-            },
-            (error) => {
-                dispatch(didReceiveError(requestID, error));
-                return Promise.resolve();
-            });
-    }
-}
-
-
 /*
     Make a query on the service based on the service name.
 
@@ -45,40 +22,22 @@ function executeScript(scriptName, context) {
     * context: the context if the query should be parameterized
     * forceCache: a boolean to force storing the value for a long period
 */
-function fetch(query, context, forceCache) {
-    let service = ServiceManager.getService(query.service);
+function fetch(configuration, context, queryConfiguration, forceCache) {
+    let service = ServiceManager.getService(configuration.queryConfiguration.service);
 
     return (dispatch, getState) => {
-        let requestID = service.getRequestID(query, context);
-
-        if (context) {
-            const pQuery = parameterizedConfiguration(query, context);
-
-            if (pQuery)
-                query = pQuery;
-            else
-                return Promise.reject("Provided context does not allow to parameterized query " + query.id);
-        }
-
+        let requestID = service.getRequestID(queryConfiguration, context);
         dispatch(didStartRequest(requestID));
 
-        return service.fetch(query, getState())
+        return ServiceManager.fetchData(configuration.id, context)
             .then(
             (results) => {
                 dispatch(didReceiveResponse(requestID, results));
                 return Promise.resolve(results);
             },
             (error) => {
-                if (process.env.NODE_ENV === "development" && service.hasOwnProperty("getMockResponse")) {
-                    const response = service.getMockResponse(query);
-                    dispatch(didReceiveResponse(requestID, response, forceCache));
-                    return Promise.resolve(response);
-                }
-                else
-                {
-                    dispatch(didReceiveError(requestID, error));
-                    return Promise.resolve();
-                }
+                dispatch(didReceiveError(requestID, error));
+                return Promise.resolve();
             });
 
     }
@@ -94,17 +53,16 @@ function shouldFetch(request) {
     return !request.get(ActionKeyStore.IS_FETCHING) && currentDate > expireDate;
 }
 
-function fetchIfNeeded(query, context, forceCache) {
-
+function fetchIfNeeded(configuration, context, queryConfiguration, forceCache) {
     // TODO: Temporary - Replace this part in the middleware
-    const isScript = typeof(query) === "string";
+    const isScript = configuration.query ? false : true;
     let requestID;
 
     if (isScript)
-        requestID = ServiceManager.getRequestID(query, context);
+        requestID = ServiceManager.getRequestID(queryConfiguration, context);
     else {
-        let service = ServiceManager.getService(query.service);
-        requestID = service.getRequestID(query, context);
+        let service = ServiceManager.getService(configuration.queryConfiguration.service);
+        requestID = service.getRequestID(queryConfiguration, context);
     }
 
     return (dispatch, getState) => {
@@ -115,10 +73,7 @@ function fetchIfNeeded(query, context, forceCache) {
               request = state.services.getIn([ActionKeyStore.REQUESTS, requestID]);
 
         if (shouldFetch(request)) {
-            if (isScript)
-                return dispatch(executeScript(query, context, forceCache));
-            else
-                return dispatch(fetch(query, context, forceCache));
+            return dispatch(fetch(configuration, context, queryConfiguration, forceCache));
 
         } else {
             return Promise.resolve();

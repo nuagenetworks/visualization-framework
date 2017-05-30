@@ -12,7 +12,8 @@ routes.get('/', IndexController.index);
 
 // Users
 routes.get('/dashboards/:dashboard', DashboardsController.index);
-routes.post('/visualizations/:visualization', VisualizationsController.fetch);
+routes.get('/visualizations/:visualization', VisualizationsController.index);
+routes.post('/visualizations/fetch/:visualization', VisualizationsController.fetch);
 
 routes.use(errorHandler);
 

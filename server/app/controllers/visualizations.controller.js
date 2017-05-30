@@ -6,6 +6,24 @@ import { ServiceManager } from "../lib/servicemanager/index"
 import { parameterizedConfiguration } from '../lib/utils/configurations'
 
 class VisualizationsController extends BaseController {
+
+  index = async (req, res, next) => {
+    let { visualization } = req.params;
+
+    try {
+      let visualizationConfig = FetchManager.fetchAndParseJSON(visualization, DirectoryTypes.VISUALIZATION);
+      if(visualizationConfig && visualizationConfig.query) {
+        visualizationConfig.queryConfiguration = FetchManager.fetchAndParseJSON(visualizationConfig.query, DirectoryTypes.QUERY);
+      } else if(visualizationConfig.script) {
+        visualizationConfig.queryConfiguration = ServiceManager.executeScript(visualizationConfig.script);
+      }
+
+      res.json(visualizationConfig);
+    } catch(err) {
+      next(err);
+    }
+  }
+
   fetch = async (req, res, next) => {
     let { visualization } = req.params;
     let context = req.body;

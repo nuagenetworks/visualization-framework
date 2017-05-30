@@ -117,41 +117,26 @@ class VisualizationView extends React.Component {
                 setPageTitle
             } = this.props;
 
-            if (!configuration)
+            if (!configuration || !configuration.id)
                 return;
 
             if (!showInDashboard)
                 setPageTitle("Visualization");
 
-            const queryName  = configuration.query,
-                  scriptName = configuration.script;
+            const { context, queryConfiguration, executeIfNeeded } = this.props;
 
-            if (scriptName) {
-                const { executeScriptIfNeeded, context } = this.props;
-                executeScriptIfNeeded(scriptName, context);
-            }
-
-            if (queryName) {
-                this.props.fetchQueryIfNeeded(queryName).then(() => {
-                    const { queryConfiguration, executeQueryIfNeeded, context } = this.props;
-
-                    if (!queryConfiguration)
-                        return;
-
-                    executeQueryIfNeeded(queryConfiguration, context).then(
-                        () => {
-                            this.setState({
-                                parameterizable: true,
-                            });
-                        },
-                        (error) => {
-                            this.setState({
-                                parameterizable: false,
-                            });
-                        }
-                    );
-                });
-            }
+            executeIfNeeded(configuration, context, queryConfiguration).then(
+                () => {
+                    this.setState({
+                        parameterizable: true,
+                    });
+                },
+                (error) => {
+                    this.setState({
+                        parameterizable: false,
+                    });
+                }
+            );
 
             // Handle configured listeners (e.g. navigate when clicking on a bar).
             if(configuration.listeners) {
@@ -238,7 +223,6 @@ class VisualizationView extends React.Component {
     renderVisualization() {
         const {
             configuration,
-            queryConfiguration,
             response
         } = this.props;
 
@@ -249,7 +233,7 @@ class VisualizationView extends React.Component {
             return this.renderCardWithInfo("Oops, " + response.error, "meh-o");
         }
 
-        const data = ServiceManager.tabify(queryConfiguration, response.results);
+        const data = response.results;
 
         if (!data || !data.length) {
             return this.renderCardWithInfo("No data to visualize", "bar-chart");
@@ -446,7 +430,6 @@ class VisualizationView extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-
     const configurationID = ownProps.id || ownProps.params.id,
           context         = state.interface.get(InterfaceActionKeyStore.CONTEXT),
           configuration   = state.configurations.getIn([
@@ -454,6 +437,7 @@ const mapStateToProps = (state, ownProps) => {
               configurationID,
               ConfigurationsActionKeyStore.DATA
           ]);
+
 
     const props = {
         id: configurationID,
@@ -469,25 +453,12 @@ const mapStateToProps = (state, ownProps) => {
 
     // Expose the query template as a JS object if it is available.
     if (configuration) {
-        let queryConfiguration = state.configurations.getIn([
-            ConfigurationsActionKeyStore.QUERIES,
-            configuration.get("query")
-        ]);
-
-        if (queryConfiguration && !queryConfiguration.get(
-            ConfigurationsActionKeyStore.IS_FETCHING
-        )) {
-            queryConfiguration = queryConfiguration.get(
-                ConfigurationsActionKeyStore.DATA
-            );
-
-            props.queryConfiguration = queryConfiguration ? queryConfiguration.toJS() : null;
-        }
-
+        props.queryConfiguration = configuration.get('queryConfiguration') ? configuration.get('queryConfiguration').toJS() : null;
         const scriptName = configuration.get("script");
 
         // Expose received response if it is available
         if (props.queryConfiguration || scriptName) {
+
             const query = props.queryConfiguration ? props.queryConfiguration : scriptName;
             const requestID = ServiceManager.getRequestID(query, context);
 
@@ -495,6 +466,7 @@ const mapStateToProps = (state, ownProps) => {
                 ServiceActionKeyStore.REQUESTS,
                 requestID
             ]);
+
             if (response && !response.get(ServiceActionKeyStore.IS_FETCHING))
                 props.response = response.toJS();
         }
@@ -520,19 +492,8 @@ const actionCreators = (dispatch) => ({
         ));
     },
 
-    fetchQueryIfNeeded: function(id) {
-        return dispatch(ConfigurationsActions.fetchIfNeeded(
-            id,
-            ConfigurationsActionKeyStore.QUERIES
-        ));
-    },
-
-    executeQueryIfNeeded: function(queryConfiguration, context) {
-        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context));
-    },
-
-    executeScriptIfNeeded: function(scriptName, context) {
-        return dispatch(ServiceActions.fetchIfNeeded(scriptName, context));
+    executeIfNeeded: function(configuration, context, queryConfiguration) {
+        return dispatch(ServiceActions.fetchIfNeeded(configuration, context, queryConfiguration));
     }
 
  });

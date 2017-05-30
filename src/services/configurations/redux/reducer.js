@@ -6,8 +6,7 @@ import { ConfigurationService } from "../index"
 let initialState = Map() // eslint-disable-line
                     // .set(,) // Usefull if we need to set some elastic search configuration information
                     .set(ActionKeyStore.DASHBOARDS, Map()) // eslint-disable-line
-                    .set(ActionKeyStore.VISUALIZATIONS, Map()) // eslint-disable-line
-                    .set(ActionKeyStore.QUERIES, Map()); // eslint-disable-line
+                    .set(ActionKeyStore.VISUALIZATIONS, Map());
 
 
 function didStartRequest(state, id, configType) {
@@ -18,10 +17,21 @@ function didReceiveResponse(state, id, configType, data) {
     const currentDate    = Date.now(),
           expirationDate = currentDate + ConfigurationService.config.cachingTime;
 
-    return state
+    let newState = state
       .setIn([configType, id, ActionKeyStore.IS_FETCHING], false)
       .setIn([configType, id, ActionKeyStore.DATA], fromJS(data))
       .setIn([configType, id, ActionKeyStore.EXPIRATION_DATE], expirationDate);
+
+    if(configType === ActionKeyStore.DASHBOARDS && data.visualizations) {
+      for (let viz of fromJS(data.visualizations)) {
+        newState = newState
+          .setIn([ActionKeyStore.VISUALIZATIONS, viz.get('id'), ActionKeyStore.IS_FETCHING], false)
+          .setIn([ActionKeyStore.VISUALIZATIONS, viz.get('id'), ActionKeyStore.DATA], viz.get('visualization'))
+          .setIn([ActionKeyStore.VISUALIZATIONS, viz.get('id'), ActionKeyStore.EXPIRATION_DATE], expirationDate);
+      }
+    }
+
+    return newState;
 }
 
 function didReceiveError(state, id, configType, error) {

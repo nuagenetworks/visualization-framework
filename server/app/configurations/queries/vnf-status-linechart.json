@@ -58,17 +58,17 @@
                                         "CPU": {
                                             "avg": {
                                                 "field": "cpu"
-                                            }
+                                            }                                            
                                         },
                                         "MEMORY": {
                                             "avg": {
                                                 "field": "memory"
-                                            }
+                                            }                                            
                                         },
                                         "DISK": {
                                             "avg": {
                                                 "field": "disk"
-                                            }
+                                            }                                            
                                         }
                                     }
                                 }

@@ -1,6 +1,5 @@
 import React from "react";
 import XYGraph from "../XYGraph";
-import { Actions } from "../../App/redux/actions";
 import { connect } from "react-redux";
 
 import {
@@ -14,7 +13,6 @@ import {
     select,
     brushX,
     voronoi,
-    merge,
     event
 } from "d3";
 
@@ -42,7 +40,6 @@ class LineGraph extends XYGraph {
           chartHeightToPixel,
           chartWidthToPixel,
           circleToPixel,
-          colorColumn,
           colors,
           legend,
           linesColumn,
@@ -107,7 +104,6 @@ class LineGraph extends XYGraph {
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
         let legendWidth       = legend.show && legendsData.length >= 1 ? this.longestLabelLength(legendsData, legendFn) * chartWidthToPixel : 0;
 
-        let xLabelWidth       = this.longestLabelLength(data, xLabelFn) * chartWidthToPixel;
         let yLabelWidth       = this.longestLabelLength(filterDatas, yLabelFn) * chartWidthToPixel;
 
         let leftMargin        = margin.left + yLabelWidth;

@@ -1,6 +1,7 @@
 import BaseController from './base.controller';
 import {DirectoryTypes, FetchManager} from '../lib/utils/fetch';
 
+import { ServiceManager } from "../lib/servicemanager/index"
 
 class DashboardsController extends BaseController {
   index = async (req, res, next) => {
@@ -11,9 +12,15 @@ class DashboardsController extends BaseController {
 
       if(dasboardData.visualizations) {
         dasboardData.visualizations.forEach((visualization, index, array) => {
-          dasboardData.visualizations[index].visualization = FetchManager.fetchAndParseJSON(visualization.id, DirectoryTypes.VISUALIZATION);
-          if(dasboardData.visualizations[index].visualization.query)
-            dasboardData.visualizations[index].query = FetchManager.fetchAndParseJSON(dasboardData.visualizations[index].visualization.query, DirectoryTypes.QUERY);
+          let viz = FetchManager.fetchAndParseJSON(visualization.id, DirectoryTypes.VISUALIZATION);
+
+          if(viz.query) {
+            viz.queryConfiguration = FetchManager.fetchAndParseJSON(viz.query, DirectoryTypes.QUERY);
+          } else if(viz.script) {
+            viz.queryConfiguration = ServiceManager.executeScript(viz.script);
+          }
+
+          dasboardData.visualizations[index].visualization = viz;
         });
       }
 

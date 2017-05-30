@@ -2,8 +2,12 @@ import { ElasticSearchService } from "../../configs/nuage/elasticsearch/index";
 import { VSDService } from "../../configs/nuage/vsd/index";
 import { MemoryService } from "../memory";
 
+import "whatwg-fetch";
+import { checkStatus, parseJSON } from "../common";
+
 let config = {
     timingCache: 5000,
+    api: process.env.REACT_APP_API_URL,
 }
 
 /*
@@ -56,47 +60,21 @@ const getRequestID = function (queryConfiguration, context) {
     return service.getRequestID(queryConfiguration, context);
 }
 
-/*
-    Tabify the results according to the service that has been used
+const fetchData = function(visualizationId, context) {
+    let url = config.api + "visualizations/fetch/" + visualizationId;
 
-    Arguments:
-    * serviceName: the service name
-    * response: the response results
-
-    Returns:
-        An array of results
-*/
-const tabify = function (queryConfiguration, response) {
-    const serviceName = queryConfiguration ? queryConfiguration.service : "VSD"; // In case of scripts...
-
-    const service = getService(serviceName)
-
-    if (!service || !service.hasOwnProperty("tabify"))
-        return response;
-
-    return service.tabify(response);
+    return fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(context)
+      })
+      .then(checkStatus)
+      .then(parseJSON);
 }
-
-
-// TODO: Temporary - Replace this part in the middleware
-const executeScript = function (scriptName, context) {
-    // TODO: For now, let's put the script in the treeview as discussed on 11/03
-    // Later, this part should be done in our middleware
-    let url = "./scripts/" + scriptName + ".js",
-        main =  require(url).main;
-
-    if (main)
-        return main(context);
-
-    return false;
-}
-
 
 export const ServiceManager = {
-    config: config,
-    register: register,
-    getService: getService,
-    getRequestID: getRequestID,
-    executeScript: executeScript,
-    tabify: tabify,
+    config,
+    register,
+    getService,
+    getRequestID,
+    fetchData
 }
