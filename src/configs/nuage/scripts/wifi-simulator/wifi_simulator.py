@@ -30,12 +30,12 @@ def populateWiFiData():
 			# Always write it in specific index in specific doc_type
 			es_data['_index'] = "nuage_wifi"
 			es_data['_type'] = "nuage_doc_type"
-			print "Writing data for " + es_data['username']
+			print "Writing data for " + es_data['ssid-name']
 			writeToES(es_data)
 
 
 def writeToES(es_data):
-	es = Elasticsearch("192.168.100.200")
+	es = Elasticsearch()
 	write_data = []
 	# Create counters on the fly everytime
 	# Write data for a day every minute

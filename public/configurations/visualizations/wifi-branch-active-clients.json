@@ -10,6 +10,7 @@
             "column": "timezones",
             "value": "Last 10",
             "field": "value"
-        }
+        },
+        "absolute": true
     }
 }
