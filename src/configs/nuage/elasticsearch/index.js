@@ -8,10 +8,7 @@ let config = function () {
     return {
         host: null,
         log: 'trace',
-        apiVersion: '2.2',
-        sniffOnStart: true,                                                     
-        sniffInterval: 60000,                                                   
-        sniffOnConnectionFault: true      
+        apiVersion: '2.2'   
     }
 }
 
