@@ -3,16 +3,19 @@
     "author": "Ronak Shah",
     "creationDate": "04/07/2017",
     "title": "WIFI Branch",
+    "settings": {
+      "verticalCompact": false
+    },
     "visualizations": [
-        { 
-          "id": "wifi-branch-active-ssids", 
+        {
+          "id": "wifi-branch-active-ssids",
           "x": 0,
           "y": 0,
           "w": 2,
           "h": 5,
           "minW": 2,
           "minH": 5
-        },      
+        },
         {
           "id": "wifi-branch-active-clients",
           "x": 2,
@@ -22,8 +25,8 @@
           "minW": 2,
           "minH": 5
         },
-        { 
-          "id": "wifi-branch-table", 
+        {
+          "id": "wifi-branch-table",
           "x": 0,
           "y": 5,
           "w": 6,
