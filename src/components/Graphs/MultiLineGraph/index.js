@@ -58,7 +58,8 @@ class LineGraph extends XYGraph {
           yTicks,
           yTickSizeInner,
           yTickSizeOuter,
-          brushEnabled
+          brushEnabled,
+          zeroStart
         } = this.getConfiguredProperties();
 
         let finalYColumn = typeof yColumn === 'object' ? yColumn : [yColumn];
@@ -130,10 +131,17 @@ class LineGraph extends XYGraph {
             }
         }
 
+        let yExtent = extent(filterDatas, yLabelUnformattedFn)
+
+        if(zeroStart && yExtent[0] > 0) {
+          yExtent[0] = 0;
+        }
+
         const xScale = scaleTime()
             .domain(extent(data, xLabelFn));
+
         const yScale = scaleLinear()
-            .domain(extent(filterDatas, yLabelUnformattedFn));
+            .domain(yExtent);
 
 
         xScale.range([0, availableWidth]);
