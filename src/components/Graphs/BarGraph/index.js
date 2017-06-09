@@ -97,9 +97,16 @@ export default class BarGraph extends XYGraph {
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
         let xAxisLabelWidth   = this.longestLabelLength(data, xLabelFn, xTickFormat) * chartWidthToPixel;
         let yAxisLabelWidth   = this.longestLabelLength(data, yLabelFn, yTickFormat) * chartWidthToPixel;
-        let leftMargin        = margin.left + yAxisLabelWidth;
-        let availableWidth    = width - (margin.left + margin.right + yAxisLabelWidth);
+
+        let overAllAvailableWidth = width - (margin.left + margin.right);
+        let maxWidthPercentage = 0.20;
+        let trucatedYAxisWidth = ((overAllAvailableWidth * maxWidthPercentage) < yAxisLabelWidth ? (overAllAvailableWidth * maxWidthPercentage) : yAxisLabelWidth);
+
+        let leftMargin        = margin.left + trucatedYAxisWidth;
+        let availableWidth    = overAllAvailableWidth - trucatedYAxisWidth;
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
+
+        let paddedYAxisWidth = trucatedYAxisWidth - 40;
 
         if (legend.show)
         {
@@ -192,6 +199,17 @@ export default class BarGraph extends XYGraph {
             top: margin.top + availableHeight / 2
         }
 
+        let xAxisGraph = <g
+            key="xAxis"
+            ref={ (el) => vertical ? d3.select(el).call(xAxis).selectAll(".tick text").call(this.wrapD3Text, barWidth) : d3.select(el).call(xAxis).selectAll(".tick text") }
+            transform={ `translate(0, ${availableHeight})` }
+        />
+
+        let yAxisGraph = <g
+            key="yAxis"
+            ref={ (el) => (!vertical && !dateHistogram) ? d3.select(el).call(yAxis).selectAll(".tick text").call(this.wrapD3Text, paddedYAxisWidth) : d3.select(el).call(yAxis) }
+        />
+
         return (
             <div className="bar-graph">
                 {this.tooltip}
@@ -203,15 +221,8 @@ export default class BarGraph extends XYGraph {
                     >
                     {this.axisTitles(xTitlePosition, yTitlePosition)}
                     <g transform={ `translate(${leftMargin},${margin.top})` } >
-                        <g
-                            key="xAxis"
-                            ref={ (el) => d3.select(el).call(xAxis) }
-                            transform={ `translate(0, ${availableHeight})` }
-                        />
-                        <g
-                            key="yAxis"
-                            ref={ (el) => d3.select(el).call(yAxis) }
-                        />
+                        { xAxisGraph }
+                        { yAxisGraph }
                         {data.map((d, i) => {
                             // Compute rectangle depending on orientation (vertical or horizontal).
                             const {
