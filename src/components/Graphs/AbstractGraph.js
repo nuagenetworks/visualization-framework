@@ -85,6 +85,28 @@ export default class AbstractGraph extends React.Component {
         }
     }
 
+    wrapD3Text (text, width) {
+      text.each(function() {
+        var text = d3.select(this),
+          words = text.text().split(/\s+/).reverse(),
+          word = words.pop(),
+          line = [],
+          y = text.attr("y"),
+          dy = parseFloat(text.attr("dy")),
+          tspan = text.text(null).append("tspan").attr("x", -2).attr("y", y).attr("dy", dy + "em");
+
+        while (word && tspan.node().getComputedTextLength() < width) {
+          line.push(word);
+          tspan.text(line.join(" "));
+          word = words.pop();
+        }
+
+        if(word) {
+          tspan.text(line.join(" ") + '...');
+        }
+      });
+    };
+
     getConfiguredProperties() {
         return Object.assign({}, this.defaults, this.props.configuration.data);
     }
