@@ -26,49 +26,64 @@
                 "5":{
                     "filters":{
                         "filters":{
-                            "NSG":{
+                            "Enterprise":{
                                 "query":{
                                     "term":{
-                                        "nsg":"{{nsg:NSG-1}}"
+                                        "enterpriseName":"{{enterpriseName:enterprise-1}}"
                                     }
                                 }
                             }
                         }
                     },
                     "aggs": {
-                        "3":{
+                        "4": {
                             "filters":{
                                 "filters":{
-                                    "VNF":{
+                                    "NSG":{
                                         "query":{
                                             "term":{
-                                                "vnf": "{{vnf:NSG-1-VNF-1}}"
+                                                "nsg":"{{nsg:NSG-1}}"
                                             }
                                         }
                                     }
                                 }
                             },
                             "aggs": {
-                                "ts": {
-                                    "date_histogram": {
-                                        "field": "timestamp",
-                                        "interval": "{{interval:1h}}"
+                                "3":{
+                                    "filters":{
+                                        "filters":{
+                                            "VNF":{
+                                                "query":{
+                                                    "term":{
+                                                        "vnf": "{{vnf:NSG-1-VNF-1}}"
+                                                    }
+                                                }
+                                            }
+                                        }
                                     },
                                     "aggs": {
-                                        "CPU": {
-                                            "avg": {
-                                                "field": "cpu"
-                                            }                                            
-                                        },
-                                        "MEMORY": {
-                                            "avg": {
-                                                "field": "memory"
-                                            }                                            
-                                        },
-                                        "DISK": {
-                                            "avg": {
-                                                "field": "disk"
-                                            }                                            
+                                        "ts": {
+                                            "date_histogram": {
+                                                "field": "timestamp",
+                                                "interval": "{{interval:1h}}"
+                                            },
+                                            "aggs": {
+                                                "CPU": {
+                                                    "avg": {
+                                                        "field": "cpu"
+                                                    }                                            
+                                                },
+                                                "MEMORY": {
+                                                    "avg": {
+                                                        "field": "memory"
+                                                    }                                            
+                                                },
+                                                "DISK": {
+                                                    "avg": {
+                                                        "field": "disk"
+                                                    }                                            
+                                                }
+                                            }
                                         }
                                     }
                                 }

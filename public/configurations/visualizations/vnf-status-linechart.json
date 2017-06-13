@@ -2,7 +2,7 @@
     "id": "vnf-status-linechart",
     "graph": "MultiLineGraph",
     "title": "VNF Utilization vs time",
-    "description": "Memory, disk and CPU utilization over a period of time",
+    "description": "Memory, disk and CPU utilization over a period of time selected in interval",
     "author": "Ronak Shah",
     "creationDate": "11/08/2016",
     "data": {
