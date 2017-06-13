@@ -2,7 +2,7 @@
     "id": "vnf-memory-status",
     "graph": "GaugeGraph",
     "title": "Memory utilization",
-    "description": "Latest memory utilization recorded",
+    "description": "Memory utilization for approx last 5 min",
     "author": "Ronak Shah",
     "creationDate": "04/13/2017",
     "data": {
