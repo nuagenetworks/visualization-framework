@@ -104,11 +104,7 @@ class LineGraph extends XYGraph {
             }
         }
 
-        let yExtent = extent(data, yLabelFn)
-
-        if(zeroStart && yExtent[0] > 0) {
-          yExtent[0] = 0;
-        }
+        let yExtent = this.updateYExtent(extent(data, yLabelFn), zeroStart);
 
         const xScale = scaleTime()
           .domain(extent(data, xLabelFn));
