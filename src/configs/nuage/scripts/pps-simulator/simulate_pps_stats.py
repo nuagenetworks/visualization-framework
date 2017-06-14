@@ -482,12 +482,9 @@ class SimulateProbeStats(object):
         probe_cnt = 0
         firstTS = True
         control_down_prob = 0.005
-        # es = self.es
-        # es_index_prefix = self.es_index_prefix
         with open('/var/log/probestats_new.log', 'w') as probestats:
             timestamp = startTime
             t_increment = 0
-            # t_increment = 30
             while timestamp != endTime:
                 # timestamp = startTime + datetime.timedelta(0, t_increment)
                 timestamp = startTime + t_increment * 1000
@@ -641,7 +638,6 @@ class SimulateSLAStats(object):
                 sla_record["SrcPort"] = src_port
                 sla_record["DstIp"] = dest_ip
                 sla_record["DstPort"] = dest_port
-
 
                 json.dump(sla_record, slastats,
                           default=json_serial)
