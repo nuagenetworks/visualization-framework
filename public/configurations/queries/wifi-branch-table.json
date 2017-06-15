@@ -18,6 +18,16 @@
                                     "format":"epoch_millis"
                                 }
                             }
+                        },
+                        {
+                            "term":{
+                                "enterpriseName":"{{enterpriseName:wifi_enterprise}}"
+                            }
+                        },
+                        {
+                            "term":{
+                                "nsg":"{{nsg:wifi_nsg}}"
+                            }
                         }
                     ]
                 }
@@ -25,32 +35,14 @@
             "aggs": {
                 "SSID": {
             		"terms": {
-	                    "field": "ssid-name",
-	                    "size": 0,
-	                    "order": {
-	                        "SumofBytes": "desc"
-	                    }     			
+	                    "field": "ssid-name"	
             		},
                     "aggs": {
-                        "SumofBytes": {
-                            "sum": {
-                                "field": "rx_bytes"
-                            }
-                        },
                         "Client": {
                         	"terms": {
-			                    "field": "client_mac",
-			                    "size": 0,
-			                    "order": {
-			                        "SumofBytes": "desc"
-			                    }      		
+			                    "field": "client_mac"	
                         	},
                         	"aggs": {
-	                        	"SumofBytes": {
-	                            	"sum": {
-	                                	"field": "rx_bytes"
-	                            	}
-	                            },
 	                            "IP": {
 		                        	"terms": {
 					                    "field": "client_ip",
@@ -61,7 +53,9 @@
 		                        	"aggs": {
 			                        	"SumofBytes": {
 			                            	"sum": {
-			                                	"field": "rx_bytes"
+                                                "script": {
+                                                    "inline": "doc['rx_bytes'].value + doc['tx_bytes'].value"
+                                                }
 			                            	}
 			                            }
 			                        }		                       

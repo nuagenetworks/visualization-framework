@@ -2,7 +2,7 @@
     "id": "wifi-branch-ssid-signal-lastseen",
     "graph": "Table",
     "title": "User Information - {{ ssid }}",
-    "description": "TBD",
+    "description": "SSID signal specific information",
     "author": "Ronak Shah",
     "creationDate": "04/07/2017",
     "data": {
