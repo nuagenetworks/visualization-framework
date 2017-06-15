@@ -132,12 +132,7 @@ class LineGraph extends XYGraph {
             }
         }
 
-
-        let yExtent = extent(filterDatas, yLabelUnformattedFn)
-
-        if(zeroStart && yExtent[0] > 0) {
-          yExtent[0] = 0;
-        }
+        let yExtent = this.updateYExtent(extent(filterDatas, yLabelUnformattedFn), zeroStart);
 
         let xScale;
 
