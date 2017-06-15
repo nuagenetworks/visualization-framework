@@ -5,6 +5,7 @@
     "author": "Curran Kelleher",
     "creationDate": "11/08/2016",
     "data": {
+        "dateHistogram": true,
         "xColumn": "ts",
         "xLabel": "Time",
         "yColumn": "SumOf",

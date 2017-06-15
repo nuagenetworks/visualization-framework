@@ -45,6 +45,7 @@ class LineGraph extends XYGraph {
           circleToPixel,
           colorColumn,
           colors,
+          dateHistogram,
           legend,
           linesColumn,
           margin,
@@ -110,8 +111,15 @@ class LineGraph extends XYGraph {
           yExtent[0] = 0;
         }
 
-        const xScale = scaleTime()
-          .domain(extent(data, xLabelFn));
+        let xScale;
+
+        if (dateHistogram) {
+            xScale = scaleTime()
+              .domain(extent(data, xLabelFn));
+        } else {
+            xScale = scaleLinear()
+              .domain(extent(data, xLabelFn));
+        }
 
         const yScale = scaleLinear()
           .domain(yExtent);
