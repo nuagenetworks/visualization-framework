@@ -1,0 +1,25 @@
+{
+    "id": "wifi-branch-ssid-linechart",
+    "graph": "LineGraph",
+    "title": "Usage - {{ssid}}",
+    "description": "TBD",
+    "author": "Ronak Shah",
+    "creationDate": "04/07/2017",
+    "data": {
+        "xColumn": "ts",
+        "xLabel": "Time",
+        "yColumn": "SumOf",
+        "yLabel": "Total Usage",
+        "yTicks": 5,
+        "linesColumn": "Users",
+        "zeroStart": false,
+        "tooltip": [
+            { "column": "Users", "label": "user" },
+            { "column": "SumOf", "label": "Usage(rx/tx bytes)"}
+        ],
+        "stroke": {
+          "width": "2px"
+        }
+    },
+    "query": "wifi-branch-ssid-linechart"
+}

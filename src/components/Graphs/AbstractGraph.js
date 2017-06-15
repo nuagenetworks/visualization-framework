@@ -85,6 +85,28 @@ export default class AbstractGraph extends React.Component {
         }
     }
 
+    wrapD3Text (text, width) {
+      text.each(function() {
+        var text = d3.select(this),
+          words = text.text().split(/\s+/).reverse(),
+          word = words.pop(),
+          line = [],
+          y = text.attr("y"),
+          dy = parseFloat(text.attr("dy")),
+          tspan = text.text(null).append("tspan").attr("x", -2).attr("y", y).attr("dy", dy + "em");
+
+        while (word && tspan.node().getComputedTextLength() < width) {
+          line.push(word);
+          tspan.text(line.join(" "));
+          word = words.pop();
+        }
+
+        if(word) {
+          tspan.text(line.join(" ") + '...');
+        }
+      });
+    };
+
     getConfiguredProperties() {
         return Object.assign({}, this.defaults, this.props.configuration.data);
     }
@@ -113,6 +135,22 @@ export default class AbstractGraph extends React.Component {
         scale.domain(domainData);
 
         return scale;
+    }
+
+    updateYExtent(yExtent, zeroStart) {
+      let padding = 0.10;
+
+      if(zeroStart && yExtent[0] > 0) {
+        yExtent[0] = 0;
+      }
+
+      let diff = Math.floor((yExtent[1] - yExtent[0]) * padding, 0);
+
+      yExtent[0] = (yExtent[0] >= 0 && (yExtent[0] - diff) < 0) ? 0 : yExtent[0] - diff;
+      yExtent[1] = (yExtent[1] <= 0 && (yExtent[1] + diff) > 0) ? 0 : yExtent[1] + diff;
+
+      console.log('yExtent', yExtent, diff);
+      return yExtent;
     }
 
     scaleColor(data, defaultColumn) {

@@ -61,8 +61,10 @@ class LineGraph extends XYGraph {
           yTicks,
           yTickSizeInner,
           yTickSizeOuter,
-          brushEnabled
+          brushEnabled,
+          zeroStart
         } = this.getConfiguredProperties();
+
 
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
@@ -101,10 +103,13 @@ class LineGraph extends XYGraph {
             }
         }
 
+        let yExtent = this.updateYExtent(extent(data, yLabelFn), zeroStart);
+
         const xScale = scaleTime()
           .domain(extent(data, xLabelFn));
+
         const yScale = scaleLinear()
-          .domain(extent(data, yLabelFn));
+          .domain(yExtent);
 
         xScale.range([0, availableWidth]);
         yScale.range([availableHeight, 0]);

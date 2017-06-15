@@ -1,9 +1,9 @@
 {
-    "id":"vnf-status-linechart",
+    "id":"wifi-branch-ssid-linechart",
     "title":"TBD",
     "service":"elasticsearch",
     "query":{
-        "index":"{{index:nuage_vnf}}",
+        "index":"{{index:nuage_wifi}}",
         "type":"{{type:nuage_doc_type}}",
         "body":{
             "size":0,
@@ -29,7 +29,7 @@
                             "Enterprise":{
                                 "query":{
                                     "term":{
-                                        "enterpriseName":"{{enterpriseName:enterprise-1}}"
+                                        "enterpriseName":"{{enterpriseName:wifi_enterprise}}"
                                     }
                                 }
                             }
@@ -42,20 +42,20 @@
                                     "NSG":{
                                         "query":{
                                             "term":{
-                                                "nsg":"{{nsg:NSG-1}}"
+                                                "nsg":"{{nsg:wifi_nsg}}"
                                             }
                                         }
                                     }
                                 }
                             },
                             "aggs": {
-                                "3":{
+                                "3": {
                                     "filters":{
                                         "filters":{
-                                            "VNF":{
+                                            "SSID":{
                                                 "query":{
                                                     "term":{
-                                                        "vnf": "{{vnf:NSG-1-VNF-1}}"
+                                                        "ssid-name":"{{ssid}}"
                                                     }
                                                 }
                                             }
@@ -68,20 +68,23 @@
                                                 "interval": "{{interval:1h}}"
                                             },
                                             "aggs": {
-                                                "CPU": {
-                                                    "avg": {
-                                                        "field": "cpu"
-                                                    }                                            
-                                                },
-                                                "MEMORY": {
-                                                    "avg": {
-                                                        "field": "memory"
-                                                    }                                            
-                                                },
-                                                "DISK": {
-                                                    "avg": {
-                                                        "field": "disk"
-                                                    }                                            
+                                                "Users": {
+                                                    "terms": {
+                                                        "field": "client_mac",
+                                                        "size": 0,
+                                                        "order": {
+                                                            "SumOf": "desc"
+                                                        }
+                                                    },
+                                                    "aggs": {
+                                                        "SumOf": {
+                                                            "sum": {
+                                                                "script": {
+                                                                    "inline": "doc['rx_bytes'].value + doc['tx_bytes'].value"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }

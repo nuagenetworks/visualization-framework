@@ -58,7 +58,8 @@ class LineGraph extends XYGraph {
           yTicks,
           yTickSizeInner,
           yTickSizeOuter,
-          brushEnabled
+          brushEnabled,
+          zeroStart
         } = this.getConfiguredProperties();
 
         let finalYColumn = typeof yColumn === 'object' ? yColumn : [yColumn];
@@ -76,8 +77,8 @@ class LineGraph extends XYGraph {
         });
 
         let filterDatas = [];
-        data.map((d) => {
-            legendsData.map((ld) => {
+        data.forEach((d) => {
+            legendsData.forEach((ld) => {
                 filterDatas.push(Object.assign({
                     yColumn: d[ld['key']],
                     columnType: ld['key']
@@ -86,10 +87,14 @@ class LineGraph extends XYGraph {
         });
 
         const isVerticalLegend = legend.orientation === 'vertical';
-        const xLabelFn         = (d) => d[xColumn];
+
+        const xLabelFn             = (d) => d[xColumn];
+
+        const yLabelUnformattedFn  = (d) => d['yColumn'];
+
         const yLabelFn         = (d) => {
             if(!yTickFormat) {
-                return d;
+                return d['yColumn'];
             }
             const formatter = format(yTickFormat);
             return formatter(d['yColumn']);
@@ -100,7 +105,6 @@ class LineGraph extends XYGraph {
         const scale            = this.scaleColor(legendsData, 'key');
         const getColor         = (d) => scale ? scale(d['key']) : stroke.color || colors[0];
 
-
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
         let legendWidth       = legend.show && legendsData.length >= 1 ? this.longestLabelLength(legendsData, legendFn) * chartWidthToPixel : 0;
 
@@ -109,8 +113,6 @@ class LineGraph extends XYGraph {
         let leftMargin        = margin.left + yLabelWidth;
         let availableWidth    = width - (margin.left + margin.right + yLabelWidth);
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
-
-
 
         if (legend.show)
         {
@@ -129,10 +131,14 @@ class LineGraph extends XYGraph {
             }
         }
 
+        let yExtent = this.updateYExtent(extent(filterDatas, yLabelUnformattedFn), zeroStart);
+
         const xScale = scaleTime()
             .domain(extent(data, xLabelFn));
+
         const yScale = scaleLinear()
-            .domain(extent(filterDatas, yLabelFn));
+            .domain(yExtent);
+
 
         xScale.range([0, availableWidth]);
         yScale.range([availableHeight, 0]);

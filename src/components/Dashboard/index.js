@@ -141,7 +141,7 @@ export class DashboardView extends React.Component {
         }
 
         if (configuration) {
-            const { visualizations } = configuration.toJS();
+            const { visualizations, settings } = configuration.toJS();
 
             let filterOptions;
 
@@ -150,6 +150,11 @@ export class DashboardView extends React.Component {
             }
             else {
                 filterOptions = defaultFilterOptions;
+            }
+
+            let verticalCompact = true;
+            if(settings && "verticalCompact" in settings) {
+              verticalCompact = settings.verticalCompact;
             }
 
             return (
@@ -165,6 +170,7 @@ export class DashboardView extends React.Component {
                             containerPadding={[10, 10]}
                             onResize={this.onResize.bind(this)}
                             onLayoutChange={this.onResize.bind(this)}
+                            verticalCompact={verticalCompact}
                             >
                             {
                                 visualizations.map((visualization) =>

@@ -2,7 +2,7 @@
     "id": "vnf-disk-status",
     "graph": "GaugeGraph",
     "title": "Disk utilization",
-    "description": "Latest disk utilization recorded",
+    "description": "Disk utilization for approx last 5 min",
     "author": "Ronak Shah",
     "creationDate": "04/13/2017",
     "data": {

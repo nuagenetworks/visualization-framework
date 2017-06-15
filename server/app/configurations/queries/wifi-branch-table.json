@@ -1,0 +1,76 @@
+{
+    "id":"wifi-branch-table",
+    "title":"TBD",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_wifi}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTimeTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "SSID": {
+            		"terms": {
+	                    "field": "ssid-name",
+	                    "size": 0,
+	                    "order": {
+	                        "SumofBytes": "desc"
+	                    }     			
+            		},
+                    "aggs": {
+                        "SumofBytes": {
+                            "sum": {
+                                "field": "rx_bytes"
+                            }
+                        },
+                        "Client": {
+                        	"terms": {
+			                    "field": "client_mac",
+			                    "size": 0,
+			                    "order": {
+			                        "SumofBytes": "desc"
+			                    }      		
+                        	},
+                        	"aggs": {
+	                        	"SumofBytes": {
+	                            	"sum": {
+	                                	"field": "rx_bytes"
+	                            	}
+	                            },
+	                            "IP": {
+		                        	"terms": {
+					                    "field": "client_ip",
+					                    "order": {
+					                        "SumofBytes": "desc"
+					                    }      		
+		                        	},
+		                        	"aggs": {
+			                        	"SumofBytes": {
+			                            	"sum": {
+			                                	"field": "rx_bytes"
+			                            	}
+			                            }
+			                        }		                       
+	                            }
+                        	}
+                        }
+                    }   		
+            	}
+            }
+        }
+    }
+}
