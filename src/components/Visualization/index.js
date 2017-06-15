@@ -311,7 +311,7 @@ class VisualizationView extends React.Component {
             return false;
         }
 
-        const data = ServiceManager.tabify(queryConfiguration, response.results);
+        const data = response.results;
 
         if (!data || !data.length) {
             return null;

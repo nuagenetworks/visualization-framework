@@ -16,7 +16,7 @@ class App extends Component {
                 <ReduxRouter>
                     <Route path={process.env.PUBLIC_URL +"/"} component={Dashboard} />
                     <Route path={process.env.PUBLIC_URL +"/dashboards/:id"} component={Dashboard} />
-                    <Route path={process.env.PUBLIC_URL +"/visualizations/:id"} component={Visualization} />
+                    <Route path={process.env.PUBLIC_URL +"/reports/visualizations/:id"} component={Visualization} />
                 </ReduxRouter>
             </AppContainer>
         </div>
