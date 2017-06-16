@@ -25,7 +25,10 @@ import { contextualize } from "../../utils/configurations"
 
 import { defaultFilterOptions } from "./default.js"
 
+import { Card, CardText } from 'material-ui/Card';
+
 import style from "./styles";
+import visualizationStyle from "../Visualization/styles"
 
 
 export class DashboardView extends React.Component {
@@ -136,7 +139,11 @@ export class DashboardView extends React.Component {
 
         if (error) {
             return (
-                <div>{error}</div>
+                <Card
+                  style={Object.assign({}, visualizationStyle.card)}
+                  >
+                  <div>Oops, Configuration Error: {error}</div>
+                </Card>
             );
         }
 
