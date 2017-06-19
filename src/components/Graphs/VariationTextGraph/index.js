@@ -173,12 +173,7 @@ export default class VariationTextGraph extends AbstractGraph {
                     }}
                     onClick={onMarkClick}
                     >
-
-                    {this.renderTitleIfNeeded(titlePosition, "top")}
-
                     {this.renderValues()}
-
-                    {this.renderTitleIfNeeded(titlePosition, "bottom")}
                 </div>
         );
 
