@@ -10,7 +10,7 @@
             { "column": "SSID", "label": "SSID"},
             { "column": "Client", "label": "Client" },
             { "column": "IP", "label": "IP" },
-            { "column": "SumofBytes", "label": "Total Usage (MB)", "format": ",.2s" }
+            { "column": "SumofBytes", "label": "Total Usage", "format": ",.2s" }
         ]
     },
     "listeners": [{
