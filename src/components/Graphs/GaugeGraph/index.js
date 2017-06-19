@@ -93,7 +93,6 @@ export default class GaugeGraph extends AbstractGraph {
             colors
         } = this.getConfiguredProperties();
 
-        console.log('Data', this.getConfiguredProperties(), data);
         const angles = {
             min: -90,
             max: 90
