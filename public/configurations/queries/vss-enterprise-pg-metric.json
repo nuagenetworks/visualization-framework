@@ -27,16 +27,16 @@
                                     "Prev 24": {
                                         "range": {
                                             "timestamp": {
-                                                "gte": "now-48h",
-                                                "lte": "now-24h"
+                                                "gte": "{{prevStartTime:now-48h}}",
+                                                "lte": "{{startTime:now-24h}}"
                                             }
                                         }
                                     },
                                     "Last 24": {
                                         "range": {
                                             "timestamp": {
-                                                "gte": "now-24h",
-                                                "lte": "now"
+                                                "gte": "{{startTime:now-24h}}",
+                                                "lte": "{{endTime:now}}"
                                             }
                                         }
                                     }
