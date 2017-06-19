@@ -2,11 +2,11 @@ import { theme } from "../../../theme";
 
 export const properties = {
     textAlign: "center",
-    margin: {
+    padding: {
         top: "15px",
         bottom: "5px",
-        left: "auto",
-        right: "auto"
+        left: "15px",
+        right: "15px"
     },
     fontSize: "1.4em",
     fontColor: theme.palette.whiteColor,

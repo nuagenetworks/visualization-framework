@@ -55,8 +55,9 @@ const style = {
         textAlign: "center",
     },
     overlayText: {
-        position: "absolute",
-        top: "40%",
+        position: "relative",
+        top: "50%",
+        transform: "translateY(-50%)",
         width: "100%",
         fontSize: "1.2em",
         fontWeight: 300,
@@ -85,9 +86,11 @@ const style = {
         cursor: "pointer"
     },
     descriptionText: {
-        padding: "60px 20px 20px 20px",
+        position: "relative",
+        top: "50%",
+        transform: "translateY(-50%)",
         fontSize: "1.1em",
-        color: theme.palette.blackColor,
+        color: theme.palette.blackColor
     }
 
 };
