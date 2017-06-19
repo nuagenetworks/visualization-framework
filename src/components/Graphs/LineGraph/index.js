@@ -1,6 +1,5 @@
 import React from "react";
 import XYGraph from "../XYGraph";
-import { Actions } from "../../App/redux/actions";
 import { connect } from "react-redux";
 
 import {
@@ -230,6 +229,7 @@ class LineGraph extends XYGraph {
                                   />
 
                                   <path
+                                      key={ i }
                                       fill="none"
                                       d={ d == null ? null : "M" + d.join("L") + "Z" }
                                       style={{"pointer-events": "all"}}

@@ -11,8 +11,7 @@ import {
     scaleTime,
     select,
     map,
-    min,
-    utcHour
+    min
 } from "d3";
 
 import {properties} from "./default.config"
