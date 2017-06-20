@@ -2,14 +2,16 @@
     "id": "wifi-branch-active-clients",
     "title": "Active Clients",
     "query": "wifi-branch-active-clients",
+    "description": "Active clients for last 10 min and last 24hrs",
     "graph": "VariationTextGraph",
-    "showTitleBar": false,
+    "showTitleBar": true,
     "data": {
         "titlePosition": "top",
         "target":{
             "column": "timezones",
             "value": "Last 10",
             "field": "value"
-        }
+        },
+        "absolute": true
     }
 }

@@ -153,7 +153,7 @@ export class DashboardView extends React.Component {
             let filterOptions;
 
             if (configuration.get("filterOptions")) {
-                filterOptions = Object.assign({}, configuration.get("filterOptions").toJS(), defaultFilterOptions);
+                filterOptions = Object.assign({}, defaultFilterOptions, configuration.get("filterOptions").toJS());
             }
             else {
                 filterOptions = defaultFilterOptions;

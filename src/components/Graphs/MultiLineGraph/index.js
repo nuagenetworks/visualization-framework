@@ -18,7 +18,7 @@ import {
 
 import {properties} from "./default.config";
 
-class LineGraph extends XYGraph {
+class MultiLineGraph extends XYGraph {
 
     constructor(props) {
         super(props, properties);
@@ -41,6 +41,7 @@ class LineGraph extends XYGraph {
           chartWidthToPixel,
           circleToPixel,
           colors,
+          dateHistogram,
           legend,
           linesColumn,
           margin,
@@ -133,12 +134,18 @@ class LineGraph extends XYGraph {
 
         let yExtent = this.updateYExtent(extent(filterDatas, yLabelUnformattedFn), zeroStart);
 
-        const xScale = scaleTime()
-            .domain(extent(data, xLabelFn));
+        let xScale;
+
+        if (dateHistogram) {
+            xScale = scaleTime()
+              .domain(extent(data, xLabelFn));
+        } else {
+            xScale = scaleLinear()
+              .domain(extent(data, xLabelFn));
+        }
 
         const yScale = scaleLinear()
             .domain(yExtent);
-
 
         xScale.range([0, availableWidth]);
         yScale.range([availableHeight, 0]);
@@ -232,6 +239,7 @@ class LineGraph extends XYGraph {
                             {
                                 legendsData.map((d, i) =>
                                     <path
+                                        key={ d['key'] }
                                         fill="none"
                                         stroke={ getColor(d) }
                                         strokeWidth={ stroke.width }
@@ -265,9 +273,10 @@ class LineGraph extends XYGraph {
                                   />
 
                                   <path
+                                      key={ i }
                                       fill="none"
                                       d={ d == null ? null : "M" + d.join("L") + "Z" }
-                                      style={{"pointer-events": "all"}}
+                                      style={{"pointerEvents": "all"}}
                                   />
                               </g>
                           )}
@@ -286,7 +295,7 @@ class LineGraph extends XYGraph {
         );
     }
 }
-LineGraph.propTypes = {
+MultiLineGraph.propTypes = {
     configuration: React.PropTypes.object,
     response: React.PropTypes.object
 };
@@ -294,4 +303,4 @@ LineGraph.propTypes = {
 const actionCreators = (dispatch) => ({
 });
 
-export default connect(null, actionCreators)(LineGraph);
+export default connect(null, actionCreators)(MultiLineGraph);

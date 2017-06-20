@@ -7,6 +7,7 @@
     "creationDate": "12/21/2016",
     "query": "medalsEvolutionPerCountry",
     "data": {
+        "dateHistogram": true,
         "xColumn": "year",
         "xLabel": "Year",
         "xTickFormat": "1",

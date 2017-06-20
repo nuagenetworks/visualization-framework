@@ -7,62 +7,48 @@
         "type":"{{type:nuage_doc_type}}",
         "body": {
             "size":0,
-            "aggs":{
-                "5":{
-                    "filters":{
-                        "filters":{
-                            "Enterprise":{
-                                "query":{
-                                    "term":{
-                                        "enterpriseName":"{{enterpriseName:wifi_enterprise}}"
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "term":{
+                                "enterpriseName":"{{enterpriseName:wifi_enterprise}}"
+                            }
+                        },
+                        {
+                            "term":{
+                                "nsg":"{{nsg:wifi_nsg}}"
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "timezones": {
+                    "filters": {
+                        "filters": {
+                            "Last 10": {
+                                "range": {
+                                    "timestamp": {
+                                        "gte": "now-10m",
+                                        "lte": "now"
+                                    }
+                                }
+                            },
+                            "Last 24": {
+                                "range": {
+                                    "timestamp": {
+                                        "gte": "now-24h",
+                                        "lte": "now"
                                     }
                                 }
                             }
                         }
                     },
-                    "aggs": {
-                        "4": {
-                            "filters":{
-                                "filters":{
-                                    "NSG":{
-                                        "query":{
-                                            "term":{
-                                                "nsg":"{{nsg:wifi_nsg}}"
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            "aggs": {
-                                "timezones": {
-                                    "filters": {
-                                        "filters": {
-                                            "Last 10": {
-                                                "range": {
-                                                    "timestamp": {
-                                                        "gte": "now-10m",
-                                                        "lte": "now"
-                                                    }
-                                                }
-                                            },
-                                            "Last 24": {
-                                                "range": {
-                                                    "timestamp": {
-                                                        "gte": "now-24h",
-                                                        "lte": "now"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    "aggs":{
-                                        "SSID":{
-                                            "cardinality":{
-                                                "field":"ssid"
-                                            }
-                                        }
-                                    }
-                                }
+                    "aggs":{
+                        "SSID":{
+                            "cardinality":{
+                                "field":"ssid-name"
                             }
                         }
                     }

@@ -22,6 +22,16 @@
                             "term": {
                                 "ssid-name": "{{ssid}}"
                             }
+                        },
+                        {
+                            "term":{
+                                "enterpriseName":"{{enterpriseName:wifi_enterprise}}"
+                            }
+                        },
+                        {
+                            "term":{
+                                "nsg":"{{nsg:wifi_nsg}}"
+                            }
                         }
                     ]
                 }
