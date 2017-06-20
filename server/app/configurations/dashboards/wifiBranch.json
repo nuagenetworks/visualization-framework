@@ -52,5 +52,38 @@
           "minW": 6,
           "minH": 12
         }
-    ]
+    ],
+    "filterOptions": {
+        "Time interval": {
+            "parameter": "startTime",
+            "default": "now-15m",
+            "options": [
+                {
+                    "label": "Last 15 min",
+                    "value": "now-15m",
+                    "default": true,
+                    "forceOptions": {
+                        "interval": "1m",
+                        "prevStartTime": "now-30m"
+                    }
+                },
+                {
+                    "label": "Last 24h",
+                    "value": "now-24h",
+                    "forceOptions": {
+                        "interval": "1h",
+                        "prevStartTime": "now-48h"
+                    }
+                },
+                {
+                    "label": "Last 7 days",
+                    "value": "now-7d",
+                    "forceOptions": {
+                        "interval": "12h",
+                        "prevStartTime": "now-14d"
+                    }
+                }
+            ]
+        }
+    }
 }
