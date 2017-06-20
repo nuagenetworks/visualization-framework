@@ -46,7 +46,7 @@ export const parameterizedConfiguration = (configuration, context) => {
 */
 export const getUsedParameters = (configuration, context) => {
     const parameters = parse(configuration).parameters;
-    
+
     let queryParams = {};
 
     for (let i in parameters) {

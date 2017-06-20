@@ -24,7 +24,8 @@
     "helmet": "^3.1.0",
     "lodash": "^4.16.4",
     "method-override": "^2.3.6",
-    "morgan": "^1.7.0"
+    "morgan": "^1.7.0",
+    "request-promise": "^4.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

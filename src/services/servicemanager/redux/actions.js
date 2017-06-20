@@ -58,9 +58,9 @@ function fetchIfNeeded(configuration, context, queryConfiguration, forceCache) {
     const isScript = configuration.query ? false : true;
     let requestID;
 
-    if (isScript)
+    if (isScript) {
         requestID = ServiceManager.getRequestID(queryConfiguration, context);
-    else {
+    } else {
         let service = ServiceManager.getService(configuration.queryConfiguration.service);
         requestID = service.getRequestID(queryConfiguration, context);
     }

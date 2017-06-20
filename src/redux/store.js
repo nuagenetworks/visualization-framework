@@ -38,6 +38,7 @@ const createStoreWithRouterAndMiddleware = compose(
 let store = createStoreWithRouterAndMiddleware(rootReducer);
 
 store.subscribe(function() {
+
     //const state = store.getState();
     /*if (state.router) {
 

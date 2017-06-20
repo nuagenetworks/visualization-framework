@@ -1,10 +1,10 @@
-import $ from "jquery";
+import { rp } from "request-promise";
 
 import { ActionKeyStore } from "./redux/actions";
 import { parameterizedConfiguration } from "../../utils/configurations";
 
 const config = {
-    api_version: "5.0",
+    api_version: "4.0",
     end_point_prefix: "/nuage/api/"
 }
 
@@ -35,7 +35,6 @@ const getHeaders = (token, organization, filter, page, orderBy, proxyUser) => {
     if (proxyUser)
         headers["X-Nuage-ProxyUser"] = proxyUser
 
-    // console.error(headers);
     return headers
 }
 
@@ -77,15 +76,16 @@ const getURL = (configuration, api) => {
 
 const makeRequest = (url, headers) => {
     // Encapsulates $.get in a Promise to ensure all services are having the same behavior
+    var rp = require('request-promise');
     return new Promise((resolve, reject) => {
-        $.get({
+        rp({
             url: url,
             headers: headers
         })
-        .done((response) => {
-            return resolve(response)
+        .then((response) => {
+            return resolve(JSON.parse(response))
         })
-        .fail((error) => {
+        .catch((error) => {
             return reject(error)
         });
     });
@@ -166,13 +166,13 @@ export const VSDServiceTest = {
     getURL: getURL
 }
 
-const fetch = (configuration, state) => {
-    let token          = state.VSD.get(ActionKeyStore.TOKEN),
-          api          = state.VSD.get(ActionKeyStore.API) || process.env.REACT_APP_VSD_API_ENDPOINT,
-          organization = state.VSD.get(ActionKeyStore.ORGANIZATION);
+const fetch = (configuration, context) => {
+    let token          = context.TOKEN,
+          api          = context.API || process.env.REACT_APP_VSD_API_ENDPOINT,
+          organization = context.organization;
 
     if (!api || !token)
-        return Promise.reject("No VSD API endpoint specified. To configure the VSD API endpoint, provide the endpoint URL via the environment variable REACT_APP_VSD_API_ENDPOINT at compile time. For a development environment, you can set an invalid value, which will cause the system to provide mock data for testing. For example, you can add the following line to your .bashrc or .profile startup script: 'export REACT_APP_VSD_API_ENDPOINT=http://something.invalid'");
+        return Promise.reject({message: "No VSD API endpoint specified. To configure the VSD API endpoint, provide the endpoint URL via the environment variable REACT_APP_VSD_API_ENDPOINT at compile time. For a development environment, you can set an invalid value, which will cause the system to provide mock data for testing. For example, you can add the following line to your .bashrc or .profile startup script: 'export REACT_APP_VSD_API_ENDPOINT=http://something.invalid'"});
 
     const url     = VSDServiceTest.getURL(configuration, api),
           headers = getHeaders(token, organization, configuration.query.filter);

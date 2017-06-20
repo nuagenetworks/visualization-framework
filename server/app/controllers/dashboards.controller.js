@@ -33,7 +33,7 @@ class DashboardsController extends BaseController {
         dasboardData.visualizations = [];
       }
 
-      res.json(dasboardData);
+      return res.json(dasboardData);
     } catch(err) {
       next(err);
     }

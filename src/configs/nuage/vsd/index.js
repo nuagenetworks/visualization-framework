@@ -16,7 +16,6 @@ export const getURLEndpoint = (configuration) => {
 
 export const getRequestID = (configuration, context) => {
     const tmpConfiguration = parameterizedConfiguration(configuration, context);
-
     if (!tmpConfiguration)
         return;
 

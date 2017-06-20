@@ -25,7 +25,7 @@ import { contextualize } from "../../utils/configurations"
 
 import { defaultFilterOptions } from "./default.js"
 
-import { Card, CardText } from 'material-ui/Card';
+import { Card } from 'material-ui/Card';
 
 import style from "./styles";
 import visualizationStyle from "../Visualization/styles"

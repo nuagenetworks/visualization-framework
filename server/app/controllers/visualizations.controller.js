@@ -18,7 +18,7 @@ class VisualizationsController extends BaseController {
         visualizationConfig.queryConfiguration = ServiceManager.executeScript(visualizationConfig.script);
       }
 
-      res.json(visualizationConfig);
+      return res.json(visualizationConfig);
     } catch(err) {
       next(err);
     }
@@ -55,7 +55,7 @@ class VisualizationsController extends BaseController {
         if (pQuery)
           queryConfig = pQuery;
         else
-          res.json([]);
+        return res.json([]);
       }
 
       //Executing the Service Fetch to reterive the response.
@@ -63,9 +63,10 @@ class VisualizationsController extends BaseController {
         if(service.tabify)
           result = service.tabify(result);
 
-        res.json(result);
-      }, function(error) {
-        next(this.formatError(error, 422));
+         return res.json(result);
+      }, function(err) {
+         //return res.json([]);
+         next(err);
       })
 
     } catch(err) {
