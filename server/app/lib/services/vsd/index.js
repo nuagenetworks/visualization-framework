@@ -83,10 +83,11 @@ const makeRequest = (url, headers) => {
             headers: headers
         })
         .then((response) => {
-            return resolve(JSON.parse(response))
+            return resolve(response ? JSON.parse(response) : [])
         })
         .catch((error) => {
-            return reject(error)
+            console.log(error)
+            return reject({message: error})
         });
     });
 }
