@@ -57,7 +57,7 @@
                 },
                 {
                     "label": "Network Macro Group",
-                    "value": "network-macro-group",
+                    "value": "network-macro-group"
                 }
             ]
         },
@@ -92,7 +92,7 @@
                 },
                 {
                     "label": "Network Macro Group",
-                    "value": "network-macro-group",
+                    "value": "network-macro-group"
                 }
             ]
         }
