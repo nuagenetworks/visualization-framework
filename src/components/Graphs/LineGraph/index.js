@@ -240,7 +240,7 @@ class LineGraph extends XYGraph {
                                       key={ i }
                                       fill="none"
                                       d={ d == null ? null : "M" + d.join("L") + "Z" }
-                                      style={{"pointer-events": "all"}}
+                                      style={{"pointerEvents": "all"}}
                                   />
                               </g>
                           )}
