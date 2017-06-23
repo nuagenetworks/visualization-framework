@@ -28,8 +28,19 @@
                         }
                     ],
                     "filter": {
-                        "term": {
-                            "SourceNSG": "{{snsg:ovs-1}}"
+                        "bool":{
+                            "must":[
+                                {
+                                    "term": {
+                                        "SourceNSG":"{{snsg:ovs-1}}"
+                                     }
+                                },
+                                {
+                                    "term":{
+                                        "DestinationNSG":"{{dnsg:ovs-2}}"
+                                     }
+                                }
+                            ]
                         }
                     }
                 }
@@ -57,6 +68,6 @@
                     }
                 }
             }
-		}
+        }
     }
 }
