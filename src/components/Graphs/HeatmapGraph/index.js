@@ -62,7 +62,6 @@ export default class HeatmapGraph extends XYGraph {
         /*
         Filtering Data for null
         */
-        console.log('xColumn', xColumn, yColumn, legendColumn);
         let data = [];
         cdata.forEach(d => {
           if(d[legendColumn] !== null && d[yColumn] !== null) {
