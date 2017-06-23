@@ -32,12 +32,12 @@
                             "must":[
                                 {
                                     "term": {
-                                        "SourceNSG":"{{snsg}}"
+                                        "SourceNSG":"{{snsg:ovs-1}}"
                                      }
                                 },
                                 {
                                     "term":{
-                                        "DestinationNSG":"{{dnsg}}"
+                                        "DestinationNSG":"{{dnsg:ovs-2}}"
                                      }
                                 }
                             ]
