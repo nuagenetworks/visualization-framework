@@ -10,8 +10,10 @@ const style = {
         background: theme.palette.greyLightColor,
         color: theme.palette.blackColor,
         padding: "10px",
-        fontSize: "1.2em",
+        fontSize: "1em",
         fontWeight: "200",
+        overflow: "hidden",
+        whiteSpace: "nowrap"
     },
     copyContainer: {
         marginTop: "1px"
