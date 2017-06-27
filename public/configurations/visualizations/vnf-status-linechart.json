@@ -10,7 +10,7 @@
         "xColumn": "ts",
         "xLabel": "Time",
         "yColumn": ["CPU", "MEMORY",  "DISK"],
-        "yTickFormat": ",.0f",
+        "yTickFormat": ",.1f",
         "yLabel": "",
         "yTicks": 5,
         "linesColumn": ["CPU", "MEMORY",  "DISK"],
