@@ -348,12 +348,15 @@ class VisualizationView extends React.Component {
 
         return (
             <div style={style.cardTitle}>
-                {this.props.configuration.title}
                 <div className="pull-right">
                     {this.renderDescriptionIcon()}
                     {this.renderShareIcon()}
                     {this.renderDownloadIcon()}
                 </div>
+                <div>
+                  {this.props.configuration.title}
+                </div>
+
             </div>
         )
     }
