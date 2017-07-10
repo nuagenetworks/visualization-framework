@@ -54,6 +54,14 @@
                     "label": "PG",
                     "value": "pg",
                     "default": true
+                },
+                {
+                    "label": "Network Macro Group",
+                    "value": "network-macro-group"
+                },
+                {
+                    "label": "Any",
+                    "value": "ANY"
                 }
             ]
         },
@@ -85,7 +93,15 @@
                     "label": "PG",
                     "value": "pg",
                     "default": true
-                }
+                },
+                {
+                    "label": "Network Macro Group",
+                    "value": "network-macro-group"
+                },
+                {
+                    "label": "Any",
+                    "value": "ANY"
+                }    
             ]
         }
     }
