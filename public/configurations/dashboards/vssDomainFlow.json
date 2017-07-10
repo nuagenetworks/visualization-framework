@@ -58,6 +58,10 @@
                 {
                     "label": "Network Macro Group",
                     "value": "network-macro-group"
+                },
+                {
+                    "label": "Any",
+                    "value": "ANY"
                 }
             ]
         },
@@ -93,7 +97,11 @@
                 {
                     "label": "Network Macro Group",
                     "value": "network-macro-group"
-                }
+                },
+                {
+                    "label": "Any",
+                    "value": "ANY"
+                }    
             ]
         }
     }
