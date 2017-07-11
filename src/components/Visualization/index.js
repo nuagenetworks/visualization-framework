@@ -348,26 +348,30 @@ class VisualizationView extends React.Component {
 
         return (
             <div style={style.cardTitle}>
-                {this.props.configuration.title}
                 <div className="pull-right">
                     {this.renderDescriptionIcon()}
                     {this.renderShareIcon()}
                     {this.renderDownloadIcon()}
                 </div>
+                <div>
+                  {this.props.configuration.title}
+                </div>
+
             </div>
         )
     }
 
     renderFiltersToolBar() {
         const {
-            configuration
+            configuration,
+            id
         } = this.props;
 
         if (!configuration || !configuration.filterOptions)
             return;
 
         return (
-            <FiltersToolBar filterOptions={configuration.filterOptions} />
+            <FiltersToolBar filterOptions={configuration.filterOptions} visualizationId={id} />
         )
     }
 
@@ -477,12 +481,19 @@ class VisualizationView extends React.Component {
 const mapStateToProps = (state, ownProps) => {
 
     const configurationID = ownProps.id || ownProps.params.id,
-          context         = state.interface.get(InterfaceActionKeyStore.CONTEXT),
+          orgContexts         = state.interface.get(InterfaceActionKeyStore.CONTEXT),
           configuration   = state.configurations.getIn([
               ConfigurationsActionKeyStore.VISUALIZATIONS,
               configurationID,
               ConfigurationsActionKeyStore.DATA
           ]);
+
+    let context = {};
+    for (let key in orgContexts) {
+      if(orgContexts.hasOwnProperty(key)) {
+        context[key.replace(`${configurationID}-`, '')] = orgContexts[key];
+      }
+    }
 
     const props = {
         id: configurationID,
