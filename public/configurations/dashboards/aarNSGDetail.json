@@ -7,8 +7,7 @@
         { "id": "aar-nsg-app-from-nsg", "x": 0, "y": 0,  "w": 6, "h": 15, "minW": 5, "minH": 12, "static": true},
         { "id": "aar-nsg-app-to-nsg",   "x": 6, "y": 0,  "w": 6, "h": 15, "minW": 5, "minH": 12, "static": true},
         { "id": "aar-nsg-sla-from-nsg", "x": 0, "y": 15, "w": 6, "h": 15, "minW": 5, "minH": 12, "static": true},
-        { "id": "aar-nsg-sla-to-nsg",   "x": 6, "y": 15, "w": 6, "h": 15, "minW": 5, "minH": 12, "static": true},
-        { "id": "aar-flow-sla-heatmap", "x": 0, "y": 30, "w": 6, "h": 15, "minW": 2, "minH": 12, "static": true}
+        { "id": "aar-nsg-sla-to-nsg",   "x": 6, "y": 15, "w": 6, "h": 15, "minW": 5, "minH": 12, "static": true}
 
     ],
     "links": [

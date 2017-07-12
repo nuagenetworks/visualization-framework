@@ -1,7 +1,7 @@
 {
     "id": "aar-domain-probe-table",
     "graph": "Table",
-    "title": "{{snsg}} ({{fromTitlePersonality}}) to {{dnsg}} ({{toTitlePersonality}}) Probe Detail",
+    "title": "{{snsg}} ({{fromPersonality}}) to {{dnsg}} ({{toPersonality}}) Probe Detail",
     "description": "Domain level, 10 most recent Path Performance Measurements from local NSG or NSGUBR as source to remote NSG or NSGUBR as destination. Computation: Order by time in descending order.",
     "author": "Ronak Shah",
     "creationDate": "11/02/2016",

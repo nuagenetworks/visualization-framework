@@ -20,8 +20,8 @@
                         {
                             "range": {
                                 "timestamp": {
-                                    "gte":"{{startTime:now-24h}}",
-                                    "lte":"{{endTimeTime:now}}",
+                                    "gte":"{{queryStartTime:now-1h}}",
+                                    "lte":"{{queryEndTime:now}}",
                                     "format": "epoch_millis"
                                 }
                             }
@@ -32,12 +32,12 @@
                             "must":[
                                 {
                                     "term": {
-                                        "SourceNSG":"{{snsg:ovs-1}}"
+                                        "SourceNSG":"{{snsg}}"
                                      }
                                 },
                                 {
                                     "term":{
-                                        "DestinationNSG":"{{dnsg:ovs-2}}"
+                                        "DestinationNSG":"{{dnsg}}"
                                      }
                                 }
                             ]
@@ -49,7 +49,7 @@
                 "date_histo": {
                     "date_histogram": {
                         "field": "timestamp",
-                        "interval": "{{interval:1h}}"
+                        "interval": "{{interval:30s}}"
                     },
                     "aggs": {
                         "application": {

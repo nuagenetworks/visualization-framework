@@ -2,7 +2,7 @@
     "id": "aarNetworkPerformance",
     "author": "Christophe SERAFIN",
     "creationDate": "01/24/2016",
-    "title": "AAR Network Performance",
+    "title": "AAR Network Performance ({{domainName}})",
     "links": [
         {
             "label": "Applications",
@@ -11,6 +11,10 @@
         {
             "label": "Network Performance",
             "url": "/dashboards/aarNetworkPerformance"
+        },
+        {
+            "label": "Application Performance",
+            "url": "/dashboards/aarApplicationPerformance"
         }
     ],
     "visualizations": [
