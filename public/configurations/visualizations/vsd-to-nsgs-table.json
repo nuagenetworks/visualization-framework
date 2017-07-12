@@ -7,7 +7,9 @@
     "data": {
         "columns": [
             { "column": "ID"},
-            { "column": "name" }
+            { "column": "name" },
+            { "column": "description"},
+            { "column": "locationID"}
         ]
     },
     "listeners": [{
