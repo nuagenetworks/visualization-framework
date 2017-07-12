@@ -24,12 +24,12 @@ export default class HeatmapGraph extends XYGraph {
 
     render() {
         const {
-            data,
+            data: cdata,
             width,
             height
         } = this.props;
 
-        if (!data || !data.length)
+        if (!cdata || !cdata.length)
             return;
 
         const {
@@ -58,6 +58,19 @@ export default class HeatmapGraph extends XYGraph {
             legendColumn
         } = this.getConfiguredProperties();
 
+
+        /*
+        Filtering Data for null
+        */
+        let data = [];
+        cdata.forEach(d => {
+          if(d[legendColumn] !== null && d[yColumn] !== null) {
+            data.push(d);
+          }
+        });
+
+        if (!data || !data.length)
+            return;
 
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
@@ -199,6 +212,7 @@ export default class HeatmapGraph extends XYGraph {
                                 <g
                                     { ...this.tooltipProps(d) }
                                     data-effect="solid"
+                                    key={ i }
                                 >
                                     <rect
                                         x={ x }
