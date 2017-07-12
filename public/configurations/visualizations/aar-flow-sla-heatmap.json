@@ -24,5 +24,14 @@
             { "column": "slastatus", "label": "Status" }
         ]
     },
+    "filterOptions": {
+        "Destination GW": {
+            "parameter": "dnsg",
+            "type": "VSD",
+            "name": "nsgateways",
+            "default": "",
+            "options": []
+        }
+    },
     "query": "aar-flow-sla-heatmap"
 }

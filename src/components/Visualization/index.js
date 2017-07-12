@@ -363,14 +363,15 @@ class VisualizationView extends React.Component {
 
     renderFiltersToolBar() {
         const {
-            configuration
+            configuration,
+            id
         } = this.props;
 
         if (!configuration || !configuration.filterOptions)
             return;
 
         return (
-            <FiltersToolBar filterOptions={configuration.filterOptions} />
+            <FiltersToolBar filterOptions={configuration.filterOptions} visualizationId={id} />
         )
     }
 
@@ -477,28 +478,60 @@ class VisualizationView extends React.Component {
     }
 }
 
+const updateFilterOptions = (state, configurations, context) => {
+  if(configurations && configurations.filterOptions) {
+    for(let key in configurations.filterOptions) {
+        if(configurations.filterOptions[key].type) {
+          if(context && context.enterpriseID) {
+             let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${configurations.filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
+
+             if(nsgs && nsgs.length) {
+               configurations.filterOptions[key].options = [];
+               configurations.filterOptions[key].default = nsgs[0].name;
+
+               nsgs.forEach((nsg) => {
+                 configurations.filterOptions[key].options.push({
+                   label: nsg.name,
+                   value: nsg.name
+                 });
+               });
+             }
+          }
+        }
+    };
+  }
+  return configurations;
+}
+
 const mapStateToProps = (state, ownProps) => {
 
     const configurationID = ownProps.id || ownProps.params.id,
-          context         = state.interface.get(InterfaceActionKeyStore.CONTEXT),
+          orgContexts         = state.interface.get(InterfaceActionKeyStore.CONTEXT),
           configuration   = state.configurations.getIn([
               ConfigurationsActionKeyStore.VISUALIZATIONS,
               configurationID,
               ConfigurationsActionKeyStore.DATA
           ]);
 
+    let context = {};
+    for (let key in orgContexts) {
+      if(orgContexts.hasOwnProperty(key)) {
+        context[key.replace(`${configurationID}-`, '')] = orgContexts[key];
+      }
+    }
+
     const props = {
         id: configurationID,
         context: context,
-        configuration: configuration ? contextualize(configuration.toJS(), context) : null,
-
         error: state.configurations.getIn([
             ConfigurationsActionKeyStore.VISUALIZATIONS,
             configurationID,
             ConfigurationsActionKeyStore.ERROR
         ])
-
     };
+
+    let vizConfig =  configuration ? contextualize(configuration.toJS(), context) : null;
+    props.configuration = updateFilterOptions(state, vizConfig, context);
 
     // Expose the query template as a JS object if it is available.
     if (configuration) {
