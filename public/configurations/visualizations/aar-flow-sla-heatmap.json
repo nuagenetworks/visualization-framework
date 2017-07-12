@@ -27,17 +27,10 @@
     "filterOptions": {
         "Destination GW": {
             "parameter": "dnsg",
-            "default": "ovs-2",
-            "options": [
-                {
-                    "label": "ovs-2",
-                    "value": "ovs-2"
-                },
-                {
-                    "label": "ovs-3",
-                    "value": "ovs-3"
-                }
-            ]
+            "type": "VSD",
+            "name": "nsgateways",
+            "default": "",
+            "options": []
         }
     },
     "query": "aar-flow-sla-heatmap"
