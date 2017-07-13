@@ -23,7 +23,16 @@
             { "column": "application", "label": "Application" },
             { "column": "slastatus", "label": "Status" }
         ]
-    },
+ 
+   },
+   "listeners": [
+        {
+            "params": {
+                "appName": "application",
+                "queryStartTime": "date_histo"
+            }
+        }
+    ],
     "filterOptions": {
         "Time": {
             "parameter": "queryStartTime",
