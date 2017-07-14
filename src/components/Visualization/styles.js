@@ -99,6 +99,9 @@ const style = {
         bottom: "0",
         display: "flex",
         alignItems: "center",
+    },
+    fullWidth: {
+        width: "100%",
     }
 
 };

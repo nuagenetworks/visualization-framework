@@ -225,7 +225,7 @@ class VisualizationView extends React.Component {
                 overlayStyle={style.overlayContainer}
                 textStyle={style.overlayText}
                 text={(
-                    <div>
+                    <div style={style.fullWidth}>
                         <FontAwesome
                             name={iconName}
                             size="2x"
