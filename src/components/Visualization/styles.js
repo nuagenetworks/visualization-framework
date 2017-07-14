@@ -88,6 +88,12 @@ const style = {
         padding: "60px 20px 20px 20px",
         fontSize: "1.1em",
         color: theme.palette.blackColor,
+    },
+    alignCenter: {
+        top: "0",
+        bottom: "0",
+        display: "flex",
+        alignItems: "center",
     }
 
 };

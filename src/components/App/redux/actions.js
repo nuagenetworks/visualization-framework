@@ -3,6 +3,7 @@ export const ActionTypes = {
     ACTION_NAV_BAR_SET_TITLE: "ACTION_NAV_BAR_SET_TITLE",
     ACTION_UPDATE_CONTEXT: "ACTION_UPDATE_CONTEXT",
     ACTION_UPDATE_VISUALIZATION_TYPE: "ACTION_UPDATE_VISUALIZATION_TYPE",
+    ACTION_NAV_BAR_HAS_LINKS: "ACTION_NAV_BAR_HAS_LINKS",
 };
 
 export const ActionKeyStore = {
@@ -35,6 +36,13 @@ export const Actions = {
         return {
             type: ActionTypes.ACTION_UPDATE_VISUALIZATION_TYPE,
             visualizationType: aVisualisationType
+        }
+    },
+
+    setHasLinks: (hasLinks) => {
+        return {
+            type: ActionTypes.ACTION_NAV_BAR_HAS_LINKS,
+            hasLinks: hasLinks
         }
     },
 };

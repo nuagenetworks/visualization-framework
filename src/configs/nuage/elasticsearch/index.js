@@ -40,7 +40,7 @@ const fetch = function (queryConfiguration, state) {
             resolve(body);
         }, function (error) {
             if (!error.body)
-                reject("no active Elastic Search host");
+                reject("Unable to connect to ElasticSearch datastore. Please check to ensure ElasticSearch datastore can be reached");
             else
                 reject(error.body.error.reason + ": " + error.body.error["resource.id"]);
         });
@@ -58,7 +58,7 @@ const ping = function (queryConfiguration, state) {
             resolve(body);
         }, function (error) {
             if (!error.body)
-                reject("no active Elastic Search host");
+                reject("Unable to connect to ElasticSearch datastore. Please check to ensure ElasticSearch datastore can be reached");
             else
                 reject(error.body.error.reason + ": " + error.body.error["resource.id"]);
         });

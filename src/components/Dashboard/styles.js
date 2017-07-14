@@ -6,7 +6,7 @@ const style = {
         textAlign: "center",
         color: theme.palette.blackColor,
         padding: "2px 10px",
-        height: "24px",
+        height: "28px",
     },
     linksList: {
         display: "inline-block",
@@ -15,10 +15,18 @@ const style = {
     },
     link: {
         padding: "0 10px",
+        fontSize: "1.3em",
     },
     gridContainer: {
         margin: "10px",
         position: "relative",
+    },
+    activeLink: {
+        fontWeight : "bold",
+        fontSize: "1.5em",
+    },
+    noneTextDecoration : {
+        textDecoration: "none",
     }
 }
 

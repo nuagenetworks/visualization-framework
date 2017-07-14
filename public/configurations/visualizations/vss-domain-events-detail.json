@@ -9,7 +9,7 @@
         "columns": [
             { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
             { "column": "value", "label": "Value" },
-            { "column": "sourceip", "label": "Source IP" },
+            { "column": "nuage_metadata.vportId", "label": "vportId IP", "totalCharacters": 8, "tooltip" : true },
             { "column": "nuage_metadata.subnetName", "label": "Subnet Name" },
             { "column": "nuage_metadata.zoneName", "label": "Zone Name" }
         ]

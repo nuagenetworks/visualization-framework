@@ -7,7 +7,8 @@ export class CardOverlay extends React.Component {
 
     render() {
         const overlayStyle = Object.assign({}, style.overlayContainer, this.props.overlayStyle);
-        const textStyle = Object.assign({}, style.overlayText, this.props.textStyle);
+        let textStyle = Object.assign({}, style.overlayText, this.props.textStyle, this.props.alignCenter);
+
 
         return (
             <div style={overlayStyle} onTouchTap={this.props.onTouchTapOverlay}>
