@@ -27,3 +27,26 @@ thead {
 tbody td, thead th {
     float: left;
 }
+
+.tooltip {
+  opacity: 1 !important;
+}
+
+.pointer {
+    cursor: pointer !important;
+    text-decoration: none;
+}
+
+.text-white {
+    color: #fcfcfc;
+}
+
+.text-white:hover {
+    font-weight: bold;
+    color: #fcfcfc;
+    cursor:  copy;
+}
+
+thead, tbody, tr, td, th {
+    display: initial !important;
+}

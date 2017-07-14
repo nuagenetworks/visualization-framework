@@ -217,9 +217,11 @@ class VisualizationView extends React.Component {
         return configuration && response && !response.isFetching;
     }
 
-    renderCardWithInfo(message, iconName, spin = false) {
+    renderCardWithInfo(message, iconName, spin = false, alignCenter = {}) {
+
         return (
             <CardOverlay
+                alignCenter={alignCenter}
                 overlayStyle={style.overlayContainer}
                 textStyle={style.overlayText}
                 text={(
@@ -248,7 +250,7 @@ class VisualizationView extends React.Component {
               GraphComponent = GraphManager.getGraphComponent(graphName);
 
         if (response.error) {
-            return this.renderCardWithInfo("Oops, " + response.error, "meh-o");
+            return this.renderCardWithInfo("Oops, " + response.error, "meh-o",false , style.alignCenter);
         }
 
         const data = ServiceManager.tabify(queryConfiguration, response.results);

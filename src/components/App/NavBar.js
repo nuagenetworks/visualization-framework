@@ -16,12 +16,18 @@ class NavBarView extends React.Component {
             context
         } = this.props;
 
+        var title = this.props.title;
+
+        if(this.props.links) {
+            title = '';
+        }
+
         if (context && context.hasOwnProperty("fullScreen"))
             return (<div></div>);
 
         return (
             <div>
-                <AppBar className="appBar" style={style.navBar} title={this.props.title} onLeftIconButtonTouchTap={this.props.onLeftIconButtonTouchTap} />
+                <AppBar className="appBar" style={style.navBar} title={title} onLeftIconButtonTouchTap={this.props.onLeftIconButtonTouchTap} />
                 <MainMenu />
             </div>
         );
@@ -32,15 +38,13 @@ class NavBarView extends React.Component {
 const mapStateToProps = (state) => ({
     title: state.interface.get(ActionKeyStore.NAV_BAR_TITLE),
     context: state.interface.get(InterfaceActionKeyStore.CONTEXT),
+    links: state.interface.get(ActionKeyStore.LINKS),
 });
 
 
 const actionCreators = (dispatch) => ({
     onLeftIconButtonTouchTap: () => {
         dispatch(Actions.toggleMainMenu());
-    },
-    updateTitle: (aTitle) => {
-        dispatch(Actions.updateTitle(aTitle));
     }
  });
 

@@ -85,14 +85,20 @@ const style = {
         textAlign: "justify",
         background: theme.palette.greyLighterColor,
         opacity: "0.8",
-        cursor: "pointer"
+        cursor: "pointer",
     },
     descriptionText: {
         position: "relative",
         top: "50%",
         transform: "translateY(-50%)",
         fontSize: "1.1em",
-        color: theme.palette.blackColor
+        color: theme.palette.blackColor,
+    },
+    alignCenter: {
+        top: "0",
+        bottom: "0",
+        display: "flex",
+        alignItems: "center",
     }
 
 };
