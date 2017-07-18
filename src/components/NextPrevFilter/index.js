@@ -23,8 +23,9 @@ export class NextPrevFilter extends React.Component {
             duration: 15,
             unit: "m",
             filterOptions: {
-                "startTime" : "startTime",
-                "endTime" : "endTime"
+                "startTime": "startTime",
+                "endTime": "endTime",
+                "prevStartTime": "prevStartTime"
             }
         }
     }
@@ -37,9 +38,11 @@ export class NextPrevFilter extends React.Component {
         if(this.props.context.interval !== nextProps.context.interval) {
             this.setState({page : 1})
 
+            let prevStartTime = (nextProps.context.prevStartTime) ? nextProps.context.prevStartTime : 0;
             let finalContext = Object.assign({}, nextProps.context, {
                 [`${nextProps.visualizationId}-${this.state.filterOptions.startTime}`] : nextProps.context.startTime,
-                [`${nextProps.visualizationId}-${this.state.filterOptions.endTime}`] : 'now'
+                [`${nextProps.visualizationId}-${this.state.filterOptions.endTime}`] : 'now',
+                [`${nextProps.visualizationId}-${this.state.filterOptions.prevStartTime}`]: prevStartTime
             });
             this.props.goTo(window.location.pathname, finalContext);
         }
@@ -99,14 +102,16 @@ export class NextPrevFilter extends React.Component {
 
         let startTime = `now-${(this.state.page - 1) * this.state.duration}`;
         let endTime = `now-${(this.state.page - 2) * this.state.duration}`;
+        let prevStartTime = `now-${(this.state.page) * this.state.duration}`;
 
         this.setState({
             page: this.state.page - 1
         })
 
         let queryParams = Object.assign({}, context, {
-                [`${visualizationId}-${this.state.filterOptions.startTime}`]: startTime+(this.state.unit),
-                [`${visualizationId}-${this.state.filterOptions.endTime}`]: endTime+(this.state.unit)
+                [`${visualizationId}-${this.state.filterOptions.startTime}`]: startTime + (this.state.unit),
+                [`${visualizationId}-${this.state.filterOptions.endTime}`]: endTime + (this.state.unit),
+                [`${visualizationId}-${this.state.filterOptions.prevStartTime}`]: prevStartTime + (this.state.unit)
             });
 
         this.props.goTo(window.location.pathname, queryParams);
@@ -121,14 +126,16 @@ export class NextPrevFilter extends React.Component {
 
         let startTime = `now-${(this.state.page + 1) * this.state.duration}`;
         let endTime = `now-${(this.state.page) * this.state.duration}`;
+        let prevStartTime = `now-${(this.state.page + 2) * this.state.duration}`;
 
         this.setState({
             page: this.state.page + 1
         });
 
         let queryParams = Object.assign({}, context, {
-                [`${visualizationId}-${this.state.filterOptions.startTime}`]: startTime+(this.state.unit),
-                [`${visualizationId}-${this.state.filterOptions.endTime}`]: endTime+(this.state.unit)
+                [`${visualizationId}-${this.state.filterOptions.startTime}`]: startTime + (this.state.unit),
+                [`${visualizationId}-${this.state.filterOptions.endTime}`]: endTime + (this.state.unit),
+                [`${visualizationId}-${this.state.filterOptions.prevStartTime}`]: prevStartTime + (this.state.unit)
             });
 
         this.props.goTo(window.location.pathname, queryParams);
