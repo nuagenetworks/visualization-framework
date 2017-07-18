@@ -1,13 +1,15 @@
 {
     "id": "vsd-to-nsgs-table",
     "graph": "Table",
-    "title": "To {{toTitlePersonality}}",
+    "title": "To {{toPersonality}}",
     "author": "Christophe SERAFIN",
     "creationDate": "23/01/2016",
     "data": {
         "columns": [
             { "column": "ID"},
-            { "column": "name" }
+            { "column": "name" },
+            { "column": "description"},
+            { "column": "locationID"}
         ]
     },
     "listeners": [{

@@ -1,7 +1,7 @@
 {
     "id": "aar-flow-sla-heatmap",
     "graph": "HeatmapGraph",
-    "title": "Heatmap Chart Example",
+    "title": "{{snsg}} ({{fromPersonality}}) to {{dnsg}} ({{toPersonality}}) Sla HeatMap",
     "author": "Anil Chauhan",
     "creationDate": "03/04/2017",
     "data": {
@@ -23,6 +23,46 @@
             { "column": "application", "label": "Application" },
             { "column": "slastatus", "label": "Status" }
         ]
+    },
+    "filterOptions": {
+        "Time": {
+            "parameter": "queryStartTime",
+            "default": "now-15m",
+            "options": [
+                {
+                    "label": "15m ago",
+                    "value": "now-15m",
+                    "forceOptions": {
+                        "queryEndTime": "now",
+                        "interval": "30s"
+                    }
+                },
+                {
+                    "label": "30m ago",
+                    "value": "now-30m",
+                    "forceOptions": {
+                        "queryEndTime": "now-15m",
+                        "interval": "30s"
+                    }
+                },
+                {
+                    "label": "45m ago",
+                    "value": "now-45m",
+                    "forceOptions": {
+                        "queryEndTime": "now-30m",
+                        "interval": "30s"
+                    }
+                },
+                {
+                    "label": "60m ago",
+                    "value": "now-60m",
+                    "forceOptions": {
+                        "queryEndTime": "now-45m",
+                        "interval": "30s"
+                    }
+                }
+            ]
+        }
     },
     "query": "aar-flow-sla-heatmap"
 }

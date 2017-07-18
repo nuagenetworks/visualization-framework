@@ -61,6 +61,7 @@ const defaults = {
     xTickSizeOuter: 0,
     xLabel: false,
     yColumnLabelPosition: 5,
+    yAxisPadding: 2,
     xLabelSize: 14,
     dateHistogram: false,
     interval: "30s",
