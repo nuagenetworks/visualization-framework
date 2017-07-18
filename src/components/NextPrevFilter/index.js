@@ -3,7 +3,6 @@ import React from "react";
 import { push } from "redux-router";
 import { connect } from "react-redux";
 import FontAwesome from "react-fontawesome";
-import { defaultFilterOptions } from "../Dashboard/default.js";
 
 import {
     Actions as InterfaceActions,
@@ -35,7 +34,7 @@ export class NextPrevFilter extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props.context.interval != nextProps.context.interval) {
+        if(this.props.context.interval !== nextProps.context.interval) {
             this.setState({page : 1})
 
             let finalContext = Object.assign({}, nextProps.context, {
@@ -73,7 +72,7 @@ export class NextPrevFilter extends React.Component {
 
     renderNextIcon() {
         let btnDisabled = true;
-        if (this.state.page != 1) {
+        if (this.state.page !== 1) {
           btnDisabled = false;
         }
         
@@ -94,7 +93,7 @@ export class NextPrevFilter extends React.Component {
             visualizationId
         } = this.props
 
-        if(this.state.page == 1) {
+        if(this.state.page === 1) {
             return;
         }
 
@@ -147,9 +146,7 @@ export class NextPrevFilter extends React.Component {
 
     render() {
         const {
-            nextPrevFilter,
-            context,
-            visualizationId
+            nextPrevFilter
         } = this.props
 
         if (!nextPrevFilter)
