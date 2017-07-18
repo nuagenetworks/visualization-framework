@@ -10,6 +10,7 @@ import { Link } from "react-router";
 import { push } from "redux-router";
 
 import FiltersToolBar from "../FiltersToolBar";
+import NextPrevFilter from "../NextPrevFilter";
 import { CardOverlay } from "../CardOverlay";
 import { Card, CardText } from 'material-ui/Card';
 
@@ -375,6 +376,20 @@ class VisualizationView extends React.Component {
         )
     }
 
+    renderNextPrevFilter() {
+        const {
+            configuration,
+            id
+        } = this.props;
+
+        if (!configuration || !configuration.nextPrevFilter)
+            return;
+        
+        return (
+            <NextPrevFilter nextPrevFilter={configuration.nextPrevFilter} visualizationId={id} />
+        )
+    }
+
     renderSharingOptions () {
         if (!this.state.showSharingOptions)
             return;
@@ -462,7 +477,10 @@ class VisualizationView extends React.Component {
               ref={this.cardTextReference}
             >
                 { this.renderTitleBarIfNeeded() }
+
+                { this.renderNextPrevFilter() }
                 { this.renderFiltersToolBar() }
+
                 { this.renderSharingOptions() }
                 <CardText style={cardText}>
                     { this.renderVisualizationIfNeeded() }

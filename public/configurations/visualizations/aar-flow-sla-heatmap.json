@@ -23,7 +23,7 @@
             { "column": "application", "label": "Application" },
             { "column": "slastatus", "label": "Status" }
         ]
-    },
+     },
     "filterOptions": {
         "Destination GW": {
             "parameter": "dnsg",
@@ -33,5 +33,6 @@
             "options": []
         }
     },
+    "nextPrevFilter": true,
     "query": "aar-flow-sla-heatmap"
 }

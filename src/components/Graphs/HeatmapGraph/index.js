@@ -141,7 +141,6 @@ export default class HeatmapGraph extends XYGraph {
         xScale.range([0, availableWidth]);
         yScale.rangeRound([availableHeight, 0]);
         
-
         const xAxis = axisBottom(xScale)
             .tickSizeInner(xTickGrid ? -availableHeight : xTickSizeInner)
             .tickSizeOuter(xTickSizeOuter);
@@ -152,6 +151,8 @@ export default class HeatmapGraph extends XYGraph {
 
         if(xTicks){
             xAxis.ticks(xTicks);
+        } else {
+            xAxis.ticks(distXDatas.length * 2);
         }
 
         const yAxis = axisLeft(yScale)
