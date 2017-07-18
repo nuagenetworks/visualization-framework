@@ -3,7 +3,7 @@
     "title": "# Events (24h)",
     "query": "vss-enterprise-events-metric",
     "graph": "VariationTextGraph",
-    "showTitleBar": false,
+    "showTitleBar": true,
     "data": {
         "titlePosition": "top",
         "target":{

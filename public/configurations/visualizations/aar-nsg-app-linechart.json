@@ -6,6 +6,7 @@
     "author": "Ronak Shah",
     "creationDate": "11/07/2016",
     "data": {
+        "dateHistogram": true,
         "xColumn": "ts",
         "yColumn": "SumOf",
         "yTickFormat": ".2s",

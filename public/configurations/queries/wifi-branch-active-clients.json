@@ -1,0 +1,59 @@
+{
+    "id":"wifi-branch-active-clients",
+    "title":"TBD",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_wifi}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body": {
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "term":{
+                                "enterpriseName":"{{enterpriseName:wifi_enterprise}}"
+                            }
+                        },
+                        {
+                            "term":{
+                                "nsg":"{{nsg:wifi_nsg}}"
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "timezones": {
+                    "filters": {
+                        "filters": {
+                            "Last 10": {
+                                "range": {
+                                    "timestamp": {
+                                        "gte": "now-10m",
+                                        "lte": "now"
+                                    }
+                                }
+                            },
+                            "Last 24": {
+                                "range": {
+                                    "timestamp": {
+                                        "gte": "now-24h",
+                                        "lte": "now"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "aggs":{
+                        "Clients":{
+                            "cardinality":{
+                                "field":"client_mac"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

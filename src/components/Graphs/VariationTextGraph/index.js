@@ -55,7 +55,7 @@ export default class VariationTextGraph extends AbstractGraph {
         return {
             lastValue: lastInfo[target.field],
             previousValue: previousInfo[target.field],
-            variation: variation !== 0 ? variation * 100 / previousInfo[target.field] : 0,
+            variation: variation !== 0 ? variation * 100 / previousInfo[target.field] : 0
         }
     }
 
@@ -73,6 +73,7 @@ export default class VariationTextGraph extends AbstractGraph {
         } = this.props;
 
         const {
+            absolute,
             target,
             positiveColor,
             negativeColor,
@@ -98,30 +99,49 @@ export default class VariationTextGraph extends AbstractGraph {
             variationIconName = "caret-down";
         }
 
+        let info = null;
+
+        if (!absolute) {
+            info = <div>
+                <span
+                    style={{
+                        fontSize: fontSize,
+                        marginRight:"3px"
+                    }}
+                    >
+                    {this.numberWithCommas(values.lastValue)}
+                </span>
+                <span
+                    style={{
+                        color: variationColor,
+                        marginLeft: "3px"
+                    }}
+                    >
+
+                    {absolute ? values.absolute : `${this.decimals(values.variation)}%`}
+
+                    <FontAwesome
+                        name={variationIconName}
+                      />
+                </span>
+            </div>
+        } else {
+          info = <div>
+                <span
+                    style={{
+                        fontSize: fontSize,
+                        marginRight:"3px",
+                        color: variationColor
+                    }}
+                    >
+                    {this.numberWithCommas(values.lastValue)} / {this.numberWithCommas(values.previousValue)}
+                </span>
+            </div>
+        }
+        console.log('absolute', absolute, values);
         return (
             <div>
-                <div>
-                    <span
-                        style={{
-                            fontSize: fontSize,
-                            marginRight:"3px"
-                        }}
-                        >
-                        {this.numberWithCommas(values.lastValue)}
-                    </span>
-                    <span
-                        style={{
-                            color: variationColor,
-                            marginLeft: "3px"
-                        }}
-                        >
-
-                        {this.decimals(values.variation)}%
-                        <FontAwesome
-                            name={variationIconName}
-                            />
-                    </span>
-                </div>
+                {info}
             </div>
         )
     }
@@ -133,7 +153,7 @@ export default class VariationTextGraph extends AbstractGraph {
         } = this.props;
 
         const {
-          margin,
+          padding,
           textAlign,
           titlePosition
         } = this.getConfiguredProperties();
@@ -142,24 +162,18 @@ export default class VariationTextGraph extends AbstractGraph {
             return;
 
         const cursor = onMarkClick ? "pointer" : undefined
-
         return (
 
                 <div
                     style={{
-                        margin: [margin.top, margin.right, margin.bottom, margin.left].join(" "),
+                        padding: [padding.top, padding.right, padding.bottom, padding.left].join(" "),
                         textAlign: textAlign,
                         cursor: cursor,
                         fontSize: "1.2em"
                     }}
                     onClick={onMarkClick}
                     >
-
-                    {this.renderTitleIfNeeded(titlePosition, "top")}
-
                     {this.renderValues()}
-
-                    {this.renderTitleIfNeeded(titlePosition, "bottom")}
                 </div>
         );
 

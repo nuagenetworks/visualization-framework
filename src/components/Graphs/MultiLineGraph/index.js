@@ -1,6 +1,5 @@
 import React from "react";
 import XYGraph from "../XYGraph";
-import { Actions } from "../../App/redux/actions";
 import { connect } from "react-redux";
 
 import {
@@ -14,13 +13,12 @@ import {
     select,
     brushX,
     voronoi,
-    merge,
     event
 } from "d3";
 
 import {properties} from "./default.config";
 
-class LineGraph extends XYGraph {
+class MultiLineGraph extends XYGraph {
 
     constructor(props) {
         super(props, properties);
@@ -42,8 +40,8 @@ class LineGraph extends XYGraph {
           chartHeightToPixel,
           chartWidthToPixel,
           circleToPixel,
-          colorColumn,
           colors,
+          dateHistogram,
           legend,
           linesColumn,
           margin,
@@ -61,7 +59,8 @@ class LineGraph extends XYGraph {
           yTicks,
           yTickSizeInner,
           yTickSizeOuter,
-          brushEnabled
+          brushEnabled,
+          zeroStart
         } = this.getConfiguredProperties();
 
         let finalYColumn = typeof yColumn === 'object' ? yColumn : [yColumn];
@@ -79,20 +78,26 @@ class LineGraph extends XYGraph {
         });
 
         let filterDatas = [];
-        data.map((d) => {
-            legendsData.map((ld) => {
+        data.forEach((d) => {
+            legendsData.forEach((ld) => {
+              if(d[ld['key']] !== null) {
                 filterDatas.push(Object.assign({
-                    yColumn: d[ld['key']],
+                    yColumn: d[ld['key']] !== null ? d[ld['key']] : 0,
                     columnType: ld['key']
                 }, d));
+              }
             });
         });
 
         const isVerticalLegend = legend.orientation === 'vertical';
-        const xLabelFn         = (d) => d[xColumn];
+
+        const xLabelFn             = (d) => d[xColumn];
+
+        const yLabelUnformattedFn  = (d) => d['yColumn'];
+
         const yLabelFn         = (d) => {
             if(!yTickFormat) {
-                return d;
+                return d['yColumn'];
             }
             const formatter = format(yTickFormat);
             return formatter(d['yColumn']);
@@ -103,18 +108,14 @@ class LineGraph extends XYGraph {
         const scale            = this.scaleColor(legendsData, 'key');
         const getColor         = (d) => scale ? scale(d['key']) : stroke.color || colors[0];
 
-
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
         let legendWidth       = legend.show && legendsData.length >= 1 ? this.longestLabelLength(legendsData, legendFn) * chartWidthToPixel : 0;
 
-        let xLabelWidth       = this.longestLabelLength(data, xLabelFn) * chartWidthToPixel;
         let yLabelWidth       = this.longestLabelLength(filterDatas, yLabelFn) * chartWidthToPixel;
 
         let leftMargin        = margin.left + yLabelWidth;
         let availableWidth    = width - (margin.left + margin.right + yLabelWidth);
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
-
-
 
         if (legend.show)
         {
@@ -133,10 +134,20 @@ class LineGraph extends XYGraph {
             }
         }
 
-        const xScale = scaleTime()
-            .domain(extent(data, xLabelFn));
+        let yExtent = this.updateYExtent(extent(filterDatas, yLabelUnformattedFn), zeroStart);
+
+        let xScale;
+
+        if (dateHistogram) {
+            xScale = scaleTime()
+              .domain(extent(data, xLabelFn));
+        } else {
+            xScale = scaleLinear()
+              .domain(extent(data, xLabelFn));
+        }
+
         const yScale = scaleLinear()
-            .domain(extent(filterDatas, yLabelFn));
+            .domain(yExtent);
 
         xScale.range([0, availableWidth]);
         yScale.range([availableHeight, 0]);
@@ -230,10 +241,11 @@ class LineGraph extends XYGraph {
                             {
                                 legendsData.map((d, i) =>
                                     <path
+                                        key={ d['key'] }
                                         fill="none"
                                         stroke={ getColor(d) }
                                         strokeWidth={ stroke.width }
-                                        d={ lineGenerator(data, d['key']) }
+                                        d={ lineGenerator(filterDatas, d['key']) }
                                     />
                                 )
                             }
@@ -263,9 +275,10 @@ class LineGraph extends XYGraph {
                                   />
 
                                   <path
+                                      key={ i }
                                       fill="none"
                                       d={ d == null ? null : "M" + d.join("L") + "Z" }
-                                      style={{"pointer-events": "all"}}
+                                      style={{"pointerEvents": "all"}}
                                   />
                               </g>
                           )}
@@ -284,7 +297,7 @@ class LineGraph extends XYGraph {
         );
     }
 }
-LineGraph.propTypes = {
+MultiLineGraph.propTypes = {
     configuration: React.PropTypes.object,
     response: React.PropTypes.object
 };
@@ -292,4 +305,4 @@ LineGraph.propTypes = {
 const actionCreators = (dispatch) => ({
 });
 
-export default connect(null, actionCreators)(LineGraph);
+export default connect(null, actionCreators)(MultiLineGraph);

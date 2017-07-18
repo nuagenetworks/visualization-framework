@@ -93,7 +93,6 @@ export default class GaugeGraph extends AbstractGraph {
             colors
         } = this.getConfiguredProperties();
 
-        console.log('Data', this.getConfiguredProperties(), data);
         const angles = {
             min: -90,
             max: 90
@@ -105,7 +104,7 @@ export default class GaugeGraph extends AbstractGraph {
 
         const minRange         = cData[minColumn] ? cData[minColumn] : (minValue ? minValue : 0);
         const maxRange         = cData[maxColumn] ? cData[maxColumn] : (maxValue ? maxValue : 100);
-        const currentValue     = cData[currentColumn] ? cData[currentColumn] : 20;
+        const currentValue     = cData[currentColumn] ? cData[currentColumn] : 0;
 
         const minRadius   = Math.min(availableWidth, availableHeight) / 2;
 

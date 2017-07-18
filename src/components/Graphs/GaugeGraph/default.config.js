@@ -23,7 +23,7 @@ export const properties = {
     minValue                  : '0',
     maxValue                  : '100',
 
-    colors                    : ['#fc5f5f', '#8fc496'],
+    colors                    : ['#8fc496', '#fc5f5f'],
     labelFormat               : '.0s',
 
     stroke: {
