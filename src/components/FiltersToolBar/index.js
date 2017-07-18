@@ -38,9 +38,10 @@ export class FiltersToolBarView extends React.Component {
 
                     if (configOptions.options) {
                         let defaultOption = configOptions.options.filter((option) => {
-                            if(option.value == configOptions.default) {
+                            if(option.value === configOptions.default) {
                                 return true;
                             }
+                            return false;
                         });
 
                         if(defaultOption.length && defaultOption[0].forceOptions) {

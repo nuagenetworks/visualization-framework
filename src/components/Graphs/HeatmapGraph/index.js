@@ -40,7 +40,6 @@ export default class HeatmapGraph extends XYGraph {
             colors,
             legend,
             margin,
-            padding,
             stroke,
             xColumn,
             xLabel,
