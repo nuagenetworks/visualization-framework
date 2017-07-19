@@ -9,7 +9,7 @@
         "labelColumn": "L7Classification",
         "tooltip": [
             { "column": "L7Classification", "label": "L7 Classification" },
-            { "column": "Sum of MB", "format": ",.1f"}
+            { "column": "Sum of MB", "format": "s"}
         ],
         "percentages": true,
         "percentagesFormat": ",.1%",

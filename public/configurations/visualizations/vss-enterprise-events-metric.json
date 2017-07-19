@@ -9,7 +9,8 @@
         "target":{
             "column": "timezones",
             "value": "Last 24",
-            "field": "doc_count"
+            "field": "doc_count",
+            "format": ",.4s"
         }
     }
 }
