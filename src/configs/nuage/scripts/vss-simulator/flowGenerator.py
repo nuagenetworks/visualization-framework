@@ -73,7 +73,8 @@ def generateFlowStats(domain_id, type="l3"):
                     es_data['nuage_metadata']['zoneName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-zone"
                 else:
                     es_data['nuage_metadata']['l2domainName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-l2"
-                es_data['tcpflags']['SYN'] = random.randint(1,5)
+                es_data['tcpflags'] = {}
+		es_data['tcpflags']['SYN'] = random.randint(1,5)
                 es_data['tcpflags']['SYN-ACK'] = random.randint(1,5)
                 es_data['tcpflags']['FIN'] = random.randint(1,3)
                 es_data['tcpflags']['FIN-ACK'] = random.randint(1,3)
