@@ -20,28 +20,34 @@ export class FiltersToolBarView extends React.Component {
         const {
             filterOptions,
             context,
-            updateContext
+            updateContext,
+            visualizationId
         } = this.props;
+
+        let configContexts = {};
 
         for(let name in filterOptions) {
             if (filterOptions.hasOwnProperty(name)) {
                 let configOptions = filterOptions[name],
-                    currentValue  = context[configOptions.parameter];
+                    paramName = visualizationId ? `${visualizationId}-${configOptions.parameter}` : configOptions.parameter,
+                    currentValue  = context[paramName];
 
                 if (!currentValue) {
                     // Update context with default value if not found
-                    updateContext({
-                        [configOptions.parameter]: configOptions.default
-                    });
+                    configContexts[paramName] = configOptions.default;
                 }
             }
         };
+
+        if(Object.keys(configContexts).length !== 0)
+          updateContext(configContexts);
     }
 
     render() {
         const {
             filterOptions,
-            context
+            context,
+            visualizationId
         } = this.props
 
         if (!filterOptions || Object.keys(filterOptions).lengh === 0)
@@ -56,7 +62,8 @@ export class FiltersToolBarView extends React.Component {
                     Object.keys(filterOptions).map((name, i) => {
 
                         let configOptions = filterOptions[name],
-                            currentValue  = context[configOptions.parameter] || configOptions.default;
+                            paramName = visualizationId ? `${visualizationId}-${configOptions.parameter}` : configOptions.parameter,
+                            currentValue  = context[paramName] || configOptions.default;
 
                         return (
                             <li
@@ -75,7 +82,7 @@ export class FiltersToolBarView extends React.Component {
                                     {configOptions.options.map((option, index) => {
 
                                         let queryParams = Object.assign({}, context, {
-                                            [configOptions.parameter]: option.value
+                                            [paramName]: option.value
                                         });
 
                                         let forceOptions = option.forceOptions;

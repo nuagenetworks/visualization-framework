@@ -11,8 +11,7 @@ import {
     scaleTime,
     select,
     map,
-    min,
-    utcHour
+    min
 } from "d3";
 
 import {properties} from "./default.config"
@@ -25,12 +24,12 @@ export default class HeatmapGraph extends XYGraph {
 
     render() {
         const {
-            data,
+            data: cdata,
             width,
             height
         } = this.props;
 
-        if (!data || !data.length)
+        if (!cdata || !cdata.length)
             return;
 
         const {
@@ -60,6 +59,19 @@ export default class HeatmapGraph extends XYGraph {
         } = this.getConfiguredProperties();
 
 
+        /*
+        Filtering Data for null
+        */
+        let data = [];
+        cdata.forEach(d => {
+          if(d[legendColumn] !== null && d[yColumn] !== null) {
+            data.push(d);
+          }
+        });
+
+        if (!data || !data.length)
+            return;
+
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
         const yLabelFn         = (d) => d[yColumn];
@@ -73,15 +85,13 @@ export default class HeatmapGraph extends XYGraph {
             .entries(data);
 
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
-        let legendWidth       = legend.show && cellColumnsData.length > 1 ? this.longestLabelLength(data, legendFn) * chartWidthToPixel : 0;
+        let legendWidth       = legend.show && cellColumnsData.length ? this.longestLabelLength(data, legendFn) * chartWidthToPixel : 0;
 
         let yLabelWidth       = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
 
         let leftMargin        = margin.left + yLabelWidth;
         let availableWidth    = width - (margin.left + margin.right + yLabelWidth);
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
-
-
 
         if (legend.show) {
             legend.width = legendWidth;
@@ -96,25 +106,41 @@ export default class HeatmapGraph extends XYGraph {
             {
                 const nbElementsPerLine  = parseInt(availableWidth / legend.width, 10);
                 const nbLines            = parseInt(cellColumnsData.length / nbElementsPerLine, 10);
+
                 availableHeight         -= nbLines * legend.circleSize * circleToPixel + chartHeightToPixel;
             }
         }
 
         //For Making xAxis BANDSCALE
+
+        const distXDatas = map(data, xLabelFn).keys().sort();
+        const distYDatas = map(data, yLabelFn).keys().sort();
+
         const xBandScale = scaleBand()
-            .domain(map(data, xLabelFn).keys().sort());
-        xBandScale.rangeRound([0, availableWidth]);
+            .domain(distXDatas);
+        xBandScale.rangeRound([0, availableWidth]).padding(0);
+
+        const yBandScale = scaleBand()
+            .domain(distYDatas);
+        yBandScale.rangeRound([0, availableHeight]);
 
         let xValues = extent(data, xLabelFn);
+        const xPadding = distXDatas.length > 1 ? ((xValues[1] - xValues[0]) / (distXDatas.length - 1)) / 2 : 1;
+
+        let boxSize = min([xBandScale.bandwidth(), yBandScale.bandwidth()]);
+
+        availableHeight = boxSize * distYDatas.length;
+        availableWidth  = boxSize * distXDatas.length;
 
         const xScale = scaleTime()
-            .domain([xValues[0], utcHour.offset(xValues[1], 1)]);
+            .domain([xValues[0] - xPadding, xValues[1] + xPadding]);
 
         const yScale = scaleBand()
-            .domain(map(data, yLabelFn).keys().sort());
+            .domain(distYDatas);
 
-        xScale.range([0, availableWidth], 0.1);
-        yScale.rangeRound([availableHeight, 0]).padding(padding);
+        xScale.range([0, availableWidth]);
+        yScale.rangeRound([availableHeight, 0]);
+        
 
         const xAxis = axisBottom(xScale)
             .tickSizeInner(xTickGrid ? -availableHeight : xTickSizeInner)
@@ -151,7 +177,6 @@ export default class HeatmapGraph extends XYGraph {
             top: margin.top + availableHeight / 2
         }
 
-        let boxSize = min([xBandScale.bandwidth(), yScale.bandwidth()])
         return (
             <div className="bar-graph">
                 {this.tooltip}
@@ -176,7 +201,7 @@ export default class HeatmapGraph extends XYGraph {
                                 height
                             } = (
                                 {
-                                    x: xScale(d[xColumn]),
+                                    x: xScale(d[xColumn]) - boxSize / 2,
                                     y: yScale(d[yColumn]) + yScale.bandwidth() / 2 - boxSize / 2,
                                     width: boxSize,
                                     height: boxSize
@@ -187,6 +212,7 @@ export default class HeatmapGraph extends XYGraph {
                                 <g
                                     { ...this.tooltipProps(d) }
                                     data-effect="solid"
+                                    key={ i }
                                 >
                                     <rect
                                         x={ x }

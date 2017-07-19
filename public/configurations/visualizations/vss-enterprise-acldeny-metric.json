@@ -3,7 +3,7 @@
     "title": "# ACL-Deny (24h)",
     "query": "vss-enterprise-acldeny-metric",
     "graph": "VariationTextGraph",
-    "showTitleBar": false,
+    "showTitleBar": true,
     "data": {
         "titlePosition": "top",
         "target":{

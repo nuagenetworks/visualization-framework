@@ -1,0 +1,8 @@
+{
+    "id":"medalsEvolution",
+    "title":"Evolution of medals",
+    "service":"memory",
+    "query": {
+        "medalType":"{{medalType:Gold}}"
+    }
+}

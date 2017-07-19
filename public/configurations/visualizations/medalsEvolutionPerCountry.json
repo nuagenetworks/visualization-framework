@@ -1,0 +1,28 @@
+{
+    "id": "medalsPerCountryPerCountry",
+    "graph": "LineGraph",
+    "title": "Medals Evolution for {{country:country}} since 1896",
+    "description": "Evolution of medals since the beggining of the olympic games",
+    "author": "Christophe SERAFIN",
+    "creationDate": "12/21/2016",
+    "query": "medalsEvolutionPerCountry",
+    "data": {
+        "dateHistogram": true,
+        "xColumn": "year",
+        "xLabel": "Year",
+        "xTickFormat": "1",
+        "yColumn": "nbMedals",
+        "yLabel": "Number of Medals",
+        "yTicks": 5,
+        "linesColumn": "medalType",
+        "colorColumn": "medalType",
+        "colors": [
+            "#ffd92f",
+            "#d9d9d9",
+            "#fec26a"
+        ],
+        "stroke": {
+            "width": "2px"
+        }
+    }
+}

@@ -3,7 +3,7 @@
     "title": "# Packets (24h)",
     "query": "vss-enterprise-flows-metric",
     "graph": "VariationTextGraph",
-    "showTitleBar": false,
+    "showTitleBar": true,
     "data": {
         "titlePosition": "top",
         "target":{
