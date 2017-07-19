@@ -11,7 +11,7 @@
         "pieInnerRadius": 0.5,
         "tooltip": [
             { "column": "Application", "label": "Application" },
-            { "column": "Sum of MB", "label": "Total MB", "format": ",.2f"}
+            { "column": "Sum of MB", "label": "Total MB", "format": "s"}
         ]
     },
     "query": "aar-nsg-top10-app"

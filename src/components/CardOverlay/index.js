@@ -7,7 +7,7 @@ export class CardOverlay extends React.Component {
 
     render() {
         const overlayStyle = Object.assign({}, style.overlayContainer, this.props.overlayStyle);
-        let textStyle = Object.assign({}, style.overlayText, this.props.textStyle, this.props.alignCenter);
+        let textStyle = Object.assign({}, style.overlayText, this.props.textStyle);
 
 
         return (

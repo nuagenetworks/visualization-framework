@@ -6,6 +6,8 @@ import FontAwesome from "react-fontawesome";
 import "./style.css";
 
 import {properties} from "./default.config"
+import { format, timeFormat } from "d3";
+const d3 = { format, timeFormat };
 
 /*
     This graph will present the variation between 2 values:
@@ -16,6 +18,8 @@ export default class VariationTextGraph extends AbstractGraph {
 
     constructor(props) {
         super(props, properties);
+        
+
     }
 
     currentTitle() {
@@ -63,8 +67,20 @@ export default class VariationTextGraph extends AbstractGraph {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    formattedValue(x, format) {
+        let formatter = d3.format(format);
+        return formatter(x);
+    }
+
     decimals(x, nb = 2) {
         return x.toFixed(nb)
+    }
+
+    getFormattedValue(x) {
+        const {
+            target
+        } = this.getConfiguredProperties();
+        return (target.format) ? this.formattedValue(x, target.format) : this.numberWithCommas(x);
     }
 
     renderValues() {
@@ -109,7 +125,7 @@ export default class VariationTextGraph extends AbstractGraph {
                         marginRight:"3px"
                     }}
                     >
-                    {this.numberWithCommas(values.lastValue)}
+                    {this.getFormattedValue(values.lastValue)}
                 </span>
                 <span
                     style={{
@@ -118,7 +134,7 @@ export default class VariationTextGraph extends AbstractGraph {
                     }}
                     >
 
-                    {absolute ? values.absolute : `${this.decimals(values.variation)}%`}
+                    {`${this.decimals(values.variation)}%`}
 
                     <FontAwesome
                         name={variationIconName}
@@ -134,11 +150,10 @@ export default class VariationTextGraph extends AbstractGraph {
                         color: variationColor
                     }}
                     >
-                    {this.numberWithCommas(values.lastValue)} / {this.numberWithCommas(values.previousValue)}
+                    {this.getFormattedValue(values.lastValue)} / {this.getFormattedValue(values.previousValue)}
                 </span>
             </div>
         }
-        console.log('absolute', absolute, values);
         return (
             <div>
                 {info}
