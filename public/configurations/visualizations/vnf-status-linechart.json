@@ -14,13 +14,13 @@
         "yLabel": "",
         "yTicks": 5,
         "linesColumn": ["CPU", "MEMORY",  "DISK"],
-        "zeroStart": true,
         "legend": {
             "orientation": "vertical",
             "show": true,
             "circleSize": 5,
             "labelOffset": 5
         },
+        "zeroStart": true,
         "tooltip": [
             { "column": "columnType", "label": "Type"},
             { "column": "yColumn", "label": "Value", "format": "0.2f"},

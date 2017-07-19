@@ -6,7 +6,6 @@
     "author": "Ronak Shah",
     "creationDate": "11/07/2016",
     "data": {
-        "zeroStart": true,
         "dateHistogram": true,
         "xColumn": "ts",
         "yColumn": "SumOf",
@@ -27,6 +26,7 @@
             "#f76159",
             "#d9d9d9"
         ],
+        "zeroStart": true,
         "tooltip": [
             { "column": "L7Classification" }
         ],
