@@ -9,7 +9,8 @@
         "target":{
             "column": "timezones",
             "value": "Last 24",
-            "field": "value"
+            "field": "value",
+            "format": ",.4s"
         }
     }
 }

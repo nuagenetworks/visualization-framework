@@ -8,7 +8,7 @@
     "data": {
         "tooltip": [
             { "column": "APMGroup", "label": "APMGroup" },
-            { "column": "Sum of MB", "label": "Total Bytes(MB)", "format": ",.2f"}
+            { "column": "Sum of MB", "label": "Total Bytes(MB)", "format": "s"}
         ],
         "sliceColumn": "Sum of MB",
         "labelColumn": "APMGroup",
