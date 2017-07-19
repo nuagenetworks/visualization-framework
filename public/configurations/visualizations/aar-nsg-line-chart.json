@@ -11,7 +11,8 @@
         "yColumn": "SumOf",
         "yLabel": "Total MB",
         "yTicks": 5,
-        "linesColumn": "L7Classification"
+        "linesColumn": "L7Classification",
+        "zeroStart": true
     },
     "query": "aar-nsg-app-linechart"
 }

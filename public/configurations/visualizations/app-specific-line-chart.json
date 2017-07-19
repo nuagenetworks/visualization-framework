@@ -8,7 +8,8 @@
         "dateHistogram": true,
         "xColumn": "key",
         "yColumn": "1",
-        "colorColumn": "key"
+        "colorColumn": "key",
+        "zeroStart": true
     },
     "query": "app-specific-vertical-bar"
 }
