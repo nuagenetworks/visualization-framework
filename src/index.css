@@ -29,3 +29,7 @@ text {
 a, a:hover {
   color: inherit;
 }
+
+img {
+  vertical-align: baseline;
+}

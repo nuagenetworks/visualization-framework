@@ -482,7 +482,7 @@ class VisualizationView extends React.Component {
                             callback={() => { this.initialize(this.props.id) }}
                             />
                     </CardText>
-                </div> 
+                </div>
             </Card>
         );
     }
