@@ -21,7 +21,6 @@ import {
 import style from "./styles";
 import Logo from "./logo.png";
 
-
 class MainMenuView extends React.Component {
 
     componentWillMount() {
@@ -219,7 +218,7 @@ class MainMenuView extends React.Component {
                     <p>{visualizationType} Analytics</p>
                 </div>
 
-                <Subheader style={style.subHeader}>ENTERPRISES</Subheader>
+                <Subheader style={style.subHeader}>ENTERPRISES <span className="pull-right"><img style={style.iconSubMenu} src="/icons/icon-enterprise.png" alt="" /></span></Subheader>
                 <List>
                     {this.renderEnterprisesMenu()}
                 </List>

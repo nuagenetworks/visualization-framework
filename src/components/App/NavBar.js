@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import AppBar from 'material-ui/AppBar';
 import MainMenu from './MainMenu.js';
+import NavBarTitle from './NavBarTitle.js';
 
 import { Actions, ActionKeyStore } from './redux/actions';
 import { ActionKeyStore as InterfaceActionKeyStore } from "./redux/actions";
@@ -13,21 +14,17 @@ import style from "./styles"
 class NavBarView extends React.Component {
     render() {
         const {
-            context
+            context,
         } = this.props;
-
-        var title = this.props.title;
-
-        if(this.props.links) {
-            title = '';
-        }
 
         if (context && context.hasOwnProperty("fullScreen"))
             return (<div></div>);
 
+        let navTitleBar = <NavBarTitle {...this.props}></NavBarTitle>;
+
         return (
             <div>
-                <AppBar className="appBar" style={style.navBar} title={title} onLeftIconButtonTouchTap={this.props.onLeftIconButtonTouchTap} />
+                <AppBar className="appBar" style={style.navBar} title={navTitleBar} onLeftIconButtonTouchTap={this.props.onLeftIconButtonTouchTap} />
                 <MainMenu />
             </div>
         );
@@ -37,8 +34,8 @@ class NavBarView extends React.Component {
 
 const mapStateToProps = (state) => ({
     title: state.interface.get(ActionKeyStore.NAV_BAR_TITLE),
-    context: state.interface.get(InterfaceActionKeyStore.CONTEXT),
-    links: state.interface.get(ActionKeyStore.LINKS),
+    titleIcon: state.interface.get(ActionKeyStore.NAV_BAR_TITLE_ICON),
+    context: state.interface.get(InterfaceActionKeyStore.CONTEXT)
 });
 
 

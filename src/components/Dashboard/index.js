@@ -46,6 +46,7 @@ export class DashboardView extends React.Component {
 
     componentDidUpdate(prevProps) {
         this.updateTitleIfNecessary(prevProps);
+        this.updateTitleIconIfNecessary(prevProps);
         this.updateConfiguration();
     }
 
@@ -72,6 +73,20 @@ export class DashboardView extends React.Component {
         setPageTitle(this.currentTitle());
     }
 
+    updateTitleIconIfNecessary(prevProps) {
+        const { configuration, setPageTitleIcon } = this.props;
+
+        if (!configuration)
+            return;
+
+        const titleIcon = configuration.get("titleIcon");
+
+        if (!titleIcon)
+            return ;
+
+        setPageTitleIcon(titleIcon);
+    }
+
     updateConfiguration() {
         const { params, fetchConfigurationIfNeeded } = this.props;
 
@@ -92,8 +107,7 @@ export class DashboardView extends React.Component {
     renderNavigationBarIfNeeded() {
         const {
             configuration,
-            context,
-            setHasLinks
+            context
         } = this.props;
 
         const links = configuration.get("links");
@@ -102,9 +116,6 @@ export class DashboardView extends React.Component {
             return;
 
         const currentUrl = window.location.pathname;
-
-        // update links status as true
-        setHasLinks(true);
 
         return (
             <div style={style.navigationContainer}>
@@ -228,15 +239,15 @@ const actionCreators = (dispatch) => ({
         dispatch(AppActions.updateTitle(aTitle));
     },
 
+    setPageTitleIcon: (aTitleIcon) => {
+        dispatch(AppActions.updateTitleIcon(aTitleIcon));
+    },
+
     fetchConfigurationIfNeeded: (id) => {
         return dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.DASHBOARDS
         ));
-    },
-
-    setHasLinks: (hasLinks) => {
-        dispatch(AppActions.setHasLinks(hasLinks));
     }
 });
 

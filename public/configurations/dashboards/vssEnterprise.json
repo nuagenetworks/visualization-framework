@@ -3,6 +3,7 @@
     "author": "Ronak Shah",
     "creationDate": "10/17/2016",
     "title": "VSS Dashboard - Enterprise {{enterpriseName:...}}",
+    "titleIcon": "enterprise",
     "visualizations": [
         { "id": "vss-enterprise-alerts-metric", "x": 1, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},
         { "id": "vss-enterprise-acldeny-metric", "x": 3, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},

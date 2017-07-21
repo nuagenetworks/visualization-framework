@@ -31,6 +31,16 @@ const style = {
         height: "16px",
         margin: "16px 8px 8px 8px"
     },
+    iconSubMenu: {
+        width: "16px",
+        height: "16px",
+        margin: "8px 8px 8px 8px"
+    },
+    iconNavBarMenu: {
+        width: "18px",
+        height: "18px",
+        veticalAlign: "baseline"
+    },
     listItem: {
         color: theme.palette.blackColor,
         fontSize: "1em",

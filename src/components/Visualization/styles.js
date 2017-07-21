@@ -5,9 +5,9 @@ const style = {
         border: theme.palette.thinBorder + theme.palette.greyColor,
         height: "100%",
         width: "100%",
-        WebkitBoxShadow: "7px 7px 17px -8px rgba(31,28,31,1)",
-        MozBoxShadow: "7px 7px 17px -8px rgba(31,28,31,1)",
-        boxShadow: "7px 7px 16px -14px rgba(31,28,31,1)"
+        WebkitBoxShadow: "rgb(31, 28, 31) 6px 6px 16px -11px",
+        MozBoxShadow: "rgb(31, 28, 31) 6px 6px 16px -11px",
+        boxShadow: "rgb(31, 28, 31) 6px 6px 16px -11px"
     },
     cardTitle: {
         background: theme.palette.greyLightColor,
