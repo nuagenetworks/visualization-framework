@@ -8,6 +8,7 @@ initialState = initialState.set(ActionKeyStore.NAV_BAR_TITLE, "");
 initialState = initialState.set(ActionKeyStore.NAV_BAR_TITLE_ICON, false);
 initialState = initialState.set(ActionKeyStore.CONTEXT, {});
 initialState = initialState.set(ActionKeyStore.HASLINKS, false);
+initialState = initialState.set(ActionKeyStore.HEADERCOLOR, Map());
 
 function toggleMainMenu(state) {
     return state.set(ActionKeyStore.MAIN_MENU_OPENED,  !state.get(ActionKeyStore.MAIN_MENU_OPENED));
@@ -34,6 +35,9 @@ function setHasLinks(state, hasLinks) {
     return state.set(ActionKeyStore.HASLINKS,  hasLinks);
 }
 
+function updateHeaderColor(state, action) {
+    return state.setIn([ActionKeyStore.HEADERCOLOR, action.id], action.color);
+}
 
 function interfaceReducer(state = initialState, action) {
 
@@ -55,6 +59,9 @@ function interfaceReducer(state = initialState, action) {
 
         case ActionTypes.ACTION_NAV_BAR_HAS_LINKS:
             return setHasLinks(state, action.hasLinks);
+
+        case ActionTypes.ACTION_UPDATE_HEADER_COLOR:
+            return updateHeaderColor(state, action);
 
         default:
             return state;
