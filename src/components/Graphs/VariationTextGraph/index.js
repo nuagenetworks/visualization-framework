@@ -93,7 +93,8 @@ export default class VariationTextGraph extends AbstractGraph {
             positiveColor,
             negativeColor,
             drawColor,
-            fontSize
+            fontSize,
+            absolute
         } = this.getConfiguredProperties();
 
         const values = this.computeValues(data, target);
