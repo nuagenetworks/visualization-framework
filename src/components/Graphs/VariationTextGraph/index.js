@@ -18,7 +18,7 @@ export default class VariationTextGraph extends AbstractGraph {
 
     constructor(props) {
         super(props, properties);
-        
+
 
     }
 
@@ -114,7 +114,6 @@ export default class VariationTextGraph extends AbstractGraph {
             variationIconName = "caret-down";
         }
 
-<<<<<<< HEAD
         let info = null;
 
         if (!absolute) {
@@ -154,32 +153,10 @@ export default class VariationTextGraph extends AbstractGraph {
                 </span>
             </div>
         }
-=======
->>>>>>> parent of 986808e... Merge branch 'master' into vss-task-list-4.0
+        
         return (
             <div>
-                <div>
-                    <span
-                        style={{
-                            fontSize: fontSize,
-                            marginRight:"3px"
-                        }}
-                        >
-                        {this.numberWithCommas(values.lastValue)}
-                    </span>
-                    <span
-                        style={{
-                            color: variationColor,
-                            marginLeft: "3px"
-                        }}
-                        >
-
-                        {this.decimals(values.variation)}%
-                        <FontAwesome
-                            name={variationIconName}
-                            />
-                    </span>
-                </div>
+                {info}
             </div>
         )
     }
