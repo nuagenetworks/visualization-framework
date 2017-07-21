@@ -26,7 +26,6 @@
             "#f76159",
             "#d9d9d9"
         ],
-        "zeroStart": true,
         "tooltip": [
             { "column": "L7Classification" }
         ],
