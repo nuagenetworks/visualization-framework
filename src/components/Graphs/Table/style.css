@@ -46,7 +46,3 @@ tbody td, thead th {
     color: #fcfcfc;
     cursor:  copy;
 }
-
-thead, tbody, tr, td, th {
-    display: initial !important;
-}

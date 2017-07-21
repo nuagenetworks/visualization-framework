@@ -112,7 +112,7 @@ export class DashboardView extends React.Component {
                     {links.map((link, index) => {
 
                         let targetURL = process.env.PUBLIC_URL + link.get("url");
-                        let highlight = currentUrl == link.get("url") ? style.activeLink : style.link;
+                        let highlight = currentUrl === link.get("url") ? style.activeLink : style.link;
 
                         return <li key={index}
                                    style={highlight}
