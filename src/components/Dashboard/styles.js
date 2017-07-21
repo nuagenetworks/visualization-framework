@@ -2,16 +2,18 @@ import { theme } from "../../theme";
 
 const style = {
     navigationContainer: {
-        background: theme.palette.greyColor,
+        background: theme.palette.greyLightDarkColor,
         textAlign: "center",
         color: theme.palette.blackColor,
         padding: "2px 10px",
-        height: "28px",
+        height: "34px",
+        borderBottom: theme.palette.thinBorder + theme.palette.greyColor,
+
     },
     linksList: {
         display: "inline-block",
-        margin: 0,
-        fontSize: "0.8em"
+        margin: "3px",
+        fontSize: "0.8em",
     },
     link: {
         padding: "0 10px",
