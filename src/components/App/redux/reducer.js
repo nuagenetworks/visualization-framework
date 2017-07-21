@@ -5,6 +5,7 @@ import { ActionTypes, ActionKeyStore } from "./actions"
 let initialState = Map(); // eslint-disable-line
 initialState = initialState.set(ActionKeyStore.MAIN_MENU_OPENED, false);
 initialState = initialState.set(ActionKeyStore.NAV_BAR_TITLE, "");
+initialState = initialState.set(ActionKeyStore.NAV_BAR_TITLE_ICON, false);
 initialState = initialState.set(ActionKeyStore.CONTEXT, {});
 initialState = initialState.set(ActionKeyStore.HASLINKS, false);
 
@@ -12,9 +13,12 @@ function toggleMainMenu(state) {
     return state.set(ActionKeyStore.MAIN_MENU_OPENED,  !state.get(ActionKeyStore.MAIN_MENU_OPENED));
 }
 
-
 function setTitle(state, aTitle) {
     return state.set(ActionKeyStore.NAV_BAR_TITLE,  aTitle);
+}
+
+function setTitleIcon(state, aTitleIcon) {
+    return state.set(ActionKeyStore.NAV_BAR_TITLE_ICON,  aTitleIcon);
 }
 
 function updateContext(state, aContext) {
@@ -39,6 +43,9 @@ function interfaceReducer(state = initialState, action) {
 
         case ActionTypes.ACTION_NAV_BAR_SET_TITLE:
             return setTitle(state, action.title);
+
+        case ActionTypes.ACTION_NAV_BAR_SET_TITLE_ICON:
+            return setTitleIcon(state, action.titleIcon);
 
         case ActionTypes.ACTION_UPDATE_CONTEXT:
             return updateContext(state, action.context);

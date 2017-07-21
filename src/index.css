@@ -25,3 +25,11 @@ body {
 text {
     font-size: 0.75em;
 }
+
+a, a:hover {
+  color: inherit;
+}
+
+img {
+  vertical-align: baseline;
+}

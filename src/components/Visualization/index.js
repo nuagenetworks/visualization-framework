@@ -464,16 +464,18 @@ class VisualizationView extends React.Component {
             >
                 { this.renderTitleBarIfNeeded() }
                 { this.renderFiltersToolBar() }
-                { this.renderSharingOptions() }
-                <CardText style={cardText}>
-                    { this.renderVisualizationIfNeeded() }
-                    {description}
-                    <ReactInterval
-                        enabled={enabled}
-                        timeout={timeout}
-                        callback={() => { this.initialize(this.props.id) }}
-                        />
-                </CardText>
+                <div>
+                    { this.renderSharingOptions() }
+                    <CardText style={cardText}>
+                        { this.renderVisualizationIfNeeded() }
+                        {description}
+                        <ReactInterval
+                            enabled={enabled}
+                            timeout={timeout}
+                            callback={() => { this.initialize(this.props.id) }}
+                            />
+                    </CardText>
+                </div>
             </Card>
         );
     }
