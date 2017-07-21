@@ -4,7 +4,10 @@ const style = {
     card: {
         border: theme.palette.thinBorder + theme.palette.greyColor,
         height: "100%",
-        width: "100%"
+        width: "100%",
+        WebkitBoxShadow: "rgb(31, 28, 31) 6px 6px 16px -11px",
+        MozBoxShadow: "rgb(31, 28, 31) 6px 6px 16px -11px",
+        boxShadow: "rgb(31, 28, 31) 6px 6px 16px -11px"
     },
     cardTitle: {
         background: theme.palette.greyLightColor,
