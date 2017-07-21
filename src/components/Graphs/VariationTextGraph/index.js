@@ -1,10 +1,18 @@
 import React from "react";
+import { connect } from "react-redux";
+
+import {
+    Actions as InterfaceActions
+} from "../../App/redux/actions";
+
+import {
+    ActionKeyStore as InterfaceActionKeyStore
+} from "../../App/redux/actions";
 
 import AbstractGraph from "../AbstractGraph";
 
 import FontAwesome from "react-fontawesome";
-import "./style.css";
-
+import style from "./styles"
 import {properties} from "./default.config"
 import { format, timeFormat } from "d3";
 const d3 = { format, timeFormat };
@@ -14,12 +22,52 @@ const d3 = { format, timeFormat };
      - Last value
      - Variation between previous value and last value
 */
-export default class VariationTextGraph extends AbstractGraph {
+export class VariationTextGraph extends AbstractGraph {
 
     constructor(props) {
         super(props, properties);
-        
+        this.settings = {
+            colors: null,
+            icon: 'minus',
+            values: null
+        }
+    }
 
+    componentWillMount() {
+        this.initialize()
+    }
+
+    initialize() {
+        const {
+            data,
+            configuration
+        } = this.props;
+
+        const {
+            target,
+            positiveColors,
+            negativeColors,
+            drawColors
+        } = this.getConfiguredProperties();
+
+        this.settings.values = this.computeValues(data, target);
+
+        if (!this.settings.values)
+            return;
+
+        this.settings.colors = drawColors;
+
+        if (this.settings.values.variation > 0){
+            this.settings.icon = "caret-up";
+            this.settings.colors = positiveColors;
+        }
+
+        if (this.settings.values.variation < 0){
+            this.settings.icon = "caret-down";
+            this.settings.colors = negativeColors;
+        }
+
+        this.props.setHeaderColor(configuration.id, this.settings.colors.header);
     }
 
     currentTitle() {
@@ -84,9 +132,8 @@ export default class VariationTextGraph extends AbstractGraph {
     }
 
     renderValues() {
-        const {
-            data,
-        } = this.props;
+        if(!this.settings.values)
+            return;
 
         const {
             absolute,
@@ -97,66 +144,42 @@ export default class VariationTextGraph extends AbstractGraph {
             fontSize
         } = this.getConfiguredProperties();
 
-        const values = this.computeValues(data, target);
-
-        if (!values)
-            return;
-
-        let variationColor = drawColor,
-            variationIconName = "";
-
-        if (values.variation > 0){
-            variationColor = positiveColor;
-            variationIconName = "caret-up";
-        }
-
-        if (values.variation < 0){
-            variationColor = negativeColor;
-            variationIconName = "caret-down";
-        }
+        const {
+            context
+        } = this.props;
 
         let info = null;
 
+
         if (!absolute) {
-            info = <div>
-                <span
-                    style={{
-                        fontSize: fontSize,
-                        marginRight:"3px"
-                    }}
-                    >
-                    {this.getFormattedValue(values.lastValue)}
-                </span>
-                <span
-                    style={{
-                        color: variationColor,
-                        marginLeft: "3px"
-                    }}
-                    >
-
-                    {`${this.decimals(values.variation)}%`}
-
-                    <FontAwesome
-                        name={variationIconName}
-                      />
-                </span>
-            </div>
+            info =
+                <span style={{ color: this.settings.colors.content, margin:"auto" }}>
+                    { this.getFormattedValue(this.settings.values.lastValue) }
+                 </span>
         } else {
-          info = <div>
-                <span
-                    style={{
-                        fontSize: fontSize,
-                        marginRight:"3px",
-                        color: variationColor
-                    }}
-                    >
-                    {this.getFormattedValue(values.lastValue)} / {this.getFormattedValue(values.previousValue)}
-                </span>
-            </div>
+          info =
+            <span style={{ color : this.settings.colors.content, margin:"auto"}}>
+                {this.getFormattedValue(this.settings.values.lastValue)} / {this.getFormattedValue(this.settings.values.previousValue)}
+            </span>
         }
+
+        let fullScreenFont = context.hasOwnProperty("fullScreen") ? style.fullScreenLargeFont : {};
         return (
-            <div>
-                {info}
+
+            <div style={{height: "100%"}}>
+                <span style={Object.assign({}, style.infoBoxIcon, this.settings.colors.iconBox ? {backgroundColor: this.settings.colors.iconBox} : {})}>
+                    <FontAwesome
+                        name={this.settings.icon}
+                        style={Object.assign({}, style.iconFont, (context.hasOwnProperty("fullScreen")) ? style.fullScreenLargerFont : {})}
+                        >
+                        <div style={Object.assign({}, style.labelText, fullScreenFont)}>
+                            {`${this.decimals(this.settings.values.variation)}%`}
+                        </div>
+                    </FontAwesome>
+                </span>
+                <span style={Object.assign({}, style.infoBoxText, fullScreenFont)}>
+                    {info}
+                </span>
             </div>
         )
     }
@@ -168,6 +191,7 @@ export default class VariationTextGraph extends AbstractGraph {
         } = this.props;
 
         const {
+          padding,
           textAlign,
         } = this.getConfiguredProperties();
 
@@ -179,10 +203,10 @@ export default class VariationTextGraph extends AbstractGraph {
 
                 <div
                     style={{
-                        padding: [padding.top, padding.right, padding.bottom, padding.left].join(" "),
                         textAlign: textAlign,
                         cursor: cursor,
-                        fontSize: "1.2em"
+                        fontSize: "1.2em",
+                        height: "100%"
                     }}
                     onClick={onMarkClick}
                     >
@@ -197,3 +221,15 @@ VariationTextGraph.propTypes = {
   configuration: React.PropTypes.object,
   data: React.PropTypes.array
 };
+
+const mapStateToProps = (state, ownProps) => ({
+    context: state.interface.get(InterfaceActionKeyStore.CONTEXT)
+});
+
+const actionCreators = (dispatch) => ({
+    setHeaderColor: function(id, color) {
+        dispatch(InterfaceActions.updateHeaderColor(id, color));
+    }
+ });
+
+export default connect(mapStateToProps, actionCreators)(VariationTextGraph);

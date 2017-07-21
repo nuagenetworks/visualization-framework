@@ -3,7 +3,6 @@
     "title": "# Security Events (24h)",
     "query": "vss-enterprise-events-metric",
     "graph": "VariationTextGraph",
-    "showTitleBar": true,
     "data": {
         "titlePosition": "top",
         "target":{

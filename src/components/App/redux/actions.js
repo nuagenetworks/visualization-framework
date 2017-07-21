@@ -5,6 +5,7 @@ export const ActionTypes = {
     ACTION_UPDATE_CONTEXT: "ACTION_UPDATE_CONTEXT",
     ACTION_UPDATE_VISUALIZATION_TYPE: "ACTION_UPDATE_VISUALIZATION_TYPE",
     ACTION_NAV_BAR_HAS_LINKS: "ACTION_NAV_BAR_HAS_LINKS",
+    ACTION_UPDATE_HEADER_COLOR: "ACTION_UPDATE_HEADER_COLOR",
 };
 
 export const ActionKeyStore = {
@@ -13,6 +14,7 @@ export const ActionKeyStore = {
     NAV_BAR_TITLE_ICON: "titleIcon",
     CONTEXT: "context",
     VISUALIZATION_TYPE: "visualizationType",
+    HEADERCOLOR: "headerColor",
 };
 
 
@@ -51,6 +53,14 @@ export const Actions = {
         return {
             type: ActionTypes.ACTION_NAV_BAR_HAS_LINKS,
             hasLinks: hasLinks
+        }
+    },
+
+    updateHeaderColor: (id, color) => {
+        return {
+            type: ActionTypes.ACTION_UPDATE_HEADER_COLOR,
+            id: id,
+            color: color
         }
     },
 };

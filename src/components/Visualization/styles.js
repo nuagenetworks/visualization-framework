@@ -28,12 +28,14 @@ const style = {
         height:16,
         fontSize: "0.75em",
         textAlign: "center",
-        cursor: "pointer",
-        color: theme.palette.blackColor,
+        cursor: "pointer"
     },
     sharingOptionsContainer: {
         padding: "2px",
-        background: theme.palette.greyColor
+        background: theme.palette.greyColor,
+        position: "absolute",
+        zIndex: 999,
+        width: "100%"
     },
     menuItem: {
         minHeight: "26px",
@@ -99,7 +101,26 @@ const style = {
     },
     fullWidth: {
         width: "100%",
-    }
+    },
+
+    smallBox: {
+        borderRadius: "2px",
+        position: "relative",
+        display: "block",
+        marginBottom: "20px",
+        boxShadow: "0 1px 1px rgba(0,0,0,0.1)"
+    },
+
+    innerCardTitleIcon: {
+        padding: 0,
+        margin: "0 0 0 1px",
+        width:16,
+        height:16,
+        fontSize: "0.75em",
+        textAlign: "center",
+        cursor: "pointer",
+        color: "#fff",
+    },
 
 };
 
