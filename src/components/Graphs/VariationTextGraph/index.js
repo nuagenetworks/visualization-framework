@@ -59,7 +59,7 @@ export default class VariationTextGraph extends AbstractGraph {
         return {
             lastValue: lastInfo[target.field],
             previousValue: previousInfo[target.field],
-            variation: variation !== 0 ? variation * 100 / previousInfo[target.field] : 0
+            variation: variation !== 0 ? variation * 100 / previousInfo[target.field] : 0,
         }
     }
 
@@ -89,7 +89,6 @@ export default class VariationTextGraph extends AbstractGraph {
         } = this.props;
 
         const {
-            absolute,
             target,
             positiveColor,
             negativeColor,
@@ -115,6 +114,7 @@ export default class VariationTextGraph extends AbstractGraph {
             variationIconName = "caret-down";
         }
 
+<<<<<<< HEAD
         let info = null;
 
         if (!absolute) {
@@ -154,9 +154,32 @@ export default class VariationTextGraph extends AbstractGraph {
                 </span>
             </div>
         }
+=======
+>>>>>>> parent of 986808e... Merge branch 'master' into vss-task-list-4.0
         return (
             <div>
-                {info}
+                <div>
+                    <span
+                        style={{
+                            fontSize: fontSize,
+                            marginRight:"3px"
+                        }}
+                        >
+                        {this.numberWithCommas(values.lastValue)}
+                    </span>
+                    <span
+                        style={{
+                            color: variationColor,
+                            marginLeft: "3px"
+                        }}
+                        >
+
+                        {this.decimals(values.variation)}%
+                        <FontAwesome
+                            name={variationIconName}
+                            />
+                    </span>
+                </div>
             </div>
         )
     }
@@ -168,7 +191,7 @@ export default class VariationTextGraph extends AbstractGraph {
         } = this.props;
 
         const {
-          padding,
+          margin,
           textAlign,
           titlePosition
         } = this.getConfiguredProperties();
@@ -177,18 +200,24 @@ export default class VariationTextGraph extends AbstractGraph {
             return;
 
         const cursor = onMarkClick ? "pointer" : undefined
+
         return (
 
                 <div
                     style={{
-                        padding: [padding.top, padding.right, padding.bottom, padding.left].join(" "),
+                        margin: [margin.top, margin.right, margin.bottom, margin.left].join(" "),
                         textAlign: textAlign,
                         cursor: cursor,
                         fontSize: "1.2em"
                     }}
                     onClick={onMarkClick}
                     >
+
+                    {this.renderTitleIfNeeded(titlePosition, "top")}
+
                     {this.renderValues()}
+
+                    {this.renderTitleIfNeeded(titlePosition, "bottom")}
                 </div>
         );
 

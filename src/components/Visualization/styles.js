@@ -10,10 +10,8 @@ const style = {
         background: theme.palette.greyLightColor,
         color: theme.palette.blackColor,
         padding: "10px",
-        fontSize: "1em",
+        fontSize: "1.2em",
         fontWeight: "200",
-        overflow: "hidden",
-        whiteSpace: "nowrap"
     },
     copyContainer: {
         marginTop: "1px"
@@ -57,9 +55,8 @@ const style = {
         textAlign: "center",
     },
     overlayText: {
-        position: "relative",
-        top: "50%",
-        transform: "translateY(-50%)",
+        position: "absolute",
+        top: "40%",
         width: "100%",
         fontSize: "1.2em",
         fontWeight: 300,
@@ -88,9 +85,7 @@ const style = {
         cursor: "pointer"
     },
     descriptionText: {
-        position: "relative",
-        top: "50%",
-        transform: "translateY(-50%)",
+        padding: "60px 20px 20px 20px",
         fontSize: "1.1em",
         color: theme.palette.blackColor,
     },

@@ -3,7 +3,7 @@
     "title": "# Alerts (24h)",
     "query": "vss-enterprise-alerts-metric",
     "graph": "VariationTextGraph",
-    "showTitleBar": true,
+    "showTitleBar": false,
     "data": {
         "titlePosition": "top",
         "target":{

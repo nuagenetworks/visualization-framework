@@ -3,7 +3,7 @@
     "title": "# PGs (24h)",
     "query": "vss-enterprise-pg-metric",
     "graph": "VariationTextGraph",
-    "showTitleBar": true,
+    "showTitleBar": false,
     "data": {
         "titlePosition": "top",
         "target":{

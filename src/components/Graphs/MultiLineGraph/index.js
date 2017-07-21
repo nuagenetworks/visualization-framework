@@ -1,5 +1,6 @@
 import React from "react";
 import XYGraph from "../XYGraph";
+import { Actions } from "../../App/redux/actions";
 import { connect } from "react-redux";
 
 import {
@@ -13,12 +14,13 @@ import {
     select,
     brushX,
     voronoi,
+    merge,
     event
 } from "d3";
 
 import {properties} from "./default.config";
 
-class MultiLineGraph extends XYGraph {
+class LineGraph extends XYGraph {
 
     constructor(props) {
         super(props, properties);
@@ -40,8 +42,8 @@ class MultiLineGraph extends XYGraph {
           chartHeightToPixel,
           chartWidthToPixel,
           circleToPixel,
+          colorColumn,
           colors,
-          dateHistogram,
           legend,
           linesColumn,
           margin,
@@ -59,8 +61,7 @@ class MultiLineGraph extends XYGraph {
           yTicks,
           yTickSizeInner,
           yTickSizeOuter,
-          brushEnabled,
-          zeroStart
+          brushEnabled
         } = this.getConfiguredProperties();
 
         let finalYColumn = typeof yColumn === 'object' ? yColumn : [yColumn];
@@ -78,26 +79,20 @@ class MultiLineGraph extends XYGraph {
         });
 
         let filterDatas = [];
-        data.forEach((d) => {
-            legendsData.forEach((ld) => {
-              if(d[ld['key']] !== null) {
+        data.map((d) => {
+            legendsData.map((ld) => {
                 filterDatas.push(Object.assign({
-                    yColumn: d[ld['key']] !== null ? d[ld['key']] : 0,
+                    yColumn: d[ld['key']],
                     columnType: ld['key']
                 }, d));
-              }
             });
         });
 
         const isVerticalLegend = legend.orientation === 'vertical';
-
-        const xLabelFn             = (d) => d[xColumn];
-
-        const yLabelUnformattedFn  = (d) => d['yColumn'];
-
+        const xLabelFn         = (d) => d[xColumn];
         const yLabelFn         = (d) => {
             if(!yTickFormat) {
-                return d['yColumn'];
+                return d;
             }
             const formatter = format(yTickFormat);
             return formatter(d['yColumn']);
@@ -108,14 +103,18 @@ class MultiLineGraph extends XYGraph {
         const scale            = this.scaleColor(legendsData, 'key');
         const getColor         = (d) => scale ? scale(d['key']) : stroke.color || colors[0];
 
+
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
         let legendWidth       = legend.show && legendsData.length >= 1 ? this.longestLabelLength(legendsData, legendFn) * chartWidthToPixel : 0;
 
+        let xLabelWidth       = this.longestLabelLength(data, xLabelFn) * chartWidthToPixel;
         let yLabelWidth       = this.longestLabelLength(filterDatas, yLabelFn) * chartWidthToPixel;
 
         let leftMargin        = margin.left + yLabelWidth;
         let availableWidth    = width - (margin.left + margin.right + yLabelWidth);
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
+
+
 
         if (legend.show)
         {
@@ -134,20 +133,10 @@ class MultiLineGraph extends XYGraph {
             }
         }
 
-        let yExtent = this.updateYExtent(extent(filterDatas, yLabelUnformattedFn), zeroStart);
-
-        let xScale;
-
-        if (dateHistogram) {
-            xScale = scaleTime()
-              .domain(extent(data, xLabelFn));
-        } else {
-            xScale = scaleLinear()
-              .domain(extent(data, xLabelFn));
-        }
-
+        const xScale = scaleTime()
+            .domain(extent(data, xLabelFn));
         const yScale = scaleLinear()
-            .domain(yExtent);
+            .domain(extent(filterDatas, yLabelFn));
 
         xScale.range([0, availableWidth]);
         yScale.range([availableHeight, 0]);
@@ -241,11 +230,10 @@ class MultiLineGraph extends XYGraph {
                             {
                                 legendsData.map((d, i) =>
                                     <path
-                                        key={ d['key'] }
                                         fill="none"
                                         stroke={ getColor(d) }
                                         strokeWidth={ stroke.width }
-                                        d={ lineGenerator(filterDatas, d['key']) }
+                                        d={ lineGenerator(data, d['key']) }
                                     />
                                 )
                             }
@@ -275,10 +263,9 @@ class MultiLineGraph extends XYGraph {
                                   />
 
                                   <path
-                                      key={ i }
                                       fill="none"
                                       d={ d == null ? null : "M" + d.join("L") + "Z" }
-                                      style={{"pointerEvents": "all"}}
+                                      style={{"pointer-events": "all"}}
                                   />
                               </g>
                           )}
@@ -297,7 +284,7 @@ class MultiLineGraph extends XYGraph {
         );
     }
 }
-MultiLineGraph.propTypes = {
+LineGraph.propTypes = {
     configuration: React.PropTypes.object,
     response: React.PropTypes.object
 };
@@ -305,4 +292,4 @@ MultiLineGraph.propTypes = {
 const actionCreators = (dispatch) => ({
 });
 
-export default connect(null, actionCreators)(MultiLineGraph);
+export default connect(null, actionCreators)(LineGraph);

@@ -13,8 +13,6 @@ import FiltersToolBar from "../FiltersToolBar";
 import { CardOverlay } from "../CardOverlay";
 import { Card, CardText } from 'material-ui/Card';
 
-import {CSVLink} from 'react-csv';
-
 import {
     Actions as ServiceActions,
     ActionKeyStore as ServiceActionKeyStore
@@ -317,62 +315,31 @@ class VisualizationView extends React.Component {
         )
     }
 
-    renderDownloadIcon() {
-        const {
-            queryConfiguration,
-            response
-        } = this.props;
-
-        if (!this.shouldShowVisualization()) {
-            return false;
-        }
-
-        const data = ServiceManager.tabify(queryConfiguration, response.results);
-
-        if (!data || !data.length) {
-            return null;
-        }
-
-        return (
-            <CSVLink data={data} filename={ `${this.props.configuration.title ? this.props.configuration.title : 'data'}.csv` } >
-                <FontAwesome
-                    name="cloud-download"
-                    style={style.cardTitleIcon}
-                />
-            </CSVLink>
-        )
-    }
-
     renderTitleBarIfNeeded() {
         if (!this.shouldShowTitleBar())
             return;
 
         return (
             <div style={style.cardTitle}>
+                {this.props.configuration.title}
                 <div className="pull-right">
                     {this.renderDescriptionIcon()}
                     {this.renderShareIcon()}
-                    {this.renderDownloadIcon()}
                 </div>
-                <div>
-                  {this.props.configuration.title}
-                </div>
-
             </div>
         )
     }
 
     renderFiltersToolBar() {
         const {
-            configuration,
-            id
+            configuration
         } = this.props;
 
         if (!configuration || !configuration.filterOptions)
             return;
 
         return (
-            <FiltersToolBar filterOptions={configuration.filterOptions} visualizationId={id} />
+            <FiltersToolBar filterOptions={configuration.filterOptions} />
         )
     }
 
@@ -482,19 +449,12 @@ class VisualizationView extends React.Component {
 const mapStateToProps = (state, ownProps) => {
 
     const configurationID = ownProps.id || ownProps.params.id,
-          orgContexts         = state.interface.get(InterfaceActionKeyStore.CONTEXT),
+          context         = state.interface.get(InterfaceActionKeyStore.CONTEXT),
           configuration   = state.configurations.getIn([
               ConfigurationsActionKeyStore.VISUALIZATIONS,
               configurationID,
               ConfigurationsActionKeyStore.DATA
           ]);
-
-    let context = {};
-    for (let key in orgContexts) {
-      if(orgContexts.hasOwnProperty(key)) {
-        context[key.replace(`${configurationID}-`, '')] = orgContexts[key];
-      }
-    }
 
     const props = {
         id: configurationID,

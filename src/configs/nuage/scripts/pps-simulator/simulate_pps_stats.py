@@ -7,7 +7,32 @@ from random import randint
 from elasticsearch import Elasticsearch
 
 
-class SimulateAARData(object):
+data = {
+    "VRFId": "1946293155",
+    "SrcNSG": "44.32.45.181",
+    "DestNSG": "121.245.72.101",
+    "SourceIP": "20.0.0.4",
+    "SourcePort": 15125,
+    "DestIP": "20.0.6.4",
+    "DestinationPort": 53,
+    "AppGroupId": "60fe3a70-4563-4292-bbbd-37a480e43ff7",
+    "AppId": "34762b19-30c5-483a-ab69-e531abb4b3c8",
+    "L7Classification": "DNS",
+    "Proto": "UDP",
+    "SrcUplinkIndex": 1,
+    "srcUplinkRole": "primary",
+    "DestUplinkIndex": 1,
+    "dstUplinkRole": "primary",
+    "SrcVportId": "6bf86674-b2aa-4477-a73c-2d18c7316197",
+    "DestVportId": "",
+    "Egress Bytes": 0,
+    "Egress Pkts": 0,
+    "Ingress Bytes": 7500,
+    "Ingress Pkts": 125
+}
+
+
+class SimulateFlowData(object):
     def __init__(self, defData):
         self.nsg_id_prefix = defData["nsg_prefix"]
         self.nsg_count = defData["nsg_count"]
@@ -33,15 +58,33 @@ class SimulateAARData(object):
         i = 0
         nsgids = []
         while i < self.nsg_count:
-            #nsg_subnet_cidr = self.getRandomCidrPrefix()
-            nsg_subnet_cidr = self.nsg_id_prefix
-            #nsg_last_octet = str(randint(2, 254))
-            nsg_last_octet = str(i)
+            nsg_subnet_cidr = self.getRandomCidrPrefix()
+            nsg_last_octet = str(randint(2, 254))
             nsg_ip = nsg_subnet_cidr + nsg_last_octet
             nsg = {
                 "nsg_subnet": nsg_subnet_cidr,
                 "nsg_id": nsg_ip,
                 "nsg_name": "ovs-" + nsg_last_octet
+            }
+            nsgids.append(nsg)
+            i += 1
+        return nsgids
+
+    def getVsdNSGIds(self):
+        i = 0
+        # vsdnsgids = ["16.118.19.91", "27.18.60.32", "65.170.79.63",
+        #           "27.106.226.140"]
+        # vsdnsgids = ["167.247.97.198", "65.175.237.32", "92.180.82.217", "191.209.231.145"]
+        vsdnsgids = ["104.41.101.14", "81.15.7.16", "213.201.93.120", "104.3.254.74"]
+
+        nsgids = []
+        while i < len(vsdnsgids):
+            nsg_subnet_cidr = self.getRandomCidrPrefix()
+            # nsg_last_octet = str(randint(2, 254))
+            nsg_ip = vsdnsgids[i]
+            nsg = {
+                "nsg_subnet": nsg_subnet_cidr,
+                "nsg_id": nsg_ip
             }
             nsgids.append(nsg)
             i += 1
@@ -70,12 +113,6 @@ class SimulateAARData(object):
         app_prefix = "myApp-"
         i = 0
         appids = []
-        app_id = str(uuid.uuid4())
-        app = {
-            "app_id": app_id,
-            "app_name": "Default Application"
-        }
-        appids.append(app)
         while i < self.app_count:
             app_id = str(uuid.uuid4())
             app = {
@@ -84,29 +121,35 @@ class SimulateAARData(object):
             }
             appids.append(app)
             i += 1
-
-
         return appids
 
     def getOutSlaApps(self):
         outslas = ["myApp-0", "myApp-1"]
         return outslas
 
-    # To simplify each appgroup will contain one application
+    def getVsdAppIds(self):
+        # appids = ["af007046-e083-4e2e-bded-40817a991e0d",
+        #           "fa1cfa0a-a4d1-4b60-861d-9e485ef0d4e4",
+        #           "0eafe1bc-eae7-4a99-8612-c614fbbb5e2a",
+        #           "647eefad-d236-427f-83b4-64ae407ac323",
+        #           "567c536d-b404-41df-997d-47b29c3b3f23"]
+        # appids = ["c35febd3-ef4a-4898-824e-519b6608d981", "bd440249-d1be-4c84-b734-c90a92617af4"]
+        appids = ["989dcb8a-c1a4-44f3-8444-2a8503f25f70", "86442ac9-a450-48cf-911e-1c2fa6821a6d", "c34d8ccf-ec77-461f-89ee-e5dbc79baa22", "c7e684b6-ae06-404f-b6e0-50ed64f0e49e"]
+        return appids
+
     def getAppGroupIds(self, appids):
         i = 0
         appGrps = []
         appGrp_prefix = "myAG-"
         while i < self.app_group_count:
             app_group_id = str(uuid.uuid4())
-            #app_count = randint(1, self.app_count - 1)
+            app_count = randint(1, self.app_count - 1)
             cnt = 0
             applist = []
-            applist.append(appids[i])
-            #while cnt < app_count:
-            #   app_index = random.randrange(0, len(appids) - 1, 1)
-            #    applist.append(appids[app_index])
-            #   cnt += 1
+            while cnt < app_count:
+                app_index = random.randrange(0, len(appids) - 1, 1)
+                applist.append(appids[app_index])
+                cnt += 1
 
             app_grp = {
                 "appgrp_id": app_group_id,
@@ -168,6 +211,35 @@ class SimulateAARData(object):
             i += 1
         return perfmons
 
+    def getVsdAppGroupIds(self, appids):
+        i = 0
+        # vsdAppGrps = ["8561a341-6609-46b9-84a4-2fa7173d34b4",
+        #            "373c8a21-f220-4cdd-a329-42f90e3a35b1",
+        #            "e4bd6733-83b4-4c6f-afe6-fbc212730d24",
+        #            "f2234323-a15a-40b7-a814-3a808c5675d2",
+        #            "420ab6ba-da1b-43ad-8f97-d4f9ddc91cea"]
+        # vsdAppGrps = ["c275c32a-a434-4e91-bcde - 13ae28d72408", "d7a6665b-740b-4c9a-a2e3-da289bc9eb3b"]
+        vsdAppGrps = ["2ebd9d05-8ba4-47c4-8b7e-38fb2bc9e668", "0d611654-775e-4fef-b30c - 16e90913b4b6", "d10aa985-c4ef-44b6-a085-f5e7b6b68bd7"]
+        appGrps = []
+        i = 0
+        while i < len(vsdAppGrps):
+            app_group_id = vsdAppGrps[i]
+            app_count = randint(1, 3)
+            cnt = 0
+            applist = []
+            while cnt < app_count:
+                app_index = random.randrange(0, len(appids) - 1, 1)
+                applist.append(appids[app_index])
+                cnt += 1
+
+            app_grp = {
+                "appgrp_id": app_group_id,
+                "app_list": applist
+            }
+            appGrps.append(app_grp)
+            i += 1
+        return appGrps
+
     def getProto(self):
         proto = ["TCP", "UDP"]
         return proto
@@ -179,14 +251,12 @@ class SimulateAARData(object):
             vportlist = []
             i = 0
             while i < self.vport_count:
-                #last_octet = str(randint(2, 254))
-                last_octet = str(i)
+                last_octet = str(randint(2, 254))
                 vport = {
                     "vport_id": str(uuid.uuid4()),
                     "vport_name": vport_prefix + last_octet,
                     "vport_ip": nsg["nsg_subnet"] + last_octet,
-                    #"port": randint(0, 4094),
-                    "port": i,
+                    "port": randint(0, 4094),
                     "nsg_id": nsg["nsg_id"],
                     "nsg_name": nsg["nsg_name"],
                     "domain": domain
@@ -197,6 +267,34 @@ class SimulateAARData(object):
             nsg_vport_hash[nsg["nsg_id"]] = vportlist
 
         return nsg_vport_hash
+
+    def getDestVports(self):
+        i = 0
+        destVports = []
+        while i < self.dest_vport_count:
+            dest_vport = str(uuid.uuid4())
+            dest_ip_last = str(randint(2, 254))
+            dest_ip = self.dest_ip_prefix + dest_ip_last
+            dest_port = randint(0, 4094)
+            vportData = {
+                "vportId": dest_vport,
+                "dest_ip": dest_ip,
+                "dest_port": dest_port
+            }
+            destVports.append(vportData)
+            i += 1
+        return destVports
+
+    def getDomainIds(self):
+        # domainIds = ["20001", "20011"]
+        # domainIds = ["769960975"]
+        domainIds = ["31683034", "1457206697"]
+
+        # while i <= self.domain_count:
+        #     domId = domPrefix + str(i)
+        #     domainIds.append(domName)
+        #     i += 1
+        return domainIds
 
     def getDomainNames(self):
         i = 1
@@ -254,208 +352,57 @@ l7_to_in_pkts = {
 }
 
 
+def create_pre_defined_flows(**kwargs):
+    appgrpids = kwargs["appgrpids"]
+    protos = kwargs["protos"]
+    l7s = kwargs["l7s"]
+    domains = kwargs["domains"]
+    nsgs = kwargs["nsgs"]
+    simData = kwargs["simData"]
+    flows = []
+    for dom in domains:
+        domData = simData.getDomData(dom, nsgs)
+        vporthash = domData.get("vport_hash")
+        for nsg_ind, nsgData in enumerate(nsgs):
+            src_nsgid = nsgData["nsg_id"]
+            svports = vporthash.get(src_nsgid)
+            # dnsg = random.randrange(0, len(nsgs) - 1, 1)
+            # dest_nsgData = nsgs[dnsg]
+            # dest_nsgid = dest_nsgData["nsg_id"]
+            # dvports = vporthash.get(dest_nsgid)
 
+            for index, svport in enumerate(svports):
+                dindex = index + 1
+                while dindex < len(svports):
+                    dvport = svports[dindex]
+                    app_cnt = 0
+                    while app_cnt < 5:
+                        app_index = random.randrange(0, len(appgrpids) - 1, 1)
+                        appgrp = appgrpids[app_index]
+                        app_grpid = appgrp["appgrp_id"]
+                        app_grpname = appgrp["appgrp_name"]
+                        applist = appgrp["app_list"]
+                        app_rand = randint(0, len(applist) - 1)
+                        app = applist[app_rand]
+                        proto = randint(0, len(protos) - 1)
+                        l7 = randint(0, len(l7s) - 1)
 
-class SimulateFlowStats(object):
-    def __init__(self, flowData, simData):
-        self.nsgs = flowData["nsgs"]
-        self.appgrps = flowData["app_grps"]
-        self.srcUplinks = flowData["srcuplinks"]
-        self.destUplinks = flowData["destuplinks"]
-        self.domains = flowData["domains"]
-        self.def_ent_name = flowData["def_ent_name"]
-        self.es = flowData["es"]
-        self.es_index_prefix = flowData["es_index_prefix"]
-        self.npm_grps = flowData["npm_grps"]
-        self.contro_states = ["Null", "Connecting", "Up", "Down", "Started"]
-        self.duc_grps = flowData["duc_grps"]
-        self.slastatus = ["InSla", "OutSla", "Unmonitored"]
-        self.outslaApps = 0.05
-        self.outslaApps = ["false", "true"]
-        self.protos = flowData["protos"]
-        self.l7s = flowData["l7s"]
-        self.perf_mons = flowData["perf_mons"]
-        self.simData = simData
-        self.hasswitchedpath = ["false", "true"]
+                        flow_entry = {
+                            "app_grp": app_grpid,
+                            "app_grp_name": app_grpname,
+                            "app_id": app["app_id"],
+                            "app_name": app["app_name"],
+                            "Proto": protos[proto],
+                            "l7_class": l7,
+                            "src_vport": svport,
+                            "dest_vport": dvport
+                        }
+                        # flows[(svport["vport_id"], dvport["vport_id"])] = flow_entry
+                        flows.append(flow_entry)
+                        app_cnt += 1
+                    dindex += 1
 
-    def create_pre_defined_flows(self, **kwargs):
-        appgrpids = kwargs["appgrpids"]
-        protos = kwargs["protos"]
-        l7s = kwargs["l7s"]
-        domains = kwargs["domains"]
-        nsgs = kwargs["nsgs"]
-        simData = kwargs["simData"]
-        flows = []
-        for dom in domains:
-            domData = simData.getDomData(dom, nsgs)
-            vporthash = domData.get("vport_hash")
-            for nsg_ind, nsgData in enumerate(nsgs):
-                src_nsgid = nsgData["nsg_id"]
-                svports = vporthash.get(src_nsgid)
-                # dnsg = random.randrange(0, len(nsgs) - 1, 1)
-                # dest_nsgData = nsgs[dnsg]
-                # dest_nsgid = dest_nsgData["nsg_id"]
-                # dvports = vporthash.get(dest_nsgid)
-
-                for index, svport in enumerate(svports):
-                    dindex = index + 1
-                    while dindex < len(svports):
-                        dvport = svports[dindex]
-                        app_grp_cnt = 0
-                        while app_grp_cnt < len(appgrpids):
-                            #app_index = random.randrange(0, len(appgrpids) - 1, 1)
-                            #app_grp_index = app_grp_cnt
-                            appgrp = appgrpids[app_grp_cnt]
-                            app_grpid = appgrp["appgrp_id"]
-                            app_grpname = appgrp["appgrp_name"]
-                            applist = appgrp["app_list"]
-                            #app_rand = randint(0, len(applist) - 1)
-                            #app = applist[app_rand]
-                            app = applist[0]
-                            proto = randint(0, len(protos) - 1)
-                            l7 = randint(0, len(l7s) - 1)
-
-                            flow_entry = {
-                                "app_grp": app_grpid,
-                                "app_grp_name": app_grpname,
-                                "app_id": app["app_id"],
-                                "app_name": app["app_name"],
-                                "Proto": protos[proto],
-                                "l7_class": l7,
-                                "src_vport": svport,
-                                "dest_vport": dvport
-                            }
-                            # flows[(svport["vport_id"], dvport["vport_id"])] = flow_entry
-                            flows.append(flow_entry)
-                            app_grp_cnt += 1
-                        dindex += 1
-
-        return flows
-
-
-    def generate_flow_stats(self, startTime, endTime):
-        pre_flows = self.create_pre_defined_flows(appgrpids=self.appgrps, l7s=self.l7s,
-                                         protos=self.protos,
-                                         domains=self.domains, nsgs=self.nsgs,
-                                         simData=self.simData)
-        sla_flows = []
-
-        flow_cnt = 0
-        sla_prob_new = 0.6
-        write_data = []
-        with open('/var/log/flowstats_new.log', 'w') as flowstats:
-            timestamp = startTime
-            t_increment = 0
-            while timestamp != endTime:
-                timestamp = startTime + t_increment * 1000
-                flow_record = {}
-                i = 0
-                sla_status_ts = get_random_with_prob(sla_prob_new)
-                for flow_entry in pre_flows:
-                    s_vport = flow_entry["src_vport"]
-                    d_vport = flow_entry["dest_vport"]
-                    dom = s_vport["domain"]
-                    src_nsgid = s_vport["nsg_id"]
-                    src_nsgname = s_vport["nsg_name"]
-                    src_vportId = s_vport["vport_id"]
-                    src_vportName = s_vport["vport_name"]
-                    src_ip = s_vport["vport_ip"]
-                    src_port = s_vport["port"]
-                    dest_ip = d_vport["vport_ip"]
-                    dest_port = d_vport["port"]
-                    proto = flow_entry["Proto"]
-                    srcUp = randint(0, 1)
-                    destUp = randint(0, 1)
-                    l7 = flow_entry["l7_class"]
-                    appid = flow_entry["app_id"]
-                    appname = flow_entry["app_name"]
-                    appgrpid = flow_entry["app_grp"]
-                    appgrpname = flow_entry["app_grp_name"]
-                    # appgrpid = flow_entry["app_grp"]
-                    if self.l7s[l7] in l7_to_in_bytes.keys():
-                        inbytes = l7_to_in_bytes.get(self.l7s[l7])
-                    else:
-                        inbytes = randint(100, 4048)
-                    if self.l7s[l7] in l7_to_in_pkts.keys():
-                        inpkts = l7_to_in_pkts.get(self.l7s[l7])
-                    else:
-                        inpkts = randint(0, 10)
-                    ingressMB = float(inbytes) / 1048576
-                    underlayId = random.randrange(0, 10)
-                    if self.slastatus[sla_status_ts] == "OutSla":
-                        if appname in self.outslaApps:
-                            flow_entry["timestamp"] = timestamp
-                            sla_flows.append(flow_entry)
-                            sla_status = 1
-                        else:
-                            sla_status = 0
-                    elif self.slastatus[sla_status_ts] == "InSla":
-                        sla_status = 0
-
-                    # flow record tuples
-                    i += 1
-                    flow_record["timestamp"] = long(timestamp)
-                    flow_record["Domain"] = dom
-                    flow_record["EnterpriseName"] = self.def_ent_name
-                    flow_record["SrcVportUUID"] = src_vportId
-                    flow_record["SrcVportName"] = src_vportName
-                    # flow_record["DstVportUUID"] = dest_vportId
-                    flow_record["SrcIp"] = src_ip
-                    flow_record["SrcPort"] = src_port
-                    flow_record["DstIp"] = dest_ip
-                    flow_record["DstPort"] = dest_port
-                    flow_record["Proto"] = proto
-                    flow_record["SrcNSG"] = src_nsgid
-                    flow_record["SourceNSG"] = src_nsgname
-                    flow_record["SrcUplink"] = self.srcUplinks[srcUp]
-                    flow_record["DstUplink"] = self.destUplinks[destUp]
-                    flow_record["L7Classification"] = self.l7s[l7]
-                    flow_record["AppID"] = appid
-                    flow_record["Application"] = appname
-                    flow_record["AppGroupID"] = appgrpid
-                    flow_record["APMGroup"] = appgrpname
-                    ingress_prob = get_random_with_prob(0.5)
-                    if ingress_prob:
-                        flow_record["IngressBytes"] = inbytes
-                        flow_record["IngressMB"] = ingressMB
-                        flow_record["IngressPackets"] = inpkts
-                    else:
-                        flow_record["IngressBytes"] = 0
-                        flow_record["IngressMB"] = 0
-                        flow_record["IngressPackets"] = 0
-
-                    if not ingress_prob:
-                        flow_record["EgressBytes"] = inbytes
-                        flow_record["EgressMB"] = float(inbytes) / 1048576  # TODO: What is this number ?
-                        flow_record["EgressPackets"] = inpkts
-                    else:
-                        flow_record["EgressBytes"] = 0
-                        flow_record["EgressMB"] = 0
-                        flow_record["EgressPackets"] = 0
-
-                    flow_record["TotalBytesCount"] = inbytes + inbytes
-                    flow_record["TotalMB"] = float(flow_record["TotalBytesCount"]) / 1048576
-
-                    flow_record["TotalPacketsCount"] = inpkts + inpkts
-                    flow_record["DstNSG"] = src_nsgid
-                    flow_record["DestinationNSG"] = src_nsgname
-                    flow_record["SlaStatus"] = self.slastatus[sla_status]
-                    flow_record["HasSwitchedPaths"] = self.hasswitchedpath[sla_status]
-                    flow_record["L7ClassEnhanced"] = self.l7s[l7]
-                    flow_record["UnderlayID"] = underlayId
-                    flow_record["UnderlayName"] = "Underlay"+str(underlayId)
-
-                    json.dump(flow_record, flowstats, default=json_serial)
-                    flowstats.write("\n")
-                    index_name = "nuage_dpi_flowstats" + '_' + self.es_index_prefix
-                    self.es.index(index=index_name, doc_type='nuage_doc_type',
-                             body=flow_record)
-                    flow_cnt += 1
-                t_increment += 30
-
-        print flow_cnt
-        return sla_flows
-
+    return flows
 
 
 class SimulateProbeStats(object):
@@ -482,9 +429,12 @@ class SimulateProbeStats(object):
         probe_cnt = 0
         firstTS = True
         control_down_prob = 0.005
+        # es = self.es
+        # es_index_prefix = self.es_index_prefix
         with open('/var/log/probestats_new.log', 'w') as probestats:
             timestamp = startTime
             t_increment = 0
+            # t_increment = 30
             while timestamp != endTime:
                 # timestamp = startTime + datetime.timedelta(0, t_increment)
                 timestamp = startTime + t_increment * 1000
@@ -500,6 +450,9 @@ class SimulateProbeStats(object):
                         srcUp = randint(0, 1)
                         destUp = randint(0, 1)
                         domain = randint(0, len(domains) - 1)
+                        # app_grp_index = random.randrange(
+                        #     0, len(app_grps) - 1, 1)
+                        # app_grp = app_grps[app_grp_index]
                         npm_grp = random.choice(npm_grps)
                         duc_grp = random.choice(self.duc_grps)
                         perf_mon = npm_grp["perf_monitor"]
@@ -639,6 +592,7 @@ class SimulateSLAStats(object):
                 sla_record["DstIp"] = dest_ip
                 sla_record["DstPort"] = dest_port
 
+
                 json.dump(sla_record, slastats,
                           default=json_serial)
                 slastats.write("\n")
@@ -687,9 +641,7 @@ def main():
     print startTime
     print endTime
 
-    simData = SimulateAARData(defData)
-    es = Elasticsearch(es_server)
-
+    simData = SimulateFlowData(defData)
 
     domains = simData.getDomainNames()
     protos = simData.getProto()
@@ -701,11 +653,128 @@ def main():
     nsgs = simData.getNSGIds()
     perf_mons = simData.getPerfMons()
     npm_grps = simData.getNPMGrps(perf_mons)
-
+    slastatus = ["InSla", "OutSla", "Unmonitored"]
+    sla_prob = 0.05
+    hasswitchedpath = ["false", "true"]
     ducgrpids = simData.getDucGrpIds()
     outslaApps = simData.getOutSlaApps()
 
+    pre_flows = create_pre_defined_flows(appgrpids=appgrpids, l7s=l7s,
+                                         protos=protos,
+                                         domains=domains, nsgs=nsgs,
+                                         simData=simData)
+    sla_flows = []
+    es = Elasticsearch(es_server)
+    flow_cnt = 0
+    sla_prob_new = 0.6
+    with open('/var/log/flowstats_new.log', 'w') as flowstats:
+        timestamp = startTime
+        t_increment = 0
+        while timestamp != endTime:
+            # deltaTime = datetime.timedelta(0, t_increment)
+            # timestamp = startTime + datetime.timedelta(0, t_increment)
+            timestamp = startTime + t_increment * 1000
+            # print timestamp
+            flow_record = {}
+            i = 0
+            sla_status_ts = get_random_with_prob(sla_prob_new)
+            for flow_entry in pre_flows:
+                # flow_entry = pre_flows[flow]
+                # svport =  randint(0, 9)
+                # dvport = randint(0, 9)
+                s_vport = flow_entry["src_vport"]
+                d_vport = flow_entry["dest_vport"]
+                dom = s_vport["domain"]
+                # import pdb pdb.set_trace()
+                src_nsgid = s_vport["nsg_id"]
+                # dest_nsgid = d_vport["nsg_id"]
+                src_nsgname = s_vport["nsg_name"]
+                # dest_nsgname = d_vport["nsg_name"]
+                src_vportId = s_vport["vport_id"]
+                src_vportName = s_vport["vport_name"]
+                src_ip = s_vport["vport_ip"]
+                src_port = s_vport["port"]
+                # dest_vportId = d_vport["vport_id"]
+                # dest_vportName = d_vport["vport_name"]
+                dest_ip = d_vport["vport_ip"]
+                dest_port = d_vport["port"]
+                proto = flow_entry["Proto"]
+                srcUp = randint(0, 1)
+                destUp = randint(0, 1)
+                l7 = flow_entry["l7_class"]
+                appid = flow_entry["app_id"]
+                appname = flow_entry["app_name"]
+                appgrpid = flow_entry["app_grp"]
+                appgrpname = flow_entry["app_grp_name"]
+                # appgrpid = flow_entry["app_grp"]
+                if l7s[l7] in l7_to_in_bytes.keys():
+                    inbytes = l7_to_in_bytes.get(l7s[l7])
+                else:
+                    inbytes = randint(100, 4048)
+                if l7s[l7] in l7_to_in_pkts.keys():
+                    inpkts = l7_to_in_pkts.get(l7s[l7])
+                else:
+                    inpkts = randint(0, 10)
+                ingressMB = float(inbytes) / 1048576
+                underlayId = random.randrange(0, 10)
+                if slastatus[sla_status_ts] == "OutSla":
+                    if appname in outslaApps:
+                        flow_entry["timestamp"] = timestamp
+                        sla_flows.append(flow_entry)
+                        sla_status = 1
+                    else:
+                        sla_status = 0
+                elif slastatus[sla_status_ts] == "InSla":
+                    sla_status = 0
 
+                # flow record tuples
+                i += 1
+                flow_record["timestamp"] = long(timestamp)
+                flow_record["Domain"] = dom
+                flow_record["EnterpriseName"] = def_ent_name
+                flow_record["SrcVportUUID"] = src_vportId
+                flow_record["SrcVportName"] = src_vportName
+                # flow_record["DstVportUUID"] = dest_vportId
+                flow_record["SrcIp"] = src_ip
+                flow_record["SrcPort"] = src_port
+                flow_record["DstIp"] = dest_ip
+                flow_record["DstPort"] = dest_port
+                flow_record["Proto"] = proto
+                flow_record["SrcNSG"] = src_nsgid
+                flow_record["SourceNSG"] = src_nsgname
+                flow_record["SrcUplink"] = srcuplinks[srcUp]
+                flow_record["DstUplink"] = destuplinks[destUp]
+                flow_record["L7Classification"] = l7s[l7]
+                flow_record["AppID"] = appid
+                flow_record["Application"] = appname
+                flow_record["AppGroupID"] = appgrpid
+                flow_record["APMGroup"] = appgrpname
+                flow_record["IngressBytes"] = inbytes
+                flow_record["IngressMB"] = ingressMB
+                flow_record["IngressPackets"] = inpkts
+                flow_record["EgressBytes"] = inbytes
+                flow_record["EgressMB"] = float(inbytes) / 1048576  # TODO: What is this number ?
+                flow_record["TotalBytesCount"] = inbytes + inbytes
+                flow_record["TotalMB"] = float(flow_record["TotalBytesCount"]) / 1048576
+                flow_record["EgressPackets"] = inpkts
+                flow_record["TotalPacketsCount"] = inpkts + inpkts
+                flow_record["DstNSG"] = src_nsgid
+                flow_record["DestinationNSG"] = src_nsgname
+                flow_record["SlaStatus"] = slastatus[sla_status]
+                flow_record["HasSwitchedPaths"] = hasswitchedpath[sla_status]
+                flow_record["L7ClassEnhanced"] = l7s[l7]
+                flow_record["UnderlayID"] = underlayId
+                flow_record["UnderlayName"] = "Underlay"+str(underlayId)
+
+                json.dump(flow_record, flowstats, default=json_serial)
+                flowstats.write("\n")
+                index_name = "nuage_dpi_flowstats" + '_' + es_index_prefix
+                es.index(index=index_name, doc_type='nuage_doc_type',
+                          body=flow_record)
+                flow_cnt += 1
+            t_increment += 30
+
+    print flow_cnt
     flowData = {
         "nsgs": nsgs,
         "app_grps": appgrpids,
@@ -716,16 +785,8 @@ def main():
         "es": es,
         "es_index_prefix": es_index_prefix,
         "npm_grps": npm_grps,
-        "duc_grps": ducgrpids,
-        "protos": protos,
-        "l7s": l7s,
-        "outslaApps": outslaApps,
-        "perf_mons": perf_mons
+        "duc_grps": ducgrpids
     }
-
-    flow_stats = SimulateFlowStats(flowData, simData)
-    sla_flows = flow_stats.generate_flow_stats(startTime, endTime)
-
     probe_stats = SimulateProbeStats(flowData)
     probe_stats.generate_probe_stats(startTime, endTime)
 

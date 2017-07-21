@@ -1,6 +1,5 @@
 import { ElasticSearchService } from "../../configs/nuage/elasticsearch/index";
 import { VSDService } from "../../configs/nuage/vsd/index";
-import { MemoryService } from "../memory";
 
 let config = {
     timingCache: 5000,
@@ -12,7 +11,6 @@ let config = {
 let services = {
     elasticsearch: ElasticSearchService,
     VSD: VSDService,
-    memory: MemoryService
 };
 
 /*

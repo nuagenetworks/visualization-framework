@@ -17,5 +17,4 @@ export const properties = {
         theme.palette.yellowLightColor,
         theme.palette.yellowDarkColor,
     ],
-    zeroStart: false,
 }

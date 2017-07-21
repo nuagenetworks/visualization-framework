@@ -6,7 +6,6 @@
     "author": "Ronak Shah",
     "creationDate": "2/28/2016",
     "data": {
-        "dateHistogram": true,
         "xColumn": "timestamp",
         "yColumn": "flag",
         "stroke": {

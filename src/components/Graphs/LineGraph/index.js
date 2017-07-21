@@ -1,5 +1,6 @@
 import React from "react";
 import XYGraph from "../XYGraph";
+import { Actions } from "../../App/redux/actions";
 import { connect } from "react-redux";
 
 import {
@@ -44,7 +45,6 @@ class LineGraph extends XYGraph {
           circleToPixel,
           colorColumn,
           colors,
-          dateHistogram,
           legend,
           linesColumn,
           margin,
@@ -62,10 +62,8 @@ class LineGraph extends XYGraph {
           yTicks,
           yTickSizeInner,
           yTickSizeOuter,
-          brushEnabled,
-          zeroStart
+          brushEnabled
         } = this.getConfiguredProperties();
-
 
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
@@ -104,20 +102,10 @@ class LineGraph extends XYGraph {
             }
         }
 
-        let yExtent = this.updateYExtent(extent(data, yLabelFn), zeroStart);
-
-        let xScale;
-
-        if (dateHistogram) {
-            xScale = scaleTime()
-              .domain(extent(data, xLabelFn));
-        } else {
-            xScale = scaleLinear()
-              .domain(extent(data, xLabelFn));
-        }
-
+        const xScale = scaleTime()
+          .domain(extent(data, xLabelFn));
         const yScale = scaleLinear()
-          .domain(yExtent);
+          .domain(extent(data, yLabelFn));
 
         xScale.range([0, availableWidth]);
         yScale.range([availableHeight, 0]);
@@ -237,10 +225,9 @@ class LineGraph extends XYGraph {
                                   />
 
                                   <path
-                                      key={ i }
                                       fill="none"
                                       d={ d == null ? null : "M" + d.join("L") + "Z" }
-                                      style={{"pointerEvents": "all"}}
+                                      style={{"pointer-events": "all"}}
                                   />
                               </g>
                           )}

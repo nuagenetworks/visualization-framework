@@ -3,12 +3,11 @@ import tabify from "./tabify";
 import { ActionKeyStore } from "./redux/actions";
 import { getUsedParameters } from "../../../utils/configurations";
 
-var client = null;
 let config = function () {
     return {
         host: null,
         log: 'trace',
-        apiVersion: '2.2'   
+        apiVersion: '2.2'
     }
 }
 
@@ -31,10 +30,7 @@ let ESClient = function (state) {
 }
 
 const fetch = function (queryConfiguration, state) {
-  
-    if (client == null) { 
-        client = ESClient(state) ; 
-    }
+    var client = ESClient(state) // eslint-disable-line
 
     if (!client)
         return Promise.reject();
