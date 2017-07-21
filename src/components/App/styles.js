@@ -4,6 +4,7 @@ const style = {
     navBar: {
         fontSize: "12px",
         fontWeight: 200,
+        background: theme.palette.greyLightColor,
     },
     container: {
     },

@@ -186,9 +186,7 @@ export class VariationTextGraph extends AbstractGraph {
         } = this.props;
 
         const {
-          padding,
           textAlign,
-          titlePosition
         } = this.getConfiguredProperties();
 
         if (!data || !data.length)

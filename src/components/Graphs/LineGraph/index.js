@@ -1,6 +1,5 @@
 import React from "react";
 import XYGraph from "../XYGraph";
-import { Actions } from "../../App/redux/actions";
 import { connect } from "react-redux";
 
 import {
