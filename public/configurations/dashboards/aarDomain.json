@@ -11,6 +11,10 @@
         {
             "label": "Network Performance",
             "url": "/dashboards/aarNetworkPerformance"
+        },
+        {
+            "label": "Application Performance",
+            "url": "/dashboards/aarApplicationPerformance"
         }
     ],
     "visualizations": [
