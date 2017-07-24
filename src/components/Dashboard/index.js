@@ -46,6 +46,7 @@ export class DashboardView extends React.Component {
 
     componentDidUpdate(prevProps) {
         this.updateTitleIfNecessary(prevProps);
+        this.updateTitleIconIfNecessary(prevProps);
         this.updateConfiguration();
     }
 
@@ -62,6 +63,7 @@ export class DashboardView extends React.Component {
         return contextualize(title, context);
     }
 
+
     updateTitleIfNecessary(prevProps) {
         const { configuration, setPageTitle } = this.props;
 
@@ -69,6 +71,20 @@ export class DashboardView extends React.Component {
             return;
 
         setPageTitle(this.currentTitle());
+    }
+
+    updateTitleIconIfNecessary(prevProps) {
+        const { configuration, setPageTitleIcon } = this.props;
+
+        if (!configuration)
+            return;
+
+        const titleIcon = configuration.get("titleIcon");
+
+        if (!titleIcon)
+            return ;
+
+        setPageTitleIcon(titleIcon);
     }
 
     updateConfiguration() {
@@ -99,17 +115,22 @@ export class DashboardView extends React.Component {
         if (!links || links.count() === 0)
             return;
 
+        const currentUrl = window.location.pathname;
+
         return (
             <div style={style.navigationContainer}>
                 <ul className="list-inline" style={style.linksList}>
                     {links.map((link, index) => {
 
                         let targetURL = process.env.PUBLIC_URL + link.get("url");
+                        let highlight = currentUrl === link.get("url") ? style.activeLink : style.link;
 
                         return <li key={index}
-                                   style={style.link}
+                                   style={highlight}
                                    >
-                                    <Link to={{ pathname:targetURL, query: context}}>
+                                    <Link to={{ pathname:targetURL, query: context}}
+                                    style={style.noneTextDecoration}
+                                    >
                                         {link.get("label")}
                                     </Link>
                                </li>;
@@ -141,20 +162,15 @@ export class DashboardView extends React.Component {
         }
 
         if (configuration) {
-            const { visualizations, settings } = configuration.toJS();
+            const { visualizations } = configuration.toJS();
 
             let filterOptions;
 
             if (configuration.get("filterOptions")) {
-                filterOptions = Object.assign({}, defaultFilterOptions, configuration.get("filterOptions").toJS());
+                filterOptions = Object.assign({}, configuration.get("filterOptions").toJS(), defaultFilterOptions);
             }
             else {
                 filterOptions = defaultFilterOptions;
-            }
-
-            let verticalCompact = true;
-            if(settings && "verticalCompact" in settings) {
-              verticalCompact = settings.verticalCompact;
             }
 
             return (
@@ -170,7 +186,6 @@ export class DashboardView extends React.Component {
                             containerPadding={[10, 10]}
                             onResize={this.onResize.bind(this)}
                             onLayoutChange={this.onResize.bind(this)}
-                            verticalCompact={verticalCompact}
                             >
                             {
                                 visualizations.map((visualization) =>
@@ -222,6 +237,10 @@ const mapStateToProps = (state, ownProps) => ({
 const actionCreators = (dispatch) => ({
     setPageTitle: (aTitle) => {
         dispatch(AppActions.updateTitle(aTitle));
+    },
+
+    setPageTitleIcon: (aTitleIcon) => {
+        dispatch(AppActions.updateTitleIcon(aTitleIcon));
     },
 
     fetchConfigurationIfNeeded: (id) => {

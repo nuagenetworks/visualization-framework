@@ -44,7 +44,6 @@ class LineGraph extends XYGraph {
           circleToPixel,
           colorColumn,
           colors,
-          dateHistogram,
           legend,
           linesColumn,
           margin,
@@ -62,10 +61,8 @@ class LineGraph extends XYGraph {
           yTicks,
           yTickSizeInner,
           yTickSizeOuter,
-          brushEnabled,
-          zeroStart
+          brushEnabled
         } = this.getConfiguredProperties();
-
 
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
@@ -82,7 +79,7 @@ class LineGraph extends XYGraph {
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
         let legendWidth       = legend.show && linesData.length > 1 ? this.longestLabelLength(data, legendFn) * chartWidthToPixel : 0;
 
-        let yLabelWidth       = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
+        let yLabelWidth       = this.longestLabelLength(data, yLabelFn, yTickFormat) * chartWidthToPixel;
         let leftMargin        = margin.left + yLabelWidth;
         let availableWidth    = width - (margin.left + margin.right + yLabelWidth);
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
@@ -104,20 +101,10 @@ class LineGraph extends XYGraph {
             }
         }
 
-        let yExtent = this.updateYExtent(extent(data, yLabelFn), zeroStart);
-
-        let xScale;
-
-        if (dateHistogram) {
-            xScale = scaleTime()
-              .domain(extent(data, xLabelFn));
-        } else {
-            xScale = scaleLinear()
-              .domain(extent(data, xLabelFn));
-        }
-
+        const xScale = scaleTime()
+          .domain(extent(data, xLabelFn));
         const yScale = scaleLinear()
-          .domain(yExtent);
+          .domain(extent(data, yLabelFn));
 
         xScale.range([0, availableWidth]);
         yScale.range([availableHeight, 0]);
@@ -237,7 +224,6 @@ class LineGraph extends XYGraph {
                                   />
 
                                   <path
-                                      key={ i }
                                       fill="none"
                                       d={ d == null ? null : "M" + d.join("L") + "Z" }
                                       style={{"pointer-events": "all"}}

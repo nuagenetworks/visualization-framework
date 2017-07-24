@@ -1,12 +1,15 @@
 import React from "react";
 import AbstractGraph from "../AbstractGraph";
 import columnAccessor from "../../../utils/columnAccessor";
+import CopyToClipboard from 'react-copy-to-clipboard';
+import {Tooltip} from 'react-lightweight-tooltip';
 
+import tooltipStyle from './tooltipStyle.js'
 import "./style.css";
-
 import {properties} from "./default.config"
 
 export default class Table extends AbstractGraph {
+
 
     constructor(props) {
         super(props, properties);
@@ -39,6 +42,11 @@ export default class Table extends AbstractGraph {
 
         const accessors = columns.map(columnAccessor);
 
+        const tooltipAccessor = [];
+        for(let column of columns) {
+            tooltipAccessor.push(column.tooltip ? columnAccessor(column.tooltip) : () => {});
+        }
+
         if (!data)
             return (
                 <p>No Rows</p>
@@ -60,6 +68,7 @@ export default class Table extends AbstractGraph {
                     overflow: "auto"
                 }}
             >
+
                 <table style={{ width: "100%" }} >
                     <thead>
                         <tr style={{
@@ -87,7 +96,6 @@ export default class Table extends AbstractGraph {
                             height:height - 50 // Set from style.css
                         }}>
                         { data.map((d, j) => {
-
                             // Set up clicking and cursor style.
                             let onClick, cursor;
                             if(onMarkClick){
@@ -109,16 +117,40 @@ export default class Table extends AbstractGraph {
                                     }}
                                     onClick={onClick}
                                 >
-                                    { accessors.map((accessor, i) =>(
-                                        <td
+                                    { accessors.map((accessor, i) => {
+
+                                        let columnData = accessor(d);
+                                        if(columns[i].tooltip) {
+
+                                            let fullText = tooltipAccessor[i](d, true);
+                                            columnData = <div>
+
+                                            <Tooltip key={j}
+                                              content={
+                                                [
+                                                  fullText,
+                                                  <CopyToClipboard text={fullText}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>,
+                                                ]
+                                              }
+                                              styles={tooltipStyle}>
+                                              <a className="pointer">
+                                                 {columnData}
+                                              </a>
+                                            </Tooltip>       
+                                           </div>
+
+                                        }
+                                        
+                                        return <td
                                             key={i}
                                             style={{
                                                 padding: padding,
                                                 width: columnWidth
                                             }}>
-                                          { accessor(d) }
+
+                                            {columnData}
                                         </td>
-                                    )) }
+                                    }) }
                                 </tr>
                             );
                         })}

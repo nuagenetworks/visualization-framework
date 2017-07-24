@@ -1,8 +1,0 @@
-{
-    "id":"medalsEvolution",
-    "title":"Evolution of medals",
-    "service":"memory",
-    "query": {
-        "country":"{{country:China}}"
-    }
-}

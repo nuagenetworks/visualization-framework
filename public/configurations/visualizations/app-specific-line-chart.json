@@ -5,7 +5,6 @@
     "author": "Curran Kelleher",
     "creationDate": "10/14/2016",
     "data": {
-        "dateHistogram": true,
         "xColumn": "key",
         "yColumn": "1",
         "colorColumn": "key"

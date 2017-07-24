@@ -11,7 +11,7 @@
             "w": 2,
             "h": 10,
             "minW": 2,
-            "minH": 10
+            "minH": 6
         },
         {
             "id": "vnf-memory-status",
@@ -20,7 +20,7 @@
             "w": 2,
             "h": 10,
             "minW": 2,
-            "minH": 10
+            "minH": 6
         },
         {
             "id": "vnf-disk-status",
@@ -29,7 +29,7 @@
             "w": 2,
             "h": 10,
             "minW": 2,
-            "minH": 10
+            "minH": 6
         },
         {
             "id": "vnf-status-linechart",
@@ -38,7 +38,7 @@
             "w": 6,
             "h": 10,
             "minW": 6,
-            "minH": 10
+            "minH": 15
         }
     ]
 }

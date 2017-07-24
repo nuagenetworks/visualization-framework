@@ -2,7 +2,8 @@
     "id": "vssDomainFlow",
     "author": "Ronak Shah",
     "creationDate": "11/02/2016",
-    "title": "{{domainName:VSS Domain}} - Flow Visualization",
+    "title": "{{domainName:VSS Domain}}",
+    "titleIcon": "domain",
     "visualizations": [
         { "id": "vss-domain-flow", "x": 1, "y": 0, "w": 5, "h": 25, "minW": 2, "minH": 12},
         { "id": "vss-domain-flow-table", "x": 6, "y": 0, "w": 5, "h": 25, "minW": 2 , "minH": 12}
@@ -58,6 +59,10 @@
                 {
                     "label": "Network Macro Group",
                     "value": "network-macro-group"
+                },
+                {
+                    "label": "Any",
+                    "value": "ANY"
                 }
             ]
         },
@@ -93,6 +98,10 @@
                 {
                     "label": "Network Macro Group",
                     "value": "network-macro-group"
+                },
+                {
+                    "label": "Any",
+                    "value": "ANY"
                 }
             ]
         }

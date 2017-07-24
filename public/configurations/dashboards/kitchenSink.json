@@ -102,7 +102,7 @@
             "h": 15,
             "minW": 2,
             "minH": 12
-        },
+        }
         {
             "id": "aar-flow-sla-heatmap",
             "x": 9,
