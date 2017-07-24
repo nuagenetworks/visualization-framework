@@ -42,6 +42,10 @@ export default class Table extends AbstractGraph {
 
         const accessors = columns.map(columnAccessor);
 
+        const tooltipAccessor = [];
+        for(let column of columns) {
+            tooltipAccessor.push(column.tooltip ? columnAccessor(column.tooltip) : () => {});
+        }
 
         if (!data)
             return (
@@ -114,12 +118,11 @@ export default class Table extends AbstractGraph {
                                     onClick={onClick}
                                 >
                                     { accessors.map((accessor, i) => {
+
                                         let columnData = accessor(d);
-
-
                                         if(columns[i].tooltip) {
 
-                                            let fullText = accessor(d, true);
+                                            let fullText = tooltipAccessor[i](d, true);
                                             columnData = <div>
 
                                             <Tooltip key={j}
@@ -130,7 +133,9 @@ export default class Table extends AbstractGraph {
                                                 ]
                                               }
                                               styles={tooltipStyle}>
-                                              <a className="pointer">{columnData}</a>
+                                              <a className="pointer">
+                                                 {columnData}
+                                              </a>
                                             </Tooltip>       
                                            </div>
 
