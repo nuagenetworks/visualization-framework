@@ -1,0 +1,26 @@
+{
+    "id": "aarApplicationPerformance",
+    "author": "Sayaji Patil",
+    "creationDate": "06/27/2017",
+    "title": "AAR Application Performance ({{domainName}})",
+    "links": [
+        {
+            "label": "Applications",
+            "url": "/dashboards/aarDomain"
+        },
+        {
+            "label": "Network Performance",
+            "url": "/dashboards/aarNetworkPerformance"
+        },
+        {
+            "label": "Application Performance",
+            "url": "/dashboards/aarApplicationPerformance"
+        }
+    ],
+    "visualizations": [
+        { "id": "vsd-from-nsgs-table",  "x": 0, "y": 0,  "w": 6, "h": 15, "minW": 2, "minH": 12, "static": false},
+        { "id": "vsd-to-nsgs-table",    "x": 6, "y": 0,  "w": 6, "h": 15, "minW": 2, "minH": 12, "static": false},
+        { "id": "aar-flow-sla-heatmap", "x": 0, "y": 15, "w": 6, "h": 15, "minW": 2, "minH": 12, "static": false},
+        { "id": "aar-nsg-sla-details",  "x": 6, "y": 15, "w": 6, "h": 15, "minW": 2, "minH": 12, "static": false}
+    ]
+}

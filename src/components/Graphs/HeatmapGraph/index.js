@@ -54,7 +54,8 @@ export default class HeatmapGraph extends XYGraph {
             yTicks,
             yTickSizeInner,
             yTickSizeOuter,
-            legendColumn
+            legendColumn,
+            yAxisPadding
         } = this.getConfiguredProperties();
 
 
@@ -88,8 +89,9 @@ export default class HeatmapGraph extends XYGraph {
 
         let yLabelWidth       = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
 
-        let leftMargin        = margin.left + yLabelWidth;
-        let availableWidth    = width - (margin.left + margin.right + yLabelWidth);
+        let leftMargin        = margin.left + yLabelWidth + yAxisPadding * chartWidthToPixel;
+        
+        let availableWidth    = width - (margin.left + margin.right + yLabelWidth - yAxisPadding * chartWidthToPixel);
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
 
         if (legend.show) {
