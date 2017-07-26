@@ -14,7 +14,7 @@ const defaultConfig = {
   release: require('../../package.json').version,
   baseDir: path.normalize(__dirname + '/../..'),
 
-  apiPrefix: '/api',
+  apiPrefix: '/reports/api',
 };
 
 export default defaultConfig;

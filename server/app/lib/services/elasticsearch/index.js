@@ -3,9 +3,9 @@ import tabify from "./tabify";
 import { getUsedParameters } from "../../utils/configurations";
 
 var client = null;
-let config = function () {
+let config = function (eshost) {
     return {
-        host: process.env.APP_ELASTICSEARCH_HOST ? process.env.APP_ELASTICSEARCH_HOST : null,
+        host: eshost ? eshost : (process.env.APP_ELASTICSEARCH_HOST ? process.env.APP_ELASTICSEARCH_HOST : null),
         log: 'trace',
         apiVersion: '2.2',
         sniffOnStart: true,
@@ -14,13 +14,13 @@ let config = function () {
     }
 }
 
-export const getCurrentConfig = function () {
-    let currentConfig = config()
+export const getCurrentConfig = function (eshost) {
+    let currentConfig = config(eshost)
     return currentConfig;
 }
 
-let ESClient = function () {
-    var config = getCurrentConfig();
+let ESClient = function (eshost) {
+    var config = getCurrentConfig(eshost);
 
     if (!config.host){
         throw new Error("The ElasticSearch host is not configured. You can configure the ElasticSearch host by setting the environment variable REACT_APP_ELASTICSEARCH_HOST at compile time. For development with a local ElasticSearch instance running on the default port, you can put the following in your .bashrc or .profile startup script: 'export REACT_APP_ELASTICSEARCH_HOST=http://localhost:9200'");
@@ -29,11 +29,12 @@ let ESClient = function () {
     return new elasticsearch.Client(config);
 }
 
-const fetch = function (queryConfiguration) {
-    var client = ESClient() // eslint-disable-line
+const fetch = function (queryConfiguration, context) {
+    var eshost = context.eshost ? context.eshost : null;
+    var client = ESClient(eshost) // eslint-disable-line
 
     if (client == null) {
-        client = ESClient() ;
+        client = ESClient(eshost) ;
     }
 
     if (!client)
