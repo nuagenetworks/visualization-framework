@@ -67,7 +67,10 @@ export class VariationTextGraph extends AbstractGraph {
             this.settings.colors = negativeColors;
         }
 
-        this.props.setHeaderColor(configuration.id, this.settings.colors.header);
+        /**
+         *CODE IS TO CHANGE THE HEADER colors
+         */
+        //this.props.setHeaderColor(configuration.id, this.settings.colors.header);
     }
 
     currentTitle() {
