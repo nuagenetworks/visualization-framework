@@ -31,7 +31,7 @@ app.use(methodOverride());
 // Mount API routes
 app.use(Constants.apiPrefix, routes);
 
-app.listen(Constants.port, () => {
+app.listen(Constants.port, Constants.ip, () => {
   // eslint-disable-next-line no-console
   console.log(`
     Port: ${Constants.port}

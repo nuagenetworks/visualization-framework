@@ -9,12 +9,12 @@ const defaultConfig = {
       production: process.env.NODE_ENV === 'production',
     };
   },
-  port: process.env.APP_SERVER_PORT || 8010,
-  ip: process.env.APP_SERVER_IP || '0.0.0.0',
+  port: process.env.MIDDLEWARE_SERVER_PORT || 8010,
+  ip: process.env.MIDDLEWARE_SERVER_IP || 'localhost',
   release: require('../../package.json').version,
   baseDir: path.normalize(__dirname + '/../..'),
 
-  apiPrefix: '/reports/api',
+  apiPrefix: '/middleware/api',
 };
 
 export default defaultConfig;
