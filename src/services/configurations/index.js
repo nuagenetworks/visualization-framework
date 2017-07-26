@@ -4,7 +4,7 @@ import { checkStatus, parseJSON } from "../common";
 
 const config = {
     path: process.env.PUBLIC_URL + "/configurations/",
-    api: process.env.REACT_APP_API_URL,
+    api: process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/reports/api/",
     cachingTime: 30000, // (ms) -> default 30s
 }
 

@@ -7,7 +7,7 @@ import { checkStatus, parseJSON } from "../common";
 
 let config = {
     timingCache: 5000,
-    api: process.env.REACT_APP_API_URL,
+    api: process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/reports/api/",
 }
 
 /*
