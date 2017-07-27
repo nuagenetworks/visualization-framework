@@ -150,11 +150,11 @@ export default class HeatmapGraph extends XYGraph {
             xAxis.tickFormat(format(xTickFormat));
         }
 
-        if(xTicks){
-            xAxis.ticks(xTicks);
-        } else {
-            xAxis.ticks(distXDatas.length * 2);
-        }
+        let tickValues = distXDatas.length < 15 ? distXDatas : distXDatas.filter((value, i) => {
+                return i % 2 == 0;
+            });
+
+        xAxis.tickValues(tickValues);
 
         const yAxis = axisLeft(yScale)
             .tickSizeInner(yTickGrid ? -availableWidth : yTickSizeInner)
@@ -178,7 +178,6 @@ export default class HeatmapGraph extends XYGraph {
             left: margin.left + chartWidthToPixel + (isVerticalLegend ? legend.width : 0),
             top: margin.top + availableHeight / 2
         }
-
         return (
             <div className="bar-graph">
                 {this.tooltip}
@@ -187,7 +186,7 @@ export default class HeatmapGraph extends XYGraph {
                     <g transform={ `translate(${leftMargin},${margin.top})` } >
                         <g
                             key="xAxis"
-                            ref={ (el) => select(el).call(xAxis) }
+                            ref={ (el) => select(el).call(xAxis).selectAll("text")}
                             transform={ `translate(0,${availableHeight})` }
                         />
                         <g
