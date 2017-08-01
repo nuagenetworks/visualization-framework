@@ -1,37 +1,3 @@
-table {
-
-    }
-
-thead, tbody, tr, td, th { display: block; }
-
-tr:after {
-    content: ' ';
-    display: block;
-    visibility: hidden;
-    clear: both;
-}
-
-thead th {
-    height: 45px;
-}
-
-tbody {
-    overflow-y: auto;
-}
-
-thead {
-    /* fallback */
-}
-
-
-tbody td, thead th {
-    float: left;
-}
-
-.tooltip {
-  opacity: 1 !important;
-}
-
 .pointer {
     cursor: pointer !important;
     text-decoration: none;
@@ -45,4 +11,8 @@ tbody td, thead th {
     font-weight: bold;
     color: #fcfcfc;
     cursor:  copy;
+}
+
+table tbody tr:hover {
+    background-color: #f2f2f2;
 }
