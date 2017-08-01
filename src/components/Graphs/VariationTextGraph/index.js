@@ -40,7 +40,6 @@ export class VariationTextGraph extends AbstractGraph {
     initialize() {
         const {
             data,
-            configuration
         } = this.props;
 
         const {
@@ -140,11 +139,6 @@ export class VariationTextGraph extends AbstractGraph {
 
         const {
             absolute,
-            target,
-            positiveColor,
-            negativeColor,
-            drawColor,
-            fontSize
         } = this.getConfiguredProperties();
 
         const {
@@ -194,7 +188,6 @@ export class VariationTextGraph extends AbstractGraph {
         } = this.props;
 
         const {
-          padding,
           textAlign,
         } = this.getConfiguredProperties();
 

@@ -3,6 +3,7 @@ import { theme } from "../../../theme";
 export const properties = {
     width: "100%",
     padding: 8,
+    limit: 5,
     colors: [theme.palette.greyLighterColor, theme.palette.whiteColor],
     fontColor: theme.palette.blackLightColor,
     border: {
