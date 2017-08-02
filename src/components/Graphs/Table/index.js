@@ -204,6 +204,7 @@ export default class Table extends AbstractGraph {
             border,
             fontColor,
             padding,
+            rowHeight,
             limit
         } = this.getConfiguredProperties();
 
@@ -242,13 +243,19 @@ export default class Table extends AbstractGraph {
                         borderBottom: border.bottom,
                         borderLeft: border.left,
                         borderRight: border.right,
-                        cursor: "pointer"
+                        cursor: "pointer",
+                        height : rowHeight,
+                    }}
+                    tableHeaderColumnStyle={{
+                        padding: padding,
+                        height : rowHeight
                     }}
                     tableRowColumnStyle={{
-                        padding: padding,
+                        height : rowHeight,
                         width: this.columnWidth,
                         whiteSpace: "inherit",
-                        fontSize: "12px"
+                        fontSize: "12px",
+
                     }}               
                 />
             </div>
