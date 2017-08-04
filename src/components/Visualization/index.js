@@ -482,6 +482,7 @@ class VisualizationView extends React.Component {
                 { this.renderFiltersToolBar() }
 
                 { this.renderSharingOptions() }
+                <div className="clearfix"></div>
                 <CardText style={cardText}>
                     { this.renderVisualizationIfNeeded() }
                     {description}
@@ -534,10 +535,12 @@ const mapStateToProps = (state, ownProps) => {
     let context = {};
     for (let key in orgContexts) {
       if(orgContexts.hasOwnProperty(key)) {
-        context[key.replace(`${configurationID}-`, '')] = orgContexts[key];
+        let filteredKey = key.replace(`${configurationID}-`, '');
+        if(!context[filteredKey] || key.includes(`${configurationID}-`))
+            context[filteredKey] = orgContexts[key];
       }
     }
-
+    
     const props = {
         id: configurationID,
         context: context,
