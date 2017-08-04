@@ -1,6 +1,7 @@
 import { ElasticSearchService } from "../../configs/nuage/elasticsearch/index";
 import { VSDService } from "../../configs/nuage/vsd/index";
 import { MemoryService } from "../memory";
+import { DatasetService } from "../dataset";
 
 import "whatwg-fetch";
 import { checkStatus, parseJSON } from "../common";
@@ -16,7 +17,8 @@ let config = {
 let services = {
     elasticsearch: ElasticSearchService,
     VSD: VSDService,
-    memory: MemoryService
+    memory: MemoryService,
+    dataset: DatasetService
 };
 
 /*

@@ -1,0 +1,30 @@
+{
+    "id": "test-multi-line-graph",
+    "graph": "MultiLineGraph",
+    "title": "MultiLineGraph",
+    "description": "Memory, disk and CPU utilization over a period of time selected in interval",
+    "author": "Anil Chauhan",
+    "creationDate": "08/03/2017",
+    "data": {
+        "dateHistogram": true,
+        "xColumn": "timestamp",
+        "xLabel": "Time",
+        "yColumn": ["CPU", "MEMORY",  "DISK"],
+        "yTickFormat": ",.0f",
+        "yLabel": "",
+        "yTicks": 5,
+        "linesColumn": ["CPU", "MEMORY",  "DISK"],
+        "legend": {
+            "orientation": "vertical",
+            "show": true,
+            "circleSize": 5,
+            "labelOffset": 5
+        },
+        "tooltip": [
+            { "column": "columnType", "label": "Type"},
+            { "column": "yColumn", "label": "Value", "format": "0.2f"},
+            { "column": "timestamp", "label": "Timestamp"}
+        ]
+    },
+    "query": "test-multi-line-graph"
+}

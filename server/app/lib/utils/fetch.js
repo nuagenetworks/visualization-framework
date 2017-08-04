@@ -7,7 +7,8 @@ export const DirectoryTypes = {
   DASHBOARD: 'dashboards',
   QUERY: 'queries',
   VISUALIZATION: 'visualizations',
-  MEMORY: 'memory'
+  MEMORY: 'memory',
+  DATASET: 'dataset'
 }
 
 const configPath = `${Constants.baseDir}/app/configurations`;

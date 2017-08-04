@@ -1,0 +1,6 @@
+{
+    "id": "test-variation-text-graph",
+    "title": "VariationTextGraph",
+    "service": "dataset",
+    "limit": 2
+}

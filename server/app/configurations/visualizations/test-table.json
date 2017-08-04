@@ -1,0 +1,18 @@
+{
+    "id": "test-table",
+    "graph": "Table",
+    "title": "Table",
+    "description": "Detail for selected event in reverse chronological order within context of this domain.",
+    "author": "Anil Chauhan",
+    "creationDate": "08/03/2017",
+    "data": {
+        "columns": [
+            { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+            { "column": "messageType", "label": "Message Type" },
+            { "column": "SumofBytes", "label": "Sum of Bytes" },
+            { "column": "APMGroup", "label": "APM Group" },
+            { "column": "doc_count", "label": "Doc Count" }
+        ]
+    },
+    "query": "test-table"
+}

@@ -1,0 +1,28 @@
+{
+    "id": "test-heatmap-graph",
+    "graph": "HeatmapGraph",
+    "title": "HeatmapGraph",
+    "author": "Anil Chauhan",
+    "creationDate": "08/03/2017",
+    "data": {
+        "xColumn": "timestamp",
+        "xLabel": "Time",
+        "yColumn": "application",
+        "yTickGrid": false,
+        "yLabel": "Application",
+        "legendColumn": "slastatus",
+        "cellColumn": "slastatus",
+        "legend": {
+            "show": true,
+            "orientation": "horizontal",
+            "circleSize": 4,
+            "labelOffset": 2
+        },
+        "tooltip": [
+            { "column": "date_histo", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+            { "column": "application", "label": "Application" },
+            { "column": "slastatus", "label": "Status" }
+        ]
+    },
+    "query": "test-heatmap-graph"
+}

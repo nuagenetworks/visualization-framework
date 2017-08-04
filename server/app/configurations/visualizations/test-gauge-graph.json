@@ -1,0 +1,13 @@
+{
+    "id": "test-gauge-graph",
+    "graph": "GaugeGraph",
+    "title": "GaugeGraph",
+    "author": "Anil Chauhan",
+    "creationDate": "08/03/2017",
+    "data": {
+        "maxValue": "100",
+        "currentValue": "10",
+        "gauzeTicks": "10"
+    },
+    "query": "test-heatmap-graph"
+}
