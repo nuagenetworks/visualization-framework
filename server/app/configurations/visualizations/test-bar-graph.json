@@ -6,9 +6,9 @@
     "author": "Anil Chauhan",
     "creationDate": "08/03/2017",
     "data": {
-        "xColumn": "L7Classification",
+        "xColumn": "Application",
         "xLabel": "Application",
-        "yColumn": "Sum of MB",
+        "yColumn": "CPU",
         "yLabel": "Total Bytes",
         "yTicks": 5,
         "yTickFormat": ".2s",
@@ -20,15 +20,15 @@
             "#f79e99"
         ],
         "tooltip": [
-            { "column": "L7Classification", "label": "L7 Signature" },
-            { "column": "Sum of MB", "format": ",.2s"}
+            { "column": "Application", "label": "Application" },
+            { "column": "CPU", "format": ",.2s"}
         ]
     },
     "listeners": [
         {
             "redirect": "/dashboards/aarEnterpriseDetail",
             "params": {
-                "app": "L7Classification"
+                "app": "Application"
             }
         }
     ],

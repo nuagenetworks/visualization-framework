@@ -8,7 +8,7 @@
     "data": {
         "dateHistogram": true,
         "xColumn": "timestamp",
-        "yColumn": "SumOf",
+        "yColumn": "value",
         "stroke": {
           "color": "#f76159",
           "width": "2px"
@@ -19,7 +19,7 @@
         "xLabel": "Time",
         "yLabel": "Total # ACL Hits",
         "xColumn": "timestamp",
-        "yColumn": "SumOf",
+        "yColumn": "value",
         "brushEnabled": false
     },
     "query": "test-line-graph"

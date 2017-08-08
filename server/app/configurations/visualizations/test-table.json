@@ -8,10 +8,9 @@
     "data": {
         "columns": [
             { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
-            { "column": "messageType", "label": "Message Type" },
-            { "column": "SumofBytes", "label": "Sum of Bytes" },
-            { "column": "APMGroup", "label": "APM Group" },
-            { "column": "doc_count", "label": "Doc Count" }
+            { "column": "Application", "label": "Application" },
+            { "column": "MEMORY", "label": "MEMORY" },
+            { "column": "value", "label": "Value" }
         ]
     },
     "query": "test-table"

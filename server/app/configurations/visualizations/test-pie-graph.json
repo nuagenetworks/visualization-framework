@@ -5,11 +5,11 @@
     "author": "Anil Chauhan",
     "creationDate": "08/03/2017",
     "data": {
-        "sliceColumn": "Sum of MB",
-        "labelColumn": "L7Classification",
+        "sliceColumn": "value",
+        "labelColumn": "Application",
         "tooltip": [
-            { "column": "L7Classification", "label": "L7 Classification" },
-            { "column": "Sum of MB", "format": ",.1f"}
+            { "column": "Application", "label": "Application" },
+            { "column": "value", "format": ",.1f"}
         ],
         "percentages": true,
         "percentagesFormat": ",.1%",
@@ -25,7 +25,7 @@
     "listeners": [{
       "redirect": "/dashboards/dateHistogramExample",
       "params": {
-          "app": "L7Classification"
+          "app": "Application"
       }
     }],
     "query": "test-pie-graph"

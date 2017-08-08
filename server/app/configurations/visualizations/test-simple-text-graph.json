@@ -1,13 +1,9 @@
 {
     "id": "test-simple-text-graph",
-    "graph": "SimpleTextGraph",
     "title": "SimpleTextGraph",
-    "author": "Anil Chauhan",
-    "creationDate": "08/03/2017",
-    "script": "effective-score",
+    "query": "test-simple-text-graph",
+    "graph": "SimpleTextGraph",
     "data": {
-        "circle": true,
-        "circleColor": "#4097FF",
-        "targetedColumn": "name"
+        "targetedColumn":"value"
     }
 }
