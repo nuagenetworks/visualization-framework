@@ -13,7 +13,6 @@
         "yLabel": "Total Usage",
         "yTicks": 5,
         "linesColumn": "Users",
-        "zeroStart": false,
         "tooltip": [
             { "column": "Users", "label": "user" },
             { "column": "SumOf", "label": "Usage(rx/tx bytes)"}
