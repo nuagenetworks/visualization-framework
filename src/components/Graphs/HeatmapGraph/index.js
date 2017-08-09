@@ -150,11 +150,7 @@ export default class HeatmapGraph extends XYGraph {
             xAxis.tickFormat(format(xTickFormat));
         }
 
-        let tickValues = distXDatas.length < 15 ? distXDatas : distXDatas.filter((value, i) => {
-                return i % 2 == 0;
-            });
-
-        xAxis.tickValues(tickValues);
+        xAxis.tickValues(distXDatas);
 
         const yAxis = axisLeft(yScale)
             .tickSizeInner(yTickGrid ? -availableWidth : yTickSizeInner)
@@ -170,7 +166,7 @@ export default class HeatmapGraph extends XYGraph {
 
         let xTitlePosition = {
             left: leftMargin + availableWidth / 2,
-            top: margin.top + availableHeight + chartHeightToPixel + xAxisHeight
+            top: margin.top + availableHeight + (chartHeightToPixel * 2) + xAxisHeight
         }
 
         let yTitlePosition = {
@@ -186,7 +182,15 @@ export default class HeatmapGraph extends XYGraph {
                     <g transform={ `translate(${leftMargin},${margin.top})` } >
                         <g
                             key="xAxis"
-                            ref={ (el) => select(el).call(xAxis).selectAll("text")}
+                            ref={ (el) => select(el)
+                                    .call(xAxis)
+                                    .selectAll("text")
+                                    .attr("dy", "1em")
+                                    .style("text-anchor", "end")
+                                    .attr("transform", function(d) {
+                                        return "rotate(-35)"
+                                    })
+                                }
                             transform={ `translate(0,${availableHeight})` }
                         />
                         <g
