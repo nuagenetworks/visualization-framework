@@ -14,8 +14,7 @@
             { "column": "destinationport", "label": "Dest Port" },
             { "column": "type", "label": "Type"},
             { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
-            { "column": "packets", "label": "Packets" },
-            { "column": "l7ApplicationName", "label": "L7 Application"}
+            { "column": "packets", "label": "Packets" }
         ]
     },
     "query": "vss-domain-flow-table"
