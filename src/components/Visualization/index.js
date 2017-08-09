@@ -218,12 +218,13 @@ class VisualizationView extends React.Component {
     }
 
     renderCardWithInfo(message, iconName, spin = false) {
+
         return (
             <CardOverlay
                 overlayStyle={style.overlayContainer}
                 textStyle={style.overlayText}
                 text={(
-                    <div>
+                    <div style={style.fullWidth}>
                         <FontAwesome
                             name={iconName}
                             size="2x"
@@ -319,6 +320,7 @@ class VisualizationView extends React.Component {
     renderDownloadIcon() {
         const {
             queryConfiguration,
+            configuration,
             response
         } = this.props;
 
@@ -333,7 +335,7 @@ class VisualizationView extends React.Component {
         }
 
         return (
-            <CSVLink data={data} filename={ `${this.props.configuration.title ? this.props.configuration.title : 'data'}.csv` } >
+            <CSVLink data={data} filename={ `${configuration.title ? configuration.title : 'data'}.csv` } >
                 <FontAwesome
                     name="cloud-download"
                     style={style.cardTitleIcon}
@@ -346,8 +348,14 @@ class VisualizationView extends React.Component {
         if (!this.shouldShowTitleBar())
             return;
 
+        const {
+            headerColor
+        } = this.props;
+
+        let color = Object.assign({}, style.cardTitle, headerColor ? headerColor : {});
+
         return (
-            <div style={style.cardTitle}>
+            <div style={color}>
                 <div className="pull-right">
                     {this.renderDescriptionIcon()}
                     {this.renderShareIcon()}
@@ -463,16 +471,18 @@ class VisualizationView extends React.Component {
             >
                 { this.renderTitleBarIfNeeded() }
                 { this.renderFiltersToolBar() }
-                { this.renderSharingOptions() }
-                <CardText style={cardText}>
-                    { this.renderVisualizationIfNeeded() }
-                    {description}
-                    <ReactInterval
-                        enabled={enabled}
-                        timeout={timeout}
-                        callback={() => { this.initialize(this.props.id) }}
-                        />
-                </CardText>
+                <div>
+                    { this.renderSharingOptions() }
+                    <CardText style={cardText}>
+                        { this.renderVisualizationIfNeeded() }
+                        {description}
+                        <ReactInterval
+                            enabled={enabled}
+                            timeout={timeout}
+                            callback={() => { this.initialize(this.props.id) }}
+                            />
+                    </CardText>
+                </div>
             </Card>
         );
     }
@@ -506,8 +516,8 @@ const updateFilterOptions = (state, configurations, context) => {
 const mapStateToProps = (state, ownProps) => {
 
     const configurationID = ownProps.id || ownProps.params.id,
-          orgContexts         = state.interface.get(InterfaceActionKeyStore.CONTEXT),
-          configuration   = state.configurations.getIn([
+          orgContexts = state.interface.get(InterfaceActionKeyStore.CONTEXT),
+          configuration = state.configurations.getIn([
               ConfigurationsActionKeyStore.VISUALIZATIONS,
               configurationID,
               ConfigurationsActionKeyStore.DATA
@@ -523,6 +533,8 @@ const mapStateToProps = (state, ownProps) => {
     const props = {
         id: configurationID,
         context: context,
+        configuration: configuration ? contextualize(configuration.toJS(), context) : null,
+        headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
         error: state.configurations.getIn([
             ConfigurationsActionKeyStore.VISUALIZATIONS,
             configurationID,

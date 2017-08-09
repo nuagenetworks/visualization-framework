@@ -1,15 +1,15 @@
 {
     "id": "vss-enterprise-alerts-metric",
-    "title": "# TCA Alerts (24h)",
+    "title": "# Alerts (24h)",
     "query": "vss-enterprise-alerts-metric",
     "graph": "VariationTextGraph",
-    "showTitleBar": true,
     "data": {
         "titlePosition": "top",
         "target":{
             "column": "timezones",
             "value": "Last 24",
-            "field": "doc_count"
+            "field": "doc_count",
+            "format": ",.4s"
         }
     }
 }

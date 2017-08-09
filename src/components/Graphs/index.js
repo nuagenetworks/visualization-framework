@@ -72,7 +72,7 @@ const defaults = {
         color: theme.palette.whiteColor,
         width: "1px"
     },
-    chartWidthToPixel: 6,           // Default value to convert a character's width into pixel
+    chartWidthToPixel: 10,           // Default value to convert a character's width into pixel
     chartHeightToPixel: 14,         // Default value to convert a character's height into pixel
     circleToPixel: 3,               // Default value to convert the circle to pixel
     legend: {
