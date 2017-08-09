@@ -21,7 +21,7 @@
         ],
         "tooltip": [
             { "column": "L7Classification", "label": "L7 Signature" },
-            { "column": "Sum of MB", "format": ",.2s"}
+            { "column": "Sum of MB", "format": "s"}
         ]
     },
     "listeners": [

@@ -1,15 +1,15 @@
 {
     "id": "vss-enterprise-events-metric",
-    "title": "# Events (24h)",
+    "title": "# Security Events (24h)",
     "query": "vss-enterprise-events-metric",
     "graph": "VariationTextGraph",
-    "showTitleBar": true,
     "data": {
         "titlePosition": "top",
         "target":{
             "column": "timezones",
             "value": "Last 24",
-            "field": "doc_count"
+            "field": "doc_count",
+            "format": ",.4s"
         }
     }
 }
