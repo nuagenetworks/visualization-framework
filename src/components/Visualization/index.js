@@ -15,6 +15,7 @@ import { CardOverlay } from "../CardOverlay";
 import { Card, CardText } from 'material-ui/Card';
 
 import {CSVLink} from 'react-csv';
+import * as d3 from "d3";
 
 import {
     Actions as ServiceActions,
@@ -243,7 +244,8 @@ class VisualizationView extends React.Component {
         const {
             configuration,
             queryConfiguration,
-            response
+            response,
+            id
         } = this.props;
 
         const graphName      = configuration.graph,
@@ -264,7 +266,7 @@ class VisualizationView extends React.Component {
               data={data}
               configuration={configuration}
               width={this.state.width}
-              height={this.state.height}
+              height={this.state.height - d3.select(`#filter_${id}`).node().getBoundingClientRect().height}
               goTo={this.props.goTo}
               {...this.state.listeners}
             />
@@ -449,7 +451,8 @@ class VisualizationView extends React.Component {
     render() {
         const {
             configuration,
-            context
+            context,
+            id
         } = this.props;
 
         if (!this.state.parameterizable || !configuration)
@@ -485,11 +488,14 @@ class VisualizationView extends React.Component {
               ref={this.cardTextReference}
             >
                 { this.renderTitleBarIfNeeded() }
-
-                { this.renderNextPrevFilter() }
-                { this.renderFiltersToolBar() }
                 <div>
                     { this.renderSharingOptions() }
+                    <div id={`filter_${id}`}>
+                        { this.renderNextPrevFilter() }
+                        { this.renderFiltersToolBar() }
+                        <div className="clearfix"></div>
+                    </div>
+                    
                     <CardText style={cardText}>
                         { this.renderVisualizationIfNeeded() }
                         {description}

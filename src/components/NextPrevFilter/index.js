@@ -19,7 +19,6 @@ export class NextPrevFilter extends React.Component {
 
         this.state = {
             page: 1,
-            enabled: false,
             duration: 15,
             unit: "m",
             filterOptions: {
@@ -33,9 +32,11 @@ export class NextPrevFilter extends React.Component {
 
     componentWillMount() {
 
-        if(this.props.context[`${this.props.visualizationId}-${this.state.filterOptions.page}`]) {
-            this.setState({page: this.props.context[`${this.props.visualizationId}-${this.state.filterOptions.page}`]});
+        let page = this.props.context[`${this.props.visualizationId}-${this.state.filterOptions.page}`];
+        if(page) {
+            this.setState({page: parseInt(page)});
         }
+
         this.updateContextValue(this.props);
     }
 
@@ -82,7 +83,7 @@ export class NextPrevFilter extends React.Component {
     renderNextIcon() {
         let btnDisabled = true;
         if (this.state.page !== 1) {
-          btnDisabled = false;
+           btnDisabled = false;
         }
         
         return (
