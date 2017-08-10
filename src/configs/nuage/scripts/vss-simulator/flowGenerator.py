@@ -59,13 +59,16 @@ def generateFlowStats(domain_id, type="l3"):
 			'outport': random.randint(1,5),
 			'domainName': CONFIG_DICT['domain.name'] + "-" + str(domain_id),
 			'dpgName': flow_data[1]['pg'],
-			'enterpriseName': CONFIG_DICT['enterprise.name'],
+            'acl_destination_type': 'pg',
+			'acl_destination_name': flow_data[1]['pg'],
+			'enterpriseName': CONFIG_DICT['enterprise.name'], 
 			'sourcevport': flow_data[0]['uuid'],
 			'destinationvport': flow_data[1]['uuid'],
-			'spgName': flow_data[0]['pg'],
-                        'subnetName': CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-sub",
-                        'zoneName': CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-zone",
-                        'aclId': flow_data[0]['uuid']
+            'acl_source_type': 'pg',
+			'acl_source_name': flow_data[0]['pg'],
+            'subnetName': CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-sub",
+            'zoneName': CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-zone",
+            'aclId': flow_data[0]['uuid']
 		}
                 if type=="l3":
                     es_data['nuage_metadata']['domainName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id)
