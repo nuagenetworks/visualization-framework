@@ -1,11 +1,11 @@
 {
-    "id": "test-heatmap-graph",
+    "id": "aar-flow-sla-heatmap",
     "graph": "HeatmapGraph",
-    "title": "HeatmapGraph",
+    "title": "{{snsg}} ({{fromPersonality}}) to {{dnsg}} ({{toPersonality}}) Sla HeatMap",
     "author": "Anil Chauhan",
-    "creationDate": "08/03/2017",
+    "creationDate": "03/04/2017",
     "data": {
-        "xColumn": "timestamp",
+        "xColumn": "date_histo",
         "xLabel": "Time",
         "yColumn": "application",
         "yTickGrid": false,
@@ -23,6 +23,15 @@
             { "column": "application", "label": "Application" },
             { "column": "slastatus", "label": "Status" }
         ]
-    },
-    "query": "test-heatmap-graph"
+ 
+   },
+   "listeners": [
+        {
+            "params": {
+                "appName": "application",
+                "queryStartTime": "timestamp"
+            }
+        }
+    ],
+    "query": "aar-flow-sla-heatmap"
 }
