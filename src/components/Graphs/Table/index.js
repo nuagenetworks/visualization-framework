@@ -163,7 +163,7 @@ export default class Table extends AbstractGraph {
                 let match = false;
 
                 accessors.forEach((accessor, i) => {
-                    if(accessor(d, true).toString().includes(search))
+                    if(accessor(d, true).toString().toUpperCase().includes(search.toUpperCase()))
                        match = true;
                 });
 
@@ -175,10 +175,10 @@ export default class Table extends AbstractGraph {
     }
 
     handleSortOrderChange(column, order) {
-
+        console.log("columns", column, order);
         this.filterData = this.filterData.sort(
           (a, b) => {
-            return order === 'desc' ? eval(`b.${column}`) > eval(`a.${column}`) : eval(`a.${column}`) > eval(`b.${column}`)
+            return order === 'desc' ? eval(`b["${column}"]`) > eval(`a["${column}"]`) : eval(`a["${column}"]`) > eval(`b["${column}"]`)
           }
         );
 
