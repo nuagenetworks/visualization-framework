@@ -124,7 +124,7 @@ export default class AbstractGraph extends React.Component {
         let domainData = d3.map(data, (d) => d[colorColumn || defaultColumn]).keys().sort();
 
         let propColors = [];
-        domainData.each((d) => {
+        domainData.forEach((d) => {
             if(mapColors[d]) {
                 propColors.push(mapColors[d]);
             }
@@ -149,7 +149,6 @@ export default class AbstractGraph extends React.Component {
       yExtent[0] = (yExtent[0] >= 0 && (yExtent[0] - diff) < 0) ? 0 : yExtent[0] - diff;
       yExtent[1] = (yExtent[1] <= 0 && (yExtent[1] + diff) > 0) ? 0 : yExtent[1] + diff;
 
-      console.log('yExtent', yExtent, diff);
       return yExtent;
     }
 
