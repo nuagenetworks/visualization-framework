@@ -40,7 +40,6 @@ export default class HeatmapGraph extends XYGraph {
             colors,
             legend,
             margin,
-            padding,
             stroke,
             xColumn,
             xLabel,
@@ -143,7 +142,6 @@ export default class HeatmapGraph extends XYGraph {
         xScale.range([0, availableWidth]);
         yScale.rangeRound([availableHeight, 0]);
         
-
         const xAxis = axisBottom(xScale)
             .tickSizeInner(xTickGrid ? -availableHeight : xTickSizeInner)
             .tickSizeOuter(xTickSizeOuter);
@@ -152,9 +150,7 @@ export default class HeatmapGraph extends XYGraph {
             xAxis.tickFormat(format(xTickFormat));
         }
 
-        if(xTicks){
-            xAxis.ticks(xTicks);
-        }
+        xAxis.tickValues(distXDatas);
 
         const yAxis = axisLeft(yScale)
             .tickSizeInner(yTickGrid ? -availableWidth : yTickSizeInner)
@@ -170,7 +166,7 @@ export default class HeatmapGraph extends XYGraph {
 
         let xTitlePosition = {
             left: leftMargin + availableWidth / 2,
-            top: margin.top + availableHeight + chartHeightToPixel + xAxisHeight
+            top: margin.top + availableHeight + (chartHeightToPixel * 2) + xAxisHeight
         }
 
         let yTitlePosition = {
@@ -178,7 +174,6 @@ export default class HeatmapGraph extends XYGraph {
             left: margin.left + chartWidthToPixel + (isVerticalLegend ? legend.width : 0),
             top: margin.top + availableHeight / 2
         }
-
         return (
             <div className="bar-graph">
                 {this.tooltip}
@@ -187,7 +182,15 @@ export default class HeatmapGraph extends XYGraph {
                     <g transform={ `translate(${leftMargin},${margin.top})` } >
                         <g
                             key="xAxis"
-                            ref={ (el) => select(el).call(xAxis) }
+                            ref={ (el) => select(el)
+                                    .call(xAxis)
+                                    .selectAll("text")
+                                    .attr("dy", "1em")
+                                    .style("text-anchor", "end")
+                                    .attr("transform", function(d) {
+                                        return "rotate(-35)"
+                                    })
+                                }
                             transform={ `translate(0,${availableHeight})` }
                         />
                         <g

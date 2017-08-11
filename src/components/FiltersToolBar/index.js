@@ -35,6 +35,19 @@ export class FiltersToolBarView extends React.Component {
                 if (!currentValue) {
                     // Update context with default value if not found
                     configContexts[paramName] = configOptions.default;
+
+                    if (configOptions.options) {
+                        let defaultOption = configOptions.options.filter((option) => {
+                            if(option.value === configOptions.default) {
+                                return true;
+                            }
+                            return false;
+                        });
+
+                        if(defaultOption.length && defaultOption[0].forceOptions) {
+                            Object.assign(configContexts, defaultOption[0].forceOptions);
+                        }
+                    }
                 }
             }
         };
@@ -49,22 +62,20 @@ export class FiltersToolBarView extends React.Component {
             context,
             visualizationId
         } = this.props
-
         if (!filterOptions || Object.keys(filterOptions).lengh === 0)
             return (
                 <div></div>
             );
-
         return (
             <div className="text-right">
                 <ul className="list-inline" style={style.list}>
                 {
+
                     Object.keys(filterOptions).map((name, i) => {
 
                         let configOptions = filterOptions[name],
                             paramName = visualizationId ? `${visualizationId}-${configOptions.parameter}` : configOptions.parameter,
                             currentValue  = context[paramName] || configOptions.default;
-
                         return (
                             <li
                                 key={i}

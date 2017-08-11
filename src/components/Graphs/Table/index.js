@@ -18,6 +18,7 @@ export default class Table extends AbstractGraph {
         this.handleFilterValueChange = this.handleFilterValueChange.bind(this);
         this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this);
         this.handleNextPageClick     = this.handleNextPageClick.bind(this);
+        this.handleClick             = this.handleClick.bind(this);
 
         /**
         */
@@ -194,6 +195,14 @@ export default class Table extends AbstractGraph {
         this.updateData();
     }
 
+    handleClick(key) {
+        const {
+            data
+        } = this.props;
+        if(this.props.onMarkClick && this.state.data[key])
+           this.props.onMarkClick(this.state.data[key]);
+    }
+
     render() {
         const {
             width,
@@ -236,6 +245,7 @@ export default class Table extends AbstractGraph {
                     onSortOrderChange={this.handleSortOrderChange}
                     page={this.currentPage}
                     count={this.filterData.length}
+                    onCellClick={this.handleClick}
                     rowSize={limit}
                     tableRowStyle={{
                         color:fontColor,
@@ -243,7 +253,6 @@ export default class Table extends AbstractGraph {
                         borderBottom: border.bottom,
                         borderLeft: border.left,
                         borderRight: border.right,
-                        cursor: "pointer",
                         height : rowHeight,
                     }}
                     tableHeaderColumnStyle={{
@@ -255,7 +264,6 @@ export default class Table extends AbstractGraph {
                         width: this.columnWidth,
                         whiteSpace: "inherit",
                         fontSize: "12px",
-
                     }}               
                 />
             </div>
