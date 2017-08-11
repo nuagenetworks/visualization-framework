@@ -63,7 +63,8 @@ class LineGraph extends XYGraph {
           yTickSizeInner,
           yTickSizeOuter,
           brushEnabled,
-          zeroStart
+          zeroStart,
+          circleRadius
         } = this.getConfiguredProperties();
 
 
@@ -203,6 +204,10 @@ class LineGraph extends XYGraph {
                         />
                         <g>
                           {linesData.map((d) =>
+
+                              (d.values.length === 1) ? 
+                                  <circle cx={xScale(d.values[0][xColumn])} cy={yScale(d.values[0][yColumn])} r={circleRadius} fill={colors[0]} />
+                              :
                               <path
                                   key={ d.key }
                                   fill="none"
