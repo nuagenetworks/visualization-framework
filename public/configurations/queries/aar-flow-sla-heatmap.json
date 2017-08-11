@@ -20,8 +20,8 @@
                         {
                             "range": {
                                 "timestamp": {
-                                    "gte":"{{startTime:now-1h}}",
-                                    "lte":"{{endTime:now}}",
+                                    "gte":"{{heatmapstartTime:now-15m}}",
+                                    "lte":"{{heatmapendTime:now}}",
                                     "format": "epoch_millis"
                                 }
                             }
@@ -49,7 +49,7 @@
                 "date_histo": {
                     "date_histogram": {
                         "field": "timestamp",
-                        "interval": "{{interval:30s}}"
+                        "interval": "{{heatmapinterval:30s}}"
                     },
                     "aggs": {
                         "application": {
