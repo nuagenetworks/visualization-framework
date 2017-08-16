@@ -29,6 +29,12 @@
             "params": {
                 "appName": "application",
                 "queryStartTime": "date_histo"
+            },
+            "dateParams": {
+                "reference": "top5-app-vertical-bar",
+                "duration": 10,
+                "column": "date_histo",
+                "unit": "m"
             }
         }
     ],
