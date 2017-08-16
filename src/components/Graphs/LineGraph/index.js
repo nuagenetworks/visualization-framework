@@ -63,7 +63,8 @@ class LineGraph extends XYGraph {
           yTickSizeInner,
           yTickSizeOuter,
           brushEnabled,
-          zeroStart
+          zeroStart,
+          circleRadius
         } = this.getConfiguredProperties();
 
 
@@ -82,7 +83,7 @@ class LineGraph extends XYGraph {
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
         let legendWidth       = legend.show && linesData.length > 1 ? this.longestLabelLength(data, legendFn) * chartWidthToPixel : 0;
 
-        let yLabelWidth       = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
+        let yLabelWidth       = this.longestLabelLength(data, yLabelFn, yTickFormat) * chartWidthToPixel;
         let leftMargin        = margin.left + yLabelWidth;
         let availableWidth    = width - (margin.left + margin.right + yLabelWidth);
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
@@ -203,6 +204,10 @@ class LineGraph extends XYGraph {
                         />
                         <g>
                           {linesData.map((d) =>
+
+                              (d.values.length === 1) ? 
+                                  <circle cx={xScale(d.values[0][xColumn])} cy={yScale(d.values[0][yColumn])} r={circleRadius} fill={colors[0]} />
+                              :
                               <path
                                   key={ d.key }
                                   fill="none"

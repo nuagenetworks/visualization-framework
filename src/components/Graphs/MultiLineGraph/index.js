@@ -60,7 +60,8 @@ class MultiLineGraph extends XYGraph {
           yTickSizeInner,
           yTickSizeOuter,
           brushEnabled,
-          zeroStart
+          zeroStart,
+          circleRadius
         } = this.getConfiguredProperties();
 
         let finalYColumn = typeof yColumn === 'object' ? yColumn : [yColumn];
@@ -176,14 +177,6 @@ class MultiLineGraph extends XYGraph {
             yAxis.ticks(yTicks);
         }
 
-        const lineGenerator = function(data, column) {
-            var generator = line()
-                .x(function(d) { return xScale(d[xColumn]); })
-                .y(function(d) { return yScale(d[column]); });
-
-            return generator(data);
-        }
-
         let xTitlePosition = {
             left: leftMargin + availableWidth / 2,
             top: margin.top + availableHeight + chartHeightToPixel + xAxisHeight
@@ -220,6 +213,27 @@ class MultiLineGraph extends XYGraph {
             'right': xScale(d[xColumn]) + leftMargin
         });
 
+
+      const lineGenerator = function(filterData, data, isCircle = false) {
+
+            if(isCircle) {
+              return filterData.map( (d) =>
+                    <circle cx={xScale(d.xColumn)} cy={yScale(d.yColumn)} r={circleRadius} fill={ scale ? scale(d['columnType']) : colors[0]} />
+                )
+            }
+            var generator = line()
+                .x(function(d) { return xScale(d[xColumn]); })
+                .y(function(d) { return yScale(d[data['key']]); });
+
+              return <path
+                        key={ data['key'] }
+                        fill="none"
+                        stroke={ getColor(data) }
+                        strokeWidth={ stroke.width }
+                        d={ generator(filterData) }
+                    />
+        }
+
         return (
             <div className="bar-graph">
                 {
@@ -240,13 +254,7 @@ class MultiLineGraph extends XYGraph {
                         <g>
                             {
                                 legendsData.map((d, i) =>
-                                    <path
-                                        key={ d['key'] }
-                                        fill="none"
-                                        stroke={ getColor(d) }
-                                        strokeWidth={ stroke.width }
-                                        d={ lineGenerator(filterDatas, d['key']) }
-                                    />
+                                    lineGenerator(filterDatas, d, (this.props.data.length === 1) ? true : false)
                                 )
                             }
                         </g>

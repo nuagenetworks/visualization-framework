@@ -1,129 +1,271 @@
-import React from "react";
+import React from 'react';
+import DataTables from 'material-ui-datatables';
 import AbstractGraph from "../AbstractGraph";
 import columnAccessor from "../../../utils/columnAccessor";
+import CopyToClipboard from 'react-copy-to-clipboard';
+import {Tooltip} from 'react-lightweight-tooltip';
 
+import tooltipStyle from './tooltipStyle.js';
 import "./style.css";
-
-import {properties} from "./default.config"
+import {properties} from "./default.config";
 
 export default class Table extends AbstractGraph {
 
-    constructor(props) {
+    constructor(props, context) {
         super(props, properties);
+
+        this.handleSortOrderChange   = this.handleSortOrderChange.bind(this);
+        this.handleFilterValueChange = this.handleFilterValueChange.bind(this);
+        this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this);
+        this.handleNextPageClick     = this.handleNextPageClick.bind(this);
+        this.handleClick             = this.handleClick.bind(this);
+
+        /**
+        */
+        this.currentPage = 1;
+        this.filterData = false;
+
+        this.state = {
+            data: []
+        }
     }
 
-    render() {
+    componentWillMount() {
+        this.initiate();
+    }
 
+    componentWillReceiveProps(nextProps) {
+        if(this.props !== nextProps) {
+            this.initiate();
+        }
+    }
+
+    initiate() {
+        let columns = this.getColumns();
+
+        if (!columns)
+            return;
+
+        /*
+         * On data change, resetting the paging and filtered data to 1 and false respectively.
+         */
+        this.resetFilters();
+
+        this.getHeaderData(columns);
+        this.updateData();
+    }
+
+    resetFilters() {
+        this.currentPage = 1;
+        this.filterData = this.props.data;
+    }
+
+    updateData() {
+        const {
+            limit,
+        } = this.getConfiguredProperties();
+
+        let offset = limit * (this.currentPage - 1);
+
+        this.setState({
+            data : this.filterData.slice(offset, offset + limit)
+        });
+    }
+
+    getColumns() {
         const {
             data,
             configuration,
-            onMarkClick,
-            width,
-            height
         } = this.props;
 
         if (!data || !data.length)
             return;
 
-        const properties = configuration.data;
-        const columns = properties.columns;
+        return configuration.data.columns;
+    }
+
+    getAccessor(columns) {
+        return columns.map(columnAccessor);
+    }
+
+    getTooltipAccessor(columns) {
+        return columns.map(column => {
+            return column.tooltip ? columnAccessor(column.tooltip) : () => {}
+        });
+    }
+
+    getHeaderData(columns) {
+
+        const {
+            padding,
+        } = this.getConfiguredProperties();
+
+        this.columnWidth =  (100 / columns.length) + "%";
+
+        this.headerData = columns.map(({column, label}, i) => ({
+            key: column,
+            label: label || column,
+            sortable: true,
+            style: {
+                padding: padding,
+                width: this.columnWidth
+            }}
+        ));
+    }
+
+    getTableData(columns) {
+        const accessors = this.getAccessor(columns);
+        const tooltipAccessor = this.getTooltipAccessor(columns);
+
+        return this.state.data.map((d, j) => {
+
+            let data = {};
+
+            accessors.forEach((accessor, i) => {
+                let columnData = accessor(d);
+
+                if(columns[i].tooltip) {
+                    let fullText = tooltipAccessor[i](d, true);
+                    columnData = <div>
+                            <Tooltip key={`tooltip_${j}_${i}`}
+                              content={
+                                [
+                                  fullText,
+                                  <CopyToClipboard text={fullText}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>,
+                                ]
+                              }
+                              styles={tooltipStyle}>
+                              <a className="pointer">
+                                 {columnData}
+                              </a>
+                            </Tooltip>
+                        </div>
+                }
+
+                data[columns[i].column] = columnData;
+            });
+
+            return data;
+        })
+    }
+
+    handleFilterValueChange(search) {
+        const {
+            data
+        } = this.props;
+
+        this.resetFilters();
+
+        if(search) {
+            const columns = this.getColumns();
+            const accessors = this.getAccessor(columns);
+            this.filterData = data.filter((d, j) => {
+                let match = false;
+
+                accessors.forEach((accessor, i) => {
+                    if(accessor(d, true).toString().toUpperCase().includes(search.toUpperCase()))
+                       match = true;
+                });
+
+                return match;
+            });
+        }
+
+        this.updateData();
+    }
+
+    handleSortOrderChange(column, order) {
+        console.log("columns", column, order);
+        this.filterData = this.filterData.sort(
+          (a, b) => {
+            return order === 'desc' ? eval(`b["${column}"]`) > eval(`a["${column}"]`) : eval(`a["${column}"]`) > eval(`b["${column}"]`)
+          }
+        );
+
+        this.updateData();
+    }
+
+    handlePreviousPageClick() {
+        --this.currentPage;
+        this.updateData();
+    }
+
+    handleNextPageClick() {
+        ++this.currentPage;
+        this.updateData();
+    }
+
+    handleClick(key) {
+        const {
+            data
+        } = this.props;
+        if(this.props.onMarkClick && this.state.data[key])
+           this.props.onMarkClick(this.state.data[key]);
+    }
+
+    render() {
+        const {
+            width,
+            height,
+        } = this.props;
 
         const {
             border,
-            colorColumn,
             fontColor,
-            header,
             padding,
-            colors
+            rowHeight,
+            limit
         } = this.getConfiguredProperties();
 
-        const accessors = columns.map(columnAccessor);
+        let tableData = this.getTableData(this.getColumns());
 
-        if (!data)
-            return (
-                <p>No Rows</p>
-            );
-
-        if (!columns)
-            return (
-                <p>No columns</p>
-            );
-
-        const scale = this.scaleColor(data);
-        const columnWidth = (100 / columns.length) + "%";
+        if(!tableData) {
+            return "<p>No Data</p>";
+        }
 
         return (
             <div
                 style={{
-                    width: width + "px",
-                    height: height + "px",
+                    width: `${width}px`,
+                    height: `${height}px`,
                     overflow: "auto"
                 }}
             >
-                <table style={{ width: "100%" }} >
-                    <thead>
-                        <tr style={{
-                            color: header.fontColor,
-                            borderTop: header.border.top,
-                            borderBottom: header.border.bottom,
-                            borderLeft: header.border.left,
-                            borderRight: header.border.right
-                        }}>
-                            { columns.map(({column, label}, i) =>(
-                                <th
-                                    key={i}
-                                    style={{
-                                        padding:padding,
-                                        width: columnWidth
-                                    }}
-                                    >
-                                    { label || column }
-                                </th>
-                            )) }
-                        </tr>
-                    </thead>
-                    <tbody
-                        style={{
-                            height:height - 50 // Set from style.css
-                        }}>
-                        { data.map((d, j) => {
 
-                            // Set up clicking and cursor style.
-                            let onClick, cursor;
-                            if(onMarkClick){
-                                onClick = () => onMarkClick(d);
-                                cursor = "pointer";
-                            }
-
-                            return (
-                                <tr
-                                    key={j}
-                                    style={{
-                                        color:fontColor,
-                                        background: scale ? scale(d[colorColumn]) : colors[j % 2],
-                                        borderTop: border.top,
-                                        borderBottom: border.bottom,
-                                        borderLeft: border.left,
-                                        borderRight: border.right,
-                                        cursor: cursor
-                                    }}
-                                    onClick={onClick}
-                                >
-                                    { accessors.map((accessor, i) =>(
-                                        <td
-                                            key={i}
-                                            style={{
-                                                padding: padding,
-                                                width: columnWidth
-                                            }}>
-                                          { accessor(d) }
-                                        </td>
-                                    )) }
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                <DataTables
+                    showRowHover={false}
+                    showHeaderToolbar={true}
+                    multiSelectable={true}
+                    columns={this.headerData}
+                    data={tableData}
+                    showRowSizeControls={false}
+                    onNextPageClick={this.handleNextPageClick}
+                    onPreviousPageClick={this.handlePreviousPageClick}
+                    onFilterValueChange={this.handleFilterValueChange}
+                    onSortOrderChange={this.handleSortOrderChange}
+                    page={this.currentPage}
+                    count={this.filterData.length}
+                    onCellClick={this.handleClick}
+                    rowSize={limit}
+                    tableRowStyle={{
+                        color:fontColor,
+                        borderTop: border.top,
+                        borderBottom: border.bottom,
+                        borderLeft: border.left,
+                        borderRight: border.right,
+                        height : rowHeight,
+                    }}
+                    tableHeaderColumnStyle={{
+                        padding: padding,
+                        height : rowHeight
+                    }}
+                    tableRowColumnStyle={{
+                        height : rowHeight,
+                        width: this.columnWidth,
+                        whiteSpace: "inherit",
+                        fontSize: "12px",
+                    }}               
+                />
             </div>
         );
     }
