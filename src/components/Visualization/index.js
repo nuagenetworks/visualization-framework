@@ -419,7 +419,8 @@ class VisualizationView extends React.Component {
     render() {
         const {
             configuration,
-            context
+            context,
+            id
         } = this.props;
 
         if (!this.state.parameterizable || !configuration)
@@ -453,6 +454,7 @@ class VisualizationView extends React.Component {
               style={Object.assign({}, style.card, configStyle.card)}
               containerStyle={style.cardContainer}
               ref={this.cardTextReference}
+              id={id}
             >
                 { this.renderTitleBarIfNeeded() }
                 { this.renderFiltersToolBar() }
