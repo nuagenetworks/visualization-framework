@@ -7,6 +7,10 @@
     "data": {
         "sliceColumn": "Sum of MB",
         "labelColumn": "L7Classification",
+        "others": {
+            "label": "Others",
+            "limit": 5
+        },
         "tooltip": [
             { "column": "L7Classification", "label": "L7 Classification" },
             { "column": "Sum of MB", "format": "s"}

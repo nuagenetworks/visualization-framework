@@ -6,6 +6,7 @@ import * as d3 from "d3";
 
 import { GraphManager } from "./index";
 import columnAccessor from "../../utils/columnAccessor";
+import crossfilter from "crossfilter2";
 
 
 export default class AbstractGraph extends React.Component {
@@ -285,6 +286,33 @@ export default class AbstractGraph extends React.Component {
                 })}
             </g>
         );
+    }
+
+    getGroupedData(data, settings) {
+
+        let cfData = crossfilter(data);
+
+        let metricDimension = cfData.dimension(function(d) { return d[settings.metric]; });
+        let topData = [];
+
+        if(settings.others && settings.others.limit && (data.length - 1) > settings.others.limit) {
+            
+            topData = metricDimension.top(settings.others.limit);
+            const otherDatas = metricDimension.top(Infinity, settings.others.limit);
+
+            const sum = otherDatas.reduce(function(total, d) {
+              return +total + d[settings.metric];
+            }, 0);
+
+            topData = topData.concat({[settings.dimension]: settings.others.label, [settings.metric]: sum})
+        } else {
+            topData = metricDimension.top(Infinity);
+        }
+
+        metricDimension.remove();
+        cfData.remove();
+
+        return topData;
     }
 
 }

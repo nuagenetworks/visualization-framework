@@ -8,6 +8,10 @@
     "data": {
         "sliceColumn": "Sum of MB",
         "labelColumn": "L7Classification",
+        "others": {
+            "label": "Others",
+            "limit": 5
+        },
         "pieInnerRadius": 0.5
     },
     "query": "top5-app-vertical-bar"

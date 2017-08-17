@@ -18,13 +18,14 @@ export default class PieGraph extends AbstractGraph {
     render() {
 
         const {
-            data,
+            data: originalData,
             width,
             height,
             onMarkClick
         } = this.props;
 
-        if (!data || !data.length)
+
+        if (!originalData || !originalData.length)
             return;
 
         const {
@@ -42,7 +43,27 @@ export default class PieGraph extends AbstractGraph {
           fontColor,
           percentages,
           percentagesFormat,
+          others
+
         } = this.getConfiguredProperties();
+
+
+        /*
+        Add below code snippet in visulaization's configuration json files
+        to use grouping data feature
+
+        "others": {
+            "label": "Others",
+            "limit": 5
+        }
+
+        */
+
+        const data = this.getGroupedData(originalData, {
+            "metric": sliceColumn,
+            "dimension": labelColumn,
+            "others": others
+          });
 
         let availableWidth     = width - (margin.left + margin.right);
         let availableHeight    = height - (margin.top + margin.bottom);
@@ -79,7 +100,7 @@ export default class PieGraph extends AbstractGraph {
             .innerRadius(labelRadius)
             .outerRadius(labelRadius);
 
-        const pie    = d3.pie().value(value);
+        const pie    = d3.pie().value(value).sort(null);
         const slices = pie(data);
 
         const labelText = (() => {
