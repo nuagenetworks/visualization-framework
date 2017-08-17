@@ -31,10 +31,9 @@
                 "queryStartTime": "date_histo"
             },
             "dateParams": {
-                "reference": "top5-app-vertical-bar",
-                "duration": 10,
-                "column": "date_histo",
-                "unit": "m"
+                "reference": "top5-app-table",
+                "duration": 600,
+                "column": "date_histo"
             }
         }
     ],

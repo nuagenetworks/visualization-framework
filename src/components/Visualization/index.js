@@ -187,9 +187,8 @@ class VisualizationView extends React.Component {
 
                             let dateQueryParams = {};
                             if(dateParams) {
-                                const unit = dateParams.unit ? dateParams.unit : this.props.context.unit;
-                                dateQueryParams[`${dateParams.reference}-endTime`] = `${d[dateParams.column]}+${dateParams.duration}${unit}`;
-                                dateQueryParams[`${dateParams.reference}-startTime`] = `${d[dateParams.column]}-${dateParams.duration}${unit}`;
+                                dateQueryParams[`${dateParams.reference}-endTime`] = +d[dateParams.column] + dateParams.duration;
+                                dateQueryParams[`${dateParams.reference}-startTime`] = +d[dateParams.column] - dateParams.duration;
                             }
 
                             // Compute the query params from the data object.
@@ -564,7 +563,7 @@ const mapStateToProps = (state, ownProps) => {
             context[filteredKey] = orgContexts[key];
       }
     }
-    
+
     const props = {
         id: configurationID,
         context: context,
