@@ -186,9 +186,11 @@ class VisualizationView extends React.Component {
                         listeners[event] = (d) => {
 
                             let dateQueryParams = {};
+
                             if(dateParams) {
-                                dateQueryParams[`${dateParams.reference}-endTime`] = +d[dateParams.column] + dateParams.duration;
-                                dateQueryParams[`${dateParams.reference}-startTime`] = +d[dateParams.column] - dateParams.duration;
+                                let filteredID = (dateParams.reference).replace(/-/g, '');
+                                dateQueryParams[`${filteredID}endTime`] = +d[dateParams.column] + dateParams.duration;
+                                dateQueryParams[`${filteredID}startTime`] = +d[dateParams.column] - dateParams.duration;
                             }
 
                             // Compute the query params from the data object.
@@ -403,7 +405,7 @@ class VisualizationView extends React.Component {
 
         if (!configuration || !configuration.nextPrevFilter)
             return;
-        
+
         return (
             <NextPrevFilter nextPrevFilter={configuration.nextPrevFilter} visualizationId={id} />
         )
@@ -504,7 +506,7 @@ class VisualizationView extends React.Component {
                         { this.renderFiltersToolBar() }
                         <div className="clearfix"></div>
                     </div>
-                    
+
                     <CardText style={cardText}>
                         { this.renderVisualizationIfNeeded() }
                         {description}
@@ -556,10 +558,13 @@ const mapStateToProps = (state, ownProps) => {
           ]);
 
     let context = {};
+    let filteredID = configurationID.replace(/-/g, '');
+
     for (let key in orgContexts) {
       if(orgContexts.hasOwnProperty(key)) {
-        let filteredKey = key.replace(`${configurationID}-`, '');
-        if(!context[filteredKey] || key.includes(`${configurationID}-`))
+
+        let filteredKey = key.replace(`${filteredID}`, '');
+        if(!context[filteredKey] || key.includes(`${filteredID}`))
             context[filteredKey] = orgContexts[key];
       }
     }
