@@ -32,7 +32,7 @@
             },
             "dateParams": {
                 "reference": "top5-app-table",
-                "duration": 600,
+                "duration": 600000,
                 "column": "date_histo"
             }
         }
