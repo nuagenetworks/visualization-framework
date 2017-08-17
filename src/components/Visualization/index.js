@@ -187,8 +187,8 @@ class VisualizationView extends React.Component {
 
                             let dateQueryParams = {};
                             if(dateParams) {
-                                dateQueryParams[`${dateParams.reference}-endTime`] = +d[dateParams.column] + dateParams.duration;
-                                dateQueryParams[`${dateParams.reference}-startTime`] = +d[dateParams.column] - dateParams.duration;
+                                dateQueryParams[`cellendTime`] = +d[dateParams.column] + dateParams.duration;
+                                dateQueryParams[`cellstartTime`] = +d[dateParams.column] - dateParams.duration;
                             }
 
                             // Compute the query params from the data object.

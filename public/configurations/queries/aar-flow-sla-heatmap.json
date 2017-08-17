@@ -20,7 +20,7 @@
                         {
                             "range": {
                                 "timestamp": {
-                                    "gte":"{{startTime:now-1h}}",
+                                    "gte":"{{startTime:now-15m}}",
                                     "lte":"{{endTime:now}}",
                                     "format": "epoch_millis"
                                 }

@@ -31,8 +31,8 @@
                 "queryStartTime": "date_histo"
             },
             "dateParams": {
-                "reference": "top5-app-table",
-                "duration": 600000,
+                "reference": "aar-nsg-sla-details",
+                "duration": 60000000,
                 "column": "date_histo"
             }
         }
