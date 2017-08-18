@@ -57,12 +57,13 @@ export default class PieGraph extends AbstractGraph {
         }
 
         */
-
-        const data = this.getGroupedData(originalData, {
+        const settings = {
             "metric": sliceColumn,
             "dimension": labelColumn,
             "otherOptions": otherOptions
-          });
+          };
+
+        const data = this.getGroupedData(originalData, settings);
 
         let availableWidth     = width - (margin.left + margin.right);
         let availableHeight    = height - (margin.top + margin.bottom);
@@ -127,7 +128,7 @@ export default class PieGraph extends AbstractGraph {
 
                                 // Set up clicking and cursor style.
                                 const { onClick, cursor } = (
-                                    onMarkClick ? {
+                                    onMarkClick && d[settings.dimension] != otherOptions.label ? {
                                         onClick: () => onMarkClick(d),
                                         cursor: "pointer"
                                     } : { }

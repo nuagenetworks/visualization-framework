@@ -89,11 +89,12 @@ export default class BarGraph extends XYGraph {
 
         const vertical = orientation  === "vertical";
 
-        const data = this.getGroupedData(originalData, {
-            "metric": vertical? yColumn : xColumn,
-            "dimension": vertical? xColumn : yColumn,
-            "otherOptions": otherOptions
-        });
+        const settings = {
+                "metric": vertical? yColumn : xColumn,
+                "dimension": vertical? xColumn : yColumn,
+                "otherOptions": otherOptions
+            }
+        const data = this.getGroupedData(originalData, settings);
 
         
         const isVerticalLegend = legend.orientation === 'vertical';
@@ -257,7 +258,7 @@ export default class BarGraph extends XYGraph {
                             const { onClick, style } = (
 
                                 // If an "onMarkClick" handler is registered,
-                                onMarkClick ? {
+                                onMarkClick && d[settings.dimension] != otherOptions.label ? {
 
                                     // set it up to be invoked, passing the current data row object.
                                     onClick: () => onMarkClick(d),
