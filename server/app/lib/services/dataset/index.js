@@ -3,9 +3,11 @@ import { DirectoryTypes, FetchManager } from '../../utils/fetch';
 
 import { taffy } from 'taffydb';
 
-const fetch = (parameters) => {
-    let databaseConfig = FetchManager.fetchAndParseJSON('database', DirectoryTypes.DATASET)
 
+const fetch = (parameters, context) => {
+
+    let file = context[DirectoryTypes.DATASET] ? context[DirectoryTypes.DATASET] : "database";
+    let databaseConfig = FetchManager.fetchAndParseJSON(file, DirectoryTypes.DATASET);
     if(!databaseConfig)
         return Promise.reject();
 
