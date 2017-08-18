@@ -49,13 +49,13 @@ export default class BarGraph extends XYGraph {
     render() {
 
         const {
-            data,
+            data: originalData,
             width,
             height,
             onMarkClick
         } = this.props;
 
-        if (!data || !data.length)
+        if (!originalData || !originalData.length)
             return;
 
         const {
@@ -84,9 +84,18 @@ export default class BarGraph extends XYGraph {
           yTicks,
           yTickSizeInner,
           yTickSizeOuter,
+          otherOptions
         } = this.getConfiguredProperties();
 
-        const vertical         = orientation        === "vertical";
+        const vertical = orientation  === "vertical";
+
+        const data = this.getGroupedData(originalData, {
+            "metric": vertical? yColumn : xColumn,
+            "dimension": vertical? xColumn : yColumn,
+            "otherOptions": otherOptions
+        });
+
+        
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
         const yLabelFn         = (d) => d[yColumn];

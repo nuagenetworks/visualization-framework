@@ -295,16 +295,16 @@ export default class AbstractGraph extends React.Component {
         let metricDimension = cfData.dimension(function(d) { return d[settings.metric]; });
         let topData = [];
 
-        if(settings.others && settings.others.limit && (data.length - 1) > settings.others.limit) {
+        if(settings.otherOptions && settings.otherOptions.limit && (data.length - 1) > settings.otherOptions.limit) {
             
-            topData = metricDimension.top(settings.others.limit);
-            const otherDatas = metricDimension.top(Infinity, settings.others.limit);
+            topData = metricDimension.top(settings.otherOptions.limit);
+            const otherDatas = metricDimension.top(Infinity, settings.otherOptions.limit);
 
             const sum = otherDatas.reduce(function(total, d) {
               return +total + d[settings.metric];
             }, 0);
 
-            topData = topData.concat({[settings.dimension]: settings.others.label, [settings.metric]: sum})
+            topData = topData.concat({[settings.dimension]: settings.otherOptions.label, [settings.metric]: sum})
         } else {
             topData = metricDimension.top(Infinity);
         }

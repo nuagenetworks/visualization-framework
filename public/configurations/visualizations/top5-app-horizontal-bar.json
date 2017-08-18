@@ -17,7 +17,11 @@
         ],
         "xTicks": 5,
         "xTickGrid": true,
-        "yTickGrid": false
+        "yTickGrid": false,
+        "otherOptions": {
+            "label": "Others",
+            "limit": 5
+        }
     },
     "query": "top5-app-vertical-bar"
 }

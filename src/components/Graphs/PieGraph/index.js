@@ -43,8 +43,7 @@ export default class PieGraph extends AbstractGraph {
           fontColor,
           percentages,
           percentagesFormat,
-          others
-
+          otherOptions
         } = this.getConfiguredProperties();
 
 
@@ -62,7 +61,7 @@ export default class PieGraph extends AbstractGraph {
         const data = this.getGroupedData(originalData, {
             "metric": sliceColumn,
             "dimension": labelColumn,
-            "others": others
+            "otherOptions": otherOptions
           });
 
         let availableWidth     = width - (margin.left + margin.right);
