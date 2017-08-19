@@ -128,7 +128,7 @@ export default class PieGraph extends AbstractGraph {
 
                                 // Set up clicking and cursor style.
                                 const { onClick, cursor } = (
-                                    onMarkClick && d[settings.dimension] != otherOptions.label ? {
+                                    onMarkClick && d[settings.dimension] !== otherOptions.label ? {
                                         onClick: () => onMarkClick(d),
                                         cursor: "pointer"
                                     } : { }

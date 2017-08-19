@@ -258,7 +258,7 @@ export default class BarGraph extends XYGraph {
                             const { onClick, style } = (
 
                                 // If an "onMarkClick" handler is registered,
-                                onMarkClick && d[settings.dimension] != otherOptions.label ? {
+                                onMarkClick && d[settings.dimension] !== otherOptions.label ? {
 
                                     // set it up to be invoked, passing the current data row object.
                                     onClick: () => onMarkClick(d),
