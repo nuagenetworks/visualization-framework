@@ -272,12 +272,13 @@ class VisualizationView extends React.Component {
             return this.renderCardWithInfo("No data to visualize", "bar-chart");
         }
 
+        let graphHeight = d3.select(`#filter_${id}`).node() ? this.state.height - d3.select(`#filter_${id}`).node().getBoundingClientRect().height : this.state.height;
         return (
             <GraphComponent
               data={data}
               configuration={configuration}
               width={this.state.width}
-              height={this.state.height - d3.select(`#filter_${id}`).node().getBoundingClientRect().height}
+              height={graphHeight}
               goTo={this.props.goTo}
               {...this.state.listeners}
             />
