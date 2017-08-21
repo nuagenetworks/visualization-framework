@@ -138,7 +138,6 @@ class VisualizationView extends React.Component {
             if (queryName) {
                 this.props.fetchQueryIfNeeded(queryName).then(() => {
                     const { queryConfiguration, executeQueryIfNeeded, context } = this.props;
-
                     if (!queryConfiguration)
                         return;
 
@@ -175,6 +174,9 @@ class VisualizationView extends React.Component {
 
                             redirect,
 
+                            // By default, specify no date params.
+                            dateParams = false,
+
                             // By default, specify no additional query params.
                             params = {}
                         } = listener;
@@ -182,6 +184,12 @@ class VisualizationView extends React.Component {
                         // Each listener expects the data object `d`,
                         // which corresponds to a row of data visualized.
                         listeners[event] = (d) => {
+
+                            let dateQueryParams = {};
+                            if(dateParams) {
+                                dateQueryParams[`cellendTime`] = +d[dateParams.column] + dateParams.duration;
+                                dateQueryParams[`cellstartTime`] = +d[dateParams.column] - dateParams.duration;
+                            }
 
                             // Compute the query params from the data object.
                             let queryParams = Object.keys(params)
@@ -191,8 +199,9 @@ class VisualizationView extends React.Component {
                                     return queryParams;
                                 }, {});
 
+
                             // Override the existing context with the new params.
-                            queryParams = Object.assign({}, this.props.context, queryParams);
+                            queryParams = Object.assign({}, this.props.context, queryParams, dateQueryParams);
 
                             let url;
 
@@ -554,7 +563,7 @@ const mapStateToProps = (state, ownProps) => {
             context[filteredKey] = orgContexts[key];
       }
     }
-    
+
     const props = {
         id: configurationID,
         context: context,

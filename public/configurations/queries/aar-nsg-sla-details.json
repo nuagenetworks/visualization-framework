@@ -6,16 +6,14 @@
         "index":"{{index:nuage_dpi_slastats}}",
         "type":"{{type:nuage_doc_type}}",
         "body":{
-            "size":0,
             "query":{
                 "bool":{
                     "must":[
                         {
                             "range":{
                                 "timestamp":{
-                                    "gte":"{{startTime:now-24h}}",
-                                    "lte":"{{endTimeTime:now}}",
-                                    "format":"epoch_millis"
+                                    "gte":"{{cellstartTime}}",
+                                    "lte":"{{cellendTime}}"
                                 }
                             }
                         },

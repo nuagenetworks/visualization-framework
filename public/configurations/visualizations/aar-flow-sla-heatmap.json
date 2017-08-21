@@ -29,6 +29,11 @@
             "params": {
                 "appName": "application",
                 "queryStartTime": "date_histo"
+            },
+            "dateParams": {
+                "reference": "aar-nsg-sla-details",
+                "duration": 60000000,
+                "column": "date_histo"
             }
         }
     ],
