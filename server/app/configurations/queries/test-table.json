@@ -1,5 +1,12 @@
 {
     "id": "test-table",
     "title": "Top 5 Applications",
-    "service": "dataset"
+    "service": "dataset",
+    "query": {
+        "timestamp": {
+	        "gte": "{{startTime:now-24h}}",
+	        "lte": "{{endTime:now}}",
+	        "fieldType": "timestamp"
+	    }
+    }
 }

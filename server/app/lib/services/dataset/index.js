@@ -1,5 +1,6 @@
 import { getUsedParameters } from '../../utils/configurations';
 import { DirectoryTypes, FetchManager } from '../../utils/fetch';
+import { TaffyFilter } from '../../utils/taffyFilters';
 
 import { taffy } from 'taffydb';
 
@@ -13,8 +14,9 @@ const fetch = (parameters, context) => {
 
     let db = taffy(databaseConfig);
 
+    let params = parameters.query ? TaffyFilter.converter(parameters.query) : {};
 
-    let query = db().filter(parameters.query);
+    let query = db().filter(params);
 
     if (parameters.sortBy)
         query = query.order(parameters.sortBy);
