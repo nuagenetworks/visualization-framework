@@ -1,0 +1,94 @@
+{
+    "id": "aar-nsg-sla-flow-details",
+    "title": "Flows Sla Details",
+    "service": "elasticsearch",
+    "query": {
+        "index": "{{index:nuage_dpi_flowstats}}",
+        "type": "{{type:nuage_doc_type}}",
+        "body": {
+            "size": 0,
+            "sort": [
+                {
+                    "timestamp": {
+                        "order": "desc"
+                    }
+                }
+            ],
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "range": {
+                                "timestamp": {
+                                    "gte":"{{nsgSlaDetailsstartTime}}",
+                                    "lte":"{{nsgSlaDetailsendTime}}",
+                                    "format": "epoch_millis"
+                                }
+                            }
+                        }
+                    ],
+                    "filter": {
+                        "bool":{
+                            "must":[
+                                {
+                                    "term":{
+                                        "EnterpriseName":"{{enterpriseName:ent-1}}"
+                                    }
+                                },
+                                {
+                                    "term":{
+                                        "Application":"{{appName}}"
+                                    }
+                                },
+                                {
+                                    "term": {
+                                        "SourceNSG":"{{snsg}}"
+                                     }
+                                },
+                                {
+                                    "term":{
+                                        "DestinationNSG":"{{dnsg}}"
+                                     }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "aggs":{
+                "SourceUplink":{
+                    "terms":{
+                        "field":"SrcUplink",
+                        "size":5,
+                        "order":{
+                            "Packets":"desc"
+                        }
+                    },
+                    "aggs":{
+                        "Packets":{
+                            "sum":{
+                                "field":"IngressPackets"
+                            }
+                        },
+                        "destinationUplink":{
+                            "terms":{
+                                "field":"DstUplink",
+                                "size":5,
+                                "order":{
+                                    "Packets":"desc"
+                                }
+                            },
+                            "aggs":{
+                                "Packets":{
+                                    "sum":{
+                                        "field":"IngressPackets"
+                                    }
+                                }
+                            }
+                        }                  
+                    }
+                }
+            }
+        }
+    }
+}

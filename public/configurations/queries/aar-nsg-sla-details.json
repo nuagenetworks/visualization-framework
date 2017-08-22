@@ -6,17 +6,21 @@
         "index":"{{index:nuage_dpi_slastats}}",
         "type":"{{type:nuage_doc_type}}",
         "body":{
-            "size":0,
             "query":{
                 "bool":{
                     "must":[
                         {
                             "range":{
                                 "timestamp":{
-                                    "gte":"{{startTime:now-24h}}",
-                                    "lte":"{{endTime:now}}",
+                                    "gte":"{{nsgSlaDetailsstartTime}}",
+                                    "lte":"{{nsgSlaDetailsendTime}}",
                                     "format":"epoch_millis"
                                 }
+                            }
+                        },
+                        {
+                            "term":{
+                                "EnterpriseName":"{{enterpriseName:ent-1}}"
                             }
                         },
                         {
@@ -26,7 +30,12 @@
                         },
                         {
                             "term":{
-                                "SourceNSG":"{{snsg:ovs-1}}"
+                                "SourceNSG":"{{snsg}}"
+                            }
+                        },
+                        {
+                            "term":{
+                                "DestinationNSG":"{{dnsg}}"
                             }
                         }
                     ]

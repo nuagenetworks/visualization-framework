@@ -2,6 +2,7 @@
     "id": "aar-flow-sla-heatmap",
     "graph": "HeatmapGraph",
     "title": "{{snsg}} ({{fromPersonality}}) to {{dnsg}} ({{toPersonality}}) Sla HeatMap",
+    "description": "Heatmap showing per application sla status over a period of chosen 15 minutes interval. Please use scroll to go back and forward in time by 15 minutes. When you click on a cell, tables detailing SLA and flow information will appear. Time chosen to collect that information is +/- 10 minutes from the cell's time.",
     "author": "Anil Chauhan",
     "creationDate": "03/04/2017",
     "key": "function(d) { return d['application'] + d['date_histo'];}",
@@ -32,8 +33,8 @@
                 "queryStartTime": "date_histo"
             },
             "dateParams": {
-                "reference": "aar-nsg-sla-details",
-                "duration": 600000,
+                "reference": "nsgSlaDetails",
+                "duration": 60000000,
                 "column": "date_histo"
             } 
         }
