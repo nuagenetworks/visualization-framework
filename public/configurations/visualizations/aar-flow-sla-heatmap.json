@@ -4,6 +4,7 @@
     "title": "{{snsg}} ({{fromPersonality}}) to {{dnsg}} ({{toPersonality}}) Sla HeatMap",
     "author": "Anil Chauhan",
     "creationDate": "03/04/2017",
+    "key": "function(d) { return d['application'] + d['date_histo'];}",
     "data": {
         "xColumn": "date_histo",
         "xLabel": "Time",
@@ -34,7 +35,7 @@
                 "reference": "aar-nsg-sla-details",
                 "duration": 600000,
                 "column": "date_histo"
-            }
+            } 
         }
     ],
     "nextPrevFilter": true,

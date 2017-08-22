@@ -246,6 +246,7 @@ export default class HeatmapGraph extends XYGraph {
                                         height={ height }
                                         fill={ getColor(d) }
                                         key={ i }
+                                        opacity= {this.getOpacity(d)}
                                         stroke={ stroke.color }
                                         strokeWidth={ stroke.width }
                                         { ...this.tooltipProps(d) }

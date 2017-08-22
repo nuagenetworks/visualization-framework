@@ -185,12 +185,23 @@ class VisualizationView extends React.Component {
                         // which corresponds to a row of data visualized.
                         listeners[event] = (d) => {
 
-                            let dateQueryParams = {};
+                            let graphQueryParams = {};
+                            let resetFilters = false;
+
+                            if(configuration.key) {
+                                let vizID = `${id.replace(/-/g, '')}vkey`;
+                                let vKey = eval("(" + configuration.key + ")")(d);
+                                if(this.props.orgContext[vizID] === vKey)
+                                    resetFilters = true;
+
+                                graphQueryParams[vizID] = vKey;
+                            }
+
 
                             if(dateParams) {
                                 let filteredID = (dateParams.reference).replace(/-/g, '');
-                                dateQueryParams[`${filteredID}endTime`] = +d[dateParams.column] + dateParams.duration;
-                                dateQueryParams[`${filteredID}startTime`] = +d[dateParams.column] - dateParams.duration;
+                                graphQueryParams[`${filteredID}endTime`] = +d[dateParams.column] + dateParams.duration;
+                                graphQueryParams[`${filteredID}startTime`] = +d[dateParams.column] - dateParams.duration;
                             }
 
                             // Compute the query params from the data object.
@@ -201,9 +212,15 @@ class VisualizationView extends React.Component {
                                     return queryParams;
                                 }, {});
 
-
+                            let mergedQueryParams = Object.assign({}, queryParams, graphQueryParams); 
                             // Override the existing context with the new params.
-                            queryParams = Object.assign({}, this.props.context, queryParams, dateQueryParams);
+                            queryParams = Object.assign({}, this.props.orgContext, mergedQueryParams);
+
+                            if(resetFilters) {
+                                for (let key in mergedQueryParams) {
+                                    queryParams[key] = '';
+                                }
+                            }
 
                             let url;
 
@@ -276,6 +293,7 @@ class VisualizationView extends React.Component {
         return (
             <GraphComponent
               data={data}
+              context={this.props.orgContext}
               configuration={configuration}
               width={this.state.width}
               height={graphHeight}
@@ -551,7 +569,7 @@ const updateFilterOptions = (state, configurations, context) => {
 const mapStateToProps = (state, ownProps) => {
 
     const configurationID = ownProps.id || ownProps.params.id,
-          orgContexts = state.interface.get(InterfaceActionKeyStore.CONTEXT),
+          orgContext = state.interface.get(InterfaceActionKeyStore.CONTEXT),
           configuration = state.configurations.getIn([
               ConfigurationsActionKeyStore.VISUALIZATIONS,
               configurationID,
@@ -561,18 +579,19 @@ const mapStateToProps = (state, ownProps) => {
     let context = {};
     let filteredID = configurationID.replace(/-/g, '');
 
-    for (let key in orgContexts) {
-      if(orgContexts.hasOwnProperty(key)) {
+    for (let key in orgContext) {
+      if(orgContext.hasOwnProperty(key)) {
 
         let filteredKey = key.replace(`${filteredID}`, '');
         if(!context[filteredKey] || key.includes(`${filteredID}`))
-            context[filteredKey] = orgContexts[key];
+            context[filteredKey] = orgContext[key];
       }
     }
 
     const props = {
         id: configurationID,
         context: context,
+        orgContext: orgContext,
         configuration: configuration ? contextualize(configuration.toJS(), context) : null,
         headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
         error: state.configurations.getIn([
