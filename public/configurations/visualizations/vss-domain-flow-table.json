@@ -15,8 +15,8 @@
             { "column": "type", "label": "Type"},
             { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
             { "column": "packets", "label": "Packets" },
-            { "column": "l7ApplicationName", "label": "L7 Application"},
-            { "column": "service", "label": "Service" }
+            { "column": "nuage_metadata.l7ApplicationName", "label": "L7 Application"},
+            { "column": "nuage_metadata.service", "label": "Service" }
         ]
     },
     "query": "vss-domain-flow-table"
