@@ -25,11 +25,12 @@ export class FiltersToolBarView extends React.Component {
         } = this.props;
 
         let configContexts = {};
+        let filteredID = visualizationId ? visualizationId.replace(/-/g, '') : '';
 
         for(let name in filterOptions) {
             if (filterOptions.hasOwnProperty(name)) {
                 let configOptions = filterOptions[name],
-                    paramName = visualizationId ? `${visualizationId}-${configOptions.parameter}` : configOptions.parameter,
+                    paramName = visualizationId ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
                     currentValue  = context[paramName];
 
                 if (!currentValue) {

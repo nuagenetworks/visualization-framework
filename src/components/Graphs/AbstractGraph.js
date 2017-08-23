@@ -287,4 +287,13 @@ export default class AbstractGraph extends React.Component {
         );
     }
 
+    getOpacity(d) {
+        const {
+            configuration,
+            context
+        } = this.props;
+        let vkey = `${configuration.id.replace(/-/g, '')}vkey`;
+        return (!context[vkey] || !configuration.key || context[vkey]  === eval("(" + configuration.key + ")")(d)) ? "1" : "0.5" 
+    }
+
 }

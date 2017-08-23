@@ -20,8 +20,8 @@
                         {
                             "range": {
                                 "timestamp": {
-                                    "gte":"{{heatmapstartTime:now-15m}}",
-                                    "lte":"{{heatmapendTime:now}}",
+                                    "gte":"{{startTime:now-15m}}",
+                                    "lte":"{{endTime:now}}",
                                     "format": "epoch_millis"
                                 }
                             }
@@ -30,6 +30,11 @@
                     "filter": {
                         "bool":{
                             "must":[
+                                {
+                                    "term": {
+                                        "EnterpriseName":"{{enterpriseName:ent-1}}"
+                                     }
+                                },
                                 {
                                     "term": {
                                         "SourceNSG":"{{snsg:ovs-1}}"
