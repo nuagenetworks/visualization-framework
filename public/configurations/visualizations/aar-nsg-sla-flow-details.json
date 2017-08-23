@@ -9,7 +9,9 @@
         "columns": [
             { "column": "SourceUplink", "label": "Source Uplink"},
             { "column": "destinationUplink", "label": "Destination Uplink" },
-            { "column": "Packets", "label": "Packets"}
+            { "column": "Packets", "label": "Packets", "format": ",.2s"},
+            { "column": "Bytes", "label": "Bytes", "format": ",.2s"}
+
         ]
     },
     "query": "aar-nsg-sla-flow-details"

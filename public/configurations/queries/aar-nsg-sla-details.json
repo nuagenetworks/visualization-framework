@@ -6,6 +6,13 @@
         "index":"{{index:nuage_dpi_slastats}}",
         "type":"{{type:nuage_doc_type}}",
         "body":{
+            "sort": [
+                {
+                    "timestamp": {
+                        "order": "desc"
+                    }
+                }
+            ],
             "query":{
                 "bool":{
                     "must":[

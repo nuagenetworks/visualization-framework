@@ -65,6 +65,11 @@
                         }
                     },
                     "aggs":{
+                        "Bytes": {
+                            "sum": {
+                                "field": "IngressBytes"
+                            }
+                        },
                         "Packets":{
                             "sum":{
                                 "field":"IngressPackets"
@@ -79,6 +84,11 @@
                                 }
                             },
                             "aggs":{
+                                "Bytes": {
+                                    "sum": {
+                                        "field": "IngressBytes"
+                                    }
+                                },
                                 "Packets":{
                                     "sum":{
                                         "field":"IngressPackets"
