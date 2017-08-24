@@ -163,7 +163,7 @@ export default class Table extends AbstractGraph {
                 let match = false;
 
                 accessors.forEach((accessor, i) => {
-                    if(accessor(d, true).toString().toUpperCase().includes(search.toUpperCase()))
+                    if(accessor(d, true) && accessor(d, true).toString().toLowerCase().includes(search.toLowerCase()))
                        match = true;
                 });
 
