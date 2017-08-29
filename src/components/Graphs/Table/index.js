@@ -229,8 +229,10 @@ export default class Table extends AbstractGraph {
             >
 
                 <DataTables
+                    headerToolbarMode={"filter"}
                     showRowHover={false}
                     showHeaderToolbar={true}
+                    showHeaderToolbarFilterIcon={false}
                     multiSelectable={true}
                     columns={this.headerData}
                     data={tableData}
