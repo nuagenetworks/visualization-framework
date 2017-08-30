@@ -1,11 +1,11 @@
-import BaseController from '../controllers/base.controller';
+import BaseController from './base.model';
 import DB from '../middleware/connection.js';
 
 class TestModel extends BaseController {
 
 	reports(req, res) {
 		DB.select('*')
-		.get('t_reports', (err,response) => {
+		.get('reports', (err,response) => {
 			console.log("Query Ran: " + DB.last_query());
 		    if (err) return console.error("Uh oh! Couldn't get results: " + err.msg);
 		        res.json({
@@ -16,14 +16,10 @@ class TestModel extends BaseController {
 	}
 
 	updateDataSet(req, res) {
-		var report_id = req.params.report_id;
-		var dashboard_id = req.params.dashboard_id;
-		var dashboard_dataset_id = req.params.dashboard_dataset_id;
+		var report_detail_id = req.params.report_detail_id;
 		var updateStatus = req.params.status;
-		DB.where('rd.report_id',report_id)
-		.where('rd.dashboard_id',dashboard_id)
-		.where('rd.dashboard_dataset_id',dashboard_dataset_id)
-	    .from('t_report_detail rd')
+		DB.where('rd.id',report_detail_id)
+	    .from('report_detail rd')
 	    .set('status',updateStatus)
 	    .update(null, null, null, (err, data) => {
 	        if (err) return console.error(err);
@@ -34,7 +30,7 @@ class TestModel extends BaseController {
 
 	deleteReports(req, res) {
 		var report_id = req.params.report_id;
-        DB.delete('t_reports', {id: report_id}, (err, data) => {
+        DB.delete('reports', {id: report_id}, (err, data) => {
             if (err) return console.error(err);
             this.successResponse('success', res);
         });
@@ -44,11 +40,11 @@ class TestModel extends BaseController {
 	reportsDetail(req, res) {
 		var report_id = req.params.report_id;
 		console.log(report_id);
-		const select = ['rd.report_id','rd.dashboard_id dashboardsId','rd.dashboard_dataset_id dataSetId', 'dd.datafile', 'dd.name dataset_name', 'dd.description', 'dd.context','d.name dashboardname','d.url dashboardUrl','r.start_time','r.end_time','r.created_at','GROUP_CONCAT(rd.dashboard_id) dashboardIds','GROUP_CONCAT(rd.dashboard_dataset_id) datasetIds','GROUP_CONCAT(dd.datafile) dataFiles','GROUP_CONCAT(dd.name) datasetName','GROUP_CONCAT(dd.description) datasetDesc','GROUP_CONCAT(dd.context) datasetContext',];
-		DB.select( select ).from('t_report_detail rd')
-		.join('t_dashboards d', 'rd.dashboard_id=d.id')
-		.join('t_dashboard_dataset dd', 'rd.dashboard_dataset_id=dd.id')
-		.join('t_reports r', 'r.id=rd.report_id')
+		const select = ['GROUP_CONCAT(rd.id) reportDetailId','GROUP_CONCAT(rd.chart_name) chartName','rd.report_id','rd.dashboard_id dashboardsId','rd.dashboard_dataset_id dataSetId', 'dd.datafile', 'dd.name dataset_name', 'dd.description', 'dd.context','d.name dashboardname','d.url dashboardUrl','r.start_time','r.end_time','r.created_at','GROUP_CONCAT(rd.dashboard_id) dashboardIds','GROUP_CONCAT(rd.dashboard_dataset_id) datasetIds','GROUP_CONCAT(dd.datafile) dataFiles','GROUP_CONCAT(dd.name) datasetName','GROUP_CONCAT(dd.description) datasetDesc','GROUP_CONCAT(dd.context) datasetContext',];
+		DB.select( select ).from('report_detail rd')
+		.join('dashboards d', 'rd.dashboard_id=d.id')
+		.join('dashboard_dataset dd', 'rd.dashboard_dataset_id=dd.id')
+		.join('reports r', 'r.id=rd.report_id')
 		.group_by(['rd.dashboard_id'])
 		.where('rd.report_id',report_id)
 		.get((err,response) => {
@@ -74,11 +70,16 @@ class TestModel extends BaseController {
 				    var dataAllFiles = [];
 				    var dataAllSetDesc = [];
 				    var datasetContextAll = [];
-
+						var reportDetailIds = [];
+						var chartNames = [];
 			    	var dataIds = response[resValues].datasetIds.split(',');
 			    	for(let d of dataIds) {
 			    		dataSetIds.push(d);
 			    	}
+						var chartName = response[resValues].chartName.split(',');
+						for(let cN of chartName) {
+							chartNames.push(cN);
+						}
 			    	var dataNames = response[resValues].datasetName.split(',');
 			    	for(let dN of dataNames) {
 			    		dataSetName.push(dN);
@@ -96,13 +97,16 @@ class TestModel extends BaseController {
 			    		datasetContextAll.push(dC);
 			    	}
 
-					var dashboardIds = response[resValues].dashboardIds.split(',');
-			    	for(let dB of dashboardIds) {
-			    		dashboardIdSet.push(dB);
-			    	}
+						var reportDetailId = response[resValues].reportDetailId.split(',');
+						for(let dI of reportDetailId) {
+							reportDetailIds.push(dI);
+						}
+
 			    	for(var finalData in dataIds) {
 				    	finalresult.dataset.push({
 				    		dashboard_id : response[resValues].dashboardsId,
+								report_detail_id : reportDetailIds[finalData],
+								chartName : chartNames[finalData],
 				    		dataSetId : dataSetIds[finalData],
 				    		datafile : dataAllFiles[finalData],
 				    		name : dataSetName[finalData],
@@ -125,7 +129,7 @@ class TestModel extends BaseController {
 			    this.successResponse(dataSets, res);
 		        //this.successResponse(response, res);
 			}
-		);	
+		);
 	}
 
 	successResponse(response, res) {

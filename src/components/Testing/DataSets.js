@@ -13,31 +13,31 @@ let config = {
     api: process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/middleware/api/",
 }
 class DataSets extends Component {
-    
+
     constructor() {
         super();
         this.state = initialState;
         this.handleSaveDataSet = this.handleSaveDataSet.bind(this);
     }
 
-    handleSaveDataSet(reportId,dashboardId,datasetId) {
-    	var optionSelect = $('input[name=option_'+reportId+'_'+dashboardId+'_'+datasetId+']:checked').val();
+    handleSaveDataSet(reportId,dashboardId,datasetId,report_detail_id) {
+    	var optionSelect = $('input[name=option_'+reportId+'_'+dashboardId+'_'+datasetId+'_'+report_detail_id+']:checked').val();
     	//var optionSelect = $('#pass_'+reportId+'_'+dashboardId+'_'+datasetId).val();
-    	let url = config.api + "testing/update/reports/"+reportId+"/"+dashboardId+"/"+datasetId+"/"+optionSelect;
+    	let url = config.api + "testing/update/reports/"+report_detail_id+'/'+optionSelect;
     	fetch(url).then(
 		  	function(response){
 		     return response.json();
 		    }
 		).then(jsonData => {
-			$('#message_'+reportId+'_'+dashboardId+'_'+datasetId).show();
+			$('#message_'+reportId+'_'+dashboardId+'_'+datasetId+'_'+report_detail_id).show();
 		});
     }
 
     render() {
-    	console.log(this.props.dataset);
+    	//console.log(this.props.dataset);
     	if(this.props.dataset) {
-    		var Collapsable = this.props.dataset.map((response)=> 
-    			<Collapse in={this.props.open} key={response.dataSetId}>
+    		var Collapsable = this.props.dataset.map((response)=>
+    			<Collapse in={this.props.open} key={response.report_detail_id}>
 	                  	<div >
 		                 <div className="panel-heading col-lg-10 col-md-10 col-sm-offset-1" style={style.dashboardTab} role="tab">
 			                <h4 className="panel-title alert alert-info" style={style.dataSetTab}>
@@ -50,31 +50,31 @@ class DataSets extends Component {
 							<div className="col-lg-4 col-md-4">
 								<div style={{paddingLeft: "35px"}}><b>Original</b></div>
 								<div>
-									<img role="presentation" src={require("../../../public/uploads/2/8/17/checkout.png")} />
+									<img role="presentation" src={require("../../../public/uploads/"+this.props.report_id+'/'+response.dashboard_id+'/'+response.dataSetId+'/'+response.chartName+'.png')} />
 								</div>
 							</div>
 							<div className="col-lg-4 col-md-4">
 								<div style={{paddingLeft: "35px"}}><b>Captured</b></div>
-								<div><img role="presentation" src={require("../../../public/uploads/2/8/17/checkout.png")} /></div>
+								<div><img role="presentation" src={require("../../../public/uploads/"+this.props.report_id+'/'+response.dashboard_id+'/'+response.dataSetId+'/'+response.chartName+'.png')} /></div>
 							</div>
 							<div className="col-lg-4 col-md-4" style={{textAlign:"right"}}>
 								<div><b>Action</b></div>
 								<div>
-									<div className="alert alert-info" id={"message_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId} style={{textAlign:"center",display:"none"}} >
+									<div className="alert alert-success" id={"message_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId+"_"+response.report_detail_id} style={{textAlign:"center",display:"none"}} >
 									  <strong>Saved!</strong>
 									</div>
-									<input type="radio" id={"pass_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId} name={"option_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId} value="pass" />Pass
-									<input type="radio" id={"fail_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId} name={"option_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId} value="fail" />Fail
-									<Button 
-										bsStyle="primary" 
-										bsSize="small" 
-									 	onClick={this.handleSaveDataSet.bind(this, this.props.report_id,response.dashboard_id,response.dataSetId)}
+									<input type="radio" id={"pass_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId} name={"option_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId+"_"+response.report_detail_id} value="pass" />Pass
+									<input type="radio" id={"fail_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId} name={"option_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId+"_"+response.report_detail_id} value="fail" />Fail
+									<Button
+										bsStyle="primary"
+										bsSize="small"
+									 	onClick={this.handleSaveDataSet.bind(this, this.props.report_id,response.dashboard_id,response.dataSetId,response.report_detail_id)}
 									 >Save</Button>
 								</div>
 							</div>
 	                    </div>
 	                </div>
-	            </Collapse> 
+	            </Collapse>
     		);
     	}
         return (

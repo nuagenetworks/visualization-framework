@@ -17,7 +17,7 @@ routes.post('/visualizations/fetch/:visualization', VisualizationsController.fet
 
 routes.get('/testing/reports', TestController.reports);
 routes.get('/testing/reports/:report_id', TestController.reportsDetail);
-routes.get('/testing/update/reports/:report_id/:dashboard_id/:dashboard_dataset_id/:status', TestController.updateDataSet);
+routes.get('/testing/update/reports/:report_detail_id/:status', TestController.updateDataSet);
 routes.get('/testing/reports/delete/:report_id', TestController.deleteReports);
 
 routes.use(errorHandler);

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import style from "./style";
-import { Button,Collapse } from 'react-bootstrap';
+//import { Button,Collapse } from 'react-bootstrap';
 import DataSets from "./DataSets.js";
 
 const initialState = {
@@ -12,7 +12,7 @@ let config = {
     api: process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/middleware/api/",
 }
 class ReportDetails extends Component {
-    
+
     constructor() {
         super();
         this.state = initialState;
@@ -34,19 +34,19 @@ class ReportDetails extends Component {
 		    	reportsDetails : jsonData.results
 		    });
 		});
-		
+
     }
 
     render() {
-    	console.log(this.state.reportsDetails);
+    	//console.log(this.state.reportsDetails);
     	if(this.state.reportsDetails) {
 
 	    	var Details = this.state.reportsDetails.map((res) =>
-	    		
+
 	    		<div key={res.count}>
 		    		<div className="col-lg-12 col-md-12">
                         <ul className="nav nav-tabs">
-                            <li className="active"><a data-toggle="tab" href="#Summery" className="text-success"><i className="fa fa-indent"></i> Summery</a></li>	
+                            <li className="active"><a data-toggle="tab" href="#Summery" className="text-success"><i className="fa fa-indent"></i> Summery</a></li>
                         </ul>
                         <div className="tab-content">
                             <div id="Summery" className="tab-pane fade in active">
@@ -88,8 +88,8 @@ class ReportDetails extends Component {
    		}
         return (
             <div style={style.overlayContainer}>
-    			
-                
+
+
                 {Details}
 
             </div>
