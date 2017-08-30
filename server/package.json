@@ -25,6 +25,7 @@
     "lodash": "^4.16.4",
     "method-override": "^2.3.6",
     "morgan": "^1.7.0",
+    "node-querybuilder": "^1.0.3",
     "request": "^2.81.0",
     "request-promise": "^4.2.1"
   },

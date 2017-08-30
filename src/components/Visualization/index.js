@@ -304,7 +304,6 @@ class VisualizationView extends React.Component {
 
     renderDownloadIcon() {
         const {
-            queryConfiguration,
             configuration,
             response
         } = this.props;
