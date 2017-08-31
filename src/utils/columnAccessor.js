@@ -12,7 +12,7 @@ const columnAccessor = ({ column, format, timeFormat, totalCharacters}) => {
     // Apply number and date formatters.
     if(format){
         const formatter = d3.format(format);
-        return (d) => formatter(value(d));
+        return (d) => value(d) ? formatter(value(d)) : '';
     } else if(timeFormat) {
         const formatter = d3.timeFormat(timeFormat);
         return (d) => formatter(new Date(value(d)));
