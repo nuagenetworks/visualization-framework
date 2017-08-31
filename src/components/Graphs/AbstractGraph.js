@@ -179,7 +179,7 @@ export default class AbstractGraph extends React.Component {
 
 
         // Extract the longest legend according to the label function
-        const longestLabel = label(data.reduce((a, b) => {
+        const lab = label(data.reduce((a, b) => {
             let labelA = label(a);
             let labelB = label(b);
 
@@ -188,9 +188,10 @@ export default class AbstractGraph extends React.Component {
 
             if (!labelB)
                 return a;
-
             return format(labelA.toString()).length > format(labelB.toString()).length ? a : b;
-        })).toString();
+        }));
+
+        const longestLabel = lab ? lab.toString() : '';
 
         // and return its length + 1 to ensure we have enough space
         return format(longestLabel).length + 1;
@@ -293,7 +294,7 @@ export default class AbstractGraph extends React.Component {
             context
         } = this.props;
         let vkey = `${configuration.id.replace(/-/g, '')}vkey`;
-        return (!context[vkey] || !configuration.key || context[vkey]  === eval("(" + configuration.key + ")")(d)) ? "1" : "0.5" 
+        return (!context[vkey] || !configuration.key || context[vkey]  === eval("(" + configuration.key + ")")(d)) ? "1" : "0.5"
     }
 
 }
