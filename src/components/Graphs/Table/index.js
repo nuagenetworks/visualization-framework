@@ -171,17 +171,12 @@ export default class Table extends AbstractGraph {
     }
 
     handleSortOrderChange(column, order) {
-
-        this.filterData = this.filterData.map(function(element) {
-            if(!element.hasOwnProperty(column)) {
-                element[column] = '';
-            }
-            return element;
-        });
+        const keys = column.split(".");
+        const value = (d) => keys.reduce((d, key) => d[key], d);
 
         this.filterData = this.filterData.sort(
           (a, b) => {
-            return order === 'desc' ? b[column] > a[column] : a[column] > b[column]
+            return order === 'desc' ? value(b) > value(a) : value(a) > value(b);
           }
         );
 
