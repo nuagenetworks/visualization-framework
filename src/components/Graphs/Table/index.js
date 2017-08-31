@@ -100,15 +100,12 @@ export default class Table extends AbstractGraph {
             padding,
         } = this.getConfiguredProperties();
 
-        this.columnWidth =  (100 / columns.length) + "%";
-
         this.headerData = columns.map(({column, label}, i) => ({
             key: column,
             label: label || column,
             sortable: true,
             style: {
                 padding: padding,
-                width: this.columnWidth
             }}
         ));
     }
@@ -161,9 +158,8 @@ export default class Table extends AbstractGraph {
             const accessors = this.getAccessor(columns);
             this.filterData = data.filter((d, j) => {
                 let match = false;
-
                 accessors.forEach((accessor, i) => {
-                    if(accessor(d, true).toString().toUpperCase().includes(search.toUpperCase()))
+                    if(accessor(d, true) && accessor(d, true).toString().toLowerCase().includes(search.toLowerCase()))
                        match = true;
                 });
 
@@ -175,10 +171,17 @@ export default class Table extends AbstractGraph {
     }
 
     handleSortOrderChange(column, order) {
-        console.log("columns", column, order);
+
+        this.filterData = this.filterData.map(function(element) {
+            if(!element.hasOwnProperty(column)) {
+                element[column] = '';
+            }
+            return element;
+        });
+
         this.filterData = this.filterData.sort(
           (a, b) => {
-            return order === 'desc' ? eval(`b["${column}"]`) > eval(`a["${column}"]`) : eval(`a["${column}"]`) > eval(`b["${column}"]`)
+            return order === 'desc' ? b[column] > a[column] : a[column] > b[column]
           }
         );
 
@@ -196,9 +199,6 @@ export default class Table extends AbstractGraph {
     }
 
     handleClick(key) {
-        const {
-            data
-        } = this.props;
         if(this.props.onMarkClick && this.state.data[key])
            this.props.onMarkClick(this.state.data[key]);
     }
@@ -210,10 +210,6 @@ export default class Table extends AbstractGraph {
         } = this.props;
 
         const {
-            border,
-            fontColor,
-            padding,
-            rowHeight,
             limit
         } = this.getConfiguredProperties();
 
@@ -233,8 +229,10 @@ export default class Table extends AbstractGraph {
             >
 
                 <DataTables
+                    headerToolbarMode={"filter"}
                     showRowHover={false}
                     showHeaderToolbar={true}
+                    showHeaderToolbarFilterIcon={false}
                     multiSelectable={true}
                     columns={this.headerData}
                     data={tableData}
@@ -247,24 +245,11 @@ export default class Table extends AbstractGraph {
                     count={this.filterData.length}
                     onCellClick={this.handleClick}
                     rowSize={limit}
-                    tableRowStyle={{
-                        color:fontColor,
-                        borderTop: border.top,
-                        borderBottom: border.bottom,
-                        borderLeft: border.left,
-                        borderRight: border.right,
-                        height : rowHeight,
+                    tableStyle={{
+                        width: "inherit",
+                        minWidth: "100%"
                     }}
-                    tableHeaderColumnStyle={{
-                        padding: padding,
-                        height : rowHeight
-                    }}
-                    tableRowColumnStyle={{
-                        height : rowHeight,
-                        width: this.columnWidth,
-                        whiteSpace: "inherit",
-                        fontSize: "12px",
-                    }}               
+                    tableBodyStyle={{overflowX: "scroll"}}
                 />
             </div>
         );

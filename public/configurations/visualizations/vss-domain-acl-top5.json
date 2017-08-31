@@ -14,7 +14,9 @@
             { "column": "top-acl-hits.sourceport", "label": "Source Port" },
             { "column": "top-acl-hits.destinationport", "label": "Dest Port" },
             { "column": "top-acl-hits.nuage_metadata.spgName", "label": "Source PG" },
-            { "column": "top-acl-hits.nuage_metadata.dpgName", "label": "Dest PG" }
+            { "column": "top-acl-hits.nuage_metadata.dpgName", "label": "Dest PG" },
+            { "column": "top-acl-hits.nuage_metadata.service", "label": "Service" },
+            { "column": "top-acl-hits.nuage_metadata.serviceGroup", "label": "ServiceGroup" }
         ]
     },
     "query": "vss-domain-acl-top5"
