@@ -99,7 +99,7 @@ export class FiltersToolBarView extends React.Component {
                     Object.keys(filterOptions).map((name, i) => {
 
                         let configOptions = filterOptions[name],
-                            paramName = visualizationId ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
+                            paramName = visualizationId && configOptions.append  ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
                             currentValue  = context[paramName] || configOptions.default;
                         return (
                             <li
