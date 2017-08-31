@@ -34,7 +34,7 @@ class DataSets extends Component {
     }
 
     render() {
-    	//console.log(this.props.dataset);
+    	console.log(this.props.dataset);
     	if(this.props.dataset) {
     		var Collapsable = this.props.dataset.map((response)=>
     			<Collapse in={this.props.open} key={response.report_detail_id}>
@@ -47,16 +47,13 @@ class DataSets extends Component {
 			                </h4>
 		            	</div>
 		            	<div className="col-lg-10 col-md-10 col-sm-offset-1" style={style.dashboardTab}>
-							<div className="col-lg-4 col-md-4">
+							<div className="col-lg-8 col-md-8">
 								<div style={{paddingLeft: "35px"}}><b>Original</b></div>
 								<div>
-									<img role="presentation" src={require("../../../public/uploads/"+this.props.report_id+'/'+response.dashboard_id+'/'+response.dataSetId+'/'+response.chartName+'.png')} />
+									<img role="presentation" src={'/uploads/'+this.props.report_id+'/'+response.dashboard_id+'/'+response.dataSetId+'/'+response.chartName+'.png'} />
 								</div>
 							</div>
-							<div className="col-lg-4 col-md-4">
-								<div style={{paddingLeft: "35px"}}><b>Captured</b></div>
-								<div><img role="presentation" src={require("../../../public/uploads/"+this.props.report_id+'/'+response.dashboard_id+'/'+response.dataSetId+'/'+response.chartName+'.png')} /></div>
-							</div>
+
 							<div className="col-lg-4 col-md-4" style={{textAlign:"right"}}>
 								<div><b>Action</b></div>
 								<div>
