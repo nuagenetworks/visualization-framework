@@ -24,9 +24,9 @@ export class FiltersToolBarView extends React.Component {
       return visualizationId ? visualizationId.replace(/-/g, '') : '';
     }
 
-    updateForceOptionContext(forceOptions) {
+    updateForceOptionContext(forceOptions, append) {
       let context = {};
-      let filteredID = this.getFilteredVisualizationId();
+      let filteredID = append ? this.getFilteredVisualizationId() : '';
 
       for(let key in forceOptions) {
         context[`${filteredID}${key}`] = forceOptions[key];
@@ -49,7 +49,7 @@ export class FiltersToolBarView extends React.Component {
         for(let name in filterOptions) {
             if (filterOptions.hasOwnProperty(name)) {
                 let configOptions = filterOptions[name],
-                    paramName = visualizationId ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
+                    paramName = visualizationId && configOptions.append ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
                     currentValue  = context[paramName];
 
                 if (!currentValue) {
@@ -65,7 +65,7 @@ export class FiltersToolBarView extends React.Component {
                         });
 
                         if(defaultOption.length && defaultOption[0].forceOptions) {
-                            Object.assign(configContexts, this.updateForceOptionContext(defaultOption[0].forceOptions));
+                            Object.assign(configContexts, this.updateForceOptionContext(defaultOption[0].forceOptions, configOptions.append));
                         }
                     }
                 }
@@ -124,7 +124,7 @@ export class FiltersToolBarView extends React.Component {
                                         let forceOptions = option.forceOptions;
 
                                         if (forceOptions)
-                                            queryParams = Object.assign({}, queryParams, this.updateForceOptionContext(forceOptions));
+                                            queryParams = Object.assign({}, queryParams, this.updateForceOptionContext(forceOptions, configOptions.append));
 
                                         return (
                                             <MenuItem
