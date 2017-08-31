@@ -10,8 +10,7 @@
         "target":{
             "column": "timezones",
             "value": "Last 10",
-            "field": "value",
-            "format": ",.4s"
+            "field": "value"
         },
         "absolute": true
     }
