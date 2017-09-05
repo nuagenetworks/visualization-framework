@@ -43,15 +43,15 @@ class ReportDetails extends Component {
 
 	    	var Details = this.state.reportsDetails.map((res) =>
 
-	    		<div key={res.count}>
-		    		<div className="col-lg-12 col-md-12">
-                        <ul className="nav nav-tabs">
-                            <li className="active"><a data-toggle="tab" href="#Summery" className="text-success"><i className="fa fa-indent"></i> Summery</a></li>
+	    		<div key={res.count} className="container">
+		    		<div>
+                        <ul className="nav nav-tabs" style={{ border: "none"}}>
+                            <li className="active"><a data-toggle="tab" href="#summary" className="text-success"><i className="fa fa-indent"></i> summary</a></li>
                         </ul>
-                        <div className="tab-content">
-                            <div id="Summery" className="tab-pane fade in active">
-                                <div className="table-responsive panel">
-                                    <table className="table">
+                        <div className="tab-content" style={{ border: "1px solid #ddd"}}>
+                            <div id="summary" className="tab-pane fade in active">
+                                <div className="panel" style={{marginBottom : 0}}>
+                                    <table className="table  table-bordered">
                                         <tbody>
                                             <tr>
                                                 <td className="text-success"><i className="fa fa-clock-o" aria-hidden="true"></i> Date</td>
@@ -65,22 +65,24 @@ class ReportDetails extends Component {
                                                 <td className="text-success"><i className="fa fa-clock-o" aria-hidden="true"></i> End Time</td>
                                                 <td>{res.end_time}</td>
                                             </tr>
+                                            <tr>
+	                                            <td className="text-success" colSpan="2">
+		                                            <div className="panel-heading " style={style.dashboardTab} onClick={ ()=> this.setState({ open: !this.state.open })}>
+										                <h4>
+										                    <a href="#" >
+										                        <i className="more-less glyphicon glyphicon-plus"></i>
+										                        {res.dashboardname} #{res.dashboardId}
+										                    </a>
+										                </h4>
+										            </div>
+									            </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
 	                </div>
-		    		<div  className="col-lg-12 col-md-12" style={style.tab} >
-			    		<div className="panel-heading " style={style.dashboardTab} onClick={ ()=> this.setState({ open: !this.state.open })}>
-			                <h4 className="panel-title">
-			                    <a href="#" >
-			                        <i className="more-less glyphicon glyphicon-plus"></i>
-			                        {res.dashboardname} #{res.dashboardId}
-			                    </a>
-			                </h4>
-			            </div>
-		            </div>
 		            <DataSets dataset={res.dataset} open={this.state.open} report_id={res.report_id} />
 	            </div>
 	    	);

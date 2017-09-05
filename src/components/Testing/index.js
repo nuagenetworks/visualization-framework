@@ -66,25 +66,31 @@ class Testing extends Component {
 		
         return (
             
-            <div style={style.overlayContainer}>
-                <table className="table table-responsive">
-				  <thead>
-				    <tr>
-				      <th>#</th>
-				      <th>Date</th>
-				      <th>Start Time</th>
-				      <th>End Time</th>				      
-				      <th>Total Charts</th>
-				      <th>Pass</th>
-				      <th>Fail</th>
-				      <th>Status</th>
-				      <th>Action</th>
-				    </tr>
-				  </thead>
-				  <tbody>
-				    {tableItems}
-				  </tbody>
-				</table>
+            <div className="container" style={style.overlayContainer}>
+            
+            	<div className="col-sm-12"  style={style.header}>
+				  <h3>Testing Reports</h3>
+				</div>
+				<div>
+	                <table className="table  table-bordered">
+					  <thead>
+					    <tr>
+					      <th>#</th>
+					      <th>Date</th>
+					      <th>Start Time</th>
+					      <th>End Time</th>				      
+					      <th>Total Charts</th>
+					      <th>Pass</th>
+					      <th>Fail</th>
+					      <th>Status</th>
+					      <th>Action</th>
+					    </tr>
+					  </thead>
+					  <tbody>
+					    {tableItems}
+					  </tbody>
+					</table>
+				</div>
             </div>
         )
     }

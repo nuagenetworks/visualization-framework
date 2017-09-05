@@ -38,38 +38,46 @@ class DataSets extends Component {
     	if(this.props.dataset) {
     		var Collapsable = this.props.dataset.map((response)=>
     			<Collapse in={this.props.open} key={response.report_detail_id}>
-	                  	<div >
-		                 <div className="panel-heading col-lg-10 col-md-10 col-sm-offset-1" style={style.dashboardTab} role="tab">
+	                  	<div className="col-sm-12">
+		                 <div className="row" style={style.dashboardTab} >
 			                <h4 className="panel-title alert alert-info" style={style.dataSetTab}>
-			                    <a href="#">
-			                        {response.name} #{response.dataSetId}
-			                    </a>
+			                      <bold>  {response.name} #{response.dataSetId} </bold>
 			                </h4>
 		            	</div>
-		            	<div className="col-lg-10 col-md-10 col-sm-offset-1" style={style.dashboardTab}>
-							<div className="col-lg-8 col-md-8">
-								<div style={{paddingLeft: "35px"}}><b>Original</b></div>
-								<div>
-									<img role="presentation" src={'/uploads/'+this.props.report_id+'/'+response.dashboard_id+'/'+response.dataSetId+'/'+response.chartName+'.png'} />
+		            	
+	                   
+		            	<div className="col-sm-10 col-xs-12" style={style.dashboardTab}>
+							<div className="row">
+								<div className="col-sm-6" style={{textAlign:"center"}}>
+									<div><b>Original</b></div>
+									<img style={{width: "100%"}} role="presentation" src={'/uploads/'+this.props.report_id+'/'+response.dashboard_id+'/'+response.dataSetId+'/'+response.chartName+'.png'} />
 								</div>
-							</div>
-
-							<div className="col-lg-4 col-md-4" style={{textAlign:"right"}}>
-								<div><b>Action</b></div>
-								<div>
-									<div className="alert alert-success" id={"message_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId+"_"+response.report_detail_id} style={{textAlign:"center",display:"none"}} >
-									  <strong>Saved!</strong>
-									</div>
-									<input type="radio" id={"pass_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId} name={"option_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId+"_"+response.report_detail_id} value="pass" />Pass
-									<input type="radio" id={"fail_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId} name={"option_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId+"_"+response.report_detail_id} value="fail" />Fail
-									<Button
-										bsStyle="primary"
-										bsSize="small"
-									 	onClick={this.handleSaveDataSet.bind(this, this.props.report_id,response.dashboard_id,response.dataSetId,response.report_detail_id)}
-									 >Save</Button>
+								<div className="col-sm-6" style={{textAlign:"center"}}>
+									<div><b>Captured</b></div>
+									<img style={{width: "100%"}} role="presentation" src={'/uploads/'+this.props.report_id+'/'+response.dashboard_id+'/'+response.dataSetId+'/'+response.chartName+'.png'} />
 								</div>
 							</div>
 	                    </div>
+	                    
+	                     <div className="col-sm-2 col-xs-12" style={{textAlign:"right"}}>
+								
+							<div>
+								<div className="alert alert-success" id={"message_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId+"_"+response.report_detail_id} style={{textAlign:"center",display:"none"}} >
+								  <strong>Saved!</strong>
+								</div>
+								<input type="radio" id={"pass_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId} name={"option_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId+"_"+response.report_detail_id} value="pass" />
+								<label style={{marginRight: '5px'}}>Pass</label>
+								<input type="radio" id={"fail_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId} name={"option_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId+"_"+response.report_detail_id} value="fail" />
+								<label style={{marginRight: '5px'}}>Fail</label>
+								<Button
+									bsStyle="primary"
+									bsSize="small"
+								 	onClick={this.handleSaveDataSet.bind(this, this.props.report_id,response.dashboard_id,response.dataSetId,response.report_detail_id)}
+								 >Save</Button>
+							</div>
+						</div>
+
+	                    
 	                </div>
 	            </Collapse>
     		);
