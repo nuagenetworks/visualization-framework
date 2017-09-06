@@ -196,9 +196,6 @@ export default class Table extends AbstractGraph {
     }
 
     handleClick(key) {
-        const {
-            data
-        } = this.props;
         if(this.props.onMarkClick && this.state.data[key])
            this.props.onMarkClick(this.state.data[key]);
     }

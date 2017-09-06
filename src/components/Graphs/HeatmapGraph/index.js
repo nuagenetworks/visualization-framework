@@ -45,7 +45,6 @@ export default class HeatmapGraph extends XYGraph {
             xLabel,
             xTickFormat,
             xTickGrid,
-            xTicks,
             xTickSizeInner,
             xTickSizeOuter,
             yColumn,
