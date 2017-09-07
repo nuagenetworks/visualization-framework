@@ -16,6 +16,25 @@ import style from "./styles";
 
 export class FiltersToolBarView extends React.Component {
 
+    getFilteredVisualizationId() {
+      const {
+          visualizationId
+      } = this.props;
+
+      return visualizationId ? visualizationId.replace(/-/g, '') : '';
+    }
+
+    updateForceOptionContext(forceOptions, append) {
+      let context = {};
+      let filteredID = append ? this.getFilteredVisualizationId() : '';
+
+      for(let key in forceOptions) {
+        context[`${filteredID}${key}`] = forceOptions[key];
+      }
+      console.log('forceOptions', context)
+      return context;
+    }
+
     componentDidMount() {
         const {
             filterOptions,
@@ -25,11 +44,12 @@ export class FiltersToolBarView extends React.Component {
         } = this.props;
 
         let configContexts = {};
+        let filteredID = this.getFilteredVisualizationId();
 
         for(let name in filterOptions) {
             if (filterOptions.hasOwnProperty(name)) {
                 let configOptions = filterOptions[name],
-                    paramName = visualizationId ? `${visualizationId}-${configOptions.parameter}` : configOptions.parameter,
+                    paramName = visualizationId && configOptions.append ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
                     currentValue  = context[paramName];
 
                 if (!currentValue) {
@@ -45,7 +65,7 @@ export class FiltersToolBarView extends React.Component {
                         });
 
                         if(defaultOption.length && defaultOption[0].forceOptions) {
-                            Object.assign(configContexts, defaultOption[0].forceOptions);
+                            Object.assign(configContexts, this.updateForceOptionContext(defaultOption[0].forceOptions, configOptions.append));
                         }
                     }
                 }
@@ -56,12 +76,17 @@ export class FiltersToolBarView extends React.Component {
           updateContext(configContexts);
     }
 
+
+
     render() {
         const {
             filterOptions,
             context,
             visualizationId
         } = this.props
+
+        let filteredID = this.getFilteredVisualizationId();
+
         if (!filterOptions || Object.keys(filterOptions).lengh === 0)
             return (
                 <div></div>
@@ -74,7 +99,7 @@ export class FiltersToolBarView extends React.Component {
                     Object.keys(filterOptions).map((name, i) => {
 
                         let configOptions = filterOptions[name],
-                            paramName = visualizationId ? `${visualizationId}-${configOptions.parameter}` : configOptions.parameter,
+                            paramName = visualizationId && configOptions.append  ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
                             currentValue  = context[paramName] || configOptions.default;
                         return (
                             <li
@@ -99,7 +124,7 @@ export class FiltersToolBarView extends React.Component {
                                         let forceOptions = option.forceOptions;
 
                                         if (forceOptions)
-                                            queryParams = Object.assign({}, queryParams, forceOptions);
+                                            queryParams = Object.assign({}, queryParams, this.updateForceOptionContext(forceOptions, configOptions.append));
 
                                         return (
                                             <MenuItem

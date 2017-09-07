@@ -30,9 +30,14 @@ export class NextPrevFilter extends React.Component {
         }
     }
 
-    componentWillMount() {
+    removeHyphens(value) {
+      return value.replace(/-/g, '');
+    }
 
-        let page = this.props.context[`${this.props.visualizationId}-${this.state.filterOptions.page}`];
+    componentWillMount() {
+        let filteredID = this.removeHyphens(this.props.visualizationId);
+
+        let page = this.props.context[`${filteredID}${this.state.filterOptions.page}`];
         if(page) {
             this.setState({page: parseInt(page)});
         }
@@ -41,14 +46,15 @@ export class NextPrevFilter extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        let filteredID = this.removeHyphens(nextProps.visualizationId);
 
         if(this.props.context.interval !== nextProps.context.interval) {
             this.setState({page: 1});
             let finalContext = Object.assign({}, nextProps.context, {
-                [`${nextProps.visualizationId}-${this.state.filterOptions.startTime}`] : nextProps.context.startTime,
-                [`${nextProps.visualizationId}-${this.state.filterOptions.endTime}`] : 'now',
-                [`${nextProps.visualizationId}-${this.state.filterOptions.prevStartTime}`]: (nextProps.context.prevStartTime) ? nextProps.context.prevStartTime : 0,
-                [`${nextProps.visualizationId}-${this.state.filterOptions.page}`] : 1,
+                [`${filteredID}${this.state.filterOptions.startTime}`] : nextProps.context.startTime,
+                [`${filteredID}${this.state.filterOptions.endTime}`] : 'now',
+                [`${filteredID}${this.state.filterOptions.prevStartTime}`]: (nextProps.context.prevStartTime) ? nextProps.context.prevStartTime : 0,
+                [`${filteredID}${this.state.filterOptions.page}`] : 1,
             });
 
             this.props.goTo(window.location.pathname, finalContext);
@@ -65,7 +71,7 @@ export class NextPrevFilter extends React.Component {
             this.setState({duration: context.duration});
             this.setState({unit: context.unit});
         }
-        
+
     }
 
     renderPrevIcon() {
@@ -85,9 +91,9 @@ export class NextPrevFilter extends React.Component {
         if (this.state.page !== 1) {
            btnDisabled = false;
         }
-        
+
         return (
-            <button  className="btn btn-xs btn-default" disabled={btnDisabled} 
+            <button  className="btn btn-xs btn-default" disabled={btnDisabled}
             onTouchTap={() => { this.goToNext() }}>
                 <FontAwesome
                     name="play"
@@ -115,11 +121,12 @@ export class NextPrevFilter extends React.Component {
             page: this.state.page - 1
         })
 
+        let filteredID = this.removeHyphens(visualizationId);
         let queryParams = Object.assign({}, context, {
-                [`${visualizationId}-${this.state.filterOptions.startTime}`]: startTime + (this.state.unit),
-                [`${visualizationId}-${this.state.filterOptions.endTime}`]: endTime + (this.state.unit),
-                [`${visualizationId}-${this.state.filterOptions.prevStartTime}`]: prevStartTime + (this.state.unit),
-                [`${visualizationId}-${this.state.filterOptions.page}`] : this.state.page - 1,
+                [`${filteredID}${this.state.filterOptions.startTime}`]: startTime + (this.state.unit),
+                [`${filteredID}${this.state.filterOptions.endTime}`]: endTime + (this.state.unit),
+                [`${filteredID}${this.state.filterOptions.prevStartTime}`]: prevStartTime + (this.state.unit),
+                [`${filteredID}${this.state.filterOptions.page}`] : this.state.page - 1,
             });
 
         this.props.goTo(window.location.pathname, queryParams);
@@ -140,11 +147,12 @@ export class NextPrevFilter extends React.Component {
             page: this.state.page + 1
         });
 
+        let filteredID = this.removeHyphens(visualizationId);
         let queryParams = Object.assign({}, context, {
-                [`${visualizationId}-${this.state.filterOptions.startTime}`]: startTime + (this.state.unit),
-                [`${visualizationId}-${this.state.filterOptions.endTime}`]: endTime + (this.state.unit),
-                [`${visualizationId}-${this.state.filterOptions.prevStartTime}`]: prevStartTime + (this.state.unit),
-                [`${visualizationId}-${this.state.filterOptions.page}`] : this.state.page + 1,
+                [`${filteredID}${this.state.filterOptions.startTime}`]: startTime + (this.state.unit),
+                [`${filteredID}${this.state.filterOptions.endTime}`]: endTime + (this.state.unit),
+                [`${filteredID}${this.state.filterOptions.prevStartTime}`]: prevStartTime + (this.state.unit),
+                [`${filteredID}${this.state.filterOptions.page}`] : this.state.page + 1,
             });
 
         this.props.goTo(window.location.pathname, queryParams);
@@ -173,7 +181,7 @@ export class NextPrevFilter extends React.Component {
         return (
             <div className="text-left">
                 {this.renderFilter()}
-            </div>    
+            </div>
         )
     }
 }
