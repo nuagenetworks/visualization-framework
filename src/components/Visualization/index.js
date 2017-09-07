@@ -10,10 +10,12 @@ import { Link } from "react-router";
 import { push } from "redux-router";
 
 import FiltersToolBar from "../FiltersToolBar";
+import NextPrevFilter from "../NextPrevFilter";
 import { CardOverlay } from "../CardOverlay";
 import { Card, CardText } from 'material-ui/Card';
 
 import {CSVLink} from 'react-csv';
+import * as d3 from "d3";
 
 import {
     Actions as ServiceActions,
@@ -136,7 +138,6 @@ class VisualizationView extends React.Component {
             if (queryName) {
                 this.props.fetchQueryIfNeeded(queryName).then(() => {
                     const { queryConfiguration, executeQueryIfNeeded, context } = this.props;
-
                     if (!queryConfiguration)
                         return;
 
@@ -173,6 +174,9 @@ class VisualizationView extends React.Component {
 
                             redirect,
 
+                            // By default, specify no date params.
+                            dateParams = false,
+
                             // By default, specify no additional query params.
                             params = {}
                         } = listener;
@@ -180,6 +184,25 @@ class VisualizationView extends React.Component {
                         // Each listener expects the data object `d`,
                         // which corresponds to a row of data visualized.
                         listeners[event] = (d) => {
+
+                            let graphQueryParams = {};
+                            let resetFilters = false;
+
+                            if(configuration.key) {
+                                let vizID = `${id.replace(/-/g, '')}vkey`;
+                                let vKey = eval("(" + configuration.key + ")")(d);
+                                if(this.props.orgContext[vizID] === vKey)
+                                    resetFilters = true;
+
+                                graphQueryParams[vizID] = vKey;
+                            }
+
+
+                            if(dateParams) {
+                                let filteredID = (dateParams.reference).replace(/-/g, '');
+                                graphQueryParams[`${filteredID}endTime`] = +d[dateParams.column] + dateParams.duration;
+                                graphQueryParams[`${filteredID}startTime`] = +d[dateParams.column] - dateParams.duration;
+                            }
 
                             // Compute the query params from the data object.
                             let queryParams = Object.keys(params)
@@ -189,8 +212,15 @@ class VisualizationView extends React.Component {
                                     return queryParams;
                                 }, {});
 
+                            let mergedQueryParams = Object.assign({}, queryParams, graphQueryParams); 
                             // Override the existing context with the new params.
-                            queryParams = Object.assign({}, this.props.context, queryParams);
+                            queryParams = Object.assign({}, this.props.orgContext, mergedQueryParams);
+
+                            if(resetFilters) {
+                                for (let key in mergedQueryParams) {
+                                    queryParams[key] = '';
+                                }
+                            }
 
                             let url;
 
@@ -242,7 +272,8 @@ class VisualizationView extends React.Component {
         const {
             configuration,
             queryConfiguration,
-            response
+            response,
+            id
         } = this.props;
 
         const graphName      = configuration.graph,
@@ -258,12 +289,14 @@ class VisualizationView extends React.Component {
             return this.renderCardWithInfo("No data to visualize", "bar-chart");
         }
 
+        let graphHeight = d3.select(`#filter_${id}`).node() ? this.state.height - d3.select(`#filter_${id}`).node().getBoundingClientRect().height : this.state.height;
         return (
             <GraphComponent
               data={data}
+              context={this.props.orgContext}
               configuration={configuration}
               width={this.state.width}
-              height={this.state.height}
+              height={graphHeight}
               goTo={this.props.goTo}
               {...this.state.listeners}
             />
@@ -383,6 +416,20 @@ class VisualizationView extends React.Component {
         )
     }
 
+    renderNextPrevFilter() {
+        const {
+            configuration,
+            id
+        } = this.props;
+
+        if (!configuration || !configuration.nextPrevFilter)
+            return;
+
+        return (
+            <NextPrevFilter nextPrevFilter={configuration.nextPrevFilter} visualizationId={id} />
+        )
+    }
+
     renderSharingOptions () {
         if (!this.state.showSharingOptions)
             return;
@@ -434,7 +481,8 @@ class VisualizationView extends React.Component {
     render() {
         const {
             configuration,
-            context
+            context,
+            id
         } = this.props;
 
         if (!this.state.parameterizable || !configuration)
@@ -470,9 +518,14 @@ class VisualizationView extends React.Component {
               ref={this.cardTextReference}
             >
                 { this.renderTitleBarIfNeeded() }
-                { this.renderFiltersToolBar() }
                 <div>
                     { this.renderSharingOptions() }
+                    <div id={`filter_${id}`}>
+                        { this.renderNextPrevFilter() }
+                        { this.renderFiltersToolBar() }
+                        <div className="clearfix"></div>
+                    </div>
+
                     <CardText style={cardText}>
                         { this.renderVisualizationIfNeeded() }
                         {description}
@@ -516,7 +569,7 @@ const updateFilterOptions = (state, configurations, context) => {
 const mapStateToProps = (state, ownProps) => {
 
     const configurationID = ownProps.id || ownProps.params.id,
-          orgContexts = state.interface.get(InterfaceActionKeyStore.CONTEXT),
+          orgContext = state.interface.get(InterfaceActionKeyStore.CONTEXT),
           configuration = state.configurations.getIn([
               ConfigurationsActionKeyStore.VISUALIZATIONS,
               configurationID,
@@ -524,15 +577,21 @@ const mapStateToProps = (state, ownProps) => {
           ]);
 
     let context = {};
-    for (let key in orgContexts) {
-      if(orgContexts.hasOwnProperty(key)) {
-        context[key.replace(`${configurationID}-`, '')] = orgContexts[key];
+    let filteredID = configurationID.replace(/-/g, '');
+
+    for (let key in orgContext) {
+      if(orgContext.hasOwnProperty(key)) {
+
+        let filteredKey = key.replace(`${filteredID}`, '');
+        if(!context[filteredKey] || key.includes(`${filteredID}`))
+            context[filteredKey] = orgContext[key];
       }
     }
 
     const props = {
         id: configurationID,
         context: context,
+        orgContext: orgContext,
         configuration: configuration ? contextualize(configuration.toJS(), context) : null,
         headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
         error: state.configurations.getIn([

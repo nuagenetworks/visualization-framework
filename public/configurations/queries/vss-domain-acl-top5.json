@@ -69,6 +69,8 @@
                                                     "include": [
                                                         "nuage_metadata.spgName",
                                                         "nuage_metadata.dpgName",
+                                                        "nuage_metadata.service",
+                                                        "nuage_metadata.serviceGroup",
                                                         "sourceport",
                                                         "destinationport",
                                                         "protocol",

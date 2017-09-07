@@ -18,6 +18,7 @@ export default class Table extends AbstractGraph {
         this.handleFilterValueChange = this.handleFilterValueChange.bind(this);
         this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this);
         this.handleNextPageClick     = this.handleNextPageClick.bind(this);
+        this.handleClick             = this.handleClick.bind(this);
 
         /**
         */
@@ -99,15 +100,12 @@ export default class Table extends AbstractGraph {
             padding,
         } = this.getConfiguredProperties();
 
-        this.columnWidth =  (100 / columns.length) + "%";
-
         this.headerData = columns.map(({column, label}, i) => ({
             key: column,
             label: label || column,
             sortable: true,
             style: {
                 padding: padding,
-                width: this.columnWidth
             }}
         ));
     }
@@ -160,9 +158,8 @@ export default class Table extends AbstractGraph {
             const accessors = this.getAccessor(columns);
             this.filterData = data.filter((d, j) => {
                 let match = false;
-
                 accessors.forEach((accessor, i) => {
-                    if(accessor(d, true).toString().includes(search))
+                    if(accessor(d, true) && accessor(d, true).toString().toLowerCase().includes(search.toLowerCase()))
                        match = true;
                 });
 
@@ -174,10 +171,12 @@ export default class Table extends AbstractGraph {
     }
 
     handleSortOrderChange(column, order) {
+        const keys = column.split(".");
+        const value = (d) => keys.reduce((d, key) => d[key], d);
 
         this.filterData = this.filterData.sort(
           (a, b) => {
-            return order === 'desc' ? eval(`b.${column}`) > eval(`a.${column}`) : eval(`a.${column}`) > eval(`b.${column}`)
+            return order === 'desc' ? value(b) > value(a) : value(a) > value(b);
           }
         );
 
@@ -194,6 +193,11 @@ export default class Table extends AbstractGraph {
         this.updateData();
     }
 
+    handleClick(key) {
+        if(this.props.onMarkClick && this.state.data[key])
+           this.props.onMarkClick(this.state.data[key]);
+    }
+
     render() {
         const {
             width,
@@ -201,10 +205,6 @@ export default class Table extends AbstractGraph {
         } = this.props;
 
         const {
-            border,
-            fontColor,
-            padding,
-            rowHeight,
             limit
         } = this.getConfiguredProperties();
 
@@ -224,8 +224,10 @@ export default class Table extends AbstractGraph {
             >
 
                 <DataTables
+                    headerToolbarMode={"filter"}
                     showRowHover={false}
                     showHeaderToolbar={true}
+                    showHeaderToolbarFilterIcon={false}
                     multiSelectable={true}
                     columns={this.headerData}
                     data={tableData}
@@ -236,27 +238,13 @@ export default class Table extends AbstractGraph {
                     onSortOrderChange={this.handleSortOrderChange}
                     page={this.currentPage}
                     count={this.filterData.length}
+                    onCellClick={this.handleClick}
                     rowSize={limit}
-                    tableRowStyle={{
-                        color:fontColor,
-                        borderTop: border.top,
-                        borderBottom: border.bottom,
-                        borderLeft: border.left,
-                        borderRight: border.right,
-                        cursor: "pointer",
-                        height : rowHeight,
+                    tableStyle={{
+                        width: "inherit",
+                        minWidth: "100%"
                     }}
-                    tableHeaderColumnStyle={{
-                        padding: padding,
-                        height : rowHeight
-                    }}
-                    tableRowColumnStyle={{
-                        height : rowHeight,
-                        width: this.columnWidth,
-                        whiteSpace: "inherit",
-                        fontSize: "12px",
-
-                    }}               
+                    tableBodyStyle={{overflowX: "scroll"}}
                 />
             </div>
         );

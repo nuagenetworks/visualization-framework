@@ -26,7 +26,8 @@ export default class HeatmapGraph extends XYGraph {
         const {
             data: cdata,
             width,
-            height
+            height,
+            onMarkClick
         } = this.props;
 
         if (!cdata || !cdata.length)
@@ -142,7 +143,6 @@ export default class HeatmapGraph extends XYGraph {
         xScale.range([0, availableWidth]);
         yScale.rangeRound([availableHeight, 0]);
         
-
         const xAxis = axisBottom(xScale)
             .tickSizeInner(xTickGrid ? -availableHeight : xTickSizeInner)
             .tickSizeOuter(xTickSizeOuter);
@@ -151,9 +151,7 @@ export default class HeatmapGraph extends XYGraph {
             xAxis.tickFormat(format(xTickFormat));
         }
 
-        if(xTicks){
-            xAxis.ticks(xTicks);
-        }
+        xAxis.tickValues(distXDatas);
 
         const yAxis = axisLeft(yScale)
             .tickSizeInner(yTickGrid ? -availableWidth : yTickSizeInner)
@@ -169,7 +167,7 @@ export default class HeatmapGraph extends XYGraph {
 
         let xTitlePosition = {
             left: leftMargin + availableWidth / 2,
-            top: margin.top + availableHeight + chartHeightToPixel + xAxisHeight
+            top: margin.top + availableHeight + (chartHeightToPixel * 2) + xAxisHeight
         }
 
         let yTitlePosition = {
@@ -177,7 +175,6 @@ export default class HeatmapGraph extends XYGraph {
             left: margin.left + chartWidthToPixel + (isVerticalLegend ? legend.width : 0),
             top: margin.top + availableHeight / 2
         }
-
         return (
             <div className="bar-graph">
                 {this.tooltip}
@@ -186,7 +183,15 @@ export default class HeatmapGraph extends XYGraph {
                     <g transform={ `translate(${leftMargin},${margin.top})` } >
                         <g
                             key="xAxis"
-                            ref={ (el) => select(el).call(xAxis) }
+                            ref={ (el) => select(el)
+                                    .call(xAxis)
+                                    .selectAll("text")
+                                    .attr("dy", "1em")
+                                    .style("text-anchor", "end")
+                                    .attr("transform", function(d) {
+                                        return "rotate(-35)"
+                                    })
+                                }
                             transform={ `translate(0,${availableHeight})` }
                         />
                         <g
@@ -209,6 +214,23 @@ export default class HeatmapGraph extends XYGraph {
                                 }
                             );
 
+                            // Set up clicking and cursor style.
+                            const { onClick, style } = (
+
+                                // If an "onMarkClick" handler is registered,
+                                onMarkClick ? {
+
+                                    // set it up to be invoked, passing the current data row object.
+                                    onClick: () => onMarkClick(d),
+
+                                    // Make the cursor a pointer on hover, as an affordance for clickability.
+                                    style: { cursor: "pointer" }
+
+                                } : {
+                                    // Otherwise, set onClick and style to "undefined".
+                                }
+                            );
+
                             return (
                                 <g
                                     { ...this.tooltipProps(d) }
@@ -218,10 +240,13 @@ export default class HeatmapGraph extends XYGraph {
                                     <rect
                                         x={ x }
                                         y={ y }
+                                        onClick={ onClick }
+                                        style={ style }
                                         width={ width }
                                         height={ height }
                                         fill={ getColor(d) }
                                         key={ i }
+                                        opacity= {this.getOpacity(d)}
                                         stroke={ stroke.color }
                                         strokeWidth={ stroke.width }
                                         { ...this.tooltipProps(d) }
