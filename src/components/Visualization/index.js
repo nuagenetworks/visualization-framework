@@ -212,13 +212,15 @@ class VisualizationView extends React.Component {
                                     return queryParams;
                                 }, {});
 
-                            let mergedQueryParams = Object.assign({}, queryParams, graphQueryParams); 
+                            let mergedQueryParams = Object.assign({}, queryParams, graphQueryParams);
                             // Override the existing context with the new params.
                             queryParams = Object.assign({}, this.props.orgContext, mergedQueryParams);
 
                             if(resetFilters) {
                                 for (let key in mergedQueryParams) {
+                                  if (mergedQueryParams.hasOwnProperty(key)) {
                                     queryParams[key] = '';
+                                  }
                                 }
                             }
 
