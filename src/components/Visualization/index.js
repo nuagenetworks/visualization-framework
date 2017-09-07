@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
+import safeEval from "safe-eval"
 
 import $ from "jquery";
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -190,7 +191,7 @@ class VisualizationView extends React.Component {
 
                             if(configuration.key) {
                                 let vizID = `${id.replace(/-/g, '')}vkey`;
-                                let vKey = eval("(" + configuration.key + ")")(d);
+                                let vKey = safeEval("(" + configuration.key + ")")(d);
                                 if(this.props.orgContext[vizID] === vKey)
                                     resetFilters = true;
 
