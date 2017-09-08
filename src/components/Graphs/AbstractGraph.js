@@ -296,7 +296,7 @@ export default class AbstractGraph extends React.Component {
         let metricDimension = cfData.dimension(function(d) { return d[settings.metric]; });
         let topData = [];
 
-        if(settings.otherOptions && settings.otherOptions.limit && (data.length - 1) > settings.otherOptions.limit) {
+        if(settings.otherOptions && settings.otherOptions.limit && data.length > settings.otherOptions.limit) {
             
             topData = metricDimension.top(settings.otherOptions.limit);
             const otherDatas = metricDimension.top(Infinity, settings.otherOptions.limit);
