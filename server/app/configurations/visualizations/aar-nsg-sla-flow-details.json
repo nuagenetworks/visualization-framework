@@ -1,0 +1,18 @@
+{
+    "id": "aar-nsg-sla-flow-details",
+    "graph": "Table",
+    "title": "Flow Details between {{snsg}} - {{dnsg}} for {{appName}}",
+    "description": "Flow details for an application in a given period.",
+    "author": "Sayaji Patil",
+    "creationDate": "07/12/2017",
+    "data": {
+        "columns": [
+            { "column": "SourceUplink", "label": "Source Uplink"},
+            { "column": "destinationUplink", "label": "Destination Uplink" },
+            { "column": "Packets", "label": "Packets", "format": ",.2s"},
+            { "column": "Bytes", "label": "Bytes", "format": ",.2s"}
+
+        ]
+    },
+    "query": "aar-nsg-sla-flow-details"
+}

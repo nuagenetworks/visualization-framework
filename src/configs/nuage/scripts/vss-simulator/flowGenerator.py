@@ -69,20 +69,24 @@ def generateFlowStats(domain_id, type="l3"):
             'subnetName': CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-sub",
             'zoneName': CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-zone",
             'aclId': flow_data[0]['uuid']
+            'l7ApplicationName': 'L7'
 		}
-                if type=="l3":
-                    es_data['nuage_metadata']['domainName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id)
-                    es_data['nuage_metadata']['subnetName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-sub"
-                    es_data['nuage_metadata']['zoneName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-zone"
-                else:
-                    es_data['nuage_metadata']['l2domainName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-l2"
-                es_data['tcpflags']['SYN'] = random.randint(1,5)
-                es_data['tcpflags']['SYN-ACK'] = random.randint(1,5)
-                es_data['tcpflags']['FIN'] = random.randint(1,3)
-                es_data['tcpflags']['FIN-ACK'] = random.randint(1,3)
-                es_data['tcpflags']['NULL'] = random.randint(1,3)
-                es_data['tcpflags']['RST'] = random.randint(1,3)
-                es_data['tcpstate'] = "INIT"
+
+        if type=="l3":
+            es_data['nuage_metadata']['domainName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id)
+            es_data['nuage_metadata']['subnetName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-sub"
+            es_data['nuage_metadata']['zoneName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-zone"
+        else:
+            es_data['nuage_metadata']['l2domainName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-l2"
+        
+        es_data['tcpflags'] = {}
+        es_data['tcpflags']['SYN'] = random.randint(1,5)
+        es_data['tcpflags']['SYN-ACK'] = random.randint(1,5)
+        es_data['tcpflags']['FIN'] = random.randint(1,3)
+        es_data['tcpflags']['FIN-ACK'] = random.randint(1,3)
+        es_data['tcpflags']['NULL'] = random.randint(1,3)
+        es_data['tcpflags']['RST'] = random.randint(1,3)
+        es_data['tcpstate'] = "INIT"
 		print ("Writing flow information between " + flow_data[0]['name'] + " and " + flow_data[1]['name'])
 		writeToES(es_data)
 

@@ -1,9 +1,11 @@
 {
     "id": "aar-flow-sla-heatmap",
     "graph": "HeatmapGraph",
-    "title": "{{snsg}} ({{fromPersonality}}) to {{dnsg}} ({{toPersonality}}) Sla HeatMap",
+    "title": "{{snsg}} ({{fromPersonality}}) to {{dnsg}} ({{toPersonality}}) SLA HeatMap",
+    "description": "Heatmap showing per application sla status over a period of chosen 15 minutes interval. Please use scroll to go back and forward in time by 15 minutes. When you click on a cell, tables detailing SLA and flow information will appear. Time chosen to collect that information is +/- 10 minutes from the cell's time.",
     "author": "Anil Chauhan",
     "creationDate": "03/04/2017",
+    "key": "function(d) { return d['application'] + d['date_histo'];}",
     "data": {
         "xColumn": "date_histo",
         "xLabel": "Time",
@@ -23,55 +25,20 @@
             { "column": "application", "label": "Application" },
             { "column": "slastatus", "label": "Status" }
         ]
- 
    },
    "listeners": [
         {
             "params": {
                 "appName": "application",
                 "queryStartTime": "date_histo"
-            }
+            },
+            "dateParams": {
+                "reference": "nsgSlaDetails",
+                "duration": 60000000,
+                "column": "date_histo"
+            } 
         }
     ],
-    "filterOptions": {
-        "Time": {
-            "parameter": "queryStartTime",
-            "default": "now-15m",
-            "options": [
-                {
-                    "label": "15m ago",
-                    "value": "now-15m",
-                    "forceOptions": {
-                        "queryEndTime": "now",
-                        "interval": "30s"
-                    }
-                },
-                {
-                    "label": "30m ago",
-                    "value": "now-30m",
-                    "forceOptions": {
-                        "queryEndTime": "now-15m",
-                        "interval": "30s"
-                    }
-                },
-                {
-                    "label": "45m ago",
-                    "value": "now-45m",
-                    "forceOptions": {
-                        "queryEndTime": "now-30m",
-                        "interval": "30s"
-                    }
-                },
-                {
-                    "label": "60m ago",
-                    "value": "now-60m",
-                    "forceOptions": {
-                        "queryEndTime": "now-45m",
-                        "interval": "30s"
-                    }
-                }
-            ]
-        }
-    },
+    "nextPrevFilter": true,
     "query": "aar-flow-sla-heatmap"
 }
