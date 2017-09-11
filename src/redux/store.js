@@ -4,7 +4,7 @@ import { createHistory } from "history";
 
 import thunkMiddleware from "redux-thunk";
 import createLogger from "redux-logger";
-import { updateContextMiddleware, updateVisualizationTypeMiddleware } from "./middlewares";
+import { updateContextMiddleware, updateVisualizationTypeMiddleware, updateConfigurationMiddleware } from "./middlewares";
 
 import configurationsReducer from "../services/configurations/redux/reducer";
 import interfaceReducer from "../components/App/redux/reducer";
@@ -31,7 +31,8 @@ const createStoreWithRouterAndMiddleware = compose(
         thunkMiddleware,
         loggerMiddleware,
         updateContextMiddleware,
-        updateVisualizationTypeMiddleware
+        updateVisualizationTypeMiddleware,
+        updateConfigurationMiddleware
     )
 )(createStore);
 
