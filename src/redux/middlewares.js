@@ -39,3 +39,32 @@ export const updateVisualizationTypeMiddleware = store => next => action => {
 
     return result;
 }
+
+export const updateConfigurationMiddleware = store => next => action => {
+    const result = next(action),
+          state  = store.getState();
+
+    if (action.type === "@@reduxReactRouter/routerDidChange" && state.router
+        && (state.router.location.pathname.indexOf('dashboards') !== -1 
+        || state.router.location.pathname.indexOf('visualizations') !== -1))
+    {
+        const id           = state.router.params.id,
+              previousPage = state.interface.get("updatePage");
+
+
+        if(!previousPage || previousPage !== id ) {
+            console.log("dddddd", previousPage);
+
+            store.dispatch({
+                    type: "ACTION_UPDATE_PAGE",
+                    id: id
+            });
+
+            store.dispatch({
+                    type: "RESET_CONFIGURATION",
+            });
+        }      
+    }
+
+    return result;
+}
