@@ -53,7 +53,6 @@ export const updateConfigurationMiddleware = store => next => action => {
 
 
         if(!previousPage || previousPage !== id ) {
-            console.log("dddddd", previousPage);
 
             store.dispatch({
                     type: "ACTION_UPDATE_PAGE",
