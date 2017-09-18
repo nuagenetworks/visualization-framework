@@ -9,16 +9,18 @@ import tooltipStyle from './tooltipStyle.js';
 import "./style.css";
 import {properties} from "./default.config";
 
+import SearchBar from "../../SearchBar";
+
 export default class Table extends AbstractGraph {
 
     constructor(props, context) {
         super(props, properties);
 
         this.handleSortOrderChange   = this.handleSortOrderChange.bind(this);
-        this.handleFilterValueChange = this.handleFilterValueChange.bind(this);
         this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this);
         this.handleNextPageClick     = this.handleNextPageClick.bind(this);
         this.handleClick             = this.handleClick.bind(this);
+        this.handleSearch            = this.handleSearch.bind(this);
 
         /**
         */
@@ -51,13 +53,19 @@ export default class Table extends AbstractGraph {
          */
         this.resetFilters();
 
-        this.getHeaderData(columns);
+        this.setHeaderData(columns);
         this.updateData();
     }
 
     resetFilters() {
         this.currentPage = 1;
         this.filterData = this.props.data;
+    }
+
+    handleSearch(data) {
+        this.currentPage = 1;
+        this.filterData = data;
+        this.updateData();
     }
 
     updateData() {
@@ -94,7 +102,7 @@ export default class Table extends AbstractGraph {
         });
     }
 
-    getHeaderData(columns) {
+    setHeaderData(columns) {
 
         const {
             padding,
@@ -106,8 +114,16 @@ export default class Table extends AbstractGraph {
             sortable: true,
             style: {
                 padding: padding,
-            }}
+            },
+            columnText: label || column,
+            columField: column,
+            type:"text"
+           }
         ));
+    }
+
+    getHeaderData() {
+        return this.headerData;
     }
 
     getTableData(columns) {
@@ -141,33 +157,8 @@ export default class Table extends AbstractGraph {
 
                 data[columns[i].column] = columnData;
             });
-
             return data;
         })
-    }
-
-    handleFilterValueChange(search) {
-        const {
-            data
-        } = this.props;
-
-        this.resetFilters();
-
-        if(search) {
-            const columns = this.getColumns();
-            const accessors = this.getAccessor(columns);
-            this.filterData = data.filter((d, j) => {
-                let match = false;
-                accessors.forEach((accessor, i) => {
-                    if(accessor(d, true) && accessor(d, true).toString().toLowerCase().includes(search.toLowerCase()))
-                       match = true;
-                });
-
-                return match;
-            });
-        }
-
-        this.updateData();
     }
 
     handleSortOrderChange(column, order) {
@@ -198,6 +189,24 @@ export default class Table extends AbstractGraph {
            this.props.onMarkClick(this.state.data[key]);
     }
 
+    renderSearchBarIfNeeded() {
+        const {
+            searchBar
+        } = this.getConfiguredProperties();
+
+        if(searchBar === false)
+           return;
+
+        return (
+          <SearchBar
+            data={this.props.data}
+            options={this.getHeaderData()}
+            handleSearch={this.handleSearch}
+            columns={this.getColumns()}
+          />
+        );
+    }
+
     render() {
         const {
             width,
@@ -222,19 +231,13 @@ export default class Table extends AbstractGraph {
                     overflow: "auto"
                 }}
             >
-
+                {this.renderSearchBarIfNeeded()} 
                 <DataTables
-                    headerToolbarMode={"filter"}
-                    showRowHover={false}
-                    showHeaderToolbar={true}
-                    showHeaderToolbarFilterIcon={false}
-                    multiSelectable={true}
-                    columns={this.headerData}
+                    columns={this.getHeaderData()}
                     data={tableData}
                     showRowSizeControls={false}
                     onNextPageClick={this.handleNextPageClick}
                     onPreviousPageClick={this.handlePreviousPageClick}
-                    onFilterValueChange={this.handleFilterValueChange}
                     onSortOrderChange={this.handleSortOrderChange}
                     page={this.currentPage}
                     count={this.filterData.length}
