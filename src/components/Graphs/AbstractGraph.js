@@ -7,13 +7,22 @@ import * as d3 from "d3";
 import { GraphManager } from "./index";
 import columnAccessor from "../../utils/columnAccessor";
 
+import {
+    format
+} from "d3";
+
 
 export default class AbstractGraph extends React.Component {
 
     constructor(props, properties = {}) {
         super(props);
 
+        this.configuredProperties = {};
+
         this.defaults = GraphManager.getDefaultProperties(properties);
+
+        // set all configuration into single object
+        this.setConfiguredProperties();
 
         // Provide tooltips for subclasses.
         const { tooltip } = this.getConfiguredProperties();
@@ -24,7 +33,6 @@ export default class AbstractGraph extends React.Component {
 
             // This function is invoked to produce the content of a tooltip.
             this.getTooltipContent = () => {
-
                 // The value of this.hoveredDatum should be set by subclasses
                 // on mouseEnter and mouseMove of visual marks
                 // to the data entry corresponding to the hovered mark.
@@ -65,6 +73,8 @@ export default class AbstractGraph extends React.Component {
                     type="dark"
                     effect="float"
                     getContent={[() => this.getTooltipContent(), 200]}
+                    afterHide={() =>  this.handleHideEvent()}
+                    afterShow={() =>  this.handleShowEvent()}
                 />
             );
 
@@ -84,6 +94,10 @@ export default class AbstractGraph extends React.Component {
             this.tooltipProps = () => null
         }
     }
+
+    handleShowEvent() {}
+
+    handleHideEvent() {}
 
     wrapD3Text (text, width) {
       text.each(function() {
@@ -107,8 +121,12 @@ export default class AbstractGraph extends React.Component {
       });
     };
 
+    setConfiguredProperties() {
+        this.configuredProperties = Object.assign({}, this.defaults, this.props.configuration.data);
+    }
+
     getConfiguredProperties() {
-        return Object.assign({}, this.defaults, this.props.configuration.data);
+        return this.configuredProperties;
     }
 
     getMappedScaleColor(data, defaultColumn) {
@@ -286,6 +304,86 @@ export default class AbstractGraph extends React.Component {
                 })}
             </g>
         );
+    }
+
+    setYlabelWidth(data) {
+        const {
+          chartWidthToPixel,
+          yTickFormat
+        } = this.getConfiguredProperties();
+
+        const yLabelFn = (d) => {
+            if(!yTickFormat) {
+                return d['yColumn'];
+            }
+            const formatter = format(yTickFormat);
+            return formatter(d['yColumn']);
+        };
+
+        this.yLabelWidth = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
+    }
+
+    getYlabelWidth() {
+        return this.yLabelWidth;
+    }
+    
+    setLeftMargin() {
+      const {
+          margin
+        } = this.getConfiguredProperties();
+
+        this.leftMargin   = margin.left + this.getYlabelWidth();
+    }
+
+    getLeftMargin() {
+        return this.leftMargin;
+    }
+    
+    setAvailableWidth({width}) {
+       
+        const {
+          margin,
+        } = this.getConfiguredProperties();
+
+        this.availableWidth = width - (margin.left + margin.right + this.getYlabelWidth());
+    }
+
+    getAvailableWidth() {
+       return this.availableWidth;
+    }
+
+    // height of x-axis
+    getXAxisHeight() {
+        const {
+          chartHeightToPixel,
+          xLabel
+        } = this.getConfiguredProperties();
+
+        return xLabel ? chartHeightToPixel : 0;
+    }
+
+    setAvailableHeight({height}) {
+
+        const {
+          chartHeightToPixel,
+          margin
+        } = this.getConfiguredProperties();
+
+        this.availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + this.getXAxisHeight());
+
+    }
+
+    getAvailableHeight() {
+        return this.availableHeight;
+    }
+
+    // Check whether to display legend as vertical or horizontal
+    checkIsVerticalLegend() {
+        const {
+          legend
+        } = this.getConfiguredProperties();
+
+        return legend.orientation === 'vertical';
     }
 
     getOpacity(d) {
