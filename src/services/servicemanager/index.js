@@ -82,8 +82,7 @@ const tabify = function (queryConfiguration, response) {
 const executeScript = function (scriptName, context) {
     // TODO: For now, let's put the script in the treeview as discussed on 11/03
     // Later, this part should be done in our middleware
-    let url = "./scripts/" + scriptName + ".js",
-        main =  require(url).main;
+    let main =  require(`./scripts/${scriptName}.js`).main;
 
     if (main)
         return main(context);
