@@ -20,6 +20,7 @@ The philosophy of the Visualization Framework is to provide a library to quickly
       - [ChordGraph](#chordgraph)
       - [SimpleTextGraph](#simpletextgraph)
       - [VariationTextGraph](#variationtextgraph)
+      - [SankeyGraph](#sankeygraph)
   - [Query configuration](#query-configuration)
 - [Services](#services)
 
@@ -343,6 +344,47 @@ This graph shows a value and its variation from the previous one.
 - **textAlign** align text on `left`, `center` or `right`. Default is `center`
 - **fontSize** font size
 - **fontColor** font color
+
+##### SankeyGraph
+
+Display nice Sankey graph
+
+![sankey-chart](https://user-images.githubusercontent.com/26645756/30849031-9da964a0-a2be-11e7-8689-95fa95d17015.png)
+
+This graph shows a value between source and destination columns.
+
+- **sourceColumn** source column
+- **targetColumn** target column
+- **valueColumn** value between source and target column.
+
+*Note:- Data should not be cyclic.*
+
+#### Sample Data
+```javascript
+
+const data = [
+    {
+    "source": "Barry",
+    "target": "Elvis",
+    "value": 2
+    },
+    {
+    "source": "Frodo",
+    "target": "Elvis",
+    "value": 2
+    },
+    {
+    "source": "Frodo",
+    "target": "Sarah",
+    "value": 2
+    },
+    {
+    "source": "Barry",
+    "target": "Alice",
+    "value": 2
+    }
+];
+```
 
 ### Query configuration
 The query configuration allows the Visualization to know which [service](#services) it should use and what is the query it should trigger.

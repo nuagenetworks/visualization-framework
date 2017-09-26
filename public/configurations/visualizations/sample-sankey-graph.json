@@ -1,0 +1,18 @@
+{
+    "id": "sample-sankey-graph",
+    "graph": "SankeyGraph",
+    "title": "Sample Sankey Graph",
+    "author": "Anil Chauhan",
+    "creationDate": "25/09/2017",
+    "data": {
+        "dateHistogram": true,
+        "sourceColumn": "source",
+        "sourceColumnLabel": "Source",
+        "targetColumn": "target",
+        "targetColumnLabel": "Target",
+        "valueColumn": "value",
+        "valueColumnLabel": "Value",
+        "valueFormat": ",.1f"
+    },
+    "query": "top5-app-vertical-bar"
+}
