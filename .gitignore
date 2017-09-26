@@ -2,6 +2,8 @@
 
 # dependencies
 node_modules
+src/configs/nuage/scripts/pps-simulator/log/*
+elasticsearch*
 
 # production
 build
