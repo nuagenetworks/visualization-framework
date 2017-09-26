@@ -189,6 +189,23 @@ export default class Table extends AbstractGraph {
            this.props.onMarkClick(this.state.data[key]);
     }
 
+    renderSearchBarIfNeeded() {
+        const {
+            searchBar
+        } = this.getConfiguredProperties();
+
+        if(searchBar) {
+          return (
+            <SearchBar
+              data={this.props.data}
+              options={this.getHeaderData()}
+              handleSearch={this.handleSearch}
+              columns={this.getColumns()}
+            />
+          );
+       }
+    }
+
     render() {
         const {
             width,
@@ -213,12 +230,7 @@ export default class Table extends AbstractGraph {
                     overflow: "auto"
                 }}
             >
-                <SearchBar
-                    data={this.props.data}
-                    options={this.getHeaderData()}
-                    handleSearch={this.handleSearch}
-                    columns={this.getColumns()}
-                /> 
+                {this.renderSearchBarIfNeeded()} 
                 <DataTables
                     columns={this.getHeaderData()}
                     data={tableData}
