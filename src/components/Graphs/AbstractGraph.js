@@ -1,7 +1,7 @@
 import React from "react";
 import { scaleOrdinal } from "d3";
 import ReactTooltip from "react-tooltip";
-import safeEval from "safe-eval"
+import safeEval from "cross-safe-eval"
 
 import * as d3 from "d3";
 

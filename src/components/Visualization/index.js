@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
-import safeEval from "safe-eval"
+import safeEval from "cross-safe-eval"
 
 import $ from "jquery";
 import CopyToClipboard from 'react-copy-to-clipboard';

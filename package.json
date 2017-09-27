@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "cross-safe-eval": "0.0.4",
     "d3": "4.10.0",
     "elasticsearch": "^11.0.1",
     "font-awesome": "^4.6.3",
@@ -40,7 +41,6 @@
     "redux-logger": "2.7.4",
     "redux-router": "2.1.2",
     "redux-thunk": "2.1.0",
-    "safe-eval": "^0.3.0",
     "taffydb": "^2.7.3",
     "whatwg-fetch": "^1.0.0"
   },
