@@ -4,7 +4,7 @@ import { ActionKeyStore } from "./redux/actions";
 import { parameterizedConfiguration } from "../../../utils/configurations";
 
 const config = {
-    api_version: "5.0",
+    api_version: "4.0",
     end_point_prefix: "/nuage/api/"
 }
 
