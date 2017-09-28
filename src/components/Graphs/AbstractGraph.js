@@ -291,29 +291,44 @@ export default class AbstractGraph extends React.Component {
 
     getGroupedData(data, settings) {
 
-        let cfData = crossfilter(data);
-
-        let metricDimension = cfData.dimension(function(d) { return d[settings.metric]; });
-        let topData = [];
-
-        if(settings.otherOptions && settings.otherOptions.limit && data.length > settings.otherOptions.limit) {
+        if(settings.otherOptions && settings.otherOptions.limit) {
             
-            topData = metricDimension.top(settings.otherOptions.limit);
-            const otherDatas = metricDimension.top(Infinity, settings.otherOptions.limit);
+            let cfData = crossfilter(data);
+            let metricDimension = cfData.dimension( d => d[settings.metric] );
+            let limit = settings.otherOptions.limit;
 
-            const sum = otherDatas.reduce(function(total, d) {
-              return +total + d[settings.metric];
-            }, 0);
+            if(!settings.otherOptions.type || settings.otherOptions.type === "percentage") {
+                const sortedData = metricDimension.top(Infinity);
+                const total = sortedData.reduce((total, d) => +total + d[settings.metric], 0);
 
-            topData = topData.concat({[settings.dimension]: settings.otherOptions.label, [settings.metric]: sum})
-        } else {
-            topData = metricDimension.top(Infinity);
+                let sum = 0;
+                let index = sortedData.findIndex( d =>  {
+                    sum += +d[settings.metric];
+                    if(((sum / total) * 100) >= limit) {
+                        return true;
+                    }
+                });
+
+                limit = index !== -1 ? index + 1 : limit;
+            }
+
+            
+            let topData = metricDimension.top(limit);
+            const otherDatas = metricDimension.top(Infinity, limit);
+
+            if(otherDatas.length) {
+                const sum = otherDatas.reduce( (total, d) => +total + d[settings.metric], 0);     
+                topData.push({
+                    [settings.dimension]: settings.otherOptions.label ? settings.otherOptions.label : 'Others', 
+                    [settings.metric]: sum
+                });
+            }
+
+            cfData.remove();
+            return topData;
         }
-
-        metricDimension.remove();
-        cfData.remove();
-
-        return topData;
+        
+        return data;
     }
 
     getOpacity(d) {

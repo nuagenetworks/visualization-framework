@@ -8,8 +8,7 @@
         "sliceColumn": "Sum of MB",
         "labelColumn": "L7Classification",
         "otherOptions": {
-            "label": "Others",
-            "limit": 5
+            "limit": 85
         },
         "tooltip": [
             { "column": "L7Classification", "label": "L7 Classification" },

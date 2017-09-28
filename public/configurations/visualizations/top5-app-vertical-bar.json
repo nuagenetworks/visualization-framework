@@ -21,7 +21,8 @@
         ],
         "otherOptions": {
             "label": "Others",
-            "limit": 5
+            "limit": 5,
+            "type": "number"
         },
         "tooltip": [
             { "column": "L7Classification", "label": "L7 Signature" },
