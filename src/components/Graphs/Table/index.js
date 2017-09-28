@@ -99,15 +99,12 @@ export default class Table extends AbstractGraph {
             padding,
         } = this.getConfiguredProperties();
 
-        this.columnWidth =  (100 / columns.length) + "%";
-
         this.headerData = columns.map(({column, label}, i) => ({
             key: column,
             label: label || column,
             sortable: true,
             style: {
                 padding: padding,
-                width: this.columnWidth
             }}
         ));
     }
@@ -237,26 +234,11 @@ export default class Table extends AbstractGraph {
                     page={this.currentPage}
                     count={this.filterData.length}
                     rowSize={limit}
-                    tableRowStyle={{
-                        color:fontColor,
-                        borderTop: border.top,
-                        borderBottom: border.bottom,
-                        borderLeft: border.left,
-                        borderRight: border.right,
-                        cursor: "pointer",
-                        height : rowHeight,
+                    tableStyle={{
+                        width: "inherit",
+                        minWidth: "100%",
                     }}
-                    tableHeaderColumnStyle={{
-                        padding: padding,
-                        height : rowHeight
-                    }}
-                    tableRowColumnStyle={{
-                        height : rowHeight,
-                        width: this.columnWidth,
-                        whiteSpace: "inherit",
-                        fontSize: "12px",
-
-                    }}               
+                    tableBodyStyle={{overflowX: "scroll"}}               
                 />
             </div>
         );
