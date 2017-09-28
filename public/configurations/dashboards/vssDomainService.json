@@ -1,12 +1,12 @@
 {
-    "id": "vssDomainEvent",
+    "id": "vssDomainService",
     "author": "Ronak Shah",
-    "creationDate": "10/18/2016",
+    "creationDate": "9/27/2017",
     "title": "{{domainName:VSS Domain}}",
     "titleIcon": "domain",
     "visualizations": [
-        { "id": "vss-domain-events-by-type", "x": 0, "y": 0, "w": 6, "h": 15, "minW": 2, "minH": 12},
-        { "id": "vss-domain-events-detail", "x": 6, "y": 0, "w": 6, "h": 15, "minW": 2, "minH": 12}
+        { "id": "vss-domain-service-top-x", "x": 0, "y": 0, "w": 6, "h": 15, "minW": 2, "minH": 12},
+        { "id": "vss-domain-service-table", "x": 6, "y": 0, "w": 6, "h": 15, "minW": 2, "minH": 12}
     ],
     "links": [
         {
