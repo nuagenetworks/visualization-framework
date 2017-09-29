@@ -1,152 +1,169 @@
-import BaseController from './base.model';
+import BaseModel from './base.model';
 import DB from '../middleware/connection.js';
 
-class TestModel extends BaseController {
+class TestModel extends BaseModel {
 
-	reports(req, res) {
-		DB.select('*')
-		.get('reports', (err,response) => {
-			console.log("Query Ran: " + DB.last_query());
-		    if (err) return console.error("Uh oh! Couldn't get results: " + err.msg);
-		        res.json({
-			      results: response,
-			    });
-			}
-		);
-	}
+    reports(req, res) {
+        DB.select('*')
+            .get('reports', (err, response) => {
+                if (err)
+                    return console.error("Oops! Something went wrong: " + err.msg);
+                res.json({
+                    results: response,
+                });
+            });
+    }
 
-	updateDataSet(req, res) {
-		var report_detail_id = req.params.report_detail_id;
-		var updateStatus = req.params.status;
-		DB.where('rd.id',report_detail_id)
-	    .from('report_detail rd')
-	    .set('status',updateStatus)
-	    .update(null, null, null, (err, data) => {
-	        if (err) return console.error(err);
-	        this.successResponse(data, res);
+    updateDataSet(req, res) {
+        let {
+            report_detail_ids,
+            report_id,
+            dashboard_id
+        } = req.body;
 
-	    });
-	}
+        let status = "pass";
 
-	deleteReports(req, res) {
-		var report_id = req.params.report_id;
-        DB.delete('reports', {id: report_id}, (err, data) => {
+        let query = DB.where('rd.dashboard_id', dashboard_id)
+
+        if (report_detail_ids.length) {
+            query = query.where_in('rd.id', report_detail_ids);
+            status = "fail";
+        }
+
+        query.from('report_detail rd')
+            .set('status', status)
+            .update(null, null, null, (err, data) => {
+
+                if (err) return console.error(err);
+
+                if (report_detail_ids.length) {
+                    DB.where_not_in('rd.id', report_detail_ids)
+                        .from('report_detail rd')
+                        .set('status', 'pass')
+                        .update(null, null, null, (err, data) => {
+                            if (err) return console.error(err);
+
+                        });
+                }
+                if (this.updateReportsPassFailCount(report_id)) {
+                    this.successResponse('success', res);
+                }
+
+            });
+    }
+
+    updateReportsPassFailCount(report_id) {
+
+        const select = ['COUNT(*) total, COUNT(status="pass" or null) pass_count', 'COUNT(status="fail" or null) fail_count'];
+        DB.select(select).from('report_detail rd')
+            .where('rd.report_id', report_id)
+            .get((err, response) => {
+                let reportData;
+                for (let resp in response) {
+                    reportData = {
+                        total: response[resp].total,
+                        pass: parseInt(response[resp].pass_count),
+                        fail: response[resp].fail_count,
+                        status: 'completed'
+                    };
+                }
+
+                DB.where('rs.id', report_id)
+                    .from('reports rs')
+                    .set(reportData)
+                    .update(null, null, null, (err, data) => {
+                        if (err) return false;
+
+                        return true;
+                    });
+            });
+        return true;
+    }
+
+    deleteReports(req, res) {
+        const report_id = req.params.report_id;
+        DB.delete('reports', {
+            id: report_id
+        }, (err, data) => {
             if (err) return console.error(err);
-            this.successResponse('success', res);
+            DB.delete('report_detail', {
+                report_id: report_id
+            }, (err, data) => {
+                if (err) return console.error(err);
+                this.successResponse('success', res);
+            });
         });
-	}
+    }
 
 
-	reportsDetail(req, res) {
-		var report_id = req.params.report_id;
-		console.log(report_id);
-		const select = ['GROUP_CONCAT(rd.id) reportDetailId','GROUP_CONCAT(rd.chart_name) chartName','rd.report_id','rd.dashboard_id dashboardsId','rd.dashboard_dataset_id dataSetId', 'dd.datafile', 'dd.name dataset_name', 'dd.description', 'dd.context','d.name dashboardname','d.url dashboardUrl','r.start_time','r.end_time','r.created_at','GROUP_CONCAT(rd.dashboard_id) dashboardIds','GROUP_CONCAT(rd.dashboard_dataset_id) datasetIds','GROUP_CONCAT(dd.datafile) dataFiles','GROUP_CONCAT(dd.name) datasetName','GROUP_CONCAT(dd.description) datasetDesc','GROUP_CONCAT(dd.context) datasetContext',];
-		DB.select( select ).from('report_detail rd')
-		.join('dashboards d', 'rd.dashboard_id=d.id')
-		.join('dashboard_dataset dd', 'rd.dashboard_dataset_id=dd.id')
-		.join('reports r', 'r.id=rd.report_id')
-		.group_by(['rd.dashboard_id'])
-		.where('rd.report_id',report_id)
-		.get((err,response) => {
-			console.log("Query Ran: " + DB.last_query());
-			//console.log(response);
-			    if (err) {
-			    	this.errorResponse(err.msg, res);
-			    } else if(typeof response !== 'undefined' && response.length==0) {
-			    	this.errorResponse('Not Found', res);
-			    }
-			    var dashboardIds = [];
+    reportsDetail(req, res) {
+        const report_id = req.params.report_id;
+        const select = ['rd.id reportDetailId', 'rd.chart_name chartName', 'rd.report_id', 'rd.dashboard_id dashboardsId', 'rd.dashboard_dataset_id dataSetId', 'dd.datafile', 'dd.name dataset_name', 'dd.description', 'dd.context', 'd.name dashboardname', 'd.url dashboardUrl', 'r.start_time', 'r.end_time', 'r.created_at', 'rd.status'];
+        DB.select(select).from('report_detail rd')
+            .join('dashboards d', 'rd.dashboard_id=d.id')
+            .join('dashboard_dataset dd', 'rd.dashboard_dataset_id=dd.id')
+            .join('reports r', 'r.id=rd.report_id')
+            .order_by('rd.dashboard_dataset_id')
+            .where('rd.report_id', report_id)
+            .get((err, response) => {
 
-			    var dataSets = [];
-			    var counter = 0;
-			    for(let resValues in response) {
-			    	counter++;
-			    	var finalresult = {
-				    	dataset : [],
-				    };
-				    var dataSetName = [];
-				    var dashboardIdSet = [];
-				    var dataSetIds = [];
-				    var dataAllFiles = [];
-				    var dataAllSetDesc = [];
-				    var datasetContextAll = [];
-						var reportDetailIds = [];
-						var chartNames = [];
-			    	var dataIds = response[resValues].datasetIds.split(',');
-			    	for(let d of dataIds) {
-			    		dataSetIds.push(d);
-			    	}
-						var chartName = response[resValues].chartName.split(',');
-						for(let cN of chartName) {
-							chartNames.push(cN);
-						}
-			    	var dataNames = response[resValues].datasetName.split(',');
-			    	for(let dN of dataNames) {
-			    		dataSetName.push(dN);
-			    	}
-			    	var dataFiles = response[resValues].dataFiles.split(',');
-			    	for(let dF of dataFiles) {
-			    		dataAllFiles.push(dF);
-			    	}
-			    	var datasetDesc = response[resValues].datasetDesc.split(',');
-			    	for(let dataDesc of datasetDesc) {
-			    		dataAllSetDesc.push(dataDesc);
-			    	}
-			    	var datasetContext = response[resValues].datasetContext.split(',');
-			    	for(let dC of datasetContext) {
-			    		datasetContextAll.push(dC);
-			    	}
+                let dashboard = {},
+                    datasets = [],
+                    start_time,
+                    end_time;
 
-						var reportDetailId = response[resValues].reportDetailId.split(',');
-						for(let dI of reportDetailId) {
-							reportDetailIds.push(dI);
-						}
+                for (let resp of response) {
+                    if (typeof dashboard[resp.dashboardsId] == 'undefined') {
+                        start_time = resp.start_time;
+                        end_time = resp.end_time;
+                        dashboard[resp.dashboardsId] = {
+                            'dashboard_id': resp.dashboardsId,
+                            'dashboard_name': resp.dashboardname,
+                            'start_time': resp.start_time,
+                            'end_time': resp.end_time,
+                            'report_id': resp.report_id,
+                            'datasets': {}
+                        }
+                    }
 
-			    	for(var finalData in dataIds) {
-				    	finalresult.dataset.push({
-				    		dashboard_id : response[resValues].dashboardsId,
-								report_detail_id : reportDetailIds[finalData],
-								chartName : chartNames[finalData],
-				    		dataSetId : dataSetIds[finalData],
-				    		datafile : dataAllFiles[finalData],
-				    		name : dataSetName[finalData],
-				    		description : dataAllSetDesc[finalData],
-				    		context : datasetContextAll[finalData],
-				    	});
-				    	finalresult.dashboardname = response[resValues].dashboardname;
-				    	finalresult.dashboardId = response[resValues].dashboardsId;
-				    	finalresult.report_id = response[resValues].report_id;
-				    	if(counter==1) {
-					    	finalresult.start_time = response[resValues].start_time;
-					    	finalresult.end_time = response[resValues].end_time;
-					    	finalresult.created_at = response[resValues].created_at;
-					    	finalresult.count = counter;
-				    	}
-			    	}
-			    	dataSets.push(finalresult);
-		    	}
+                    if (typeof dashboard[resp.dashboardsId]['datasets'][resp.dataSetId] == 'undefined') {
+                        dashboard[resp.dashboardsId]['datasets'][resp.dataSetId] = {
+                            'data_set_id': resp.dataSetId,
+                            'data_set_name': resp.dataset_name,
+                            'charts': []
+                        }
+                    }
 
-			    this.successResponse(dataSets, res);
-		        //this.successResponse(response, res);
-			}
-		);
-	}
+                    dashboard[resp.dashboardsId]['datasets'][resp.dataSetId]['charts'].push(resp);
+                }
 
-	successResponse(response, res) {
-		return res.json({
-          	status : 200,
-          	error : false,
-	      	results: response,
-		});
-	}
+                return res.json({
+                    status: 200,
+                    error: false,
+                    results: {
+                        data: dashboard,
+                        start_time: start_time,
+                        end_time: end_time
+                    }
+                });
+            });
+    }
 
-	errorResponse(err, res) {
-		return res.json({
-			status : 404,
-			error : true,
-			results: 'Data Not Found',
-		});
-	}
+    successResponse(response, res) {
+        return res.json({
+            status: 200,
+            error: false,
+            results: response,
+        });
+    }
+
+    errorResponse(err, res) {
+        return res.json({
+            status: 404,
+            error: true,
+            results: 'Data Not Found',
+        });
+    }
 
 }
 

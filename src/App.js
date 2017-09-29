@@ -7,7 +7,6 @@ import Dashboard from "./components/Dashboard";
 import Visualization from "./components/Visualization";
 import Testing from "./components/Testing";
 import ReportDetails from "./components/Testing/ReportDetails.js";
-import EditReports from "./components/Testing/EditReports.js";
 class App extends Component {
 
     render() {
@@ -20,7 +19,7 @@ class App extends Component {
                     <Route path={process.env.PUBLIC_URL +"/reports/visualizations/:id"} component={Visualization} />
                     <Route path={process.env.PUBLIC_URL +"/testing"} component={Testing} />
                     <Route path={process.env.PUBLIC_URL +"/testing/reports/detail/:id"} component={ReportDetails} />
-                    <Route path={process.env.PUBLIC_URL +"/testing/reports/edit/:id"} component={EditReports} />
+                    <Route path={process.env.PUBLIC_URL +"/testing/reports/edit/:id"} component={ReportDetails} />
                 </ReduxRouter>
             </AppContainer>
         </div>

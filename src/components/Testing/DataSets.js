@@ -1,94 +1,105 @@
 import React, { Component } from "react";
-import style from "./style";
-import { Button,Collapse } from 'react-bootstrap';
 import $ from 'jquery';
+import style from "./style";
 
-const initialState = {
-	reportsDetails : [],
-	open : false,
-	showMessage : false
-};
-let config = {
-    timingCache: 5000,
-    api: process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/middleware/api/",
-}
-class DataSets extends Component {
 
-    constructor() {
-        super();
-        this.state = initialState;
-        this.handleSaveDataSet = this.handleSaveDataSet.bind(this);
-    }
+export default class DataSets extends Component {
 
-    handleSaveDataSet(reportId,dashboardId,datasetId,report_detail_id) {
-    	var optionSelect = $('input[name=option_'+reportId+'_'+dashboardId+'_'+datasetId+'_'+report_detail_id+']:checked').val();
-    	//var optionSelect = $('#pass_'+reportId+'_'+dashboardId+'_'+datasetId).val();
-    	let url = config.api + "testing/update/reports/"+report_detail_id+'/'+optionSelect;
-    	fetch(url).then(
-		  	function(response){
-		     return response.json();
-		    }
-		).then(jsonData => {
-			$('#message_'+reportId+'_'+dashboardId+'_'+datasetId+'_'+report_detail_id).show();
-		});
-    }
+  constructor() {
 
-    render() {
-    	console.log(this.props.dataset);
-    	if(this.props.dataset) {
-    		var Collapsable = this.props.dataset.map((response)=>
-    			<Collapse in={this.props.open} key={response.report_detail_id}>
-	                  	<div className="col-sm-12">
-		                 <div className="row" style={style.dashboardTab} >
-			                <h4 className="panel-title alert alert-info" style={style.dataSetTab}>
-			                      <bold>  {response.name} #{response.dataSetId} </bold>
-			                </h4>
-		            	</div>
-		            	
-	                   
-		            	<div className="col-sm-10 col-xs-12" style={style.dashboardTab}>
-							<div className="row">
-								<div className="col-sm-6" style={{textAlign:"center"}}>
-									<div><b>Original</b></div>
-									<img style={{width: "100%"}} role="presentation" src={'/uploads/'+this.props.report_id+'/'+response.dashboard_id+'/'+response.dataSetId+'/'+response.chartName+'.png'} />
-								</div>
-								<div className="col-sm-6" style={{textAlign:"center"}}>
-									<div><b>Captured</b></div>
-									<img style={{width: "100%"}} role="presentation" src={'/uploads/'+this.props.report_id+'/'+response.dashboard_id+'/'+response.dataSetId+'/'+response.chartName+'.png'} />
-								</div>
-							</div>
-	                    </div>
-	                    
-	                     <div className="col-sm-2 col-xs-12" style={{textAlign:"right"}}>
-								
-							<div>
-								<div className="alert alert-success" id={"message_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId+"_"+response.report_detail_id} style={{textAlign:"center",display:"none"}} >
-								  <strong>Saved!</strong>
-								</div>
-								<input type="radio" id={"pass_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId} name={"option_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId+"_"+response.report_detail_id} value="pass" />
-								<label style={{marginRight: '5px'}}>Pass</label>
-								<input type="radio" id={"fail_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId} name={"option_"+this.props.report_id+"_"+response.dashboard_id+"_"+response.dataSetId+"_"+response.report_detail_id} value="fail" />
-								<label style={{marginRight: '5px'}}>Fail</label>
-								<Button
-									bsStyle="primary"
-									bsSize="small"
-								 	onClick={this.handleSaveDataSet.bind(this, this.props.report_id,response.dashboard_id,response.dataSetId,response.report_detail_id)}
-								 >Save</Button>
-							</div>
+    super();
+	this.configApi = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/middleware/api/";
+
+  }
+  
+  getConfigApi(url) {
+    return this.configApi + url;
+  }
+  
+  handleSaveDataSet(report_id, dashboard_id) {
+
+	let selectedOption = $("input:checkbox[name=option]:checked").map(function() {return $(this).val()}).get();
+	
+	if(!selectedOption.length)
+		selectedOption = [];
+
+	let params = {
+		report_detail_ids:selectedOption,
+		report_id,
+		dashboard_id
+	}
+	fetch(this.getConfigApi("testing/update/reports"), {
+		method: 'post',
+		headers: new Headers({
+			'Content-Type': 'application/json'
+		}),
+		body: JSON.stringify(params)
+	}).then(function(response) {
+		return response.json();
+	}).then(function(data) {
+		window.location.href="/testing";
+	});
+  }
+
+  renderDataSet() {
+
+	let collaspableData = [];
+	for(let response in this.props.dataset) {
+		if (this.props.dataset.hasOwnProperty(response)) {
+			let chartsDetails = this.props.dataset[response].charts.map((response, index)=>
+			<div key={response.reportDetailId}  style={{marginTop: "20px"}}>
+				<div className={index === 0 ? "" : "hide"} style={style.dataSetDescription}>
+					<span style={style.dataSetDescriptionSpan}>
+						<i className="fa fa-info-circle" aria-hidden="true"></i> {response.description}
+					</span>
+				</div>
+				<div className="" style={style.dashboardTab} style={{ display: "flex"}}>
+						<div className="text-center" style={{ flex: 1}}>
+							<div><b>Original</b></div>
+							<img style={style.chartImgWidth} role="presentation" src={'/original/'+response.chartName+'.png'} />
+						</div>
+						<div className="text-center" style={{ flex: 1}}>
+							<div><b>Captured</b></div>
+							<img style={style.chartImgWidth} role="presentation" src={'/uploads/'+response.report_id+'/'+response.dashboardsId+'/'+response.dataSetId+'/'+response.chartName+'.png'} />
 						</div>
 
-	                    
-	                </div>
-	            </Collapse>
-    		);
-    	}
-        return (
-            <div>
-    			{Collapsable}
+						<div  className={this.props.editAction ? "" : "hide"} style={style.isfailedBtn}>
+							<div>
+								<label style={style.isfailedLbl}>Failed</label>
+								{response.status==="fail" ? (
+							        <input type="checkbox" name="option" value={response.reportDetailId}  defaultChecked/>
+							      ) : (
+							        <input type="checkbox" name="option" value={response.reportDetailId}  />
+							    )}
+								
+							</div>
+						</div>
+                </div>
+			</div>
+		);
 
-            </div>
-        )
+		collaspableData.push(<div key={this.props.dataset[response].data_set_id} style={style.chartsContainer}>
+         	<div className="row" style={style.dashboardTab} >
+                <h4 className="panel-title" style={style.dataSetTab}>
+                    <bold>{this.props.dataset[response].data_set_name}</bold>
+                </h4>
+    		</div>
+    		{chartsDetails}
+        </div>)
+	  }
     }
-}
 
-export default DataSets;
+    return collaspableData;
+  }
+
+  render() {
+    return (
+        <div>
+			{this.renderDataSet()}
+			<div className="text-center" style={{flex:"auto", marginTop: "5px"}}>
+    			<button type="button" className="btn btn-primary btn-md active" onClick={this.handleSaveDataSet.bind(this,this.props.report_id,this.props.dashboard_id)}>Update</button>
+            </div>          
+        </div>
+    )
+  }
+}
