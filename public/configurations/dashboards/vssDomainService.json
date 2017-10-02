@@ -6,7 +6,8 @@
     "titleIcon": "domain",
     "visualizations": [
         { "id": "vss-domain-service-top-x", "x": 0, "y": 0, "w": 6, "h": 15, "minW": 2, "minH": 12},
-        { "id": "vss-domain-service-table", "x": 6, "y": 0, "w": 6, "h": 15, "minW": 2, "minH": 12}
+        { "id": "vss-domain-service-table", "x": 6, "y": 0, "w": 6, "h": 15, "minW": 2, "minH": 12},
+        { "id": "vss-domain-service-all-services", "x": 0, "y": 6, "w": 6, "h": 15, "minW": 2, "minH": 12}
     ],
     "links": [
         {
@@ -28,6 +29,10 @@
         {
             "label": "Service Analytics",
             "url": "/dashboards/vssDomainService"
+        },
+        {
+            "label": "Application Analytics",
+            "url": "/dashboards/vssDomainApplication"
         }
     ]
 }

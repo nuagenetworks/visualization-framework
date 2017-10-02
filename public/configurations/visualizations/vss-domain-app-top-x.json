@@ -1,17 +1,17 @@
 {
-    "id": "vss-domain-service-top-x",
+    "id": "vss-domain-app-top-x",
     "graph": "BarGraph",
-    "title": "Top 5 Services",
-    "description": "Top 5 l4 services per domain based on number of bytes rx/tx",
+    "title": "Top 5 Applications",
+    "description": "Top 5 Applications per domain based on number of bytes rx/tx",
     "author": "Ronak Shah",
-    "creationDate": "9/27/2017",
+    "creationDate": "10/02/2017",
     "data": {
         "xColumn": "SumOf",
-        "yColumn": "services",
-        "colorColumn": "services",
+        "yColumn": "apps",
+        "colorColumn": "apps",
         "orientation": "horizontal",
         "tooltip": [
-            { "column": "services", "label": "Service" },
+            { "column": "apps", "label": "L7 Application" },
             { "column": "SumOf", "label": "# Bytes", "format": ",.1f"}
         ],
         "colors": [
@@ -25,7 +25,7 @@
         "xTickFormat": ".2s",
         "xTicks": 8,
         "xLabel": "Total # of bytes",
-        "yLabel": "Services"
+        "yLabel": "Applications"
     },
-    "query": "vss-domain-service-top-x"
+    "query": "vss-domain-app-top-x"
 }

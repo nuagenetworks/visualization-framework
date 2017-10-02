@@ -30,6 +30,10 @@
         {
             "label": "Service Analytics",
             "url": "/dashboards/vssDomainService"
+        },
+        {
+            "label": "Application Analytics",
+            "url": "/dashboards/vssDomainApplication"
         }
     ],
     "filterOptions": {

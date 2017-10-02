@@ -1,0 +1,17 @@
+{
+    "id": "vss-domain-app-table",
+    "graph": "Table",
+    "title": "Application Detail",
+    "description": "Detail in a reverse chronological order about applications found in this domain.",
+    "author": "Ronak Shah",
+    "creationDate": "10/02/2017",
+    "data": {
+        "columns": [
+            { "column": "nuage_metadata.l7ApplicationName", "label": "L7 Application" },
+            { "column": "type", "label": "Action"},
+            { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+            { "column": "nuage_metadata.aclId", "label": "ACL", "totalCharacters": 8, "tooltip" : {"column": "nuage_metadata.aclId"} }
+        ]
+    },
+    "query": "vss-domain-app-table"
+}
