@@ -194,16 +194,17 @@ export default class Table extends AbstractGraph {
             searchBar
         } = this.getConfiguredProperties();
 
-        if(searchBar) {
-          return (
-            <SearchBar
-              data={this.props.data}
-              options={this.getHeaderData()}
-              handleSearch={this.handleSearch}
-              columns={this.getColumns()}
-            />
-          );
-       }
+        if(searchBar === false)
+           return;
+
+        return (
+          <SearchBar
+            data={this.props.data}
+            options={this.getHeaderData()}
+            handleSearch={this.handleSearch}
+            columns={this.getColumns()}
+          />
+        );
     }
 
     render() {
