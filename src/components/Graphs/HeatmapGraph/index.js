@@ -46,7 +46,6 @@ export default class HeatmapGraph extends XYGraph {
             xLabel,
             xTickFormat,
             xTickGrid,
-            xTicks,
             xTickSizeInner,
             xTickSizeOuter,
             yColumn,
@@ -91,7 +90,7 @@ export default class HeatmapGraph extends XYGraph {
         let yLabelWidth       = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
 
         let leftMargin        = margin.left + yLabelWidth + yAxisPadding * chartWidthToPixel;
-        
+
         let availableWidth    = width - (margin.left + margin.right + yLabelWidth - yAxisPadding * chartWidthToPixel);
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
 
@@ -142,7 +141,7 @@ export default class HeatmapGraph extends XYGraph {
 
         xScale.range([0, availableWidth]);
         yScale.rangeRound([availableHeight, 0]);
-        
+
         const xAxis = axisBottom(xScale)
             .tickSizeInner(xTickGrid ? -availableHeight : xTickSizeInner)
             .tickSizeOuter(xTickSizeOuter);
@@ -246,7 +245,7 @@ export default class HeatmapGraph extends XYGraph {
                                         height={ height }
                                         fill={ getColor(d) }
                                         key={ i }
-                                        opacity= {this.getOpacity(d)}
+                                        opacity={ this.getOpacity(d) }
                                         stroke={ stroke.color }
                                         strokeWidth={ stroke.width }
                                         { ...this.tooltipProps(d) }
