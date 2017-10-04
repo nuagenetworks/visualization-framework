@@ -18,6 +18,7 @@ import {
 } from "../../services/configurations/redux/actions";
 
 import {
+    Actions as InterfaceActions,
     ActionKeyStore as InterfaceActionKeyStore
 } from "../App/redux/actions";
 
@@ -95,6 +96,11 @@ export class DashboardView extends React.Component {
 
         if (!params.id)
             return;
+
+        /*console.log(this.props.id);
+        this.props.updateContext({
+          "dashboard": this.props.id
+        })*/
 
         fetchConfigurationIfNeeded(params.id);
     }
@@ -255,6 +261,10 @@ const actionCreators = (dispatch) => ({
 
     setPageTitleIcon: (aTitleIcon) => {
         dispatch(AppActions.updateTitleIcon(aTitleIcon));
+    },
+
+    updateContext: function(context) {
+        dispatch(InterfaceActions.updateContext(context));
     },
 
     fetchConfigurationIfNeeded: (id) => {

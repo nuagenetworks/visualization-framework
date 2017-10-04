@@ -35,6 +35,15 @@ export const updateVisualizationTypeMiddleware = store => next => action => {
             };
             store.dispatch(action);
         }
+
+        // Generate a specific action to update the context
+        const action = {
+            type: "ACTION_UPDATE_CONTEXT",
+            context: {
+              "dashboard": id
+            }
+        };
+        store.dispatch(action);
     }
 
     return result;
@@ -45,7 +54,7 @@ export const updateConfigurationMiddleware = store => next => action => {
           state  = store.getState();
 
     if (action.type === "@@reduxReactRouter/routerDidChange" && state.router
-        && (state.router.location.pathname.indexOf('dashboards') !== -1 
+        && (state.router.location.pathname.indexOf('dashboards') !== -1
         || state.router.location.pathname.indexOf('visualizations') !== -1))
     {
         const id           = state.router.params.id,
@@ -62,7 +71,7 @@ export const updateConfigurationMiddleware = store => next => action => {
             store.dispatch({
                     type: "RESET_CONFIGURATION",
             });
-        }      
+        }
     }
 
     return result;

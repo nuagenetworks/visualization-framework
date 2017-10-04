@@ -6,8 +6,7 @@ import { taffy } from 'taffydb';
 
 
 const fetch = (parameters, context) => {
-
-    let file = context[DirectoryTypes.DATASET] ? context[DirectoryTypes.DATASET] : "database";
+    let file = context[DirectoryTypes.DATASET] && context['dashboard'] ? `${context['dashboard']}/${context[DirectoryTypes.DATASET]}` : "database";
     let databaseConfig = FetchManager.fetchAndParseJSON(file, DirectoryTypes.DATASET);
     if(!databaseConfig)
         return Promise.reject();

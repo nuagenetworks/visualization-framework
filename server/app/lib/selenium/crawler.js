@@ -24,7 +24,8 @@ const MESSAGES = {
     SUCCESS: 'success',
     URL_NOT_FOUND: 'Provided url does not exists',
     NO_WIDGET: 'Seems like an invalid Dashboard, no widgets found',
-    WIDGETS_NOT_LOADING: 'Some of the widgets are not loading properly.'
+    WIDGETS_NOT_LOADING: 'Some of the widgets are still waiting for data.',
+    WIDGET_DATA_ISSUE: 'Some of the widgets have corrupted data'
 }
 
 export const crawl = function (reportId, dashboard, callback) {
@@ -135,9 +136,14 @@ const fetchWidgets = function() {
       let sizes = [];
       let statuses = [];
 
+      let allChartsLoaded = true;
+
       driver.findElements(By.xpath("//div[contains(@class,'react-grid-layout')]/div/div")).then(function(elems) {
           elems.forEach(function (elem) {
               elem.getAttribute('id').then(function(name){
+                  if(name == "") {
+                    allChartsLoaded = false;
+                  }
                   names.push(name);
               });
 
@@ -166,10 +172,14 @@ const fetchWidgets = function() {
                     if (err) {
                         console.log(err);
                     } else {
+                        if(!allChartsLoaded) {
+                            errors.push(MESSAGES.WIDGET_DATA_ISSUE)
+                        }
+
                         for(var i = 0; i < sizes.length; i++) {
                             widgets.push({
-                              chart_name : names[i],
-                              status: statuses[i] == "fail" ? "fail" : null
+                              chart_name : names[i] ? names[i] : i,
+                              status: statuses[i] == "fail" || names[i] == "" ? "fail" : null
                             });
 
                             cropImage(sizes[i], locations[i], `${filePath}/dashboard.png`, `${filePath}/${names[i] ? names[i] : i}.png`, i === sizes.length - 1);

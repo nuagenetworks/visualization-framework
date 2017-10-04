@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import $ from 'jquery';
 import style from "./style";
 
+import SubPanel from "../Common/SubPanel"
+import Error from "../Common/Error"
+import Infobox from "../Common/Infobox"
+
 export default class DataSets extends Component {
 
   constructor() {
@@ -62,13 +66,13 @@ export default class DataSets extends Component {
 			  let chartsDetails = datasets[datasetID].charts.map((response, index) =>
 			    <div key={response.chart_id}  style={{marginTop: "20px"}}>
 				    <div className="" style={style.dashboardTab} style={{ display: "flex"}}>
-              {datasets[datasetID].dataset_id ?
-  					    (<div className="text-center" style={{ flex: 4}}>
+              {datasets[datasetID].dataset_id ? 
+  					    (<div className="text-center" style={{ flex: 5}}>
 
   							  <img style={style.chartImgWidth} role="presentation" src={`${this.getBaseURL()}dashboards/original/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/${response.chart_name}.png`} />
   						  </div>) : null
               }
-						  <div className="text-center" style={{ flex: 4}}>
+						  <div className="text-center" style={{ flex: 5}}>
 							  <img style={style.chartImgWidth} role="presentation" src={`${this.getBaseURL()}dashboards/${response.report_id}/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/${response.chart_name}.png`} />
 						  </div>
 
@@ -95,32 +99,13 @@ export default class DataSets extends Component {
 			  </div>
 		    );
 
-        let errors = null;
-        if(datasets[datasetID].errors) {
-          errors = (JSON.parse(datasets[datasetID].errors)).map((error) =>
-            <p>{error}</p>
-          );
-        }
-
 		    collaspableData.push(
-          <div key={datasetID} style={style.chartsContainer}>
-     	      <div className="row" style={style.dashboardTab} >
-              <h4 className="panel-title" style={style.dataSetTab}>
-                <bold>{datasets[datasetID].dataset_name ? datasets[datasetID].dataset_name : 'Standard'}</bold>
-              </h4>
-  		      </div>
-            <div>
-              <div className={datasets[datasetID].dataset_description ? "" : "hide"} style={style.dataSetDescription}>
-  					    <span style={style.dataSetDescriptionSpan}>
-  						    <i className="fa fa-info-circle" aria-hidden="true"></i> {datasets[datasetID].dataset_description}
-  					    </span>
-  				    </div>
-              <div style={style.error}>
-                  {errors}
-              </div>
+          <SubPanel key={datasets[datasetID].dataset_name} title={datasets[datasetID].dataset_name ? datasets[datasetID].dataset_name : 'Standard'}>
+              <Infobox data={datasets[datasetID].dataset_description} />
+              <Error data={datasets[datasetID].errors}></Error>
+
               {chartsDetails}
-            </div>
-          </div>
+          </SubPanel>
         );
 	    }
     }

@@ -6,6 +6,8 @@ import DataTables from 'material-ui-datatables';
 import FontAwesome from "react-fontawesome";
 import moment from "moment";
 
+import Panel from "../Common/Panel";
+
 class Testing extends Component {
 
   constructor() {
@@ -23,24 +25,24 @@ class Testing extends Component {
 	    sortable : true,
 	    render: (started_at, all) => <p>{started_at ? moment(started_at).format('YYYY-MM-DD HH:mm:ss') : 'N/A'}</p>
 
-	  }, 
+	  },
 	  {
 	    key: 'completed_at',
 	    label: 'Completed Time',
 	    sortable : true,
 	    render: (completed_at, all) => <p>{completed_at ? moment(completed_at).format('YYYY-MM-DD HH:mm:ss') : 'N/A'}</p>
 
-	  }, 
+	  },
 	  {
 	    key: 'total',
 	    label: 'Total',
 	    sortable : true
-	  }, 
+	  },
 	  {
 	    key: 'pass',
 	    label: 'Pass',
 	    sortable : true
-	  }, 
+	  },
 	  {
 	    key: 'fail',
 	    label: 'Fail',
@@ -55,7 +57,7 @@ class Testing extends Component {
 	  {
 	    key: 'id',
 	    label: 'Action',
-	    render: (id, all) => 
+	    render: (id, all) =>
 	    	<span>
 	    		<span className="btn btn-default btn-xs" onTouchTap={() => {this.props.goTo(`${process.env.PUBLIC_URL}/testing/reports/detail/${id}`)}}>
 	    			<FontAwesome name='eye'></FontAwesome>
@@ -86,7 +88,7 @@ class Testing extends Component {
     this.handleFilterValueChange = this.handleFilterValueChange.bind(this);
     this.deleteReport = this.deleteReport.bind(this);
   }
-  
+
   getConfigApi(url) {
 	   return this.configApi + url;
   }
@@ -119,9 +121,9 @@ class Testing extends Component {
 	    this.resetFilters();
   	    this.updateData();
   	});
-  	
+
   }
-  
+
   resetFilters() {
     this.currentPage = 1;
     this.filterData = this.data;
@@ -165,7 +167,7 @@ class Testing extends Component {
             return match;
         });
     }
-    
+
     this.updateData();
   }
 
@@ -197,38 +199,33 @@ class Testing extends Component {
 
     if(!tableData) {
 	  return "<p>No Data</p>";
-    } 
+    }
 
     return (
-        <div className="container" style={style.overlayContainer}>
-          <div style={style.header}>
-			<h3>Testing Reports</h3>
-		  </div>
-		  <div>
-				<DataTables
-				headerToolbarMode={"filter"}
-				showRowHover={false}
-				showHeaderToolbar={true}
-				showHeaderToolbarFilterIcon={false}
-				multiSelectable={true}
-				columns={this.table_columns}
-				data={tableData}
-				showRowSizeControls={false}
-                onNextPageClick={this.handleNextPageClick}
-                onPreviousPageClick={this.handlePreviousPageClick}
-                onFilterValueChange={this.handleFilterValueChange}
-                onSortOrderChange={this.handleSortOrderChange}                				
-				page={this.currentPage}
-				count={this.filterData.length}
-				rowSize={this.limit}
-				tableStyle={{
-				width: "inherit",
-				minWidth: "100%"
-				}}
-				tableBodyStyle={{overflowX: "scroll"}}
-				/>
-		  </div>
-        </div>
+        <Panel title={'Reports'}>
+  				<DataTables
+  				headerToolbarMode={"filter"}
+  				showRowHover={false}
+  				showHeaderToolbar={true}
+  				showHeaderToolbarFilterIcon={false}
+  				multiSelectable={true}
+  				columns={this.table_columns}
+  				data={tableData}
+  				showRowSizeControls={false}
+                  onNextPageClick={this.handleNextPageClick}
+                  onPreviousPageClick={this.handlePreviousPageClick}
+                  onFilterValueChange={this.handleFilterValueChange}
+                  onSortOrderChange={this.handleSortOrderChange}
+  				page={this.currentPage}
+  				count={this.filterData.length}
+  				rowSize={this.limit}
+  				tableStyle={{
+  				width: "inherit",
+  				minWidth: "100%"
+  				}}
+  				tableBodyStyle={{overflowX: "scroll"}}
+  				/>
+        </Panel>
     )
   }
 }
