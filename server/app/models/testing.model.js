@@ -126,11 +126,11 @@ class TestingModel extends BaseModel {
 
     deleteReports(req, res) {
         const report_id = req.params.report_id;
-        DB.delete('reports', {
+        DB.delete('t_reports', {
             id: report_id
         }, (err, data) => {
             if (err) return console.error(err);
-            DB.delete('report_detail', {
+            DB.delete('t_report_dashboards', {
                 report_id: report_id
             }, (err, data) => {
                 if (err) return console.error(err);

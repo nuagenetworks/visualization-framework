@@ -1,24 +1,108 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { push } from "redux-router";
 import style from "./style";
+import DataTables from 'material-ui-datatables';
+import FontAwesome from "react-fontawesome";
+import moment from "moment";
 
-
-export default class Testing extends Component {
+class Testing extends Component {
 
   constructor() {
     super();
+	this.table_columns = [
+	  {
+	    key: 'created_at',
+	    label: 'Initiated Time',
+	    sortable : true,
+	    render: (created_at, all) => <p>{created_at ? moment(created_at).format('YYYY-MM-DD HH:mm:ss') : 'N/A'}</p>
+	  },
+	  {
+	    key: 'started_at',
+	    label: 'Started Time',
+	    sortable : true,
+	    render: (started_at, all) => <p>{started_at ? moment(started_at).format('YYYY-MM-DD HH:mm:ss') : 'N/A'}</p>
+
+	  }, 
+	  {
+	    key: 'completed_at',
+	    label: 'Completed Time',
+	    sortable : true,
+	    render: (completed_at, all) => <p>{completed_at ? moment(completed_at).format('YYYY-MM-DD HH:mm:ss') : 'N/A'}</p>
+
+	  }, 
+	  {
+	    key: 'total',
+	    label: 'Total',
+	    sortable : true
+	  }, 
+	  {
+	    key: 'pass',
+	    label: 'Pass',
+	    sortable : true
+	  }, 
+	  {
+	    key: 'fail',
+	    label: 'Fail',
+	    sortable : true
+	  },
+	  {
+	    key: 'status',
+	    label: 'Status',
+	    sortable : true,
+	    render: (status, all) => <p>{status.toUpperCase()}</p>
+	  },
+	  {
+	    key: 'id',
+	    label: 'Action',
+	    render: (id, all) => 
+	    	<span>
+	    		<span className="btn btn-default btn-xs" onTouchTap={() => {this.props.goTo(`${process.env.PUBLIC_URL}/testing/reports/detail/${id}`)}}>
+	    			<FontAwesome name='eye'></FontAwesome>
+    			</span>
+    			<span className="btn btn-primary btn-xs" onTouchTap={() => {this.props.goTo(`${process.env.PUBLIC_URL}/testing/reports/edit/${id}`)}}>
+	    			<FontAwesome name='pencil'></FontAwesome>
+    			</span>
+    			<span className="btn btn-danger btn-xs" onTouchTap={() => {this.deleteReport(id)}}>
+	    			<FontAwesome name='trash'></FontAwesome>
+    			</span>
+	  		</span>
+	  }
+	];
+
+    this.currentPage = 1;
+    this.limit = 10;
+    this.filterData = false;
 
     this.state = {
-    	reportsList: []
+    	data: []
     }
+
     this.configApi   = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/middleware/api/";
+
+    this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this);
+    this.handleNextPageClick     = this.handleNextPageClick.bind(this);
+    this.handleSortOrderChange   = this.handleSortOrderChange.bind(this);
+    this.handleFilterValueChange = this.handleFilterValueChange.bind(this);
+    this.deleteReport = this.deleteReport.bind(this);
+  }
+  
+  getConfigApi(url) {
+	   return this.configApi + url;
   }
 
   componentWillMount() {
-    this.getAllReports();
+    this.initiate();
   }
 
-  getConfigApi(url) {
-	   return this.configApi + url;
+  componentWillReceiveProps(nextProps) {
+    if(this.props !== nextProps) {
+        this.initiate();
+    }
+  }
+
+  initiate() {
+    this.getAllReports();
   }
 
   getAllReports() {
@@ -28,72 +112,135 @@ export default class Testing extends Component {
 	      return response.json();
 	    }
   	).then(jsonData => {
-  	    this.setState({ reportsList: jsonData.results});
-
+  	    this.data = jsonData.results;
+  	     /*
+	     * On data change, resetting the paging and filtered data to 1 and false respectively.
+	     */
+	    this.resetFilters();
+  	    this.updateData();
   	});
+  	
+  }
+  
+  resetFilters() {
+    this.currentPage = 1;
+    this.filterData = this.data;
+    this.setState({ data: this.data });
   }
 
-  deleteReport(reportId) {
-
-	fetch(this.getConfigApi("testing/reports/delete/"+reportId)).then(
+  deleteReport(id) {
+	fetch(this.getConfigApi(`testing/reports/delete/${id}`)).then(
 	  	function(response){
 	     return response.json();
 	    }
 	).then(jsonData => {
-	    this.getAllReports();
+	    this.initiate();
 	});
   }
 
-  renderReportList() {
+  handlePreviousPageClick() {
+    --this.currentPage;
+    this.updateData();
+  }
 
-  	return (
-	  this.state.reportsList.map((reports) =>
-	  	<tr key={reports.id}>
-		  <th scope="row">{reports.id}</th>
-		  <td >{reports.created_at ? new Date(reports.created_at).toUTCString().replace(/\s*(GMT|UTC)$/, "") : 'N/A'}</td>
-	      <td >{reports.started_at ? new Date(reports.started_at).toUTCString().replace(/\s*(GMT|UTC)$/, "") : 'N/A'}</td>
-          <td >{reports.completed_at ? new Date(reports.completed_at).toUTCString().replace(/\s*(GMT|UTC)$/, "") : 'N/A'}</td>
-		  <td >{reports.total}</td>
-		  <td >{reports.pass}</td>
-		  <td >{reports.fail}</td>
-		  <td >{reports.status.toUpperCase()}</td>
-		  <td>
-        <a href={process.env.PUBLIC_URL +"/testing/reports/detail/"+reports.id} className="btn btn-primary btn-xs" style={{marginRight:'5px'}}><i className="fa fa-eye" aria-hidden="true"></i></a>
-        <a href={process.env.PUBLIC_URL +"/testing/reports/edit/"+reports.id} className="btn btn-default btn-xs" style={{marginRight:'5px'}}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-  			<a href="#" className="btn btn-danger btn-xs"><i className="fa fa-trash-o" aria-hidden="true" onClick={this.deleteReport.bind(this, reports.id)}></i></a>
-		  </td>
-		</tr>
-      )
-	)
+  handleNextPageClick() {
+    ++this.currentPage;
+    this.updateData();
+  }
+
+  handleFilterValueChange(search) {
+
+    this.resetFilters();
+
+    this.filterData = this.data;
+
+    if(search) {
+        this.filterData = this.data.filter((d, j) => {
+            let match = false;
+            this.table_columns.map((column, i) => {
+                if(d[column.key] && d[column.key].toString().toLowerCase().includes(search.toLowerCase()))
+                   match = true;
+            });
+
+            return match;
+        });
+    }
+    
+    this.updateData();
+  }
+
+  handleSortOrderChange(column, order) {
+
+    this.filterData = this.filterData.sort(
+      (a, b) => {
+        return order === 'desc' ? b[column] > a[column] : a[column] > b[column];
+      }
+    );
+
+    this.updateData();
+  }
+
+  updateData() {
+
+    let offset = this.limit * (this.currentPage - 1);
+
+    this.setState({
+        data : this.filterData.slice(offset, offset + this.limit)
+    });
 
   }
+
+
   render() {
+
+    const tableData = this.state.data;
+
+    if(!tableData) {
+	  return "<p>No Data</p>";
+    } 
+
     return (
         <div className="container" style={style.overlayContainer}>
           <div style={style.header}>
 			<h3>Testing Reports</h3>
 		  </div>
 		  <div>
-        <table className="table  table-bordered">
-				<thead>
-				  <tr>
-				    <th>#</th>
-				    <th>Initiated Time</th>
-				    <th>Started Time</th>
-				    <th>Completed Time</th>
-				    <th>Total Charts</th>
-				    <th>Pass</th>
-				    <th>Fail</th>
-				    <th>Status</th>
-				    <th>Action</th>
-				  </tr>
-				</thead>
-				<tbody>
-				  {this.renderReportList()}
-				</tbody>
-			  </table>
+				<DataTables
+				headerToolbarMode={"filter"}
+				showRowHover={false}
+				showHeaderToolbar={true}
+				showHeaderToolbarFilterIcon={false}
+				multiSelectable={true}
+				columns={this.table_columns}
+				data={tableData}
+				showRowSizeControls={false}
+                onNextPageClick={this.handleNextPageClick}
+                onPreviousPageClick={this.handlePreviousPageClick}
+                onFilterValueChange={this.handleFilterValueChange}
+                onSortOrderChange={this.handleSortOrderChange}                				
+				page={this.currentPage}
+				count={this.filterData.length}
+				rowSize={this.limit}
+				tableStyle={{
+				width: "inherit",
+				minWidth: "100%"
+				}}
+				tableBodyStyle={{overflowX: "scroll"}}
+				/>
 		  </div>
         </div>
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {};
+};
+
+const actionCreators = (dispatch) => ({
+  goTo: function(link, context) {
+   dispatch(push({pathname:link, query:context}));
+  }
+});
+
+export default connect(mapStateToProps, actionCreators)(Testing);
