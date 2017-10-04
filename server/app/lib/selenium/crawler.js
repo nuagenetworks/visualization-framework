@@ -149,7 +149,7 @@ const fetchWidgets = function() {
                   sizes.push(size);
               });
 
-              elem.findElements(By.xpath(".//span[contains(@class,'fa-spin') or contains(@class,'fa-bar-chart')]")).then(function(elements) {
+              elem.findElements(By.xpath(".//span[contains(@class,'fa-spin') or contains(@class,'fa-bar-chart') or contains(@class,'fa-meh-o')]")).then(function(elements) {
                   statuses.push(elements.length ? 'fail' : 'pass');
               });
           });

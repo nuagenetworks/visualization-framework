@@ -7,7 +7,7 @@ import "whatwg-fetch";
 import { checkStatus, parseJSON } from "../common";
 
 let config = {
-    timingCache: 5000,
+    timingCache: 30000,
     api: process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/middleware/api/",
 }
 

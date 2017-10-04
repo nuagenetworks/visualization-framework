@@ -6,6 +6,7 @@ export const ActionTypes = {
     ACTION_UPDATE_VISUALIZATION_TYPE: "ACTION_UPDATE_VISUALIZATION_TYPE",
     ACTION_NAV_BAR_HAS_LINKS: "ACTION_NAV_BAR_HAS_LINKS",
     ACTION_UPDATE_HEADER_COLOR: "ACTION_UPDATE_HEADER_COLOR",
+    ACTION_UPDATE_PAGE: "ACTION_UPDATE_PAGE",
 };
 
 export const ActionKeyStore = {
@@ -15,6 +16,7 @@ export const ActionKeyStore = {
     CONTEXT: "context",
     VISUALIZATION_TYPE: "visualizationType",
     HEADERCOLOR: "headerColor",
+    UPDATEPAGE: "updatePage"
 };
 
 
@@ -61,6 +63,13 @@ export const Actions = {
             type: ActionTypes.ACTION_UPDATE_HEADER_COLOR,
             id: id,
             color: color
+        }
+    },
+
+    updatePage: (id) => {
+        return {
+            type: ActionTypes.ACTION_UPDATE_PAGE,
+            id: id
         }
     },
 };

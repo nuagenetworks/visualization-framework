@@ -27,6 +27,7 @@
     "material-ui-datatables": "0.18.2",
     "moment": "^2.18.1",
     "react": "15.6.0",
+    "react-collapsible": "^2.0.3",
     "react-copy-to-clipboard": "^4.3.1",
     "react-csv": "^1.0.8",
     "react-dom": "15.6.0",
