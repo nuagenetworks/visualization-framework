@@ -43,20 +43,16 @@ export default class ReportDetails extends Component {
   }
 
   renderReportDetail() {
-    
     const reports = this.state.reportsDetails;
-    if(reports.data) {
 
-      const dashboard_details = Object.keys(reports.data).map( s => reports.data[s]);
-
-      return ( dashboard_details.map((res,index) =>
-
-                <div key={res.dashboard_id}>
-                    <Collapsible trigger={res.dashboard_name}>
-                            <DataSets dataset={res.datasets} editAction={this.state.editAction} report_id={res.report_id} dashboard_id={res.dashboard_id} />
-                    </Collapsible>
-                </div>
-            )
+    if(reports.dashboards) {
+      const dashboards = Object.keys(reports.dashboards).map(key => reports.dashboards[key]);
+      return dashboards.map((dashboard,index) =>
+          <div key={dashboard.dashboard_id}>
+              <Collapsible trigger={dashboard.dashboard_name}>
+                  <DataSets datasets={dashboard.datasets} editAction={this.state.editAction} report_id={this.props.params.id} dashboard_id={dashboard.dashboard_id} />
+              </Collapsible>
+          </div>
       );
     }
   }
@@ -69,6 +65,7 @@ export default class ReportDetails extends Component {
     }
 
     const reports = this.state.reportsDetails;
+    console.log(reports);
     return (
         <div className="container" style={style.overlayContainer}>
             <div className="text-center">
@@ -83,14 +80,18 @@ export default class ReportDetails extends Component {
                         <table className="table table-bordered">
                             <tbody>
                                 <tr>
-                                    <td ><i className="fa fa-clock-o" aria-hidden="true"></i> Start Time</td>
-                                    <td>{new Date(reports.start_time).toUTCString().replace(/\s*(GMT|UTC)$/, "")}</td>
+                                    <td ><i className="fa fa-clock-o" aria-hidden="true"></i> Created At</td>
+                                    <td>{reports.created_at}</td>
                                 </tr>
                                 <tr>
-                                    <td ><i className="fa fa-clock-o" aria-hidden="true"></i> End Time</td>
-                                    <td>{new Date(reports.end_time).toUTCString().replace(/\s*(GMT|UTC)$/, "")}</td>
+                                    <td ><i className="fa fa-clock-o" aria-hidden="true"></i> Started At</td>
+                                    <td>{reports.started_at}</td>
                                 </tr>
-                                
+                                <tr>
+                                    <td ><i className="fa fa-clock-o" aria-hidden="true"></i> Completed At</td>
+                                    <td>{reports.completed_at}</td>
+                                </tr>
+
                             </tbody>
                         </table>
                     </div>

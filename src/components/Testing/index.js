@@ -3,7 +3,7 @@ import style from "./style";
 
 
 export default class Testing extends Component {
-    
+
   constructor() {
     super();
 
@@ -18,7 +18,7 @@ export default class Testing extends Component {
   }
 
   getConfigApi(url) {
-	return this.configApi + url;
+	   return this.configApi + url;
   }
 
   getAllReports() {
@@ -27,11 +27,11 @@ export default class Testing extends Component {
 	  	function(response){
 	      return response.json();
 	    }
-	).then(jsonData => {
-	    this.setState({ reportsList: jsonData.results});
+  	).then(jsonData => {
+  	    this.setState({ reportsList: jsonData.results});
 
-	});	
-  } 
+  	});
+  }
 
   deleteReport(reportId) {
 
@@ -45,22 +45,22 @@ export default class Testing extends Component {
   }
 
   renderReportList() {
-  	 
+
   	return (
 	  this.state.reportsList.map((reports) =>
 	  	<tr key={reports.id}>
 		  <th scope="row">{reports.id}</th>
 		  <td >{reports.created_at ? new Date(reports.created_at).toUTCString().replace(/\s*(GMT|UTC)$/, "") : 'N/A'}</td>
-	      <td >{reports.start_time ? new Date(reports.start_time).toUTCString().replace(/\s*(GMT|UTC)$/, "") : 'N/A'}</td>
-          <td >{reports.end_time ? new Date(reports.end_time).toUTCString().replace(/\s*(GMT|UTC)$/, "") : 'N/A'}</td>
+	      <td >{reports.started_at ? new Date(reports.started_at).toUTCString().replace(/\s*(GMT|UTC)$/, "") : 'N/A'}</td>
+          <td >{reports.completed_at ? new Date(reports.completed_at).toUTCString().replace(/\s*(GMT|UTC)$/, "") : 'N/A'}</td>
 		  <td >{reports.total}</td>
 		  <td >{reports.pass}</td>
 		  <td >{reports.fail}</td>
 		  <td >{reports.status.toUpperCase()}</td>
 		  <td>
-		    <a href={process.env.PUBLIC_URL +"/testing/reports/edit/"+reports.id} className="btn btn-default btn-xs" style={{marginRight:'5px'}}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-			<a href={process.env.PUBLIC_URL +"/testing/reports/detail/"+reports.id} className="btn btn-primary btn-xs" style={{marginRight:'5px'}}><i className="fa fa-eye" aria-hidden="true"></i></a>
-			<a href="#" className="btn btn-danger btn-xs"><i className="fa fa-trash-o" aria-hidden="true" onClick={this.deleteReport.bind(this, reports.id)}></i></a>
+        <a href={process.env.PUBLIC_URL +"/testing/reports/detail/"+reports.id} className="btn btn-primary btn-xs" style={{marginRight:'5px'}}><i className="fa fa-eye" aria-hidden="true"></i></a>
+        <a href={process.env.PUBLIC_URL +"/testing/reports/edit/"+reports.id} className="btn btn-default btn-xs" style={{marginRight:'5px'}}><i className="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+  			<a href="#" className="btn btn-danger btn-xs"><i className="fa fa-trash-o" aria-hidden="true" onClick={this.deleteReport.bind(this, reports.id)}></i></a>
 		  </td>
 		</tr>
       )
@@ -68,19 +68,19 @@ export default class Testing extends Component {
 
   }
   render() {
-    return (    
+    return (
         <div className="container" style={style.overlayContainer}>
           <div style={style.header}>
 			<h3>Testing Reports</h3>
 		  </div>
 		  <div>
-              <table className="table  table-bordered">
+        <table className="table  table-bordered">
 				<thead>
 				  <tr>
 				    <th>#</th>
-				    <th>Date</th>
-				    <th>Start Time</th>
-				    <th>End Time</th>				      
+				    <th>Initiated Time</th>
+				    <th>Started Time</th>
+				    <th>Completed Time</th>
 				    <th>Total Charts</th>
 				    <th>Pass</th>
 				    <th>Fail</th>

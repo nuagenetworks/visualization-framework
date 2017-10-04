@@ -7,10 +7,10 @@ import Dashboard from "./components/Dashboard";
 import Visualization from "./components/Visualization";
 import Testing from "./components/Testing";
 import ReportDetails from "./components/Testing/ReportDetails.js";
-class App extends Component {
 
+class App extends Component {
     render() {
-        return (
+      return (
         <div>
             <AppContainer>
                 <ReduxRouter>
@@ -23,7 +23,7 @@ class App extends Component {
                 </ReduxRouter>
             </AppContainer>
         </div>
-        );
+      );
     }
 }
 

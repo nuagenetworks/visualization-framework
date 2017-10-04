@@ -63,7 +63,7 @@ const getRequestID = function (queryConfiguration, context) {
 }
 
 const fetchData = function(visualizationId, context) {
-    let url = config.api + "visualizations/fetch/" + visualizationId;
+    let url = `${config.api}visualizations/fetch/${visualizationId}`;
 
     return fetch(url, {
         method: 'POST',

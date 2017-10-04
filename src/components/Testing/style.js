@@ -7,7 +7,7 @@ const style = {
     zIndex: "1",
     marginTop: "20px",
     padding:"14px"
-  }, 
+  },
 
   dataSetTab : {
     textAlign: "center",
@@ -54,7 +54,21 @@ const style = {
   },
 
   dashboardTab: {
-	display: "flex-12"
+	   display: "flex-12"
+  },
+
+  error: {
+    color: "#ad3e3e",
+    paddingTop: "10px",
+    fontWeight: "bold",
+    fontSize: "12px"
+  },
+
+  success: {
+    color: "#54944a",
+    paddingTop: "10px",
+    fontWeight: "bold",
+    fontSize: "12px"
   }
 }
 

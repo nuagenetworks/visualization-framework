@@ -3,7 +3,7 @@ import { Router } from 'express';
 import IndexController from './controllers/index.controller';
 import DashboardsController from './controllers/dashboards.controller';
 import VisualizationsController from './controllers/visualizations.controller';
-import TestController from './controllers/test.controller';
+import TestingController from './controllers/testing.controller';
 import errorHandler from './middleware/error-handler';
 
 const routes = new Router();
@@ -16,10 +16,11 @@ routes.get('/visualizations/:visualization', VisualizationsController.index);
 routes.post('/visualizations/fetch/:visualization', VisualizationsController.fetch);
 
 // testing routes
-routes.get('/testing/reports', TestController.reports);
-routes.get('/testing/reports/:report_id', TestController.reportsDetail);
-routes.post('/testing/update/reports', TestController.updateDataSet);
-routes.get('/testing/reports/delete/:report_id', TestController.deleteReports);
+routes.get('/testing/reports', TestingController.reports);
+routes.get('/testing/reports/:report_id', TestingController.detail);
+routes.post('/testing/update/reports', TestingController.updateDataSet);
+routes.get('/testing/reports/delete/:report_id', TestingController.deleteReports);
+routes.post('/testing/initiate', TestingController.initiate);
 
 routes.use(errorHandler);
 
