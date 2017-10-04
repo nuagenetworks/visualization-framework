@@ -49,13 +49,13 @@ export default class BarGraph extends XYGraph {
     render() {
 
         const {
-            data,
+            data: originalData,
             width,
             height,
             onMarkClick
         } = this.props;
 
-        if (!data || !data.length)
+        if (!originalData || !originalData.length)
             return;
 
         const {
@@ -84,9 +84,19 @@ export default class BarGraph extends XYGraph {
           yTicks,
           yTickSizeInner,
           yTickSizeOuter,
+          otherOptions
         } = this.getConfiguredProperties();
 
-        const vertical         = orientation        === "vertical";
+        const vertical = orientation  === "vertical";
+
+        const settings = {
+                "metric": vertical? yColumn : xColumn,
+                "dimension": vertical? xColumn : yColumn,
+                "otherOptions": otherOptions
+            }
+        const data = this.getGroupedData(originalData, settings);
+
+        
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
         const yLabelFn         = (d) => d[yColumn];
@@ -248,7 +258,7 @@ export default class BarGraph extends XYGraph {
                             const { onClick, style } = (
 
                                 // If an "onMarkClick" handler is registered,
-                                onMarkClick ? {
+                                onMarkClick && d[settings.dimension] !== otherOptions.label ? {
 
                                     // set it up to be invoked, passing the current data row object.
                                     onClick: () => onMarkClick(d),

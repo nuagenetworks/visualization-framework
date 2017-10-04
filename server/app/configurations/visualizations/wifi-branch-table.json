@@ -1,7 +1,7 @@
 {
     "id": "wifi-branch-table",
     "graph": "Table",
-    "title": "Wifi Branch Table",
+    "title": "WiFi Branch Table",
     "description": "SSIDs, Clients and Usage table",
     "author": "Ronak Shah",
     "creationDate": "04/07/2017",

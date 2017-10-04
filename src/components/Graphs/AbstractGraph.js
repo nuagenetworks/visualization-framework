@@ -1,11 +1,13 @@
 import React from "react";
 import { scaleOrdinal } from "d3";
 import ReactTooltip from "react-tooltip";
+import safeEval from "cross-safe-eval"
 
 import * as d3 from "d3";
 
 import { GraphManager } from "./index";
 import columnAccessor from "../../utils/columnAccessor";
+import crossfilter from "crossfilter2";
 
 
 export default class AbstractGraph extends React.Component {
@@ -179,7 +181,7 @@ export default class AbstractGraph extends React.Component {
 
 
         // Extract the longest legend according to the label function
-        const longestLabel = label(data.reduce((a, b) => {
+        const lab = label(data.reduce((a, b) => {
             let labelA = label(a);
             let labelB = label(b);
 
@@ -188,9 +190,10 @@ export default class AbstractGraph extends React.Component {
 
             if (!labelB)
                 return a;
-
             return format(labelA.toString()).length > format(labelB.toString()).length ? a : b;
-        })).toString();
+        }));
+
+        const longestLabel = lab ? lab.toString() : '';
 
         // and return its length + 1 to ensure we have enough space
         return format(longestLabel).length + 1;
@@ -285,6 +288,57 @@ export default class AbstractGraph extends React.Component {
                 })}
             </g>
         );
+    }
+
+    getGroupedData(data, settings) {
+
+        if(settings.otherOptions && settings.otherOptions.limit) {
+            
+            let cfData = crossfilter(data);
+            let metricDimension = cfData.dimension( d => d[settings.metric] );
+            let limit = settings.otherOptions.limit;
+
+            if(!settings.otherOptions.type || settings.otherOptions.type === "percentage") {
+                const sortedData = metricDimension.top(Infinity);
+                const total = sortedData.reduce((total, d) => +total + d[settings.metric], 0);
+
+                let sum = 0;
+                let index = sortedData.findIndex( d =>  {
+                    sum += +d[settings.metric];
+                    if(((sum / total) * 100) >= limit) {
+                        return true;
+                    }
+                });
+
+                limit = index !== -1 ? index + 1 : limit;
+            }
+
+            
+            let topData = metricDimension.top(limit);
+            const otherDatas = metricDimension.top(Infinity, limit);
+
+            if(otherDatas.length) {
+                const sum = otherDatas.reduce( (total, d) => +total + d[settings.metric], 0);     
+                topData.push({
+                    [settings.dimension]: settings.otherOptions.label ? settings.otherOptions.label : 'Others', 
+                    [settings.metric]: sum
+                });
+            }
+
+            cfData.remove();
+            return topData;
+        }
+        
+        return data;
+    }
+
+    getOpacity(d) {
+        const {
+            configuration,
+            context
+        } = this.props;
+        let vkey = `${configuration.id.replace(/-/g, '')}vkey`;
+        return (!context[vkey] || !configuration.key || context[vkey]  === safeEval("(" + configuration.key + ")")(d)) ? "1" : "0.5"
     }
 
 }

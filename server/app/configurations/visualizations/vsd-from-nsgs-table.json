@@ -6,9 +6,9 @@
     "creationDate": "23/01/2016",
     "data": {
         "columns": [
-            { "column": "ID"},
-            { "column": "name" },
-            { "column": "description"}
+            { "column": "name"},
+            { "column": "description" },
+            { "column": "ID"}
         ]
     },
     "listeners": [{
