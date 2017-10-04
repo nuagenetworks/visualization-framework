@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
+import safeEval from "cross-safe-eval"
 
 import $ from "jquery";
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -177,7 +178,7 @@ class VisualizationView extends React.Component {
 
                             if(configuration.key) {
                                 let vizID = `${id.replace(/-/g, '')}vkey`;
-                                let vKey = eval("(" + configuration.key + ")")(d);
+                                let vKey = safeEval("(" + configuration.key + ")")(d);
                                 if(this.props.orgContext[vizID] === vKey)
                                     resetFilters = true;
 
@@ -199,13 +200,15 @@ class VisualizationView extends React.Component {
                                     return queryParams;
                                 }, {});
 
-                            let mergedQueryParams = Object.assign({}, queryParams, graphQueryParams); 
+                            let mergedQueryParams = Object.assign({}, queryParams, graphQueryParams);
                             // Override the existing context with the new params.
                             queryParams = Object.assign({}, this.props.orgContext, mergedQueryParams);
 
                             if(resetFilters) {
                                 for (let key in mergedQueryParams) {
+                                  if (mergedQueryParams.hasOwnProperty(key)) {
                                     queryParams[key] = '';
+                                  }
                                 }
                             }
 

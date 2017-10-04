@@ -39,7 +39,7 @@ export class NextPrevFilter extends React.Component {
 
         let page = this.props.context[`${filteredID}${this.state.filterOptions.page}`];
         if(page) {
-            this.setState({page: parseInt(page)});
+            this.setState({page: parseInt(page, 10)});
         }
 
         this.updateContextValue(this.props);
