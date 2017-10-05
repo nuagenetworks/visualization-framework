@@ -222,7 +222,7 @@ class Testing extends Component {
         <Panel title={'Reports'}>
           <div className="text-right" style={style.reportDiv}>
             <button type="button" style={style.reportBtn} className="btn btn-sm btn-primary" onClick={this.generateNewReport.bind(this)}><FontAwesome name='plus'></FontAwesome> New Report</button>
-            <button type="button" className="btn btn-xs btn-primary" onClick={this.getAllReports.bind(this)} style={style.reloadBtn}><FontAwesome name='refresh'></FontAwesome></button>
+            <button type="button" className="btn btn-xs btn-primary" onClick={this.getAllReports.bind(this)} style={style.reloadBtn}><FontAwesome name='refresh'></FontAwesome> Reload</button>
           </div>
   				<DataTables
   				headerToolbarMode={"filter"}
