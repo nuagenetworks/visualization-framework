@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "redux-router";
-import style from "./style";
 import DataTables from 'material-ui-datatables';
 import FontAwesome from "react-fontawesome";
 import moment from "moment";
+import 'react-notifications/lib/notifications.css';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import style from "./style";
 
 import Panel from "../Common/Panel";
 
@@ -59,13 +61,13 @@ class Testing extends Component {
 	    label: 'Action',
 	    render: (id, all) =>
 	    	<span>
-	    		<span className="btn btn-default btn-xs" onTouchTap={() => {this.props.goTo(`${process.env.PUBLIC_URL}/testing/reports/detail/${id}`)}}>
+	    		<span className="btn btn-default btn-xs" style={style.actionBtn} onTouchTap={() => {this.props.goTo(`${process.env.PUBLIC_URL}/testing/reports/detail/${id}`)}}>
 	    			<FontAwesome name='eye'></FontAwesome>
     			</span>
-    			<span className="btn btn-primary btn-xs" onTouchTap={() => {this.props.goTo(`${process.env.PUBLIC_URL}/testing/reports/edit/${id}`)}}>
+    			<span className="btn btn-primary btn-xs" style={style.actionBtn} onTouchTap={() => {this.props.goTo(`${process.env.PUBLIC_URL}/testing/reports/edit/${id}`)}}>
 	    			<FontAwesome name='pencil'></FontAwesome>
     			</span>
-    			<span className="btn btn-danger btn-xs" onTouchTap={() => {this.deleteReport(id)}}>
+    			<span className="btn btn-danger btn-xs" style={style.actionBtn} onTouchTap={() => {this.deleteReport(id)}}>
 	    			<FontAwesome name='trash'></FontAwesome>
     			</span>
 	  		</span>
@@ -131,13 +133,14 @@ class Testing extends Component {
   }
 
   deleteReport(id) {
-	fetch(this.getConfigApi(`testing/reports/delete/${id}`)).then(
+	  fetch(this.getConfigApi(`testing/reports/delete/${id}`)).then(
 	  	function(response){
 	     return response.json();
 	    }
-	).then(jsonData => {
+	  ).then(jsonData => {
 	    this.initiate();
-	});
+      NotificationManager.success('Successfully Deleted', '');
+	  });
   }
 
   handlePreviousPageClick() {
@@ -191,7 +194,21 @@ class Testing extends Component {
     });
 
   }
+  
+  generateNewReport() {
 
+    fetch(this.getConfigApi("testing/initiate"), {
+      method: 'post',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    }).then(function(response) {
+      return response.json();
+    }).then(jsonData => {
+      NotificationManager.success(jsonData.results, '');
+      this.getAllReports();
+    });
+  }
 
   render() {
 
@@ -203,6 +220,9 @@ class Testing extends Component {
 
     return (
         <Panel title={'Reports'}>
+          <div className="text-right" style={style.reportBtn}>
+            <button type="button" className="btn btn-sm btn-primary" onClick={this.generateNewReport.bind(this)}>New Report</button>
+          </div>
   				<DataTables
   				headerToolbarMode={"filter"}
   				showRowHover={false}
@@ -225,6 +245,7 @@ class Testing extends Component {
   				}}
   				tableBodyStyle={{overflowX: "scroll"}}
   				/>
+          <NotificationContainer/>
         </Panel>
     )
   }

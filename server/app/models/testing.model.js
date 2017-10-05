@@ -19,6 +19,7 @@ class TestingModel extends BaseModel {
     getReports(callback) {
       DB.select('*')
         .order_by('id', 'desc')
+        .where('deleted_at',null)
         .get('t_reports', callback);
     }
 
@@ -47,95 +48,106 @@ class TestingModel extends BaseModel {
       DB.insert_batch('t_report_dashboard_widgets', data, callback);
     }
 
-    updateDataSet(req, res) {
-        let {
-            report_detail_ids,
-            report_id
-        } = req.body;
+    updateDataSet(chart_id, report_id, report_dashboard_id, callback) {
 
-        let status = "pass";
-        async.series([
-          function(callback) {
-             DB.where('rdw.dashboard_id', dashboard_id)
-          },
-          function(callback) {
+        let status;
 
-          }
-        ], function(err, res) {
-          this.successResponse('success', {});
+        const select = ['status'];
+        DB.select(select).from('t_report_dashboard_widgets rdw')
+            .where('rdw.id', chart_id)
+            .get((err, response) => {
+              for (let resp in response) {
+                  status = response[resp].status;
+              }
+              if(status === 'fail') {
+                 status = 'pass';
+              }
+              else if(status==='pass') {
+                status = 'fail';
+              } 
+              else if(!status) {
+                status = 'fail';
+              }
+              this.updateChartStatus(status, chart_id, report_id, report_dashboard_id, callback)
+
         });
-
-
-        /*let query = DB.where('rdw.dashboard_id', dashboard_id)
-
-        if (report_detail_ids.length) {
-            query = query.where_in('rdw.id', report_detail_ids);
-            status = "fail";
-        }
-
-        query.from('t_report_dashboard_widgets rdw')
-            .set('status', status)
-            .update(null, null, null, (err, data) => {
-
-                if (err) return console.error(err);
-
-                if (report_detail_ids.length) {
-                    DB.where_not_in('rd.id', report_detail_ids)
-                        .from('report_detail rd')
-                        .set('status', 'pass')
-                        .update(null, null, null, (err, data) => {
-                            if (err) return console.error(err);
-
-                        });
-                }
-                if (this.updateReportsPassFailCount(report_id)) {
-                    this.successResponse('success', res);
-                }
-
-            });*/
-
     }
 
-    updateReportsPassFailCount(report_id) {
+    updateChartStatus(status, chart_id, report_id, report_dashboard_id, callback) {
+      let query = DB.where('rdw.id', chart_id);
 
-        const select = ['COUNT(*) total, COUNT(status="pass" or null) pass_count', 'COUNT(status="fail" or null) fail_count'];
-        DB.select(select).from('report_detail rd')
+      query.from('t_report_dashboard_widgets rdw')
+          .set('status', status)
+          .update(null, null, null, (err, data) => {
+            
+              if (err) return console.error(err);
+
+              DB.where('status',null)
+                  .from('t_report_dashboard_widgets rdw')
+                  .set('status', 'pass')
+                  .update(null, null, null, (err, data) => {
+                    
+                      if (err) return console.error(err);
+
+                      if (this.updateReportsPassFailCount(report_id, report_dashboard_id)) {
+                          callback(null, 'success');
+                      }
+
+              });
+
+      });
+    }
+
+    updateReportsPassFailCount(report_id, report_dashboard_id) {
+      
+        const select = ['GROUP_CONCAT( id SEPARATOR  "," ) report_dashboard_id'];
+        DB.select(select).from('t_report_dashboards rd')
             .where('rd.report_id', report_id)
             .get((err, response) => {
-                let reportData;
-                for (let resp in response) {
-                    reportData = {
-                        total: response[resp].total,
-                        pass: parseInt(response[resp].pass_count),
-                        fail: response[resp].fail_count,
-                        status: 'completed'
-                    };
-                }
+              let report_dashboard_ids;
+              for (let resp in response) {
+                  report_dashboard_ids = response[resp].report_dashboard_id.split(',');
+              }
+              
+              const select = ['COUNT(*) total, COUNT(status="pass" or null) pass_count', 'COUNT(status="fail" or null) fail_count'];
+              DB.select(select).from('t_report_dashboard_widgets rdw')
+                  .where_in('rdw.report_dashboard_id', report_dashboard_ids)
+                  .get((err, response) => {
+                      let reportData;
+                      for (let resp in response) {
+                          reportData = {
+                              total: response[resp].total,
+                              pass: parseInt(response[resp].pass_count),
+                              fail: response[resp].fail_count,
+                              status: 'completed'
+                          };
+                      }
 
-                DB.where('rs.id', report_id)
-                    .from('reports rs')
-                    .set(reportData)
-                    .update(null, null, null, (err, data) => {
-                        if (err) return false;
+                      DB.where('rs.id', report_id)
+                          .from('t_reports rs')
+                          .set(reportData)
+                          .update(null, null, null, (err, data) => {
+                              if (err) return false;
 
-                        return true;
-                    });
-            });
+                              return true;
+                      });
+                  });
+      });
+
+
         return true;
     }
 
-    deleteReports(req, res) {
-        const report_id = req.params.report_id;
-        DB.delete('t_reports', {
-            id: report_id
-        }, (err, data) => {
-            if (err) return console.error(err);
-            DB.delete('t_report_dashboards', {
-                report_id: report_id
-            }, (err, data) => {
-                if (err) return console.error(err);
-                this.successResponse('success', res);
-            });
+    deleteReports(reportID, callback) {
+        var CurrentDate = moment().format('YYYY-MM-DD HH:mm:ss');
+
+        DB.where('rs.id', reportID)
+            .from('t_reports rs')
+            .set('deleted_at',CurrentDate)
+            .update(null, null, null, (err, data) => {
+                if (err) return callback(err);
+
+                return callback(null, 'success');
         });
     }
 
@@ -143,7 +155,7 @@ class TestingModel extends BaseModel {
     getDetailReport(reportID, callback) {
         const select = [
           'r.created_at', 'r.started_at', 'r.completed_at', 'r.id report_id', 'r.total', 'r.pass', 'r.fail', 'r.message', 'r.status',
-          'rdw.id chart_id', 'rdw.chart_name', 'rdw.status chart_status',
+          'rdw.id chart_id', 'rdw.chart_name', 'rdw.status chart_status','rdw.report_dashboard_id report_dashboard_id',
           'rd.errors as dataset_errors',
           'dd.id dataset_id, dd.datafile dataset_file', 'dd.name dataset_name', 'dd.description dataset_description',
           'd.id dashboard_id', 'd.name dashboard_name', 'd.url dashboard_url'];

@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import $ from 'jquery';
+import 'react-notifications/lib/notifications.css';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 import style from "./style";
 
 import SubPanel from "../Common/SubPanel"
 import Error from "../Common/Error"
 import Infobox from "../Common/Infobox"
-
+import Image from "./Image"
 export default class DataSets extends Component {
 
   constructor() {
@@ -21,17 +22,12 @@ export default class DataSets extends Component {
     return "http://localhost:8010/";
   }
 
-  handleSaveDataSet(report_id, dashboard_id) {
-
-	  let selectedOption = $("input:checkbox[name=option]:checked").map(function() {return $(this).val()}).get();
-
-	  if(!selectedOption.length)
-		  selectedOption = [];
+  handleSaveDataSet(chart_id, report_id, report_dashboard_id) {
 
 	  let params = {
-		  report_detail_ids:selectedOption,
-		  report_id,
-		  dashboard_id
+		  chart_id:chart_id,
+      report_id : report_id,
+      report_dashboard_id : report_dashboard_id
 	  }
 
     fetch(this.getConfigApi("testing/update/reports"), {
@@ -43,19 +39,30 @@ export default class DataSets extends Component {
 	  }).then(function(response) {
 		  return response.json();
 	  }).then(function(data) {
-		  window.location.href="/testing";
+      NotificationManager.success('Successfully Updated', '');
 	  });
   }
 
   getStatus(status) {
     let result = <span>Pending</span>;
-    if(status == 'fail') {
+    if(status === 'fail') {
       result = <span style={style.error}>Failed</span>;
     } else if(status === 'pass') {
       result = <span style={style.success}>Passed</span>;
     }
 
     return result;
+  }
+
+  getActionCheckbox(status, chart_id, report_id, report_dashboard_id) {
+    let action;
+    if(status === 'fail') {
+      action = <input type="checkbox" name="option" value={chart_id} onClick={this.handleSaveDataSet.bind(this,chart_id, report_id, report_dashboard_id)}  defaultChecked/>;
+    } else {
+      action = <input type="checkbox" name="option" value={chart_id} onClick={this.handleSaveDataSet.bind(this,chart_id, report_id, report_dashboard_id)} />;
+    }
+
+    return action;   
   }
 
   renderDataSet() {
@@ -67,25 +74,17 @@ export default class DataSets extends Component {
 			    <div key={response.chart_id}  style={{marginTop: "20px"}}>
 				    <div className="" style={style.dashboardTab} style={{ display: "flex"}}>
               {datasets[datasetID].dataset_id ? 
-  					    (<div className="text-center" style={{ flex: 5}}>
-
-  							  <img style={style.chartImgWidth} role="presentation" src={`${this.getBaseURL()}dashboards/original/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/${response.chart_name}.png`} />
-  						  </div>) : null
+  					    (
+                  <Image data={`${this.getBaseURL()}dashboards/original/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/${response.chart_name}.png`}  />
+                ) : null
               }
-						  <div className="text-center" style={{ flex: 5}}>
-							  <img style={style.chartImgWidth} role="presentation" src={`${this.getBaseURL()}dashboards/${response.report_id}/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/${response.chart_name}.png`} />
-						  </div>
-
+              <Image data={`${this.getBaseURL()}dashboards/${response.report_id}/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/${response.chart_name}.png`}  />
               {
-                this.props.editAction ?
+                this.props.editMode ?
   						  (<div style={style.isfailedBtn}>
   							  <div>
     								<label style={style.isfailedLbl}>Failed</label>
-    								{response.chart_status === "fail" ? (
-    							        <input type="checkbox" name="option" value={response.chart_id}  defaultChecked/>
-    							      ) : (
-    							        <input type="checkbox" name="option" value={response.chart_id}  />
-    							    )}
+    								{this.getActionCheckbox(response.chart_status, response.chart_id, response.report_id, response.report_dashboard_id)}
   							  </div>
   						  </div>) :
                 (
@@ -103,8 +102,8 @@ export default class DataSets extends Component {
           <SubPanel key={datasets[datasetID].dataset_name} title={datasets[datasetID].dataset_name ? datasets[datasetID].dataset_name : 'Standard'}>
               <Infobox data={datasets[datasetID].dataset_description} />
               <Error data={datasets[datasetID].errors}></Error>
-
               {chartsDetails}
+              <NotificationContainer/>
           </SubPanel>
         );
 	    }

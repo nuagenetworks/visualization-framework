@@ -49,7 +49,7 @@ const style = {
     padding:'15px'
   },
 
-  chartImgWidth : {
+  image : {
     width:'50%'
   },
 
@@ -69,6 +69,13 @@ const style = {
     paddingTop: "10px",
     fontWeight: "bold",
     fontSize: "12px"
+  },
+
+  actionBtn : {
+    marginRight : '5px'
+  },
+  reportBtn : {
+    marginBottom : '10px'
   }
 }
 

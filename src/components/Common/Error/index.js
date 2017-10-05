@@ -4,7 +4,7 @@ import style from "./style";
 export default class Error extends Component {
   render() {
     let errors = this.props.data;
-    if(typeof errors == "string")
+    if(typeof errors === "string")
       errors = JSON.parse(errors);
 
     if(!errors || !errors.length)

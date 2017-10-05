@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Collapsible from 'react-collapsible';
-import style from "./style";
 import DataSets from "./DataSets.js";
 
 import Panel from "../Common/Panel";

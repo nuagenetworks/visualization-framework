@@ -42,11 +42,30 @@ class TestingController extends BaseController {
 	}
 
 	updateDataSet(req, res) {
-		return model.updateDataSet(req, res);
+		let {
+            chart_id,
+            report_id,
+            report_dashboard_id
+        } = req.body;
+
+		return model.updateDataSet(chart_id, report_id, report_dashboard_id, function(err, results, next) {
+			if(err) {
+				next(err)
+			} else{
+				return successResponse(res, results);
+			}
+		});
 	}
 
 	deleteReports(req, res) {
-		return model.deleteReports(req, res);
+		let reportID = req.params.report_id;
+		return model.deleteReports(reportID, function(err, results, next) {
+			if(err) {
+				next(err)
+			} else{
+				return successResponse(res, results);
+			}
+		});
 	}
 
 
