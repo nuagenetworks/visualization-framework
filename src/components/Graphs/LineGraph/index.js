@@ -30,12 +30,12 @@ class LineGraph extends XYGraph {
     render() {
 
         const {
-            data,
+            data: originalData,
             width,
             height
         } = this.props;
 
-        if (!data || !data.length)
+        if (!originalData || !originalData.length)
             return;
 
         const {
@@ -63,17 +63,25 @@ class LineGraph extends XYGraph {
           yTickSizeInner,
           yTickSizeOuter,
           brushEnabled,
-          zeroStart
+          zeroStart,
+          circleRadius
         } = this.getConfiguredProperties();
-
 
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
         const yLabelFn         = (d) => d[yColumn];
         const legendFn         = (d) => d[linesColumn];
         const label            = (d) => d["key"];
+
+        const data = originalData.map(d => {
+          return Object.assign({}, d, yLabelFn(d) ? {} : {[yColumn]: 0});
+        });
+
         const scale            = this.scaleColor(data, linesColumn);
         const getColor         = (d) => scale ? scale(d[colorColumn] || d[linesColumn] || d["key"]) : stroke.color || colors[0];
+
+
+
 
         const linesData = nest()
             .key((d) => linesColumn ? d[linesColumn] : "Line")
@@ -82,10 +90,12 @@ class LineGraph extends XYGraph {
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
         let legendWidth       = legend.show && linesData.length > 1 ? this.longestLabelLength(data, legendFn) * chartWidthToPixel : 0;
 
-        let yLabelWidth       = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
+        let yLabelWidth       = this.longestLabelLength(data, yLabelFn, yTickFormat) * chartWidthToPixel;
         let leftMargin        = margin.left + yLabelWidth;
         let availableWidth    = width - (margin.left + margin.right + yLabelWidth);
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
+
+
 
         if (legend.show)
         {
@@ -203,6 +213,10 @@ class LineGraph extends XYGraph {
                         />
                         <g>
                           {linesData.map((d) =>
+
+                              (d.values.length === 1) ?
+                                  <circle cx={xScale(d.values[0][xColumn])} cy={yScale(d.values[0][yColumn])} r={circleRadius} fill={colors[0]} />
+                              :
                               <path
                                   key={ d.key }
                                   fill="none"

@@ -58,14 +58,17 @@ def generateFlowStats(domain_id, type="l3"):
 			'flowid': random.randint(10000,15000),
 			'outport': random.randint(1,5),
 			'domainName': CONFIG_DICT['domain.name'] + "-" + str(domain_id),
-			'dpgName': flow_data[1]['pg'],
+                        'acl_destination_type': 'pg',
+			'acl_destination_name': flow_data[1]['pg'],
 			'enterpriseName': CONFIG_DICT['enterprise.name'], 
 			'sourcevport': flow_data[0]['uuid'],
 			'destinationvport': flow_data[1]['uuid'],
-			'spgName': flow_data[0]['pg'],
+                        'acl_source_type': 'pg',
+			'acl_source_name': flow_data[0]['pg'],
                         'subnetName': CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-sub",
                         'zoneName': CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-zone",
-                        'aclId': flow_data[0]['uuid']
+                        'aclId': flow_data[0]['uuid'],
+                        'l7ApplicationName': 'L7'
 		}
                 if type=="l3":
                     es_data['nuage_metadata']['domainName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id)
@@ -73,6 +76,7 @@ def generateFlowStats(domain_id, type="l3"):
                     es_data['nuage_metadata']['zoneName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-zone"
                 else:
                     es_data['nuage_metadata']['l2domainName'] = CONFIG_DICT['domain.name'] + "-" + str(domain_id) + "-l2"
+                es_data['tcpflags'] = {}
                 es_data['tcpflags']['SYN'] = random.randint(1,5)
                 es_data['tcpflags']['SYN-ACK'] = random.randint(1,5)
                 es_data['tcpflags']['FIN'] = random.randint(1,3)

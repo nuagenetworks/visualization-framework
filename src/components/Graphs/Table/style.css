@@ -1,29 +1,19 @@
-table {
-
-    }
-
-thead, tbody, tr, td, th { display: block; }
-
-tr:after {
-    content: ' ';
-    display: block;
-    visibility: hidden;
-    clear: both;
+.pointer {
+    cursor: pointer !important;
+    text-decoration: none;
 }
 
-thead th {
-    height: 45px;
+.text-white {
+    color: #fcfcfc;
 }
 
-tbody {
-    overflow-y: auto;
+.text-white:hover {
+    font-weight: bold;
+    color: #fcfcfc;
+    cursor:  copy;
 }
 
-thead {
-    /* fallback */
-}
-
-
-tbody td, thead th {
-    float: left;
+table tbody tr:hover {
+    background-color: #f2f2f2;
+    cursor: pointer;
 }

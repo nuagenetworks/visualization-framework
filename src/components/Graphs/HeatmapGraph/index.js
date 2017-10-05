@@ -26,7 +26,8 @@ export default class HeatmapGraph extends XYGraph {
         const {
             data: cdata,
             width,
-            height
+            height,
+            onMarkClick
         } = this.props;
 
         if (!cdata || !cdata.length)
@@ -45,7 +46,6 @@ export default class HeatmapGraph extends XYGraph {
             xLabel,
             xTickFormat,
             xTickGrid,
-            xTicks,
             xTickSizeInner,
             xTickSizeOuter,
             yColumn,
@@ -90,7 +90,7 @@ export default class HeatmapGraph extends XYGraph {
         let yLabelWidth       = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
 
         let leftMargin        = margin.left + yLabelWidth + yAxisPadding * chartWidthToPixel;
-        
+
         let availableWidth    = width - (margin.left + margin.right + yLabelWidth - yAxisPadding * chartWidthToPixel);
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
 
@@ -141,7 +141,7 @@ export default class HeatmapGraph extends XYGraph {
 
         xScale.range([0, availableWidth]);
         yScale.rangeRound([availableHeight, 0]);
-        
+
         const xAxis = axisBottom(xScale)
             .tickSizeInner(xTickGrid ? -availableHeight : xTickSizeInner)
             .tickSizeOuter(xTickSizeOuter);
@@ -213,6 +213,23 @@ export default class HeatmapGraph extends XYGraph {
                                 }
                             );
 
+                            // Set up clicking and cursor style.
+                            const { onClick, style } = (
+
+                                // If an "onMarkClick" handler is registered,
+                                onMarkClick ? {
+
+                                    // set it up to be invoked, passing the current data row object.
+                                    onClick: () => onMarkClick(d),
+
+                                    // Make the cursor a pointer on hover, as an affordance for clickability.
+                                    style: { cursor: "pointer" }
+
+                                } : {
+                                    // Otherwise, set onClick and style to "undefined".
+                                }
+                            );
+
                             return (
                                 <g
                                     { ...this.tooltipProps(d) }
@@ -222,10 +239,13 @@ export default class HeatmapGraph extends XYGraph {
                                     <rect
                                         x={ x }
                                         y={ y }
+                                        onClick={ onClick }
+                                        style={ style }
                                         width={ width }
                                         height={ height }
                                         fill={ getColor(d) }
                                         key={ i }
+                                        opacity={ this.getOpacity(d) }
                                         stroke={ stroke.color }
                                         strokeWidth={ stroke.width }
                                         { ...this.tooltipProps(d) }

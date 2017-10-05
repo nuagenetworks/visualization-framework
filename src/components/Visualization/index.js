@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
+import safeEval from "cross-safe-eval"
 
 import $ from "jquery";
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -15,6 +16,7 @@ import { CardOverlay } from "../CardOverlay";
 import { Card, CardText } from 'material-ui/Card';
 
 import {CSVLink} from 'react-csv';
+import * as d3 from "d3";
 
 import {
     Actions as ServiceActions,
@@ -137,7 +139,6 @@ class VisualizationView extends React.Component {
             if (queryName) {
                 this.props.fetchQueryIfNeeded(queryName).then(() => {
                     const { queryConfiguration, executeQueryIfNeeded, context } = this.props;
-
                     if (!queryConfiguration)
                         return;
 
@@ -174,6 +175,9 @@ class VisualizationView extends React.Component {
 
                             redirect,
 
+                            // By default, specify no date params.
+                            dateParams = false,
+
                             // By default, specify no additional query params.
                             params = {}
                         } = listener;
@@ -181,6 +185,25 @@ class VisualizationView extends React.Component {
                         // Each listener expects the data object `d`,
                         // which corresponds to a row of data visualized.
                         listeners[event] = (d) => {
+
+                            let graphQueryParams = {};
+                            let resetFilters = false;
+
+                            if(configuration.key) {
+                                let vizID = `${id.replace(/-/g, '')}vkey`;
+                                let vKey = safeEval("(" + configuration.key + ")")(d);
+                                if(this.props.orgContext[vizID] === vKey)
+                                    resetFilters = true;
+
+                                graphQueryParams[vizID] = vKey;
+                            }
+
+
+                            if(dateParams) {
+                                let filteredID = (dateParams.reference).replace(/-/g, '');
+                                graphQueryParams[`${filteredID}endTime`] = +d[dateParams.column] + dateParams.duration;
+                                graphQueryParams[`${filteredID}startTime`] = +d[dateParams.column] - dateParams.duration;
+                            }
 
                             // Compute the query params from the data object.
                             let queryParams = Object.keys(params)
@@ -190,8 +213,17 @@ class VisualizationView extends React.Component {
                                     return queryParams;
                                 }, {});
 
+                            let mergedQueryParams = Object.assign({}, queryParams, graphQueryParams);
                             // Override the existing context with the new params.
-                            queryParams = Object.assign({}, this.props.context, queryParams);
+                            queryParams = Object.assign({}, this.props.orgContext, mergedQueryParams);
+
+                            if(resetFilters) {
+                                for (let key in mergedQueryParams) {
+                                  if (mergedQueryParams.hasOwnProperty(key)) {
+                                    queryParams[key] = '';
+                                  }
+                                }
+                            }
 
                             let url;
 
@@ -219,12 +251,13 @@ class VisualizationView extends React.Component {
     }
 
     renderCardWithInfo(message, iconName, spin = false) {
+
         return (
             <CardOverlay
                 overlayStyle={style.overlayContainer}
                 textStyle={style.overlayText}
                 text={(
-                    <div>
+                    <div style={style.fullWidth}>
                         <FontAwesome
                             name={iconName}
                             size="2x"
@@ -242,7 +275,8 @@ class VisualizationView extends React.Component {
         const {
             configuration,
             queryConfiguration,
-            response
+            response,
+            id
         } = this.props;
 
         const graphName      = configuration.graph,
@@ -258,12 +292,14 @@ class VisualizationView extends React.Component {
             return this.renderCardWithInfo("No data to visualize", "bar-chart");
         }
 
+        let graphHeight = d3.select(`#filter_${id}`).node() ? this.state.height - d3.select(`#filter_${id}`).node().getBoundingClientRect().height : this.state.height;
         return (
             <GraphComponent
               data={data}
+              context={this.props.orgContext}
               configuration={configuration}
               width={this.state.width}
-              height={this.state.height}
+              height={graphHeight}
               goTo={this.props.goTo}
               {...this.state.listeners}
             />
@@ -320,6 +356,7 @@ class VisualizationView extends React.Component {
     renderDownloadIcon() {
         const {
             queryConfiguration,
+            configuration,
             response
         } = this.props;
 
@@ -334,7 +371,7 @@ class VisualizationView extends React.Component {
         }
 
         return (
-            <CSVLink data={data} filename={ `${this.props.configuration.title ? this.props.configuration.title : 'data'}.csv` } >
+            <CSVLink data={data} filename={ `${configuration.title ? configuration.title : 'data'}.csv` } >
                 <FontAwesome
                     name="cloud-download"
                     style={style.cardTitleIcon}
@@ -347,8 +384,14 @@ class VisualizationView extends React.Component {
         if (!this.shouldShowTitleBar())
             return;
 
+        const {
+            headerColor
+        } = this.props;
+
+        let color = Object.assign({}, style.cardTitle, headerColor ? headerColor : {});
+
         return (
-            <div style={style.cardTitle}>
+            <div style={color}>
                 <div className="pull-right">
                     {this.renderDescriptionIcon()}
                     {this.renderShareIcon()}
@@ -384,7 +427,7 @@ class VisualizationView extends React.Component {
 
         if (!configuration || !configuration.nextPrevFilter)
             return;
-        
+
         return (
             <NextPrevFilter nextPrevFilter={configuration.nextPrevFilter} visualizationId={id} />
         )
@@ -441,7 +484,8 @@ class VisualizationView extends React.Component {
     render() {
         const {
             configuration,
-            context
+            context,
+            id
         } = this.props;
 
         if (!this.state.parameterizable || !configuration)
@@ -477,21 +521,24 @@ class VisualizationView extends React.Component {
               ref={this.cardTextReference}
             >
                 { this.renderTitleBarIfNeeded() }
+                <div>
+                    { this.renderSharingOptions() }
+                    <div id={`filter_${id}`}>
+                        { this.renderNextPrevFilter() }
+                        { this.renderFiltersToolBar() }
+                        <div className="clearfix"></div>
+                    </div>
 
-                { this.renderNextPrevFilter() }
-                { this.renderFiltersToolBar() }
-
-                { this.renderSharingOptions() }
-                <div className="clearfix"></div>
-                <CardText style={cardText}>
-                    { this.renderVisualizationIfNeeded() }
-                    {description}
-                    <ReactInterval
-                        enabled={enabled}
-                        timeout={timeout}
-                        callback={() => { this.initialize(this.props.id) }}
-                        />
-                </CardText>
+                    <CardText style={cardText}>
+                        { this.renderVisualizationIfNeeded() }
+                        {description}
+                        <ReactInterval
+                            enabled={enabled}
+                            timeout={timeout}
+                            callback={() => { this.initialize(this.props.id) }}
+                            />
+                    </CardText>
+                </div>
             </Card>
         );
     }
@@ -525,25 +572,31 @@ const updateFilterOptions = (state, configurations, context) => {
 const mapStateToProps = (state, ownProps) => {
 
     const configurationID = ownProps.id || ownProps.params.id,
-          orgContexts         = state.interface.get(InterfaceActionKeyStore.CONTEXT),
-          configuration   = state.configurations.getIn([
+          orgContext = state.interface.get(InterfaceActionKeyStore.CONTEXT),
+          configuration = state.configurations.getIn([
               ConfigurationsActionKeyStore.VISUALIZATIONS,
               configurationID,
               ConfigurationsActionKeyStore.DATA
           ]);
 
     let context = {};
-    for (let key in orgContexts) {
-      if(orgContexts.hasOwnProperty(key)) {
-        let filteredKey = key.replace(`${configurationID}-`, '');
-        if(!context[filteredKey] || key.includes(`${configurationID}-`))
-            context[filteredKey] = orgContexts[key];
+    let filteredID = configurationID.replace(/-/g, '');
+
+    for (let key in orgContext) {
+      if(orgContext.hasOwnProperty(key)) {
+
+        let filteredKey = key.replace(`${filteredID}`, '');
+        if(!context[filteredKey] || key.includes(`${filteredID}`))
+            context[filteredKey] = orgContext[key];
       }
     }
-    
+
     const props = {
         id: configurationID,
         context: context,
+        orgContext: orgContext,
+        configuration: configuration ? contextualize(configuration.toJS(), context) : null,
+        headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
         error: state.configurations.getIn([
             ConfigurationsActionKeyStore.VISUALIZATIONS,
             configurationID,

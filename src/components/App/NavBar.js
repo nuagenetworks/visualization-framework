@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import AppBar from 'material-ui/AppBar';
 import MainMenu from './MainMenu.js';
+import NavBarTitle from './NavBarTitle.js';
 
 import { Actions, ActionKeyStore } from './redux/actions';
 import { ActionKeyStore as InterfaceActionKeyStore } from "./redux/actions";
@@ -13,15 +14,17 @@ import style from "./styles"
 class NavBarView extends React.Component {
     render() {
         const {
-            context
+            context,
         } = this.props;
 
         if (context && context.hasOwnProperty("fullScreen"))
             return (<div></div>);
 
+        let navTitleBar = <NavBarTitle {...this.props}></NavBarTitle>;
+
         return (
             <div>
-                <AppBar className="appBar" style={style.navBar} title={this.props.title} onLeftIconButtonTouchTap={this.props.onLeftIconButtonTouchTap} />
+                <AppBar className="appBar" style={style.navBar} title={navTitleBar} onLeftIconButtonTouchTap={this.props.onLeftIconButtonTouchTap} />
                 <MainMenu />
             </div>
         );
@@ -31,16 +34,14 @@ class NavBarView extends React.Component {
 
 const mapStateToProps = (state) => ({
     title: state.interface.get(ActionKeyStore.NAV_BAR_TITLE),
-    context: state.interface.get(InterfaceActionKeyStore.CONTEXT),
+    titleIcon: state.interface.get(ActionKeyStore.NAV_BAR_TITLE_ICON),
+    context: state.interface.get(InterfaceActionKeyStore.CONTEXT)
 });
 
 
 const actionCreators = (dispatch) => ({
     onLeftIconButtonTouchTap: () => {
         dispatch(Actions.toggleMainMenu());
-    },
-    updateTitle: (aTitle) => {
-        dispatch(Actions.updateTitle(aTitle));
     }
  });
 

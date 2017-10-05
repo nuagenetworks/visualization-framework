@@ -20,7 +20,7 @@
                         {
                             "range": {
                                 "timestamp": {
-                                    "gte":"{{startTime:now-1h}}",
+                                    "gte":"{{startTime:now-15m}}",
                                     "lte":"{{endTime:now}}",
                                     "format": "epoch_millis"
                                 }
@@ -30,6 +30,11 @@
                     "filter": {
                         "bool":{
                             "must":[
+                                {
+                                    "term": {
+                                        "EnterpriseName":"{{enterpriseName:ent-1}}"
+                                     }
+                                },
                                 {
                                     "term": {
                                         "SourceNSG":"{{snsg:ovs-1}}"
@@ -49,7 +54,7 @@
                 "date_histo": {
                     "date_histogram": {
                         "field": "timestamp",
-                        "interval": "{{interval:30s}}"
+                        "interval": "{{heatmapinterval:30s}}"
                     },
                     "aggs": {
                         "application": {
