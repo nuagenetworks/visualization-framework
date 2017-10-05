@@ -18,13 +18,14 @@ export default class PieGraph extends AbstractGraph {
     render() {
 
         const {
-            data,
+            data: originalData,
             width,
             height,
             onMarkClick
         } = this.props;
 
-        if (!data || !data.length)
+
+        if (!originalData || !originalData.length)
             return;
 
         const {
@@ -42,7 +43,27 @@ export default class PieGraph extends AbstractGraph {
           fontColor,
           percentages,
           percentagesFormat,
+          otherOptions
         } = this.getConfiguredProperties();
+
+
+        /*
+        Add below code snippet in visulaization's configuration json files
+        to use grouping data feature
+
+        "others": {
+            "label": "Others",
+            "limit": 5
+        }
+
+        */
+        const settings = {
+            "metric": sliceColumn,
+            "dimension": labelColumn,
+            "otherOptions": otherOptions
+          };
+
+        const data = this.getGroupedData(originalData, settings);
 
         let availableWidth     = width - (margin.left + margin.right);
         let availableHeight    = height - (margin.top + margin.bottom);
@@ -79,7 +100,7 @@ export default class PieGraph extends AbstractGraph {
             .innerRadius(labelRadius)
             .outerRadius(labelRadius);
 
-        const pie    = d3.pie().value(value);
+        const pie    = d3.pie().value(value).sort(null);
         const slices = pie(data);
 
         const labelText = (() => {
@@ -107,7 +128,7 @@ export default class PieGraph extends AbstractGraph {
 
                                 // Set up clicking and cursor style.
                                 const { onClick, cursor } = (
-                                    onMarkClick ? {
+                                    onMarkClick && d[settings.dimension] !== otherOptions.label ? {
                                         onClick: () => onMarkClick(d),
                                         cursor: "pointer"
                                     } : { }
