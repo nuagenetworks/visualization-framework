@@ -19,6 +19,11 @@
             "#e78ac3",
             "#f79e99"
         ],
+        "otherOptions": {
+            "label": "Others",
+            "limit": 5,
+            "type": "number"
+        },
         "tooltip": [
             { "column": "L7Classification", "label": "L7 Signature" },
             { "column": "Sum of MB", "format": "s"}

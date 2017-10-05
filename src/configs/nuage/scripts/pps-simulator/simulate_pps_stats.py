@@ -4,8 +4,8 @@ import json
 import random
 import uuid
 from random import randint
-from elasticsearch import Elasticsearch
-
+from elasticsearch import Elasticsearch, helpers
+import time
 
 class SimulateAARData(object):
     def __init__(self, defData):
@@ -333,7 +333,7 @@ class SimulateFlowStats(object):
         return flows
 
 
-    def generate_flow_stats(self, startTime, endTime):
+    def generate_flow_stats(self, startTime, endTime,es_chunk_size):
         pre_flows = self.create_pre_defined_flows(appgrpids=self.appgrps, l7s=self.l7s,
                                          protos=self.protos,
                                          domains=self.domains, nsgs=self.nsgs,
@@ -343,7 +343,8 @@ class SimulateFlowStats(object):
         flow_cnt = 0
         sla_prob_new = 0.6
         write_data = []
-        with open('/var/log/flowstats_new.log', 'w') as flowstats:
+        chunk_size = es_chunk_size
+        with open('log/flowstats_new.log', 'w') as flowstats:
             timestamp = startTime
             t_increment = 0
             while timestamp != endTime:
@@ -448,12 +449,17 @@ class SimulateFlowStats(object):
                     json.dump(flow_record, flowstats, default=json_serial)
                     flowstats.write("\n")
                     index_name = "nuage_dpi_flowstats" + '_' + self.es_index_prefix
-                    self.es.index(index=index_name, doc_type='nuage_doc_type',
-                             body=flow_record)
+                    flow_record['_index']= index_name
+                    flow_record['_type'] = 'nuage_doc_type'
+                    write_data.append(flow_record)
+                    if len(write_data)>=chunk_size:
+                        helpers.bulk(self.es,iter(write_data),request_timeout=50)
+                        write_data = []
                     flow_cnt += 1
                 t_increment += 30
-
-        print flow_cnt
+        if len(write_data):
+            helpers.bulk(self.es,iter(write_data),request_timeout=50)
+        print "flow_cnt = "+ str(flow_cnt)
         return sla_flows
 
 
@@ -472,7 +478,7 @@ class SimulateProbeStats(object):
         self.contro_states = ["Null", "Connecting", "Up", "Down", "Started"]
         self.duc_grps = flowData["duc_grps"]
 
-    def generate_probe_stats(self, startTime, endTime):
+    def generate_probe_stats(self, startTime, endTime,es_chunk_size):
         nsgs = self.nsgs
         # app_grps = self.appgrps
         srcuplinks = self.srcUplinks
@@ -482,7 +488,9 @@ class SimulateProbeStats(object):
         probe_cnt = 0
         firstTS = True
         control_down_prob = 0.005
-        with open('/var/log/probestats_new.log', 'w') as probestats:
+        write_data = []
+        chunk_size = es_chunk_size
+        with open('log/probestats_new.log', 'w') as probestats:
             timestamp = startTime
             t_increment = 0
             while timestamp != endTime:
@@ -549,9 +557,17 @@ class SimulateProbeStats(object):
                                   default=json_serial)
                         probestats.write("\n")
                         index_name = "nuage_dpi_probestats" + '_' + self.es_index_prefix
-                        self.es.index(index=index_name, doc_type='nuage_doc_type', body=probe_record)
+                        probe_record['_index']=index_name
+                        probe_record['_type'] = 'nuage_doc_type'
+                        write_data.append(probe_record)
+                        if len(write_data)>=chunk_size:
+                            helpers.bulk(self.es,iter(write_data),request_timeout=50)
+                            write_data = []
                         probe_cnt += 1
                         d_nsg_ind += 1
+                if len(write_data):
+                    helpers.bulk(self.es,iter(write_data),request_timeout=50)
+                    write_data = []
                 t_increment += 30
                 firstTS = False
 
@@ -581,14 +597,15 @@ class SimulateSLAStats(object):
         self.es = flowData["es"]
         self.es_index_prefix = flowData["es_index_prefix"]
 
-    def generate_sla_stats(self, sla_flows):
+    def generate_sla_stats(self, sla_flows,es_chunk_size):
         nsgs = self.nsgs
         srcuplinks = self.srcUplinks
         destuplinks = self.destUplinks
         l4class = self.l4class
         sla_cnt = 0
-
-        with open('/var/log/slastats_new.log', 'w') as slastats:
+        write_data = []
+        chunk_size = es_chunk_size
+        with open('log/slastats_new.log', 'w') as slastats:
             sla_record = {}
             for flow_entry in sla_flows:
                 s_vport = flow_entry["src_vport"]
@@ -643,9 +660,16 @@ class SimulateSLAStats(object):
                           default=json_serial)
                 slastats.write("\n")
                 index_name = "nuage_dpi_slastats" + '_' + self.es_index_prefix
-                self.es.index(index=index_name, doc_type='nuage_doc_type',
-                              body=sla_record)
+                sla_record['_index'] = index_name
+                sla_record['_type']='nuage_doc_type'
+                write_data.append(sla_record)
+                if len(write_data)>=chunk_size:
+                    helpers.bulk(self.es,iter(write_data),request_timeout=50)
+                    write_data = []
                 sla_cnt += 1
+        if len(write_data):
+            helpers.bulk(self.es,iter(write_data),request_timeout=50)
+            write_data = []
         print "sla_cnt = " + str(sla_cnt)
 
 
@@ -664,28 +688,17 @@ def main():
     defData["domain_count"] = config.getint('default', 'domain_count')
     defData["npm_count"] = config.getint('default', 'npm_count')
     defData["perf_mon_count"] = config.getint('default', 'perf_mon_count')
-    print config.getint('default', 'duc_count')
+    #print config.getint('default', 'duc_count')
     defData["duc_count"] = config.getint('default', 'duc_count')
-    print defData["duc_count"]
+    #print defData["duc_count"]
 
     def_ent_name = config.get('default', 'def_ent_name')
     es_server = config.get('default', 'es_server')
+    es_chunk_size = config.get('default','es_chunk_size')
 
-    start_time = config.get('default', 'start_time')
-    start_ts = start_time.split('/')
-    es_index_prefix = start_ts[0] + '_' + start_ts[1] + '_' + start_ts[2]
-    start_ts = map(int, start_ts)
-    startTime = datetime.datetime(start_ts[0], start_ts[1], start_ts[2], start_ts[3], start_ts[4], start_ts[5])
-    startTime = datetime_to_epoch(startTime)
-
-    end_time = config.get('default', 'end_time')
-    end_ts = end_time.split('/')
-    end_ts = map(int, end_ts)
-    endTime = datetime.datetime(end_ts[0], end_ts[1], end_ts[2], end_ts[3], end_ts[4], end_ts[5])
-    endTime = datetime_to_epoch(endTime)
-
-    print startTime
-    print endTime
+    startTime = float(int(time.time())) * 1000 - (24 * 60 * 60 * 1000)
+    endTime = float(int(time.time()))*1000
+    es_index_prefix = (datetime.datetime.fromtimestamp(startTime/1000)).strftime('%Y_%m_%d')
 
     simData = SimulateAARData(defData)
     es = Elasticsearch(es_server)
@@ -724,13 +737,13 @@ def main():
     }
 
     flow_stats = SimulateFlowStats(flowData, simData)
-    sla_flows = flow_stats.generate_flow_stats(startTime, endTime)
+    sla_flows = flow_stats.generate_flow_stats(startTime, endTime,es_chunk_size)
 
     probe_stats = SimulateProbeStats(flowData)
-    probe_stats.generate_probe_stats(startTime, endTime)
+    probe_stats.generate_probe_stats(startTime, endTime,es_chunk_size)
 
     sla_stats = SimulateSLAStats(flowData)
-    sla_stats.generate_sla_stats(sla_flows)
+    sla_stats.generate_sla_stats(sla_flows,es_chunk_size)
 
 
 if __name__ == '__main__':

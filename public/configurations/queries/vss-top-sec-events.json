@@ -18,43 +18,33 @@
                                     "format":"epoch_millis"
                                 }
                             }
+                        },
+                        {
+                            "term": {
+                                "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
+                            }
                         }
                     ]
                 }
             },
             "aggs": {
-                "2": {
-                    "filters":{
-                        "filters":{
-                            "Enterprise":{
-                                "query":{
-                                    "term":{
-                                        "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
-                                    }
-                                }
-                            }
+                "SumOf": {
+                    "sum": {
+                        "field": "value"
+                    }
+                },
+                "EventType": {
+                    "terms": {
+                        "field": "type",
+                        "size": 5,
+                        "order": {
+                            "SumOf": "desc"
                         }
                     },
                     "aggs": {
                         "SumOf": {
                             "sum": {
                                 "field": "value"
-                            }
-                        },
-                        "EventType": {
-                            "terms": {
-                                "field": "type",
-                                "size": 5,
-                                "order": {
-                                    "SumOf": "desc"
-                                }
-                            },
-                            "aggs": {
-                                "SumOf": {
-                                    "sum": {
-                                        "field": "value"
-                                    }
-                                }
                             }
                         }
                     }

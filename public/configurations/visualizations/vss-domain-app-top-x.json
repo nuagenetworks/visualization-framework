@@ -1,0 +1,31 @@
+{
+    "id": "vss-domain-app-top-x",
+    "graph": "BarGraph",
+    "title": "Top 5 Applications",
+    "description": "Top 5 Applications per domain based on number of bytes rx/tx",
+    "author": "Ronak Shah",
+    "creationDate": "10/02/2017",
+    "data": {
+        "xColumn": "SumOf",
+        "yColumn": "apps",
+        "colorColumn": "apps",
+        "orientation": "horizontal",
+        "tooltip": [
+            { "column": "apps", "label": "L7 Application" },
+            { "column": "SumOf", "label": "# Bytes", "format": ",.1f"}
+        ],
+        "colors": [
+             "#7da3f7",
+             "#fec26a",
+             "#e78ac3",
+             "#f79e99"
+        ],
+        "xTickGrid": true,
+        "yTickGrid": false,
+        "xTickFormat": ".2s",
+        "xTicks": 8,
+        "xLabel": "Total # of bytes",
+        "yLabel": "Applications"
+    },
+    "query": "vss-domain-app-top-x"
+}
