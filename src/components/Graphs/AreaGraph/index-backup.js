@@ -218,7 +218,7 @@ class AreaGraph extends XYGraph {
 
         this.lines.push( <path
                   key={ data['key'] }
-                  fill="none"
+                  fill={this.getColor(data)}
                   stroke={ this.getColor(data) }
                   strokeWidth={ stroke.width }
                   d={ lineGenerator(filterData) }
@@ -243,12 +243,12 @@ class AreaGraph extends XYGraph {
     }
 
     handleShowEvent() {
-        d3.select("#tooltip-line").style("opacity", 1);
+        d3.select(".tooltip-line").style("opacity", 1);
     }
 
     handleHideEvent() {
         this.hoveredDatum = null;
-        d3.select("#tooltip-line").style("opacity", 0);
+        d3.select(".tooltip-line").style("opacity", 0);
     }
 
     renderTooltip() {
