@@ -220,8 +220,9 @@ class Testing extends Component {
 
     return (
         <Panel title={'Reports'}>
-          <div className="text-right" style={style.reportBtn}>
-            <button type="button" className="btn btn-sm btn-primary" onClick={this.generateNewReport.bind(this)}>New Report</button>
+          <div className="text-right" style={style.reportDiv}>
+            <button type="button" style={style.reportBtn} className="btn btn-sm btn-primary" onClick={this.generateNewReport.bind(this)}><FontAwesome name='plus'></FontAwesome> New Report</button>
+            <button type="button" className="btn btn-xs btn-primary" onClick={this.getAllReports.bind(this)} style={style.reloadBtn}><FontAwesome name='refresh'></FontAwesome></button>
           </div>
   				<DataTables
   				headerToolbarMode={"filter"}
@@ -232,10 +233,10 @@ class Testing extends Component {
   				columns={this.table_columns}
   				data={tableData}
   				showRowSizeControls={false}
-                  onNextPageClick={this.handleNextPageClick}
-                  onPreviousPageClick={this.handlePreviousPageClick}
-                  onFilterValueChange={this.handleFilterValueChange}
-                  onSortOrderChange={this.handleSortOrderChange}
+          onNextPageClick={this.handleNextPageClick}
+          onPreviousPageClick={this.handlePreviousPageClick}
+          onFilterValueChange={this.handleFilterValueChange}
+          onSortOrderChange={this.handleSortOrderChange}
   				page={this.currentPage}
   				count={this.filterData.length}
   				rowSize={this.limit}

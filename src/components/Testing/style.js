@@ -74,8 +74,14 @@ const style = {
   actionBtn : {
     marginRight : '5px'
   },
-  reportBtn : {
+  reportDiv : {
     marginBottom : '10px'
+  },
+  reportBtn : {
+    marginRight : '5px'
+  },
+  reloadBtn : {
+    padding : '5px 10px 5px 10px'
   }
 }
 
