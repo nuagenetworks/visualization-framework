@@ -7,47 +7,43 @@
         "type":"{{type:nuage_doc_type}}",
         "body":{    
             "size": 0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "term": {
+                                "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
+                            }
+                        }
+                    ]
+                }
+            },
             "aggs": {
-                "2": {
-                    "filters":{
-                        "filters":{
-                            "Domain":{
-                                "query":{
-                                    "term":{
-                                        "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
+                "timezones": {
+                    "filters": {
+                        "filters": {
+                            "Prev 24": {
+                                "range": {
+                                    "timestamp": {
+                                        "gte": "{{prevStartTime:now-48h}}",
+                                        "lte": "{{startTime:now-24h}}"
+                                    }
+                                }
+                            },
+                            "Last 24": {
+                                "range": {
+                                    "timestamp": {
+                                        "gte": "{{startTime:now-24h}}",
+                                        "lte": "{{endTime:now}}"
                                     }
                                 }
                             }
                         }
                     },
                     "aggs": {
-                        "timezones": {
-                            "filters": {
-                                "filters": {
-                                    "Prev 24": {
-                                        "range": {
-                                            "timestamp": {
-                                                "gte": "{{prevStartTime:now-48h}}",
-                                                "lte": "{{startTime:now-24h}}"
-                                            }
-                                        }
-                                    },
-                                    "Last 24": {
-                                        "range": {
-                                            "timestamp": {
-                                                "gte": "{{startTime:now-24h}}",
-                                                "lte": "{{endTime:now}}"
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            "aggs": {
-                                "SumOf": {
-                                    "sum": {
-                                        "field": "packets"
-        			    }
-                                }
+                        "SumOf": {
+                            "sum": {
+                                "field": "packets"
                             }
                         }
                     }

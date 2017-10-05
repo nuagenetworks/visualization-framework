@@ -7,6 +7,7 @@ import * as d3 from "d3";
 
 import { GraphManager } from "./index";
 import columnAccessor from "../../utils/columnAccessor";
+import crossfilter from "crossfilter2";
 
 import {
     format
@@ -385,6 +386,47 @@ export default class AbstractGraph extends React.Component {
         } = this.getConfiguredProperties();
 
         return legend.orientation === 'vertical';
+    }
+    getGroupedData(data, settings) {
+
+        if(settings.otherOptions && settings.otherOptions.limit) {
+            
+            let cfData = crossfilter(data);
+            let metricDimension = cfData.dimension( d => d[settings.metric] );
+            let limit = settings.otherOptions.limit;
+
+            if(!settings.otherOptions.type || settings.otherOptions.type === "percentage") {
+                const sortedData = metricDimension.top(Infinity);
+                const total = sortedData.reduce((total, d) => +total + d[settings.metric], 0);
+
+                let sum = 0;
+                let index = sortedData.findIndex( d =>  {
+                    sum += +d[settings.metric];
+                    if(((sum / total) * 100) >= limit) {
+                        return true;
+                    }
+                });
+
+                limit = index !== -1 ? index + 1 : limit;
+            }
+
+            
+            let topData = metricDimension.top(limit);
+            const otherDatas = metricDimension.top(Infinity, limit);
+
+            if(otherDatas.length) {
+                const sum = otherDatas.reduce( (total, d) => +total + d[settings.metric], 0);     
+                topData.push({
+                    [settings.dimension]: settings.otherOptions.label ? settings.otherOptions.label : 'Others', 
+                    [settings.metric]: sum
+                });
+            }
+
+            cfData.remove();
+            return topData;
+        }
+        
+        return data;
     }
 
     getOpacity(d) {
