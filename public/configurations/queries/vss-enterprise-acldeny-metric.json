@@ -7,53 +7,39 @@
         "type":"{{type:nuage_doc_type}}",
         "body":{    
             "size": 0,
-            "aggs": {
-                "2": {
-                    "filters":{
-                        "filters":{
-                            "Domain":{
-                                "query":{
-                                    "term":{
-                                        "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
-                                    }
-                                }
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "term": {
+                                "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "type": "ACL_DENY"
                             }
                         }
-                    },
-                    "aggs": {
-                        "timezones": {
-                            "filters": {
-                                "filters": {
-                                    "Prev 24": {
-                                        "range": {
-                                            "timestamp": {
-                                                "gte": "{{prevStartTime:now-48h}}",
-                                                "lte": "{{startTime:now-24h}}"
-                                            }
-                                        }
-                                    },
-                                    "Last 24": {
-                                        "range": {
-                                            "timestamp": {
-                                                "gte": "{{startTime:now-24h}}",
-                                                "lte": "{{endTime:now}}"
-                                            }
-                                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "timezones": {
+                    "filters": {
+                        "filters": {
+                            "Prev 24": {
+                                "range": {
+                                    "timestamp": {
+                                        "gte": "{{prevStartTime:now-48h}}",
+                                        "lte": "{{startTime:now-24h}}"
                                     }
                                 }
                             },
-                            "aggs": {
-                                "types": {
-                                    "filters": {
-                                        "filters": {
-                                            "type": {
-                                                "query": {
-                                                    "term": {
-                                                        "type": "ACL_DENY"
-                                                    }
-                                                }
-                                            }
-                                        }
+                            "Last 24": {
+                                "range": {
+                                    "timestamp": {
+                                        "gte": "{{startTime:now-24h}}",
+                                        "lte": "{{endTime:now}}"
                                     }
                                 }
                             }
