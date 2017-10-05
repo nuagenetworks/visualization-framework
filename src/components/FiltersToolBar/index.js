@@ -29,7 +29,9 @@ export class FiltersToolBarView extends React.Component {
       let filteredID = append ? this.getFilteredVisualizationId() : '';
 
       for(let key in forceOptions) {
-        context[`${filteredID}${key}`] = forceOptions[key];
+        if(forceOptions.hasOwnProperty(key)) {
+          context[`${filteredID}${key}`] = forceOptions[key];
+        }
       }
       console.log('forceOptions', context)
       return context;
