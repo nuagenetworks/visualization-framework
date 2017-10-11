@@ -9,12 +9,22 @@
         "dateHistogram": true,
         "xColumn": "ts",
         "xLabel": "Time",
-        "yColumn": ["CPU", "MEMORY",  "DISK"],
+        "yColumn": [
+            {
+                "key": "CPU"
+            },
+            {
+                "key": "MEMORY"
+            },
+            {
+                "key": "DISK",
+                "value": "DISK"
+            }
+        ],
         "yTickFormat": ",.1f",
         "yLabel": "",
         "yTicks": 5,
         "xTickGrid": true,
-        "linesColumn": ["CPU", "MEMORY",  "DISK"],
         "legend": {
             "orientation": "vertical",
             "show": true,

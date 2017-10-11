@@ -19,6 +19,11 @@ export default class AbstractGraph extends React.Component {
         super(props);
 
         this.configuredProperties = {};
+        this.node = {};
+
+        this.yLabelWidth = 0;
+
+        this.setGraphId();
 
         this.defaults = GraphManager.getDefaultProperties(properties);
 
@@ -59,17 +64,13 @@ export default class AbstractGraph extends React.Component {
                 }
             }
 
-            // Use a unique tooltip ID per visualization,
-            // otherwise there are overlapping tooltips.
-            const tooltipId = String(Math.random());
-
             // Expose tooltipId in case subclasses need it.
-            this.tooltipId = tooltipId;
+            this.tooltipId = `tooltip-${this.getGraphId()}`;
 
             // This JSX object can be used by subclasses to enable tooltips.
             this.tooltip = (
                 <ReactTooltip
-                    id={ tooltipId }
+                    id={ this.tooltipId }
                     place="top"
                     type="dark"
                     effect="float"
@@ -85,7 +86,7 @@ export default class AbstractGraph extends React.Component {
             // data.map((d) => <rect { ...this.tooltipProps(d) } />
             this.tooltipProps = (d) => ({
                 "data-tip": true,
-                "data-for": tooltipId,
+                "data-for": this.tooltipId,
                 "onMouseEnter": () => this.hoveredDatum = d,
                 "onMouseMove": () => this.hoveredDatum = d
             });
@@ -94,6 +95,18 @@ export default class AbstractGraph extends React.Component {
             this.getTooltipContent = () => null
             this.tooltipProps = () => null
         }
+    }
+
+    setGraphId() {
+        this.graphId = new Date().valueOf();
+    }
+
+    getGraphId () {
+        return this.graphId;
+    }
+
+    getSVG() {
+        return d3.select(this.node);
     }
 
     handleShowEvent() {}
@@ -327,6 +340,14 @@ export default class AbstractGraph extends React.Component {
     getYlabelWidth() {
         return this.yLabelWidth;
     }
+
+    setDimensions(props, data = null) {
+        this.setYlabelWidth(data ? data : props.data);
+        
+        this.setAvailableWidth(props);
+        this.setAvailableHeight(props);
+        this.setLeftMargin();
+    }
     
     setLeftMargin() {
       const {
@@ -341,7 +362,6 @@ export default class AbstractGraph extends React.Component {
     }
     
     setAvailableWidth({width}) {
-       
         const {
           margin,
         } = this.getConfiguredProperties();
@@ -394,6 +414,75 @@ export default class AbstractGraph extends React.Component {
         } = this.props;
         let vkey = `${configuration.id.replace(/-/g, '')}vkey`;
         return (!context[vkey] || !configuration.key || context[vkey]  === safeEval("(" + configuration.key + ")")(d)) ? "1" : "0.5"
+    }
+
+    renderNewLegend(data, legendConfig, getColor, label) {
+
+        if (!legendConfig.show)
+            return;
+
+        const {
+            width,
+            height
+        } = this.props;
+
+        const {
+            margin,
+            fontColor,
+            circleToPixel,
+        } = this.getConfiguredProperties();
+
+        const isVertical = legendConfig.orientation === 'vertical';
+        const lineHeight = legendConfig.circleSize * circleToPixel;
+        const x          = legendConfig.circleSize + legendConfig.labelOffset;
+        const radius     = legendConfig.circleSize;
+        let transform;
+
+        if (isVertical)
+        {
+            let top  = height - (margin.bottom + ((data.length - 1) * lineHeight));
+            transform = (d,i) => `translate(${margin.left}, ${top + (i *  lineHeight)})`;
+
+        } else {
+            // Place legends horizontally
+            const availableWidth    = width - margin.left - margin.right;
+            const legendWidth       = legendConfig.width + legendConfig.circleSize + 2 * legendConfig.labelOffset;
+            const nbElementsPerLine = parseInt(availableWidth / legendWidth, 10);
+            const nbLines           = parseInt(data.length / nbElementsPerLine, 10);
+            const top               = height - (margin.bottom + (nbLines * lineHeight));
+
+            transform = (d, i) => `translate(${margin.left + ((i % nbElementsPerLine) * legendWidth)}, ${top + parseInt(i / nbElementsPerLine, 10) * lineHeight})`;
+        }
+
+        const legends = this.getSVG().select('.legend').selectAll('.legend-item')
+          .data(data);
+
+        const newLegends = legends.enter().append('g')
+          .attr('class', 'legend-item');
+
+        newLegends.append('circle')
+          .attr('class', 'item-circle');
+
+        newLegends.append('text')
+          .attr('class', 'item-text')
+          .style('alignment-baseline', 'central');
+
+
+        const allLegends = newLegends.merge(legends);
+
+        allLegends
+          .attr("transform", transform );
+
+        allLegends.selectAll('.item-circle')
+          .attr('r', radius)
+          .style('fill', d => getColor(d));
+
+        allLegends.selectAll('.item-text')
+          .attr('x', x)
+          .style('fill', fontColor)
+          .text( d => label(d));
+
+        legends.exit().remove();
     }
 
 }

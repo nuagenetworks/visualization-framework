@@ -19,77 +19,84 @@ export default class XYGraph extends AbstractGraph {
     }
 
     writeYLabel(x, y) {
-
+        
     }
 
     writeXLabel(x, y) {
-
+        
     }
 
-    setYBandScale(data) {
-
-      const yLabelFn = (d) => d['yColumn'];
-
-      const distYDatas = map(data, yLabelFn).keys().sort();
-
-      this.yBandScale = scaleBand()
-            .domain(distYDatas);
-        this.yBandScale.rangeRound([0, this.getAvailableHeight()]);
+    configureAxis(data) {
+        this.setBandScale(data);
+        this.setScale(data);
+        this.setAxis(data);
+        this.setTitlePositions();
     }
 
-    getYBandScale() {
-      return this.yBandScale;
-    }
-
-    setXBandScale(data) {
+    setBandScale(data) {
         const {
           xColumn
         } = this.getConfiguredProperties();
 
+        this.bandScale  = {};
         const xLabelFn  = (d) => d[xColumn];
+        const yLabelFn  = (d) => d['yColumn'];
 
         const distXDatas = map(data, xLabelFn).keys().sort();
+        const distYDatas = map(data, yLabelFn).keys().sort();
 
-        this.xBandScale = scaleBand()
+        this.bandScale.x = scaleBand()
             .domain(distXDatas);
-        this.xBandScale.rangeRound([0, this.getAvailableWidth()]);
+
+        this.bandScale.x.rangeRound([0, this.getAvailableWidth()]);
+
+        this.bandScale.y = scaleBand()
+          .domain(distYDatas);
+
+        this.bandScale.y.rangeRound([0, this.getAvailableHeight()]);
     }
 
-    getXBandScale() {
-      //return min([this.xBandScale.bandwidth(), this.yBandScale.bandwidth()]);
-      return this.xBandScale;
+    getBandScale() {
+      return this.bandScale;
     }
 
-    setXScale(data) {
-
+    setScale(data) {
         if (!data || !data.length)
             return;
 
         const {
           dateHistogram,
-          xColumn
+          xColumn,
+          zeroStart
         } = this.getConfiguredProperties();
 
         const xLabelFn = (d) => d[xColumn];
+        const yLabelFn = (d) => d['yColumn'];
+        const yExtent  = this.updateYExtent(extent(data, yLabelFn), zeroStart);
 
-        this.xScale = null;
+        this.scale = {};
 
         if (dateHistogram) {
-            this.xScale = scaleTime()
+            this.scale.x = scaleTime()
               .domain(extent(data, xLabelFn));
         } else {
-            this.xScale = scaleLinear()
+            this.scale.x = scaleLinear()
               .domain(extent(data, xLabelFn));
         }
 
-        this.xScale.range([0, this.getAvailableWidth()]);
+        this.scale.x.range([0, this.getAvailableWidth()]);
+
+        this.scale.y = scaleLinear()
+            .domain(yExtent);
+        
+        this.scale.y.range([this.getAvailableHeight(), 0]);
     }
 
-    getXScale() {
-        return this.xScale;
+    getScale() {
+        return this.scale;
     }
 
-    setXaxis(data) {
+    setAxis(data) {
 
         if (!data || !data.length)
             return;
@@ -99,106 +106,68 @@ export default class XYGraph extends AbstractGraph {
           xTickSizeOuter,
           xTickFormat,
           xTickGrid,
-          xTicks
+          xTicks,
+          yTickFormat,
+          yTickGrid,
+          yTicks,
+          yTickSizeInner,
+          yTickSizeOuter,
         } = this.getConfiguredProperties();
 
-        this.xAxis = axisBottom(this.getXScale())
+        this.axis = {};
+
+        // X axis
+        this.axis.x = axisBottom(this.getScale().x)
         .tickSizeInner(xTickGrid ? -this.getAvailableHeight() : xTickSizeInner)
         .tickSizeOuter(xTickSizeOuter);
 
         if(xTickFormat){
-            this.xAxis.tickFormat(format(xTickFormat));
+            this.axis.x.tickFormat(format(xTickFormat));
         }
 
         if(xTicks){
-            this.xAxis.ticks(xTicks);
+            this.axis.x.ticks(xTicks);
         }
+     
+        // Y axis
+        this.axis.y = axisLeft(this.getScale().y)
+        .tickSizeInner(yTickGrid ? -this.getAvailableWidth() : yTickSizeInner)
+        .tickSizeOuter(yTickSizeOuter);
+
+      if(yTickFormat){
+          this.axis.y.tickFormat(format(yTickFormat));
+      }
+
+      if(yTicks){
+          this.axis.y.ticks(yTicks);
+      }
     }
 
-    getXAxis() {
-        return this.xAxis;
+    getAxis() {
+        return this.axis;
     }
 
-    setYScale(data) {
-
-        const {
-          zeroStart,
-        } = this.getConfiguredProperties();
-
-        const yLabelFn  = (d) => d['yColumn'];
-
-        let yExtent = this.updateYExtent(extent(data, yLabelFn), zeroStart);
-        
-        this.yScale = scaleLinear()
-            .domain(yExtent);
-        
-        this.yScale.range([this.getAvailableHeight(), 0]);
-    } 
-
-    getYScale() {
-        return this.yScale;
-    }
-
-    setYaxis() {
-
-          const {
-            yTickFormat,
-            yTickGrid,
-            yTicks,
-            yTickSizeInner,
-            yTickSizeOuter,
-          } = this.getConfiguredProperties();
-
-          this.yAxis = axisLeft(this.getYScale())
-            .tickSizeInner(yTickGrid ? -this.getAvailableWidth() : yTickSizeInner)
-            .tickSizeOuter(yTickSizeOuter);
-
-          if(yTickFormat){
-              this.yAxis.tickFormat(format(yTickFormat));
-          }
-
-          if(yTicks){
-              this.yAxis.ticks(yTicks);
-          }
-    }
-
-    getYAxis() {
-        return this.yAxis;
-    } 
-
-    setXTitlePositions() {
-
+    setTitlePositions() {
       const {
           chartHeightToPixel,
-          margin,
-        } = this.getConfiguredProperties();
-
-        this.xTitlePosition = {
-              left: this.getLeftMargin() + this.getAvailableWidth() / 2,
-              top: margin.top + this.getAvailableHeight() + chartHeightToPixel + this.getXAxisHeight()
-        }
-    }
-
-    getXTitlePositions() {
-        return this.xTitlePosition;
-    }
-
-    setYTitlePositions() {
-
-      const {
           chartWidthToPixel,
           margin,
         } = this.getConfiguredProperties();
 
-        this.yTitlePosition = {
-            // We use chartWidthToPixel to compensate the rotation of the title
-            left: margin.left + chartWidthToPixel + (this.checkIsVerticalLegend() ? this.getLegend().width : 0),
-            top: margin.top + this.getAvailableHeight() / 2
+        this.titlePosition = {
+            x: {
+              left: this.getLeftMargin() + this.getAvailableWidth() / 2,
+              top: margin.top + this.getAvailableHeight() + chartHeightToPixel + this.getXAxisHeight()
+            },
+            y: {
+              left: margin.left + chartWidthToPixel + (this.checkIsVerticalLegend() ? this.getLegendConfig().width : 0),
+              top: margin.top + this.getAvailableHeight() / 2
+            }
         }
     }
 
-    getYTitlePositions() {
-        return this.yTitlePosition;
+    getTitlePositions() {
+        return this.titlePosition;
     }
 
     axisTitles(xLabelPosition, yLabelPosition) {
@@ -247,51 +216,60 @@ export default class XYGraph extends AbstractGraph {
         );
     }
 
-    newAxisTitles(xLabelPosition, yLabelPosition) {
+    generateAxisTitleElement() {
+
+        const {
+            xLabel,
+            yLabel
+        } = this.getConfiguredProperties();
+
+        const axis = this.getSVG().select('.axis-title');
+
+        if(xLabel) {
+            axis.append('text')
+            .attr('class', 'x-axis-label')
+            .attr('text-anchor', 'middle');
+        }
+
+        if(yLabel) {
+            axis.append('text')
+              .attr('class', 'y-axis-label')
+              .attr('text-anchor', 'middle')
+        }
+
+
+    }
+
+    setAxisTitles() {
         const {
             xColumn,
             xLabel,
             xLabelSize,
             yColumn,
-            yLabel,
-            yLabelSize,
+            yLabel
         } = this.getConfiguredProperties();
 
-        return (
-            <g>
-                { xLabel ? (
-                    <text
-                        className="axis-label"
-                        x={ xLabelPosition.left }
-                        y={ xLabelPosition.top }
-                        textAnchor="middle"
-                        fontSize={xLabelSize + "px"}
-                    >
-                        { xLabel === true ? xColumn : xLabel}
-                    </text>
-                    ) : null
-                }
-                { yLabel ? (
-                    <text
-                        className="axis-label"
-                        transform={[
-                            "translate(",
-                            yLabelPosition.left ,
-                            ",",
-                            yLabelPosition.top,
-                            ") rotate(-90)"
-                        ].join("")}
-                        textAnchor="middle"
-                        fontSize={yLabelSize + "px"}
-                    >
-                        { yLabel === true ? yColumn : yLabel}
-                    </text>
-                    ) : null
-                }
-            </g>
-        );
+        const tilePositions = this.getTitlePositions();
+
+        const axis = this.getSVG().select('.axis-title');
+
+        if(xLabel) {
+            axis.select('.x-axis-label')
+              .attr('x', tilePositions.x.left)
+              .attr('y', tilePositions.x.top)
+              .style('font-size', `${xLabelSize}px` )
+              .text(xLabel === true ? xColumn : xLabel)
+        }
+
+        if(yLabel) {
+            axis.select('.y-axis-label')
+              .attr('font-size', `${xLabelSize}px` )
+              .attr('transform', `translate(${tilePositions.y.left}, ${tilePositions.y.top}) rotate(-90)`)
+              .text(yLabel === true ? yColumn : yLabel)
+        }
     }
 }
+
 XYGraph.propTypes = {
   configuration: React.PropTypes.object,
   data: React.PropTypes.array
