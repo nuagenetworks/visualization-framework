@@ -1,6 +1,6 @@
 {
-    "id":"vss-enterprise-acldeny-time",
-    "title":"ACL Deny vs Time",
+    "id":"vss-domain-service-all-services",
+    "title":"L4 Services",
     "service":"elasticsearch",
     "query":{
         "index":"{{index:nuage_flow}}",
@@ -26,22 +26,25 @@
                         },
                         {
                             "term": {
-                                "type": "DENY"
+                                "nuage_metadata.domainName":"{{domainName:chord_domain}}"
                             }
                         }
                     ]
                 }
             },
             "aggs": {
-                "timestamp": {
-                    "date_histogram": {
-                        "field": "timestamp",
-                        "interval": "{{interval:1h}}"
+                "services": {
+                    "terms": {
+                        "field": "nuage_metadata.service",
+                        "size": 0,
+                        "order": {
+                            "SumOf": "desc"
+                        }
                     },
                     "aggs": {
                         "SumOf": {
                             "sum": {
-                                "field": "packets"
+                                "field": "bytes"
                             }
                         }
                     }

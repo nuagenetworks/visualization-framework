@@ -24,7 +24,16 @@
         {
             "label": "ACL Analytics",
             "url": "/dashboards/vssDomainACL"
+        },
+        {
+            "label": "Service Analytics",
+            "url": "/dashboards/vssDomainService"
+        },
+        {
+            "label": "Application Analytics",
+            "url": "/dashboards/vssDomainApplication"
         }
+
     ],
     "filterOptions": {
         "Source Field": {
