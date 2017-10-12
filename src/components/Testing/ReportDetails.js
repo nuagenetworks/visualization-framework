@@ -1,44 +1,31 @@
 import React, { Component } from "react";
 import Collapsible from 'react-collapsible';
+import { connect } from "react-redux";
 import DataSets from "./DataSets.js";
-
 import Panel from "../Common/Panel";
+import { Actions, ActionKeyStore } from "./redux/actions";
+import { CardOverlay } from "../CardOverlay";
+import FontAwesome from "react-fontawesome";
+import style from "./style";
 
+const configUrl = 'testing/reports/';
+class ReportDetails extends Component {
 
-export default class ReportDetails extends Component {
-
-  constructor() {
-    super();
-    this.state = {
-      reports : {}
-    };
-
-    this.configApi   = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/middleware/api/";
-  }
-
-  componentWillMount() {
-    this.editMode = this.props.params.mode === 'edit';
+  componentDidMount() {
     this.getAllReports();
   }
 
-  getConfigApi(url) {
-    return this.configApi + url;
-  }
-
   getAllReports() {
-    fetch(this.getConfigApi("testing/reports/"+this.props.params.id)).then(
-      function(response){
-        return response.json();
-      }
-    ).then(data => {
-      this.setState({
-        reports : data.results
-      });
-    });
+    const {
+      getReport,
+      params
+    } = this.props;
+    this.editMode = params.mode === 'edit';   
+    getReport(`${configUrl}${params.id}`);
   }
 
   renderReportDetail() {
-    const reports = this.state.reports;
+    const reports = this.props.data;
     
     if(reports.dashboards) {
       return Object.keys(reports.dashboards).map(key =>
@@ -52,7 +39,7 @@ export default class ReportDetails extends Component {
   }
 
   renderCommonData() {
-    const reports = this.state.reports;
+    const reports = this.props.data;
     return (
       <div className="tab-content" style={{ border: "1px solid #ddd"}} key="mainData">
         <div id="Summary" className="tab-pane fade in active">
@@ -79,27 +66,93 @@ export default class ReportDetails extends Component {
     );
   }
 
+  shouldShowReportsLoading() {
+    return this.props.loader;
+  }
+  
+  renderRepoprtsIfNeeded() {
+    if (this.shouldShowReportsLoading()) {
+      return this.renderCardWithInfo("Please wait while loading", "circle-o-notch", true);
+    }
+    return false;
+  }
 
+  renderCardWithInfo(message, iconName, spin = false) {
+    
+      return (
+        <CardOverlay
+            overlayStyle={style.overlayContainerLoader}
+            textStyle={style.overlayText}
+            text={(
+                <div style={style.fullWidth}>
+                    <FontAwesome
+                        name={iconName}
+                        size="2x"
+                        spin={spin}
+                        />
+                    <br></br>
+                    {message}
+                </div>
+            )}
+        />
+      )
+  }
 
   render() {
 
-    if(!this.state.reports) {
+    if(!this.props.data) {
         return null;
     }
 
     return (
         <Panel title="Detailed Report">
-          <div>
-            <ul className="nav nav-tabs">
-                <li className="active">
-                  <a href={'/testing/'} className="text-success" style={{cursor:"pointer"}}>
-                  <i className="fa fa-backward"></i> Back</a>
-                </li>
-            </ul>
-            {this.renderCommonData()}
-            {this.renderReportDetail()}
-          </div>
+          {
+            this.renderRepoprtsIfNeeded() ? this.renderRepoprtsIfNeeded() : (
+              <div>
+                <ul className="nav nav-tabs">
+                    <li className="active">
+                      <a href={'/testing/'} className="text-success" style={{cursor:"pointer"}}>
+                      <i className="fa fa-backward"></i> Back</a>
+                    </li>
+                </ul>
+                {this.renderCommonData()}
+                {this.renderReportDetail()}
+              </div>
+            )
+          }
+          
         </Panel>
     )
   }
 }
+
+const mapStateToProps = (state, ownProps) => {
+  const url =  `${configUrl}${ownProps.params.id}`;
+  const data =  state.testReducer.getIn([
+    url,
+    ActionKeyStore.DATA
+  ]);
+  const loader =  state.testReducer.getIn([
+    url,
+    ActionKeyStore.IS_FETCHING
+  ]);
+  
+  const props = {
+    data: data ? data.toJS() : [],
+    loader: loader,
+    params:ownProps.params
+  };
+
+  return props;
+};
+
+const actionCreators = (dispatch) => ({
+
+  getReport: (configUrl) => {
+    return dispatch(Actions.fetchIfNeeded(
+      configUrl
+    ));
+  }
+});
+
+export default connect(mapStateToProps, actionCreators)(ReportDetails);

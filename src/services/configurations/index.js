@@ -16,8 +16,23 @@ const fetchConfiguration = function (id, configType) {
         .then(parseJSON);
 }
 
+const processRequest = function (configType, method ='GET', params) {
+    let url = config.api + configType;
+    params = (typeof params !== 'undefined') ?  JSON.stringify(params) : {};
+    return fetch(url, {
+        method: method,
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        }),
+        body: params
+    })
+    .then(checkStatus)
+    .then(parseJSON);
+}
+
 export const ConfigurationService = {
     id: "configuration",
     fetch: fetchConfiguration,
     config: config,
+    processRequest: processRequest
 }

@@ -10,6 +10,8 @@ import configurationsReducer from "../services/configurations/redux/reducer";
 import interfaceReducer from "../components/App/redux/reducer";
 import messageBoxReducer from "../components/MessageBox/redux/reducer";
 import serviceReducer from "../services/servicemanager/redux/reducer";
+import testingReducer from "../components/Testing/redux/reducer";
+
 
 const loggerMiddleware = createLogger();
 
@@ -18,7 +20,8 @@ const appReducer = combineReducers({
     interface: interfaceReducer,
     messageBox: messageBoxReducer,
     router: routerStateReducer,
-    services: serviceReducer
+    services: serviceReducer,
+    testReducer: testingReducer
 });
 
 const rootReducer = (state, action) => {

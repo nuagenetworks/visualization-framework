@@ -1,19 +1,22 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import 'react-notifications/lib/notifications.css';
 import { push } from "redux-router";
 import DataTables from 'material-ui-datatables';
 import FontAwesome from "react-fontawesome";
 import moment from "moment";
-import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import style from "./style";
-
 import Panel from "../Common/Panel";
+import { Actions, ActionKeyStore } from "./redux/actions";
+import { CardOverlay } from "../CardOverlay";
+
+const configUrl = 'testing/reports';
 
 class Testing extends Component {
 
   constructor() {
-    super();
+  super();
 	this.table_columns = [
 	  {
 	    key: 'created_at',
@@ -75,33 +78,28 @@ class Testing extends Component {
 	];
 
     this.currentPage = 1;
-    this.limit = 10;
+    this.limit = 5;
     this.filterData = false;
 
     this.state = {
     	data: []
-    }
-
-    this.configApi   = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/middleware/api/";
+    };
 
     this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this);
     this.handleNextPageClick     = this.handleNextPageClick.bind(this);
     this.handleSortOrderChange   = this.handleSortOrderChange.bind(this);
     this.handleFilterValueChange = this.handleFilterValueChange.bind(this);
-    this.deleteReport = this.deleteReport.bind(this);
+    this.deleteReport            = this.deleteReport.bind(this);
   }
 
-  getConfigApi(url) {
-	   return this.configApi + url;
-  }
-
-  componentWillMount() {
+  componentDidMount() {
     this.initiate();
   }
 
   componentWillReceiveProps(nextProps) {
     if(this.props !== nextProps) {
-        this.initiate();
+      this.resetFilters(nextProps);
+      this.updateData();
     }
   }
 
@@ -111,36 +109,28 @@ class Testing extends Component {
 
   getAllReports() {
 
-	fetch(this.getConfigApi("testing/reports")).then(
-	  	function(response){
-	      return response.json();
-	    }
-  	).then(jsonData => {
-  	    this.data = jsonData.results;
-  	     /*
-	     * On data change, resetting the paging and filtered data to 1 and false respectively.
-	     */
-	    this.resetFilters();
-  	    this.updateData();
-  	});
-
+    const {
+      getReport,
+    } = this.props;
+    
+    getReport(configUrl);
   }
 
-  resetFilters() {
+  resetFilters(props) {
     this.currentPage = 1;
-    this.filterData = this.data;
-    this.setState({ data: this.data });
+    this.filterData = props.data;
+    this.setState({ data: props.data });
   }
 
   deleteReport(id) {
-	  fetch(this.getConfigApi(`testing/reports/delete/${id}`)).then(
-	  	function(response){
-	     return response.json();
-	    }
-	  ).then(jsonData => {
-	    this.initiate();
-      NotificationManager.success('Successfully Deleted', '');
-	  });
+    const {
+      deleteReport,
+    } = this.props;
+    
+    deleteReport(`testing/reports/delete/${id}`).then( () => {
+      this.getAllReports();    
+    });
+
   }
 
   handlePreviousPageClick() {
@@ -155,12 +145,10 @@ class Testing extends Component {
 
   handleFilterValueChange(search) {
 
-    this.resetFilters();
-
-    this.filterData = this.data;
+    this.resetFilters(this.props);
 
     if(search) {
-        this.filterData = this.data.filter((d, j) => {
+        this.filterData = this.props.data.filter((d, j) => {
             let match = false;
             this.table_columns.map((column, i) => {
                 if(d[column.key] && d[column.key].toString().toLowerCase().includes(search.toLowerCase()))
@@ -186,36 +174,63 @@ class Testing extends Component {
   }
 
   updateData() {
-
     let offset = this.limit * (this.currentPage - 1);
-
     this.setState({
         data : this.filterData.slice(offset, offset + this.limit)
     });
-
   }
   
   generateNewReport() {
-
-    fetch(this.getConfigApi("testing/initiate"), {
-      method: 'post',
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      })
-    }).then(function(response) {
-      return response.json();
-    }).then(jsonData => {
-      NotificationManager.success(jsonData.results, '');
-      this.getAllReports();
+    const {
+      generateNewReport,
+    } = this.props;
+    
+    generateNewReport(`testing/initiate`,'POST').then( (data) => {
+      NotificationManager.success(data.results, '');
+      this.getAllReports();    
     });
+    
   }
 
+  shouldShowReportsLoading() {
+    return this.props.loader;
+  }
+  
+  renderRepoprtsIfNeeded() {
+    if (this.shouldShowReportsLoading()) {
+      return this.renderCardWithInfo("Please wait while loading", "circle-o-notch", true);
+    }
+
+    return false;
+  }
+
+  renderCardWithInfo(message, iconName, spin = false) {
+    
+      return (
+          <CardOverlay
+              overlayStyle={style.overlayContainerLoader}
+              textStyle={style.overlayText}
+              text={(
+                  <div style={style.fullWidth}>
+                      <FontAwesome
+                          name={iconName}
+                          size="2x"
+                          spin={spin}
+                          />
+                      <br></br>
+                      {message}
+                  </div>
+              )}
+              />
+      )
+  }
+    
   render() {
 
     const tableData = this.state.data;
 
     if(!tableData) {
-	  return "<p>No Data</p>";
+	    return "<p>No Data</p>";
     }
 
     return (
@@ -223,43 +238,85 @@ class Testing extends Component {
           <div className="text-right" style={style.reportDiv}>
             <button type="button" style={style.reportBtn} className="btn btn-sm btn-primary" onClick={this.generateNewReport.bind(this)}><FontAwesome name='plus'></FontAwesome> New Report</button>
             <button type="button" className="btn btn-xs btn-primary" onClick={this.getAllReports.bind(this)} style={style.reloadBtn}><FontAwesome name='refresh'></FontAwesome> Reload</button>
+            
           </div>
-  				<DataTables
-  				headerToolbarMode={"filter"}
-  				showRowHover={false}
-  				showHeaderToolbar={true}
-  				showHeaderToolbarFilterIcon={false}
-  				multiSelectable={true}
-  				columns={this.table_columns}
-  				data={tableData}
-  				showRowSizeControls={false}
-          onNextPageClick={this.handleNextPageClick}
-          onPreviousPageClick={this.handlePreviousPageClick}
-          onFilterValueChange={this.handleFilterValueChange}
-          onSortOrderChange={this.handleSortOrderChange}
-  				page={this.currentPage}
-  				count={this.filterData.length}
-  				rowSize={this.limit}
-  				tableStyle={{
-  				width: "inherit",
-  				minWidth: "100%"
-  				}}
-  				tableBodyStyle={{overflowX: "scroll"}}
-  				/>
-          <NotificationContainer/>
+         {
+          this.renderRepoprtsIfNeeded() ? this.renderRepoprtsIfNeeded() : (
+            <div>
+              <DataTables
+                headerToolbarMode={"filter"}
+                showRowHover={false}
+                showHeaderToolbar={true}
+                showHeaderToolbarFilterIcon={false}
+                multiSelectable={true}
+                columns={this.table_columns}
+                data={tableData}
+                showRowSizeControls={false}
+                onNextPageClick={this.handleNextPageClick}
+                onPreviousPageClick={this.handlePreviousPageClick}
+                onFilterValueChange={this.handleFilterValueChange}
+                onSortOrderChange={this.handleSortOrderChange}
+                page={this.currentPage}
+                count={this.filterData.length}
+                rowSize={this.limit}
+                tableStyle={{
+                width: "inherit",
+                minWidth: "100%"
+                }}
+                tableBodyStyle={{overflowX: "scroll"}}
+              />
+              <NotificationContainer/>
+            </div>
+          )
+         }
+  				
         </Panel>
     )
   }
 }
 
-const mapStateToProps = (state) => {
-  return {};
+const mapStateToProps = (state, ownProps) => {
+    const data =  state.testReducer.getIn([
+      configUrl,
+      ActionKeyStore.DATA
+    ]);
+    const loader =  state.testReducer.getIn([
+      configUrl,
+      ActionKeyStore.IS_FETCHING
+    ])
+    const props = {
+      data: data ? data.toJS() : [],
+      loader: loader
+    };
+
+    return props;
 };
 
 const actionCreators = (dispatch) => ({
+
+  getReport: (configUrl) => {
+    return dispatch(Actions.fetchIfNeeded(
+      configUrl
+    ));
+  },
+
+  deleteReport: (configUrl) => {
+    return dispatch(Actions.deleteReports(
+      configUrl
+    ));
+  },
+  
+  generateNewReport: (configUrl, method) => {
+    return dispatch(Actions.generateNewReport(
+      configUrl,
+      method
+    ));
+  },
+
   goTo: function(link, context) {
    dispatch(push({pathname:link, query:context}));
   }
+
 });
 
 export default connect(mapStateToProps, actionCreators)(Testing);

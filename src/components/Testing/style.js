@@ -1,3 +1,4 @@
+import { theme } from "../../theme";
 const style = {
   overlayContainer: {
     color: "rgb(136, 136, 136)",
@@ -50,7 +51,8 @@ const style = {
   },
 
   image : {
-    width:'50%'
+    width:'50%',
+    cursor:'pointer'
   },
 
   dashboardTab: {
@@ -82,6 +84,27 @@ const style = {
   },
   reloadBtn : {
     padding : '5px 10px 5px 10px'
+  },
+  overlayContainerLoader: {
+    position: "absolute",
+    top: "0",
+    left: "0",
+    width: "100%",
+    height: "100%",
+    display: "inline-block",
+    textAlign: "center",
+  },
+  overlayText: {
+    position: "relative",
+    top: "50%",
+    transform: "translateY(-50%)",
+    width: "100%",
+    fontSize: "1.2em",
+    fontWeight: 300,
+    color: theme.palette.blackColor,
+  },
+  fullWidth: {
+    width: "100%",
   }
 }
 
