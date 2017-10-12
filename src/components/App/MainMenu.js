@@ -75,7 +75,7 @@ class MainMenuView extends React.Component {
             return;
 
         const targetedDashboard = visualizationType === "VSS" ? "vssDomainFlow" : "aarDomain";
-        const domainType = "nuage_metadata.domainName"
+        const domainType = visualizationType === "VSS" ? "nuage_metadata.domainName" : "Domain";
 
         return (
             <div>
@@ -112,7 +112,7 @@ class MainMenuView extends React.Component {
             return;
 
         const targetedDashboard = visualizationType === "VSS" ? "vssDomainFlow" : "aarDomain";
-        const domainType = "nuage_metadata.l2domainName"
+        const domainType = visualizationType === "VSS" ? "nuage_metadata.l2domainName" : "L2Domain";
 
         return (
             <div>
