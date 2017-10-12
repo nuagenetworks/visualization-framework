@@ -6,6 +6,10 @@
         "index":"{{index:nuage_flow}}",
         "type":"{{type:nuage_doc_type}}",
         "body":{
+            "size": 100,
+            "sort": [
+              { "timestamp": { "order": "desc" } }
+            ],
             "query":{
                 "bool":{
                     "must":[
