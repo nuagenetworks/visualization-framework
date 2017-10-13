@@ -1,6 +1,6 @@
 {
     "id": "vss-enterprise-acldeny-metric",
-    "title": "# ACL-Deny (24h)",
+    "title": "# ACL-Deny",
     "query": "vss-enterprise-acldeny-metric",
     "graph": "VariationTextGraph",
     "data": {
