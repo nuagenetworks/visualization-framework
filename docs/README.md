@@ -447,7 +447,7 @@ For reference, please follow the link for installation [install-chromedriver-sel
 
 5.If we want to add any scenario to the url of the dashboard just add query string like given in this url, **http://localhost:3000/dashboards/testDashboard?dataset=Scenario1**
 
-4.We will test visualization frameworks for different scenarios by adding multiple scenarios in **datafile column** of **t_dashboard_datasets** table.
+6.We will test visualization frameworks for different scenarios by adding multiple scenarios in **datafile column** of **t_dashboard_datasets** table.
 ![t_dashboard_datasets](https://user-images.githubusercontent.com/14901092/31498636-26de4844-af80-11e7-8ce5-7a744fb9b690.png)
 
 Then url will look like below:
