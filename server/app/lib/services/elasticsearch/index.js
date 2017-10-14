@@ -6,7 +6,7 @@ var client = null;
 let config = function (eshost) {
     return {
         host: eshost ? eshost : (process.env.APP_ELASTICSEARCH_HOST ? process.env.APP_ELASTICSEARCH_HOST : null),
-        //log: 'trace',
+        log: 'trace',
         apiVersion: '2.2',
         sniffOnStart: true,
         sniffInterval: 60000,

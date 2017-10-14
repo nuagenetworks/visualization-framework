@@ -96,7 +96,6 @@ export default class BarGraph extends XYGraph {
             }
         const data = this.getGroupedData(originalData, settings);
 
-        
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
         const yLabelFn         = (d) => d[yColumn];
@@ -258,7 +257,7 @@ export default class BarGraph extends XYGraph {
                             const { onClick, style } = (
 
                                 // If an "onMarkClick" handler is registered,
-                                otherOptions && onMarkClick && d[settings.dimension] !== otherOptions.label ? {
+                                onMarkClick && (!otherOptions || d[settings.dimension] !== otherOptions.label) ? {
 
                                     // set it up to be invoked, passing the current data row object.
                                     onClick: () => onMarkClick(d),
