@@ -25,7 +25,7 @@ const MESSAGES = {
     URL_NOT_FOUND: 'Provided url does not exists',
     NO_WIDGET: 'Seems like an invalid Dashboard, no widgets found',
     WIDGETS_NOT_LOADING: 'Some of the widgets are still waiting for data.',
-    WIDGET_DATA_ISSUE: 'Some of the widgets have corrupted data'
+    WIDGET_DATA_ISSUE: ` widgets haven't loaded due to console errors.`
 }
 
 export const crawl = function (reportId, dashboard, callback) {
@@ -136,28 +136,31 @@ const fetchWidgets = function() {
       let sizes = [];
       let statuses = [];
 
-      let allChartsLoaded = true;
+      let allChartsLoaded = 0;
 
       driver.findElements(By.xpath("//div[contains(@class,'react-grid-layout')]/div/div")).then(function(elems) {
           elems.forEach(function (elem) {
-              elem.getAttribute('id').then(function(name){
+              elem.getAttribute('id').then(function(name, index){
                   if(name == "") {
-                    allChartsLoaded = false;
+                    allChartsLoaded++;
+                  } else {
+                    names.push(name);
+                    
+                    elem.getLocation().then(function(location){
+                        locations.push(location);
+                    });
+
+                    elem.getSize().then(function(size){
+                        sizes.push(size);
+                    });
+
+                    elem.findElements(By.xpath(".//span[contains(@class,'fa-spin') or contains(@class,'fa-bar-chart') or contains(@class,'fa-meh-o')]")).then(function(elements) {
+                        statuses.push(elements.length ? 'fail' : 'pass');
+                    });
                   }
-                  names.push(name);
               });
 
-              elem.getLocation().then(function(location){
-                  locations.push(location);
-              });
 
-              elem.getSize().then(function(size){
-                  sizes.push(size);
-              });
-
-              elem.findElements(By.xpath(".//span[contains(@class,'fa-spin') or contains(@class,'fa-bar-chart') or contains(@class,'fa-meh-o')]")).then(function(elements) {
-                  statuses.push(elements.length ? 'fail' : 'pass');
-              });
           });
       });
 
@@ -172,17 +175,17 @@ const fetchWidgets = function() {
                     if (err) {
                         console.log(err);
                     } else {
-                        if(!allChartsLoaded) {
-                            errors.push(MESSAGES.WIDGET_DATA_ISSUE)
+                        if(allChartsLoaded) {
+                            errors.push(`${allChartsLoaded}${MESSAGES.WIDGET_DATA_ISSUE}`)
                         }
 
-                        for(var i = 0; i < sizes.length; i++) {
+                        for(let i = 0; i < sizes.length; i++) {
                             widgets.push({
-                              chart_name : names[i] ? names[i] : i,
-                              status: statuses[i] == "fail" || names[i] == "" ? "fail" : null
+                              chart_name : names[i],
+                              status: statuses[i] == "fail" ? "fail" : null
                             });
 
-                            cropImage(sizes[i], locations[i], `${filePath}/dashboard.png`, `${filePath}/${names[i] ? names[i] : i}.png`, i === sizes.length - 1);
+                            cropImage(sizes[i], locations[i], `${filePath}/dashboard.png`, `${filePath}/${names[i]}.png`, i === sizes.length - 1);
                         }
                     }
 

@@ -25,15 +25,26 @@ const rootReducer = (state, action) => {
   return appReducer(state, action);
 };
 
+const composeEnhancers =
+  typeof window === 'object' &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+    }) : compose;
+
+const enhancer = composeEnhancers(
+  applyMiddleware(
+      thunkMiddleware,
+      loggerMiddleware,
+      updateContextMiddleware,
+      updateVisualizationTypeMiddleware,
+      updateConfigurationMiddleware
+  )
+  // other store enhancers if any
+);
+
 const createStoreWithRouterAndMiddleware = compose(
     reduxReactRouter({createHistory}),
-    applyMiddleware(
-        thunkMiddleware,
-        loggerMiddleware,
-        updateContextMiddleware,
-        updateVisualizationTypeMiddleware,
-        updateConfigurationMiddleware
-    )
+    enhancer
 )(createStore);
 
 let store = createStoreWithRouterAndMiddleware(rootReducer);
