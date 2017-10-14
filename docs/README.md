@@ -439,9 +439,12 @@ For reference, please follow the link for installation [install-chromedriver-sel
 ![reports](https://user-images.githubusercontent.com/14901092/31492666-ba459f0e-af69-11e7-993a-5474cbc36e26.png)
 
 2.**Status column** will show **EXECUTING** status of that report. Keep on running this report until status changes to **COMPLETED**.
+
 3.We can also add as many **dashboards** in our testing platform by adding name of the dashboard in **name column** and associated **url** of the dashboard to test in **t_dashboards table**.
 ![t_dashboards](https://user-images.githubusercontent.com/14901092/31498449-9057203a-af7f-11e7-887b-4167fad7f78f.png)
+
 4.We will fetch all the charts using the **url** column of **t_dashboards table** like **http://localhost:3000/dashboards/aarDomain**.
+
 5.If we want to add any scenario to the url of the dashboard just add query string like given in this url, **http://localhost:3000/dashboards/testDashboard?dataset=Scenario1**
 
 4.We will test visualization frameworks for different scenarios by adding multiple scenarios in **datafile column** of **t_dashboard_datasets** table.
