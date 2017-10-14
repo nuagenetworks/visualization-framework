@@ -291,9 +291,12 @@ export default class AbstractGraph extends React.Component {
     }
 
     getGroupedData(data, settings) {
+        const {
+          otherMinimumLimit
+        } = this.getConfiguredProperties();
 
         if(settings.otherOptions && settings.otherOptions.limit) {
-            
+
             let cfData = crossfilter(data);
             let metricDimension = cfData.dimension( d => d[settings.metric] );
             let limit = settings.otherOptions.limit;
@@ -303,7 +306,7 @@ export default class AbstractGraph extends React.Component {
                 const total = sortedData.reduce((total, d) => +total + d[settings.metric], 0);
 
                 let sum = 0;
-                let index = sortedData.findIndex( d =>  {
+                let index = sortedData.findIndex( (d, i) =>  {
                     sum += +d[settings.metric];
                     if(((sum / total) * 100) >= limit) {
                         return true;
@@ -311,16 +314,23 @@ export default class AbstractGraph extends React.Component {
                 });
 
                 limit = index !== -1 ? index + 1 : limit;
+
+                /**
+                  Limit must meet the minimum limit default to 10
+                **/
+                let min = settings.otherOptions.minimum ? settings.otherOptions.minimum : otherMinimumLimit;
+                if( limit < min)
+                  limit = min;
             }
 
-            
+
             let topData = metricDimension.top(limit);
             const otherDatas = metricDimension.top(Infinity, limit);
 
             if(otherDatas.length) {
-                const sum = otherDatas.reduce( (total, d) => +total + d[settings.metric], 0);     
+                const sum = otherDatas.reduce( (total, d) => +total + d[settings.metric], 0);
                 topData.push({
-                    [settings.dimension]: settings.otherOptions.label ? settings.otherOptions.label : 'Others', 
+                    [settings.dimension]: settings.otherOptions.label ? settings.otherOptions.label : 'Others',
                     [settings.metric]: sum
                 });
             }
@@ -328,7 +338,7 @@ export default class AbstractGraph extends React.Component {
             cfData.remove();
             return topData;
         }
-        
+
         return data;
     }
 
