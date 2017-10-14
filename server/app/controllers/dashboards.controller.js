@@ -12,6 +12,7 @@ class DashboardsController extends BaseController {
       let visualizations = [];
       let viz = null;
       if(dasboardData.visualizations) {
+        
         dasboardData.visualizations.forEach((visualization, index, array) => {
           try {
             viz = FetchManager.fetchAndParseJSON(visualization.id, DirectoryTypes.VISUALIZATION);

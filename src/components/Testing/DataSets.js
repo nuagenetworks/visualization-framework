@@ -1,22 +1,15 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import style from "./style";
-
 import SubPanel from "../Common/SubPanel"
 import Error from "../Common/Error"
 import Infobox from "../Common/Infobox"
-import Image from "./Image"
-export default class DataSets extends Component {
+import Image from "./Image";
+import { Actions } from "./redux/actions";
 
-  constructor() {
-    super();
-  	this.configApi = process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/middleware/api/";
-  }
-
-  getConfigApi(url) {
-    return this.configApi + url;
-  }
+class DataSets extends Component {
 
   getBaseURL() {
     return "http://localhost:8010/";
@@ -28,19 +21,15 @@ export default class DataSets extends Component {
 		  chart_id:chart_id,
       report_id : report_id,
       report_dashboard_id : report_dashboard_id
-	  }
+    }
+    
+    const {
+      updateDataSet,
+    } = this.props;
 
-    fetch(this.getConfigApi("testing/update/reports"), {
-		  method: 'post',
-		  headers: new Headers({
-			  'Content-Type': 'application/json'
-		  }),
-		  body: JSON.stringify(params)
-	  }).then(function(response) {
-		  return response.json();
-	  }).then(function(data) {
-      NotificationManager.success('Successfully Updated', '');
-	  });
+    updateDataSet(`testing/update/reports`,'POST', params).then( (data) => {
+      NotificationManager.success('Successfully Updated', '');    
+    });
   }
 
   getStatus(status) {
@@ -72,7 +61,8 @@ export default class DataSets extends Component {
 	 	  if (datasets.hasOwnProperty(datasetID)) {
 			  let chartsDetails = datasets[datasetID].charts.map((response, index) =>
 			    <div key={response.chart_id}  style={{marginTop: "20px"}}>
-				    <div className="" style={style.dashboardTab} style={{ display: "flex"}}>
+				    <div className="" style={{ display: "flex"}}>
+              {response.dataset_file}
               {datasets[datasetID].dataset_id ? 
   					    (
                   <Image data={`${this.getBaseURL()}dashboards/original/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/${response.chart_name}.png`}  />
@@ -120,3 +110,20 @@ export default class DataSets extends Component {
     )
   }
 }
+
+const mapStateToProps = (state, ownProps) => ({
+  
+});
+
+const actionCreators = (dispatch) => ({
+
+  updateDataSet: (configUrl, method, params) => {
+    return dispatch(Actions.updateDataSet(
+      configUrl,
+      method,
+      params
+    ));
+  }
+});
+
+export default connect(mapStateToProps, actionCreators)(DataSets);
