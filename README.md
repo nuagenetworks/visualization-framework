@@ -51,9 +51,17 @@ Here is a list of environment variable that can be set to configure the visualiz
 ## Middleware Setup
 
     1. Go inside the `visualization-framework/server` folder
-    2. Install all dependancies using `npm install` (it will take some time, please be patient)
-    3. Run the application using `npm start` command.
-    4. Run the lint using `npm run lint` command.
+    2. Install all dependencies using `npm install` (it will take some time, please be patient)
+    3. Copy /server/.env.example to /server/.env and change the paramets as per your settings.
+    4. Run the application using `npm start` command.
+    5. Run the lint using `npm run lint` command. 
+
+### Testing Framework Setup
+    1.Install ChromeDriver and Selenium
+    2.Create a database and run the sql script located at server/sql-dump
+    3.Kindly Update the mysql connection settings in server/.env 
+    4.Testing Url can be located at http://localhost:3000/testing/
+    5.Please run above steps before npm start of the middleware setup
 
 ## Middleware APIs
     1. Dashboard Confirguration: http://HOSTNAME/api/dashboards/:dashboardname
