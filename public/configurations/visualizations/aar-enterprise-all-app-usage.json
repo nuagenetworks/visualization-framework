@@ -22,15 +22,15 @@
         "pieOuterRadius": 0.95,
         "legend": {
             "show": true,
-            "orientation": "horizontal",
-            "circleSize": 1,
+            "orientation": "vertical",
+            "circleSize": 4,
             "labelOffset": 2
         }
     },
     "listeners": [{
       "redirect": "/dashboards/aarEnterpriseDetail",
       "params": {
-          "app": "L7Classification"
+          "appName": "L7Classification"
       }
     }],
     "query": "aar-enterprise-all-app-usage"
