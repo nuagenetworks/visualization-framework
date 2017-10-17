@@ -23,5 +23,10 @@
         "xColumn": "SourceNSG",
         "yColumn": "SumofBytes"
     },
+    "listeners": [{
+      "params": {
+          "srcNSG": "SourceNSG"
+      }
+    }],
     "query": "aar-enterprise-nsg-per-app"
 }

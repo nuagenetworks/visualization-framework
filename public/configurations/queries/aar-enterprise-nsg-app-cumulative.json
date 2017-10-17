@@ -33,14 +33,19 @@
                             "term": {
                                 "L7ClassEnhanced":"{{appName}}"
                             }
+                        },
+                        {
+                            "term": {
+                                "SourceNSG":"{{srcNSG}}"
+                            }
                         }
                     ]
                 }
             },
              "aggs": {
-                "SourceNSG": {
+                "DestinationIP": {
                     "terms": {
-                        "field": "SourceNSG",
+                        "field": "DstIp",
                         "order": {
                             "SumofBytes": "desc"
                         }

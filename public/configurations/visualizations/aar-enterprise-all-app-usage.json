@@ -28,7 +28,6 @@
         }
     },
     "listeners": [{
-      "redirect": "/dashboards/aarEnterpriseDetail",
       "params": {
           "appName": "L7Classification"
       }

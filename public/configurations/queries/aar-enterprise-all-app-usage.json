@@ -18,37 +18,27 @@
                                     "format":"epoch_millis"
                                 }
                             }
+                        },
+                        {
+                            "term": {
+                                "EnterpriseName": "{{enterpriseName:test_org}}"
+                            }
                         }
                     ]
                 }
             },
             "aggs":{
-                "3":{
-                    "filters":{
-                        "filters":{
-                            "Enterprise":{
-                                "query":{
-                                    "term":{
-                                        "EnterpriseName":"{{enterpriseName:test_org}}"
-                                    }
-                                }
-                            }
+                "L7Classification":{
+                    "terms":{
+                        "field":"L7ClassEnhanced",
+                        "order":{
+                            "Sum of MB":"desc"
                         }
                     },
                     "aggs":{
-                        "L7Classification":{
-                            "terms":{
-                                "field":"L7ClassEnhanced",
-                                "order":{
-                                    "Sum of MB":"desc"
-                                }
-                            },
-                            "aggs":{
-                                "Sum of MB":{
-                                    "sum":{
-                                        "field":"TotalBytesCount"
-                                    }
-                                }
+                        "Sum of MB":{
+                            "sum":{
+                                "field":"TotalBytesCount"
                             }
                         }
                     }
