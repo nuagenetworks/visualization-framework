@@ -22,7 +22,7 @@
             { "column": "SumofBytes", "label": "Total Bytes", "format": "s"}
         ],
         "percentages": true,
-        "labelColumn": "DestinationIP",
+        "labelColumn": "SourceIP",
         "sliceColumn": "SumofBytes",
         "percentagesFormat": ",.1%",
         "pieLabelRadius": 0.55,

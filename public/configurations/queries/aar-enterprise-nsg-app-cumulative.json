@@ -43,9 +43,9 @@
                 }
             },
              "aggs": {
-                "DestinationIP": {
+                "SourceIP": {
                     "terms": {
-                        "field": "DstIp",
+                        "field": "SrcIp",
                         "order": {
                             "SumofBytes": "desc"
                         }
