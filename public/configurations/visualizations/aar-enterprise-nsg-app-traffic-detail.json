@@ -1,6 +1,6 @@
 {
     "id": "aar-enterprise-nsg-app-traffic-detail",
-    "graph": "LineGraph",
+    "graph": "AreaGraph",
     "title": "NSG Application traffic detail for source {{SourceIP}}",
     "description": "Client {{SourceIP}} application traffic history on NSG",
     "author": "Bharat Mukheja",
