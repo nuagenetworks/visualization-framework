@@ -34,5 +34,10 @@
             "labelOffset": 3
         }
     },
+    "listeners": [{
+      "params": {
+          "SourceIP": "SourceIP"
+      }
+    }],
     "query": "aar-enterprise-nsg-app-cumulative"
 }
