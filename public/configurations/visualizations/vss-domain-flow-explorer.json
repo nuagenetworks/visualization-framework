@@ -7,6 +7,8 @@
     "author": "Ronak Shah",
     "creationDate": "10/23/2017",
     "data": {
+        "limit": 100,
+        "selectable": true,
         "columns": [
             { "column": "sourcemac", "label": "SMAC" },
             { "column": "sourceip", "label": "SIP" },

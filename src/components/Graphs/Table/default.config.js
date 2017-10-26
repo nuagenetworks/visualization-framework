@@ -4,6 +4,11 @@ export const properties = {
     width: "100%",
     padding: 5,
     limit: 5,
+
+    selectable: true,
+    multiSelectable: true,
+    showCheckboxes: false,
+
     rowHeight: 40,
     colors: [theme.palette.greyLighterColor, theme.palette.whiteColor],
     fontColor: theme.palette.blackLightColor,
