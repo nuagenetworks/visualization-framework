@@ -86,28 +86,52 @@ class AreaGraph extends XYGraph {
     } = this.props;
 
     const {
-        yColumn
+        yColumn,
+        xColumn,
+        linesColumn
     } = this.getConfiguredProperties();
-
-    this.yColumns = typeof yColumn === 'object' ? yColumn : [{ key: yColumn }];
 
     this.data = [];
 
-    data.forEach((d) => {
-        this.getYColumns().forEach((ld) => {
-            if(d[ld.key] !== null) {
-              this.data.push(Object.assign({
-                  yColumn: d[ld.key] !== null ? d[ld.key] : 0,
-                  columnType: ld.key
-              }, d));
-            }
-        });
-    });
+    if(linesColumn) {
+      data.forEach((d) => {
+          this.data.push(Object.assign({
+              yColumn: d[yColumn],
+              columnType: d[linesColumn]
+          }, d));
+      });
 
-    //Nest the entries by symbol
-    this.dataNest = d3.nest()
-      .key(function(d) {return d.columnType;})
-      .entries(this.getData());  
+      //Nest the entries by symbol
+      this.dataNest = d3.nest()
+        .key(function(d) {return d.columnType;})
+        .entries(this.data);
+
+    } else {
+
+      this.yColumns = typeof yColumn === 'object' ? yColumn : [{ key: yColumn }];
+
+      data.forEach((d) => {
+          this.getYColumns().forEach((ld) => {
+              if(d[ld.key] !== null) {
+                this.data.push(Object.assign({
+                    yColumn: d[ld.key] !== null ? d[ld.key] : 0,
+                    columnType: ld.key
+                }, d));
+              }
+          });
+      });
+
+      //Nest the entries by symbol
+      this.dataNest = d3.nest()
+        .key(function(d) {return d.columnType;})
+        .entries(this.data);
+    }
+
+    
+
+    if(!this.yColumns) {
+      this.yColumns = this.dataNest;
+    }
 
     return;
   }
@@ -199,11 +223,17 @@ class AreaGraph extends XYGraph {
   //tooltip circles
   tooltipCircle(data = null) {
     const {
-        circleRadius
+        circleRadius,
+        xColumn
     } = this.getConfiguredProperties();
 
     const yScale = this.getScale().y;
-    const cy     = data ? d => yScale(data[d.key]) : 1
+    const cy     = data ? (d, i) => {
+      let filter = d.values.filter(function(e) {
+        return e[xColumn] === data[xColumn];
+      })[0];
+      return yScale(filter.yColumn) 
+    }: 1
 
     const tooltipCircle = this.getGraph()
         .select('.tooltip-line').selectAll('.tooltipCircle')
@@ -233,12 +263,12 @@ class AreaGraph extends XYGraph {
 
     const lineGenerator = line()
       .x( d => scale.x(d[xColumn]))
-      .y( d => scale.y(d[d.columnType]));  
+      .y( d => scale.y(d.yColumn));  
 
     const areaGenerator = area()
       .x( d => scale.x(d[xColumn]))
       .y0( d => availableHeight)
-      .y1( d => scale.y(d[d.columnType]));
+      .y1( d => scale.y(d.yColumn));
 
     const svg   =  this.getGraph();
 
@@ -291,10 +321,10 @@ class AreaGraph extends XYGraph {
     // add transition effect
     svg.select(`#clip-${this.getGraphId()} rect`)
         .transition().duration(transition)
-        .attr('width', this.availableWidth);  
+        .attr('width', this.availableWidth);
 
     lines.exit().remove();
-    areas.exit().remove();  
+    //areas.exit().remove();  
 
   }
  
