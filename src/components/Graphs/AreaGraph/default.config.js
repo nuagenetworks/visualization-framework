@@ -4,7 +4,7 @@ export const properties = {
     stroke: {
         color: "red",
         width: "2px",
-        opacity: "0.4"
+        opacity: "0.3"
     },
     legend: {
         show: false
