@@ -308,8 +308,7 @@ class AreaGraph extends XYGraph {
 
     newAreas.append('path')
         .attr('class', 'area')
-        .style('opacity', stroke.opacity)
-        .style('strokeWidth', stroke.width)
+        .attr('fill-opacity', stroke.opacity)
         .attr('clip-path', `url(#clip-${this.getGraphId()})`);
 
     const allAreas = newAreas.merge(areas); 
