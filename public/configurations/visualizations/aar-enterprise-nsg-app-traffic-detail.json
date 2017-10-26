@@ -10,7 +10,7 @@
         "xColumn": "ts",
         "xLabel": "Time",
         "yColumn": "SumofBytes",
-        "yTickFormat": ",.1f",
+        "yTickFormat": ",.2s",
         "yLabel": "Traffic",
         "stroke": {
             "width": "2px"
