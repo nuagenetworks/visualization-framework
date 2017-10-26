@@ -29,7 +29,7 @@
     },
     "listeners": [{
       "params": {
-          "appName": "L7Classification"
+          "app": "L7Classification"
       }
     }],
     "query": "aar-enterprise-all-app-usage"

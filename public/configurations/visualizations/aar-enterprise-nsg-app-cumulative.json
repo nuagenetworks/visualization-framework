@@ -1,7 +1,7 @@
 {
     "id": "aar-enterprise-nsg-app-cumulative",
     "graph": "PieGraph",
-    "title": "Data Usage NSG Cumulative for {{appName}} App ",
+    "title": "Data Usage NSG Cumulative for {{app}} App ",
     "description": "Enterprise Level. Shows enterprise wide cumulative data usage per nsg for an app.",
     "author": "Bharat Mukheja",
     "creationDate": "10/15/2017",
