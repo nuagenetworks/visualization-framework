@@ -215,14 +215,7 @@ export default class Table extends AbstractGraph {
         }
 
         return (
-            <div
-                style={{
-                    width: `${width}px`,
-                    height: `${height}px`,
-                    overflow: "auto"
-                }}
-            >
-
+            <div>
                 <DataTables
                     headerToolbarMode={"filter"}
                     showRowHover={false}
@@ -244,7 +237,8 @@ export default class Table extends AbstractGraph {
                         width: "inherit",
                         minWidth: "100%"
                     }}
-                    tableBodyStyle={{overflowX: "scroll"}}
+                    tableBodyStyle={{overflow: "auto", height: `${height - 100}px`}}
+                    footerToolbarStyle={{height: "36px"}}
                 />
             </div>
         );
