@@ -110,18 +110,19 @@ class AreaGraph extends XYGraph {
         }
 
       })
-    }
 
-    if(insertTooltip) {
-      yColumns.forEach(column => {
-        updatedTooltip.push({
-          column: column.key,
-          format: format
+      if(insertTooltip) {
+        yColumns.forEach(column => {
+          updatedTooltip.push({
+            column: column.key,
+            format: format
+          })
         })
-      })
+      }
+  
+      this.setTooltipAccessor(updatedTooltip)
     }
-
-    this.setTooltipAccessor(updatedTooltip)
+   
   }
 
   parseData() {
