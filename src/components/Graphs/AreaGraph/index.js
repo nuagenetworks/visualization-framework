@@ -80,6 +80,50 @@ class AreaGraph extends XYGraph {
     this.getSVG().select('.tooltip-line').style('opacity', 0);
   }
 
+  updateTooltipConfiguration() {
+    const {
+      tooltip,
+      linesColumn,
+      yColumn
+    } = this.getConfiguredProperties();
+
+    const yColumns = this.getYColumns();
+
+    let updatedTooltip = [];
+    
+    let insertTooltip = false;
+    let format = null;
+    
+    if(tooltip) {
+      tooltip.forEach(t => {
+
+        //Checking whether need to insert all the dynamic values
+        if([linesColumn, yColumn].indexOf(t.column) !== -1) {
+          insertTooltip = true;
+
+          //If Format is specified for metric column
+          if(t.column == yColumn && t.format) {
+            format = t.format;
+          }
+        } else {
+          updatedTooltip.push(Object.assign({}, t));
+        }
+
+      })
+    }
+
+    if(insertTooltip) {
+      yColumns.forEach(column => {
+        updatedTooltip.push({
+          column: column.key,
+          format: format
+        })
+      })
+    }
+
+    this.setTooltipAccessor(updatedTooltip)
+  }
+
   parseData() {
     let {
         data
@@ -94,44 +138,55 @@ class AreaGraph extends XYGraph {
     this.data = [];
 
     if(linesColumn) {
-      data.forEach((d) => {
-          this.data.push(Object.assign({
-              yColumn: d[yColumn],
-              columnType: d[linesColumn]
-          }, d));
-      });
+      //Finding all the distinct lines
+      this.yColumns = [...new Set(data.map(item => item[linesColumn]))]
+        .map(d => ({key: d}));
 
-      //Nest the entries by symbol
-      this.dataNest = d3.nest()
-        .key(function(d) {return d.columnType;})
-        .entries(this.data);
+      let groupedData = d3.nest()
+        .key(function(d) {return d[xColumn];})
+        .entries(data);
 
+      this.data = [];
+      groupedData.forEach(group => {
+        //Generating the partial to append to each object will be used in tooltip
+        let partial = {};
+        group.values.forEach(d => {
+          partial[d[linesColumn]] = d[yColumn];
+        });
+
+        group.values.forEach(d => {
+          this.data.push(Object.assign({}, d, {
+            yColumn: d[yColumn],
+            columnType: d[linesColumn]
+          }, partial));
+        })
+      })
+
+      this.updateTooltipConfiguration();
+      
     } else {
 
       this.yColumns = typeof yColumn === 'object' ? yColumn : [{ key: yColumn }];
 
       data.forEach((d) => {
-          this.getYColumns().forEach((ld) => {
-              if(d[ld.key] !== null) {
-                this.data.push(Object.assign({
-                    yColumn: d[ld.key] !== null ? d[ld.key] : 0,
-                    columnType: ld.key
-                }, d));
-              }
-          });
+        this.getYColumns().forEach((ld) => {
+            if(d[ld.key] !== null) {
+              this.data.push(Object.assign({
+                  yColumn: d[ld.key] !== null ? d[ld.key] : 0,
+                  columnType: ld.key
+              }, d));
+            }
+        });
       });
 
-      //Nest the entries by symbol
-      this.dataNest = d3.nest()
-        .key(function(d) {return d.columnType;})
-        .entries(this.data);
     }
 
-    
+    //Nest the entries by symbol
+    this.dataNest = d3.nest()
+      .key(function(d) {return d.columnType;})
+      .entries(this.data);
 
-    if(!this.yColumns) {
-      this.yColumns = this.dataNest;
-    }
+    //this.dataNest;
 
     return;
   }
@@ -228,16 +283,15 @@ class AreaGraph extends XYGraph {
     } = this.getConfiguredProperties();
 
     const yScale = this.getScale().y;
-    const cy     = data ? (d, i) => {
-      let filter = d.values.filter(function(e) {
-        return e[xColumn] === data[xColumn];
-      })[0];
-      return yScale(filter.yColumn) 
-    }: 1
+    const cy     = data 
+      ? (d, i) => {
+        return yScale(data[d.key])
+      } 
+      : 1
 
     const tooltipCircle = this.getGraph()
         .select('.tooltip-line').selectAll('.tooltipCircle')
-        .data(this.getYColumns(), d => d.key);
+        .data(this.getDataNest(), d => d.key);
 
     tooltipCircle.enter().append('circle')
         .attr('class', 'tooltipCircle')
@@ -333,15 +387,22 @@ class AreaGraph extends XYGraph {
         data
     } = this.props  
 
+    const {
+      xTickFontSize,
+      yTickFontSize
+    } = this.getConfiguredProperties();
+
     const svg =  this.getGraph();
 
     //Add the X Axis
     svg.select('.xAxis')
+      .style('font-size', xTickFontSize)
       .attr('transform', 'translate(0,'+ this.getAvailableHeight() +')')
       .call(this.getAxis().x);
   
     //Add the Y Axis
     svg.select('.yAxis')
+      .style('font-size', yTickFontSize)
       .call(this.getAxis().y);
 
     this.setAxisTitles();

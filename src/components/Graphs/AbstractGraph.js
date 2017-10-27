@@ -35,35 +35,7 @@ export default class AbstractGraph extends React.Component {
         const { tooltip } = this.getConfiguredProperties();
         if(tooltip) {
 
-            // Generate accessors that apply number and date formatters.
-            const accessors = tooltip.map(columnAccessor);
-
-            // This function is invoked to produce the content of a tooltip.
-            this.getTooltipContent = () => {
-                // The value of this.hoveredDatum should be set by subclasses
-                // on mouseEnter and mouseMove of visual marks
-                // to the data entry corresponding to the hovered mark.
-                if(this.hoveredDatum) {
-                    return (
-                        <div>
-                            {/* Display each tooltip column as "label : value". */}
-                            {tooltip.map(({column, label}, i) => (
-                                <div key={column}>
-                                    <strong>
-                                        {/* Use label if present, fall back to column name. */}
-                                        {label || column}
-                                    </strong> : <span>
-                                        {/* Apply number and date formatting to the value. */}
-                                        {accessors[i](this.hoveredDatum)}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    );
-                } else {
-                    return null;
-                }
-            }
+            this.setTooltipAccessor(tooltip);
 
             // Expose tooltipId in case subclasses need it.
             this.tooltipId = `tooltip-${this.getGraphId()}`;
@@ -95,6 +67,38 @@ export default class AbstractGraph extends React.Component {
         } else {
             this.getTooltipContent = () => null
             this.tooltipProps = () => null
+        }
+    }
+
+    setTooltipAccessor(tooltip) {
+        // Generate accessors that apply number and date formatters.
+        const accessors = tooltip.map(columnAccessor);
+        
+        // This function is invoked to produce the content of a tooltip.
+        this.getTooltipContent = () => {
+            // The value of this.hoveredDatum should be set by subclasses
+            // on mouseEnter and mouseMove of visual marks
+            // to the data entry corresponding to the hovered mark.
+            if(this.hoveredDatum) {
+                return (
+                    <div>
+                        {/* Display each tooltip column as "label : value". */}
+                        {tooltip.map(({column, label}, i) => (
+                            <div key={column}>
+                                <strong>
+                                    {/* Use label if present, fall back to column name. */}
+                                    {label || column}
+                                </strong> : <span>
+                                    {/* Apply number and date formatting to the value. */}
+                                    {accessors[i](this.hoveredDatum)}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                );
+            } else {
+                return null;
+            }
         }
     }
 

@@ -102,24 +102,24 @@ export default class XYGraph extends AbstractGraph {
             return;
 
         const {
-          xTickSizeInner,
-          xTickSizeOuter,
-          xTickFormat,
-          xTickGrid,
-          xTicks,
-          yTickFormat,
-          yTickGrid,
-          yTicks,
-          yTickSizeInner,
-          yTickSizeOuter,
+            xTickSizeInner,
+            xTickSizeOuter,
+            xTickFormat,
+            xTickGrid,
+            xTicks,
+            yTickFormat,
+            yTickGrid,
+            yTicks,
+            yTickSizeInner,
+            yTickSizeOuter,
         } = this.getConfiguredProperties();
 
         this.axis = {};
 
         // X axis
         this.axis.x = axisBottom(this.getScale().x)
-        .tickSizeInner(xTickGrid ? -this.getAvailableHeight() : xTickSizeInner)
-        .tickSizeOuter(xTickSizeOuter);
+            .tickSizeInner(xTickGrid ? -this.getAvailableHeight() : xTickSizeInner)
+            .tickSizeOuter(xTickSizeOuter);
 
         if(xTickFormat){
             this.axis.x.tickFormat(format(xTickFormat));
@@ -128,19 +128,19 @@ export default class XYGraph extends AbstractGraph {
         if(xTicks){
             this.axis.x.ticks(xTicks);
         }
-     
+        
         // Y axis
         this.axis.y = axisLeft(this.getScale().y)
-        .tickSizeInner(yTickGrid ? -this.getAvailableWidth() : yTickSizeInner)
-        .tickSizeOuter(yTickSizeOuter);
+            .tickSizeInner(yTickGrid ? -this.getAvailableWidth() : yTickSizeInner)
+            .tickSizeOuter(0);
 
-      if(yTickFormat){
-          this.axis.y.tickFormat(format(yTickFormat));
-      }
+        if(yTickFormat){
+            this.axis.y.tickFormat(format(yTickFormat));
+        }
 
-      if(yTicks){
-          this.axis.y.ticks(yTicks);
-      }
+        if(yTicks){
+            this.axis.y.ticks(yTicks);
+        }
     }
 
     getAxis() {
