@@ -1,0 +1,34 @@
+
+{
+    "id": "vss-domain-flow-explorer",
+    "graph": "Table",
+    "title": "Flow Explorer",
+    "description": "Detail in a reverse chronological order about flows",
+    "author": "Ronak Shah",
+    "creationDate": "10/23/2017",
+    "data": {
+        "columns": [
+            { "column": "sourcemac", "label": "SMAC" },
+            { "column": "sourceip", "label": "SIP" },
+            { "column": "destinationmac", "label": "DMAC" },
+            { "column": "destinationip", "label": "DIP" },
+            { "column": "sourceport", "label": "S-Port" },
+            { "column": "destinationport", "label": "D-Port" },
+            { "column": "protocol", "label": "Proto" },
+            { "column": "type", "label": "Type"},
+            { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+            { "column": "packets", "label": "Packets" },
+            { "column": "nuage_metadata.subnetName", "label": "Subnet"},
+            { "column": "nuage_metadata.zoneName", "label": "Zone" },
+            { "column": "nuage_metadata.acl_source_type", "label": "Asso Source Type" },
+            { "column": "nuage_metadata.acl_source_name", "label": "Asso Source Name" },
+            { "column": "nuage_metadata.acl_destination_type", "label": "Asso Dest Type" },
+            { "column": "nuage_metadata.acl_destination_name", "label": "Asso Dest Name" },
+            { "column": "nuage_metadata.l7ApplicationName", "label": "L7 Application"},
+            { "column": "nuage_metadata.service", "label": "Service" },
+            { "column": "nuage_metadata.serviceGroup", "label": "Service Group" },
+            { "column": "nuage_metadata.aclId", "label": "ACL", "totalCharacters": 5, "tooltip" : {"column": "nuage_metadata.aclId"} }
+        ]
+    },
+    "query": "vss-domain-flow-explorer"
+}
