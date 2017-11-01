@@ -73,7 +73,7 @@ export default class Table extends AbstractGraph {
     }
 
     checkFontsize() {
-        if(this.test.querySelector('table').clientWidth > this.test.clientWidth) {
+        if(this.container.querySelector('table').clientWidth > this.container.clientWidth) {
             this.decrementFontSize();
         }
     }
@@ -253,7 +253,8 @@ export default class Table extends AbstractGraph {
         }
 
         return (
-            <div ref={(input) => { this.test = input; }}>
+            <div ref={(input) => { this.container = input; }}>
+                {this.renderSearchBarIfNeeded()}
                 <DataTables
                     columns={this.getHeaderData()}
                     data={tableData}
