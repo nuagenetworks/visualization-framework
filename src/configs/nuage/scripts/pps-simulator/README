@@ -6,7 +6,8 @@ Requirements to run the program:
 3. Configure Elastic search server ip in the config.ini under "es_server"
 4. Configure Elastic search server ip in the init_template.sh in place of 'http://localhost:9200'
 5. Run 'init_template.sh' to setup an elasticsearch template.
-5. Run 'python simulate_pps_stats.py' to push entries into elasticsearch
+6. Create a folder named 'log' in the same location where simulate_pps_stats.py is stored
+7. Run 'python simulate_pps_stats.py' to push entries into elasticsearch
 
 About simulator -
 
