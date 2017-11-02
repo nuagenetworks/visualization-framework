@@ -17,7 +17,7 @@ const tableStyle = {
     },
     rowColumn: {
         fontSize: "12px",
-        padding: "3px", 
+        padding: "2px", 
         height: "32px"
     },
     footerToolbar: {

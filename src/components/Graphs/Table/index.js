@@ -23,6 +23,7 @@ export default class Table extends AbstractGraph {
         this.handleClick             = this.handleClick.bind(this);
         this.handleSearch            = this.handleSearch.bind(this);
         this.handleRowSelection      = this.handleRowSelection.bind(this);
+        this.handleContextMenu       = this.handleContextMenu.bind(this);
 
         /**
         */
@@ -64,7 +65,7 @@ export default class Table extends AbstractGraph {
         this.filterData = this.props.data;
         this.setHeaderData(columns);
         this.updateData();
-    }
+    }   
 
     decrementFontSize() {
         this.setState({
@@ -210,10 +211,36 @@ export default class Table extends AbstractGraph {
 
     handleRowSelection(selectedRows) {
         this.selectedRows[this.currentPage] = selectedRows.slice();
+
         this.setState({
             selected: this.selectedRows[this.currentPage]
         })
     }
+
+    handleContextMenu(event) {
+        event.preventDefault()
+        const selectedRows = this.getSelectedRows()
+        console.log(selectedRows);
+        return false
+    }
+
+    getSelectedRows() {
+        const {
+            limit
+        } = this.getConfiguredProperties();
+
+        let selected = [];
+        for(let page in this.selectedRows) {
+            if(this.selectedRows.hasOwnProperty(page)) {
+                this.selectedRows[page].forEach((index) => {
+                    selected.push(this.filterData[(page - 1) * limit + index])
+                })
+            }
+        }
+
+        return selected;
+    }
+    
 
     renderSearchBarIfNeeded() {
         const {
@@ -253,7 +280,9 @@ export default class Table extends AbstractGraph {
         }
 
         return (
-            <div ref={(input) => { this.container = input; }}>
+            <div ref={(input) => { this.container = input; }}
+                onContextMenu={this.handleContextMenu}
+                >
                 {this.renderSearchBarIfNeeded()}
                 <DataTables
                     columns={this.getHeaderData()}
