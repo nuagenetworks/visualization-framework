@@ -298,6 +298,10 @@ Display nice Pie or Donut graphs
 - **pieInnerRadius** inner radius of the slices. Make this non-zero for a Donut Chart
 - **pieOuterRadius** outer radius of the slices
 - **pieLabelRadius** radius for positioning labels
+- **otherOptions** optional object
+  - **type** Value must be percentage or number, and default is percentage
+  - **limit** As per the type we can define the limit in percentage or slices respectively.
+  - **minimum** In case of percentage, if we want to override the mimium slices of 10.
 
 
 ##### Table

@@ -69,6 +69,7 @@ const defaults = {
     xLabelSize: 14,
     dateHistogram: false,
     interval: "30s",
+    otherMinimumLimit: 10,
     colors: [theme.palette.blueColor],
     fontColor: theme.palette.blackColor,
     fontSize: "1em",
