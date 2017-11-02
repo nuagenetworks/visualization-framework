@@ -8,6 +8,7 @@ export const properties = {
     selectable: true,
     multiSelectable: true,
     showCheckboxes: false,
+    enableSelectAll: true,
 
     rowHeight: 40,
     colors: [theme.palette.greyLighterColor, theme.palette.whiteColor],
