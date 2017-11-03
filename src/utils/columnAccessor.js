@@ -18,7 +18,13 @@ const columnAccessor = ({ column, format, timeFormat, totalCharacters}) => {
         return (d) => formatter(new Date(value(d)));
     } else if(totalCharacters) {
         return (d, showTooltip) => {
-           return showTooltip ? value(d) : value(d).substr(0,totalCharacters).concat('...') ;
+            return showTooltip
+              ? value(d)
+              : (
+                  value(d).length > totalCharacters
+                  ? value(d).substr(0, totalCharacters).concat('...')
+                  : value(d)
+                );
         }
     } else {
       return value;

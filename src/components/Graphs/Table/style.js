@@ -9,7 +9,8 @@ const tableStyle = {
     },
     headerColumn: {
         fontSize: "12px", 
-        padding: "3px",
+        padding: "0px",
+        paddingLeft: "2px",
         height: "32px"
     },
     row: {
@@ -17,7 +18,8 @@ const tableStyle = {
     },
     rowColumn: {
         fontSize: "12px",
-        padding: "2px", 
+        padding: "0px",
+        padingLeft: "2px", 
         height: "32px"
     },
     footerToolbar: {
