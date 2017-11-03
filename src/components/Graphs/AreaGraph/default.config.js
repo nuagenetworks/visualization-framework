@@ -1,11 +1,8 @@
 import { theme } from "../../../theme"
 
 export const properties = {
-    stroke: {
-        color: "red",
-        width: "2px",
-        opacity: "0.3"
-    },
+    strokeWidth: '2px',
+    opacity: '0.3',
     legend: {
         show: false
     },

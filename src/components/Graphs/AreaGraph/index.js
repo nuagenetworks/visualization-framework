@@ -286,7 +286,7 @@ class AreaGraph extends XYGraph {
     const yScale = this.getScale().y;
     const cy     = data 
       ? (d, i) => {
-        return yScale(data[d.key])
+        return data[d.key] ? yScale(data[d.key]) : -50
       } 
       : 1
 
@@ -308,9 +308,10 @@ class AreaGraph extends XYGraph {
   drawArea() {
 
     const {
-      stroke,
+      opacity,
       xColumn,
-      transition
+      transition,
+      strokeWidth
     } = this.getConfiguredProperties();
 
     const scale          = this.getScale();
@@ -342,7 +343,7 @@ class AreaGraph extends XYGraph {
     newLines.append('path')
         .attr('class', 'line')
         .style('fill', 'none')
-        .style('strokeWidth', stroke.width)
+        .style('strokeWidth', strokeWidth)
         .attr('clip-path', `url(#clip-${this.getGraphId()})`);
 
     const allLines = newLines.merge(lines); 
@@ -363,7 +364,7 @@ class AreaGraph extends XYGraph {
 
     newAreas.append('path')
         .attr('class', 'area')
-        .attr('fill-opacity', stroke.opacity)
+        .attr('fill-opacity', opacity)
         .attr('clip-path', `url(#clip-${this.getGraphId()})`);
 
     const allAreas = newAreas.merge(areas); 
