@@ -6,16 +6,17 @@
     "author": "Curran Kelleher",
     "creationDate": "10/14/2016",
     "data": {
+        "orientation": "horizontal",
         "interval": "30m",
-        "xColumn": "SourceNSG",
-        "yColumn": "SumofBytes",
-        "yTickFormat": ".2s",
+        "yColumn": "SourceNSG",
+        "xColumn": "SumofBytes",
+        "xTickFormat": ".2s",
         "stackColumn": "L7Classification",
         "xLabel": "Time",
         "yLabel": "Total Bytes",
         "legend": {
             "show": true,
-            "orientation": "vertical",
+            "orientation": "horizontal",
             "circleSize": 4,
             "labelOffset": 2
         }

@@ -25,7 +25,7 @@ const timeAbbreviations = {
     "m": "utcMinute",
     "s": "utcSecond",
     "ms": "utcMillisecond"
-};
+}
 
 function computeBarWidth(interval, timeScale) {
     const step = +interval.substr(0, interval.length - 1);
@@ -110,7 +110,7 @@ export default class BarGraph extends XYGraph {
               key: dimension,
               sortColumn: stack
             }),
-            stackColumn: yColumn
+            stackColumn: metric
           });
 
         console.log('nestedData', nestedData)
@@ -190,13 +190,13 @@ export default class BarGraph extends XYGraph {
               .domain([0, d3.max(nestedData, metricFn)])
 
         } else {
-
             // Handle the case of a horizontal bar chart.
             xScale = d3.scaleLinear()
-              .domain([0, d3.max(nestedData, metricFn)]);
+              .domain([0, d3.max(nestedData, metricFn)])
+            
             yScale = d3.scaleBand()
               .domain(nestedData.map(dimensionFn))
-              .padding(padding);
+              .padding(padding)
         }
 
         xScale.range([0, availableWidth]);
@@ -206,8 +206,8 @@ export default class BarGraph extends XYGraph {
           .tickSizeInner(xTickGrid ? -availableHeight : xTickSizeInner)
           .tickSizeOuter(xTickSizeOuter);
 
-        if(xTickFormat){
-            xAxis.tickFormat(d3.format(xTickFormat));
+        if(xTickFormat) {
+            xAxis.tickFormat(d3.format(xTickFormat))
         }
 
         if(xTicks){
@@ -284,9 +284,9 @@ export default class BarGraph extends XYGraph {
                                             width: barWidth,
                                             height: yScale(d.y0) - yScale(d.y1)
                                         } : {
-                                            x: 0,
+                                            x: xScale(d.y0),
                                             y: yScale(d[dimension]),
-                                            width: xScale(d[metric]),
+                                            width: xScale(d.y1) - xScale(d.y0),
                                             height: yScale.bandwidth()
                                         }
                                     );
@@ -309,7 +309,6 @@ export default class BarGraph extends XYGraph {
                                         // Otherwise, set onClick and style to "undefined".
                                     }
                                 );*/
-                                console.log()
                                 return (
                                     <rect
                                         x={ x }
