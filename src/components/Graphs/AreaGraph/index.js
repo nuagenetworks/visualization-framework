@@ -185,9 +185,20 @@ class AreaGraph extends XYGraph {
     //Nest the entries by symbol
     this.dataNest = d3.nest()
       .key(function(d) {return d.columnType;})
+      .rollup(function(values) {
+        return {
+          data: values,
+          max: d3.max(values, function(d) {
+            return d.yColumn
+          })
+        }
+      })
       .entries(this.data);
 
-    //this.dataNest;
+      this.dataNest = this.dataNest.sort(function(a, b) {
+        return a.value.max > b.value.max
+      })
+      
 
     return;
   }
@@ -302,7 +313,7 @@ class AreaGraph extends XYGraph {
         .attr('cx', 1)
         .attr('cy', cy);
 
-    tooltipCircle.exit().remove();   
+    tooltipCircle.exit().remove();
   }
 
   drawArea() {
@@ -319,14 +330,14 @@ class AreaGraph extends XYGraph {
 
     const lineGenerator = line()
       .x( d => scale.x(d[xColumn]))
-      .y( d => scale.y(d.yColumn));  
+      .y( d => scale.y(d.yColumn));
 
     const areaGenerator = area()
       .x( d => scale.x(d[xColumn]))
       .y0( d => availableHeight)
       .y1( d => scale.y(d.yColumn));
 
-    const svg   =  this.getGraph();
+    const svg = this.getGraph();
 
     svg.select('.area-chart')
       .select(`#clip-${this.getGraphId()}`)
@@ -350,7 +361,16 @@ class AreaGraph extends XYGraph {
 
     allLines.select('.line')
         .style('stroke', d => this.getColor({'key': d.key}))
-        .attr('d', d => lineGenerator(d.values));    
+        .attr('d', d => {
+          let data = (d.value.data)
+          
+          // Starting Line from xAxis over here
+          return lineGenerator([
+            Object.assign({}, data[0], {yColumn: 0}),
+            ...data,
+            Object.assign({}, data[data.length-1], {yColumn: 0}),
+          ])
+        })
 
     // Add area
 
@@ -371,7 +391,7 @@ class AreaGraph extends XYGraph {
 
     allAreas.select('.area')
         .style('fill', d => this.getColor({'key': d.key}))
-        .attr('d', d => areaGenerator(d.values));
+        .attr('d', d => areaGenerator(d.value.data));
 
     // add transition effect
     svg.select(`#clip-${this.getGraphId()} rect`)
