@@ -31,6 +31,13 @@ function didReceiveError(state, id, configType, error) {
         .setIn([configType, id, ActionKeyStore.ERROR], fromJS(error));
 }
 
+function resetConfiguration(state) {
+    return state
+            .set(ActionKeyStore.DASHBOARDS, Map())
+            .set(ActionKeyStore.VISUALIZATIONS, Map())
+            .set(ActionKeyStore.QUERIES, Map());
+}
+
 function configurationsReducer(state = initialState, action) {
 
     switch (action.type) {
@@ -42,6 +49,9 @@ function configurationsReducer(state = initialState, action) {
 
         case ActionTypes.CONFIG_DID_RECEIVE_ERROR:
             return didReceiveError(state, action.id, action.configType, action.error);
+
+        case ActionTypes.RESET_CONFIGURATION:
+            return resetConfiguration(state);
 
         default:
             return state;

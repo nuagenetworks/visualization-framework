@@ -4,7 +4,7 @@ import { createHistory } from "history";
 
 import thunkMiddleware from "redux-thunk";
 import createLogger from "redux-logger";
-import { updateContextMiddleware, updateVisualizationTypeMiddleware } from "./middlewares";
+import { updateContextMiddleware, updateVisualizationTypeMiddleware, updateConfigurationMiddleware } from "./middlewares";
 
 import configurationsReducer from "../services/configurations/redux/reducer";
 import ESReducer from "../configs/nuage/elasticsearch/redux/reducer";
@@ -39,7 +39,8 @@ const createStoreWithRouterAndMiddleware = compose(
         thunkMiddleware,
         loggerMiddleware,
         updateContextMiddleware,
-        updateVisualizationTypeMiddleware
+        updateVisualizationTypeMiddleware,
+        updateConfigurationMiddleware
     )
 )(createStore);
 

@@ -4,6 +4,7 @@ export const ActionTypes = {
     CONFIG_DID_START_REQUEST: "CONFIG_DID_START_REQUEST",
     CONFIG_DID_RECEIVE_RESPONSE: "CONFIG_DID_RECEIVE_RESPONSE",
     CONFIG_DID_RECEIVE_ERROR: "CONFIG_DID_RECEIVE_ERROR",
+    RESET_CONFIGURATION: "RESET_CONFIGURATION",
 };
 
 export const ActionKeyStore = {
@@ -108,10 +109,17 @@ function didReceiveError (id, configType, error) {
     };
 };
 
+function resetConfiguration () {
+    return {
+        type: ActionTypes.RESET_CONFIGURATION
+    }
+};
+
 export const Actions = {
     fetch,
     fetchIfNeeded,
     didStartRequest,
     didReceiveResponse,
-    didReceiveError
+    didReceiveError,
+    resetConfiguration
 };
