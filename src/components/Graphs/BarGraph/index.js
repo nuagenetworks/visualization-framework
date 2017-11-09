@@ -8,7 +8,7 @@ import "./style.css";
 
 import { properties } from "./default.config"
 
-import { nest, nestStack } from "../../../utils/helpers"
+import { nest, nestStack, nestSum, limit } from "../../../utils/helpers"
 
 // TODO split out this time interval log into a utility module.
 
@@ -50,14 +50,14 @@ export default class BarGraph extends XYGraph {
     render() {
 
         const {
-            data: originalData,
+            data,
             width,
             height,
             onMarkClick
         } = this.props;
         
 
-        if (!originalData || !originalData.length)
+        if (!data || !data.length)
             return;
 
         const {
@@ -92,7 +92,7 @@ export default class BarGraph extends XYGraph {
 
         const vertical = orientation  === "vertical";
 
-        let dimension, metric
+        let dimension, metric;
 
         if (vertical) {
           dimension = xColumn
@@ -103,23 +103,31 @@ export default class BarGraph extends XYGraph {
         }
 
         let stack = stackColumn || dimension
-        
+
         let nestedData = nestStack({
-            data: nest({
-              data: originalData, 
-              key: dimension,
-              sortColumn: stack
+            data: limit({
+              data: nestSum({
+                data: nest({
+                    data, 
+                    key: dimension,
+                    sortColumn: stack
+                }),
+                stackColumn: metric
+              }),
+              limitOption: Object.assign ({
+                fields: [
+                  {
+                    type: 'array',
+                    name: 'values',
+                    groups: [stack],
+                    metrics: metric
+                  }
+                ]}
+                , otherOptions || {}
+              )
             }),
             stackColumn: metric
-          });
-
-        console.log('nestedData', nestedData)
-
-        const data = this.getGroupedData(originalData, {
-            metric,
-            dimension,
-            otherOptions
-        });
+        })
 
         const isVerticalLegend = legend.orientation === 'vertical';
 
@@ -131,28 +139,28 @@ export default class BarGraph extends XYGraph {
         const metricFn         = (d) => d.total
         const dimensionFn      = (d) => d.key
 
-        const label            = stackLabelFn;
         const scale            = this.scaleColor(data, stack);
 
         const getColor         = (d) => scale ? scale(d[colorColumn || stack]) : colors[0];
 
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
+        
         let xAxisLabelWidth   = this.longestLabelLength(data, xLabelFn, xTickFormat) * chartWidthToPixel;
         let yAxisLabelWidth   = this.longestLabelLength(data, yLabelFn, yTickFormat) * chartWidthToPixel;
 
         let overAllAvailableWidth = width - (margin.left + margin.right);
         let maxWidthPercentage = 0.20;
         let trucatedYAxisWidth = ((overAllAvailableWidth * maxWidthPercentage) < yAxisLabelWidth ? (overAllAvailableWidth * maxWidthPercentage) : yAxisLabelWidth);
-
+        
         let leftMargin        = margin.left + trucatedYAxisWidth;
         let availableWidth    = overAllAvailableWidth - trucatedYAxisWidth;
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
 
-        let paddedYAxisWidth = trucatedYAxisWidth - 40;
-
+        let legendWidth = this.longestLabelLength(data, stackLabelFn) * chartWidthToPixel;
+        
         if (legend.show)
         {
-            legend.width = vertical ? xAxisLabelWidth : yAxisLabelWidth;
+            legend.width = legendWidth
 
             // Compute the available space considering a legend
             if (isVerticalLegend)
@@ -169,7 +177,6 @@ export default class BarGraph extends XYGraph {
 
         let xScale, yScale;
 
-        console.log('dateHistogram', dateHistogram)
         if (dateHistogram) {
 
             // Handle the case of a vertical date histogram.
@@ -246,13 +253,24 @@ export default class BarGraph extends XYGraph {
 
         let xAxisGraph = <g
             key="xAxis"
-            ref={ (el) => vertical ? d3.select(el).call(xAxis).selectAll(".tick text").call(this.wrapD3Text, barWidth) : d3.select(el).call(xAxis).selectAll(".tick text") }
+            ref={ (el) => vertical 
+                  ? d3.select(el).call(xAxis)
+                      .selectAll(".tick text")
+                      .call(this.wrapD3Text, barWidth) 
+                  : d3.select(el).call(xAxis)
+                      .selectAll(".tick text") 
+                }
             transform={ `translate(0, ${availableHeight})` }
         />
 
         let yAxisGraph = <g
             key="yAxis"
-            ref={ (el) => (!vertical && !dateHistogram) ? d3.select(el).call(yAxis).selectAll(".tick text").call(this.wrapD3Text, paddedYAxisWidth) : d3.select(el).call(yAxis) }
+            ref={ (el) => ( !vertical && !dateHistogram) 
+                  ? d3.select(el).call(yAxis)
+                      .selectAll(".tick text")
+                      .call(this.wrapD3Text, yAxisLabelWidth) 
+                  : d3.select(el).call(yAxis) 
+                }
         />
 
         return (
@@ -291,10 +309,9 @@ export default class BarGraph extends XYGraph {
                                         }
                                     );
 
-                                    console.log(metric, d[metric], x, y, width, height)
                                 
                                 // Set up clicking and cursor style.
-                               /* const { onClick, style } = (
+                                const { onClick, style } = (
 
                                     // If an "onMarkClick" handler is registered,
                                     onMarkClick && (!otherOptions || d[dimension] !== otherOptions.label) ? {
@@ -308,7 +325,7 @@ export default class BarGraph extends XYGraph {
                                     } : {
                                         // Otherwise, set onClick and style to "undefined".
                                     }
-                                );*/
+                                );
                                 return (
                                     <rect
                                         x={ x }
@@ -327,7 +344,7 @@ export default class BarGraph extends XYGraph {
                             })
                         })}
                     </g>
-                    {this.renderLegend(data, legend, getColor, label)}
+                    {this.renderLegend(data, legend, getColor, stackLabelFn)}
                 </svg>
             </div>
         );

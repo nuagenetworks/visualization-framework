@@ -2,9 +2,8 @@
  * Nesting - Grouping of elements by key and sorting of inner values
  */
 
-
 import { nest, ascending } from "d3";
-import sorter from "./sorter"
+import { sorter } from "../"
 
 export default ({
     data, 

@@ -1,5 +1,9 @@
+export {default as merge} from "./merge"
+export {default as pick} from "./pick"
 export {default as sorter} from "./sorter"
-export {default as nest} from "./nest"
-export {default as reducerSum} from "./reducerSum"
 export {default as stack} from "./stack"
-export {default as nestStack} from "./nestStack"
+
+export * from "./limit/index"
+export * from "./nest/index"
+export * from "./reducers/index"
+

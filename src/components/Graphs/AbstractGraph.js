@@ -190,6 +190,7 @@ export default class AbstractGraph extends React.Component {
 
             if (!labelB)
                 return a;
+
             return format(labelA.toString()).length > format(labelB.toString()).length ? a : b;
         }));
 
@@ -203,6 +204,9 @@ export default class AbstractGraph extends React.Component {
 
         if (!legend.show)
             return;
+
+        // Getting unique labels
+        data = data.filter((e, i) => data.findIndex(a => label(a) === label(e)) === i)
 
         const {
             width,
@@ -291,6 +295,7 @@ export default class AbstractGraph extends React.Component {
     }
 
     getGroupedData(data, settings) {
+        
         const {
           otherMinimumLimit
         } = this.getConfiguredProperties();
@@ -328,10 +333,11 @@ export default class AbstractGraph extends React.Component {
             const otherDatas = metricDimension.top(Infinity, limit);
 
             if(otherDatas.length) {
+                let values = {};
                 const sum = otherDatas.reduce( (total, d) => +total + d[settings.metric], 0);
                 topData.push({
                     [settings.dimension]: settings.otherOptions.label ? settings.otherOptions.label : 'Others',
-                    [settings.metric]: sum
+                    [settings.metric]: sum,
                 });
             }
 
