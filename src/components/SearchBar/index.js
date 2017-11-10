@@ -13,32 +13,59 @@ import SearchIcon  from 'react-icons/lib/fa/search';
   
 export default class SearchBar extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
+
         this.state = {
             data: [],
             isOk: true,
+            query: this.props.searchText || ''
         }
 
-        // set props data
-        this.options = this.props.options;
-        this.data    = this.props.data;
-        this.columns = this.props.columns ? this.props.columns : false;
-
-        this.autoCompleteHandler = new AutoCompleteHandler(this.data, this.options);
+        const {
+            options,
+            data,
+        } = this.props
+        
+        this.autoCompleteHandler = new AutoCompleteHandler(data, options)
     }
 
-    onChange(query,result) {
+    componentDidMount () {
+        const { query } = this.state
+
+        if(query) {
+            this.refs.filterBox.onSubmit(query)
+        }
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return JSON.stringify(nextProps.data) !== JSON.stringify(this.props.data)
+    }
+
+    componentDidUpdate () {
+        const { query } = this.state
+
+        this.refs.filterBox.onSubmit(query)
+    }
+
+    onChange (query, result) {
         this.setState({
-            isOk: !result.isError
-        });
+            isOk: !result.isError,
+            query
+        })
     }
 
-    onParseOk(expressions) {
-        var newData = new AdvancedResultProcessing(this.options, this.columns).process(this.data, expressions);
-        this.props.handleSearch(newData);        
+    onParseOk (expressions) {
+        const {
+            options,
+            data,
+            columns = false
+        } = this.props
+
+        const filteredData = new AdvancedResultProcessing(options, columns).process(data, expressions)
+        this.props.handleSearch(filteredData)
     }
     
-    renderIcon() {
+    renderIcon () {
         var style = {
             marginTop: 10,
             marginLeft: 5
@@ -49,16 +76,24 @@ export default class SearchBar extends React.Component {
     }
 
     render() {
+        const {
+            query
+        } = this.state
+
+        const {
+            options
+        } = this.props
+
         return (
            
         <div style={{display: "flex", margin: "10px"}}>
             <div className="filter">
                 <ReactFilterBox
+                    ref="filterBox"
                     onChange={this.onChange.bind(this)}
                     autoCompleteHandler={this.autoCompleteHandler}
-                    query={this.state.query}
-                    data={this.data}
-                    options={this.options}
+                    query={query}
+                    options={options}
                     onParseOk={this.onParseOk.bind(this) }
                 />
 

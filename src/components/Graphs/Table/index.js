@@ -35,6 +35,7 @@ export default class Table extends AbstractGraph {
             data: [],
             fontSize: style.defaultFontsize
         }
+
     }
 
     componentWillMount() {
@@ -42,7 +43,7 @@ export default class Table extends AbstractGraph {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(this.props !== nextProps) {
+        if(JSON.stringify(this.props) !== JSON.stringify(nextProps)) {
             this.initiate();
         }
     }
@@ -153,14 +154,16 @@ export default class Table extends AbstractGraph {
             accessors.forEach((accessor, i) => {
                 let columnData = accessor(d);
 
-                if(columns[i].tooltip) {
+                if(columnData && columns[i].tooltip) {
                     let fullText = tooltipAccessor[i](d, true);
                     columnData = <div>
-                            <Tooltip key={`tooltip_${j}_${i}`}
+                            <Tooltip key={`tooltip${j}${i}`}
                               content={
                                 [
                                   fullText,
-                                  <CopyToClipboard text={fullText}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>,
+                                  <CopyToClipboard text={fullText} key={`clipboard${j}${i}`}>
+                                    <button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button>
+                                  </CopyToClipboard>,
                                 ]
                               }
                               styles={tooltipStyle}>
@@ -219,8 +222,8 @@ export default class Table extends AbstractGraph {
 
     handleContextMenu(event) {
         event.preventDefault()
-        const selectedRows = this.getSelectedRows()
-        console.log(selectedRows);
+        //const selectedRows = this.getSelectedRows()
+
         return false
     }
 
@@ -244,7 +247,8 @@ export default class Table extends AbstractGraph {
 
     renderSearchBarIfNeeded() {
         const {
-            searchBar
+            searchBar,
+            searchText
         } = this.getConfiguredProperties();
 
         if(searchBar === false)
@@ -256,13 +260,13 @@ export default class Table extends AbstractGraph {
             options={this.getHeaderData()}
             handleSearch={this.handleSearch}
             columns={this.getColumns()}
+            searchText={searchText}
           />
         );
     }
 
     render() {
         const {
-            width,
             height,
         } = this.props;
 
