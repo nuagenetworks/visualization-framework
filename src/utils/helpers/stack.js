@@ -3,18 +3,18 @@
  */
 
 export default ({
-    data, 
-    column,
+    data,
+  column,
   }) => {
 
-    let sum = 0
-    return data.map((d) => {
-        let y0 = sum
-        sum += +(d[column])
+  let sum = 0
+  return data.map((d) => {
+    let y0 = sum
+    sum += +(d[column])
 
-        return Object.assign({}, d, {
-            y0: y0,
-            y1: sum ? sum - 1 : 0
-        })
+    return Object.assign({}, d, {
+      y0: y0,
+      y1: sum ? sum - 1 : 0
     })
+  })
 }
