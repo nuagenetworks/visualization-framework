@@ -42,7 +42,7 @@ img {
 
 /* Track */
 .react-grid-item ::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
   -webkit-border-radius: 0px;
   border-radius: 0px;
 }
@@ -51,11 +51,32 @@ img {
 .react-grid-item ::-webkit-scrollbar-thumb {
   -webkit-border-radius: 0px;
   border-radius: 0px;
-  background: rgba(202, 201, 201, 0.8); 
+  background: rgba(202, 201, 201, 0.8);
   cursor: pointer
 }
 
 .react-grid-item ::-webkit-scrollbar-thumb:window-inactive {
-  background: rgba(202, 201, 201, 0.8); 
+  background: rgba(202, 201, 201, 0.8);
   cursor: default;
+}
+
+.contextMenu {
+  position: absolute;
+  background-color: white;
+  border: 1px solid rgb(217, 217, 217);
+  z-index: 10000;
+  font-size: 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.contextMenu > li {
+  padding: 10px 5px;
+  min-width: 80px;
+  cursor: pointer;
+}
+
+.contextMenu > li:hover {
+  color: white;
+  background-color: rgb(107, 148, 236);
 }

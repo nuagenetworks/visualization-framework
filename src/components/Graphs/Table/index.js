@@ -33,7 +33,8 @@ export default class Table extends AbstractGraph {
         this.state = {
             selected: [],
             data: [],
-            fontSize: style.defaultFontsize
+            fontSize: style.defaultFontsize,
+            contextMenu: null,
         }
 
     }
@@ -50,6 +51,11 @@ export default class Table extends AbstractGraph {
 
     componentDidUpdate() {
         this.checkFontsize();
+        const { contextMenu } = this.state;
+
+        if (contextMenu) {
+            this.openContextMenu();
+        }
     }
 
     initiate() {
@@ -66,7 +72,7 @@ export default class Table extends AbstractGraph {
         this.filterData = this.props.data;
         this.setHeaderData(columns);
         this.updateData();
-    }   
+    }
 
     decrementFontSize() {
         this.setState({
@@ -221,10 +227,60 @@ export default class Table extends AbstractGraph {
     }
 
     handleContextMenu(event) {
-        event.preventDefault()
+        event.preventDefault();
         //const selectedRows = this.getSelectedRows()
+        const { clientX: x, clientY: y } = event;
+        this.setState({ contextMenu: { x, y } });
+        return true;
+    }
 
-        return false
+    handleCloseContextMenu = () => {
+        this.setState({ contextMenu: null });
+        this.closeContextMenu();
+    }
+
+    closeContextMenu = () => {
+        document.body.removeEventListener('click', this.handleCloseContextMenu);
+        const node = document.getElementById('contextMenu');
+        if (node) node.remove();
+    }
+
+    openContextMenu = () => {
+        const { contextMenu: { x, y } } = this.state;
+        this.closeContextMenu();
+        document.body.addEventListener('click', this.handleCloseContextMenu);
+
+        const node = document.createElement('ul');
+        node.classList.add('contextMenu');
+        node.id = 'contextMenu';
+        node.style = `top: ${y}px; left: ${x}px; z-index: 100000`;
+
+        // TODO menu needs to be part of the configurations
+        const menu = [
+            {
+                text: 'New Flow',
+                pathname: "/dashboards/vssDomainFlowExplorer/flow"
+            },
+        ];
+
+        const selectedRows = this.getSelectedRows();
+        const flow = selectedRows ? selectedRows[0] : null;
+
+        menu.forEach((item) => {
+            const { text, pathname } = item;
+            const li = document.createElement('li');
+            li.textContent = text;
+            const linkObject = {
+                pathname,
+                query: { flow }
+            };
+            li.onclick = () => {
+                // dispatch a push to the menu link
+                console.error("LINK object: ", linkObject);
+            };
+            node.append(li);
+        });
+        document.body.append(node);
     }
 
     getSelectedRows() {
@@ -243,7 +299,7 @@ export default class Table extends AbstractGraph {
 
         return selected;
     }
-    
+
 
     renderSearchBarIfNeeded() {
         const {
