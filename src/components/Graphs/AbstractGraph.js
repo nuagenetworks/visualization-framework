@@ -9,13 +9,27 @@ import { GraphManager } from "./index";
 import columnAccessor from "../../utils/columnAccessor";
 import crossfilter from "crossfilter2";
 
+import {
+    format
+} from "d3";
+
 
 export default class AbstractGraph extends React.Component {
 
     constructor(props, properties = {}) {
         super(props);
 
+        this.configuredProperties = {};
+        this.node = {};
+
+        this.yLabelWidth = 0;
+
+        this.setGraphId();
+
         this.defaults = GraphManager.getDefaultProperties(properties);
+
+        // set all configuration into single object
+        this.setConfiguredProperties();
 
         // Provide tooltips for subclasses.
         const { tooltip } = this.getConfiguredProperties();
@@ -26,7 +40,6 @@ export default class AbstractGraph extends React.Component {
 
             // This function is invoked to produce the content of a tooltip.
             this.getTooltipContent = () => {
-
                 // The value of this.hoveredDatum should be set by subclasses
                 // on mouseEnter and mouseMove of visual marks
                 // to the data entry corresponding to the hovered mark.
@@ -52,21 +65,19 @@ export default class AbstractGraph extends React.Component {
                 }
             }
 
-            // Use a unique tooltip ID per visualization,
-            // otherwise there are overlapping tooltips.
-            const tooltipId = String(Math.random());
-
             // Expose tooltipId in case subclasses need it.
-            this.tooltipId = tooltipId;
+            this.tooltipId = `tooltip-${this.getGraphId()}`;
 
             // This JSX object can be used by subclasses to enable tooltips.
             this.tooltip = (
                 <ReactTooltip
-                    id={ tooltipId }
+                    id={ this.tooltipId }
                     place="top"
                     type="dark"
                     effect="float"
                     getContent={[() => this.getTooltipContent(), 200]}
+                    afterHide={() =>  this.handleHideEvent()}
+                    afterShow={() =>  this.handleShowEvent()}
                 />
             );
 
@@ -76,7 +87,7 @@ export default class AbstractGraph extends React.Component {
             // data.map((d) => <rect { ...this.tooltipProps(d) } />
             this.tooltipProps = (d) => ({
                 "data-tip": true,
-                "data-for": tooltipId,
+                "data-for": this.tooltipId,
                 "onMouseEnter": () => this.hoveredDatum = d,
                 "onMouseMove": () => this.hoveredDatum = d
             });
@@ -86,6 +97,22 @@ export default class AbstractGraph extends React.Component {
             this.tooltipProps = () => null
         }
     }
+
+    setGraphId() {
+        this.graphId = new Date().valueOf();
+    }
+
+    getGraphId () {
+        return this.graphId;
+    }
+
+    getSVG() {
+        return d3.select(this.node);
+    }
+
+    handleShowEvent() {}
+
+    handleHideEvent() {}
 
     wrapD3Text (text, width) {
       text.each(function() {
@@ -109,8 +136,12 @@ export default class AbstractGraph extends React.Component {
       });
     };
 
+    setConfiguredProperties() {
+        this.configuredProperties = Object.assign({}, this.defaults, this.props.configuration.data);
+    }
+
     getConfiguredProperties() {
-        return Object.assign({}, this.defaults, this.props.configuration.data);
+        return this.configuredProperties;
     }
 
     getMappedScaleColor(data, defaultColumn) {
@@ -290,6 +321,93 @@ export default class AbstractGraph extends React.Component {
         );
     }
 
+    setYlabelWidth(data) {
+        const {
+          chartWidthToPixel,
+          yTickFormat
+        } = this.getConfiguredProperties();
+
+        const yLabelFn = (d) => {
+            if(!yTickFormat) {
+                return d['yColumn'];
+            }
+            const formatter = format(yTickFormat);
+            return formatter(d['yColumn']);
+        };
+
+        this.yLabelWidth = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
+    }
+
+    getYlabelWidth() {
+        return this.yLabelWidth;
+    }
+
+    setDimensions(props, data = null) {
+        this.setYlabelWidth(data ? data : props.data);
+        
+        this.setAvailableWidth(props);
+        this.setAvailableHeight(props);
+        this.setLeftMargin();
+    }
+    
+    setLeftMargin() {
+      const {
+          margin
+        } = this.getConfiguredProperties();
+
+        this.leftMargin   = margin.left + this.getYlabelWidth();
+    }
+
+    getLeftMargin() {
+        return this.leftMargin;
+    }
+    
+    setAvailableWidth({width}) {
+        const {
+          margin,
+        } = this.getConfiguredProperties();
+
+        this.availableWidth = width - (margin.left + margin.right + this.getYlabelWidth());
+    }
+
+    getAvailableWidth() {
+       return this.availableWidth;
+    }
+
+    // height of x-axis
+    getXAxisHeight() {
+        const {
+          chartHeightToPixel,
+          xLabel
+        } = this.getConfiguredProperties();
+
+        return xLabel ? chartHeightToPixel : 0;
+    }
+
+    setAvailableHeight({height}) {
+
+        const {
+          chartHeightToPixel,
+          margin
+        } = this.getConfiguredProperties();
+
+        this.availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + this.getXAxisHeight());
+
+    }
+
+    getAvailableHeight() {
+        return this.availableHeight;
+    }
+
+    // Check whether to display legend as vertical or horizontal
+    checkIsVerticalLegend() {
+        const {
+          legend
+        } = this.getConfiguredProperties();
+
+        return legend.orientation === 'vertical';
+    }
+    
     getGroupedData(data, settings) {
         const {
           otherMinimumLimit
@@ -349,6 +467,75 @@ export default class AbstractGraph extends React.Component {
         } = this.props;
         let vkey = `${configuration.id.replace(/-/g, '')}vkey`;
         return (!context[vkey] || !configuration.key || context[vkey]  === safeEval("(" + configuration.key + ")")(d)) ? "1" : "0.5"
+    }
+
+    renderNewLegend(data, legendConfig, getColor, label) {
+
+        if (!legendConfig.show)
+            return;
+
+        const {
+            width,
+            height
+        } = this.props;
+
+        const {
+            margin,
+            fontColor,
+            circleToPixel,
+        } = this.getConfiguredProperties();
+
+        const isVertical = legendConfig.orientation === 'vertical';
+        const lineHeight = legendConfig.circleSize * circleToPixel;
+        const x          = legendConfig.circleSize + legendConfig.labelOffset;
+        const radius     = legendConfig.circleSize;
+        let transform;
+
+        if (isVertical)
+        {
+            let top  = height - (margin.bottom + ((data.length - 1) * lineHeight));
+            transform = (d,i) => `translate(${margin.left}, ${top + (i *  lineHeight)})`;
+
+        } else {
+            // Place legends horizontally
+            const availableWidth    = width - margin.left - margin.right;
+            const legendWidth       = legendConfig.width + legendConfig.circleSize + 2 * legendConfig.labelOffset;
+            const nbElementsPerLine = parseInt(availableWidth / legendWidth, 10);
+            const nbLines           = parseInt(data.length / nbElementsPerLine, 10);
+            const top               = height - (margin.bottom + (nbLines * lineHeight));
+
+            transform = (d, i) => `translate(${margin.left + ((i % nbElementsPerLine) * legendWidth)}, ${top + parseInt(i / nbElementsPerLine, 10) * lineHeight})`;
+        }
+
+        const legends = this.getSVG().select('.legend').selectAll('.legend-item')
+          .data(data);
+
+        const newLegends = legends.enter().append('g')
+          .attr('class', 'legend-item');
+
+        newLegends.append('circle')
+          .attr('class', 'item-circle');
+
+        newLegends.append('text')
+          .attr('class', 'item-text')
+          .style('alignment-baseline', 'central');
+
+
+        const allLegends = newLegends.merge(legends);
+
+        allLegends
+          .attr("transform", transform );
+
+        allLegends.selectAll('.item-circle')
+          .attr('r', radius)
+          .style('fill', d => getColor(d));
+
+        allLegends.selectAll('.item-text')
+          .attr('x', x)
+          .style('fill', fontColor)
+          .text( d => label(d));
+
+        legends.exit().remove();
     }
 
 }
