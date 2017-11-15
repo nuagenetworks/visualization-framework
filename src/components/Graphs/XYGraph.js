@@ -40,7 +40,7 @@ export default class XYGraph extends AbstractGraph {
 
         this.bandScale  = {};
         const xLabelFn  = (d) => d[xColumn];
-        const yLabelFn  = (d) => d['yColumn'];
+        const yLabelFn  = (d) => d['y0'];
 
         const distXDatas = map(data, xLabelFn).keys().sort();
         const distYDatas = map(data, yLabelFn).keys().sort();
@@ -71,7 +71,7 @@ export default class XYGraph extends AbstractGraph {
         } = this.getConfiguredProperties();
 
         const xLabelFn = (d) => d[xColumn];
-        const yLabelFn = (d) => d['yColumn'];
+        const yLabelFn = (d) => d['y0'];
         const yExtent  = this.updateYExtent(extent(data, yLabelFn), zeroStart);
 
         this.scale = {};

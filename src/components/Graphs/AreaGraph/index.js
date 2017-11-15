@@ -3,6 +3,7 @@ import XYGraph from '../XYGraph';
 import { connect } from 'react-redux';
 import * as d3 from 'd3';
 import ReactTooltip from 'react-tooltip';
+import { stack } from '../../../utils/helpers';
 
 import {
     line,
@@ -133,7 +134,8 @@ class AreaGraph extends XYGraph {
     const {
         yColumn,
         xColumn,
-        linesColumn
+        linesColumn,
+        stackedArea
     } = this.getConfiguredProperties();
 
     this.data = [];
@@ -141,10 +143,10 @@ class AreaGraph extends XYGraph {
     if(linesColumn) {
       //Finding all the distinct lines
       this.yColumns = [...new Set(data.map(item => item[linesColumn]))]
-        .map(d => ({key: d}));
+        .map(d => ({key: d}))
 
       let groupedData = d3.nest()
-        .key(function(d) {return d[xColumn];})
+        .key(function(d) {return d[xColumn]})
         .entries(data);
 
       this.data = [];
@@ -152,13 +154,26 @@ class AreaGraph extends XYGraph {
         //Generating the partial to append to each object will be used in tooltip
         let partial = {};
         group.values.forEach(d => {
-          partial[d[linesColumn]] = d[yColumn];
+          partial[d[linesColumn]] = d[yColumn]
         });
 
+        let sumOfValues = 0,
+            y1          = 0;
+
         group.values.forEach(d => {
+
+          if(stackedArea) {
+            y1 = sumOfValues;
+            sumOfValues += +d[yColumn];
+          } else {
+            sumOfValues = d[yColumn];
+          }
+          
           this.data.push(Object.assign({}, d, {
             yColumn: d[yColumn],
-            columnType: d[linesColumn]
+            columnType: d[linesColumn],
+            y0: sumOfValues,
+            y1: y1
           }, partial));
         })
       })
@@ -170,11 +185,26 @@ class AreaGraph extends XYGraph {
       this.yColumns = typeof yColumn === 'object' ? yColumn : [{ key: yColumn }];
 
       data.forEach((d) => {
-        this.getYColumns().forEach((ld) => {
+        let sumOfValues = 0,
+            y1          = 0;
+            
+        this.getYColumns().forEach((ld, index) => {
+
             if(d[ld.key] !== null) {
+              let value = d[ld.key] !== null ? d[ld.key] : 0;
+
+              if(stackedArea) {
+                y1 = sumOfValues;
+                sumOfValues += +value;
+              } else {
+                sumOfValues = value;
+              }
+
               this.data.push(Object.assign({
-                  yColumn: d[ld.key] !== null ? d[ld.key] : 0,
-                  columnType: ld.key
+                  yColumn: value,
+                  columnType: ld.key,
+                  y0: sumOfValues,
+                  y1: y1
               }, d));
             }
         });
@@ -188,19 +218,27 @@ class AreaGraph extends XYGraph {
       .rollup(function(values) {
         return {
           data: values,
-          max: d3.max(values, function(d) {
-            return d.yColumn
-          })
+          max: d3.max(values, d =>  d.y0 )
         }
       })
-      .entries(this.data);
+      .entries(this.data)
 
-      this.dataNest = this.dataNest.sort(function(a, b) {
-        return a.value.max > b.value.max
+    this.dataNest = this.dataNest.sort(function(a, b) {
+      return a.value.max > b.value.max
+    })
+
+    this.tooltipData = d3.nest()
+      .key(function(d) {return d[xColumn]})
+      .rollup(function(values) {
+        return {
+          data: values//stack({ data: values, column: 'yColumn'})
+        }
       })
-      
+      .entries(this.data)
 
-    return;
+      console.log("Sssssss", this.tooltipData);
+
+    return
   }
 
   updateLegend() {
@@ -291,13 +329,20 @@ class AreaGraph extends XYGraph {
   tooltipCircle(data = null) {
     const {
         circleRadius,
-        xColumn
+        stroke,
+        stackedArea
     } = this.getConfiguredProperties();
-
+    
     const yScale = this.getScale().y;
+    let sumValue = 0;
     const cy     = data 
-      ? (d, i) => {
-        return data[d.key] ? yScale(data[d.key]) : -50
+      ? d => {
+        let finalValue = [];
+        finalValue = data.data.filter(value => { 
+          return value.columnType == d.key
+        });
+
+        return (finalValue.length && finalValue[0].y0) ? yScale(finalValue[0].y0) : -50;         
       } 
       : 1
 
@@ -307,10 +352,10 @@ class AreaGraph extends XYGraph {
 
     tooltipCircle.enter().append('circle')
         .attr('class', 'tooltipCircle')
-        .style('fill', d => this.getColor(d))
+        .style('fill', stackedArea ? 'rgb(255,0,0)' : d => this.getColor(d))
         .attr('r', circleRadius)
       .merge(tooltipCircle)
-        .attr('cx', 1)
+        .attr('cx', 0)
         .attr('cy', cy);
 
     tooltipCircle.exit().remove();
@@ -330,12 +375,12 @@ class AreaGraph extends XYGraph {
 
     const lineGenerator = line()
       .x( d => scale.x(d[xColumn]))
-      .y( d => scale.y(d.yColumn));
+      .y( d => scale.y(d.y0));
 
     const areaGenerator = area()
       .x( d => scale.x(d[xColumn]))
-      .y0( d => availableHeight)
-      .y1( d => scale.y(d.yColumn));
+      .y0( d => scale.y(d.y0))
+      .y1( d => scale.y(d.y1))
 
     const svg = this.getGraph();
 
@@ -373,7 +418,6 @@ class AreaGraph extends XYGraph {
         })
 
     // Add area
-
     const areas = svg.select('.area-chart')
         .selectAll('.area-block')
         .data(this.getDataNest(), d => d.key );
@@ -399,7 +443,7 @@ class AreaGraph extends XYGraph {
         .attr('width', this.availableWidth);
 
     lines.exit().remove();
-    //areas.exit().remove();  
+    areas.exit().remove();  
 
   }
  
@@ -461,17 +505,15 @@ class AreaGraph extends XYGraph {
 
   // Create tooltip data
   renderTooltip() {
-
     const {
       xColumn,
     } = this.getConfiguredProperties();
 
     let scale    = this.getScale();
     let bandwidth = this.getBandScale().x.bandwidth() * 0.8;
-
     const tooltip = this.getGraph()
         .select('.tooltip-section').selectAll('rect')
-        .data(this.getData());
+        .data(this.tooltipData);
 
     const newTooltip = tooltip.enter().append('rect')
         .attr('data-for', this.tooltipId)
@@ -486,25 +528,20 @@ class AreaGraph extends XYGraph {
     const allTooltip = newTooltip.merge(tooltip);  
     
     allTooltip     
-        .attr('x', d => scale.x(d[xColumn]) - (bandwidth)/2)
+        .attr('x', d => scale.x(d.key) - (bandwidth)/2)
         .attr('height', this.getAvailableHeight())
         .on('mouseover',  d  => this.updateVerticalLine(d))
-        .on('mouseenter', d => this.hoveredDatum = d)
-        .on('mousemove',  d  => this.hoveredDatum = d);
+        .on('mouseenter', d => this.hoveredDatum = d.value.data[0] ? d.value.data[0]: {})
+        .on('mousemove',  d  => this.hoveredDatum = d.value.data[0] ? d.value.data[0]: {});
 
     tooltip.exit().remove();
   }
 
   //update vertical line on mouseover 
   updateVerticalLine(data) {
-    const {
-        xColumn,
-      } = this.getConfiguredProperties();
-
       ReactTooltip.rebuild();   
-
-      const rightMargin = this.getScale().x(data[xColumn]);
-      this.tooltipCircle(data);
+      const rightMargin = this.getScale().x(data.key);
+      this.tooltipCircle(data.value);
       this.getGraph()
        .select('.tooltip-line')
          .attr('transform', 'translate('+rightMargin+', 0)');  
