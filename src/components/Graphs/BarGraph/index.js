@@ -290,6 +290,7 @@ export default class BarGraph extends XYGraph {
                             nestedData.map((nest, i) => {
                                 return nest.values.map((d, i) => {
                                     // Compute rectangle depending on orientation (vertical or horizontal).
+
                                     const {
                                         x,
                                         y,
@@ -309,7 +310,7 @@ export default class BarGraph extends XYGraph {
                                         }
                                     );
 
-                                
+
                                 // Set up clicking and cursor style.
                                 const { onClick, style } = (
 
@@ -333,8 +334,8 @@ export default class BarGraph extends XYGraph {
                                         width={ width }
                                         height={ height }
                                         fill={ getColor(d) }
-                                        //onClick={ onClick }
-                                        //style={ style }
+                                        onClick={ onClick }
+                                        style={ style }
                                         key={ i }
                                         stroke={ stroke.color }
                                         strokeWidth={ stroke.width }
