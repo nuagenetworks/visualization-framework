@@ -5,6 +5,7 @@
 export default ({
     column,
     order
+
   }) => {
   return (a, b) => {
     let sortOrder = order || 'ASC'

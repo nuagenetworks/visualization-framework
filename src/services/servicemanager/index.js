@@ -3,7 +3,7 @@ import { VSDService } from "../../configs/nuage/vsd/index";
 import { MemoryService } from "../memory";
 
 let config = {
-    timingCache: 5000,
+    timingCache: 30000,
 }
 
 /*
