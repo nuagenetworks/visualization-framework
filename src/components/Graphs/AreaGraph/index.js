@@ -191,7 +191,7 @@ class AreaGraph extends XYGraph {
         sortColumn: this.yKey
     })
 
-    if(stacked === false) {
+    if(!stacked) {
       nestedXData.forEach(data => {
         data.values.map(value => {
           return Object.assign( value, {
@@ -394,12 +394,11 @@ class AreaGraph extends XYGraph {
         .attr('d', d => {
 
           let data = (d.values)
-          
-          // Starting Line from xAxis over here
+            // Starting Line from xAxis over here
           return lineGenerator([
-            Object.assign({}, data[0], {yValue: 0}),
+            Object.assign({}, data[0], {y1: data[0].y0}),
             ...data,
-            Object.assign({}, data[data.length-1], {yValue: 0}),
+            Object.assign({}, data[data.length-1], {y1: data[data.length-1].y0}),
           ])
         })
 
@@ -492,6 +491,14 @@ class AreaGraph extends XYGraph {
   // Create tooltip data
   renderTooltip() {
 
+    let mergeTooltips = (d) => {
+      let records = d.values[0]
+      d.values.forEach((o) => {
+        records[o[this.yKey]] = o[this.yValue]
+      })
+      return records
+    }
+
     let scale    = this.getScale();
     let bandwidth = this.getBandScale().x.bandwidth() * 0.8;
     const tooltip = this.getGraph()
@@ -514,8 +521,12 @@ class AreaGraph extends XYGraph {
         .attr('x', d => scale.x(d.key) - (bandwidth)/2)
         .attr('height', this.getAvailableHeight())
         .on('mouseover',  d  => this.updateVerticalLine(d))
-        .on('mouseenter', d => this.hoveredDatum = d.values[0] ? d.values[0]: {})
-        .on('mousemove',  d  => this.hoveredDatum = d.values[0] ? d.values[0]: {});
+        .on('mouseenter', d => {
+          this.hoveredDatum = mergeTooltips(d)//d.values[0] ? d.values[0]: {}
+        })
+        .on('mousemove',  d  => {
+          this.hoveredDatum = mergeTooltips(d)
+        })
 
     tooltip.exit().remove();
   }

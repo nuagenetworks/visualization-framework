@@ -23,6 +23,7 @@ export const properties = {
         theme.palette.aquaLightColor
     ],
     zeroStart: true,
+    stacked: true,
     circleRadius: 5,
     transition: 1000
 }
