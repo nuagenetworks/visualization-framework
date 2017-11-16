@@ -1,5 +1,5 @@
 {
-    "id": "aar-enterprise-nsg-per-app",
+    "id": "aar-enterprise-app-per-nsg",
     "title": "Data Usage per NSG for an App",
     "service": "elasticsearch",
     "query": {
@@ -23,16 +23,11 @@
                             "term": {
                                 "EnterpriseName": "{{enterpriseName:test_org}}"
                             }
-                        },
-                        {
-                            "term": {
-                                "L7ClassEnhanced":"{{app}}"
-                            }
                         }
                     ]
                 }
             },
-             "aggs": {
+            "aggs": {
                 "SourceNSG": {
                     "terms": {
                         "field": "SourceNSG",
@@ -40,10 +35,23 @@
                             "SumofBytes": "desc"
                         }
                     },
-                    "aggs": {
-                        "SumofBytes": {
-                            "sum": {
-                                "field": "TotalBytesCount"
+                        "aggs": {
+                            "SumofBytes": {
+                                "sum": {
+                                    "field": "TotalBytesCount"
+                                }
+                            },
+                            "L7Classification": {
+                                "terms": {
+                                    "field": "L7Classification"
+                                },
+                                "aggs": {
+                                    "SumofBytes": {
+                                        "sum": {
+                                            "field": "TotalBytesCount"
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -51,5 +59,3 @@
             }
         }
     }
-}
-

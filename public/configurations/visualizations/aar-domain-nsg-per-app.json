@@ -1,8 +1,8 @@
 {
-    "id": "aar-enterprise-nsg-per-app",
+    "id": "aar-domain-nsg-per-app",
     "graph": "BarGraph",
     "title": "Data Usage per NSG for {{app}} App",
-    "description": "Enterprise Level. Shows enterprise wide data usage per nsg for an app.",
+    "description": "Domain Level. Shows Domain wide data usage per nsg for an app.",
     "author": "Bharat Mukheja",
     "creationDate": "10/15/2017",
     "data": {
@@ -28,5 +28,5 @@
           "snsg": "SourceNSG"
       }
     }],
-    "query": "aar-enterprise-nsg-per-app"
+    "query": "aar-domain-nsg-per-app"
 }

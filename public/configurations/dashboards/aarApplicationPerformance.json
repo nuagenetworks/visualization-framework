@@ -15,6 +15,10 @@
         {
             "label": "Application Performance",
             "url": "/dashboards/aarApplicationPerformance"
+        },
+        {
+            "label": "Details",
+            "url": "/dashboards/aarDomainDetail"
         }
     ],
     "visualizations": [
