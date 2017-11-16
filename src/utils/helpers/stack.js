@@ -8,13 +8,13 @@ export default ({
   }) => {
 
   let sum = 0
-  return data.map((d) => {
+  return data.map((d, i) => {
     let y0 = sum
-    sum += +(d[column])
+    sum += +(d[column]) - (i === 0 ? 1 : 0)
 
     return Object.assign({}, d, {
       y0: y0,
-      y1: sum ? sum - 1 : 0
+      y1: sum
     })
   })
 }

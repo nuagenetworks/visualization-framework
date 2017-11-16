@@ -4,8 +4,14 @@
     "creationDate": "01/24/2016",
     "title": "Example",
     "visualizations": [
-        { "id": "vsd-from-nsgs-table",  "x": 0, "y": 0, "w": 6, "h": 12, "minW": 2, "minH": 12, "static": true},
-        { "id": "vsd-to-nsgs-table",    "x": 6, "y": 0, "w": 6, "h": 12, "minW": 2, "minH": 12, "static": true},
-        { "id": "aar-enterprise-nsg-per-app", "x": 0, "y": 5, "w": 6,  "h": 15, "minW": 2, "minH": 12, "static": true}
+        { 
+            "id": "test-area-graph",
+            "x": 0,
+            "y": 0,
+            "w": 12,
+            "h": 20,
+            "minW": 6,
+            "minH": 15
+        }
     ]
 }

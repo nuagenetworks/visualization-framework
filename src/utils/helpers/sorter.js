@@ -4,7 +4,8 @@
 
 export default ({
     column,
-  order
+    order
+
   }) => {
   return (a, b) => {
     let sortOrder = order || 'ASC'
@@ -13,7 +14,7 @@ export default ({
       'DESC': () => +(a[column] < b[column])
     }
 
-    return a[column] == b[column]
+    return a[column] === b[column]
       ? 0
       : operations[sortOrder]() || -1
   }

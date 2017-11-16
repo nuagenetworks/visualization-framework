@@ -10,6 +10,7 @@ import Table from "./Table";
 import ChordGraph from "./ChordGraph";
 import GaugeGraph from "./GaugeGraph";
 import HeatmapGraph from "./HeatmapGraph";
+import AreaGraph from "./AreaGraph";
 
 import { theme } from "../../theme";
 
@@ -26,7 +27,8 @@ let registry = {
     ChordGraph,
     GaugeGraph,
     VariationTextGraph,
-    HeatmapGraph
+    HeatmapGraph,
+    AreaGraph
 };
 
 /*
@@ -52,12 +54,14 @@ const defaults = {
     margin: { top: 10, bottom: 10, left: 10, right: 10 },
     padding: 0.1,
     yTickGrid: true,
+    yTickFontSize: 12,
     yTickSizeInner: 6,
     yTickSizeOuter: 0,
     yLabel: false,
     xColumnLabelPosition: 17,
     yLabelSize: 14,
     xTickGrid: false,
+    xTickFontSize: 12,
     xTickSizeInner: 6,
     xTickSizeOuter: 0,
     xLabel: false,
