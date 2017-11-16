@@ -26,21 +26,22 @@ export default class XYGraph extends AbstractGraph {
         
     }
 
-    configureAxis(data) {
-        this.setBandScale(data);
-        this.setScale(data);
+    configureAxis({data, customYColumn = null}) {
+        this.setBandScale(data, customYColumn)
+        this.setScale(data, customYColumn)
         this.setAxis(data);
         this.setTitlePositions();
     }
 
-    setBandScale(data) {
+    setBandScale(data, customYColumn) {
         const {
-          xColumn
+          xColumn,
+          yColumn
         } = this.getConfiguredProperties();
 
         this.bandScale  = {};
         const xLabelFn  = (d) => d[xColumn];
-        const yLabelFn  = (d) => d['y0'];
+        const yLabelFn  = (d) => d[customYColumn ? customYColumn : yColumn];
 
         const distXDatas = map(data, xLabelFn).keys().sort();
         const distYDatas = map(data, yLabelFn).keys().sort();
@@ -60,18 +61,19 @@ export default class XYGraph extends AbstractGraph {
       return this.bandScale;
     }
 
-    setScale(data) {
+    setScale(data, customYColumn) {
         if (!data || !data.length)
             return;
 
         const {
           dateHistogram,
           xColumn,
+          yColumn,
           zeroStart
         } = this.getConfiguredProperties();
 
         const xLabelFn = (d) => d[xColumn];
-        const yLabelFn = (d) => d['y0'];
+        const yLabelFn = (d) => d[customYColumn ? customYColumn : yColumn];
         const yExtent  = this.updateYExtent(extent(data, yLabelFn), zeroStart);
 
         this.scale = {};
@@ -111,7 +113,6 @@ export default class XYGraph extends AbstractGraph {
             yTickGrid,
             yTicks,
             yTickSizeInner,
-            yTickSizeOuter,
         } = this.getConfiguredProperties();
 
         this.axis = {};

@@ -1,9 +1,9 @@
-import React from 'react';
-import XYGraph from '../XYGraph';
-import { connect } from 'react-redux';
-import * as d3 from 'd3';
-import ReactTooltip from 'react-tooltip';
-import { stack } from '../../../utils/helpers';
+import React from 'react'
+import XYGraph from '../XYGraph'
+import { connect } from 'react-redux'
+import ReactTooltip from 'react-tooltip'
+
+import { nest, nestStack, nestMax, merge, sorter } from "../../../utils/helpers"
 
 import {
     line,
@@ -13,6 +13,9 @@ import {
 import { properties } from './default.config';
 
 class AreaGraph extends XYGraph {
+
+  yKey   = 'yKey'
+  yValue = 'yValue'
 
   constructor(props) {
     super(props, properties);
@@ -45,26 +48,39 @@ class AreaGraph extends XYGraph {
     if (!data || !data.length)
         return;
 
+    const {
+      linesColumn,
+      yColumn
+    } = this.getConfiguredProperties();
+
+    if(linesColumn) {
+      this.yKey = linesColumn
+      this.yValue = yColumn
+    }
+
     this.parseData(); 
 
-    this.setDimensions(props, this.getData());
+    this.setDimensions(props, this.getRefinedData());
     this.updateLegend();
-    this.configureAxis(this.getData());
+    this.configureAxis({
+      data: this.getRefinedData(),
+      customYColumn: 'y1'
+    });
   }
 
   getYColumns() {
     return this.yColumns;
   }
 
-  getData() {
-    return this.data;
+  getRefinedData() {
+    return this.refinedData;
   }
 
   getLegendConfig() {
     return this.legendConfig;
   }
 
-  getDataNest() {
+  getRefinedDataNest() {
     return this.dataNest;
   }
 
@@ -103,7 +119,7 @@ class AreaGraph extends XYGraph {
           insertTooltip = true;
 
           //If Format is specified for metric column
-          if(t.column == yColumn && t.format) {
+          if(t.column === yColumn && t.format) {
             format = t.format;
           }
         } else {
@@ -135,7 +151,7 @@ class AreaGraph extends XYGraph {
         yColumn,
         xColumn,
         linesColumn,
-        stackedArea
+        stacked
     } = this.getConfiguredProperties();
 
     this.data = [];
@@ -145,100 +161,74 @@ class AreaGraph extends XYGraph {
       this.yColumns = [...new Set(data.map(item => item[linesColumn]))]
         .map(d => ({key: d}))
 
-      let groupedData = d3.nest()
-        .key(function(d) {return d[xColumn]})
-        .entries(data);
-
-      this.data = [];
-      groupedData.forEach(group => {
-        //Generating the partial to append to each object will be used in tooltip
-        let partial = {};
-        group.values.forEach(d => {
-          partial[d[linesColumn]] = d[yColumn]
-        });
-
-        let sumOfValues = 0,
-            y1          = 0;
-
-        group.values.forEach(d => {
-
-          if(stackedArea) {
-            y1 = sumOfValues;
-            sumOfValues += +d[yColumn];
-          } else {
-            sumOfValues = d[yColumn];
-          }
-          
-          this.data.push(Object.assign({}, d, {
-            yColumn: d[yColumn],
-            columnType: d[linesColumn],
-            y0: sumOfValues,
-            y1: y1
-          }, partial));
-        })
-      })
-
+      this.data = data;
       this.updateTooltipConfiguration();
       
     } else {
 
+      /**
+       * Spliiting yColumns into respective objects
+       */
       this.yColumns = typeof yColumn === 'object' ? yColumn : [{ key: yColumn }];
 
       data.forEach((d) => {
-        let sumOfValues = 0,
-            y1          = 0;
-            
         this.getYColumns().forEach((ld, index) => {
 
             if(d[ld.key] !== null) {
-              let value = d[ld.key] !== null ? d[ld.key] : 0;
-
-              if(stackedArea) {
-                y1 = sumOfValues;
-                sumOfValues += +value;
-              } else {
-                sumOfValues = value;
-              }
-
               this.data.push(Object.assign({
-                  yColumn: value,
-                  columnType: ld.key,
-                  y0: sumOfValues,
-                  y1: y1
+                  [this.yValue]: d[ld.key],
+                  [this.yKey]: ld.key,
               }, d));
             }
-        });
-      });
+
+        })
+      })
+    }
+
+    let nestedXData = nest({
+        data: this.data,
+        key: xColumn,
+        sortColumn: this.yKey
+    })
+
+    if(stacked === false) {
+      nestedXData.forEach(data => {
+        data.values.map(value => {
+          return Object.assign( value, {
+            y0: 0,
+            y1: value[this.yValue]
+          })
+        })
+      })
+    } else {
+      nestedXData = nestStack({
+        data: nestedXData,
+        stackColumn: this.yValue
+      })
 
     }
 
-    //Nest the entries by symbol
-    this.dataNest = d3.nest()
-      .key(function(d) {return d.columnType;})
-      .rollup(function(values) {
-        return {
-          data: values,
-          max: d3.max(values, d =>  d.y0 )
-        }
-      })
-      .entries(this.data)
+    this.tooltipData = nestedXData
 
-    this.dataNest = this.dataNest.sort(function(a, b) {
-      return a.value.max > b.value.max
-    })
+    //Merging Back with y0 and y1 calculated according to xAxis and now will be used for line plotting
+    this.refinedData = merge({
+          data: nestedXData,
+          fields: [{name: 'values', type: 'array'}]
+      }).values
 
-    this.tooltipData = d3.nest()
-      .key(function(d) {return d[xColumn]})
-      .rollup(function(values) {
-        return {
-          data: values//stack({ data: values, column: 'yColumn'})
-        }
-      })
-      .entries(this.data)
 
-      console.log("Sssssss", this.tooltipData);
+    this.dataNest = nestMax({
+        data: nest({
+          data: this.refinedData,
+          key: this.yKey
+        }),
+        sortColumn: 'y1'
+      }).sort(sorter({
+          column: 'max',
+          order: 'DESC'
+        })
+      )
 
-    return
   }
 
   updateLegend() {
@@ -312,15 +302,15 @@ class AreaGraph extends XYGraph {
     let boundaryCircle = this.getGraph()
       .select('.area-chart')
       .selectAll('.boundaryCircle')
-      .data(this.getData());
+      .data(this.getRefinedData());
 
     boundaryCircle.enter().append('circle')
         .attr('class', 'boundaryCircle')
-        .style('fill', d => this.getColor({'key': d.columnType}))
+        .style('fill', d => this.getColor({'key': d.key}))
         .attr('r', circleRadius)
       .merge(boundaryCircle)
         .attr('cx', d => this.getScale().x(d.xColumn))
-        .attr('cy', d => this.getScale().y(d.yColumn));
+        .attr('cy', d => this.getScale().y(d.yValue));
 
     boundaryCircle.exit().remove();   
   }
@@ -329,30 +319,25 @@ class AreaGraph extends XYGraph {
   tooltipCircle(data = null) {
     const {
         circleRadius,
-        stroke,
-        stackedArea
+        stacked
     } = this.getConfiguredProperties();
     
     const yScale = this.getScale().y;
-    let sumValue = 0;
     const cy     = data 
       ? d => {
         let finalValue = [];
-        finalValue = data.data.filter(value => { 
-          return value.columnType == d.key
-        });
-
-        return (finalValue.length && finalValue[0].y0) ? yScale(finalValue[0].y0) : -50;         
+        finalValue = data.filter(value =>  value[this.yKey] === d.key);
+        return (finalValue.length && finalValue[0].y1) ? yScale(finalValue[0].y1) : -50;
       } 
       : 1
 
     const tooltipCircle = this.getGraph()
         .select('.tooltip-line').selectAll('.tooltipCircle')
-        .data(this.getDataNest(), d => d.key);
+        .data(this.getRefinedDataNest(), d => d.key);
 
     tooltipCircle.enter().append('circle')
         .attr('class', 'tooltipCircle')
-        .style('fill', stackedArea ? 'rgb(255,0,0)' : d => this.getColor(d))
+        .style('fill', stacked === false ? d => this.getColor(d) : 'rgb(255,0,0)')
         .attr('r', circleRadius)
       .merge(tooltipCircle)
         .attr('cx', 0)
@@ -375,12 +360,12 @@ class AreaGraph extends XYGraph {
 
     const lineGenerator = line()
       .x( d => scale.x(d[xColumn]))
-      .y( d => scale.y(d.y0));
+      .y( d => scale.y(d.y1));
 
     const areaGenerator = area()
       .x( d => scale.x(d[xColumn]))
-      .y0( d => scale.y(d.y0))
-      .y1( d => scale.y(d.y1))
+      .y0( d => scale.y(d.y1))
+      .y1( d => scale.y(d.y0))
 
     const svg = this.getGraph();
 
@@ -391,7 +376,7 @@ class AreaGraph extends XYGraph {
 
     const lines = svg.select('.area-chart')
         .selectAll('.line-block')
-        .data(this.getDataNest(), d => d.key );
+        .data(this.getRefinedDataNest(), d => d.key );
 
     const newLines = lines.enter().append('g')
         .attr('class', 'line-block');
@@ -407,20 +392,21 @@ class AreaGraph extends XYGraph {
     allLines.select('.line')
         .style('stroke', d => this.getColor({'key': d.key}))
         .attr('d', d => {
-          let data = (d.value.data)
+
+          let data = (d.values)
           
           // Starting Line from xAxis over here
           return lineGenerator([
-            Object.assign({}, data[0], {yColumn: 0}),
+            Object.assign({}, data[0], {yValue: 0}),
             ...data,
-            Object.assign({}, data[data.length-1], {yColumn: 0}),
+            Object.assign({}, data[data.length-1], {yValue: 0}),
           ])
         })
 
     // Add area
     const areas = svg.select('.area-chart')
         .selectAll('.area-block')
-        .data(this.getDataNest(), d => d.key );
+        .data(this.getRefinedDataNest(), d => d.key );
 
     const newAreas = areas.enter()
        .append('g')
@@ -435,7 +421,7 @@ class AreaGraph extends XYGraph {
 
     allAreas.select('.area')
         .style('fill', d => this.getColor({'key': d.key}))
-        .attr('d', d => areaGenerator(d.value.data));
+        .attr('d', d => areaGenerator(d.values));
 
     // add transition effect
     svg.select(`#clip-${this.getGraphId()} rect`)
@@ -505,9 +491,6 @@ class AreaGraph extends XYGraph {
 
   // Create tooltip data
   renderTooltip() {
-    const {
-      xColumn,
-    } = this.getConfiguredProperties();
 
     let scale    = this.getScale();
     let bandwidth = this.getBandScale().x.bandwidth() * 0.8;
@@ -531,8 +514,8 @@ class AreaGraph extends XYGraph {
         .attr('x', d => scale.x(d.key) - (bandwidth)/2)
         .attr('height', this.getAvailableHeight())
         .on('mouseover',  d  => this.updateVerticalLine(d))
-        .on('mouseenter', d => this.hoveredDatum = d.value.data[0] ? d.value.data[0]: {})
-        .on('mousemove',  d  => this.hoveredDatum = d.value.data[0] ? d.value.data[0]: {});
+        .on('mouseenter', d => this.hoveredDatum = d.values[0] ? d.values[0]: {})
+        .on('mousemove',  d  => this.hoveredDatum = d.values[0] ? d.values[0]: {});
 
     tooltip.exit().remove();
   }
@@ -541,7 +524,7 @@ class AreaGraph extends XYGraph {
   updateVerticalLine(data) {
       ReactTooltip.rebuild();   
       const rightMargin = this.getScale().x(data.key);
-      this.tooltipCircle(data.value);
+      this.tooltipCircle(data.values);
       this.getGraph()
        .select('.tooltip-line')
          .attr('transform', 'translate('+rightMargin+', 0)');  
