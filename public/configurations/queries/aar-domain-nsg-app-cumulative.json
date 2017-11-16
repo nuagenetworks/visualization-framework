@@ -1,5 +1,5 @@
 {
-    "id": "aar-enterprise-nsg-per-app",
+    "id": "aar-doamin-nsg-app-cumulative",
     "title": "Data Usage per NSG for an App",
     "service": "elasticsearch",
     "query": {
@@ -26,16 +26,26 @@
                         },
                         {
                             "term": {
+                                "{{domainType:Domain}}":"{{domainName:Domain1}}"
+                            }
+                        },
+                        {
+                            "term": {
                                 "L7ClassEnhanced":"{{app}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "SourceNSG":"{{snsg}}"
                             }
                         }
                     ]
                 }
             },
              "aggs": {
-                "SourceNSG": {
+                "SourceIP": {
                     "terms": {
-                        "field": "SourceNSG",
+                        "field": "SrcIp",
                         "order": {
                             "SumofBytes": "desc"
                         }

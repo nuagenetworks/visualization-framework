@@ -1,5 +1,5 @@
 {
-    "id": "aar-enterprise-nsg-per-app",
+    "id": "aar-domain-nsg-per-app",
     "title": "Data Usage per NSG for an App",
     "service": "elasticsearch",
     "query": {
@@ -22,6 +22,11 @@
                         {
                             "term": {
                                 "EnterpriseName": "{{enterpriseName:test_org}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "{{domainType:Domain}}":"{{domainName:Domain1}}"
                             }
                         },
                         {

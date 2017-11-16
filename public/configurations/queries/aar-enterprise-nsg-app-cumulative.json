@@ -1,5 +1,5 @@
 {
-    "id": "aar-enterprise-nsg-per-app",
+    "id": "aar-enterprise-nsg-app-cumulative",
     "title": "Data Usage per NSG for an App",
     "service": "elasticsearch",
     "query": {
@@ -28,14 +28,19 @@
                             "term": {
                                 "L7ClassEnhanced":"{{app}}"
                             }
+                        },
+                        {
+                            "term": {
+                                "SourceNSG":"{{snsg}}"
+                            }
                         }
                     ]
                 }
             },
              "aggs": {
-                "SourceNSG": {
+                "SourceIP": {
                     "terms": {
-                        "field": "SourceNSG",
+                        "field": "SrcIp",
                         "order": {
                             "SumofBytes": "desc"
                         }
