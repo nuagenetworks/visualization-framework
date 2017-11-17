@@ -3,6 +3,8 @@ import tabify from "./tabify";
 import { ActionKeyStore } from "./redux/actions";
 import { getUsedParameters } from "../../../utils/configurations";
 
+const ERROR_MESSAGE = "could not able to fetch data. Please, try again later."
+
 var client = null;
 let config = function () {
     return {
@@ -46,7 +48,7 @@ const fetch = function (queryConfiguration, state) {
             if (!error.body)
                 reject("Unable to connect to ElasticSearch datastore. Please check to ensure ElasticSearch datastore can be reached");
             else
-                reject(error.body.error.reason + ": " + error.body.error["resource.id"]);
+                reject(ERROR_MESSAGE);
         });
     });
 }
@@ -64,7 +66,7 @@ const ping = function (queryConfiguration, state) {
             if (!error.body)
                 reject("Unable to connect to ElasticSearch datastore. Please check to ensure ElasticSearch datastore can be reached");
             else
-                reject(error.body.error.reason + ": " + error.body.error["resource.id"]);
+                reject(ERROR_MESSAGE);
         });
     });
 }
