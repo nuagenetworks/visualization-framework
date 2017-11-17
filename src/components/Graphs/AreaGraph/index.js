@@ -105,7 +105,6 @@ class AreaGraph extends XYGraph {
     } = this.getConfiguredProperties();
 
     const yColumns = this.getYColumns();
-
     let updatedTooltip = [];
     
     let insertTooltip = false;
@@ -157,6 +156,7 @@ class AreaGraph extends XYGraph {
     this.data = [];
 
     if(linesColumn) {
+
       //Finding all the distinct lines
       this.yColumns = [...new Set(data.map(item => item[linesColumn]))]
         .map(d => ({key: d}))
@@ -185,13 +185,24 @@ class AreaGraph extends XYGraph {
       })
     }
 
+    let sequence = nest({
+      data: this.data,
+      key: this.yKey,
+      sortColumn: 'yValue',
+      sortOrder: 'DESC'
+    }).sort((a, b) => {
+       return b.values[0].yValue - a.values[0].yValue
+    }).map(d => d.key)
+
     let nestedXData = nest({
         data: this.data,
         key: xColumn,
-        sortColumn: this.yKey
+        sortColumn: this.yKey,
+        sortOrder: 'DESC',
+        sequence
     })
 
-    if(!stacked) {
+    if(stacked === false) {
       nestedXData.forEach(data => {
         data.values.map(value => {
           return Object.assign( value, {
@@ -216,19 +227,14 @@ class AreaGraph extends XYGraph {
           fields: [{name: 'values', type: 'array'}]
       }).values
 
-
-    this.dataNest = nestMax({
-        data: nest({
+    this.dataNest = nest({
           data: this.refinedData,
           key: this.yKey
-        }),
-        sortColumn: 'y1'
-      }).sort(sorter({
-          column: 'max',
-          order: 'DESC'
-        })
-      )
-
+        }).sort(sorter({
+            column: 'key',
+            sequence
+          })
+        )
   }
 
   updateLegend() {
@@ -394,7 +400,8 @@ class AreaGraph extends XYGraph {
         .attr('d', d => {
 
           let data = (d.values)
-            // Starting Line from xAxis over here
+          
+          // Starting Line from xAxis over here
           return lineGenerator([
             Object.assign({}, data[0], {y1: data[0].y0}),
             ...data,
@@ -522,7 +529,7 @@ class AreaGraph extends XYGraph {
         .attr('height', this.getAvailableHeight())
         .on('mouseover',  d  => this.updateVerticalLine(d))
         .on('mouseenter', d => {
-          this.hoveredDatum = mergeTooltips(d)//d.values[0] ? d.values[0]: {}
+            this.hoveredDatum = mergeTooltips(d)
         })
         .on('mousemove',  d  => {
           this.hoveredDatum = mergeTooltips(d)
