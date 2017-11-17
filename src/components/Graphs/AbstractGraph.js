@@ -1,7 +1,7 @@
 import React from "react";
 import { scaleOrdinal } from "d3";
 import ReactTooltip from "react-tooltip";
-import safeEval from "cross-safe-eval"
+import evalExpression from "eval-expression"
 
 import * as d3 from "d3";
 
@@ -476,7 +476,7 @@ export default class AbstractGraph extends React.Component {
             context
         } = this.props;
         let vkey = `${configuration.id.replace(/-/g, '')}vkey`;
-        return (!context[vkey] || !configuration.key || context[vkey]  === safeEval("(" + configuration.key + ")")(d)) ? "1" : "0.5"
+        return (!context[vkey] || !configuration.key || context[vkey]  === evalExpression("(" + configuration.key + ")")(d)) ? "1" : "0.5"
     }
 
     renderNewLegend(data, legendConfig, getColor, label) {
