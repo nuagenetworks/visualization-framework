@@ -5,9 +5,12 @@ import columnAccessor from "../../../utils/columnAccessor";
 import CopyToClipboard from 'react-copy-to-clipboard';
 import {Tooltip} from 'react-lightweight-tooltip';
 
-import tooltipStyle from './tooltipStyle.js';
+import tooltipStyle from './tooltipStyle';
 import "./style.css";
+import style from './style'
 import {properties} from "./default.config";
+
+import SearchBar from "../../SearchBar";
 
 export default class Table extends AbstractGraph {
 
@@ -15,18 +18,22 @@ export default class Table extends AbstractGraph {
         super(props, properties);
 
         this.handleSortOrderChange   = this.handleSortOrderChange.bind(this);
-        this.handleFilterValueChange = this.handleFilterValueChange.bind(this);
         this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this);
         this.handleNextPageClick     = this.handleNextPageClick.bind(this);
         this.handleClick             = this.handleClick.bind(this);
+        this.handleSearch            = this.handleSearch.bind(this);
+        this.handleRowSelection      = this.handleRowSelection.bind(this);
+        this.handleContextMenu       = this.handleContextMenu.bind(this);
 
         /**
         */
         this.currentPage = 1;
         this.filterData = false;
-
+        this.selectedRows = {};
         this.state = {
-            data: []
+            selected: [],
+            data: [],
+            fontSize: style.defaultFontsize
         }
     }
 
@@ -40,6 +47,10 @@ export default class Table extends AbstractGraph {
         }
     }
 
+    componentDidUpdate() {
+        this.checkFontsize();
+    }
+
     initiate() {
         let columns = this.getColumns();
 
@@ -51,13 +62,33 @@ export default class Table extends AbstractGraph {
          */
         this.resetFilters();
 
-        this.getHeaderData(columns);
+        this.filterData = this.props.data;
+        this.setHeaderData(columns);
         this.updateData();
+    }   
+
+    decrementFontSize() {
+        this.setState({
+            fontSize: this.state.fontSize - 1
+        })
+    }
+
+    checkFontsize() {
+        if(this.container.querySelector('table').clientWidth > this.container.clientWidth) {
+            this.decrementFontSize();
+        }
     }
 
     resetFilters() {
         this.currentPage = 1;
-        this.filterData = this.props.data;
+        this.selectedRows = {};
+    }
+
+    handleSearch(data) {
+        this.resetFilters();
+
+        this.filterData = data;
+        this.updateData();
     }
 
     updateData() {
@@ -68,7 +99,8 @@ export default class Table extends AbstractGraph {
         let offset = limit * (this.currentPage - 1);
 
         this.setState({
-            data : this.filterData.slice(offset, offset + limit)
+            data : this.filterData.slice(offset, offset + limit),
+            selected: this.selectedRows[this.currentPage] ? this.selectedRows[this.currentPage]: []
         });
     }
 
@@ -94,20 +126,20 @@ export default class Table extends AbstractGraph {
         });
     }
 
-    getHeaderData(columns) {
-
-        const {
-            padding,
-        } = this.getConfiguredProperties();
-
+    setHeaderData(columns) {
         this.headerData = columns.map(({column, label}, i) => ({
             key: column,
             label: label || column,
             sortable: true,
-            style: {
-                padding: padding,
-            }}
+            columnText: label || column,
+            columField: column,
+            type:"text"
+           }
         ));
+    }
+
+    getHeaderData() {
+        return this.headerData;
     }
 
     getTableData(columns) {
@@ -141,33 +173,8 @@ export default class Table extends AbstractGraph {
 
                 data[columns[i].column] = columnData;
             });
-
             return data;
         })
-    }
-
-    handleFilterValueChange(search) {
-        const {
-            data
-        } = this.props;
-
-        this.resetFilters();
-
-        if(search) {
-            const columns = this.getColumns();
-            const accessors = this.getAccessor(columns);
-            this.filterData = data.filter((d, j) => {
-                let match = false;
-                accessors.forEach((accessor, i) => {
-                    if(accessor(d, true) && accessor(d, true).toString().toLowerCase().includes(search.toLowerCase()))
-                       match = true;
-                });
-
-                return match;
-            });
-        }
-
-        this.updateData();
     }
 
     handleSortOrderChange(column, order) {
@@ -180,6 +187,10 @@ export default class Table extends AbstractGraph {
           }
         );
 
+        /**
+         * Resetting the paging due to sorting
+         */
+        this.resetFilters();
         this.updateData();
     }
 
@@ -198,6 +209,57 @@ export default class Table extends AbstractGraph {
            this.props.onMarkClick(this.state.data[key]);
     }
 
+    handleRowSelection(selectedRows) {
+        this.selectedRows[this.currentPage] = selectedRows.slice();
+
+        this.setState({
+            selected: this.selectedRows[this.currentPage]
+        })
+    }
+
+    handleContextMenu(event) {
+        event.preventDefault()
+        const selectedRows = this.getSelectedRows()
+        console.log(selectedRows);
+        return false
+    }
+
+    getSelectedRows() {
+        const {
+            limit
+        } = this.getConfiguredProperties();
+
+        let selected = [];
+        for(let page in this.selectedRows) {
+            if(this.selectedRows.hasOwnProperty(page)) {
+                this.selectedRows[page].forEach((index) => {
+                    selected.push(this.filterData[(page - 1) * limit + index])
+                })
+            }
+        }
+
+        return selected;
+    }
+    
+
+    renderSearchBarIfNeeded() {
+        const {
+            searchBar
+        } = this.getConfiguredProperties();
+
+        if(searchBar === false)
+           return;
+
+        return (
+          <SearchBar
+            data={this.props.data}
+            options={this.getHeaderData()}
+            handleSearch={this.handleSearch}
+            columns={this.getColumns()}
+          />
+        );
+    }
+
     render() {
         const {
             width,
@@ -205,7 +267,10 @@ export default class Table extends AbstractGraph {
         } = this.props;
 
         const {
-            limit
+            limit,
+            selectable,
+            multiSelectable,
+            showCheckboxes
         } = this.getConfiguredProperties();
 
         let tableData = this.getTableData(this.getColumns());
@@ -215,36 +280,32 @@ export default class Table extends AbstractGraph {
         }
 
         return (
-            <div
-                style={{
-                    width: `${width}px`,
-                    height: `${height}px`,
-                    overflow: "auto"
-                }}
-            >
-
+            <div ref={(input) => { this.container = input; }}
+                onContextMenu={this.handleContextMenu}
+                >
+                {this.renderSearchBarIfNeeded()}
                 <DataTables
-                    headerToolbarMode={"filter"}
-                    showRowHover={false}
-                    showHeaderToolbar={true}
-                    showHeaderToolbarFilterIcon={false}
-                    multiSelectable={true}
-                    columns={this.headerData}
+                    columns={this.getHeaderData()}
                     data={tableData}
+                    selectable={selectable}
+                    multiSelectable={multiSelectable}
+                    selectedRows={this.state.selected}
+                    showCheckboxes={showCheckboxes}
                     showRowSizeControls={false}
                     onNextPageClick={this.handleNextPageClick}
                     onPreviousPageClick={this.handlePreviousPageClick}
-                    onFilterValueChange={this.handleFilterValueChange}
                     onSortOrderChange={this.handleSortOrderChange}
+                    onRowSelection={this.handleRowSelection}
                     page={this.currentPage}
                     count={this.filterData.length}
                     onCellClick={this.handleClick}
                     rowSize={limit}
-                    tableStyle={{
-                        width: "inherit",
-                        minWidth: "100%"
-                    }}
-                    tableBodyStyle={{overflowX: "scroll"}}
+                    tableStyle={style.table}
+                    tableHeaderColumnStyle={Object.assign({}, style.headerColumn, {fontSize: this.state.fontSize})}
+                    tableRowStyle={style.row}
+                    tableRowColumnStyle={Object.assign({}, style.rowColumn, {fontSize: this.state.fontSize})}
+                    tableBodyStyle={Object.assign({}, style.body, {height: `${height - 100}px`})}
+                    footerToolbarStyle={style.footerToolbar}
                 />
             </div>
         );

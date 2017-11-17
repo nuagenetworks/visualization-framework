@@ -80,9 +80,6 @@ class LineGraph extends XYGraph {
         const scale            = this.scaleColor(data, linesColumn);
         const getColor         = (d) => scale ? scale(d[colorColumn] || d[linesColumn] || d["key"]) : stroke.color || colors[0];
 
-
-
-
         const linesData = nest()
             .key((d) => linesColumn ? d[linesColumn] : "Line")
             .entries(data);

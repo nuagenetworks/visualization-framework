@@ -1,0 +1,50 @@
+{
+    "id":"aar-enterprise-all-app-usage",
+    "title":"All enterprise Applications",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_dpi_flowstats}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        },
+                        {
+                            "term": {
+                                "EnterpriseName": "{{enterpriseName:test_org}}"
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs":{
+                "L7Classification":{
+                    "terms":{
+                        "field":"L7ClassEnhanced",
+                        "order":{
+                            "Sum of MB":"desc"
+                        }
+                    },
+                    "aggs":{
+                        "Sum of MB":{
+                            "sum":{
+                                "field":"TotalBytesCount"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

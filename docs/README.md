@@ -261,7 +261,8 @@ Display vertical or horizontal bar charts
 
 __x-axis__
 
-- **xColumn*** attribute name in your results to use for x-axis
+- **xColumn** attribute name in your results to use for x-axis
+- **stackColumn** (optional) To show stacked Bar Charts
 - **xLabel** x-axis title
 - **xTicks** number of ticks to use for x-axis
 - **xTickFormat** [d3 format](https://github.com/d3/d3-format) style to display x-axis labels
@@ -298,10 +299,18 @@ Display nice Pie or Donut graphs
 - **pieInnerRadius** inner radius of the slices. Make this non-zero for a Donut Chart
 - **pieOuterRadius** outer radius of the slices
 - **pieLabelRadius** radius for positioning labels
+- **otherOptions** optional object
+  - **type** Value must be percentage or number, and default is percentage
+  - **limit** As per the type we can define the limit in percentage or slices respectively.
+  - **minimum** In case of percentage, if we want to override the mimium slices of 10.
 
 
 ##### Table
 - **width** width of the table. Default is `100%`
+- **selectable** - To enable/disable selectable feature - Default is `true`
+- **multiSelectable** To enable/disable multi select feature - default is `true`
+- **showCheckboxes** To show checkboxes to select rows - default is `false`
+- **enableSelectAll** To enable/disable select all feature - Default is `true`
 - **border**
   - **top** set top border. Default is `solid 1px #ccc`
   - **bottom** set bottom border. Default is `0`

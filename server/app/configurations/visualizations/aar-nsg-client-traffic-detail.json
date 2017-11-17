@@ -1,0 +1,49 @@
+{
+    "id": "aar-nsg-client-traffic-detail",
+    "graph": "AreaGraph",
+    "title": "Branch Client traffic detail on {{snsg}}",
+    "description": "Client traffic history on NSG",
+    "author": "Bharat Mukheja",
+    "creationDate": "10/20/2017",
+    "data": {
+        "dateHistogram": true,
+        "xColumn": "ts",
+        "xLabel": "Time",
+        "yColumn": "SumofBytes",
+        "yTickFormat": ",.2s",
+        "yLabel": "Traffic",
+        "stroke": {
+            "width": "2px"
+        },
+        "yTicks": 5,
+        "linesColumn": "{{client_trafficType:DstIp}}",
+        "legend": {
+            "orientation": "vertical",
+            "show": true,
+            "circleSize": 5,
+            "labelOffset": 5
+        },
+        "tooltip": [
+            { "column": "{{client_trafficType:DstIp}}", "label": "Client"},
+            { "column": "SumofBytes", "label": "Data Usage", "format": ",.2s"},
+            { "column": "ts", "label": "Timestamp", "timeFormat": "%b %d, %y %X"}
+        ]
+    },
+    "filterOptions": {
+        "Traffic Type": {
+            "parameter": "client_trafficType",
+            "options": [
+                {
+                    "label": "Download",
+                    "value": "DstIp",
+                    "default": true
+                },
+                {
+                    "label": "Upload",
+                    "value": "SrcIp"
+                }
+            ]
+        }
+    },
+    "query": "aar-nsg-client-traffic-detail"
+}
