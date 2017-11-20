@@ -15,6 +15,8 @@ const defaultConfig = {
   baseDir: path.normalize(__dirname + '/../..'),
 
   apiPrefix: '/middleware/api',
-};
+  cert: process.env.HTTPS_CERT_PATH || null,
+  key: process.env.HTTPS_KEY_PATH || null
+}
 
 export default defaultConfig;

@@ -4,6 +4,9 @@ import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import morgan from 'morgan';
 import helmet from 'helmet';
+import fs from 'fs';
+import https from 'https';
+import http from 'http';
 
 import routes from './routes';
 import Constants from './configurations/constants';
@@ -31,12 +34,33 @@ app.use(methodOverride());
 // Mount API routes
 app.use(Constants.apiPrefix, routes);
 
-app.listen(Constants.port, Constants.ip, () => {
-  // eslint-disable-next-line no-console
-  console.log(`
-    Port: ${Constants.port}
-    Env: ${app.get('env')}
-  `);
+app.get('/', function(req, res) {
+  res.end('Welcome on the secure server !');
 });
+
+if(Constants.cert && Constants.key) {
+  const sslOptions = {
+    key: fs.readFileSync(Constants.key, 'utf8'),
+    cert: fs.readFileSync(Constants.cert, 'utf8')
+  }
+
+  https.createServer(sslOptions, app).listen(Constants.port, Constants.ip, () => {
+    // eslint-disable-next-line no-console
+    console.log(`
+      Port: ${Constants.port}
+      Env: ${app.get('env')}
+    `)
+
+  })
+} else {
+  http.createServer(app).listen(Constants.port, Constants.ip, () => {
+    // eslint-disable-next-line no-console
+    console.log(`
+      Port: ${Constants.port}
+      Env: ${app.get('env')}
+    `)
+
+  })
+}
 
 export default app;
