@@ -3,7 +3,7 @@ import tabify from "./tabify";
 import { ActionKeyStore } from "./redux/actions";
 import { getUsedParameters } from "../../../utils/configurations";
 
-const ERROR_MESSAGE = "unable to fetch data. Please, try again later."
+const ERROR_MESSAGE = "unable to fetch data."
 
 var client = null;
 let config = function () {
