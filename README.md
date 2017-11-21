@@ -52,8 +52,9 @@ Here is a list of environment variable that can be set to configure the visualiz
 
     1. Go inside the `visualization-framework/server` folder
     2. Install all dependancies using `npm install` (it will take some time, please be patient)
-    3. Run the application using `npm start` command.
-    4. Run the lint using `npm run lint` command.
+    3. Run command `cp config.example.json config.json` and update respective variables. 
+    4. Run the application using `npm start` command.
+    5. Run the lint using `npm run lint` command.
 
 ## Middleware APIs
     1. Dashboard Confirguration: http://HOSTNAME/api/dashboards/:dashboardname
