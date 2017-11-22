@@ -64,7 +64,9 @@ class LineGraph extends XYGraph {
           yTickSizeOuter,
           brushEnabled,
           zeroStart,
-          circleRadius
+          circleRadius,
+          defaultY,
+          defaultYColor
         } = this.getConfiguredProperties();
 
         const isVerticalLegend = legend.orientation === 'vertical';
@@ -193,6 +195,19 @@ class LineGraph extends XYGraph {
           'right': xScale(d[xColumn]) + leftMargin
         });
 
+        let horizontalLine;
+        if(defaultY) {
+            horizontalLine =  <line
+                x1="0"
+                y1={yScale(defaultY)}
+                x2={availableWidth}
+                y2={yScale(defaultY)}
+                stroke= { defaultYColor ? defaultYColor : "rgb(255,0,0)"}
+                strokeWidth="1.5"
+                opacity="0.7"
+            />
+        }
+
         return (
             <div className="bar-graph">
                 {this.tooltip}
@@ -208,6 +223,7 @@ class LineGraph extends XYGraph {
                             key="yAxis"
                             ref={ (el) => select(el).call(yAxis) }
                         />
+                        <g> { horizontalLine } </g>
                         <g>
                           {linesData.map((d) =>
 

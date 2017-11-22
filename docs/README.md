@@ -287,6 +287,7 @@ Display one or multiple lines
 ![multiline-chart](https://cloud.githubusercontent.com/assets/1447243/21205460/4672e4a6-c211-11e6-88a5-269bc32d2140.png)
 
 - **linesColumn** attribute name in your results to display line value
+- **defaultY** default yAxis value used to draw straight horizontal line to show cut off value
 
 See x-axis and y-axis sections in BarGraph for more information
 
