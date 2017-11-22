@@ -204,7 +204,7 @@ class LineGraph extends XYGraph {
                 y2={yScale(defaultY)}
                 stroke= { defaultYColor ? defaultYColor : "rgb(255,0,0)"}
                 strokeWidth="1.5"
-                opacity="0.7"
+                opacity="0.6"
             />
         }
 

@@ -19,5 +19,5 @@ export const properties = {
     ],
     zeroStart: true,
     circleRadius: 5,
-    defaultYColor: theme.palette.greenColor
+    defaultYColor: theme.palette.lightBrown
 }
