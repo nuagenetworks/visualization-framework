@@ -47,7 +47,7 @@ export default class AbstractGraph extends React.Component {
                     place="top"
                     type="dark"
                     effect="float"
-                    getContent={[() => this.getTooltipContent(), 200]}
+                    getContent={[() => this.getTooltipContent(this.hoveredDatum), 200]}
                     afterHide={() =>  this.handleHideEvent()}
                     afterShow={() =>  this.handleShowEvent()}
                 />
@@ -75,11 +75,11 @@ export default class AbstractGraph extends React.Component {
         const accessors = tooltip.map(columnAccessor);
         
         // This function is invoked to produce the content of a tooltip.
-        this.getTooltipContent = () => {
+        this.getTooltipContent = (data) => {
             // The value of this.hoveredDatum should be set by subclasses
             // on mouseEnter and mouseMove of visual marks
             // to the data entry corresponding to the hovered mark.
-            if(this.hoveredDatum) {
+            if(data) {
                 return (
                     <div>
                         {/* Display each tooltip column as "label : value". */}
@@ -90,7 +90,7 @@ export default class AbstractGraph extends React.Component {
                                     {label || column}
                                 </strong> : <span>
                                     {/* Apply number and date formatting to the value. */}
-                                    {accessors[i](this.hoveredDatum)}
+                                    {accessors[i](data)}
                                 </span>
                             </div>
                         ))}
@@ -329,18 +329,19 @@ export default class AbstractGraph extends React.Component {
         );
     }
 
-    setYlabelWidth(data) {
+    setYlabelWidth(data, yColumn = null) {
         const {
           chartWidthToPixel,
           yTickFormat
         } = this.getConfiguredProperties();
 
+        yColumn = yColumn ? yColumn : 'yColumn'
         const yLabelFn = (d) => {
             if(!yTickFormat) {
-                return d['yColumn'];
+                return d[yColumn];
             }
             const formatter = format(yTickFormat);
-            return formatter(d['yColumn']);
+            return formatter(d[yColumn]);
         };
 
         this.yLabelWidth = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
@@ -350,9 +351,9 @@ export default class AbstractGraph extends React.Component {
         return this.yLabelWidth;
     }
 
-    setDimensions(props, data = null) {
-        this.setYlabelWidth(data ? data : props.data);
+    setDimensions(props, data = null, yColumn) {
         
+        this.setYlabelWidth(data ? data : props.data, yColumn);
         this.setAvailableWidth(props);
         this.setAvailableHeight(props);
         this.setLeftMargin();
@@ -455,7 +456,6 @@ export default class AbstractGraph extends React.Component {
             const otherDatas = metricDimension.top(Infinity, limit);
 
             if(otherDatas.length) {
-                let values = {};
                 const sum = otherDatas.reduce( (total, d) => +total + d[settings.metric], 0);
                 topData.push({
                     [settings.dimension]: settings.otherOptions.label ? settings.otherOptions.label : 'Others',
@@ -481,7 +481,7 @@ export default class AbstractGraph extends React.Component {
 
     renderNewLegend(data, legendConfig, getColor, label) {
 
-        if (!legendConfig.show)
+        if (!legendConfig || !legendConfig.show)
             return;
 
         const {

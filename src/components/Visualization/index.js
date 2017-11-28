@@ -60,6 +60,7 @@ class VisualizationView extends React.Component {
         this.initialize(this.props.id);
     }
 
+
     componentDidMount = () => {
         const {
             registerResize,
@@ -274,7 +275,6 @@ class VisualizationView extends React.Component {
     renderVisualization() {
         const {
             configuration,
-            queryConfiguration,
             response,
             id
         } = this.props;
@@ -286,16 +286,7 @@ class VisualizationView extends React.Component {
             return this.renderCardWithInfo("Oops, " + response.error, "meh-o");
         }
 
-        const data = ServiceManager.tabify(queryConfiguration, response.results);
-
-        // const data = [{
-        //     "key_as_string": "2017-07-05T00:00:00.000Z",
-        //     "ts": 1499212800000,
-        //     "doc_count": 144,
-        //     "MEMORY": 49.06944444444444,
-        //     "CPU": 60.958333333333336,
-        //     "DISK": 0.09722222222222
-        // }];
+        const data = response.results;
 
         if (!data || !data.length) {
             return this.renderCardWithInfo("No data to visualize", "bar-chart");
@@ -364,7 +355,6 @@ class VisualizationView extends React.Component {
 
     renderDownloadIcon() {
         const {
-            queryConfiguration,
             configuration,
             response
         } = this.props;
@@ -373,7 +363,7 @@ class VisualizationView extends React.Component {
             return false;
         }
 
-        const data = ServiceManager.tabify(queryConfiguration, response.results);
+        const data = response.results;
 
         if (!data || !data.length) {
             return null;
@@ -537,7 +527,6 @@ class VisualizationView extends React.Component {
                         { this.renderFiltersToolBar() }
                         <div className="clearfix"></div>
                     </div>
-
                     <CardText style={cardText}>
                         { this.renderVisualizationIfNeeded() }
                         {description}

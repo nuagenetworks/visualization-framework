@@ -12,6 +12,7 @@ import interfaceReducer from "../components/App/redux/reducer";
 import messageBoxReducer from "../components/MessageBox/redux/reducer";
 import serviceReducer from "../services/servicemanager/redux/reducer";
 import VSDReducer from "../configs/nuage/vsd/redux/reducer";
+import { reducer as tooltip } from 'redux-tooltip';
 
 import { Actions as VSDActions, ActionKeyStore as VSDActionKeyStore} from "../configs/nuage/vsd/redux/actions"
 import { Actions as ESActions, ActionKeyStore as ESActionKeyStore} from "../configs/nuage/elasticsearch/redux/actions"
@@ -27,6 +28,7 @@ const appReducer = combineReducers({
     router: routerStateReducer,
     services: serviceReducer,
     VSD: VSDReducer,
+    tooltip
 });
 
 const rootReducer = (state, action) => {

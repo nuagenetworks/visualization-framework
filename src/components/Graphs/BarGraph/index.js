@@ -298,13 +298,13 @@ export default class BarGraph extends XYGraph {
                                         height
                                     } = (
                                         vertical ? {
-                                            x: xScale(d[dimension]),
+                                            x: xScale(nest.key),
                                             y: yScale(d.y1),
                                             width: barWidth,
                                             height: yScale(d.y0) - yScale(d.y1)
                                         } : {
                                             x: xScale(d.y0),
-                                            y: yScale(d[dimension]),
+                                            y: yScale(nest.key),
                                             width: xScale(d.y1) - xScale(d.y0),
                                             height: yScale.bandwidth()
                                         }
@@ -327,6 +327,7 @@ export default class BarGraph extends XYGraph {
                                         // Otherwise, set onClick and style to "undefined".
                                     }
                                 );
+
                                 return (
                                     <rect
                                         x={ x }

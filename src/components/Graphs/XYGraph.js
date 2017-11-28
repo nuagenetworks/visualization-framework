@@ -133,7 +133,7 @@ export default class XYGraph extends AbstractGraph {
         // Y axis
         this.axis.y = axisLeft(this.getScale().y)
             .tickSizeInner(yTickGrid ? -this.getAvailableWidth() : yTickSizeInner)
-            .tickSizeOuter(0);
+            .tickSizeOuter(xTickSizeOuter);
 
         if(yTickFormat){
             this.axis.y.tickFormat(format(yTickFormat));
@@ -237,8 +237,6 @@ export default class XYGraph extends AbstractGraph {
               .attr('class', 'y-axis-label')
               .attr('text-anchor', 'middle')
         }
-
-
     }
 
     setAxisTitles() {
