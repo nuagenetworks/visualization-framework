@@ -133,7 +133,7 @@ export default class XYGraph extends AbstractGraph {
         // Y axis
         this.axis.y = axisLeft(this.getScale().y)
             .tickSizeInner(yTickGrid ? -this.getAvailableWidth() : yTickSizeInner)
-            .tickSizeOuter(0);
+            .tickSizeOuter(xTickSizeOuter);
 
         if(yTickFormat){
             this.axis.y.tickFormat(format(yTickFormat));
@@ -152,13 +152,15 @@ export default class XYGraph extends AbstractGraph {
       const {
           chartHeightToPixel,
           chartWidthToPixel,
-          margin,
+          margin
         } = this.getConfiguredProperties();
 
         this.titlePosition = {
             x: {
               left: this.getLeftMargin() + this.getAvailableWidth() / 2,
-              top: margin.top + this.getAvailableHeight() + chartHeightToPixel + this.getXAxisHeight()
+              top: (this.isBrush() && this.isVertical())
+                ?  margin.top + margin.bottom + this.getMinMarginTop() + this.getAvailableMinHeight()
+                :  margin.top + this.getAvailableHeight() + chartHeightToPixel + this.getXAxisHeight()
             },
             y: {
               left: margin.left + chartWidthToPixel + (this.checkIsVerticalLegend() ? this.getLegendConfig().width : 0),
@@ -237,8 +239,6 @@ export default class XYGraph extends AbstractGraph {
               .attr('class', 'y-axis-label')
               .attr('text-anchor', 'middle')
         }
-
-
     }
 
     setAxisTitles() {
