@@ -18,97 +18,57 @@
                                     "format":"epoch_millis"
                                 }
                             }
+                        },
+                        {
+                            "term": {
+                                "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "nuage_metadata.domainName":"{{domainName:chord_domain}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "nuage_metadata.acl_source_type":"{{source_field:pg}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "nuage_metadata.acl_destination_type":"{{destination_field:pg}}"
+                            }
                         }
                     ]
                 }
             },
             "aggs": {
-                "2": {
-                    "filters":{
-                        "filters":{
-                            "Enterprise":{
-                                "query":{
-                                    "term":{
-                                        "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
-                                    }
-                                }
-                            }
-                        }
+                "source": {
+                    "terms": {
+                        "field": "nuage_metadata.acl_source_name",
+                        "size": 5,
+                        "order": {
+                            "SumOf": "desc"
+                        }   
                     },
                     "aggs": {
-                        "3": {
-                            "filters":{
-                                "filters":{
-                                    "Domain":{
-                                        "query":{
-                                            "term":{
-                                                "{{domainType:nuage_metadata.domainName}}":"{{domainName:chord_domain}}"
-                                            }
-                                        }
-                                    }
+                        "SumOf": {
+                            "sum": {
+                                "field": "packets"
+                            }
+                        },
+                        "destination": {
+                            "terms": {
+                                "field": "nuage_metadata.acl_destination_name",
+                                "size": 5,
+                                "order": {
+                                    "SumOf": "desc"
                                 }
                             },
                             "aggs": {
-                                "4": {
-                                    "filters":{
-                                        "filters":{
-                                            "SourceType":{
-                                                "query":{
-                                                    "term":{
-                                                        "nuage_metadata.acl_source_type":"{{source_field:pg}}"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    "aggs": {
-                                        "5": {
-                                            "filters":{
-                                                "filters":{
-                                                    "DestinationType":{
-                                                        "query":{
-                                                            "term":{
-                                                                "nuage_metadata.acl_destination_type":"{{destination_field:pg}}"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            "aggs": {
-                                                "source": {
-                                                    "terms": {
-                                                        "field": "nuage_metadata.acl_source_name",
-                                                        "size": 5,
-                                                        "order": {
-                                                            "SumOf": "desc"
-                                                        }   
-                                                    },
-                                                    "aggs": {
-                                                        "SumOf": {
-                                                            "sum": {
-                                                                "field": "packets"
-                                                            }
-                                                        },
-                                                        "destination": {
-                                                            "terms": {
-                                                                "field": "nuage_metadata.acl_destination_name",
-                                                                "size": 5,
-                                                                "order": {
-                                                                    "SumOf": "desc"
-                                                                }
-                                                            },
-                                                            "aggs": {
-                                                                "SumOf": {
-                                                                    "sum": {
-                                                                        "field": "packets"
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
+                                "SumOf": {
+                                    "sum": {
+                                        "field": "packets"
                                     }
                                 }
                             }
