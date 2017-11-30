@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { push } from "redux-router";
 import DataTables from 'material-ui-datatables';
 import AbstractGraph from "../AbstractGraph";
 import columnAccessor from "../../../utils/columnAccessor";
@@ -12,7 +14,12 @@ import {properties} from "./default.config";
 
 import SearchBar from "../../SearchBar";
 
-export default class Table extends AbstractGraph {
+import {
+    Actions as VFSActions,
+    ActionKeyStore as VFSActionKeyStore
+} from '../../../features/redux/actions';
+
+class Table extends AbstractGraph {
 
     constructor(props, context) {
         super(props, properties);
@@ -46,6 +53,10 @@ export default class Table extends AbstractGraph {
     componentWillReceiveProps(nextProps) {
         if(JSON.stringify(this.props) !== JSON.stringify(nextProps)) {
             this.initiate();
+        }
+        const { selected } = nextProps;
+        if (selected && JSON.stringify(selected) !== JSON.stringify(this.props.selected)) {
+            this.setState({selected: [selected]});
         }
     }
 
@@ -224,6 +235,13 @@ export default class Table extends AbstractGraph {
         this.setState({
             selected: this.selectedRows[this.currentPage]
         })
+        const { selectFlow, location } = this.props;
+
+        if (selectFlow) {
+            const selectedRows = this.getSelectedRows();
+            const flow = selectedRows ? selectedRows[0] : {};
+            selectFlow(flow, location.query, location.pathname);
+        }
     }
 
     handleContextMenu(event) {
@@ -253,30 +271,29 @@ export default class Table extends AbstractGraph {
         const node = document.createElement('ul');
         node.classList.add('contextMenu');
         node.id = 'contextMenu';
-        node.style = `top: ${y}px; left: ${x}px; z-index: 100000`;
+        node.style = `top: ${y}px; left: ${x}px; z-index: 100000;`;
 
         // TODO menu needs to be part of the configurations
+        const { goTo } = this.props;
+        const path = `${process.env.PUBLIC_URL}/vfs`;
         const menu = [
             {
-                text: 'New Flow',
-                pathname: "/dashboards/vssDomainFlowExplorer/flow"
+                text: 'New Virtual Firewall Rule',
+                pathname: `${path}/new`,
+            },
+            {
+                text: 'Add to Virtual Firewall Rule',
+                pathname: `${path}/edit`,
             },
         ];
-
-        const selectedRows = this.getSelectedRows();
-        const flow = selectedRows ? selectedRows[0] : null;
 
         menu.forEach((item) => {
             const { text, pathname } = item;
             const li = document.createElement('li');
             li.textContent = text;
-            const linkObject = {
-                pathname,
-                query: { flow }
-            };
-            li.onclick = () => {
+            li.onclick = (e) => {
                 // dispatch a push to the menu link
-                console.error("LINK object: ", linkObject);
+                goTo(pathname);
             };
             node.append(li);
         });
@@ -376,3 +393,23 @@ Table.propTypes = {
   configuration: React.PropTypes.object,
   response: React.PropTypes.object
 };
+
+const mapStateToProps = (state, customProps) => {
+    const location = state.router.location;
+
+    return {
+        ...state,
+        ...customProps,
+        location,
+        selected: state.VFS.get(VFSActionKeyStore.VFS_SELECTED_FLOW_DATA),
+    }
+}
+
+const actionCreators = (dispatch) => ({
+    selectFlow: (flow, currentQueryParams, currentPath) => dispatch(VFSActions.selectFlow(flow, currentQueryParams, currentPath)),
+    goTo: (link, queryParams) => {
+        dispatch(push({pathname: link, query: queryParams}));
+    }
+});
+
+export default connect ( mapStateToProps, actionCreators) (Table);
