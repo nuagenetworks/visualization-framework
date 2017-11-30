@@ -65,7 +65,9 @@ img {
   background-color: white;
   border: 1px solid rgb(217, 217, 217);
   z-index: 10000;
+  font-family: "Lato", Helvetica, Arial, sans-serif;
   font-size: 12px;
+  color: rgb(33, 33, 33);
   padding: 0;
   list-style: none;
 }
@@ -73,6 +75,8 @@ img {
 .contextMenu > li {
   padding: 10px 5px;
   min-width: 80px;
+  justify-content: space-between;
+  border-bottom: solid 1px #dfdfdf;
   cursor: pointer;
 }
 
