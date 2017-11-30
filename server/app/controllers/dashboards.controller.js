@@ -25,6 +25,7 @@ class DashboardsController extends BaseController {
             dasboardData.visualizations[index].visualization = viz;
             visualizations.push(dasboardData.visualizations[index]);
           } catch(err) {
+            console.log(`ERROR OCCURED: Visualization configurations issue - ${err.message}`)
             //LOG ALL THE ERRORS HERE FOR ANY MISS CONFIGURATIONS
           }
         });

@@ -9,6 +9,7 @@ export default function errorHandler(err, req, res, next) {
     return res.sendStatus(500);
   }
 
+  console.log('ERROR OCCURED: ', err.message || err)
   const error = {
     message: err.message || 'Internal Server Error.',
   };
