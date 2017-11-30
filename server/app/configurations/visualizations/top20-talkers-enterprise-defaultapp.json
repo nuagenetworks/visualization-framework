@@ -7,7 +7,8 @@
     "creationDate": "10/14/2016",
     "data": {
         "columns": [
-            { "column": "DomainName", "label": "Domain"},
+            { "column": "L3Domain", "label": "L3 Domain"},
+            { "column": "L2Domain", "label": "L2 Domain"},
             { "column": "L7Classification", "label": "L7 Classification" },
             { "column": "1", "label": "Total Bytes", "format": ",.2s" }
         ]

@@ -79,10 +79,11 @@
                                                 "field": "EgressBytes"
                                             }
                                         },
-                                        "DomainName": {
+                                        "L3Domain": {
                                             "terms": {
                                                 "field": "Domain",
                                                 "size": 5,
+                                                "missing":"N/A",
                                                 "order": {
                                                     "EgressBytes": "desc"
                                                 }
@@ -96,6 +97,28 @@
                                                 "EgressBytes": {
                                                     "sum": {
                                                         "field": "EgressBytes"
+                                                    }
+                                                },
+                                                "L2Domain": {
+                                                    "terms": {
+                                                        "field": "L2Domain",
+                                                        "size": 5,
+                                                        "missing":"N/A",
+                                                        "order": {
+                                                            "EgressBytes": "desc"
+                                                        }
+                                                    },
+                                                    "aggs": {
+                                                        "EgressPackets": {
+                                                            "sum": {
+                                                                "field": "EgressPackets"
+                                                            }
+                                                        },
+                                                        "EgressBytes": {
+                                                            "sum": {
+                                                                "field": "EgressBytes"
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }

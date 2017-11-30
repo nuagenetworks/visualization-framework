@@ -1,110 +1,129 @@
 {
-    "id":"top20-talkers-enterprise-table",
-    "title":"Top 20 Talkers in Enterprise",
-    "service":"elasticsearch",
+    "id": "top20-talkers-enterprise-table",
+    "title": "Top 20 Talkers in Enterprise",
+    "service": "elasticsearch",
     "query": {
-      "index":"{{index:nuage_dpi_flowstats}}",
-      "type":"{{type:nuage_doc_type}}",
-      "body": {
-        "size":0,
-        "query":{
-            "bool":{
-                "must":[
-                    {
-                        "range":{
-                            "timestamp":{
-                                "gte":"{{startTime:now-24h}}",
-                                "lte":"{{endTime:now}}",
-                                "format":"epoch_millis"
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        "aggs":{
-            "2":{
-                "filters":{
-                    "filters":{
-                        "EnterpriseName":{
-                            "query":{
-                                "term":{
-                                    "EnterpriseName":"{{enterpriseName:test_org}}"
+        "index": "{{index:nuage_dpi_flowstats}}",
+        "type": "{{type:nuage_doc_type}}",
+        "body": {
+            "size": 0,
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "range": {
+                                "timestamp": {
+                                    "gte": "{{startTime:now-24h}}",
+                                    "lte": "{{endTime:now}}",
+                                    "format": "epoch_millis"
                                 }
                             }
                         }
-                    }
-                },
-                "aggs":{
-                    "5":{
-                        "filters":{
-                            "filters":{
-                                "AppName":{
-                                    "query":{
-                                        "not":{
-                                            "term":{
-                                                "Application":"Default Application"
+                    ]
+                }
+            },
+            "aggs": {
+                "2": {
+                    "filters": {
+                        "filters": {
+                            "EnterpriseName": {
+                                "query": {
+                                    "term": {
+                                        "EnterpriseName": "{{enterpriseName:test_org}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "aggs": {
+                        "5": {
+                            "filters": {
+                                "filters": {
+                                    "AppName": {
+                                        "query": {
+                                            "not": {
+                                                "term": {
+                                                    "Application": "Default Application"
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                        },
-                        "aggs":{
-                            "Application":{
-                                "terms":{
-                                    "field":"Application",
-                                    "size":20,
-                                    "order":{
-                                        "1":"desc"
-                                    }
-                                },
-                                "aggs":{
-                                    "1":{
-                                        "sum":{
-                                            "field":"TotalBytesCount"
+                            },
+                            "aggs": {
+                                "Application": {
+                                    "terms": {
+                                        "field": "Application",
+                                        "size": 20,
+                                        "order": {
+                                            "1": "desc"
                                         }
                                     },
-                                    "APMGroup":{
-                                        "terms":{
-                                            "field":"APMGroup",
-                                            "size":20,
-                                            "order":{
-                                                "1":"desc"
+                                    "aggs": {
+                                        "1": {
+                                            "sum": {
+                                                "field": "TotalBytesCount"
                                             }
                                         },
-                                        "aggs":{
-                                            "1":{
-                                                "sum":{
-                                                    "field":"TotalBytesCount"
+                                        "APMGroup": {
+                                            "terms": {
+                                                "field": "APMGroup",
+                                                "size": 20,
+                                                "order": {
+                                                    "1": "desc"
                                                 }
                                             },
-                                            "DomainName":{
-                                                "terms":{
-                                                    "field":"Domain",
-                                                    "size":20,
-                                                    "order":{
-                                                        "1":"desc"
+                                            "aggs": {
+                                                "1": {
+                                                    "sum": {
+                                                        "field": "TotalBytesCount"
                                                     }
                                                 },
-                                                "aggs":{
-                                                    "1":{
-                                                        "sum":{
-                                                            "field":"TotalBytesCount"
+                                                "L3Domain": {
+                                                    "terms": {
+                                                        "field": "Domain",
+                                                        "size": 20,
+                                                        "missing":"N/A",
+                                                        "order": {
+                                                            "1": "desc"
                                                         }
                                                     },
-                                                    "L7Classification":{
-                                                        "terms":{
-                                                            "field":"L7ClassEnhanced",
-                                                            "size":20,
-                                                            "order":{
-                                                                "1":"desc"
+                                                    "aggs": {
+                                                        "1": {
+                                                            "sum": {
+                                                                "field": "TotalBytesCount"
                                                             }
                                                         },
-                                                        "aggs":{
-                                                            "1":{
-                                                                "sum":{
-                                                                    "field":"TotalBytesCount"
+                                                        "L2Domain": {
+                                                            "terms": {
+                                                                "field": "L2Domain",
+                                                                "size": 20,
+                                                                "missing":"N/A",
+                                                                "order": {
+                                                                    "1": "desc"
+                                                                }
+                                                            },
+                                                            "aggs": {
+                                                                "1": {
+                                                                    "sum": {
+                                                                        "field": "TotalBytesCount"
+                                                                    }
+                                                                },
+                                                                "L7Classification": {
+                                                                    "terms": {
+                                                                        "field": "L7ClassEnhanced",
+                                                                        "size": 20,
+                                                                        "order": {
+                                                                            "1": "desc"
+                                                                        }
+                                                                    },
+                                                                    "aggs": {
+                                                                        "1": {
+                                                                            "sum": {
+                                                                                "field": "TotalBytesCount"
+                                                                            }
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -120,6 +139,5 @@
                 }
             }
         }
-      }
     }
 }
