@@ -1,0 +1,36 @@
+{
+    "id": "aar-domain-all-app-usage",
+    "graph": "PieGraph",
+    "title": "Domain Applications",
+    "description":"Usage chart for all the applications discovered in the Domain",
+    "author": "Bharat Mukheja",
+    "creationDate": "09/21/2017",
+    "data": {
+        "sliceColumn": "Sum of MB",
+        "labelColumn": "L7Classification",
+        "otherOptions": {
+            "label": "Others",
+            "limit": 85
+        },
+        "tooltip": [
+            { "column": "L7Classification", "label": "L7 Classification" },
+            { "column": "Sum of MB", "format": "s"}
+        ],
+        "percentages": true,
+        "percentagesFormat": ",.1%",
+        "pieLabelRadius": 0.55,
+        "pieOuterRadius": 0.95,
+        "legend": {
+            "show": true,
+            "orientation": "vertical",
+            "circleSize": 4,
+            "labelOffset": 2
+        }
+    },
+    "listeners": [{
+      "params": {
+          "app": "L7Classification"
+      }
+    }],
+    "query": "aar-domain-all-app-usage"
+}

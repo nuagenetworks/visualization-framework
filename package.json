@@ -14,10 +14,10 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
-    "cross-safe-eval": "0.0.4",
     "crossfilter2": "^1.4.1",
     "d3": "4.10.0",
     "elasticsearch": "^11.0.1",
+    "eval-expression": "^1.0.0",
     "font-awesome": "^4.6.3",
     "fontawesome": "^4.5.0",
     "immutable": "3.7.6",

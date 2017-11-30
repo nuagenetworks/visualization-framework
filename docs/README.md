@@ -261,7 +261,8 @@ Display vertical or horizontal bar charts
 
 __x-axis__
 
-- **xColumn*** attribute name in your results to use for x-axis
+- **xColumn** attribute name in your results to use for x-axis
+- **stackColumn** (optional) To show stacked Bar Charts
 - **xLabel** x-axis title
 - **xTicks** number of ticks to use for x-axis
 - **xTickFormat** [d3 format](https://github.com/d3/d3-format) style to display x-axis labels
