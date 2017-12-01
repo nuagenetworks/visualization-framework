@@ -245,8 +245,14 @@ class Table extends AbstractGraph {
     }
 
     handleContextMenu(event) {
+        const {
+            menu
+        } = this.getConfiguredProperties();
+
+        if (!menu) {
+            return false;
+        }
         event.preventDefault();
-        //const selectedRows = this.getSelectedRows()
         const { clientX: x, clientY: y } = event;
         this.setState({ contextMenu: { x, y } });
         return true;
@@ -265,6 +271,10 @@ class Table extends AbstractGraph {
 
     openContextMenu = () => {
         const { contextMenu: { x, y } } = this.state;
+        const {
+            menu
+        } = this.getConfiguredProperties();
+
         this.closeContextMenu();
         document.body.addEventListener('click', this.handleCloseContextMenu);
 
@@ -273,27 +283,16 @@ class Table extends AbstractGraph {
         node.id = 'contextMenu';
         node.style = `top: ${y}px; left: ${x}px; z-index: 100000;`;
 
-        // TODO menu needs to be part of the configurations
-        const { goTo } = this.props;
-        const path = `${process.env.PUBLIC_URL}/vfs`;
-        const menu = [
-            {
-                text: 'New Virtual Firewall Rule',
-                pathname: `${path}/new`,
-            },
-            {
-                text: 'Add to Virtual Firewall Rule',
-                pathname: `${path}/edit`,
-            },
-        ];
+        const { goTo, location: { query } } = this.props;
 
         menu.forEach((item) => {
-            const { text, pathname } = item;
+            const { text, rootpath } = item;
+            const pathname = `${process.env.PUBLIC_URL}/${rootpath}`
             const li = document.createElement('li');
             li.textContent = text;
             li.onclick = (e) => {
                 // dispatch a push to the menu link
-                goTo(pathname);
+                goTo(pathname, query);
             };
             node.append(li);
         });
@@ -398,8 +397,6 @@ const mapStateToProps = (state, customProps) => {
     const location = state.router.location;
 
     return {
-        ...state,
-        ...customProps,
         location,
         selected: state.VFS.get(VFSActionKeyStore.VFS_SELECTED_FLOW_DATA),
     }

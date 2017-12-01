@@ -42,11 +42,16 @@ export const mapStateToProps = (state, ownProps) => {
         parentQuery = context;
     }
 
+    let parentPath = state.VFS.get(VFSActionKeyStore.VFS_SELECTED_FLOW_PARENT_PATHNAME);
+    if (!parentPath) {
+        parentPath = `${process.env.PUBLIC_URL}/dashboards/vssDomainFlowExplorer`;
+    }
+
     const props = {
         data: state.VFS.get(VFSActionKeyStore.VFS_SELECTED_FLOW_DATA),
-        parentQuery: parentQuery,
-        parentPath: state.VFS.get(VFSActionKeyStore.VFS_SELECTED_FLOW_PARENT_PATHNAME),
-        context: context,
+        parentQuery,
+        parentPath,
+        context,
         visualizationType: state.interface.get(InterfaceActionKeyStore.VISUALIZATION_TYPE),
         isConnected: state.services.getIn([ServiceActionKeyStore.REQUESTS, ServiceManager.getRequestID(queryConfiguration), ServiceActionKeyStore.RESULTS]),
         formObject: state.form ? state.form['flow-editor'] : null,
