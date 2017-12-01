@@ -108,6 +108,9 @@ class BarGraph extends XYGraph {
       otherOptions,
       vertical: this.isVertical()
     })
+
+    // check condition to apply brush on chart
+    this.isBrushable(this.nestedData)
   }
 
   getNestedData() {
@@ -204,9 +207,6 @@ class BarGraph extends XYGraph {
 
   // generate methods which helps to create charts
   elementGenerator() {
-    const {
-      brush
-    } = this.getConfiguredProperties()
     
     const svg =  this.getGraph()
 
@@ -218,7 +218,7 @@ class BarGraph extends XYGraph {
     svg.insert('g',':first-child')
       .attr('class', 'yAxis')
 
-    if(brush) {
+    if(this.isBrush()) {
       this.getMinGraph()
         .append("g")
         .attr("class", "brush")
@@ -240,8 +240,7 @@ class BarGraph extends XYGraph {
       yTickFormat,
       chartWidthToPixel,
       yColumn,
-      dateHistogram,
-      brush
+      dateHistogram
     } = this.getConfiguredProperties()
 
     const svg =  this.getGraph()
@@ -293,7 +292,7 @@ class BarGraph extends XYGraph {
       svg: this.getSVG()
     })
 
-    if(brush)
+    if(this.isBrush())
       this.configureMinGraph()
   }
 
@@ -497,7 +496,7 @@ class BarGraph extends XYGraph {
       brushXY = d3.brushX()
       .extent([[0, 0], [this.getAvailableWidth(), this.getAvailableMinHeight()]])
 
-      range = minScale.x.range()
+      range = [0, this.getAvailableWidth()]
 
     } else {
 
@@ -524,7 +523,7 @@ class BarGraph extends XYGraph {
 
     }
 
-    const brush = brushXY
+    const brushing = brushXY
       .on("brush end", () => {
 
          const scale = this.getScale(),
@@ -557,8 +556,8 @@ class BarGraph extends XYGraph {
       });
 
     svg.select(".brush")
-      .call(brush)
-      .call(brush.move, range);
+      .call(brushing)
+      .call(brushing.move, range);
 
     // draw stacked bars
     this.drawGraph({scale: minScale, brush: true, svg})

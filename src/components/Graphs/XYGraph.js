@@ -159,7 +159,7 @@ export default class XYGraph extends AbstractGraph {
         this.titlePosition = {
             x: {
               left: this.getLeftMargin() + this.getAvailableWidth() / 2,
-              top: (brush && this.isVertical())
+              top: (this.isBrush() && this.isVertical())
                 ?  margin.top + margin.bottom + this.getMinMarginTop() + this.getAvailableMinHeight()
                 :  margin.top + this.getAvailableHeight() + chartHeightToPixel + this.getXAxisHeight()
             },

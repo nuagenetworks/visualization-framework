@@ -24,6 +24,8 @@ export default class AbstractGraph extends React.Component {
 
         this.yLabelWidth = 0;
 
+        this.brush = false;
+
         this.setGraphId();
 
         this.defaults = GraphManager.getDefaultProperties(properties);
@@ -357,6 +359,19 @@ export default class AbstractGraph extends React.Component {
         this.setAvailableWidth(props);
         this.setAvailableHeight(props);
     }
+
+    // check condition to apply brush on chart
+    isBrushable(data = []) {
+        const {
+            brush
+        } = this.getConfiguredProperties()
+
+        this.brush = brush && brush <= data.length
+    }
+
+    isBrush() {
+        return this.brush
+    }
     
     setLeftMargin() {
       const {
@@ -372,13 +387,12 @@ export default class AbstractGraph extends React.Component {
     
     setAvailableWidth({width}) {
         const {
-          margin,
-          brush
+          margin
         } = this.getConfiguredProperties();
 
         this.availableWidth = width - (margin.left + margin.right + this.getYlabelWidth());
 
-        if(brush && !this.isVertical()) {
+        if(this.isBrush() && !this.isVertical()) {
             this.availableWidth = this.availableWidth * 0.80
             this.availableMinWidth = width - (this.availableWidth + this.getLeftMargin() + margin.left + margin.right + margin.left )
             this.minMarginLeft = this.availableWidth + this.getLeftMargin() + margin.left           
@@ -410,13 +424,12 @@ export default class AbstractGraph extends React.Component {
     setAvailableHeight({height}) {
         const {
           chartHeightToPixel,
-          margin,
-          brush
+          margin
         } = this.getConfiguredProperties();
 
         this.availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + this.getXAxisHeight())        
 
-        if(this.isVertical() && brush) {
+        if(this.isVertical() && this.isBrush()) {
             this.availableHeight     = this.availableHeight * 0.75
             this.availableMinHeight  = height - (this.availableHeight + (margin.top * 4) + margin.bottom + chartHeightToPixel + this.getXAxisHeight());
             this.minMarginTop        = this.availableHeight + (margin.top * 2) + chartHeightToPixel + this.getXAxisHeight()
