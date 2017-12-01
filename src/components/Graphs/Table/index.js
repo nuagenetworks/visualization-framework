@@ -54,10 +54,6 @@ class Table extends AbstractGraph {
         if(JSON.stringify(this.props) !== JSON.stringify(nextProps)) {
             this.initiate();
         }
-        const { selected } = nextProps;
-        if (selected && JSON.stringify(selected) !== JSON.stringify(this.props.selected)) {
-            this.setState({selected: [selected]});
-        }
     }
 
     componentDidUpdate() {
@@ -393,12 +389,9 @@ Table.propTypes = {
   response: React.PropTypes.object
 };
 
-const mapStateToProps = (state, customProps) => {
-    const location = state.router.location;
-
+const mapStateToProps = (state) => {
     return {
-        location,
-        selected: state.VFS.get(VFSActionKeyStore.VFS_SELECTED_FLOW_DATA),
+        location: state.router.location
     }
 }
 
