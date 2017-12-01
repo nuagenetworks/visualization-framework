@@ -153,12 +153,15 @@ export default class XYGraph extends AbstractGraph {
           chartHeightToPixel,
           chartWidthToPixel,
           margin,
+          brushEnabled
         } = this.getConfiguredProperties();
 
         this.titlePosition = {
             x: {
               left: this.getLeftMargin() + this.getAvailableWidth() / 2,
-              top: margin.top + this.getAvailableHeight() + chartHeightToPixel + this.getXAxisHeight()
+              top: (brushEnabled && this.isVertical())
+                ?  margin.top + margin.bottom + this.getMinMarginTop() + this.getAvailableMinHeight()
+                :  margin.top + this.getAvailableHeight() + chartHeightToPixel + this.getXAxisHeight()
             },
             y: {
               left: margin.left + chartWidthToPixel + (this.checkIsVerticalLegend() ? this.getLegendConfig().width : 0),

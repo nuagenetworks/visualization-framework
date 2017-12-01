@@ -4,7 +4,7 @@ export {default as sorter} from "./sorter"
 export {default as stack} from "./stack"
 export {default as constants} from "./constants"
 
-export * from "./dataParser/index"
+export * from "./barGraph/index"
 export * from "./limit/index"
 export * from "./nest/index"
 export * from "./reducers/index"

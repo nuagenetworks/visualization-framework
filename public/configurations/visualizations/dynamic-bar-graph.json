@@ -12,6 +12,7 @@
         "yLabel": "Total Bytes",
         "yTicks": 5,
         "yTickFormat": ".2s",
+        "brushEnabled": true,
         "colors": [
             "#7da3f7",
             "#b3d645",

@@ -352,11 +352,10 @@ export default class AbstractGraph extends React.Component {
     }
 
     setDimensions(props, data = null, yColumn) {
-        
         this.setYlabelWidth(data ? data : props.data, yColumn);
+        this.setLeftMargin();
         this.setAvailableWidth(props);
         this.setAvailableHeight(props);
-        this.setLeftMargin();
     }
     
     setLeftMargin() {
@@ -374,13 +373,28 @@ export default class AbstractGraph extends React.Component {
     setAvailableWidth({width}) {
         const {
           margin,
+          brushEnabled
         } = this.getConfiguredProperties();
 
         this.availableWidth = width - (margin.left + margin.right + this.getYlabelWidth());
+
+        if(brushEnabled && !this.isVertical()) {
+            this.availableWidth = this.availableWidth * 0.80
+            this.availableMinWidth = width - (this.availableWidth + this.getLeftMargin() + margin.left + margin.right + margin.left )
+            this.minMarginLeft = this.availableWidth + this.getLeftMargin() + margin.left           
+        }
     }
 
     getAvailableWidth() {
        return this.availableWidth;
+    }
+
+    getAvailableMinWidth() {
+        return this.availableMinWidth;
+    }
+
+    getMinMarginLeft() {
+        return this.minMarginLeft;
     }
 
     // height of x-axis
@@ -394,18 +408,40 @@ export default class AbstractGraph extends React.Component {
     }
 
     setAvailableHeight({height}) {
-
         const {
           chartHeightToPixel,
-          margin
+          margin,
+          brushEnabled
         } = this.getConfiguredProperties();
 
-        this.availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + this.getXAxisHeight());
+        this.availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + this.getXAxisHeight())        
 
+        if(this.isVertical() && brushEnabled) {
+            this.availableHeight     = this.availableHeight * 0.75
+            this.availableMinHeight  = height - (this.availableHeight + (margin.top * 4) + margin.bottom + chartHeightToPixel + this.getXAxisHeight());
+            this.minMarginTop        = this.availableHeight + (margin.top * 2) + chartHeightToPixel + this.getXAxisHeight()
+        }
     }
 
     getAvailableHeight() {
         return this.availableHeight;
+    }
+
+    getAvailableMinHeight() {
+        return this.availableMinHeight;
+    }
+
+    getMinMarginTop() {
+        return this.minMarginTop;
+    }
+
+    // Check whether to display chart as vertical or horizontal
+    isVertical() {
+        const {
+          orientation
+        } = this.getConfiguredProperties()
+
+        return orientation === 'vertical'
     }
 
     // Check whether to display legend as vertical or horizontal

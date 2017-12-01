@@ -1,28 +1,14 @@
 import React from 'react'
 import * as d3 from 'd3'
-import { connect } from 'react-redux';
-import { actions } from 'redux-tooltip';
+import { connect } from 'react-redux'
+import { actions } from 'redux-tooltip'
 import _ from 'lodash'
+
 
 import { properties } from './default.config'
 import XYGraph from '../XYGraph'
 
-import { barGraphParser, pick, constants } from '../../../utils/helpers'
-
-
-function computeBarWidth(interval, timeScale) {
-  const step = +interval.substr(0, interval.length - 1);
-
-  // TODO handle case of 'ms'
-  const abbreviation = interval.substr(interval.length - 1);
-  const d3Interval = constants.timeAbbreviations[abbreviation];
-
-  // TODO validation and error handling
-  const start = new Date(2000, 0, 0, 0, 0);
-  const end = d3[d3Interval].offset(start, step);
-
-  return timeScale(end) - timeScale(start);
-}
+import { dataParser, pick, barWidth } from '../../../utils/helpers'
 
 const FILTER_KEY = ['data', 'height', 'width', 'context']
 
@@ -72,12 +58,8 @@ class BarGraph extends XYGraph {
     return this.getSVG().select('.graph-container')
   }
 
-  isVertical() {
-    const {
-      orientation
-    } = this.getConfiguredProperties()
-
-    return orientation === 'vertical'
+  getMinGraph() {
+    return this.getSVG().select('.mini-graph-container');
   }
 
   initiate(props) {
@@ -86,7 +68,7 @@ class BarGraph extends XYGraph {
     } = props
 
     if (!data || !data.length)
-        return; 
+        return
 
     this.parseData()
     this.setDimensions(props, this.getNestedData(), this.isVertical() ? 'total' : 'key')
@@ -118,7 +100,7 @@ class BarGraph extends XYGraph {
 
     this.stack = stackColumn || this.dimension
 
-    this.nestedData = barGraphParser({
+    this.nestedData = dataParser({
       data,
       dimension: this.dimension,
       metric: this.metric,
@@ -153,7 +135,7 @@ class BarGraph extends XYGraph {
     } = this.getConfiguredProperties()
     
 
-    const legendWidth = this.longestLabelLength(data, this.getStackLabelFn()) * chartWidthToPixel;    
+    const legendWidth = this.longestLabelLength(data, this.getStackLabelFn()) * chartWidthToPixel    
 
     let legend = Object.assign({}, originalLegend)
     
@@ -222,6 +204,9 @@ class BarGraph extends XYGraph {
 
   // generate methods which helps to create charts
   elementGenerator() {
+    const {
+      brushEnabled
+    } = this.getConfiguredProperties()
     
     const svg =  this.getGraph()
 
@@ -232,6 +217,17 @@ class BarGraph extends XYGraph {
     //Add the Y Axis
     svg.insert('g',':first-child')
       .attr('class', 'yAxis')
+
+    if(brushEnabled) {
+      this.getMinGraph()
+        .append("g")
+        .attr("class", "brush")
+    }
+
+
+    svg.append("defs").append("clipPath")
+    .attr("id", "clip")
+    .append('rect')
 
     // generate elements for X and Y titles
     this.generateAxisTitleElement()
@@ -244,7 +240,8 @@ class BarGraph extends XYGraph {
       yTickFormat,
       chartWidthToPixel,
       yColumn,
-      dateHistogram
+      dateHistogram,
+      brushEnabled
     } = this.getConfiguredProperties()
 
     const svg =  this.getGraph()
@@ -255,8 +252,16 @@ class BarGraph extends XYGraph {
     // set bar width
     this.setBarWidth()
 
+
+    svg.select("#clip")
+    .select("rect")
+      .attr("x", this.isVertical() ? 0 : -this.getYlabelWidth())
+      .attr("width", this.getAvailableWidth())
+      .attr("height", this.getAvailableHeight());
+
     //Add the X Axis
     const xAxis = svg.select('.xAxis')
+      .style('clip-path', 'url(#clip)')
       .attr('transform', 'translate(0,'+ this.getAvailableHeight() +')')
       .call(this.getAxis().x)
       .selectAll('.tick text')
@@ -272,6 +277,9 @@ class BarGraph extends XYGraph {
     const yAxis = svg.select('.yAxis')
       .call(this.getAxis().y)
 
+    if(!this.isVertical())
+      yAxis.style('clip-path', 'url(#clip)')
+
     if(!this.isVertical() && !dateHistogram) {
       yAxis.selectAll('.tick text')
         .call(this.wrapD3Text, yAxisLabelWidth)
@@ -279,8 +287,14 @@ class BarGraph extends XYGraph {
 
     this.setAxisTitles()
     this.renderLegendIfNeeded()
-    this.drawGraph()
-    
+    this.drawGraph({
+      scale: this.getScale(),
+      brushEnabled: false,
+      svg: this.getSVG()
+    })
+
+    if(brushEnabled)
+      this.configureMinGraph()
   }
 
   setColor() {
@@ -291,7 +305,7 @@ class BarGraph extends XYGraph {
     const {
       colorColumn,
       colors
-    } = this.getConfiguredProperties();
+    } = this.getConfiguredProperties()
 
     const scale = this.scaleColor(data, this.getStack())
     this.color =  (d) => scale ? scale(d[colorColumn || this.getStack()]) : colors[0]
@@ -305,10 +319,10 @@ class BarGraph extends XYGraph {
     const {
       dateHistogram,
       interval
-    } = this.getConfiguredProperties();
+    } = this.getConfiguredProperties()
 
     if (dateHistogram) {
-      this.barWidth = computeBarWidth(interval, this.getScale().x)
+      this.barWidth = barWidth(interval, this.getScale().x)
     } else if (this.isVertical()) {
       this.barWidth = this.getScale().x.bandwidth()
     }
@@ -326,52 +340,13 @@ class BarGraph extends XYGraph {
     this.renderNewLegend(data, this.getLegendConfig(), this.getColor(), this.getStackLabelFn())
   }
 
-  drawGraph() {
+  getBarDimensions(scale) {
 
-    let self = this
-
-    const {
-      onMarkClick
-    } = this.props
-
-    const {
-      stroke,
-      otherOptions,
-      loadSpeed
-    } = this.getConfiguredProperties()
-
-    const svg =  this.getGraph()
-    const scale = this.getScale()    
-
-    // draw stacked bars
-    const bars = svg.select('.graph-bars')
-      .selectAll('.bar-block')
-      .data(this.getNestedData(), d => d.key )
-
-    const newBars = bars.enter().append('g')
-      .attr('class', 'bar-block')
-
-    newBars.append('rect')
-      .style('stroke', stroke.color)
-      .style('stroke-width', stroke.width)
-
-    const allBars = newBars.merge(bars)
-
-
-    const {
-      x,
-      y,
-      width,
-      height,
-      initialX,
-      initialY,
-      initialHeight,
-      initialWidth
-    } = (
+    return (
         this.isVertical() ? {
             x: d => scale.x(d.key),
             y: d => scale.y(d.y1),
-            width: this.getBarWidth(),
+            width: scale.x.bandwidth(),
             height: d => scale.y(d.y0) - scale.y(d.y1),
             initialY: d => scale.y(0),
             initialHeight: 0,
@@ -387,14 +362,59 @@ class BarGraph extends XYGraph {
             get initialY() { return this.y },
             get initialHeight() { return this.height }
         }
-    );
-   
+    )
+  }
 
+  drawGraph({
+    scale,
+    brushEnabled = false,
+    svg
+  }) {
+
+    let self = this
+
+    const {
+      onMarkClick
+    } = this.props
+
+    const {
+      stroke,
+      otherOptions,
+      loadSpeed
+    } = this.getConfiguredProperties()
+
+    const classPrefix = brushEnabled ? 'min-' : ''
+
+    // draw stacked bars
+    const bars = svg.select(`.${classPrefix}graph-bars`)
+      .selectAll(`.${classPrefix}bar-block`)
+      .data(this.getNestedData(), d => d.key )
+
+    const newBars = bars.enter().append('g')
+      .attr('class', `${classPrefix}bar-block`)
+      .style('clip-path', 'url(#clip)')
+
+    newBars.append('rect')
+      .style('stroke', stroke.color)
+      .style('stroke-width', stroke.width)
+
+    const allBars = newBars.merge(bars)
     const nestedBars = allBars.selectAll('rect')
       .data( d =>  d.values.map( datum => Object.assign(datum, {key: d.key} )))
 
     const newNestedBars = nestedBars.enter().append('rect')
     const allNestedbars = newNestedBars.merge(nestedBars)
+
+    const {
+      x,
+      y,
+      width,
+      height,
+      initialX,
+      initialY,
+      initialHeight,
+      initialWidth
+    } = this.getBarDimensions(scale)
 
     allNestedbars
       .style('cursor', onMarkClick ? 'pointer' : '')
@@ -402,7 +422,7 @@ class BarGraph extends XYGraph {
       .attr('x', initialX)
       .attr('y', initialY)
       .attr('height', initialHeight)
-      .attr('width', initialWidth)      
+      .attr('width', initialWidth)
       .on('click', d => {
           this.handleLeave()
           onMarkClick && (!otherOptions || d[this.getDimension()] !== otherOptions.label)
@@ -425,9 +445,9 @@ class BarGraph extends XYGraph {
             )
             .on('mouseleave', self.handleLeave)
           })
-        
+
     // Remove all remaining nodes        
-    bars.exit().remove();
+    bars.exit().remove()
   }
 
   handleMove(data) {
@@ -435,9 +455,115 @@ class BarGraph extends XYGraph {
   }
 
   handleLeave() {
-    this.props.hideTooltip();
+    this.props.hideTooltip()
   }
 
+  configureMinGraph() {
+    const {
+      data
+    } = this.props
+
+    if (!data || !data.length)
+      return
+
+    const {
+      margin,
+      padding
+    } = this.getConfiguredProperties()
+
+    const svg   = this.getMinGraph(),
+          scale = this.getScale(),
+          minScale = { x: {}, y: {}}
+
+    let range, brushXY, mainZoom
+
+    if(this.isVertical()) {
+
+      svg.attr('transform', `translate(${this.getLeftMargin()},${this.getMinMarginTop()})`)
+      mainZoom = d3.scaleLinear()
+        .range([0, this.getAvailableWidth()])
+        .domain([0, this.getAvailableWidth()])
+
+      minScale.x = d3.scaleBand()
+        .domain(scale.x.domain())
+        .padding(padding)
+
+      minScale.y = d3.scaleLinear()
+        .domain(scale.y.domain());
+
+      minScale.x.range([0, this.getAvailableWidth()])
+      minScale.y.range([this.getAvailableMinHeight(), 0])
+
+      brushXY = d3.brushX()
+      .extent([[0, 0], [this.getAvailableWidth(), this.getAvailableMinHeight()]])
+
+      range = minScale.x.range()
+
+    } else {
+
+      svg.attr('transform', `translate(${this.getMinMarginLeft()},${margin.top})`)
+
+      mainZoom = d3.scaleLinear()
+        .range([this.getAvailableHeight(), 0])
+        .domain([0, this.getAvailableHeight()])
+
+      minScale.x = d3.scaleLinear()
+        .domain(scale.x.domain())
+
+      minScale.y = d3.scaleBand()
+        .domain(scale.y.domain())
+        .padding(padding);
+
+      minScale.x.range([0, this.getAvailableMinWidth()])
+      minScale.y.range([this.getAvailableHeight(), 0])
+
+      range = [0, this.getAvailableHeight()]
+
+      brushXY = d3.brushY()
+        .extent([[0, 0], [this.getAvailableMinWidth(), this.getAvailableHeight()]])
+
+    }
+
+    const brush = brushXY
+      .on("brush end", () => {
+
+         const scale = this.getScale(),
+          originalRange = mainZoom.range()
+
+         let [start, end] = d3.event.selection || range;
+
+        if(this.isVertical()) {
+          mainZoom.domain([start, end]);
+          scale.x.range([mainZoom(originalRange[0]), mainZoom(originalRange[1])]);
+          this.getGraph().select(".xAxis").call(this.getAxis().x);
+        } else {
+          mainZoom.domain([end, start]);
+          scale.y.range([mainZoom(originalRange[0]), mainZoom(originalRange[1])]);
+          this.getGraph().select(".yAxis").call(this.getAxis().y);
+        }
+        const {
+          x,
+          y,
+          width,
+          height
+        } = this.getBarDimensions(scale)
+
+        this.getGraph().selectAll(".bar-block").selectAll("rect")
+          .attr('x', x)
+          .attr('y', y)
+          .attr('width', width)
+          .attr('height', height)
+
+      });
+
+    svg.select(".brush")
+      .call(brush)
+      .call(brush.move, range);
+
+    // draw stacked bars
+    this.drawGraph({scale: minScale, brushEnabled: true, svg})
+
+  }
 
   render() {
     const {
@@ -457,9 +583,12 @@ class BarGraph extends XYGraph {
       <div className='dynamic-bar-graph'>
         <svg width={width} height={height}>
           <g ref={node => this.node = node}>
-            <g className='graph-container' transform={`translate(${this.getLeftMargin()},${margin.top})`} >
+            <g className='graph-container' transform={`translate(${this.getLeftMargin()},${margin.top})`}>
               <g className='graph-bars'></g>
               <g className='tooltip-section'></g>
+            </g>
+            <g className='mini-graph-container'>
+              <g className='min-graph-bars'></g>
             </g>
             <g className='axis-title'></g>
             <g className='legend'></g>
@@ -488,14 +617,14 @@ const actionCreators = (dispatch) => ({
           y: d3.event.pageY
         },
         content: data
-      }));
+      }))
   },
   
   hideTooltip: function() {
-    dispatch(actions.hide());
+    dispatch(actions.hide())
   }
 
-});
+})
 
-export default connect(mapStateToProps, actionCreators)(BarGraph);
+export default connect(mapStateToProps, actionCreators)(BarGraph)
 
