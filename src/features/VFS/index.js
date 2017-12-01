@@ -116,7 +116,7 @@ class VFS extends React.Component {
                     mirrors.name = mirrordestinations.type;
                     const option = getMirrorDestinationForValue(mirrordestinations.type);
                     if (option && Array.isArray(option)) {
-                        mirrors.label = option[0].text;
+                        mirrors.label = option[0].label ? option[0].label : option[0].text;
                     }
                 }
             }
@@ -268,14 +268,14 @@ class VFS extends React.Component {
                 <Header>Matching Criteria</Header>
                 {twoColumnRow({
                     name: 'locationType',
-                    label: 'Origin Location',
+                    label: 'Source',
                     component: Select,
                     options: NetworkTypeOptions,
                     validate: [required],
                     error: getFieldError('locationType')
                 }, {
                     name: 'networkType',
-                    label: 'Destination Network',
+                    label: 'Destination',
                     component: Select,
                     options: NetworkTypeOptions,
                     validate: [required],

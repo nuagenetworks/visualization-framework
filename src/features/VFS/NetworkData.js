@@ -305,10 +305,12 @@ export const MirrorDestinationOptions = [
     {
         text: 'Overlay Mirror Destination',
         value: 'l2domainID',
+        label: 'L2 Domain',
     },
     {
         text: 'Underlay Mirror Destination',
-        value: 'mirrorDestinationID'
+        value: 'mirrorDestinationID',
+        label: 'Mirror Destination',
     }
 ];
 

@@ -87,6 +87,16 @@ const dataViewSectionLabel = {
     color: 'rgb(107, 148, 236)',
 };
 
+const viewContent = {
+    display: 'flex',
+    height: '100%',
+};
+
+const wrapper = {
+    height: '100%',
+    width: '100%',
+    position: 'relative',
+};
 
 export default {
     button,
@@ -345,5 +355,16 @@ export default {
     },
     rowKey: {
         width: 50,
+    },
+    viewContent,
+    viewContentWrapper: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+    },
+    viewWrapper: {
+        ...wrapper,
+        overflow: 'hidden',
     },
 };
