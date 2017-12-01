@@ -205,7 +205,7 @@ class BarGraph extends XYGraph {
   // generate methods which helps to create charts
   elementGenerator() {
     const {
-      brushEnabled
+      brush
     } = this.getConfiguredProperties()
     
     const svg =  this.getGraph()
@@ -218,7 +218,7 @@ class BarGraph extends XYGraph {
     svg.insert('g',':first-child')
       .attr('class', 'yAxis')
 
-    if(brushEnabled) {
+    if(brush) {
       this.getMinGraph()
         .append("g")
         .attr("class", "brush")
@@ -241,7 +241,7 @@ class BarGraph extends XYGraph {
       chartWidthToPixel,
       yColumn,
       dateHistogram,
-      brushEnabled
+      brush
     } = this.getConfiguredProperties()
 
     const svg =  this.getGraph()
@@ -289,11 +289,11 @@ class BarGraph extends XYGraph {
     this.renderLegendIfNeeded()
     this.drawGraph({
       scale: this.getScale(),
-      brushEnabled: false,
+      brush: false,
       svg: this.getSVG()
     })
 
-    if(brushEnabled)
+    if(brush)
       this.configureMinGraph()
   }
 
@@ -367,7 +367,7 @@ class BarGraph extends XYGraph {
 
   drawGraph({
     scale,
-    brushEnabled = false,
+    brush = false,
     svg
   }) {
 
@@ -383,7 +383,7 @@ class BarGraph extends XYGraph {
       loadSpeed
     } = this.getConfiguredProperties()
 
-    const classPrefix = brushEnabled ? 'min-' : ''
+    const classPrefix = brush ? 'min-' : ''
 
     // draw stacked bars
     const bars = svg.select(`.${classPrefix}graph-bars`)
@@ -561,7 +561,7 @@ class BarGraph extends XYGraph {
       .call(brush.move, range);
 
     // draw stacked bars
-    this.drawGraph({scale: minScale, brushEnabled: true, svg})
+    this.drawGraph({scale: minScale, brush: true, svg})
 
   }
 

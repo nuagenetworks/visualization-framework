@@ -373,12 +373,12 @@ export default class AbstractGraph extends React.Component {
     setAvailableWidth({width}) {
         const {
           margin,
-          brushEnabled
+          brush
         } = this.getConfiguredProperties();
 
         this.availableWidth = width - (margin.left + margin.right + this.getYlabelWidth());
 
-        if(brushEnabled && !this.isVertical()) {
+        if(brush && !this.isVertical()) {
             this.availableWidth = this.availableWidth * 0.80
             this.availableMinWidth = width - (this.availableWidth + this.getLeftMargin() + margin.left + margin.right + margin.left )
             this.minMarginLeft = this.availableWidth + this.getLeftMargin() + margin.left           
@@ -411,12 +411,12 @@ export default class AbstractGraph extends React.Component {
         const {
           chartHeightToPixel,
           margin,
-          brushEnabled
+          brush
         } = this.getConfiguredProperties();
 
         this.availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + this.getXAxisHeight())        
 
-        if(this.isVertical() && brushEnabled) {
+        if(this.isVertical() && brush) {
             this.availableHeight     = this.availableHeight * 0.75
             this.availableMinHeight  = height - (this.availableHeight + (margin.top * 4) + margin.bottom + chartHeightToPixel + this.getXAxisHeight());
             this.minMarginTop        = this.availableHeight + (margin.top * 2) + chartHeightToPixel + this.getXAxisHeight()
