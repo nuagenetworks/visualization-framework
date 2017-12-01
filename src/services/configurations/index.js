@@ -1,10 +1,10 @@
 import "whatwg-fetch";
 import { checkStatus, parseJSON } from "../common";
-
+var os = require("os");
 
 const config = {
     path: process.env.PUBLIC_URL + "/configurations/",
-    api: process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/middleware/api/",
+    api: process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "https://" + os.hostname() + ":8010/middleware/api/",
     cachingTime: 120000, // (ms) -> default 30s
 }
 

@@ -5,9 +5,10 @@ import { MemoryService } from "../memory";
 import "whatwg-fetch";
 import { checkStatus, parseJSON } from "../common";
 
+var os = require("os");
 let config = {
     timingCache: 5000,
-    api: process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/middleware/api/",
+    api: process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "https://" + os.hostname() + ":8010/middleware/api/",
 }
 
 /*

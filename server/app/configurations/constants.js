@@ -1,8 +1,8 @@
 import path from 'path'
 import readConfig from 'read-config'
 
-
 const config = readConfig(path.resolve(__dirname, '../../config.json'));
+var os = require("os");
 
 const defaultConfig = {
   env: config.NODE_ENV,
@@ -14,7 +14,7 @@ const defaultConfig = {
     };
   },
   port: config.MIDDLEWARE_SERVER_PORT || 8010,
-  ip: config.MIDDLEWARE_SERVER_IP || 'localhost',
+  ip: config.MIDDLEWARE_SERVER_IP || os.hostname(),
   release: require('../../package.json').version,
   baseDir: path.normalize(__dirname + '/../..'),
   apiPrefix: config.APP_PREFIX || '/middleware/api',
