@@ -13,6 +13,7 @@ export const properties = {
     rowHeight: 40,
     colors: [theme.palette.greyLighterColor, theme.palette.whiteColor],
     fontColor: theme.palette.blackLightColor,
+    highlightColor: theme.palette.greenLighterColor,
     border: {
         top: "solid 1px " + theme.palette.greyLightColor,
         left: "0",

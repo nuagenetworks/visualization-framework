@@ -6,6 +6,8 @@
     "author": "Ronak Shah",
     "creationDate": "11/29/2016",
     "data": {
+        "hidePagination": true,
+        "highlight": "top-acl-hits.sort",
         "columns": [
             { "column": "top-acls", "label": "ACL ID" },
             { "column": "top-acl-hits.sort", "label": "# Packets" },
