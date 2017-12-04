@@ -3,7 +3,7 @@ import { theme } from "../../../theme";
 export const properties = {
     width: "100%",
     padding: 5,
-    limit: 5,
+    limit: 100,
 
     selectable: true,
     multiSelectable: false,
