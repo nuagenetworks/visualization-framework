@@ -270,7 +270,7 @@ export const NetworkTypeOptions = [
     },
     {
         text: 'Network Macro',
-        value: 'NETWORK_MACRO'
+        value: 'ENTERPRISE_NETWORK'
     },
     {
         text: 'Network Macro Group',

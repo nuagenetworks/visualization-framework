@@ -263,7 +263,7 @@ class VFS extends React.Component {
                         error: getFieldError('priority')
                     })
                 }
-                <Header>Matching Criteria</Header>
+                <Header>Match Criteria</Header>
                 {twoColumnRow({
                     name: 'locationType',
                     label: 'Source',
@@ -382,7 +382,7 @@ class VFS extends React.Component {
             case 'PGEXPRESSION':
                 fetchPGExpressionsIfNeeded(domainID);
                 break;
-            case 'NETWORK_MACRO':
+            case 'ENTERPRISE_NETWORK':
                 fetchNetworkMacrosIfNeeded(enterpriseID);
                 break;
             case 'NETWORK_MACRO_GROUP':
@@ -462,7 +462,7 @@ class VFS extends React.Component {
                 return policygroups;
             case 'PGEXPRESSION':
                 return pgexpressions;
-            case 'NETWORK_MACRO':
+            case 'ENTERPRISE_NETWORK':
                 return enterprisenetworks;
             case 'NETWORK_MACRO_GROUP':
                 return networkmacrogroups;
