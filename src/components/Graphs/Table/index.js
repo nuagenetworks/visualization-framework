@@ -1,35 +1,37 @@
-import React from 'react';
-import DataTables from 'material-ui-datatables';
-import AbstractGraph from "../AbstractGraph";
-import columnAccessor from "../../../utils/columnAccessor";
-import CopyToClipboard from 'react-copy-to-clipboard';
-import {Tooltip} from 'react-lightweight-tooltip';
+import React from 'react'
+import DataTables from 'material-ui-datatables'
+import AbstractGraph from "../AbstractGraph"
+import columnAccessor from "../../../utils/columnAccessor"
+import CopyToClipboard from 'react-copy-to-clipboard'
+import {Tooltip} from 'react-lightweight-tooltip'
+import * as d3 from 'd3'
 
-import tooltipStyle from './tooltipStyle';
-import "./style.css";
+import tooltipStyle from './tooltipStyle'
+import "./style.css"
 import style from './style'
-import {properties} from "./default.config";
+import {properties} from "./default.config"
 
-import SearchBar from "../../SearchBar";
+import SearchBar from "../../SearchBar"
 
 export default class Table extends AbstractGraph {
 
     constructor(props, context) {
-        super(props, properties);
+        super(props, properties)
 
-        this.handleSortOrderChange   = this.handleSortOrderChange.bind(this);
-        this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this);
-        this.handleNextPageClick     = this.handleNextPageClick.bind(this);
-        this.handleClick             = this.handleClick.bind(this);
-        this.handleSearch            = this.handleSearch.bind(this);
-        this.handleRowSelection      = this.handleRowSelection.bind(this);
-        this.handleContextMenu       = this.handleContextMenu.bind(this);
+        this.handleSortOrderChange   = this.handleSortOrderChange.bind(this)
+        this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this)
+        this.handleNextPageClick     = this.handleNextPageClick.bind(this)
+        this.handleClick             = this.handleClick.bind(this)
+        this.handleSearch            = this.handleSearch.bind(this)
+        this.handleRowSelection      = this.handleRowSelection.bind(this)
+        this.handleContextMenu       = this.handleContextMenu.bind(this)
 
         /**
         */
-        this.currentPage = 1;
-        this.filterData = false;
-        this.selectedRows = {};
+        this.currentPage = 1
+        this.filterData = false
+        this.selectedRows = {}
+        this.htmlData = {}
         this.state = {
             selected: [],
             data: [],
@@ -133,7 +135,10 @@ export default class Table extends AbstractGraph {
             sortable: true,
             columnText: label || column,
             columField: column,
-            type:"text"
+            type:"text",
+            style: {
+              textIndent: '2px'
+            }
            }
         ));
     }
@@ -177,12 +182,13 @@ export default class Table extends AbstractGraph {
                         </div>
                 }
 
-                if(highlight && columns[i].column === highlight && originalData) {
-                    highlighter = true;
+                if(highlight && highlight.includes(columns[i].column) && originalData) {
+                    highlighter = true
                 }
 
                 data[columns[i].column] = columnData;
             });
+
             if(highlighter)
                Object.keys(data).map( key => {
                 return data[key] = <div style={{background: highlightColor, height: style.row.height, padding: "10px 0"}}>{data[key]}</div>
@@ -225,11 +231,18 @@ export default class Table extends AbstractGraph {
     }
 
     handleRowSelection(selectedRows) {
-        this.selectedRows[this.currentPage] = selectedRows.slice();
+        const {
+            multiSelectable
+        } = this.getConfiguredProperties();
 
-        this.setState({
-            selected: this.selectedRows[this.currentPage]
-        })
+        if(!multiSelectable) {
+            this.handleClick(...selectedRows)
+        } else {
+            this.selectedRows[this.currentPage] = selectedRows.slice();
+            this.setState({
+                selected: this.selectedRows[this.currentPage]
+            })
+        }
     }
 
     handleContextMenu(event) {
@@ -251,7 +264,6 @@ export default class Table extends AbstractGraph {
                 })
             }
         }
-
         return selected;
     }
     
@@ -274,6 +286,26 @@ export default class Table extends AbstractGraph {
         );
     }
 
+    removeHighlighter(data) {
+        const {
+            highlight
+        } = this.getConfiguredProperties();
+
+        if(highlight) {
+            this.state.selected.map( (key) => {
+                if(highlight && data[key]) {
+                    for (let i in data[key]) {
+                        if (data[key].hasOwnProperty(i)) {
+                            if(data[key][i].props.style)
+                                data[key][i].props.style.background = ''
+                        }
+                    }
+                }
+            })
+        }
+        return data
+    }
+
     render() {
         const {
             height,
@@ -289,11 +321,15 @@ export default class Table extends AbstractGraph {
 
         let tableData = this.getTableData(this.getColumns())
 
+        // overrite style of highlighted selected row
+        tableData = this.removeHighlighter(tableData)
+
+
         if(!tableData) {
             return "<p>No Data</p>";
         }
 
-        let showHeader = (this.filterData && this.filterData.length <= limit && hidePagination) ? false : true,
+        let showHeader = (this.filterData && this.filterData.length <= limit && hidePagination !== false) ? false : true,
           tableHeight  = showHeader ? `${height - 100}px` : height
 
         return (

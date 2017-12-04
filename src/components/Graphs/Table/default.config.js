@@ -6,7 +6,7 @@ export const properties = {
     limit: 5,
 
     selectable: true,
-    multiSelectable: true,
+    multiSelectable: false,
     showCheckboxes: false,
     enableSelectAll: true,
 
