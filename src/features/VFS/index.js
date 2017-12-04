@@ -160,7 +160,6 @@ class VFS extends React.Component {
             srcList = {
                 name: 'locationID',
                 component: Select,
-                label: Array.isArray(srcLabel) && srcLabel.length > 0 ? srcLabel[0].text : null,
             };
             if (srcOptions && Array.isArray(srcOptions)) {
                 srcList.options = srcOptions;
@@ -181,7 +180,6 @@ class VFS extends React.Component {
             destList = {
                 name: 'networkID',
                 component: Select,
-                label: Array.isArray(destLabel) && destLabel.length > 0 ? destLabel[0].text : null,
             };
             if (destOptions && Array.isArray(destOptions)) {
                 destList.options = destOptions;
@@ -283,11 +281,7 @@ class VFS extends React.Component {
                 })}
                 { (srcList || destList) &&  twoColumnRow(srcList, destList) }
                 {
-                    twoColumnRow({
-                        name: 'sourcePort',
-                        label: 'Source Port',
-                        component: TextInput,
-                    }, {
+                    twoColumnRow(null, {
                         name: 'destinationPort',
                         label: 'Destination Port',
                         component: TextInput
@@ -326,7 +320,7 @@ class VFS extends React.Component {
                 {
                     twoColumnRow({
                         name: 'flowLoggingEnabled',
-                        label: 'Enable Flow Login',
+                        label: 'Enable Flow Logging',
                         hideLabel: true,
                         component: Checkbox
                     }, {
@@ -508,7 +502,7 @@ class VFS extends React.Component {
             action:  actions && Array.isArray(actions) && actions.length > 0 ? actions[0].value : 'FORWARD',
             destinationPort: data && data.destinationport ? data.destinationport : '*',
             priority: '0',
-            sourcePort: data && data.sourceport ? data.sourceport : '*',
+            sourcePort: '*',
         });
     }
 
