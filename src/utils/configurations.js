@@ -1,4 +1,29 @@
-import parse from "json-templates";
+import parse from "../utils/helpers/json_templates";
+import translator from "../utils/translators"
+
+/**
+   This will update the context by calling the respective translator
+   Arguments:
+    * parameters: parameters of the query that have been parsed.
+    * context: the context object that contains parameters value
+    Returns:
+        context: updated context by calling respective translators
+ */
+const evaluateContext = (context, parameters) => {
+    let updatedContext = Object.assign({}, context)
+    for (let i in parameters) {
+
+        if (!parameters.hasOwnProperty(i))
+            continue;
+
+        let parameter = parameters[i]
+        if(parameter.evaluate) {
+            updatedContext[parameter.key] = translator(parameter.evaluate, context[parameter.key])
+            console.log('CALL', parameter, updatedContext)
+        }
+    }
+    return updatedContext
+}
 
 /*
     Check if the context can parameterized all parameters.
@@ -30,7 +55,7 @@ export const parameterizedConfiguration = (configuration, context) => {
           isContextOK    = shouldParameterizedContext(template.parameters, context);
 
     if(isContextOK)
-        return template(context);
+        return template(evaluateContext(context, template.parameters))
 
     return false;
 }
@@ -68,5 +93,7 @@ export const getUsedParameters = (configuration, context) => {
 }
 
 export const contextualize = (data, context) => {
-    return parse(data)(context);
+    let template = parse(data)
+    return template(evaluateContext(context, template.parameters));
 }
+
