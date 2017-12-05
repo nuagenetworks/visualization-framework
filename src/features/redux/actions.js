@@ -1,20 +1,22 @@
 export const ActionTypes = {
-    ACTION_VFS_SELECT_FLOW: "ACTION_VFS_SELECT_FLOW",
-    ACTION_VFS_RESET_FLOW: "ACTION_VFS_RESET_FLOW"
+    ACTION_SELECT_ROW: "ACTION_SELECT_ROW",
+    ACTION_RESET_ROW: "ACTION_RESET_ROW",
 };
 
 export const ActionKeyStore = {
-    VFS_SELECTED_FLOW_DATA: 'data',
-    VFS_SELECTED_FLOW_PARENT_QUERY: 'parentQuery',
-    VFS_SELECTED_FLOW_PARENT_PATHNAME: 'parentPath',
+    SELECTED_ROW_DATA: 'data',
+    SELECTED_ROW_PARENT_QUERY: 'parentQuery',
+    SELECTED_ROW_PARENT_PATHNAME: 'parentPath',
+    SELECTED_ROW: 'rows',
 };
 
 
 export const Actions = {
-    selectFlow: (data, parentQuery, parentPath) => {
+    selectRow: (id, data, parentQuery, parentPath) => {
         return {
-            type: ActionTypes.ACTION_VFS_SELECT_FLOW,
+            type: ActionTypes.ACTION_SELECT_ROW,
             data: data,
+            id,
             parentQuery: parentQuery,
             parentPath: parentPath,
         };

@@ -28,6 +28,29 @@ const getRequestResponse = (state, path) => {
         error: state.services.getIn([ServiceActionKeyStore.REQUESTS, path, ServiceActionKeyStore.ERROR]),
     }
 }
+const buildMapStateToProps = (state, ownProps) => {
+    const query = state.router.location.query;
+    const { id } = query;
+    const context = state.interface.get(InterfaceActionKeyStore.CONTEXT);
+    let parentQuery = state.VFS.getIn([VFSActionKeyStore.SELECTED_ROW, id, VFSActionKeyStore.SELECTED_ROW_PARENT_QUERY]);
+    if (!parentQuery || Object.getOwnPropertyNames(parentQuery).length <= 0) {
+        parentQuery = context;
+    }
+
+    let parentPath = state.VFS.getIn([VFSActionKeyStore.SELECTED_ROW, id, VFSActionKeyStore.SELECTED_ROW_PARENT_PATHNAME]);
+    if (!parentPath) {
+        parentPath = `${process.env.PUBLIC_URL}/dashboards/vssDomainFlowExplorer`;
+    }
+
+    return {
+        data: state.VFS.getIn([VFSActionKeyStore.SELECTED_ROW, id, VFSActionKeyStore.SELECTED_ROW_DATA]),
+        parentQuery,
+        parentPath,
+        context,
+        visualizationType: state.interface.get(InterfaceActionKeyStore.VISUALIZATION_TYPE),
+    };
+
+}
 export const mapStateToProps = (state, ownProps) => {
     const query = state.router.location.query;
     const queryConfiguration = {
@@ -36,23 +59,9 @@ export const mapStateToProps = (state, ownProps) => {
             parentResource: "enterprises",
         }
     };
-    const context = state.interface.get(InterfaceActionKeyStore.CONTEXT);
-    let parentQuery = state.VFS.get(VFSActionKeyStore.VFS_SELECTED_FLOW_PARENT_QUERY);
-    if (!parentQuery || Object.getOwnPropertyNames(parentQuery).length <= 0) {
-        parentQuery = context;
-    }
-
-    let parentPath = state.VFS.get(VFSActionKeyStore.VFS_SELECTED_FLOW_PARENT_PATHNAME);
-    if (!parentPath) {
-        parentPath = `${process.env.PUBLIC_URL}/dashboards/vssDomainFlowExplorer`;
-    }
 
     const props = {
-        data: state.VFS.get(VFSActionKeyStore.VFS_SELECTED_FLOW_DATA),
-        parentQuery,
-        parentPath,
-        context,
-        visualizationType: state.interface.get(InterfaceActionKeyStore.VISUALIZATION_TYPE),
+        ...buildMapStateToProps(state, ownProps),
         isConnected: state.services.getIn([ServiceActionKeyStore.REQUESTS, ServiceManager.getRequestID(queryConfiguration), ServiceActionKeyStore.RESULTS]),
         formObject: state.form ? state.form['flow-editor'] : null,
         getFieldError: (fieldName) => getError(state, 'flow-editor', fieldName),

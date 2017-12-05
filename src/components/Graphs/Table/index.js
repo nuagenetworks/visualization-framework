@@ -254,11 +254,11 @@ class Table extends AbstractGraph {
         this.setState({
             selected: this.selectedRows[this.currentPage]
         })
-        const { selectFlow, location } = this.props;
-        if (selectFlow) {
+        const { selectRow, location } = this.props;
+        if (selectRow) {
             const selectedRows = this.getSelectedRows();
             const flow = selectedRows ? selectedRows[0] : {};
-            selectFlow(flow, location.query, location.pathname);
+            selectRow(this.props.configuration.id, flow, location.query, location.pathname);
         }
 
     }
@@ -303,7 +303,8 @@ class Table extends AbstractGraph {
         node.id = 'contextMenu';
         node.style = `top: ${y}px; left: ${x}px; z-index: 100000;`;
 
-        const { goTo, location: { query } } = this.props;
+        const { goTo, location: { query }, configuration: { id } } = this.props;
+        query.id = id;
 
         menu.forEach((item) => {
             const { text, rootpath } = item;
@@ -447,7 +448,7 @@ const mapStateToProps = (state) => {
 }
 
 const actionCreators = (dispatch) => ({
-    selectFlow: (flow, currentQueryParams, currentPath) => dispatch(VFSActions.selectFlow(flow, currentQueryParams, currentPath)),
+    selectRow: (vssID, row, currentQueryParams, currentPath) => dispatch(VFSActions.selectRow(vssID, row, currentQueryParams, currentPath)),
     goTo: (link, queryParams) => {
         dispatch(push({pathname: link, query: queryParams}));
     }

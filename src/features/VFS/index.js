@@ -515,7 +515,7 @@ class VFS extends React.Component {
             return false;
         }
 
-        return JSON.stringify(nextProps) !== JSON.stringify(this.props) || JSON.stringify(this.state) !== JSON.stringify(nextState);
+        return nextProps !== this.props || this.state !== nextState;
     }
 
     componentWillReceiveProps(nextProps) {
