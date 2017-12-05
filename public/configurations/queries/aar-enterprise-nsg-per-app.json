@@ -26,6 +26,11 @@
                         },
                         {
                             "term": {
+                                "{{zeroBytesType:EgressBytes}}": 0
+                            }
+                        },
+                        {
+                            "term": {
                                 "L7ClassEnhanced":"{{app}}"
                             }
                         }
@@ -33,9 +38,9 @@
                 }
             },
              "aggs": {
-                "SourceNSG": {
+                "NSG": {
                     "terms": {
-                        "field": "SourceNSG",
+                        "field": "{{NsgType:SourceNSG}}",
                         "order": {
                             "SumofBytes": "desc"
                         }
@@ -43,7 +48,7 @@
                     "aggs": {
                         "SumofBytes": {
                             "sum": {
-                                "field": "TotalBytesCount"
+                                "field": "{{bytesType:IngressBytes}}"
                             }
                         }
                     }

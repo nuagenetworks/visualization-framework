@@ -24,7 +24,7 @@
             { "column": "date_histo", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
             { "column": "application", "label": "Application" },
             { "column": "slastatus", "label": "Status" },
-            { "column": "appGroup", "label": "AppGroup" }
+            { "column": "apmGroup", "label": "ApmGroup" }
         ]
    },
    "listeners": [
@@ -32,7 +32,7 @@
             "params": {
                 "appName": "application",
                 "queryStartTime": "date_histo",
-                "appGroupId": "appGroup",
+                "apmGroup": "apmGroup",
                 "slastatus": "slastatus"
             },
             "dateParams": {

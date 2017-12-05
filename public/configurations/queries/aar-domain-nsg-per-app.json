@@ -26,6 +26,11 @@
                         },
                         {
                             "term": {
+                                "{{zeroBytesType:EgressBytes}}": 0
+                            }
+                        },
+                        {
+                            "term": {
                                 "{{domainType:Domain}}":"{{domainName:Domain1}}"
                             }
                         },
@@ -38,9 +43,9 @@
                 }
             },
              "aggs": {
-                "SourceNSG": {
+                "NSG": {
                     "terms": {
-                        "field": "SourceNSG",
+                        "field": "{{NsgType:SourceNSG}}",
                         "order": {
                             "SumofBytes": "desc"
                         }
@@ -48,7 +53,7 @@
                     "aggs": {
                         "SumofBytes": {
                             "sum": {
-                                "field": "TotalBytesCount"
+                                "field": "{{bytesType:IngressBytes}}"
                             }
                         }
                     }

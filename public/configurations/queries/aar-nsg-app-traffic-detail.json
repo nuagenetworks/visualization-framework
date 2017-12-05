@@ -21,12 +21,12 @@
                         },
                         {
                             "term": {
-                                "IngressBytes": 0
+                                "{{zeroBytesType:EgressBytes}}": 0
                             }
                         },
                         {
                             "term": {
-                                "SourceNSG": "{{snsg}}"
+                                "{{NsgType:SourceNSG}}": "{{nsg}}"
                             }
                         }
                     ]
@@ -36,7 +36,7 @@
         "ts": {
           "date_histogram": {
             "field": "timestamp",
-            "interval": "1h"
+            "interval": "{{interval:1h}}"
           },
           "aggs": {
             "L7Classification": {
@@ -50,7 +50,7 @@
               "aggs": {
                 "SumofBytes": {
                   "sum": {
-                    "field": "{{app_trafficType:EgressBytes}}"
+                    "field": "{{bytesType:IngressBytes}}"
                   }
                 }
               }
