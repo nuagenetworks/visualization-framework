@@ -1,0 +1,36 @@
+{
+    "id": "aar-nsg-per-port-pktloss-linechart",
+    "graph": "MultiLineGraph",
+    "title": "SLA Packet Loss",
+    "description": "",
+    "author": "Bharat Mukheja",
+    "creationDate": "11/17/2017",
+    "data": {
+        "dateHistogram": true,
+        "xColumn": "ts",
+        "yColumn": ["PacketLoss","Configured SLA PacketLoss"],
+        "yTickFormat": ".2s",
+        "xLabel": "Time",
+        "yLabel": "Packet Loss",
+        "linesColumn": ["PacketLoss","Configured SLA PacketLoss"],
+        "stroke": {
+          "color": "#f76159",
+          "width": "2px"
+        },
+        "legend": {
+            "orientation": "horizontal",
+            "show": true,
+            "circleSize": 5,
+            "labelOffset": 5
+        },
+        "colors": [
+            "#ff0000",
+            "#000000"
+            ],
+        "tooltip": [
+            { "column": "PacketLoss","label":"Actual Packet Loss" },
+            { "column": "Configured SLA PacketLoss","label":"Configured SLA Packet Loss" }
+        ]
+    },
+    "query": "aar-nsg-per-port-pktloss-linechart"
+}
