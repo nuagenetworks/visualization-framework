@@ -9,7 +9,7 @@ const type = (value) => {
     Array.isArray(value) ? "array" :
     value instanceof Date ? "date" :
     typeof value
-  );
+  )
 }
 
 
@@ -17,32 +17,32 @@ const type = (value) => {
 // e.g. "['{{foo}}']" --> { key: "foo" }
 // e.g. "['{{foo:bar}}']" --> { key: "foo", defaultValue: "bar" }
 const Parameter = (match) => {
-    match = match.substr(2, match.length - 4).trim();
-    let i = match.indexOf(":");
+    match = match.substr(2, match.length - 4).trim()
+    let i = match.indexOf(":")
     if(i !== -1){
         let parameter = {
-        key: match.substr(0, i),
+            key: match.substr(0, i),
         }
 
         let value = match.substr(i + 1)
         
         if(value.includes('call(')) {
-        let re = /(call\(')(.*)('\))/;
-        parameter.evaluate = value.replace(re, "$2");
+            let re = /(call\(')(.*)('\))/
+            parameter.evaluate = value.replace(re, "$2")
         } else {
-        parameter.defaultValue = value
+            parameter.defaultValue = value
         }
 
         return parameter
     } else {
-        return { key: match };
+        return { key: match }
     }
 }
 
 // Constructs a template function with `parameters` property.
 const Template = (fn, parameters) => {
-    fn.parameters = parameters;
-    return fn;
+    fn.parameters = parameters
+    return fn
 }
   
 // Parses leaf nodes of the template object that are strings.
@@ -51,7 +51,7 @@ const parseString = (() => {
 
   // This regular expression detects instances of the
   // template parameter syntax such as {{foo}} or {{foo:someDefault}}.
-  let regex = /{{(\w|:|\s|-|\.|\)|\(|'|,)+}}/g;
+  let regex = /{{(\w|:|\s|-|\.|\)|\(|'|,)+}}/g
 
   return (str) => {
     if(regex.test(str)){
@@ -60,22 +60,22 @@ const parseString = (() => {
           parameters = matches.map(Parameter);
       
       return Template((context) => {
-        context = context || {};
-        return matches.reduce(function (str, match, i){
-          let parameter = parameters[i];
+        context = context || {}
+        return matches.reduce((str, match, i) => {
+          let parameter = parameters[i]
 
-          let value = context[parameter.key] || parameter.defaultValue;
-          return str.replace(match, value);
-        }, str);
-      }, parameters);
+          let value = context[parameter.key] || parameter.defaultValue
+          return str.replace(match, value)
+        }, str)
+      }, parameters)
 
     } else {
       return Template(() => {
-        return str;
-      }, []);
+        return str
+      }, [])
     }
   }
-})();
+})()
 
 // Parses non-leaf-nodes in the template object that are objects.
 const parseObject = (object) => {
@@ -84,17 +84,17 @@ const parseObject = (object) => {
     return {
       keyTemplate: parseString(key),
       valueTemplate: parse(object[key])
-    };
-  });
+    }
+  })
 
   return Template(function (context){
     return children.reduce(function (newObject, child){
-      newObject[child.keyTemplate(context)] = child.valueTemplate(context);
-      return newObject;
-    }, {});
+      newObject[child.keyTemplate(context)] = child.valueTemplate(context)
+      return newObject
+    }, {})
   }, children.reduce(function (parameters, child){
-      return parameters.concat(child.valueTemplate.parameters, child.keyTemplate.parameters);
-  }, []));
+      return parameters.concat(child.valueTemplate.parameters, child.keyTemplate.parameters)
+  }, []))
 
 }
 
@@ -102,15 +102,15 @@ const parseObject = (object) => {
 // Parses non-leaf-nodes in the template object that are arrays.
 const parseArray = (array) => {
 
-  let templates = array.map(parse);
+  let templates = array.map(parse)
 
   return Template(function (context){
     return templates.map(function (template){
-      return template(context);
-    });
+      return template(context)
+    })
   }, templates.reduce(function (parameters, template){
-    return parameters.concat(template.parameters);
-  }, []));
+    return parameters.concat(template.parameters)
+  }, []))
 
 }
 
@@ -132,11 +132,8 @@ parse = (value) => {
         case "array":
         return parseArray(value);
         default:
-        return Template(function (){ return value; }, []);
+        return Template(function (){ return value; }, [])
     }
 }
 
-
-  
-
-export default parse;
+export default parse
