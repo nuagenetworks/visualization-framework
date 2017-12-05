@@ -19,7 +19,6 @@ const evaluateContext = (context, parameters) => {
         let parameter = parameters[i]
         if(parameter.evaluate) {
             updatedContext[parameter.key] = translator(parameter.evaluate, context[parameter.key])
-            console.log('CALL', parameter, updatedContext)
         }
     }
     return updatedContext
