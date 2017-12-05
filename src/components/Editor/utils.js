@@ -25,7 +25,7 @@ export const parseServerErrors = (response) => {
     const errors = [];
     if (response.errors && Array.isArray(response.errors)) {
         response.errors.forEach(({ property, descriptions }, index) => {
-            if (!property) {
+            if (descriptions && Array.isArray(descriptions)) {
                 descriptions.forEach(({ title, description }) => {
                     errors.push({
                         title,
@@ -33,7 +33,6 @@ export const parseServerErrors = (response) => {
                     });
                 });
             }
-
         });
     }
     else if (response.errors) {
