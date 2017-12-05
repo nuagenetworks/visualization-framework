@@ -92,7 +92,7 @@ export const getUsedParameters = (configuration, context) => {
 }
 
 export const contextualize = (data, context) => {
-    let template = parse(data)
+    const template = parse(data)
     return template(evaluateContext(context, template.parameters))
 }
 
