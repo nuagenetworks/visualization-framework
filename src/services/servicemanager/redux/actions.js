@@ -5,6 +5,7 @@ export const ActionTypes = {
     SERVICE_MANAGER_DID_START_REQUEST: "SERVICE_MANAGER_DID_START_REQUEST",
     SERVICE_MANAGER_DID_RECEIVE_RESPONSE: "SERVICE_MANAGER_DID_RECEIVE_RESPONSE",
     SERVICE_MANAGER_DID_RECEIVE_ERROR: "SERVICE_MANAGER_DID_RECEIVE_ERROR",
+    SERVICE_MANAGER_DELETE_REQUEST: "SERVICE_MANAGER_DELETE_REQUEST",
 };
 
 export const ActionKeyStore = {
@@ -126,6 +127,57 @@ function fetchIfNeeded(query, context, forceCache) {
     }
 }
 
+function post(query, body, context, forceCache) {
+    let service = ServiceManager.getService(query.service);
+
+    return (dispatch, getState) => {
+        let requestID = service.getRequestID(query, context);
+
+        if (context) {
+            const pQuery = parameterizedConfiguration(query, context);
+
+            if (pQuery)
+                query = pQuery;
+            else
+                return Promise.reject("Provided context does not allow to parameterized query " + query.id);
+        }
+
+        dispatch(didStartRequest(requestID));
+
+        return service.post(query, body, getState())
+            .then(
+            (results) => {
+                dispatch(didReceiveResponse(requestID, results));
+                return Promise.resolve(results);
+            },
+            (error) => {
+                dispatch(didReceiveError(requestID, error));
+                return Promise.resolve();
+            });
+
+    }
+}
+
+function postIfNeeded(query, body, context, forceCache) {
+    const service = ServiceManager.getService(query.service);
+    const requestID = service.getRequestID(query, context);
+
+    return (dispatch, getState) => {
+        if (!requestID)
+            return Promise.reject();
+
+        const state = getState(),
+              request = state.services.getIn([ActionKeyStore.REQUESTS, requestID]);
+
+        if (shouldFetch(request)) {
+            return dispatch(post(query, body, context, forceCache));
+
+        } else {
+            return Promise.resolve();
+        }
+    }
+}
+
 function didStartRequest(requestID) {
     return {
         type: ActionTypes.SERVICE_MANAGER_DID_START_REQUEST,
@@ -150,10 +202,19 @@ function didReceiveError(requestID, error) {
     };
 }
 
+function deleteRequest(requestID) {
+    return {
+        type: ActionTypes.SERVICE_MANAGER_DELETE_REQUEST,
+        requestID: requestID,
+    };
+}
+
 export const Actions = {
     fetch: fetch,
     fetchIfNeeded: fetchIfNeeded,
     didStartRequest: didStartRequest,
     didReceiveResponse: didReceiveResponse,
     didReceiveError: didReceiveError,
+    postIfNeeded: postIfNeeded,
+    deleteRequest: deleteRequest,
 };

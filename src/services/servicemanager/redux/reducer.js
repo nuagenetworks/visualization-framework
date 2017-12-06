@@ -32,6 +32,10 @@ function didReceiveError(state, requestID, error) {
         .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS], []);
 }
 
+function deleteRequest(state, requestID) {
+    return state.deleteIn([ActionKeyStore.REQUESTS, requestID]);
+}
+
 function servicesReducer(state = initialState, action) {
 
     switch (action.type) {
@@ -44,6 +48,8 @@ function servicesReducer(state = initialState, action) {
         case ActionTypes.SERVICE_MANAGER_DID_RECEIVE_ERROR:
             return didReceiveError(state, action.requestID, action.error);
 
+        case ActionTypes.SERVICE_MANAGER_DELETE_REQUEST:
+            return deleteRequest(state, action.requestID);
         default:
             return state;
     }

@@ -24,6 +24,7 @@ class MessageBoxView extends React.Component {
                 actions={buttons}
                 open={this.props.opened}
                 onRequestClose={this.props.close}
+                style={{zIndex: 10000}}
                 >
                 {this.props.body}
             </Dialog>
@@ -34,7 +35,7 @@ class MessageBoxView extends React.Component {
 MessageBoxView.propTypes = {
     opened: React.PropTypes.bool,
     title: React.PropTypes.string,
-    body: React.PropTypes.string,
+    body: React.PropTypes.node,
 };
 
 const mapStateToProps = (state) => ({

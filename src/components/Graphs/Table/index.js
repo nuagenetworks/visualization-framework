@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { push } from "redux-router"
 import DataTables from 'material-ui-datatables'
 import AbstractGraph from "../AbstractGraph"
 import columnAccessor from "../../../utils/columnAccessor"
@@ -13,7 +15,12 @@ import {properties} from "./default.config"
 
 import SearchBar from "../../SearchBar"
 
-export default class Table extends AbstractGraph {
+import {
+    Actions as VFSActions,
+    ActionKeyStore as VFSActionKeyStore
+} from '../../../features/redux/actions'
+
+class Table extends AbstractGraph {
 
     constructor(props, context) {
         super(props, properties)
@@ -35,7 +42,8 @@ export default class Table extends AbstractGraph {
         this.state = {
             selected: [],
             data: [],
-            fontSize: style.defaultFontsize
+            fontSize: style.defaultFontsize,
+            contextMenu: null,
         }
     }
 
@@ -51,6 +59,10 @@ export default class Table extends AbstractGraph {
 
     componentDidUpdate() {
         this.checkFontsize();
+        const { contextMenu } = this.state;
+        if (contextMenu) {
+            this.openContextMenu();
+        }
     }
 
     initiate() {
@@ -67,7 +79,7 @@ export default class Table extends AbstractGraph {
         this.filterData = this.props.data;
         this.setHeaderData(columns);
         this.updateData();
-    }   
+    }
 
     decrementFontSize() {
         this.setState({
@@ -237,18 +249,75 @@ export default class Table extends AbstractGraph {
 
         if(!multiSelectable) {
             this.handleClick(...selectedRows)
-        } else {
-            this.selectedRows[this.currentPage] = selectedRows.slice();
-            this.setState({
-                selected: this.selectedRows[this.currentPage]
-            })
         }
+        this.selectedRows[this.currentPage] = selectedRows.slice();
+        this.setState({
+            selected: this.selectedRows[this.currentPage]
+        })
+        const { selectRow, location } = this.props;
+        if (selectRow) {
+            const selectedRows = this.getSelectedRows();
+            const flow = selectedRows ? selectedRows[0] : {};
+            selectRow(this.props.configuration.id, flow, location.query, location.pathname);
+        }
+
     }
 
     handleContextMenu(event) {
+        const {
+            menu
+        } = this.getConfiguredProperties();
+
+        if (!menu) {
+            return false;
+        }
         event.preventDefault()
         const selectedRows = this.getSelectedRows()
-        return false
+        const { clientX: x, clientY: y } = event;
+        this.setState({ contextMenu: { x, y } });
+        return true;
+    }
+
+    handleCloseContextMenu = () => {
+        this.setState({ contextMenu: null });
+        this.closeContextMenu();
+    }
+
+    closeContextMenu = () => {
+        document.body.removeEventListener('click', this.handleCloseContextMenu);
+        const node = document.getElementById('contextMenu');
+        if (node) node.remove();
+    }
+
+    openContextMenu = () => {
+        const { contextMenu: { x, y } } = this.state;
+        const {
+            menu
+        } = this.getConfiguredProperties();
+
+        this.closeContextMenu();
+        document.body.addEventListener('click', this.handleCloseContextMenu);
+
+        const node = document.createElement('ul');
+        node.classList.add('contextMenu');
+        node.id = 'contextMenu';
+        node.style = `top: ${y}px; left: ${x}px; z-index: 100000;`;
+
+        const { goTo, location: { query }, configuration: { id } } = this.props;
+        query.id = id;
+
+        menu.forEach((item) => {
+            const { text, rootpath } = item;
+            const pathname = `${process.env.PUBLIC_URL}/${rootpath}`
+            const li = document.createElement('li');
+            li.textContent = text;
+            li.onclick = (e) => {
+                // dispatch a push to the menu link
+                goTo(pathname, query);
+            };
+            node.append(li);
+        });
+        document.body.append(node);
     }
 
     getSelectedRows() {
@@ -266,7 +335,6 @@ export default class Table extends AbstractGraph {
         }
         return selected;
     }
-    
 
     renderSearchBarIfNeeded(showHeader) {
         const {
@@ -371,3 +439,18 @@ Table.propTypes = {
   configuration: React.PropTypes.object,
   response: React.PropTypes.object
 };
+
+const mapStateToProps = (state) => {
+    return {
+        location: state.router.location
+    }
+}
+
+const actionCreators = (dispatch) => ({
+    selectRow: (vssID, row, currentQueryParams, currentPath) => dispatch(VFSActions.selectRow(vssID, row, currentQueryParams, currentPath)),
+    goTo: (link, queryParams) => {
+        dispatch(push({pathname: link, query: queryParams}));
+    }
+});
+
+export default connect ( mapStateToProps, actionCreators) (Table);

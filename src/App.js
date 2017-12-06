@@ -4,7 +4,9 @@ import { Route } from "react-router";
 
 import AppContainer from "./components/App/AppContainer.js";
 import Dashboard from "./components/Dashboard"
-import Visualization from "./components/Visualization"
+import Visualization from "./components/Visualization";
+
+import { VFS } from "./features";
 
 
 class App extends Component {
@@ -15,8 +17,12 @@ class App extends Component {
             <AppContainer>
                 <ReduxRouter>
                     <Route path={process.env.PUBLIC_URL +"/"} component={Dashboard} />
-                    <Route path={process.env.PUBLIC_URL +"/dashboards/:id"} component={Dashboard} />
+                    <Route path={process.env.PUBLIC_URL +"/dashboards/:id"} component={Dashboard}>
+                    </Route>
                     <Route path={process.env.PUBLIC_URL +"/visualizations/:id"} component={Visualization} />
+                    <Route path={`${process.env.PUBLIC_URL}/vfs`}>
+                        <Route path="new" component={VFS} />
+                    </Route>
                 </ReduxRouter>
             </AppContainer>
         </div>

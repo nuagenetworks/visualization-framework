@@ -73,7 +73,7 @@ export default class AbstractGraph extends React.Component {
     setTooltipAccessor(tooltip) {
         // Generate accessors that apply number and date formatters.
         const accessors = tooltip.map(columnAccessor);
-        
+
         // This function is invoked to produce the content of a tooltip.
         this.getTooltipContent = () => {
             // The value of this.hoveredDatum should be set by subclasses
@@ -141,7 +141,7 @@ export default class AbstractGraph extends React.Component {
     };
 
     setConfiguredProperties() {
-        this.configuredProperties = Object.assign({}, this.defaults, this.props.configuration.data);
+        this.configuredProperties = Object.assign({}, this.defaults, this.props.configuration.data, { menu: this.props.configuration.menu });
     }
 
     getConfiguredProperties() {
@@ -352,12 +352,12 @@ export default class AbstractGraph extends React.Component {
 
     setDimensions(props, data = null) {
         this.setYlabelWidth(data ? data : props.data);
-        
+
         this.setAvailableWidth(props);
         this.setAvailableHeight(props);
         this.setLeftMargin();
     }
-    
+
     setLeftMargin() {
       const {
           margin
@@ -369,7 +369,7 @@ export default class AbstractGraph extends React.Component {
     getLeftMargin() {
         return this.leftMargin;
     }
-    
+
     setAvailableWidth({width}) {
         const {
           margin,
@@ -415,9 +415,9 @@ export default class AbstractGraph extends React.Component {
 
         return legend.orientation === 'vertical';
     }
-    
+
     getGroupedData(data, settings) {
-        
+
         const {
           otherMinimumLimit
         } = this.getConfiguredProperties();

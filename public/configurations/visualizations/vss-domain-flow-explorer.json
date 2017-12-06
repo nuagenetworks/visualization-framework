@@ -31,5 +31,8 @@
             { "column": "packets", "label": "Packets" }
         ]
     },
+    "menu": [
+        { "text": "Create Virtual Firewall Rule", "rootpath": "vfs/new" }
+    ],
     "query": "vss-domain-flow-explorer"
 }

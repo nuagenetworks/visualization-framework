@@ -91,6 +91,27 @@ const makeRequest = (url, headers) => {
     });
 }
 
+const makePOSTRequest = (url, headers, body) => {
+    return new Promise((resolve, reject) => {
+        $.post({
+                url: url,
+                headers: headers,
+                data: JSON.stringify(body),
+                dataType: 'json',
+                contentType: 'application/json',
+            })
+            .done((response) => {
+                return resolve(response)
+            })
+            .fail((error) => {
+                return reject(error)
+            })
+            .always((data, status, error) => {
+                console.log("POST DONE: data = ", data, " status = ", status, " error = ", error);
+            });
+    });
+}
+
 const getMockResponse = (configuration) => {
 
     let parent   = configuration.query.parentResource,
@@ -163,7 +184,8 @@ const getMockResponse = (configuration) => {
 
 export const VSDServiceTest = {
     makeRequest: makeRequest,
-    getURL: getURL
+    getURL: getURL,
+    makePOSTRequest: makePOSTRequest,
 }
 
 const fetch = (configuration, state) => {
@@ -180,10 +202,25 @@ const fetch = (configuration, state) => {
     return VSDServiceTest.makeRequest(url, headers);
 }
 
+const post = (configuration, body, state) => {
+    let token          = state.VSD.get(ActionKeyStore.TOKEN),
+          api          = state.VSD.get(ActionKeyStore.API) || process.env.REACT_APP_VSD_API_ENDPOINT,
+          organization = state.VSD.get(ActionKeyStore.ORGANIZATION);
+
+    if (!api || !token)
+        return Promise.reject("No VSD API endpoint specified. To configure the VSD API endpoint, provide the endpoint URL via the environment variable REACT_APP_VSD_API_ENDPOINT at compile time. For a development environment, you can set an invalid value, which will cause the system to provide mock data for testing. For example, you can add the following line to your .bashrc or .profile startup script: 'export REACT_APP_VSD_API_ENDPOINT=http://something.invalid'");
+
+    const url     = VSDServiceTest.getURL(configuration, api),
+          headers = getHeaders(token, organization, configuration.query.filter);
+
+    return VSDServiceTest.makePOSTRequest(url, headers, body);
+}
+
 export const VSDService = {
     id: "VSD",
     config: config,
     getRequestID: getRequestID,
     getMockResponse: getMockResponse,
-    fetch: fetch
+    fetch: fetch,
+    post: post
 }
