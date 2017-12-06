@@ -336,7 +336,6 @@ class Table extends AbstractGraph {
         return selected;
     }
 
-
     renderSearchBarIfNeeded(showHeader) {
         const {
             searchBar

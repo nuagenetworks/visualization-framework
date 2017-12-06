@@ -23,14 +23,17 @@
         "tooltip": [
             { "column": "date_histo", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
             { "column": "application", "label": "Application" },
-            { "column": "slastatus", "label": "Status" }
+            { "column": "slastatus", "label": "Status" },
+            { "column": "appGroup", "label": "AppGroup" }
         ]
    },
    "listeners": [
         {
             "params": {
                 "appName": "application",
-                "queryStartTime": "date_histo"
+                "queryStartTime": "date_histo",
+                "appGroupId": "appGroup",
+                "slastatus": "slastatus"
             },
             "dateParams": {
                 "reference": "nsgSlaDetails",

@@ -383,7 +383,8 @@ If you need to pass a specific parameter, check out this example:
     "title":"Top 5 Statistics",
     "service":"elasticsearch",
     "query":{
-        "resourceName": "{{resourceName:defaultName}}"
+        "resourceName": "{{resourceName:defaultName}}",
+        "methodName": "{{methodName:call('demo')}}"
     }
 }
 ```
@@ -392,6 +393,10 @@ The query configuration will be "contextualized" which means:
 
 - if the `context` contains a parameter named `resourceName`, the query will send its value
 - if the `context` does NOT contain `resourceName`, the value sent will be `defaultName`
+- ###### Custom Translator
+    - You can also call the custom `Translator` placed at `\utils\translators\`, e.g. in above example translator `demo` will get called with value passed as parameter named as `methodName` in the URL.
+    - Just wrap the translator name inside `call` method.
+    - You can also add your custom translators by adding respective file inside `\utils\translators` and register it inside `\utils\translators\index.js`
 
 Visualization Framework is using [json-templates](https://github.com/datavis-tech/json-templates) thanks to [@curran](https://github.com/curran),
 

@@ -1,0 +1,36 @@
+{
+    "id": "aar-nsg-per-port-delay-linechart",
+    "graph": "MultiLineGraph",
+    "title": "SLA Delay",
+    "description": "",
+    "author": "Bharat Mukheja",
+    "creationDate": "11/17/2017",
+    "data": {
+        "dateHistogram": true,
+        "xColumn": "ts",
+        "yColumn": ["Delay","Configured SLA Delay"],
+        "yTickFormat": ".2s",
+        "xLabel": "Time",
+        "yLabel": "Delay",
+        "linesColumn":["Delay","Configured SLA Delay"],
+        "stroke": {
+          "color": "#f76159",
+          "width": "2px"
+        },
+        "colors": [
+            "#ff0000",
+            "#000000"
+            ],
+        "legend": {
+            "orientation": "horizontal",
+            "show": true,
+            "circleSize": 5,
+            "labelOffset": 5
+        },
+        "tooltip": [
+            { "column": "Delay","label":"Actual Delay" },
+            { "column": "Configured SLA Delay","label":"Configured SLA Delay" }
+        ]
+    },
+    "query": "aar-nsg-per-port-delay-linechart"
+}

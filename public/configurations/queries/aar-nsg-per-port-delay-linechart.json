@@ -1,0 +1,68 @@
+{
+    "id":"aar-nsg-per-port-delay-linechart",
+    "title":"TBD",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_dpi_probestats}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        },
+                        {
+                            "term": {
+                                "SourceNSG": "{{snsg}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "DestinationNSG": "{{dnsg}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "SrcUplink": "{{srcUplink}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "DstUplink": "{{dstUplink}}"
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "ts": {
+                    "date_histogram": {
+                        "field": "timestamp",
+                        "interval": "{{interval:1h}}"
+                    },
+                    "aggs": {
+                        "Delay": {
+                            "avg": {
+                                "field": "AvgDelay"
+                            }
+                        },
+                        "Configured SLA Delay":{
+                            "avg":{
+                                "field":"ConfigAvgDelay"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
