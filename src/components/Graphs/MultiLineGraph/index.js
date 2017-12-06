@@ -61,7 +61,9 @@ class MultiLineGraph extends XYGraph {
           yTickSizeOuter,
           brushEnabled,
           zeroStart,
-          circleRadius
+          circleRadius,
+          defaultY,
+          defaultYColor
         } = this.getConfiguredProperties();
 
         let finalYColumn = typeof yColumn === 'object' ? yColumn : [yColumn];
@@ -234,6 +236,28 @@ class MultiLineGraph extends XYGraph {
                     />
         }
 
+        let horizontalLine;
+        if(defaultY) {
+
+            let value = defaultY
+            if(typeof defaultY === 'object') {
+                value = defaultY.source && defaultY.column && this.props[defaultY.source]
+                 ? this.props[defaultY.source][0][defaultY.column]
+                 : null
+            }
+            if(value) {
+                horizontalLine =  <line
+                    x1="0"
+                    y1={yScale(value)}
+                    x2={availableWidth}
+                    y2={yScale(value)}
+                    stroke={ defaultYColor ? defaultYColor : "rgb(255,0,0)"}
+                    strokeWidth="1.5"
+                    opacity="0.7"
+                />
+            }
+        }
+
         return (
             <div className="bar-graph">
                 {
@@ -251,6 +275,7 @@ class MultiLineGraph extends XYGraph {
                             key="yAxis"
                             ref={ (el) => select(el).call(yAxis) }
                         />
+                        <g> { horizontalLine } </g>
                         <g>
                             {
                                 legendsData.map((d, i) =>

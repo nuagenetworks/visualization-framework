@@ -66,8 +66,9 @@ function fetch(query, context, forceCache) {
         return service.fetch(query, getState())
             .then(
             (results) => {
-                dispatch(didReceiveResponse(requestID, results));
-                return Promise.resolve(results);
+                const data = ServiceManager.tabify(query, results);
+                dispatch(didReceiveResponse(requestID, data));
+                return Promise.resolve(data);
             },
             (error) => {
                 if (process.env.NODE_ENV === "development" && service.hasOwnProperty("getMockResponse")) {

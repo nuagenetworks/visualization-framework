@@ -33,7 +33,7 @@
         { "id": "aar-nsg-sla-details",  "x": 0, "y": 90, "w": 6, "h": 15, "minW": 2, "minH": 12, "static": false},
         { "id": "aar-nsg-sla-flow-details", "x": 6, "y": 105, "w": 6, "h": 15, "minW": 2, "minH": 12, "static": false}
     ],
-    "filterOptions": {
+    "defaultFilterOptionsOverride": {
         "Time interval": {
             "parameter": "startTime",
             "default": "now-15m",

@@ -17,6 +17,10 @@
           "color": "#f76159",
           "width": "2px"
         },
+        "defaultY": {
+            "source": "config-data",
+            "column": "oneWayJitter"
+        },
         "legend": {
             "orientation": "horizontal",
             "show": true,
@@ -26,11 +30,13 @@
         "colors": [
             "#ff0000",
             "#000000"
-            ],
+        ],
         "tooltip": [
-            { "column": "Jitter","label":"Actual Jitter" },
-            { "column": "Configured SLA Jitter","label":"Configured SLA Jitter" }
+            { "column": "Jitter","label":"Actual Jitter" }
         ]
     },
-    "query": "aar-nsg-per-port-jitter-linechart"
+    "query": {
+        "data": "aar-nsg-per-port-jitter-linechart",
+        "config-data": "aar-nsg-app-config"
+    }
 }

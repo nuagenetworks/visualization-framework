@@ -17,6 +17,10 @@
           "color": "#f76159",
           "width": "2px"
         },
+        "defaultY": {
+            "source": "config-data",
+            "column": "oneWayLoss"
+        },
         "legend": {
             "orientation": "horizontal",
             "show": true,
@@ -29,8 +33,11 @@
             ],
         "tooltip": [
             { "column": "PacketLoss","label":"Actual Packet Loss" },
-            { "column": "Configured SLA PacketLoss","label":"Configured SLA Packet Loss" }
+            { "column": "oneWayLoss","label":"Configured SLA Packet Loss" }
         ]
     },
-    "query": "aar-nsg-per-port-pktloss-linechart"
+    "query": {
+        "data": "aar-nsg-per-port-pktloss-linechart",
+        "config-data": "aar-nsg-app-config"
+    }
 }
