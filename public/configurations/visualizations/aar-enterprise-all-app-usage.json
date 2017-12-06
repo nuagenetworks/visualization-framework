@@ -1,7 +1,7 @@
 {
     "id": "aar-enterprise-all-app-usage",
     "graph": "PieGraph",
-    "title": "Enterprise Applications",
+    "title": "Enterprise Applications by {{trafficType}} data",
     "description":"Usage chart for all the applications discovered in the Enterprise",
     "author": "Bharat Mukheja",
     "creationDate": "09/21/2017",

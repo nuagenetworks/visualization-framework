@@ -21,6 +21,11 @@
                         },
                         {
                             "term": {
+                                "{{zeroBytesType:EgressBytes}}": 0
+                            }
+                        },
+                        {
+                            "term": {
                                 "EnterpriseName": "{{enterpriseName:test_org}}"
                             }
                         }
@@ -28,9 +33,9 @@
                 }
             },
             "aggs": {
-                "SourceNSG": {
+                "{{NsgType:SourceNSG}}": {
                     "terms": {
-                        "field": "SourceNSG",
+                        "field": "{{NsgType:SourceNSG}}",
                         "order": {
                             "SumofBytes": "desc"
                         }
@@ -38,7 +43,7 @@
                         "aggs": {
                             "SumofBytes": {
                                 "sum": {
-                                    "field": "TotalBytesCount"
+                                    "field": "{{bytesType:IngressBytes}}"
                                 }
                             },
                             "L7Classification": {
@@ -48,7 +53,7 @@
                                 "aggs": {
                                     "SumofBytes": {
                                         "sum": {
-                                            "field": "TotalBytesCount"
+                                            "field": "{{bytesType:IngressBytes}}"
                                         }
                                     }
                                 }
