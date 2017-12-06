@@ -419,15 +419,15 @@ class VFS extends React.Component {
 
     validate = (values) => {
         const errorObject = {};
-        const { description, locationID, networkID, action, parentID } = values;
+        const { description, locationType, destinationType, locationID, networkID, action, parentID } = values;
         if (!description) {
             errorObject.description = "Policy Rule name is required";
         }
-        if (!locationID) {
-            errorObject.locationID = "Please select a valid origin location";
+        if ((locationType !== 'ANY' || locationType !== 'UNDERLAY_INTERNET_POLICYGROUP') && !locationID) {
+            errorObject.locationID = "Please select a valid source";
         }
-        if (!networkID) {
-            errorObject.networkID = "Please select a valid destination network";
+        if ((destinationType !== 'ANY' || destinationType !== 'UNDERLAY_INTERNET_POLICYGROUP') && !networkID) {
+            errorObject.networkID = "Please select a valid destination";
         }
         if (!action) {
             errorObject.action = "Please select a valid action";
