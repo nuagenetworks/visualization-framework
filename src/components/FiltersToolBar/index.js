@@ -25,16 +25,20 @@ export class FiltersToolBarView extends React.Component {
     }
 
     updateForceOptionContext(forceOptions, append) {
-      let context = {};
+      const {
+          context
+      } = this.props;
+
+      let forceContext = {};
       let filteredID = append ? this.getFilteredVisualizationId() : '';
 
       for(let key in forceOptions) {
-        if(forceOptions.hasOwnProperty(key)) {
-          context[`${filteredID}${key}`] = forceOptions[key];
+        if(forceOptions.hasOwnProperty(key) && (!context[key] || context[key] !== forceOptions[key])) {
+            forceContext[`${filteredID}${key}`] = forceOptions[key];
         }
       }
-      console.log('forceOptions', context)
-      return context;
+
+      return forceContext;
     }
 
     componentDidMount() {
@@ -51,31 +55,45 @@ export class FiltersToolBarView extends React.Component {
         for(let name in filterOptions) {
             if (filterOptions.hasOwnProperty(name)) {
                 let configOptions = filterOptions[name],
-                    paramName = visualizationId && configOptions.append ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
-                    currentValue  = context[paramName];
+                    paramName     = visualizationId && configOptions.append ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
+                    currentValue  = context[paramName],
+                    defaultOption = []
 
-                if (!currentValue) {
-                    // Update context with default value if not found
-                    configContexts[paramName] = configOptions.default;
 
-                    if (configOptions.options) {
-                        let defaultOption = configOptions.options.filter((option) => {
-                            if(option.value === configOptions.default) {
-                                return true;
-                            }
-                            return false;
-                        });
+                if (configOptions.options) {
+                    let value = currentValue ? currentValue : configOptions.default;
+                    // check value present in config. If not, then set value from default option
+                    for(let i = 0; i < configOptions.options.length; i++) {
+                        let option = configOptions.options[i];
 
-                        if(defaultOption.length && defaultOption[0].forceOptions) {
-                            Object.assign(configContexts, this.updateForceOptionContext(defaultOption[0].forceOptions, configOptions.append));
+                        if(option.value === value) {
+                            defaultOption = []
+                            defaultOption.push(option)
+                            break;
+                        }
+
+                        if(option.default) {
+                            defaultOption.push(option)
+                        }
+                    }
+
+                    if(defaultOption.length) {
+                        if(currentValue !== defaultOption[0].value) {
+                            configContexts[paramName] = defaultOption[0].value
+                        }
+
+                        if(defaultOption[0].forceOptions) {
+                            configContexts = Object.assign({}, configContexts, this.updateForceOptionContext(defaultOption[0].forceOptions, configOptions.append));
                         }
                     }
                 }
             }
         };
 
-        if(Object.keys(configContexts).length !== 0)
-          updateContext(configContexts);
+        if(Object.keys(configContexts).length !== 0) {
+            updateContext(configContexts)
+            this.props.goTo(window.location.pathname, Object.assign({}, context, configContexts))
+        }
     }
 
 
