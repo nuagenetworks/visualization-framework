@@ -17,10 +17,14 @@
           "color": "#f76159",
           "width": "2px"
         },
+        "defaultY": {
+            "source": "config-data",
+            "column": "oneWayDelay"
+        },
         "colors": [
             "#ff0000",
             "#000000"
-            ],
+        ],
         "legend": {
             "orientation": "horizontal",
             "show": true,
@@ -32,5 +36,8 @@
             { "column": "Configured SLA Delay","label":"Configured SLA Delay" }
         ]
     },
-    "query": "aar-nsg-per-port-delay-linechart"
+    "query": {
+        "data": "aar-nsg-per-port-delay-linechart",
+        "config-data": "aar-nsg-app-config"
+    }
 }

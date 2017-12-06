@@ -37,12 +37,12 @@
                                 },
                                 {
                                     "term": {
-                                        "SourceNSG":"{{snsg:ovs-1}}"
+                                        "SourceNSG":"{{snsg}}"
                                      }
                                 },
                                 {
                                     "term":{
-                                        "DestinationNSG":"{{dnsg:ovs-2}}"
+                                        "DestinationNSG":"{{dnsg}}"
                                      }
                                 }
                             ]
@@ -62,15 +62,22 @@
                                 "field": "APMGroup"
                             },
                             "aggs": {
-                                "application": {
+                                "appID": {
                                     "terms": {
-                                        "field": "Application"
+                                        "field": "AppID"
                                     },
                                     "aggs": {
-                                        "slastatus": {
+                                        "application": {
                                             "terms": {
-                                                "size": 1,
-                                                "field": "SlaStatus"
+                                                "field": "Application"
+                                            },
+                                            "aggs": {
+                                                "slastatus": {
+                                                    "terms": {
+                                                        "size": 1,
+                                                        "field": "SlaStatus"
+                                                    }
+                                                }
                                             }
                                         }
                                     }

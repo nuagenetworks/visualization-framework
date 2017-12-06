@@ -33,7 +33,8 @@
                 "appName": "application",
                 "queryStartTime": "date_histo",
                 "apmGroup": "apmGroup",
-                "slastatus": "slastatus"
+                "slastatus": "slastatus",
+                "appID": "appID"
             },
             "dateParams": {
                 "reference": "nsgSlaDetails",
