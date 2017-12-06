@@ -126,7 +126,15 @@ Here is the list of options:
 - **creationDate** creation date
 - **title*** title of the visualization
 - **description*** a description of the visualization
-- **query*** identifier of the query to execute for this visualization
+- **query*** (object | string) identifier of the query to execute for this visualization, it can be one or more than one, for objects key will be passed as data to all the graphs e.g. 
+    ```
+    query: {
+        data: "query1",
+        data2: "query2"
+    }
+    ```
+    Note: data key is required in case of object.
+
 - **refreshInterval** set the time interval in `ms` between two refresh. Use `-1` to deactivate refresh.
 - **data** an object that helps you configure your visualization. (See below to find graphs specific data).
   - **colorColumn** attribute name in your results to use for color
@@ -287,6 +295,7 @@ Display one or multiple lines
 ![multiline-chart](https://cloud.githubusercontent.com/assets/1447243/21205460/4672e4a6-c211-11e6-88a5-269bc32d2140.png)
 
 - **linesColumn** attribute name in your results to display line value
+- **defaultY** (string | object) default yAxis value used to draw straight horizontal line to show cut off value. It can be object which define data `source` and `column` to get data from another query
 
 See x-axis and y-axis sections in BarGraph for more information
 
