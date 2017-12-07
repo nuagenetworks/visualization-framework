@@ -3,6 +3,8 @@ export const ActionTypes = {
     ACTION_NAV_BAR_SET_TITLE: "ACTION_NAV_BAR_SET_TITLE",
     ACTION_NAV_BAR_SET_TITLE_ICON: "ACTION_NAV_BAR_SET_TITLE_ICON",
     ACTION_UPDATE_CONTEXT: "ACTION_UPDATE_CONTEXT",
+    ACTION_RESET_CONTEXT: "ACTION_RESET_CONTEXT",
+    PENDING_DASHBOARD_CONTEXT: "PENDING_DASHBOARD_CONTEXT",
     ACTION_UPDATE_VISUALIZATION_TYPE: "ACTION_UPDATE_VISUALIZATION_TYPE",
     ACTION_NAV_BAR_HAS_LINKS: "ACTION_NAV_BAR_HAS_LINKS",
     ACTION_UPDATE_HEADER_COLOR: "ACTION_UPDATE_HEADER_COLOR",
@@ -41,6 +43,12 @@ export const Actions = {
     updateContext: (aContext) => {
         return {
             type: ActionTypes.ACTION_UPDATE_CONTEXT,
+            context: aContext
+        }
+    },
+    resetContext: (aContext) => {
+        return {
+            type: ActionTypes.ACTION_RESET_CONTEXT,
             context: aContext
         }
     },

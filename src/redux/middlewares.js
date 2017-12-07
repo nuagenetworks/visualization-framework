@@ -1,3 +1,5 @@
+import { stat } from "fs";
+
 export const updateContextMiddleware = store => next => action => {
 
     const result = next(action),
@@ -55,13 +57,17 @@ export const updateConfigurationMiddleware = store => next => action => {
         if(!previousPage || previousPage !== id ) {
 
             store.dispatch({
-                    type: "ACTION_UPDATE_PAGE",
-                    id: id
-            });
+                type: "ACTION_UPDATE_PAGE",
+                id: id
+            })
 
             store.dispatch({
-                    type: "RESET_CONFIGURATION",
-            });
+                type: "RESET_CONFIGURATION",
+            })
+
+            store.dispatch({
+                type: "PENDING_DASHBOARD_CONTEXT"
+            })
         }      
     }
 

@@ -28,6 +28,16 @@ function updateContext(state, aContext) {
     return state.set(ActionKeyStore.CONTEXT,  Object.assign({}, currentContext, aContext));
 }
 
+function resetContext(state, aContext) {
+    return state
+        .set(ActionKeyStore.PENDING_DASHBOARD_CONTEXT, false)
+        .set(ActionKeyStore.CONTEXT,  Object.assign({}, aContext));
+    }
+
+function pendindDashboardContext(state) {
+    return state.set(ActionKeyStore.PENDING_DASHBOARD_CONTEXT, true)
+}
+
 function updateVisualizationType(state, aType) {
     return state.set(ActionKeyStore.VISUALIZATION_TYPE, aType);
 }
@@ -58,6 +68,12 @@ function interfaceReducer(state = initialState, action) {
 
         case ActionTypes.ACTION_UPDATE_CONTEXT:
             return updateContext(state, action.context);
+
+        case ActionTypes.ACTION_RESET_CONTEXT:
+            return resetContext(state, action.context);
+
+        case ActionTypes.PENDING_DASHBOARD_CONTEXT:
+            return pendindDashboardContext(state)
 
         case ActionTypes.ACTION_UPDATE_VISUALIZATION_TYPE:
             return updateVisualizationType(state, action.visualizationType);

@@ -64,7 +64,9 @@ class LineGraph extends XYGraph {
           yTickSizeOuter,
           brushEnabled,
           zeroStart,
-          circleRadius
+          circleRadius,
+          defaultY,
+          defaultYColor
         } = this.getConfiguredProperties();
 
         const isVerticalLegend = legend.orientation === 'vertical';
@@ -128,6 +130,26 @@ class LineGraph extends XYGraph {
 
         xScale.range([0, availableWidth]);
         yScale.range([availableHeight, 0]);
+
+        // calculate new range from defaultY
+        let horizontalLine,
+        defaultYvalue
+
+        if(defaultY) {
+
+            defaultYvalue = defaultY
+            let [startRange, endRange] = yScale.domain()
+
+            if(typeof defaultY === 'object') {
+                defaultYvalue = defaultY.source && defaultY.column && this.props[defaultY.source]
+                ? this.props[defaultY.source][0][defaultY.column]
+                : null
+
+                startRange = startRange > defaultYvalue ? defaultYvalue - 1 : startRange
+                endRange = endRange < defaultYvalue ? defaultYvalue + 1 : endRange
+                yScale.domain([startRange, endRange]);
+            }
+        }
 
         const xAxis = axisBottom(xScale)
           .tickSizeInner(xTickGrid ? -availableHeight : xTickSizeInner)
@@ -193,6 +215,19 @@ class LineGraph extends XYGraph {
           'right': xScale(d[xColumn]) + leftMargin
         });
 
+        //draw horizontal line
+        if(defaultYvalue) {
+            horizontalLine =  <line
+                x1="0"
+                y1={yScale(defaultYvalue)}
+                x2={availableWidth}
+                y2={yScale(defaultYvalue)}
+                stroke={ defaultYColor ? defaultYColor : "rgb(255,0,0)"}
+                strokeWidth="1.5"
+                opacity="0.7"
+            />
+        }
+
         return (
             <div className="bar-graph">
                 {this.tooltip}
@@ -208,6 +243,7 @@ class LineGraph extends XYGraph {
                             key="yAxis"
                             ref={ (el) => select(el).call(yAxis) }
                         />
+                        <g> { horizontalLine } </g>
                         <g>
                           {linesData.map((d) =>
 

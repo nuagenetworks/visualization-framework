@@ -148,12 +148,31 @@ class MultiLineGraph extends XYGraph {
             xScale = scaleLinear()
               .domain(extent(data, xLabelFn));
         }
-
         const yScale = scaleLinear()
             .domain(yExtent);
 
         xScale.range([0, availableWidth]);
         yScale.range([availableHeight, 0]);
+
+        // calculate new range from defaultY
+        let horizontalLine,
+            defaultYvalue
+
+        if(defaultY) {
+
+            defaultYvalue = defaultY
+            let [startRange, endRange] = yScale.domain()
+
+            if(typeof defaultY === 'object') {
+                defaultYvalue = defaultY.source && defaultY.column && this.props[defaultY.source]
+                 ? this.props[defaultY.source][0][defaultY.column]
+                 : null
+
+                 startRange = startRange > defaultYvalue ? defaultYvalue - 1 : startRange
+                 endRange = endRange < defaultYvalue ? defaultYvalue + 1 : endRange
+                 yScale.domain([startRange, endRange]);
+            }
+        }
 
         const xAxis = axisBottom(xScale)
           .tickSizeInner(xTickGrid ? -availableHeight : xTickSizeInner)
@@ -216,7 +235,7 @@ class MultiLineGraph extends XYGraph {
         });
 
 
-      const lineGenerator = function(filterData, data, isCircle = false) {
+        const lineGenerator = function(filterData, data, isCircle = false) {
 
             if(isCircle) {
               return filterData.map( (d) =>
@@ -236,26 +255,17 @@ class MultiLineGraph extends XYGraph {
                     />
         }
 
-        let horizontalLine;
-        if(defaultY) {
-
-            let value = defaultY
-            if(typeof defaultY === 'object') {
-                value = defaultY.source && defaultY.column && this.props[defaultY.source]
-                 ? this.props[defaultY.source][0][defaultY.column]
-                 : null
-            }
-            if(value) {
-                horizontalLine =  <line
-                    x1="0"
-                    y1={yScale(value)}
-                    x2={availableWidth}
-                    y2={yScale(value)}
-                    stroke={ defaultYColor ? defaultYColor : "rgb(255,0,0)"}
-                    strokeWidth="1.5"
-                    opacity="0.7"
-                />
-            }
+        //draw horizontal line
+        if(defaultYvalue) {
+            horizontalLine =  <line
+                x1="0"
+                y1={yScale(defaultYvalue)}
+                x2={availableWidth}
+                y2={yScale(defaultYvalue)}
+                stroke={ defaultYColor ? defaultYColor : "rgb(255,0,0)"}
+                strokeWidth="1.5"
+                opacity="0.7"
+            />
         }
 
         return (
