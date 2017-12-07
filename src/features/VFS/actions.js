@@ -51,6 +51,20 @@ const buildMapStateToProps = (state, ownProps) => {
     };
 
 }
+const vfsPoliciesConfig = (domainID) => {
+    return (
+            {
+                service: "VSD",
+                query: {
+                    parentResource: "domains",
+                    parentID: domainID,
+                    resource: "virtualfirewallpolicies",
+                    filter: 'policyState == "DRAFT"',
+                }
+            }
+        );
+}
+
 export const mapStateToProps = (state, ownProps) => {
     const query = state.router.location.query;
     const queryConfiguration = {
@@ -94,7 +108,9 @@ export const mapStateToProps = (state, ownProps) => {
         props.pgexpressions = getRequestResponse(state, `domains/${domainID}/pgexpressions`);
         props.zones = getRequestResponse(state, `domains/${domainID}/zones`);
         props.subnets = getRequestResponse(state, `domains/${domainID}/subnets`);
-        props.vfpolicies = getRequestResponse(state, `domains/${domainID}/virtualfirewallpolicies`);
+
+        const reqID = ServiceManager.getRequestID(vfsPoliciesConfig(domainID));
+        props.vfpolicies = getRequestResponse(state, reqID);
     }
 
     if (l2DomainID) {
@@ -106,15 +122,7 @@ export const mapStateToProps = (state, ownProps) => {
 
 export const actionCreators = (dispatch) => ({
     fetchDomainFirewallPoliciesIfNeeded: (domainID) => {
-        const configuration = {
-            service: "VSD",
-            query: {
-                parentResource: "domains",
-                parentID: domainID,
-                resource: "virtualfirewallpolicies"
-            }
-        }
-        return dispatch(ServiceActions.fetchIfNeeded(configuration));
+        return dispatch(ServiceActions.fetchIfNeeded(vfsPoliciesConfig(domainID)));
     },
     fetchFirewallRulesIfNeeded: (policyID) => {
         const configuration = {
