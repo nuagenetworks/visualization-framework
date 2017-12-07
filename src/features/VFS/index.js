@@ -243,24 +243,18 @@ class VFS extends React.Component {
 
         return (
             <div>
-                <Label>Virtual Firewall Policy</Label>
-                <Form.Field
-                    name="parentID"
-                    component={Select}
-                    options={policyOptions}
-                    error={getFieldError("parentID")}
-                />
                 {
                     twoColumnRow({
+                        name: 'parentID',
+                        label: 'Virtual Firewall Policy',
+                        component: Select,
+                        options: policyOptions,
+                        error: getFieldError("parentID")
+                    }, {
                         name: 'description',
                         label: 'Name',
                         component: TextInput,
                         validate: [required],
-                    }, {
-                        name: 'priority',
-                        label: 'Priority',
-                        component: TextInput,
-                        error: getFieldError('priority')
                     })
                 }
                 <Header>Match Criteria</Header>
@@ -501,7 +495,6 @@ class VFS extends React.Component {
             networkType: 'ANY',
             action:  actions && Array.isArray(actions) && actions.length > 0 ? actions[0].value : 'FORWARD',
             destinationPort: data && data.destinationport ? data.destinationport : '*',
-            priority: '0',
             sourcePort: '*',
         });
     }
