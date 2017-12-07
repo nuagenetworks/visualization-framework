@@ -34,6 +34,7 @@ class CreateFlow extends React.Component {
         }
         this.resetFieldsOnChange = this.resetFieldsOnChange.bind(this);
         this.toggleError = this.toggleError.bind(this);
+        this.handleDone = this.handleDone.bind(this);
     }
 
     componentWillMount() {
@@ -381,6 +382,13 @@ class CreateFlow extends React.Component {
         }
     }
 
+    handleDone = () => {
+        // first dispatch a reset of the selection
+        const { resetSelectedFlow, query: { id } } = this.props;
+        resetSelectedFlow(id);
+        this.props.handleClose();
+    }
+
     renderModal = () => {
         const {
             data,
@@ -439,6 +447,7 @@ class CreateFlow extends React.Component {
                 parent={{resource: 'virtualfirewallpolicies', ID: parentIDValue}}
                 resourceName='virtualfirewallrules'
                 errored={this.state.error}
+                onDone={this.handleDone}
             >
 
             {

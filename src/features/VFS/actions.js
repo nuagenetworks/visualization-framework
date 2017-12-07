@@ -18,6 +18,7 @@ import {
 } from "../../components/App/redux/actions";
 
 import {
+    Actions as VFSActions,
     ActionKeyStore as VFSActionKeyStore,
 } from '../redux/actions';
 
@@ -373,4 +374,5 @@ export const actionCreators = (dispatch) => ({
     goTo: (pathname, query) => dispatch(push({pathname: pathname, query: query})),
     showMessageBox: (title, body) => dispatch(MessageBoxActions.toggleMessageBox(true, title, body)),
     changeFieldValue: (formName, fieldName, fieldValue) => dispatch(change(formName, fieldName, fieldValue)),
+    resetSelectedFlow: (vssID) => dispatch(dispatch(VFSActions.selectRow(vssID)))
 });

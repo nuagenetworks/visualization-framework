@@ -18,6 +18,7 @@ export const ModalEditor = props => {
         submitLabel,
         handleClick,
         errored,
+        onDone,
     } = props;
     let buttons = [
         <FlatButton
@@ -42,7 +43,7 @@ export const ModalEditor = props => {
             width={width}
         >
             <div style={style.modalEditorContainer}>
-                <Editor {...props} onDone={onCancel}>
+                <Editor {...props} onDone={onDone}>
                     {children}
                 </Editor>
             </div>
