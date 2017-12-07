@@ -10,7 +10,6 @@
         "limit": 100,
         "columns": [
             { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
-            { "column": "nuage_metadata.aclId", "label": "ACL", "totalCharacters": 13, "tooltip" : {"column": "nuage_metadata.aclId"} },
             { "column": "sourceip", "label": "SIP" },
             { "column": "destinationip", "label": "DIP" },
             { "column": "sourceport", "label": "S-Port" },
@@ -29,6 +28,8 @@
             { "column": "sourcemac", "label": "SMAC" },
             { "column": "destinationmac", "label": "DMAC" },
             { "column": "packets", "label": "Packets" }
+            { "column": "nuage_metadata.aclId", "label": "ACL", "totalCharacters": 13, "tooltip" : {"column": "nuage_metadata.aclId"} },
+            { "column": "nuage_metadata.vfrPolicyID", "label": "Policy ID", "totalCharacters": 13, "tooltip" : {"column": "nuage_metadata.vfrPolicyID"} }
         ]
     },
     "menu": [
