@@ -32,7 +32,7 @@
         ]
     },
     "menu": [
-        { "text": "Create Virtual Firewall Rule", "rootpath": "vfs/new" }
+        { "text": "Create Virtual Firewall Rule", "rootpath": "vfs/new", "params": { "operation": "create"} }
     ],
     "query": "vss-domain-flow-explorer"
 }
