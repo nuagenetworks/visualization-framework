@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ModalEditor from '../../components/Editor/ModalEditor';
 import { required } from '../../components/Editor/utils';
 import { Form, TextInput, Label, Columns, Select, Checkbox, Header } from '../../ui-components';
+import { getMetaDataAttribute, twoColumnRow, buildOptions } from './utils';
 import {
     NetworkProtocols,
     getNetworkProtocolForValue,
@@ -14,64 +15,6 @@ import {
     getMirrorDestinationForValue,
 } from './NetworkData';
 import { mapStateToProps, actionCreators } from './actions';
-
-const twoColumnRow = (col1, col2) => {
-    const col = { name: null, label: null, component: null};
-    const { name: nameCol1, label: labelCol1, component: componentCol1, text: textCol1, ...restCol1 } = col1 ? col1 : col;
-    const { name: nameCol2, label: labelCol2, component: componentCol2, text: textCol2, ...restCol2 } = col2 ? col2 : col;
-    const displayLabelCol1 = col1 && labelCol1 && !col1.hideLabel;
-    const displayLabelCol2 = col2 && labelCol2 && !col2.hideLabel;
-    return (
-        <Columns>
-            <Columns.Column width="15%">
-                {displayLabelCol1 && <Label>{labelCol1}</Label>}
-            </Columns.Column>
-            <Columns.Column width="32%">
-                { col1 && !textCol1 && col1.component &&
-                    <Form.Field
-                        name={nameCol1}
-                        label={labelCol1}
-                        component={componentCol1}
-                        {...restCol1}
-                    />
-                }
-                { col1 && textCol1 &&
-                    <div>{textCol1}</div>
-                }
-            </Columns.Column>
-            <Columns.Column width="6%"/>
-            <Columns.Column width="15%">
-                {displayLabelCol2 && <Label>{labelCol2}</Label>}
-            </Columns.Column>
-            <Columns.Column width="32%">
-                { col2 && !textCol2 && componentCol2 &&
-                    <Form.Field
-                        name={nameCol2}
-                        label={labelCol2}
-                        component={componentCol2}
-                        {...restCol2}
-                    />
-                }
-                { col2 && textCol2 &&
-                    <div>{textCol2}</div>
-                }
-            </Columns.Column>
-        </Columns>
-    )
-};
-
-const buildOptions = (options) => {
-    if (options && options.data && options.data.length > 0) {
-        return options.data.map(item => ({ text: item.name, value: item.ID }));
-    }
-    if (options && options.isFetching) {
-        return "Fetching...";
-    }
-    if (options && options.error) {
-        return options.error;
-    }
-    return "No Data available";
-}
 
 class VFS extends React.Component {
     constructor(...props) {
@@ -88,12 +31,12 @@ class VFS extends React.Component {
 
     componentWillMount() {
         this.initialize(this.props);
-        this.setState({opened: true});
+        this.setState({opened: true, formName: 'flow-editor'});
     }
 
     resetFieldsOnChange = (value, ...fields) => {
         const { changeFieldValue } = this.props;
-        const formName = 'flow-editor';
+        const { formName } = this.state;
         if (value) {
             if (fields) {
                 fields.forEach(fieldName => changeFieldValue(formName, fieldName, null))
@@ -240,7 +183,6 @@ class VFS extends React.Component {
         const destList = this.buildDestField(destination);
 
         const l7Apps = this.buildL7AppField(l7applicationsignatures);
-
         return (
             <div>
                 {
@@ -336,7 +278,7 @@ class VFS extends React.Component {
             context
         } = this.props;
 
-        let enterpriseID = this.getMetaDataAttribute(data, 'enterpriseId');
+        let enterpriseID = getMetaDataAttribute(data, 'enterpriseId');
         if (!enterpriseID && query) {
             enterpriseID = query.enterpriseID;
         }
@@ -361,7 +303,7 @@ class VFS extends React.Component {
             fetchL7ApplicationSignaturesIfNeeded,
         } = this.props;
         const enterpriseID = this.getEnterpriseID();
-        const domainID = this.getMetaDataAttribute(data, 'domainId');
+        const domainID = getMetaDataAttribute(data, 'domainId');
 
         switch (type) {
             case 'ZONE':
@@ -404,7 +346,7 @@ class VFS extends React.Component {
             data,
             fetchDomainFirewallPoliciesIfNeeded,
         } = props;
-        const domainID = this.getMetaDataAttribute(data, 'domainId');
+        const domainID = getMetaDataAttribute(data, 'domainId');
         if (domainID) {
             fetchDomainFirewallPoliciesIfNeeded (domainID);
         }
@@ -431,8 +373,6 @@ class VFS extends React.Component {
         }
         return errorObject;
     }
-
-    getMetaDataAttribute = (data, attrName) => data && data.hasOwnProperty("nuage_metadata") ? data.nuage_metadata[attrName] : null;
 
     getNetworkItems = (type) => {
         const {
@@ -633,7 +573,7 @@ class VFS extends React.Component {
                 title={title}
                 submitLabel={buttonLabel}
                 open={this.state.opened}
-                name='flow-editor'
+                name={this.state.formName}
                 onCancel={this.handleClose}
                 width='60%'
                 onValidate={this.validate}
@@ -660,7 +600,7 @@ class VFS extends React.Component {
                 title={title}
                 submitLabel={buttonLabel}
                 open={this.state.opened}
-                name='flow-editor'
+                name={this.state.formName}
                 onCancel={this.handleClose}
                 width='60%'
                 errored={true}
