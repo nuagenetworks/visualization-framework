@@ -43,6 +43,11 @@
                             "term": {
                                 "DstUplink": "{{dstUplink}}"
                             }
+                        },
+                        {
+                            "term": {
+                                "Application": "{{app}}"
+                            }
                         }
                     ]
                 }

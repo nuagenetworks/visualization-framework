@@ -1,7 +1,7 @@
 {
     "id": "aar-flow-uplink-pairs",
     "graph": "Table",
-    "title": "",
+    "title": "Traffic Uplink Pairs for {{app}}",
     "description": "Shows all uplink pairs for the flow",
     "author": "Bharat Mukheja",
     "creationDate": "11/21/2017",
