@@ -32,10 +32,10 @@ export default class AbstractGraph extends React.Component {
         this.setConfiguredProperties();
 
         // Provide tooltips for subclasses.
-        const { tooltip } = this.getConfiguredProperties();
+        const { tooltip, defaultY } = this.getConfiguredProperties();
         if(tooltip) {
 
-            this.setTooltipAccessor(tooltip);
+            this.setTooltipAccessor(tooltip, defaultY);
 
             // Expose tooltipId in case subclasses need it.
             this.tooltipId = `tooltip-${this.getGraphId()}`;
@@ -70,9 +70,14 @@ export default class AbstractGraph extends React.Component {
         }
     }
 
-    setTooltipAccessor(tooltip) {
+    setTooltipAccessor(tooltip, defaultY) {
         // Generate accessors that apply number and date formatters.
         const accessors = tooltip.map(columnAccessor);
+
+        let defaultYAccessors
+        if(defaultY && defaultY.tooltip) {
+            defaultYAccessors = defaultY.tooltip.map(columnAccessor)
+        }
 
         // This function is invoked to produce the content of a tooltip.
         this.getTooltipContent = () => {
@@ -80,22 +85,41 @@ export default class AbstractGraph extends React.Component {
             // on mouseEnter and mouseMove of visual marks
             // to the data entry corresponding to the hovered mark.
             if(this.hoveredDatum) {
-                return (
-                    <div>
-                        {/* Display each tooltip column as "label : value". */}
-                        {tooltip.map(({column, label}, i) => (
-                            <div key={column}>
-                                <strong>
-                                    {/* Use label if present, fall back to column name. */}
-                                    {label || column}
-                                </strong> : <span>
-                                    {/* Apply number and date formatting to the value. */}
-                                    {accessors[i](this.hoveredDatum)}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                );
+                if(this.hoveredDatum.defaultY) {
+                    return (
+                        <div>
+                            {/* Display each tooltip column as "label : value". */}
+                            {defaultY.tooltip.map(({column, label}, i) => (
+                                <div key={column}>
+                                    <strong>
+                                        {/* Use label if present, fall back to column name. */}
+                                        {label || column}
+                                    </strong> : <span>
+                                        {/* Apply number and date formatting to the value. */}
+                                        {defaultYAccessors[i](this.hoveredDatum)}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    );
+                } else {
+                    return (
+                        <div>
+                            {/* Display each tooltip column as "label : value". */}
+                            {tooltip.map(({column, label}, i) => (
+                                <div key={column}>
+                                    <strong>
+                                        {/* Use label if present, fall back to column name. */}
+                                        {label || column}
+                                    </strong> : <span>
+                                        {/* Apply number and date formatting to the value. */}
+                                        {accessors[i](this.hoveredDatum)}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    );
+                }
             } else {
                 return null;
             }
@@ -455,7 +479,6 @@ export default class AbstractGraph extends React.Component {
             const otherDatas = metricDimension.top(Infinity, limit);
 
             if(otherDatas.length) {
-                let values = {};
                 const sum = otherDatas.reduce( (total, d) => +total + d[settings.metric], 0);
                 topData.push({
                     [settings.dimension]: settings.otherOptions.label ? settings.otherOptions.label : 'Others',

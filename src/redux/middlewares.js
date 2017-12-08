@@ -1,4 +1,3 @@
-import { stat } from "fs";
 
 export const updateContextMiddleware = store => next => action => {
 

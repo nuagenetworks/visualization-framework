@@ -133,18 +133,18 @@ class LineGraph extends XYGraph {
 
         // calculate new range from defaultY
         let horizontalLine,
-        defaultYvalue
+          defaultYvalue,
+          yAxisData
 
         if(defaultY) {
 
             defaultYvalue = defaultY
             let [startRange, endRange] = yScale.domain()
 
-            if(typeof defaultY === 'object') {
-                defaultYvalue = defaultY.source && defaultY.column && this.props[defaultY.source]
-                ? this.props[defaultY.source][0][defaultY.column]
-                : null
+            if(typeof defaultY === 'object' && defaultY.source && defaultY.column && this.props[defaultY.source]) {
 
+                yAxisData = this.props[defaultY.source][0] || {}
+                defaultYvalue = yAxisData[defaultY.column] || null
                 startRange = startRange > defaultYvalue ? defaultYvalue - 1 : startRange
                 endRange = endRange < defaultYvalue ? defaultYvalue + 1 : endRange
                 yScale.domain([startRange, endRange]);
@@ -217,15 +217,36 @@ class LineGraph extends XYGraph {
 
         //draw horizontal line
         if(defaultYvalue) {
-            horizontalLine =  <line
-                x1="0"
-                y1={yScale(defaultYvalue)}
-                x2={availableWidth}
-                y2={yScale(defaultYvalue)}
-                stroke={ defaultYColor ? defaultYColor : "rgb(255,0,0)"}
-                strokeWidth="1.5"
-                opacity="0.7"
-            />
+            let y = yScale(defaultYvalue),
+            height = 20,
+            tooltip = []
+
+            if(yAxisData) {
+                tooltip = this.tooltipProps(Object.assign({}, yAxisData ,{defaultY}))
+            }
+
+            horizontalLine =
+            <g>
+                <rect
+                    height={height}
+                    width={availableWidth}
+                    x="0"
+                    y={ y - height/2}
+                    opacity="0"
+                    { ...tooltip }
+                    data-offset="{ 'left' : 0, 'bottom' : 0}"
+                />
+                <line
+                    x1="0"
+                    y1={y}
+                    x2={availableWidth}
+                    y2={y}
+                    stroke={ defaultYColor ? defaultYColor : "rgb(255,0,0)"}
+                    strokeWidth="1.5"
+                    opacity="0.7"
+                    className="horizontalLine"
+                />
+            </g>
         }
 
         return (
@@ -243,7 +264,6 @@ class LineGraph extends XYGraph {
                             key="yAxis"
                             ref={ (el) => select(el).call(yAxis) }
                         />
-                        <g> { horizontalLine } </g>
                         <g>
                           {linesData.map((d) =>
 
@@ -292,6 +312,7 @@ class LineGraph extends XYGraph {
                               </g>
                           )}
                         </g>
+                        { horizontalLine }
                         {
                             brushEnabled &&
                             <g
