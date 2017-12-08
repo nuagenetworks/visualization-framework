@@ -2,6 +2,9 @@ import React from 'react';
 import { change, submit } from 'redux-form';
 import { getPOSTRequestID } from './utils';
 import { errorField, errorSpan } from '../../ui-components/style';
+import {
+    ActionKeyStore as VFSActionKeyStore,
+} from '../../features/redux/actions';
 
 import {
     Actions as MessageBoxActions,
@@ -11,20 +14,29 @@ import {
     Actions as ServiceActions,
 } from "../../services/servicemanager/redux/actions";
 
-export const formSubmit = (values, parent, resourceName) => (dispatch, getState) => {
-    const parentID = parent.ID ? parent.ID : values.parentID;
-    let configuration = {
-        service: "VSD",
-        query: {
-            parentResource: parent.resource,
-            parentID: parentID,
-            resource: resourceName
-        }
-    }
+const getEntity = (ID, state) => state.VFS.getIn([VFSActionKeyStore.SELECTED_ROW, ID, VFSActionKeyStore.SELECTED_ROW_DATA])
+
+const post = ({ values, configuration, dispatch }) => {
     dispatch(ServiceActions.postIfNeeded(configuration, values));
+}
+
+const update = ({ values, configuration, dispatch, getState }) => {
+    const { ID } = values;
+    const body = getEntity(ID, getState());
+    dispatch(ServiceActions.updateIfNeeded(configuration, body, values));
+}
+
+export const formSubmit = (values, configuration) => (dispatch, getState) => {
+    const { ID } = values;
+    if (ID) {
+        update({values, configuration, dispatch, getState});
+    }
+    else {
+        post({values, configuration, dispatch});
+    }
 };
 
-export const submitFailure = (parent, resourceName, errors) => (dispatch, getState) => {
+export const submitFailure = (configuration, errors) => (dispatch, getState) => {
     if (errors && errors.length > 0) {
         const errorInfo = () => {
             const errorDesc = errors.map(item => <span style={errorSpan}>{item.description}</span>);
@@ -36,13 +48,13 @@ export const submitFailure = (parent, resourceName, errors) => (dispatch, getSta
         }
         const errorTitle = errors[0].title;
         dispatch(MessageBoxActions.toggleMessageBox(true, errorTitle, errorInfo()));
-        dispatch(ServiceActions.deleteRequest(getPOSTRequestID(parent, resourceName)));
+        dispatch(ServiceActions.deleteRequest(getPOSTRequestID(configuration)));
     }
 }
 
-export const submitSuccess = (parent, resourceName, onDone) => (dispatch, getState) => {
+export const submitSuccess = (configuration, onDone) => (dispatch, getState) => {
     dispatch(MessageBoxActions.toggleMessageBox(true, "Success", "The request has been posted to the server successfully "));
-    dispatch(ServiceActions.deleteRequest(getPOSTRequestID(parent, resourceName)));
+    dispatch(ServiceActions.deleteRequest(getPOSTRequestID(configuration)));
     if (onDone) {
         onDone();
     }

@@ -315,7 +315,14 @@ export const MirrorDestinationOptions = [
 ];
 
 export const getNetworkProtocolForValue = (value) => {
-    return NetworkProtocols.filter(item => item.value.startsWith(value));
+    const protocols = NetworkProtocols.filter(item => item.value.startsWith(value));
+
+    return protocols && Array.isArray(protocols) && protocols.length > 0 ? protocols[0].value : null;
+}
+export const getNetworkProtocolForText = (text) => {
+    const protocols = NetworkProtocols.filter(item => item.text.startsWith(text));
+
+    return protocols && Array.isArray(protocols) && protocols.length > 0 ? protocols[0].value : null;
 }
 
 export const getSecurityPolicyActionsForValue = (value) => {

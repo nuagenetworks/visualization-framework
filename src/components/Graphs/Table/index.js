@@ -17,7 +17,6 @@ import SearchBar from "../../SearchBar"
 
 import {
     Actions as VFSActions,
-    ActionKeyStore as VFSActionKeyStore
 } from '../../../features/redux/actions'
 
 class Table extends AbstractGraph {
@@ -272,7 +271,6 @@ class Table extends AbstractGraph {
             return false;
         }
         event.preventDefault()
-        const selectedRows = this.getSelectedRows()
         const { clientX: x, clientY: y } = event;
         this.setState({ contextMenu: { x, y } });
         return true;
@@ -307,13 +305,15 @@ class Table extends AbstractGraph {
         query.id = id;
 
         menu.forEach((item) => {
-            const { text, rootpath } = item;
+            const { text, rootpath, params } = item;
             const pathname = `${process.env.PUBLIC_URL}/${rootpath}`
             const li = document.createElement('li');
             li.textContent = text;
+            const queryParams = (params && Object.getOwnPropertyNames(params).length > 0) ?
+                    Object.assign({}, query, params) : Object.assign({}, query);
             li.onclick = (e) => {
                 // dispatch a push to the menu link
-                goTo(pathname, query);
+                goTo(pathname, queryParams);
             };
             node.append(li);
         });
