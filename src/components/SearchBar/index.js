@@ -39,6 +39,7 @@ export default class SearchBar extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         return JSON.stringify(nextProps.data) !== JSON.stringify(this.props.data)
+          || JSON.stringify(nextState) !== JSON.stringify(this.state)
     }
 
     componentDidUpdate () {
