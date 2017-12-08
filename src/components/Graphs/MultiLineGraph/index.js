@@ -155,7 +155,7 @@ class MultiLineGraph extends XYGraph {
         // calculate new range from defaultY
         let horizontalLine,
             defaultYvalue,
-            yAxisData
+            horizontalLineData
 
         if(defaultY) {
 
@@ -164,8 +164,8 @@ class MultiLineGraph extends XYGraph {
 
             if(typeof defaultY === 'object' && defaultY.source && defaultY.column && this.props[defaultY.source]) {
 
-                yAxisData = this.props[defaultY.source][0] || {}
-                defaultYvalue = yAxisData[defaultY.column] || null
+                horizontalLineData = this.props[defaultY.source][0] || {}
+                defaultYvalue = horizontalLineData[defaultY.column] || null
                 startRange = startRange > defaultYvalue ? defaultYvalue - 1 : startRange
                 endRange = endRange < defaultYvalue ? defaultYvalue + 1 : endRange
                 yScale.domain([startRange, endRange]);
@@ -259,32 +259,33 @@ class MultiLineGraph extends XYGraph {
               height = 20,
               tooltip = []
 
-            if(yAxisData) {
-                tooltip = this.tooltipProps(Object.assign({}, yAxisData ,{defaultY}))
+            if(horizontalLineData) {
+                tooltip = this.tooltipProps(Object.assign({}, horizontalLineData , {tooltipName: 'defaultY'}))
             }
 
-            horizontalLine =
-            <g>
-                <rect
-                    height={height}
-                    width={availableWidth}
-                    x="0"
-                    y={ y - height/2}
-                    opacity="0"
-                    { ...tooltip }
-                    data-offset="{ 'left' : 0, 'bottom' : 0}"
-                />
-                <line
-                    x1="0"
-                    y1={y}
-                    x2={availableWidth}
-                    y2={y}
-                    stroke={ defaultYColor ? defaultYColor : "rgb(255,0,0)"}
-                    strokeWidth="1.5"
-                    opacity="0.7"
-                    className="horizontalLine"
-                />
-            </g>
+            horizontalLine = (
+                <g>
+                    <rect
+                        height={height}
+                        width={availableWidth}
+                        x="0"
+                        y={ y - height/2}
+                        opacity="0"
+                        { ...tooltip }
+                        data-offset="{ 'left' : 0, 'bottom' : 0}"
+                    />
+                    <line
+                        x1="0"
+                        y1={y}
+                        x2={availableWidth}
+                        y2={y}
+                        stroke={ defaultYColor ? defaultYColor : "rgb(255,0,0)"}
+                        strokeWidth="1.5"
+                        opacity="0.7"
+                        className="horizontalLine"
+                    />
+                </g>
+            )
         }
 
         return (

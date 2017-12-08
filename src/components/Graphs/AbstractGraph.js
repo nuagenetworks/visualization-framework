@@ -23,6 +23,7 @@ export default class AbstractGraph extends React.Component {
         this.node = {};
 
         this.yLabelWidth = 0;
+        this.accessors = {}
 
         this.setGraphId();
 
@@ -35,7 +36,8 @@ export default class AbstractGraph extends React.Component {
         const { tooltip, defaultY } = this.getConfiguredProperties();
         if(tooltip) {
 
-            this.setTooltipAccessor(tooltip, defaultY);
+            this.setTooltipAccessor(tooltip);
+            this.setTooltipAccessor(defaultY ? defaultY.tooltip : null, 'defaultY')
 
             // Expose tooltipId in case subclasses need it.
             this.tooltipId = `tooltip-${this.getGraphId()}`;
@@ -70,14 +72,12 @@ export default class AbstractGraph extends React.Component {
         }
     }
 
-    setTooltipAccessor(tooltip, defaultY) {
-        // Generate accessors that apply number and date formatters.
-        const accessors = tooltip.map(columnAccessor);
+    setTooltipAccessor(tooltip, type = 'default') {
+        if(!tooltip)
+            return;
 
-        let defaultYAccessors
-        if(defaultY && defaultY.tooltip) {
-            defaultYAccessors = defaultY.tooltip.map(columnAccessor)
-        }
+        // Generate accessors that apply number and date formatters.
+        this.accessors[type] = tooltip.map(columnAccessor);
 
         // This function is invoked to produce the content of a tooltip.
         this.getTooltipContent = () => {
@@ -85,45 +85,31 @@ export default class AbstractGraph extends React.Component {
             // on mouseEnter and mouseMove of visual marks
             // to the data entry corresponding to the hovered mark.
             if(this.hoveredDatum) {
-                if(this.hoveredDatum.defaultY) {
-                    return (
-                        <div>
-                            {/* Display each tooltip column as "label : value". */}
-                            {defaultY.tooltip.map(({column, label}, i) => (
-                                <div key={column}>
-                                    <strong>
-                                        {/* Use label if present, fall back to column name. */}
-                                        {label || column}
-                                    </strong> : <span>
-                                        {/* Apply number and date formatting to the value. */}
-                                        {defaultYAccessors[i](this.hoveredDatum)}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    );
-                } else {
-                    return (
-                        <div>
-                            {/* Display each tooltip column as "label : value". */}
-                            {tooltip.map(({column, label}, i) => (
-                                <div key={column}>
-                                    <strong>
-                                        {/* Use label if present, fall back to column name. */}
-                                        {label || column}
-                                    </strong> : <span>
-                                        {/* Apply number and date formatting to the value. */}
-                                        {accessors[i](this.hoveredDatum)}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    );
-                }
+                let type = this.hoveredDatum.tooltipName || 'default'
+                return this.tooltipContent({tooltip, accessors: this.accessors[type]})
             } else {
                 return null;
             }
         }
+    }
+
+    tooltipContent({tooltip, accessors}) {
+        return (
+            <div>
+                {/* Display each tooltip column as "label : value". */}
+                {tooltip.map(({column, label}, i) => (
+                    <div key={column}>
+                        <strong>
+                            {/* Use label if present, fall back to column name. */}
+                            {label || column}
+                        </strong> : <span>
+                            {/* Apply number and date formatting to the value. */}
+                            {accessors[i](this.hoveredDatum)}
+                        </span>
+                    </div>
+                ))}
+            </div>
+        )
     }
 
     setGraphId() {
