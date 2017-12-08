@@ -200,7 +200,8 @@ export const mapStateToProps = (state, ownProps) => {
         'locationType',
         'networkType',
         'locationID',
-        'networkID') :
+        'networkID',
+        'ID') :
         selectFieldValues(state,
             formName,
             'locationType',
@@ -374,5 +375,6 @@ export const actionCreators = (dispatch) => ({
     goTo: (pathname, query) => dispatch(push({pathname: pathname, query: query})),
     showMessageBox: (title, body) => dispatch(MessageBoxActions.toggleMessageBox(true, title, body)),
     changeFieldValue: (formName, fieldName, fieldValue) => dispatch(change(formName, fieldName, fieldValue)),
-    resetSelectedFlow: (vssID) => dispatch(dispatch(VFSActions.selectRow(vssID)))
+    resetSelectedFlow: (vssID) => dispatch(dispatch(VFSActions.selectRow(vssID))),
+    selectRule: (ID, rule) => dispatch(dispatch(VFSActions.selectRow(ID, rule))),
 });

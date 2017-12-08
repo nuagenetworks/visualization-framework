@@ -10,19 +10,18 @@ class Editor extends Component {
         const {
             errors: oldErrors,
             onError,
-            parent,
-            resourceName,
             onSuccess,
             onDone,
+            configuration,
         } = this.props;
         const { errors, success } = nextProps;
 
         if (errors && !oldErrors) {
-            onError(parent, resourceName, errors);
+            onError(configuration(), errors);
         }
 
         if (success) {
-            onSuccess(parent, resourceName, onDone);
+            onSuccess(configuration(), onDone);
         }
     }
     render() {
@@ -33,11 +32,10 @@ class Editor extends Component {
             onSubmit,
             validate,
             onValidate,
-            parent,
-            resourceName,
+            configuration,
         } = this.props;
 
-        const handleSubmit = formData => onSubmit(formData, parent, resourceName);
+        const handleSubmit = formData => onSubmit(formData, configuration());
         const formValidation = values => validate(values, onValidate);
 
         return (
@@ -69,19 +67,18 @@ Editor.propTypes = {
     getInitialValues: PropTypes.func,
     onSubmit: PropTypes.func.isRequired,
     onValidate: PropTypes.func.isRequired,
-    parent: PropTypes.shape({}).isRequired,
-    resourceName: PropTypes.string.isRequired,
-    onDone: PropTypes.func
+    onDone: PropTypes.func,
+    configuration: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => {
     const query = state.router.location.query;
-    const { parent, resourceName } = ownProps;
-    const errors = getServerErrors(state, parent, resourceName);
+    const { configuration } = ownProps;
+    const errors = getServerErrors(state, configuration());
     return {
         query,
         errors,
-        success: isSubmitSuccessfull(state, parent, resourceName),
+        success: isSubmitSuccessfull(state, configuration()),
     };
 }
 

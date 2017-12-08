@@ -35,6 +35,7 @@ class CreateFlow extends React.Component {
         this.resetFieldsOnChange = this.resetFieldsOnChange.bind(this);
         this.toggleError = this.toggleError.bind(this);
         this.handleDone = this.handleDone.bind(this);
+        this.postConfiguration = this.postConfiguration.bind(this);
     }
 
     componentWillMount() {
@@ -389,6 +390,18 @@ class CreateFlow extends React.Component {
         this.props.handleClose();
     }
 
+    postConfiguration = () => {
+        const { parentIDValue } = this.props;
+        return {
+            service: "VSD",
+            query: {
+                parentResource: "virtualfirewallpolicies",
+                parentID: parentIDValue,
+                resource: "virtualfirewallrules"
+            }
+        }
+    }
+
     renderModal = () => {
         const {
             data,
@@ -399,7 +412,6 @@ class CreateFlow extends React.Component {
             networkIDValue,
             mirrorDestinationTypeValue,
             l2domainIDValue,
-            parentIDValue,
         } = this.props;
 
         //associatedVirtualFirewallRuleID
@@ -444,8 +456,7 @@ class CreateFlow extends React.Component {
                 width='60%'
                 onValidate={this.validate}
                 getInitialValues={() => this.initialValues(data)}
-                parent={{resource: 'virtualfirewallpolicies', ID: parentIDValue}}
-                resourceName='virtualfirewallrules'
+                configuration={this.postConfiguration}
                 errored={this.state.error}
                 onDone={this.handleDone}
             >

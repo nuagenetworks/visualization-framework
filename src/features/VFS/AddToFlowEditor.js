@@ -58,10 +58,29 @@ class AddToFlowEditor extends React.Component {
             error: false,
         }
         this.toggleError = this.toggleError.bind(this);
+        this.putConfiguration = this.putConfiguration.bind(this);
     }
 
     componentWillMount() {
         this.setState({opened: true, formName: 'add-flow-editor'});
+    }
+
+    handleSelectRule = (evt) => {
+        const { preventDefault, ...values } = evt;
+        const ID = values ? Object.values(values).join('') : null;
+        if (ID) {
+            const vfrules = getNetworkItems('virtualfirewallrules', this.props);
+            if (vfrules && vfrules.data && vfrules.data.length > 0) {
+                const { selectRule, data } = this.props;
+                if (selectRule && data) {
+                    const object = Object.assign({}, vfrules.data[0]);
+                    var re = new RegExp(data.destinationport, 'gi');
+                    object.destinationPort = object.destinationPort === '*' || object.destinationPort.match(re) ? object.destinationPort :
+                        `${object.destinationPort}, ${data.destinationport}`;
+                    selectRule(ID, object);
+                }
+            }
+        }
     }
 
     buildSourceField = (source) => {
@@ -208,9 +227,10 @@ class AddToFlowEditor extends React.Component {
         if (vfRuleOptions && Array.isArray(vfRuleOptions)) {
             return (
                 <Form.Field
-                    name="vfRule"
+                    name="ID"
                     component={Select}
                     options={vfRuleOptions}
+                    onChange={this.handleSelectRule}
                 />
             );
         }
@@ -220,6 +240,32 @@ class AddToFlowEditor extends React.Component {
 
     }
 
+    handleCancel = () => {
+        // first dispatch a reset of the selection
+        const { resetSelectedFlow, IDValue } = this.props;
+        resetSelectedFlow(IDValue);
+        this.props.handleClose();
+    }
+
+    handleDone = () => {
+        // first dispatch a reset of the selection
+        const { resetSelectedFlow, query: { id }, IDValue } = this.props;
+        resetSelectedFlow(id);
+        resetSelectedFlow(IDValue);
+        this.props.handleClose();
+    }
+
+    putConfiguration = () => {
+        const { IDValue } = this.props;
+        return {
+            service: "VSD",
+            query: {
+                parentResource: "virtualfirewallrules",
+                parentID: IDValue,
+            }
+        }
+    }
+
     renderAdd = () => {
         const {
             data,
@@ -227,7 +273,6 @@ class AddToFlowEditor extends React.Component {
             networkTypeValue,
             locationIDValue,
             networkIDValue,
-            handleClose,
         } = this.props;
 
         const title = "Add to Firewall Rule";
@@ -256,8 +301,12 @@ class AddToFlowEditor extends React.Component {
                 submitLabel={buttonLabel}
                 open={this.state.opened}
                 name={this.state.formName}
-                onCancel={handleClose}
+                onCancel={this.handleCancel}
+                onDone={this.handleDone}
                 width='60%'
+                onValidate={this.validate}
+                configuration={this.putConfiguration}
+                errored={this.state.error}
             >
                 <Header>Match Criteria</Header>
                 <TwoColumnRow firstColumnProps={{
@@ -282,7 +331,6 @@ class AddToFlowEditor extends React.Component {
                     name: 'protocol',
                     label: 'Protocol',
                     text: protocol,
-                    options: NetworkTypeOptions,
                 }} secondColumnProps={{
                     name: 'dPort',
                     label: 'Destination Port',
