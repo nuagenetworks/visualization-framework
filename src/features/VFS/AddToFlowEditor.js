@@ -76,7 +76,7 @@ class AddToFlowEditor extends React.Component {
                     const object = Object.assign({}, vfrules.data[0]);
                     var re = new RegExp(data.destinationport, 'gi');
                     object.destinationPort = object.destinationPort === '*' || object.destinationPort.match(re) ? object.destinationPort :
-                        `${object.destinationPort}, ${data.destinationport}`;
+                        `${object.destinationPort},${data.destinationport}`;
                     selectRule(ID, object);
                 }
             }
