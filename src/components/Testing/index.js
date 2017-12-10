@@ -78,11 +78,14 @@ class Testing extends Component {
 	];
 
     this.currentPage = 1;
-    this.limit = 5;
-    this.filterData = false;
+    this.limit = 10;
+    this.totalData = 0;
+    this.sortBy = {column : 'id',order : 'desc'};
+    this.searchString = '';
 
     this.state = {
-    	data: []
+    	data: [],
+      searchString : ''
     };
 
     this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this);
@@ -98,8 +101,7 @@ class Testing extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(this.props !== nextProps) {
-      this.resetFilters(nextProps);
-      this.updateData();
+      this.updateData(nextProps);
     }
   }
 
@@ -107,19 +109,35 @@ class Testing extends Component {
     this.getAllReports();
   }
 
-  getAllReports() {
-
+  getAllReports(pageNum, search, sortBy) {
+    
     const {
       getReport,
     } = this.props;
     
-    getReport(configUrl);
+    let pageId = typeof pageNum !== 'undefined' ? pageNum : this.currentPage;
+    let searchString = typeof search !== 'undefined' ? search : '';
+    let sortOrder = typeof sortBy !== 'undefined' ? sortBy : {column : 'id',order : 'desc'};
+
+    let params = {
+      page:pageId,
+      search:searchString,
+      sortBy:sortOrder,
+      limit:this.limit
+    }
+
+    getReport(`testing/reports`,'POST', params);
   }
 
-  resetFilters(props) {
-    this.currentPage = 1;
-    this.filterData = props.data;
-    this.setState({ data: props.data });
+  countTotalRecords(records) {
+    if(typeof records !== 'undefined') {
+      let totalRecords = 0;
+      for(let rec of records) {
+        totalRecords = rec.totalRecords
+      }
+      this.totalData = totalRecords;
+    }
+
   }
 
   deleteReport(id) {
@@ -128,55 +146,39 @@ class Testing extends Component {
     } = this.props;
     
     deleteReport(`testing/reports/delete/${id}`).then( () => {
-      this.getAllReports();    
+      this.getAllReports(this.currentPage, this.searchString, this.sortBy);    
     });
-
   }
 
   handlePreviousPageClick() {
     --this.currentPage;
-    this.updateData();
+    this.getAllReports(this.currentPage, this.searchString, this.sortBy);
   }
 
   handleNextPageClick() {
     ++this.currentPage;
-    this.updateData();
+    this.getAllReports(this.currentPage, this.searchString, this.sortBy);
   }
 
   handleFilterValueChange(search) {
-
-    this.resetFilters(this.props);
-
-    if(search) {
-        this.filterData = this.props.data.filter((d, j) => {
-            let match = false;
-            this.table_columns.map((column, i) => {
-                if(d[column.key] && d[column.key].toString().toLowerCase().includes(search.toLowerCase()))
-                   match = true;
-            });
-
-            return match;
-        });
-    }
-
-    this.updateData();
+    this.searchString = search;
+    this.currentPage = 1;
+    this.getAllReports(this.currentPage, this.searchString, this.sortBy);
   }
 
   handleSortOrderChange(column, order) {
-
-    this.filterData = this.filterData.sort(
-      (a, b) => {
-        return order === 'desc' ? b[column] > a[column] : a[column] > b[column];
-      }
-    );
-
-    this.updateData();
+    this.sortBy = {
+      column : column,
+      order : order
+    }
+    this.getAllReports(this.currentPage, this.searchString, this.sortBy);
+    
   }
 
-  updateData() {
-    let offset = this.limit * (this.currentPage - 1);
+  updateData(props) {
+    this.countTotalRecords(props.data)
     this.setState({
-        data : this.filterData.slice(offset, offset + this.limit)
+      data : props.data
     });
   }
   
@@ -187,7 +189,7 @@ class Testing extends Component {
     
     generateNewReport(`testing/initiate`,'POST').then( (data) => {
       NotificationManager.success(data.results, '');
-      this.getAllReports();    
+      this.getAllReports(this.currentPage, this.searchString, this.sortBy);   
     });
     
   }
@@ -224,11 +226,11 @@ class Testing extends Component {
               />
       )
   }
-    
+
+
   render() {
 
     const tableData = this.state.data;
-
     if(!tableData) {
 	    return "<p>No Data</p>";
     }
@@ -237,8 +239,7 @@ class Testing extends Component {
         <Panel title={'Reports'}>
           <div className="text-right" style={style.reportDiv}>
             <button type="button" style={style.reportBtn} className="btn btn-sm btn-primary" onClick={this.generateNewReport.bind(this)}><FontAwesome name='plus'></FontAwesome> New Report</button>
-            <button type="button" className="btn btn-xs btn-primary" onClick={this.getAllReports.bind(this)} style={style.reloadBtn}><FontAwesome name='refresh'></FontAwesome> Reload</button>
-            
+            <button type="button" className="btn btn-xs btn-primary" onClick={this.getAllReports.bind(this, this.currentPage, this.searchString, this.sortBy)} style={style.reloadBtn}><FontAwesome name='refresh'></FontAwesome> Reload</button>
           </div>
          {
           this.renderRepoprtsIfNeeded() ? this.renderRepoprtsIfNeeded() : (
@@ -257,7 +258,7 @@ class Testing extends Component {
                 onFilterValueChange={this.handleFilterValueChange}
                 onSortOrderChange={this.handleSortOrderChange}
                 page={this.currentPage}
-                count={this.filterData.length}
+                count={this.totalData}
                 rowSize={this.limit}
                 tableStyle={{
                 width: "inherit",
@@ -265,6 +266,7 @@ class Testing extends Component {
                 }}
                 tableBodyStyle={{overflowX: "scroll"}}
               />
+              
               <NotificationContainer/>
             </div>
           )
@@ -280,6 +282,7 @@ const mapStateToProps = (state, ownProps) => {
       configUrl,
       ActionKeyStore.DATA
     ]);
+
     const loader =  state.testReducer.getIn([
       configUrl,
       ActionKeyStore.IS_FETCHING
@@ -293,10 +296,11 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const actionCreators = (dispatch) => ({
-
-  getReport: (configUrl) => {
+  getReport: (configUrl, method, params) => {
     return dispatch(Actions.fetchIfNeeded(
-      configUrl
+      configUrl,
+      method,
+      params
     ));
   },
 

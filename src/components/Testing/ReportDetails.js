@@ -58,6 +58,18 @@ class ReportDetails extends Component {
                       <td ><i className="fa fa-clock-o" aria-hidden="true"></i> Completed at</td>
                       <td>{reports.completed_at}</td>
                   </tr>
+                  <tr>
+                      <td ><i className="fa fa-area-chart" aria-hidden="true"></i> Total</td>
+                      <td>{reports.total}</td>
+                  </tr>
+                  <tr>
+                      <td ><i className="fa fa-area-chart" aria-hidden="true"></i> Pass</td>
+                      <td>{reports.pass}</td>
+                  </tr>
+                  <tr>
+                      <td ><i className="fa fa-area-chart" aria-hidden="true"></i> Fail</td>
+                      <td>{reports.fail}</td>
+                  </tr>
               </tbody>
             </table>
           </div>

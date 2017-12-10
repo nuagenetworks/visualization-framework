@@ -14,14 +14,14 @@ import { ConfigurationService } from "../../../services/configurations/index";
     REPORT_EXPIRATION_DATE: "reportExpirationDate"
 
   };
-   function fetchIfNeeded(configUrl) {
+   function fetchIfNeeded(configUrl, method, params) {
 
 	return (dispatch, getState) => {
-        return dispatch(fetchReports(configUrl));
+        return dispatch(fetchReports(configUrl, method, params));
 	}
   }
 
-  function fetchReports(configUrl) {
+  function fetchReports(configUrl, method, params) {
 
     if(!configUrl) {
         throw new Error("Config url argument must be specified.");
@@ -30,7 +30,7 @@ import { ConfigurationService } from "../../../services/configurations/index";
     return (dispatch) => {
         dispatch(didStartRequest(configUrl));
 
-        return ConfigurationService.processRequest(configUrl)
+        return ConfigurationService.processRequest(configUrl, method, params)
             .then((response) => {
                 dispatch(didReceiveResponse(configUrl, response));
                 return Promise.resolve(response);
