@@ -13,8 +13,8 @@
                         {
                             "range":{
                                 "timestamp":{
-                                    "gte":"{{startTime:now-15m}}",
-                                    "lte":"{{endTime:now}}",
+                                    "gte":"now-15m",
+                                    "lte":"now",
                                     "format":"epoch_millis"
                                 }
                             }
@@ -49,8 +49,8 @@
                         "interval": "{{interval:1m}}",
                         "min_doc_count":0,
                         "extended_bounds" : {
-                            "min": "{{startTime:now-15m}}",
-                            "max": "{{endTime:now}}"
+                            "min": "now-14m",
+                            "max": "now-1m"
                         }
                     },
                     "aggs": {
