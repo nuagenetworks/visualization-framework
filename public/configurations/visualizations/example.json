@@ -16,7 +16,11 @@
         "linesColumn": ["CPU", "MEMORY",  "DISK"],
         "defaultY": {
             "source": "data2",
-            "column": "memory"
+            "column": "memory",
+            "tooltip": [
+                { "column": "memory", "label": "memory"},
+                { "column": "cpu", "label": "cpu"}
+            ]
         },
         "legend": {
             "orientation": "vertical",
