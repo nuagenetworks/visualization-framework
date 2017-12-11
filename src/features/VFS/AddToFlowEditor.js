@@ -59,10 +59,11 @@ class AddToFlowEditor extends React.Component {
         }
         this.toggleError = this.toggleError.bind(this);
         this.putConfiguration = this.putConfiguration.bind(this);
+        this.resetFieldsOnChange = this.resetFieldsOnChange.bind(this);
     }
 
     componentWillMount() {
-        this.setState({opened: true, formName: 'add-flow-editor'});
+        this.setState({opened: true, formName: 'add-flow-editor', error: true});
     }
 
     handleSelectRule = (evt) => {
@@ -138,14 +139,6 @@ class AddToFlowEditor extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const { data } = nextProps;
-
-        const { error } = nextState;
-
-        if (!data || Object.getOwnPropertyNames(data).length <= 0 || error) {
-            return false;
-        }
-
         return nextProps !== this.props || this.state !== nextState;
     }
 
@@ -213,6 +206,23 @@ class AddToFlowEditor extends React.Component {
         }
 
         this.fetchVFRulesIfNeeded(nextProps);
+        const vfrules = getNetworkItems('virtualfirewallrules', nextProps);
+        if (vfrules && vfrules.data && vfrules.data.length > 0) {
+            this.toggleError(false);
+        }
+        else {
+            this.toggleError(true);
+        }
+    }
+
+    resetFieldsOnChange = (value, ...fields) => {
+        const { changeFieldValue } = this.props;
+        const { formName } = this.state;
+        if (value) {
+            if (fields) {
+                fields.forEach(fieldName => changeFieldValue(formName, fieldName, null))
+            }
+        }
     }
 
     toggleError = (flag) => {
@@ -314,11 +324,13 @@ class AddToFlowEditor extends React.Component {
                     label: 'Source',
                     component: Select,
                     options: NetworkTypeOptions,
+                    onChange:(e) => this.resetFieldsOnChange(e, 'locationID')
                 }} secondColumnProps={{
                     name: 'networkType',
                     label: 'Destination',
                     component: Select,
                     options: NetworkTypeOptions,
+                    onChange:(e) => this.resetFieldsOnChange(e, 'networkID')
                 }} />
                 { (srcList || destList) &&  <TwoColumnRow firstColumnProps={srcList} secondColumnProps={destList} /> }
 
