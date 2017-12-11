@@ -83,12 +83,10 @@ class MultiLineGraph extends XYGraph {
         let filterDatas = [];
         data.forEach((d) => {
             legendsData.forEach((ld) => {
-              if(d[ld['key']] !== null) {
                 filterDatas.push(Object.assign({
                     yColumn: d[ld['key']] !== null ? d[ld['key']] : 0,
                     columnType: ld['key']
                 }, d));
-              }
             });
         });
 
