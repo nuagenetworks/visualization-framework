@@ -173,14 +173,10 @@ class AreaGraph extends XYGraph {
 
       data.forEach((d) => {
         this.getYColumns().forEach((ld, index) => {
-
-            if(d[ld.key] !== null) {
-              this.data.push(Object.assign({
-                  [this.yValue]: d[ld.key],
-                  [this.yKey]: ld.key,
-              }, d));
-            }
-
+          this.data.push(Object.assign({
+              [this.yValue]: d[ld.key] !== null ? d[ld.key] : 0,
+              [this.yKey]: ld.key,
+          }, d));
         })
       })
     }
