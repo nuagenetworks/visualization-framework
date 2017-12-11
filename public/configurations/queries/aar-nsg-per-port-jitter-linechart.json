@@ -13,7 +13,7 @@
                         {
                             "range":{
                                 "timestamp":{
-                                    "gte":"{{startTime:now-24h}}",
+                                    "gte":"{{startTime:now-15m}}",
                                     "lte":"{{endTime:now}}",
                                     "format":"epoch_millis"
                                 }
@@ -46,7 +46,12 @@
                 "ts": {
                     "date_histogram": {
                         "field": "timestamp",
-                        "interval": "{{interval:1h}}"
+                        "interval": "{{interval:1m}}",
+                        "min_doc_count":0,
+                        "extended_bounds" : {
+                            "min": "{{startTime:now-15m}}",
+                            "max": "{{endTime:now}}"
+                        }
                     },
                     "aggs": {
                         "Jitter": {
