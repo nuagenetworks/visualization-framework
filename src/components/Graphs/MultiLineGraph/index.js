@@ -155,6 +155,27 @@ class MultiLineGraph extends XYGraph {
         xScale.range([0, availableWidth]);
         yScale.range([availableHeight, 0]);
 
+        // calculate new range from defaultY
+        let horizontalLine,
+            defaultYvalue,
+            horizontalLineData
+
+        if(defaultY) {
+
+            defaultYvalue = defaultY
+            let [startRange, endRange] = yScale.domain()
+
+            if(typeof defaultY === 'object' && defaultY.source && defaultY.column && this.props[defaultY.source]) {
+                horizontalLineData = this.props[defaultY.source][0] || {}
+                defaultYvalue = horizontalLineData[defaultY.column] || null
+            }
+
+            startRange = startRange > defaultYvalue ? defaultYvalue - 1 : startRange
+            endRange = endRange < defaultYvalue ? defaultYvalue + 1 : endRange
+            yScale.domain([startRange, endRange]);
+
+        }
+
         const xAxis = axisBottom(xScale)
           .tickSizeInner(xTickGrid ? -availableHeight : xTickSizeInner)
           .tickSizeOuter(xTickSizeOuter);
@@ -236,26 +257,39 @@ class MultiLineGraph extends XYGraph {
                     />
         }
 
-        let horizontalLine;
-        if(defaultY) {
+        //draw horizontal line
+        if(defaultYvalue) {
+            let y = yScale(defaultYvalue),
+            height = 20,
+            tooltip = []
 
-            let value = defaultY
-            if(typeof defaultY === 'object') {
-                value = defaultY.source && defaultY.column && this.props[defaultY.source]
-                 ? this.props[defaultY.source][0][defaultY.column]
-                 : null
+            if(horizontalLineData && defaultY.tooltip) {
+                tooltip = this.tooltipProps(Object.assign({}, horizontalLineData ,{tooltipName: 'defaultY'}))
             }
-            if(value) {
-                horizontalLine =  <line
-                    x1="0"
-                    y1={yScale(value)}
-                    x2={availableWidth}
-                    y2={yScale(value)}
-                    stroke={ defaultYColor ? defaultYColor : "rgb(255,0,0)"}
-                    strokeWidth="1.5"
-                    opacity="0.7"
-                />
-            }
+
+            horizontalLine = (
+                <g>
+                    <rect
+                        height={height}
+                        width={availableWidth}
+                        x="0"
+                        y={ y - height/2}
+                        opacity="0"
+                        { ...tooltip }
+                        data-offset="{ 'left' : 0, 'bottom' : 0}"
+                    />
+                    <line
+                        x1="0"
+                        y1={y}
+                        x2={availableWidth}
+                        y2={y}
+                        stroke={ defaultYColor ? defaultYColor : "rgb(255,0,0)"}
+                        strokeWidth="1.5"
+                        opacity="0.7"
+                        className="horizontalLine"
+                    />
+                </g>
+            )
         }
 
         return (
@@ -275,7 +309,6 @@ class MultiLineGraph extends XYGraph {
                             key="yAxis"
                             ref={ (el) => select(el).call(yAxis) }
                         />
-                        <g> { horizontalLine } </g>
                         <g>
                             {
                                 legendsData.map((d, i) =>
@@ -316,6 +349,7 @@ class MultiLineGraph extends XYGraph {
                               </g>
                           )}
                         </g>
+                        { horizontalLine }
                         {
                             brushEnabled &&
                             <g

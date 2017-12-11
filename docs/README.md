@@ -295,7 +295,19 @@ Display one or multiple lines
 ![multiline-chart](https://cloud.githubusercontent.com/assets/1447243/21205460/4672e4a6-c211-11e6-88a5-269bc32d2140.png)
 
 - **linesColumn** attribute name in your results to display line value
-- **defaultY** (string | object) default yAxis value used to draw straight horizontal line to show cut off value. It can be object which define data `source` and `column` to get data from another query
+- **defaultY** (string | object) default yAxis value used to draw straight horizontal line to show cut off value. It can be object which define data `source` and `column` to get data from another query and you may define separate `tooltip` for this staright line from data `source`. Example - 
+```javascript
+ {
+     `"defaultY": {
+         "source": "data2",
+         "column": "memory",
+         "tooltip": [
+             { "column": "memory", "label": "memory"},
+             { "column": "cpu", "label": "cpu"}
+         ]
+     }
+ }
+ ```
 
 See x-axis and y-axis sections in BarGraph for more information
 
