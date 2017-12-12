@@ -37,7 +37,7 @@
             },
             "dateParams": {
                 "reference": "nsgSlaDetails",
-                "duration": 60000000,
+                "duration": 600000,
                 "column": "date_histo"
             } 
         }

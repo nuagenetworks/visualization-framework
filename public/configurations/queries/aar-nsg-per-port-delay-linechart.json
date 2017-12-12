@@ -13,8 +13,8 @@
                         {
                             "range":{
                                 "timestamp":{
-                                    "gte":"now-15m",
-                                    "lte":"now",
+                                    "gte":"{{nsgSlaDetailsstartTime:now-20m}}",
+                                    "lte":"{{nsgSlaDetailsendTime:now}}",
                                     "format":"epoch_millis"
                                 }
                             }
@@ -49,8 +49,8 @@
                         "interval": "{{interval:1m}}",
                         "min_doc_count":0,
                         "extended_bounds" : {
-                            "min": "now-14m",
-                            "max": "now-1m"
+                            "min" : "{{nsgSlaDetailsstartTime:now-20m}}",
+                            "max" : "{{nsgSlaDetailsendTime:now}}"
                         }
                     },
                     "aggs": {
