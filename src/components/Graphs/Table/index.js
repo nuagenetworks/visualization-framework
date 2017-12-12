@@ -161,7 +161,7 @@ export default class Table extends AbstractGraph {
                               content={
                                 [
                                   fullText,
-                                  <CopyToClipboard text={fullText} key={`clipboard${j}${i}`}>
+                                  <CopyToClipboard text={fullText ? fullText : ''} key={`clipboard${j}${i}`}>
                                     <button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button>
                                   </CopyToClipboard>,
                                 ]

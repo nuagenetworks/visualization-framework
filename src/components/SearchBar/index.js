@@ -31,6 +31,7 @@ export default class SearchBar extends React.Component {
 
     componentDidMount () {
         const { query } = this.state
+        console.log = () => {}
 
         if(query) {
             this.refs.filterBox.onSubmit(query)
@@ -44,7 +45,6 @@ export default class SearchBar extends React.Component {
 
     componentDidUpdate () {
         const { query } = this.state
-
         this.refs.filterBox.onSubmit(query)
     }
 
