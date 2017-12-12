@@ -23,14 +23,13 @@
         "tooltip": [
             { "column": "date_histo", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
             { "column": "application", "label": "Application" },
-            { "column": "slastatus", "label": "Status" },
-            { "column": "apmGroup", "label": "ApmGroup" }
+            { "column": "slastatus", "label": "Status" }
         ]
    },
    "listeners": [
         {
             "params": {
-                "appName": "application",
+                "app": "application",
                 "queryStartTime": "date_histo",
                 "apmGroup": "apmGroup",
                 "slastatus": "slastatus",
@@ -38,7 +37,7 @@
             },
             "dateParams": {
                 "reference": "nsgSlaDetails",
-                "duration": 60000000,
+                "duration": 600000,
                 "column": "date_histo"
             } 
         }
