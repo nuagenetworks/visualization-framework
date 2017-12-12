@@ -54,6 +54,11 @@ const style = {
         fontSize: "1.1em",
         fontWeight: 300,
         background: theme.palette.greyLightColor,
+    },
+    menuRight: {
+        margin: "14px",
+        textAlign: "center",
+        fontSize: "14px"
     }
 }
 
