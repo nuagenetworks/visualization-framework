@@ -33,7 +33,7 @@
                 }
             },
             "aggs": {
-                "{{NsgType:SourceNSG}}": {
+                "NSG": {
                     "terms": {
                         "field": "{{NsgType:SourceNSG}}",
                         "order": {

@@ -1,18 +1,18 @@
 {
     "id": "aar-nsg-per-port-jitter-linechart",
     "graph": "MultiLineGraph",
-    "title": "SLA Jitter",
+    "title": "SLA Jitter for {{app}}",
     "description": "",
     "author": "Bharat Mukheja",
     "creationDate": "11/17/2017",
     "data": {
         "dateHistogram": true,
         "xColumn": "ts",
-        "yColumn": ["Jitter","Configured SLA Jitter"],
+        "yColumn": ["Jitter"],
         "yTickFormat": ".2s",
         "xLabel": "Time",
         "yLabel": "Jitter",
-        "linesColumn":["Jitter","Configured SLA Jitter"],
+        "linesColumn":["Jitter"],
         "stroke": {
           "color": "#f76159",
           "width": "2px"

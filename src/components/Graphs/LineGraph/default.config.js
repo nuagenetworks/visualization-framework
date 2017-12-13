@@ -18,5 +18,6 @@ export const properties = {
         theme.palette.yellowDarkColor,
     ],
     zeroStart: true,
-    circleRadius: 5
+    circleRadius: 5,
+    defaultYColor: theme.palette.greenColor
 }
