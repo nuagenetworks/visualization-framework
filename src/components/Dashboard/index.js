@@ -107,7 +107,8 @@ export class DashboardView extends React.Component {
     renderNavigationBarIfNeeded() {
         const {
             configuration,
-            context
+            context,
+            filterContext
         } = this.props;
 
         const links = configuration.get("links");
@@ -116,6 +117,7 @@ export class DashboardView extends React.Component {
             return;
 
         const currentUrl = window.location.pathname;
+        let contextWithFilter = Object.assign({}, context, filterContext)
 
         return (
             <div style={style.navigationContainer}>
@@ -128,7 +130,7 @@ export class DashboardView extends React.Component {
                         return <li key={index}
                                    style={highlight}
                                    >
-                                    <Link to={{ pathname:targetURL, query: context}}
+                                    <Link to={{ pathname:targetURL, query: contextWithFilter}}
                                     style={style.noneTextDecoration}
                                     >
                                         {link.get("label")}
@@ -225,6 +227,8 @@ export class DashboardView extends React.Component {
 
 const mapStateToProps = (state, ownProps) => ({
     context: state.interface.get(InterfaceActionKeyStore.CONTEXT),
+
+    filterContext: state.interface.get(InterfaceActionKeyStore.FILTER_CONTEXT),
 
     configuration: state.configurations.getIn([
         ConfigurationsActionKeyStore.DASHBOARDS,

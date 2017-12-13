@@ -44,7 +44,9 @@
                     "default": true,
                     "forceOptions": {
                         "interval": "1m",
-                        "prevStartTime": "now-30m"
+                        "prevStartTime": "now-30m",
+                        "unit": "m",
+                        "duration": "15"
                     }
                 }
             ]

@@ -6,7 +6,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunkMiddleware from "redux-thunk";
 import createLogger from "redux-logger";
 import { reducer as formReducer } from 'redux-form';
-import { updateContextMiddleware, updateVisualizationTypeMiddleware, updateConfigurationMiddleware } from "./middlewares";
+import { updateContextMiddleware, updateVisualizationTypeMiddleware } from "./middlewares";
 
 import configurationsReducer from "../services/configurations/redux/reducer";
 import ESReducer from "../configs/nuage/elasticsearch/redux/reducer";
@@ -44,8 +44,7 @@ const createStoreWithRouterAndMiddleware = composeWithDevTools(
         thunkMiddleware,
         loggerMiddleware,
         updateContextMiddleware,
-        updateVisualizationTypeMiddleware,
-        updateConfigurationMiddleware
+        updateVisualizationTypeMiddleware
     )
 )(createStore);
 
