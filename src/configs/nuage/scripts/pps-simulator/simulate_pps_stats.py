@@ -527,9 +527,12 @@ class SimulateProbeStats(object):
                         probe_record["MonitorPayload"] = perf_mon["monitor_payload"]
                         probe_record["MonitorProbeInterval"] = perf_mon["probe_interval"]
                         probe_record["MonitorProbeNoOfPackets"] = perf_mon["probe_num_pkts"]
-                        probe_record["AvgDelay"] = avg_latency
-                        probe_record["AvgJitter"] = avg_jitter
-                        probe_record["AvgPktLoss"] = avg_pktloss
+                        probe_record["AvgDelay"] = float(avg_latency)
+                        probe_record["AvgJitter"] = float(avg_jitter)
+                        probe_record["AvgPktLoss"] = float(avg_pktloss)
+                        probe_record["ConfigAvgDelay"] = 200.0
+                        probe_record["ConfigAvgJitter"] = 50.0
+                        probe_record["ConfigAvgPktLoss"] = 50.0
                         probe_record["Domain"] = domains[domain]
                         probe_record["EnterpriseName"] = self.def_ent_name
                         probe_record["ControlSessionState"] = self.contro_states[0]
@@ -542,16 +545,16 @@ class SimulateProbeStats(object):
 
                         if firstTS and initPacket == 1:
                             probe_record["ControlSessionState"] = self.contro_states[2]
-                            probe_record["AvgDelay"] = "Null"
-                            probe_record["AvgJitter"] = "Null"
-                            probe_record["AvgPktLoss"] = "Null"
+                            del probe_record["AvgDelay"]
+                            del probe_record["AvgJitter"]
+                            del probe_record["AvgPktLoss"]
                             initPacket = 0
                         else:
                             if get_random_with_prob(control_down_prob):
                                 probe_record["ControlSessionState"] = self.contro_states[3]
-                                probe_record["AvgDelay"] = "Null"
-                                probe_record["AvgJitter"] = "Null"
-                                probe_record["AvgPktLoss"] = "Null"
+                                del probe_record["AvgDelay"]
+                                del probe_record["AvgJitter"]
+                                del probe_record["AvgPktLoss"]
 
                         json.dump(probe_record, probestats,
                                   default=json_serial)

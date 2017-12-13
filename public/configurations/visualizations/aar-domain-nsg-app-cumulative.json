@@ -1,0 +1,43 @@
+{
+    "id": "aar-domain-nsg-app-cumulative",
+    "graph": "PieGraph",
+    "title": "Cumulative {{trafficType}} Data Usage on NSG {{nsg}} for {{app}} App ",
+    "description": "Domain Level. Shows domain wide cumulative data usage per nsg for an app.",
+    "author": "Bharat Mukheja",
+    "creationDate": "10/15/2017",
+    "data": {
+        "colors": [
+            "#7da3f7",
+            "#fec26a",
+            "#e78ac3",
+            "#f79e99",
+            "#b3d645"
+        ],
+        "otherOptions": {
+            "label": "Others",
+            "limit": 85
+        },
+        "tooltip": [
+            { "column": "Ip", "label": "IP" },
+            { "column": "SumofBytes", "label": "Total Bytes", "format": "s"}
+        ],
+        "percentages": true,
+        "labelColumn": "Ip",
+        "sliceColumn": "SumofBytes",
+        "percentagesFormat": ",.1%",
+        "pieLabelRadius": 0.55,
+        "pieOuterRadius": 0.95,
+        "legend": {
+            "show": true,
+            "orientation": "vertical",
+            "circleSize": 4,
+            "labelOffset": 3
+        }
+    },
+    "listeners": [{
+      "params": {
+          "Ip": "Ip"
+      }
+    }],
+    "query": "aar-domain-nsg-app-cumulative"
+}

@@ -42,7 +42,7 @@
                                     "Domain": {
                                         "query": {
                                             "term": {
-                                                "Domain": "{{domainName:Domain1}}"
+                                                "{{domainType:Domain}}": "{{domainName:Domain1}}"
                                             }
                                         }
                                     }

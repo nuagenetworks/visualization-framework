@@ -3,16 +3,17 @@ import { theme } from "../../../theme";
 export const properties = {
     width: "100%",
     padding: 5,
-    limit: 5,
+    limit: 100,
 
     selectable: true,
-    multiSelectable: true,
+    multiSelectable: false,
     showCheckboxes: false,
     enableSelectAll: true,
 
     rowHeight: 40,
     colors: [theme.palette.greyLighterColor, theme.palette.whiteColor],
     fontColor: theme.palette.blackLightColor,
+    highlightColor: theme.palette.greenLighterColor,
     border: {
         top: "solid 1px " + theme.palette.greyLightColor,
         left: "0",

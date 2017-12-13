@@ -1,0 +1,31 @@
+{
+    "id": "aar-nsg-all-app-usage",
+    "graph": "PieGraph",
+    "title": "NSG Applications",
+    "description":"Usage chart for all the applications discovered in the NSG",
+    "author": "Bharat Mukheja",
+    "creationDate": "11/31/2017",
+    "data": {
+        "sliceColumn": "Sum of MB",
+        "labelColumn": "L7Classification",
+        "otherOptions": {
+            "label": "Others",
+            "limit": 85
+        },
+        "tooltip": [
+            { "column": "L7Classification", "label": "L7 Classification" },
+            { "column": "Sum of MB", "format": ",.2s"}
+        ],
+        "percentages": true,
+        "percentagesFormat": ",.1%",
+        "pieLabelRadius": 0.55,
+        "pieOuterRadius": 0.95,
+        "legend": {
+            "show": true,
+            "orientation": "vertical",
+            "circleSize": 4,
+            "labelOffset": 2
+        }
+    },
+    "query": "aar-nsg-all-app-usage"
+}
