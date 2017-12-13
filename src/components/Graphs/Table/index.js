@@ -182,7 +182,7 @@ class Table extends AbstractGraph {
                               content={
                                 [
                                   fullText,
-                                  <CopyToClipboard text={fullText}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>,
+                                  <CopyToClipboard text={fullText ? fullText : ''}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>,
                                 ]
                               }
                               styles={tooltipStyle}>
@@ -377,6 +377,7 @@ class Table extends AbstractGraph {
     render() {
         const {
             height,
+            data
         } = this.props;
 
         const {
@@ -397,7 +398,7 @@ class Table extends AbstractGraph {
             return "<p>No Data</p>";
         }
 
-        let showHeader = (this.filterData && this.filterData.length <= limit && hidePagination !== false) ? false : true,
+        let showHeader = (data.length <= limit && hidePagination !== false) ? false : true,
           tableHeight  = showHeader ? `${height - 100}px` : height
 
         return (
