@@ -182,7 +182,7 @@ class Table extends AbstractGraph {
                               content={
                                 [
                                   fullText,
-                                  <CopyToClipboard text={fullText}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>,
+                                  <CopyToClipboard text={fullText ? fullText : ''}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>,
                                 ]
                               }
                               styles={tooltipStyle}>
