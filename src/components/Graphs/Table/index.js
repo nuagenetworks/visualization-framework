@@ -377,6 +377,7 @@ class Table extends AbstractGraph {
     render() {
         const {
             height,
+            data
         } = this.props;
 
         const {
@@ -397,7 +398,7 @@ class Table extends AbstractGraph {
             return "<p>No Data</p>";
         }
 
-        let showHeader = (this.filterData && this.filterData.length <= limit && hidePagination !== false) ? false : true,
+        let showHeader = (data.length <= limit && hidePagination !== false) ? false : true,
           tableHeight  = showHeader ? `${height - 100}px` : height
 
         return (
