@@ -46,7 +46,7 @@
                         "interval": "1m",
                         "prevStartTime": "now-30m",
                         "unit": "m",
-                        "duration": 15
+                        "duration": "15"
                     }
                 }
             ]

@@ -7,6 +7,7 @@ initialState = initialState.set(ActionKeyStore.MAIN_MENU_OPENED, false);
 initialState = initialState.set(ActionKeyStore.NAV_BAR_TITLE, "");
 initialState = initialState.set(ActionKeyStore.NAV_BAR_TITLE_ICON, false);
 initialState = initialState.set(ActionKeyStore.CONTEXT, {});
+initialState = initialState.set(ActionKeyStore.FILTER_CONTEXT, {});
 initialState = initialState.set(ActionKeyStore.HASLINKS, false);
 initialState = initialState.set(ActionKeyStore.HEADERCOLOR, Map());
 initialState = initialState.set(ActionKeyStore.UPDATEPAGE, "");
@@ -26,6 +27,11 @@ function setTitleIcon(state, aTitleIcon) {
 function updateContext(state, aContext) {
     let currentContext = state.get(ActionKeyStore.CONTEXT);
     return state.set(ActionKeyStore.CONTEXT,  Object.assign({}, currentContext, aContext));
+}
+
+function filterContext(state, aContext) {
+    let currentContext = state.get(ActionKeyStore.FILTER_CONTEXT);
+    return state.set(ActionKeyStore.FILTER_CONTEXT, Object.assign({}, currentContext, aContext));
 }
 
 function updateVisualizationType(state, aType) {
@@ -58,6 +64,9 @@ function interfaceReducer(state = initialState, action) {
 
         case ActionTypes.ACTION_UPDATE_CONTEXT:
             return updateContext(state, action.context);
+
+        case ActionTypes.ACTION_FILTER_CONTEXT:
+            return filterContext(state, action.context);
 
         case ActionTypes.ACTION_UPDATE_VISUALIZATION_TYPE:
             return updateVisualizationType(state, action.visualizationType);

@@ -91,7 +91,6 @@ export class FiltersToolBarView extends React.Component {
         };
 
         if(Object.keys(configContexts).length !== 0) {
-            updateContext(configContexts)
             this.props.goTo(window.location.pathname, Object.assign({}, context, configContexts))
         }
     }
@@ -137,14 +136,12 @@ export class FiltersToolBarView extends React.Component {
 
                                     {configOptions.options.map((option, index) => {
 
-                                        let queryParams = Object.assign({}, context, {
-                                            [paramName]: option.value
-                                        });
+                                        let queryParams = {};
 
                                         let forceOptions = option.forceOptions;
 
                                         if (forceOptions)
-                                            queryParams = Object.assign({}, queryParams, this.updateForceOptionContext(forceOptions, configOptions.append));
+                                            queryParams = Object.assign({}, {[paramName]: option.value}, this.updateForceOptionContext(forceOptions, configOptions.append));
 
                                         return (
                                             <MenuItem
@@ -153,7 +150,7 @@ export class FiltersToolBarView extends React.Component {
                                                 primaryText={option.label}
                                                 style={style.menuItem}
                                                 disabled={option.disabled}
-                                                onTouchTap={() => { this.props.goTo(window.location.pathname, queryParams);}}
+                                                onTouchTap={() => { this.props.saveFilterContext(queryParams); this.props.goTo(window.location.pathname, Object.assign({}, context, queryParams));}}
                                                 />
                                         )
                                     })}
@@ -184,6 +181,9 @@ const actionCreators = (dispatch) => ({
 
     updateContext: function(context) {
         dispatch(InterfaceActions.updateContext(context));
+    },
+    saveFilterContext: function(context) {
+        dispatch(InterfaceActions.filterContext(context));
     }
 
 });
