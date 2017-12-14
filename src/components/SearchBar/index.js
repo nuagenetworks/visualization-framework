@@ -27,6 +27,10 @@ export default class SearchBar extends React.Component {
         } = this.props
         
         this.autoCompleteHandler = new AutoCompleteHandler(data, options)
+        this.onChange = this.onChange.bind(this)
+        this.onParseOk = this.onParseOk.bind(this)
+
+        this.setTimeout = null
     }
 
     componentDidMount () {
@@ -62,10 +66,14 @@ export default class SearchBar extends React.Component {
             columns = false
         } = this.props
 
-        const filteredData = new AdvancedResultProcessing(options, columns).process(data, expressions)
-        this.props.handleSearch(filteredData)
+        clearTimeout(this.setTimeout)
+
+        this.setTimeout = setTimeout(() => {
+            const filteredData = new AdvancedResultProcessing(options, columns).process(data, expressions)
+            this.props.handleSearch(filteredData)
+        }, 1000)
     }
-    
+
     renderIcon () {
         var style = {
             marginTop: 10,
@@ -91,11 +99,11 @@ export default class SearchBar extends React.Component {
             <div className="filter">
                 <ReactFilterBox
                     ref="filterBox"
-                    onChange={this.onChange.bind(this)}
+                    onChange={this.onChange}
                     autoCompleteHandler={this.autoCompleteHandler}
                     query={query}
                     options={options}
-                    onParseOk={this.onParseOk.bind(this) }
+                    onParseOk={this.onParseOk}
                 />
 
                 <div className="filter-icon">
