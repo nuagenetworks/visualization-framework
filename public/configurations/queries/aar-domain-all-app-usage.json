@@ -21,6 +21,11 @@
                         },
                         {
                             "term": {
+                                "{{zeroBytesType:EgressBytes}}": 0
+                            }
+                        },
+                        {
+                            "term": {
                                 "EnterpriseName": "{{enterpriseName:test_org}}"
                             }
                         },
@@ -43,7 +48,7 @@
                     "aggs":{
                         "Sum of MB":{
                             "sum":{
-                                "field":"TotalBytesCount"
+                                "field":"{{bytesType:IngressBytes}}"
                             }
                         }
                     }

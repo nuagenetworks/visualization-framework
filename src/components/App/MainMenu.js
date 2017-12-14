@@ -75,14 +75,14 @@ class MainMenuView extends React.Component {
             return;
 
         const targetedDashboard = visualizationType === "VSS" ? "vssDomainFlow" : "aarDomain";
-        const domainType = "nuage_metadata.domainName"
+        const domainType = visualizationType === "VSS" ? "nuage_metadata.domainName" : "Domain";
 
         return (
             <div>
                 {domains.map((domain) => {
 
 
-                    let queryParams = Object.assign({}, context, {domainName: domain.name, domainType: domainType});
+                    let queryParams = Object.assign({}, context, {domainName: domain.name, domainType: domainType, domainID: domain.ID});
 
                     return (
                         <ListItem
@@ -112,13 +112,13 @@ class MainMenuView extends React.Component {
             return;
 
         const targetedDashboard = visualizationType === "VSS" ? "vssDomainFlow" : "aarDomain";
-        const domainType = "nuage_metadata.l2domainName"
+        const domainType = visualizationType === "VSS" ? "nuage_metadata.l2domainName" : "L2Domain";
 
         return (
             <div>
                 {l2Domains.map((l2Domain) => {
 
-                    let queryParams = Object.assign({}, context, {domainName: l2Domain.name, domainType: domainType});
+                    let queryParams = Object.assign({}, context, {domainName: l2Domain.name, domainType: domainType, domainID: l2Domain.ID});
 
                     return (
                         <ListItem

@@ -22,5 +22,34 @@
             "label": "Detail View",
             "url": "/dashboards/aarEnterpriseDetail"
         }
-    ]
+    ],
+    "filterOptions": {
+        "Traffic Type": {
+            "parameter": "trafficType",
+            "default": "Upload",
+            "options": [
+                {
+                    "label": "Upload",
+                    "value": "Upload",
+                    "default": true,
+                    "forceOptions": {
+                        "bytesType": "IngressBytes",
+                        "zeroBytesType":"EgressBytes",
+                        "IpType": "SrcIp",
+                        "NsgType":"SourceNSG"
+                    }
+                },
+                {
+                    "label": "Download",
+                    "value": "Download",
+                    "forceOptions": {
+                        "bytesType": "EgressBytes",
+                        "zeroBytesType":"IngressBytes",
+                        "IpType": "DstIp",
+                        "NsgType":"DestinationNSG"
+                    }
+                }
+            ]
+        }
+    }
 }

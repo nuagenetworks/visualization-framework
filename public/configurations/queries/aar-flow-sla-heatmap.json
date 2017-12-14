@@ -37,12 +37,12 @@
                                 },
                                 {
                                     "term": {
-                                        "SourceNSG":"{{snsg:ovs-1}}"
+                                        "SourceNSG":"{{snsg}}"
                                      }
                                 },
                                 {
                                     "term":{
-                                        "DestinationNSG":"{{dnsg:ovs-2}}"
+                                        "DestinationNSG":"{{dnsg}}"
                                      }
                                 }
                             ]
@@ -56,16 +56,30 @@
                         "field": "timestamp",
                         "interval": "{{heatmapinterval:30s}}"
                     },
-                    "aggs": {
-                        "application": {
+                    "aggs":{
+                        "apmGroup":{
                             "terms": {
-                                "field": "Application"
+                                "field": "APMGroup"
                             },
                             "aggs": {
-                                "slastatus": {
+                                "appID": {
                                     "terms": {
-                                        "size": 1,
-                                        "field": "SlaStatus"
+                                        "field": "AppID"
+                                    },
+                                    "aggs": {
+                                        "application": {
+                                            "terms": {
+                                                "field": "Application"
+                                            },
+                                            "aggs": {
+                                                "slastatus": {
+                                                    "terms": {
+                                                        "size": 1,
+                                                        "field": "SlaStatus"
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }

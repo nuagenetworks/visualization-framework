@@ -27,10 +27,5 @@
             "labelOffset": 2
         }
     },
-    "listeners": [{
-      "params": {
-          "app": "L7Classification"
-      }
-    }],
     "query": "aar-nsg-all-app-usage"
 }

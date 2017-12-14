@@ -9,6 +9,7 @@ const columnAccessor = ({ column, format, timeFormat, totalCharacters}) => {
     // Generate the accessor for nested values (e.g. "foo.bar").
     const keys = column.split(".");
     const value = (d) => keys.reduce((d, key) => d[key], d);
+    
     // Apply number and date formatters.
     if(format){
         const formatter = d3.format(format);
@@ -18,7 +19,7 @@ const columnAccessor = ({ column, format, timeFormat, totalCharacters}) => {
         return (d) => formatter(new Date(value(d)));
     } else if(totalCharacters) {
         return (d, showTooltip) => {
-            return showTooltip
+            return showTooltip || !value(d)
               ? value(d)
               : (
                   value(d).length > totalCharacters

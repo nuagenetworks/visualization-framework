@@ -36,7 +36,7 @@
                 "apps": {
                     "terms": {
                         "field": "nuage_metadata.l7ApplicationName",
-                        "size": 0,
+                        "size": 100,
                         "order": {
                             "SumOf": "desc"
                         }
