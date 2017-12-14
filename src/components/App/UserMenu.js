@@ -1,5 +1,4 @@
 import React from 'react'
-import style from "./styles"
 import FontAwesome from "react-fontawesome";
 
 class UserMenuView extends React.Component {

@@ -6,7 +6,6 @@ import AbstractGraph from "../AbstractGraph"
 import columnAccessor from "../../../utils/columnAccessor"
 import CopyToClipboard from 'react-copy-to-clipboard'
 import {Tooltip} from 'react-lightweight-tooltip'
-import * as d3 from 'd3'
 
 import tooltipStyle from './tooltipStyle'
 import "./style.css"
@@ -163,6 +162,10 @@ class Table extends AbstractGraph {
             highlight,
             highlightColor
         } = this.getConfiguredProperties();
+
+        if(!columns)
+            return []
+
         const accessors = this.getAccessor(columns);
         const tooltipAccessor = this.getTooltipAccessor(columns);
 
@@ -179,16 +182,16 @@ class Table extends AbstractGraph {
                     let fullText = tooltipAccessor[i](d, true);
                     columnData = <div>
                             <Tooltip key={`tooltip_${j}_${i}`}
-                              content={
+                            content={
                                 [
-                                  fullText,
-                                  <CopyToClipboard text={fullText ? fullText : ''}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>,
+                                fullText,
+                                <CopyToClipboard text={fullText ? fullText : ''}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>,
                                 ]
-                              }
-                              styles={tooltipStyle}>
-                              <a className="pointer">
-                                 {columnData}
-                              </a>
+                            }
+                            styles={tooltipStyle}>
+                            <a className="pointer">
+                                {columnData}
+                            </a>
                             </Tooltip>
                         </div>
                 }
@@ -336,17 +339,19 @@ class Table extends AbstractGraph {
         return selected;
     }
 
-    renderSearchBarIfNeeded(showHeader) {
+    renderSearchBarIfNeeded() {
         const {
-            searchBar
+            searchBar,
+            searchText
         } = this.getConfiguredProperties();
 
-        if(searchBar === false || !showHeader)
+        if(searchBar === false)
            return;
 
         return (
           <SearchBar
             data={this.props.data}
+            searchText={searchText}
             options={this.getHeaderData()}
             handleSearch={this.handleSearch}
             columns={this.getColumns()}
@@ -390,27 +395,26 @@ class Table extends AbstractGraph {
 
         let tableData = this.getTableData(this.getColumns())
 
+        if(!tableData || !tableData.length) {
+            return
+        }
+
         // overrite style of highlighted selected row
         tableData = this.removeHighlighter(tableData)
 
-
-        if(!tableData) {
-            return "<p>No Data</p>";
-        }
-
-        let showHeader = (data.length <= limit && hidePagination !== false) ? false : true,
-          tableHeight  = showHeader ? `${height - 100}px` : height
+        let showFooter = (data.length <= limit && hidePagination !== false) ? false : true,
+          heightMargin  =  showFooter ?  100 : 70
 
         return (
             <div ref={(input) => { this.container = input; }}
                 onContextMenu={this.handleContextMenu}
                 >
-                {this.renderSearchBarIfNeeded(showHeader)}
+                {this.renderSearchBarIfNeeded()}
                 <DataTables
                     columns={this.getHeaderData()}
                     data={tableData}
                     showHeaderToolbar={false}
-                    showFooterToolbar={showHeader}
+                    showFooterToolbar={showFooter}
                     selectable={selectable}
                     multiSelectable={multiSelectable}
                     selectedRows={this.state.selected}
@@ -428,7 +432,7 @@ class Table extends AbstractGraph {
                     tableHeaderColumnStyle={Object.assign({}, style.headerColumn, {fontSize: this.state.fontSize})}
                     tableRowStyle={style.row}
                     tableRowColumnStyle={Object.assign({}, style.rowColumn, {fontSize: this.state.fontSize})}
-                    tableBodyStyle={Object.assign({}, style.body, {height: tableHeight})}
+                    tableBodyStyle={Object.assign({}, style.body, {height: `${height - heightMargin}px`})}
                     footerToolbarStyle={style.footerToolbar}
                 />
             </div>

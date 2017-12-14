@@ -1,11 +1,12 @@
 const tableStyle = {
-    defaultFontsize: 12,
+    defaultFontsize: 10,
     table: {
         width: "inherit",
         minWidth: "100%"
     },
     body: {
-        overflow: "auto"
+        overflowY: "auto",
+        overflowX: "hidden"
     },
     headerColumn: {
         fontSize: "12px", 
