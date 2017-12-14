@@ -1,11 +1,10 @@
 export const defaultFilterOptions = {
     "Time interval": {
         "parameter": "startTime",
-        "default": "now-15m",
+        "default": "now-24h",
         "options": [
             {
                 "label": "Last 15 min",
-                "default": true,
                 "value": "now-15m",
                 "forceOptions": {
                     "interval": "1m",
@@ -17,6 +16,7 @@ export const defaultFilterOptions = {
             {
                 "label": "Last 24h",
                 "value": "now-24h",
+                "default": true,
                 "forceOptions": {
                     "interval": "1h",
                     "prevStartTime": "now-48h",
