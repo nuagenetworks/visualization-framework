@@ -26,7 +26,7 @@ const getEntityNameForID = (ID, entityCollection) => {
 const buildVFRuleOptions = (options, srcEntity, destEntity) => {
     if (options && options.data && options.data.length > 0) {
         return options.data.map(item => {
-            const desc = item.description ? item.description : '';
+            const desc = item.description ? `${item.description}: ` : '';
             const locationType = getNetworkTypeForValue(item.locationType);
             const networkType = getNetworkTypeForValue(item.networkType);
             let action = getSecurityPolicyActionsForValue(item.action);
@@ -36,7 +36,8 @@ const buildVFRuleOptions = (options, srcEntity, destEntity) => {
             const from = srcEntityName ? `${locationType[0].text} ${srcEntityName}` : locationType[0].text;
             const to = destEntityName ? `${networkType[0].text} ${destEntityName}` : networkType[0].text;
             const priority = item.priority;
-            const text = `${desc}: D-Port: ${item.destinationPort}: From ${from} To: ${to} Action: ${action} Priority: ${priority}`;
+            const templateName = item.ACLTemplateName ? `Policy: ${item.ACLTemplateName}: ` : "";
+            const text = `${templateName}${desc}D-Port: ${item.destinationPort}: From ${from} To: ${to} Action: ${action} Priority: ${priority}`;
             return ({ text, value: item.ID });
         });
     }
