@@ -43,10 +43,11 @@ export class FiltersToolBarView extends React.Component {
 
     componentDidMount() {
         const {
-            filterOptions,
             context,
-            updateContext,
-            visualizationId
+            filterOptions,
+            filterContext,
+            visualizationId,
+            saveFilterContext
         } = this.props;
 
         let configContexts = {};
@@ -91,6 +92,10 @@ export class FiltersToolBarView extends React.Component {
         };
 
         if(Object.keys(configContexts).length !== 0) {
+
+            if(!Object.keys(filterContext).length) {
+                saveFilterContext(configContexts)
+            }
             this.props.goTo(window.location.pathname, Object.assign({}, context, configContexts))
         }
     }
@@ -170,17 +175,14 @@ FiltersToolBarView.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-    context: state.interface.get(InterfaceActionKeyStore.CONTEXT)
+    context: state.interface.get(InterfaceActionKeyStore.CONTEXT),
+    filterContext: state.interface.get(InterfaceActionKeyStore.FILTER_CONTEXT),
 })
 
 const actionCreators = (dispatch) => ({
 
     goTo: function(link, context) {
         dispatch(push({pathname:link, query:context}));
-    },
-
-    updateContext: function(context) {
-        dispatch(InterfaceActions.updateContext(context));
     },
     saveFilterContext: function(context) {
         dispatch(InterfaceActions.filterContext(context));
