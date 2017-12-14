@@ -152,8 +152,7 @@ export default class XYGraph extends AbstractGraph {
       const {
           chartHeightToPixel,
           chartWidthToPixel,
-          margin,
-          brush
+          margin
         } = this.getConfiguredProperties();
 
         this.titlePosition = {
