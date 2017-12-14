@@ -18,75 +18,45 @@
                                     "format":"epoch_millis"
                                 }
                             }
+                        },
+                        {
+                            "term": {
+                                "enterpriseName":"{{enterpriseName:wifi_enterprise}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "nsg":"{{nsg:wifi_nsg}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "ssid-name":"{{ssid}}"
+                            }
                         }
                     ]
                 }
             },
-            "aggs":{
-                "5":{
-                    "filters":{
-                        "filters":{
-                            "Enterprise":{
-                                "query":{
-                                    "term":{
-                                        "enterpriseName":"{{enterpriseName:wifi_enterprise}}"
-                                    }
-                                }
-                            }
-                        }
+            "aggs": {
+                "ts": {
+                    "date_histogram": {
+                        "field": "timestamp",
+                        "interval": "{{interval:1h}}"
                     },
                     "aggs": {
-                        "4": {
-                            "filters":{
-                                "filters":{
-                                    "NSG":{
-                                        "query":{
-                                            "term":{
-                                                "nsg":"{{nsg:wifi_nsg}}"
-                                            }
-                                        }
-                                    }
+                        "Users": {
+                            "terms": {
+                                "field": "client_mac",
+                                "size": 0,
+                                "order": {
+                                    "SumOf": "desc"
                                 }
                             },
                             "aggs": {
-                                "3": {
-                                    "filters":{
-                                        "filters":{
-                                            "SSID":{
-                                                "query":{
-                                                    "term":{
-                                                        "ssid-name":"{{ssid}}"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    "aggs": {
-                                        "ts": {
-                                            "date_histogram": {
-                                                "field": "timestamp",
-                                                "interval": "{{interval:1h}}"
-                                            },
-                                            "aggs": {
-                                                "Users": {
-                                                    "terms": {
-                                                        "field": "client_mac",
-                                                        "size": 0,
-                                                        "order": {
-                                                            "SumOf": "desc"
-                                                        }
-                                                    },
-                                                    "aggs": {
-                                                        "SumOf": {
-                                                            "sum": {
-                                                                "script": {
-                                                                    "inline": "doc['rx_bytes'].value + doc['tx_bytes'].value"
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                "SumOf": {
+                                    "sum": {
+                                        "script": {
+                                            "inline": "doc['rx_bytes'].value + doc['tx_bytes'].value"
                                         }
                                     }
                                 }

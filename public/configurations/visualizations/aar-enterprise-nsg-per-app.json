@@ -1,25 +1,32 @@
 {
     "id": "aar-enterprise-nsg-per-app",
     "graph": "BarGraph",
-    "title": "L7Classification yeah",
-    "description": "Bandwidth usage per application across domains. Layer-7 Classification includes discovered applications including Common Name in TLS certificates when available. Computation: Sum of total Bytes sent and/or received for a given interval displayed over the configured timespan. Possible values are: If time span = Last 15 minutes: interval is 1 minute, If time span = Last 24 hours: interval is 1 hour, If time span = Last 7 days: interval is 12 hours",
-    "author": "Curran Kelleher",
-    "creationDate": "10/14/2016",
+    "title": "{{trafficType}} Data Usage per NSG for {{app}} App",
+    "description": "Enterprise Level. Shows enterprise wide {{trafficType}} data usage per nsg for an app.",
+    "author": "Bharat Mukheja",
+    "creationDate": "10/15/2017",
     "data": {
-        "orientation": "horizontal",
-        "interval": "30m",
-        "yColumn": "SourceNSG",
-        "xColumn": "SumofBytes",
-        "xTickFormat": ".2s",
-        "stackColumn": "L7Classification",
-        "xLabel": "Time",
+        "colors": [
+            "#7da3f7",
+            "#fec26a",
+            "#e78ac3",
+            "#f79e99",
+            "#b3d645"
+        ],
+        "tooltip": [
+            { "column": "NSG", "label": "NSG" },
+            { "column": "SumofBytes", "label": "Total Bytes", "format": ",.2s"}
+        ],
+        "xLabel": "NSG",
         "yLabel": "Total Bytes",
-        "legend": {
-            "show": true,
-            "orientation": "horizontal",
-            "circleSize": 4,
-            "labelOffset": 2
-        }
+        "yTickFormat": ".2s",
+        "xColumn": "NSG",
+        "yColumn": "SumofBytes"
     },
+    "listeners": [{
+      "params": {
+          "nsg": "NSG"
+      }
+    }],
     "query": "aar-enterprise-nsg-per-app"
 }

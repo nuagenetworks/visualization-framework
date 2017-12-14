@@ -166,11 +166,16 @@ export class DashboardView extends React.Component {
 
             let filterOptions;
 
-            if (configuration.get("filterOptions")) {
-                filterOptions = Object.assign({}, defaultFilterOptions, configuration.get("filterOptions").toJS());
-            }
+            if (configuration.get("defaultFilterOptionsOverride")) {
+                filterOptions = configuration.get("defaultFilterOptionsOverride").toJS();
+            } 
             else {
-                filterOptions = defaultFilterOptions;
+                if (configuration.get("filterOptions")) {
+                    filterOptions = Object.assign({}, defaultFilterOptions, configuration.get("filterOptions").toJS());
+                }
+                else {
+                    filterOptions = defaultFilterOptions;
+                }
             }
 
             let verticalCompact = true;

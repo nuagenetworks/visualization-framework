@@ -1,7 +1,7 @@
 import React from "react";
 import { scaleOrdinal } from "d3";
 import ReactTooltip from "react-tooltip";
-import safeEval from "cross-safe-eval"
+import evalExpression from "eval-expression"
 
 import * as d3 from "d3";
 
@@ -23,6 +23,8 @@ export default class AbstractGraph extends React.Component {
         this.node = {};
 
         this.yLabelWidth = 0;
+        this.accessors = {}
+        this.tooltips = {}
 
         this.setGraphId();
 
@@ -32,10 +34,11 @@ export default class AbstractGraph extends React.Component {
         this.setConfiguredProperties();
 
         // Provide tooltips for subclasses.
-        const { tooltip } = this.getConfiguredProperties();
+        const { tooltip, defaultY } = this.getConfiguredProperties();
         if(tooltip) {
 
             this.setTooltipAccessor(tooltip);
+            this.setTooltipAccessor(defaultY ? defaultY.tooltip : null, 'defaultY')
 
             // Expose tooltipId in case subclasses need it.
             this.tooltipId = `tooltip-${this.getGraphId()}`;
@@ -70,36 +73,45 @@ export default class AbstractGraph extends React.Component {
         }
     }
 
-    setTooltipAccessor(tooltip) {
+    setTooltipAccessor(tooltip, type = 'default') {
+        if(!tooltip)
+            return;
+
+        this.tooltips[type] = tooltip
         // Generate accessors that apply number and date formatters.
-        const accessors = tooltip.map(columnAccessor);
-        
+        this.accessors[type] = tooltip.map(columnAccessor);
+
         // This function is invoked to produce the content of a tooltip.
         this.getTooltipContent = () => {
             // The value of this.hoveredDatum should be set by subclasses
             // on mouseEnter and mouseMove of visual marks
             // to the data entry corresponding to the hovered mark.
             if(this.hoveredDatum) {
-                return (
-                    <div>
-                        {/* Display each tooltip column as "label : value". */}
-                        {tooltip.map(({column, label}, i) => (
-                            <div key={column}>
-                                <strong>
-                                    {/* Use label if present, fall back to column name. */}
-                                    {label || column}
-                                </strong> : <span>
-                                    {/* Apply number and date formatting to the value. */}
-                                    {accessors[i](this.hoveredDatum)}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                );
+                let type = this.hoveredDatum.tooltipName || 'default'
+                return this.tooltipContent({tooltip: this.tooltips[type], accessors: this.accessors[type]})
             } else {
                 return null;
             }
         }
+    }
+
+    tooltipContent({tooltip, accessors}) {
+        return (
+            <div>
+                {/* Display each tooltip column as "label : value". */}
+                {tooltip.map(({column, label}, i) => (
+                    <div key={column}>
+                        <strong>
+                            {/* Use label if present, fall back to column name. */}
+                            {label || column}
+                        </strong> : <span>
+                            {/* Apply number and date formatting to the value. */}
+                            {accessors[i](this.hoveredDatum)}
+                        </span>
+                    </div>
+                ))}
+            </div>
+        )
     }
 
     setGraphId() {
@@ -141,7 +153,7 @@ export default class AbstractGraph extends React.Component {
     };
 
     setConfiguredProperties() {
-        this.configuredProperties = Object.assign({}, this.defaults, this.props.configuration.data);
+        this.configuredProperties = Object.assign({}, this.defaults, this.props.configuration.data, { menu: this.props.configuration.menu });
     }
 
     getConfiguredProperties() {
@@ -352,12 +364,12 @@ export default class AbstractGraph extends React.Component {
 
     setDimensions(props, data = null) {
         this.setYlabelWidth(data ? data : props.data);
-        
+
         this.setAvailableWidth(props);
         this.setAvailableHeight(props);
         this.setLeftMargin();
     }
-    
+
     setLeftMargin() {
       const {
           margin
@@ -369,7 +381,7 @@ export default class AbstractGraph extends React.Component {
     getLeftMargin() {
         return this.leftMargin;
     }
-    
+
     setAvailableWidth({width}) {
         const {
           margin,
@@ -415,9 +427,9 @@ export default class AbstractGraph extends React.Component {
 
         return legend.orientation === 'vertical';
     }
-    
+
     getGroupedData(data, settings) {
-        
+
         const {
           otherMinimumLimit
         } = this.getConfiguredProperties();
@@ -476,7 +488,7 @@ export default class AbstractGraph extends React.Component {
             context
         } = this.props;
         let vkey = `${configuration.id.replace(/-/g, '')}vkey`;
-        return (!context[vkey] || !configuration.key || context[vkey]  === safeEval("(" + configuration.key + ")")(d)) ? "1" : "0.5"
+        return (!context[vkey] || !configuration.key || context[vkey]  === evalExpression("(" + configuration.key + ")")(d)) ? "1" : "0.5"
     }
 
     renderNewLegend(data, legendConfig, getColor, label) {

@@ -8,7 +8,8 @@
     "data": {
         "columns": [
             { "column": "SourceIP", "label": "Client IP" },
-            { "column": "DomainName", "label": "Domain" },
+            { "column": "L3Domain", "label": "L3 Domain" },
+            { "column": "L2Domain", "label": "L2 Domain" },
             { "column": "Packets", "label": "Packets", "format": ",.2s" },
             { "column": "Bytes", "label": "Bytes", "format": ",.2s" }
         ]

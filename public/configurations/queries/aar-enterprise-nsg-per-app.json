@@ -21,42 +21,34 @@
                         },
                         {
                             "term": {
-                                "IngressBytes": 0
+                                "EnterpriseName": "{{enterpriseName:test_org}}"
                             }
                         },
                         {
                             "term": {
-                                "EnterpriseName": "{{enterpriseName:test_org}}"
+                                "{{zeroBytesType:EgressBytes}}": 0
+                            }
+                        },
+                        {
+                            "term": {
+                                "L7ClassEnhanced":"{{app}}"
                             }
                         }
                     ]
                 }
             },
-            "aggs": {
-                "SourceNSG": {
+             "aggs": {
+                "NSG": {
                     "terms": {
-                        "field": "SourceNSG",
+                        "field": "{{NsgType:SourceNSG}}",
                         "order": {
                             "SumofBytes": "desc"
                         }
                     },
-                        "aggs": {
-                            "SumofBytes": {
-                                "sum": {
-                                    "field": "TotalBytesCount"
-                                }
-                            },
-                            "L7Classification": {
-                                "terms": {
-                                    "field": "L7Classification"
-                                },
-                                "aggs": {
-                                    "SumofBytes": {
-                                        "sum": {
-                                            "field": "TotalBytesCount"
-                                        }
-                                    }
-                                }
+                    "aggs": {
+                        "SumofBytes": {
+                            "sum": {
+                                "field": "{{bytesType:IngressBytes}}"
                             }
                         }
                     }
@@ -64,3 +56,5 @@
             }
         }
     }
+}
+
