@@ -79,10 +79,11 @@
                                                 "field": "IngressBytes"
                                             }
                                         },
-                                        "DomainName": {
+                                        "L3Domain": {
                                             "terms": {
                                                 "field": "Domain",
                                                 "size": 5,
+                                                "missing":"N/A",
                                                 "order": {
                                                     "IngressBytes": "desc"
                                                 }
@@ -96,6 +97,28 @@
                                                 "IngressBytes": {
                                                     "sum": {
                                                         "field": "IngressBytes"
+                                                    }
+                                                },
+                                                "L2Domain": {
+                                                    "terms": {
+                                                        "field": "L2Domain",
+                                                        "size": 5,
+                                                        "missing": "N/A",
+                                                        "order": {
+                                                            "IngressBytes": "desc"
+                                                        }
+                                                    },
+                                                    "aggs": {
+                                                        "IngressPackets": {
+                                                            "sum": {
+                                                                "field": "IngressPackets"
+                                                            }
+                                                        },
+                                                        "IngressBytes": {
+                                                            "sum": {
+                                                                "field": "IngressBytes"
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }

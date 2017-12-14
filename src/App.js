@@ -7,6 +7,11 @@ import Dashboard from "./components/Dashboard";
 import Visualization from "./components/Visualization";
 import Testing from "./components/Testing";
 import ReportDetails from "./components/Testing/ReportDetails.js";
+import Dashboard from "./components/Dashboard"
+import Visualization from "./components/Visualization";
+
+import { VFS } from "./features";
+
 
 class App extends Component {
     render() {
@@ -19,6 +24,12 @@ class App extends Component {
                     <Route path={process.env.PUBLIC_URL +"/reports/visualizations/:id"} component={Visualization} />
                     <Route path={process.env.PUBLIC_URL +"/testing"} component={Testing} />
                     <Route path={process.env.PUBLIC_URL +"/testing/reports/:mode/:id"} component={ReportDetails} />
+                    <Route path={process.env.PUBLIC_URL +"/dashboards/:id"} component={Dashboard}>
+                    </Route>
+                    <Route path={process.env.PUBLIC_URL +"/visualizations/:id"} component={Visualization} />
+                    <Route path={`${process.env.PUBLIC_URL}/vfs`}>
+                        <Route path="new" component={VFS} />
+                    </Route>
                 </ReduxRouter>
             </AppContainer>
         </div>

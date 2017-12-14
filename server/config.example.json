@@ -1,0 +1,10 @@
+{
+    "MIDDLEWARE_SERVER_PORT": 8010,
+    "MIDDLEWARE_SERVER_IP": "localhost",
+    "APP_ELASTICSEARCH_HOST": "http://localhost:9200",
+    "REACT_APP_VSD_API_ENDPOINT": "https://vsd.com:8443/nuage/api/",
+    "APP_PREFIX": "/middleware/api",
+    "HTTPS_KEY_PATH": null,
+    "HTTPS_CERT_PATH": null,
+    "NODE_ENV": "development" // possible env - test, development, production    
+}

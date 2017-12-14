@@ -70,7 +70,7 @@
         {
             "id": "effective-score",
             "x": 0,
-            "y": 15,
+            "y": 30,
             "w": 3,
             "h": 15,
             "minW": 2,
@@ -79,7 +79,7 @@
         {
             "id": "vss-domain-acl-time",
             "x": 3,
-            "y": 15,
+            "y": 30,
             "w": 3,
             "h": 15,
             "minW": 2,
@@ -88,7 +88,7 @@
         {
             "id": "aar-nsg-line-chart",
             "x": 6,
-            "y": 15,
+            "y": 30,
             "w": 3,
             "h": 15,
             "minW": 2,
@@ -96,8 +96,8 @@
         },
         {
             "id": "aar-nsg-gauge-chart",
-            "x": 6,
-            "y": 15,
+            "x": 9,
+            "y": 30,
             "w": 3,
             "h": 15,
             "minW": 2,
@@ -105,13 +105,21 @@
         },
         {
             "id": "aar-flow-sla-heatmap",
-            "x": 9,
-            "y": 15,
+            "x": 0,
+            "y": 45,
             "w": 6,
             "h": 15,
             "minW": 2,
             "minH": 12
+        },
+        { 
+            "id": "test-area-graph",
+            "x": 6,
+            "y": 45,
+            "w": 6,
+            "h": 15,
+            "minW": 6,
+            "minH": 15
         }
-
     ]
 }

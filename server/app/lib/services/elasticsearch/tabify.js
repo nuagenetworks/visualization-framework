@@ -6,6 +6,9 @@
   Inspired by Kibana's implementation, found at
   https://github.com/elastic/kibana/blob/master/src/ui/public/agg_response/tabify/tabify.js
 */
+import Constants from '../../../configurations/constants';
+
+
 export default function tabify(response) {
     let table;
 
@@ -23,7 +26,7 @@ export default function tabify(response) {
         throw new Error("Tabify() invoked with invalid result set. Result set must have either 'aggregations' or 'hits' defined.");
     }
 
-    if (process.env.NODE_ENV === "development" && 0) {
+    if (Constants.env === "development") {
         console.log("Results from tabify (first 3 rows only):");
 
         // This one shows where there are "undefined" values.

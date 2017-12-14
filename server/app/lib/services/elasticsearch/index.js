@@ -1,12 +1,14 @@
 import elasticsearch from "elasticsearch";
 import tabify from "./tabify";
 import { getUsedParameters } from "../../utils/configurations";
+import Constants from '../../../configurations/constants';
+
 
 var client = null;
 let config = function (eshost) {
     return {
-        host: eshost ? eshost : (process.env.APP_ELASTICSEARCH_HOST ? process.env.APP_ELASTICSEARCH_HOST : null),
-        //log: 'trace',
+        host: eshost || Constants.elasticSearchHost ,
+        log: 'trace',
         apiVersion: '2.2',
         sniffOnStart: true,
         sniffInterval: 60000,

@@ -20,13 +20,6 @@
     {
         "redirect": "/dashboards/aarNSGDetail",
         "params": {
-            "snsg": "SourceNSG"
-        }
-    }],
-    "listeners": [
-    {
-        "redirect": "/dashboards/aarNSGDetail",
-        "params": {
             "snsg": "DestinationNSG"
         }
     }],

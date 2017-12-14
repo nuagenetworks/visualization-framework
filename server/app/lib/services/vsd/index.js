@@ -2,6 +2,8 @@ import { rp } from "request-promise";
 
 import { ActionKeyStore } from "./redux/actions";
 import { parameterizedConfiguration } from "../../utils/configurations";
+import Constants from '../../../configurations/constants';
+
 
 const config = {
     api_version: "4.0",
@@ -169,7 +171,7 @@ export const VSDServiceTest = {
 
 const fetch = (configuration, context) => {
     let token          = context.TOKEN,
-          api          = context.API || process.env.REACT_APP_VSD_API_ENDPOINT,
+          api          = context.API || Constants.vsdApiEndPoint,
           organization = context.organization;
 
     if (!api || !token)

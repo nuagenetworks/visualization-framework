@@ -127,7 +127,15 @@ Here is the list of options:
 - **creationDate** creation date
 - **title*** title of the visualization
 - **description*** a description of the visualization
-- **query*** identifier of the query to execute for this visualization
+- **query*** (object | string) identifier of the query to execute for this visualization, it can be one or more than one, for objects key will be passed as data to all the graphs e.g. 
+    ```
+    query: {
+        data: "query1",
+        data2: "query2"
+    }
+    ```
+    Note: data key is required in case of object.
+
 - **refreshInterval** set the time interval in `ms` between two refresh. Use `-1` to deactivate refresh.
 - **data** an object that helps you configure your visualization. (See below to find graphs specific data).
   - **colorColumn** attribute name in your results to use for color
@@ -262,7 +270,8 @@ Display vertical or horizontal bar charts
 
 __x-axis__
 
-- **xColumn*** attribute name in your results to use for x-axis
+- **xColumn** attribute name in your results to use for x-axis
+- **stackColumn** (optional) To show stacked Bar Charts
 - **xLabel** x-axis title
 - **xTicks** number of ticks to use for x-axis
 - **xTickFormat** [d3 format](https://github.com/d3/d3-format) style to display x-axis labels
@@ -287,6 +296,19 @@ Display one or multiple lines
 ![multiline-chart](https://cloud.githubusercontent.com/assets/1447243/21205460/4672e4a6-c211-11e6-88a5-269bc32d2140.png)
 
 - **linesColumn** attribute name in your results to display line value
+- **defaultY** (string | object) default yAxis value used to draw straight horizontal line to show cut off value. It can be object which define data `source` and `column` to get data from another query and you may define separate `tooltip` for this staright line from data `source`. Example - 
+```javascript
+ {
+     `"defaultY": {
+         "source": "data2",
+         "column": "memory",
+         "tooltip": [
+             { "column": "memory", "label": "memory"},
+             { "column": "cpu", "label": "cpu"}
+         ]
+     }
+ }
+ ```
 
 See x-axis and y-axis sections in BarGraph for more information
 
@@ -299,10 +321,20 @@ Display nice Pie or Donut graphs
 - **pieInnerRadius** inner radius of the slices. Make this non-zero for a Donut Chart
 - **pieOuterRadius** outer radius of the slices
 - **pieLabelRadius** radius for positioning labels
+- **otherOptions** optional object
+  - **type** Value must be percentage or number, and default is percentage
+  - **limit** As per the type we can define the limit in percentage or slices respectively.
+  - **minimum** In case of percentage, if we want to override the mimium slices of 10.
 
 
 ##### Table
 - **width** width of the table. Default is `100%`
+- **selectable** - To enable/disable selectable feature - Default is `true`
+- **multiSelectable** To enable/disable multi select feature - default is `false`
+- **showCheckboxes** To show checkboxes to select rows - default is `false`
+- **enableSelectAll** To enable/disable select all feature - Default is `true`
+- **highlight** (Array of columns) Highlighted the rows if value of columns is not null
+- **hidePagination** Hide paging and search bar if data size is less than pagination limit - Default is `true`
 - **border**
   - **top** set top border. Default is `solid 1px #ccc`
   - **bottom** set bottom border. Default is `0`
@@ -376,7 +408,8 @@ If you need to pass a specific parameter, check out this example:
     "title":"Top 5 Statistics",
     "service":"elasticsearch",
     "query":{
-        "resourceName": "{{resourceName:defaultName}}"
+        "resourceName": "{{resourceName:defaultName}}",
+        "methodName": "{{methodName:call('demo')}}"
     }
 }
 ```
@@ -385,6 +418,10 @@ The query configuration will be "contextualized" which means:
 
 - if the `context` contains a parameter named `resourceName`, the query will send its value
 - if the `context` does NOT contain `resourceName`, the value sent will be `defaultName`
+- ###### Custom Translator
+    - You can also call the custom `Translator` placed at `\utils\translators\`, e.g. in above example translator `demo` will get called with value passed as parameter named as `methodName` in the URL.
+    - Just wrap the translator name inside `call` method.
+    - You can also add your custom translators by adding respective file inside `\utils\translators` and register it inside `\utils\translators\index.js`
 
 Visualization Framework is using [json-templates](https://github.com/datavis-tech/json-templates) thanks to [@curran](https://github.com/curran),
 

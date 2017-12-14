@@ -1,32 +1,48 @@
-import React from 'react';
-import DataTables from 'material-ui-datatables';
-import AbstractGraph from "../AbstractGraph";
-import columnAccessor from "../../../utils/columnAccessor";
-import CopyToClipboard from 'react-copy-to-clipboard';
-import {Tooltip} from 'react-lightweight-tooltip';
+import React from 'react'
+import { connect } from 'react-redux'
+import { push } from "redux-router"
+import DataTables from 'material-ui-datatables'
+import AbstractGraph from "../AbstractGraph"
+import columnAccessor from "../../../utils/columnAccessor"
+import CopyToClipboard from 'react-copy-to-clipboard'
+import {Tooltip} from 'react-lightweight-tooltip'
+import * as d3 from 'd3'
 
-import tooltipStyle from './tooltipStyle.js';
-import "./style.css";
-import {properties} from "./default.config";
+import tooltipStyle from './tooltipStyle'
+import "./style.css"
+import style from './style'
+import {properties} from "./default.config"
 
-export default class Table extends AbstractGraph {
+import SearchBar from "../../SearchBar"
+
+import {
+    Actions as VFSActions,
+} from '../../../features/redux/actions'
+
+class Table extends AbstractGraph {
 
     constructor(props, context) {
-        super(props, properties);
+        super(props, properties)
 
-        this.handleSortOrderChange   = this.handleSortOrderChange.bind(this);
-        this.handleFilterValueChange = this.handleFilterValueChange.bind(this);
-        this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this);
-        this.handleNextPageClick     = this.handleNextPageClick.bind(this);
-        this.handleClick             = this.handleClick.bind(this);
+        this.handleSortOrderChange   = this.handleSortOrderChange.bind(this)
+        this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this)
+        this.handleNextPageClick     = this.handleNextPageClick.bind(this)
+        this.handleClick             = this.handleClick.bind(this)
+        this.handleSearch            = this.handleSearch.bind(this)
+        this.handleRowSelection      = this.handleRowSelection.bind(this)
+        this.handleContextMenu       = this.handleContextMenu.bind(this)
 
         /**
         */
-        this.currentPage = 1;
-        this.filterData = false;
-
+        this.currentPage = 1
+        this.filterData = false
+        this.selectedRows = {}
+        this.htmlData = {}
         this.state = {
-            data: []
+            selected: [],
+            data: [],
+            fontSize: style.defaultFontsize,
+            contextMenu: null,
         }
     }
 
@@ -37,6 +53,14 @@ export default class Table extends AbstractGraph {
     componentWillReceiveProps(nextProps) {
         if(this.props !== nextProps) {
             this.initiate();
+        }
+    }
+
+    componentDidUpdate() {
+        this.checkFontsize();
+        const { contextMenu } = this.state;
+        if (contextMenu) {
+            this.openContextMenu();
         }
     }
 
@@ -51,13 +75,33 @@ export default class Table extends AbstractGraph {
          */
         this.resetFilters();
 
-        this.getHeaderData(columns);
+        this.filterData = this.props.data;
+        this.setHeaderData(columns);
         this.updateData();
+    }
+
+    decrementFontSize() {
+        this.setState({
+            fontSize: this.state.fontSize - 1
+        })
+    }
+
+    checkFontsize() {
+        if(this.container.querySelector('table').clientWidth > this.container.clientWidth) {
+            this.decrementFontSize();
+        }
     }
 
     resetFilters() {
         this.currentPage = 1;
-        this.filterData = this.props.data;
+        this.selectedRows = {};
+    }
+
+    handleSearch(data) {
+        this.resetFilters();
+
+        this.filterData = data;
+        this.updateData();
     }
 
     updateData() {
@@ -68,7 +112,8 @@ export default class Table extends AbstractGraph {
         let offset = limit * (this.currentPage - 1);
 
         this.setState({
-            data : this.filterData.slice(offset, offset + limit)
+            data : this.filterData.slice(offset, offset + limit),
+            selected: this.selectedRows[this.currentPage] ? this.selectedRows[this.currentPage]: []
         });
     }
 
@@ -94,32 +139,41 @@ export default class Table extends AbstractGraph {
         });
     }
 
-    getHeaderData(columns) {
-
-        const {
-            padding,
-        } = this.getConfiguredProperties();
-
+    setHeaderData(columns) {
         this.headerData = columns.map(({column, label}, i) => ({
             key: column,
             label: label || column,
             sortable: true,
+            columnText: label || column,
+            columField: column,
+            type:"text",
             style: {
-                padding: padding,
-            }}
+              textIndent: '2px'
+            }
+           }
         ));
     }
 
+    getHeaderData() {
+        return this.headerData;
+    }
+
     getTableData(columns) {
+        const {
+            highlight,
+            highlightColor
+        } = this.getConfiguredProperties();
         const accessors = this.getAccessor(columns);
         const tooltipAccessor = this.getTooltipAccessor(columns);
 
         return this.state.data.map((d, j) => {
 
-            let data = {};
+            let data = {},
+                highlighter = false;
 
             accessors.forEach((accessor, i) => {
-                let columnData = accessor(d);
+                let originalData = accessor(d),
+                    columnData   = originalData
 
                 if(columns[i].tooltip) {
                     let fullText = tooltipAccessor[i](d, true);
@@ -128,7 +182,7 @@ export default class Table extends AbstractGraph {
                               content={
                                 [
                                   fullText,
-                                  <CopyToClipboard text={fullText}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>,
+                                  <CopyToClipboard text={fullText ? fullText : ''}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>,
                                 ]
                               }
                               styles={tooltipStyle}>
@@ -139,35 +193,20 @@ export default class Table extends AbstractGraph {
                         </div>
                 }
 
+                if(highlight && highlight.includes(columns[i].column) && originalData) {
+                    highlighter = true
+                }
+
                 data[columns[i].column] = columnData;
             });
 
-            return data;
+            if(highlighter)
+               Object.keys(data).map( key => {
+                return data[key] = <div style={{background: highlightColor, height: style.row.height, padding: "10px 0"}}>{data[key]}</div>
+            })
+
+            return data
         })
-    }
-
-    handleFilterValueChange(search) {
-        const {
-            data
-        } = this.props;
-
-        this.resetFilters();
-
-        if(search) {
-            const columns = this.getColumns();
-            const accessors = this.getAccessor(columns);
-            this.filterData = data.filter((d, j) => {
-                let match = false;
-                accessors.forEach((accessor, i) => {
-                    if(accessor(d, true) && accessor(d, true).toString().toLowerCase().includes(search.toLowerCase()))
-                       match = true;
-                });
-
-                return match;
-            });
-        }
-
-        this.updateData();
     }
 
     handleSortOrderChange(column, order) {
@@ -180,6 +219,10 @@ export default class Table extends AbstractGraph {
           }
         );
 
+        /**
+         * Resetting the paging due to sorting
+         */
+        this.resetFilters();
         this.updateData();
     }
 
@@ -198,53 +241,195 @@ export default class Table extends AbstractGraph {
            this.props.onMarkClick(this.state.data[key]);
     }
 
-    render() {
+    handleRowSelection(selectedRows) {
         const {
-            width,
-            height,
-        } = this.props;
+            multiSelectable
+        } = this.getConfiguredProperties();
 
+        if(!multiSelectable) {
+            this.handleClick(...selectedRows)
+        }
+        this.selectedRows[this.currentPage] = selectedRows.slice();
+        this.setState({
+            selected: this.selectedRows[this.currentPage]
+        })
+        const { selectRow, location } = this.props;
+        if (selectRow) {
+            const selectedRows = this.getSelectedRows();
+            const flow = selectedRows ? selectedRows[0] : {};
+            selectRow(this.props.configuration.id, flow, location.query, location.pathname);
+        }
+
+    }
+
+    handleContextMenu(event) {
+        const {
+            menu
+        } = this.getConfiguredProperties();
+
+        if (!menu) {
+            return false;
+        }
+        event.preventDefault()
+        const { clientX: x, clientY: y } = event;
+        this.setState({ contextMenu: { x, y } });
+        return true;
+    }
+
+    handleCloseContextMenu = () => {
+        this.setState({ contextMenu: null });
+        this.closeContextMenu();
+    }
+
+    closeContextMenu = () => {
+        document.body.removeEventListener('click', this.handleCloseContextMenu);
+        const node = document.getElementById('contextMenu');
+        if (node) node.remove();
+    }
+
+    openContextMenu = () => {
+        const { contextMenu: { x, y } } = this.state;
+        const {
+            menu
+        } = this.getConfiguredProperties();
+
+        this.closeContextMenu();
+        document.body.addEventListener('click', this.handleCloseContextMenu);
+
+        const node = document.createElement('ul');
+        node.classList.add('contextMenu');
+        node.id = 'contextMenu';
+        node.style = `top: ${y}px; left: ${x}px; z-index: 100000;`;
+
+        const { goTo, location: { query }, configuration: { id } } = this.props;
+        query.id = id;
+
+        menu.forEach((item) => {
+            const { text, rootpath, params } = item;
+            const pathname = `${process.env.PUBLIC_URL}/${rootpath}`
+            const li = document.createElement('li');
+            li.textContent = text;
+            const queryParams = (params && Object.getOwnPropertyNames(params).length > 0) ?
+                    Object.assign({}, query, params) : Object.assign({}, query);
+            li.onclick = (e) => {
+                // dispatch a push to the menu link
+                goTo(pathname, queryParams);
+            };
+            node.append(li);
+        });
+        document.body.append(node);
+    }
+
+    getSelectedRows() {
         const {
             limit
         } = this.getConfiguredProperties();
 
-        let tableData = this.getTableData(this.getColumns());
+        let selected = [];
+        for(let page in this.selectedRows) {
+            if(this.selectedRows.hasOwnProperty(page)) {
+                this.selectedRows[page].forEach((index) => {
+                    selected.push(this.filterData[(page - 1) * limit + index])
+                })
+            }
+        }
+        return selected;
+    }
+
+    renderSearchBarIfNeeded(showHeader) {
+        const {
+            searchBar
+        } = this.getConfiguredProperties();
+
+        if(searchBar === false || !showHeader)
+           return;
+
+        return (
+          <SearchBar
+            data={this.props.data}
+            options={this.getHeaderData()}
+            handleSearch={this.handleSearch}
+            columns={this.getColumns()}
+          />
+        );
+    }
+
+    removeHighlighter(data) {
+        const {
+            highlight
+        } = this.getConfiguredProperties();
+
+        if(highlight) {
+            this.state.selected.map( (key) => {
+                if(highlight && data[key]) {
+                    for (let i in data[key]) {
+                        if (data[key].hasOwnProperty(i)) {
+                            if(data[key][i].props.style)
+                                data[key][i].props.style.background = ''
+                        }
+                    }
+                }
+            })
+        }
+        return data
+    }
+
+    render() {
+        const {
+            height,
+            data
+        } = this.props;
+
+        const {
+            limit,
+            selectable,
+            multiSelectable,
+            showCheckboxes,
+            hidePagination
+        } = this.getConfiguredProperties();
+
+        let tableData = this.getTableData(this.getColumns())
+
+        // overrite style of highlighted selected row
+        tableData = this.removeHighlighter(tableData)
+
 
         if(!tableData) {
             return "<p>No Data</p>";
         }
 
-        return (
-            <div
-                style={{
-                    width: `${width}px`,
-                    height: `${height}px`,
-                    overflow: "auto"
-                }}
-            >
+        let showHeader = (data.length <= limit && hidePagination !== false) ? false : true,
+          tableHeight  = showHeader ? `${height - 100}px` : height
 
+        return (
+            <div ref={(input) => { this.container = input; }}
+                onContextMenu={this.handleContextMenu}
+                >
+                {this.renderSearchBarIfNeeded(showHeader)}
                 <DataTables
-                    headerToolbarMode={"filter"}
-                    showRowHover={false}
-                    showHeaderToolbar={true}
-                    showHeaderToolbarFilterIcon={false}
-                    multiSelectable={true}
-                    columns={this.headerData}
+                    columns={this.getHeaderData()}
                     data={tableData}
+                    showHeaderToolbar={false}
+                    showFooterToolbar={showHeader}
+                    selectable={selectable}
+                    multiSelectable={multiSelectable}
+                    selectedRows={this.state.selected}
+                    showCheckboxes={showCheckboxes}
                     showRowSizeControls={false}
                     onNextPageClick={this.handleNextPageClick}
                     onPreviousPageClick={this.handlePreviousPageClick}
-                    onFilterValueChange={this.handleFilterValueChange}
                     onSortOrderChange={this.handleSortOrderChange}
+                    onRowSelection={this.handleRowSelection}
                     page={this.currentPage}
                     count={this.filterData.length}
                     onCellClick={this.handleClick}
                     rowSize={limit}
-                    tableStyle={{
-                        width: "inherit",
-                        minWidth: "100%"
-                    }}
-                    tableBodyStyle={{overflowX: "scroll"}}
+                    tableStyle={style.table}
+                    tableHeaderColumnStyle={Object.assign({}, style.headerColumn, {fontSize: this.state.fontSize})}
+                    tableRowStyle={style.row}
+                    tableRowColumnStyle={Object.assign({}, style.rowColumn, {fontSize: this.state.fontSize})}
+                    tableBodyStyle={Object.assign({}, style.body, {height: tableHeight})}
+                    footerToolbarStyle={style.footerToolbar}
                 />
             </div>
         );
@@ -255,3 +440,18 @@ Table.propTypes = {
   configuration: React.PropTypes.object,
   response: React.PropTypes.object
 };
+
+const mapStateToProps = (state) => {
+    return {
+        location: state.router.location
+    }
+}
+
+const actionCreators = (dispatch) => ({
+    selectRow: (vssID, row, currentQueryParams, currentPath) => dispatch(VFSActions.selectRow(vssID, row, currentQueryParams, currentPath)),
+    goTo: (link, queryParams) => {
+        dispatch(push({pathname: link, query: queryParams}));
+    }
+});
+
+export default connect ( mapStateToProps, actionCreators) (Table);
