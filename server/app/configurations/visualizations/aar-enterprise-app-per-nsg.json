@@ -1,7 +1,7 @@
 {
     "id": "aar-enterprise-app-per-nsg",
     "graph": "BarGraph",
-    "title": "Data Usage on Apps per NSG",
+    "title": "{{trafficType}} Data Usage on Apps per NSG",
     "description": "Enterprise Level. Enterprise wide per NSG traffic detail",
     "author": "Bharat Mukheja",
     "creationDate": "11/31/2017",
@@ -15,13 +15,13 @@
         ],
         "tooltip": [
             { "column": "L7Classification", "label": "App" },
-            { "column": "SourceNSG", "label": "NSG" },
+            { "column": "NSG", "label": "NSG" },
             { "column": "SumofBytes", "label": "Total Bytes", "format": ",.2s"}
         ],
         "xLabel": "NSG",
         "yLabel": "Total Bytes",
         "yTickFormat": ".2s",
-        "xColumn": "SourceNSG",
+        "xColumn": "NSG",
         "stackColumn":"L7Classification",
         "yColumn": "SumofBytes",
         "legend": {
@@ -33,7 +33,7 @@
     },
     "listeners": [{
       "params": {
-          "snsg": "SourceNSG",
+          "nsg": "NSG",
           "app":"L7Classification"
       }
     }],

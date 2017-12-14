@@ -21,6 +21,11 @@
                         },
                         {
                             "term": {
+                                "{{zeroBytesType:EgressBytes}}": 0
+                            }
+                        },
+                        {
+                            "term": {
                                 "EnterpriseName": "{{enterpriseName:test_org}}"
                             }
                         },
@@ -31,16 +36,16 @@
                         },
                         {
                             "term": {
-                                "SourceNSG":"{{snsg}}"
+                                "{{NsgType:SourceNSG}}":"{{nsg}}"
                             }
                         }
                     ]
                 }
             },
              "aggs": {
-                "SourceIP": {
+                "Ip": {
                     "terms": {
-                        "field": "SrcIp",
+                        "field": "{{IpType:SrcIp}}",
                         "order": {
                             "SumofBytes": "desc"
                         }
@@ -48,7 +53,7 @@
                     "aggs": {
                         "SumofBytes": {
                             "sum": {
-                                "field": "TotalBytesCount"
+                                "field": "{{bytesType:IngressBytes}}"
                             }
                         }
                     }

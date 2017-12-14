@@ -1,0 +1,41 @@
+{
+    "id": "example",
+    "graph": "MultiLineGraph",
+    "title": "VNF Utilization vs time",
+    "description": "Memory, disk and CPU utilization over a period of time selected in interval",
+    "author": "Anil chauhan",
+    "creationDate": "06/12/2017",
+    "data": {
+        "dateHistogram": true,
+        "xColumn": "ts",
+        "xLabel": "Time",
+        "yColumn": ["CPU", "MEMORY",  "DISK"],
+        "yTickFormat": ",.1f",
+        "yLabel": "",
+        "yTicks": 5,
+        "linesColumn": ["CPU", "MEMORY",  "DISK"],
+        "defaultY": {
+            "source": "data2",
+            "column": "memory",
+            "tooltip": [
+                { "column": "memory", "label": "memory"},
+                { "column": "cpu", "label": "cpu"}
+            ]
+        },
+        "legend": {
+            "orientation": "vertical",
+            "show": true,
+            "circleSize": 5,
+            "labelOffset": 5
+        },
+        "tooltip": [
+            { "column": "columnType", "label": "Type"},
+            { "column": "yColumn", "label": "Value", "format": "0.2f"},
+            { "column": "ts", "label": "Timestamp"}
+        ]
+    },
+    "query": {
+        "data": "vnf-status-linechart",
+        "data2": "vnf-status"
+    }
+}

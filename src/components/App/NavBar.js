@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import MainMenu from './MainMenu.js';
 import NavBarTitle from './NavBarTitle.js';
+import UserMenu from './UserMenu.js';
 
 import { Actions, ActionKeyStore } from './redux/actions';
 import { ActionKeyStore as InterfaceActionKeyStore } from "./redux/actions";
@@ -24,7 +25,14 @@ class NavBarView extends React.Component {
 
         return (
             <div>
-                <AppBar className="appBar" style={style.navBar} title={navTitleBar} onLeftIconButtonTouchTap={this.props.onLeftIconButtonTouchTap} />
+                <AppBar
+                  className="appBar"
+                  style={style.navBar}
+                  title={navTitleBar}
+                  onLeftIconButtonTouchTap={this.props.onLeftIconButtonTouchTap}
+                  iconElementRight={<UserMenu context={context}/>}
+                  iconStyleRight={style.menuRight}
+                />
                 <MainMenu />
             </div>
         );

@@ -1,4 +1,28 @@
-import parse from "json-templates";
+import parse from "../utils/helpers/json_templates"
+import translator from "../utils/translators"
+
+/**
+   This will update the context by calling the respective translator
+   Arguments:
+    * parameters: parameters of the query that have been parsed.
+    * context: the context object that contains parameters value
+    Returns:
+        context: updated context by calling respective translators
+ */
+const evaluateContext = (context, parameters) => {
+    let updatedContext = Object.assign({}, context)
+    for (let i in parameters) {
+
+        if (!parameters.hasOwnProperty(i))
+            continue
+
+        let parameter = parameters[i]
+        if(parameter.evaluate) {
+            updatedContext[parameter.key] = translator(parameter.evaluate, context[parameter.key])
+        }
+    }
+    return updatedContext
+}
 
 /*
     Check if the context can parameterized all parameters.
@@ -10,7 +34,7 @@ import parse from "json-templates";
 */
 const shouldParameterizedContext = (parameters, context) => {
     return parameters.every((parameter) => {
-        return "defaultValue" in parameter || parameter.key in context;
+        return "defaultValue" in parameter || parameter.key in context
     })
 }
 
@@ -24,15 +48,15 @@ const shouldParameterizedContext = (parameters, context) => {
 */
 export const parameterizedConfiguration = (configuration, context) => {
     if (!configuration)
-        return false;
+        return false
 
     const template       = parse(configuration),
-          isContextOK    = shouldParameterizedContext(template.parameters, context);
+          isContextOK    = shouldParameterizedContext(template.parameters, context)
 
     if(isContextOK)
-        return template(context);
+        return template(evaluateContext(context, template.parameters))
 
-    return false;
+    return false
 }
 
 /*
@@ -46,28 +70,29 @@ export const parameterizedConfiguration = (configuration, context) => {
 */
 export const getUsedParameters = (configuration, context) => {
     const parameters = parse(configuration).parameters;
-
-    let queryParams = {};
+    let queryParams = {}
 
     for (let i in parameters) {
 
         if (!parameters.hasOwnProperty(i))
-            continue;
-
-        let parameter = parameters[i];
+            continue
+            
+        let parameter = parameters[i]
 
         if (parameter.key in context) {
-            queryParams[parameter.key] = context[parameter.key];
+            queryParams[parameter.key] = context[parameter.key]
         }
         else if ("defaultValue" in parameter) {
-            queryParams[parameter.key] = parameter.defaultValue;
+            queryParams[parameter.key] = parameter.defaultValue
         }
         // else ignore the parameter because it is not used in the provided configuration.
     }
 
-    return queryParams;
+    return queryParams
 }
 
 export const contextualize = (data, context) => {
-    return parse(data)(context);
+    const template = parse(data)
+    return template(evaluateContext(context, template.parameters))
 }
+
