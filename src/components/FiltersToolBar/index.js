@@ -141,12 +141,12 @@ export class FiltersToolBarView extends React.Component {
 
                                     {configOptions.options.map((option, index) => {
 
-                                        let queryParams = {};
+                                        let queryParams = {[paramName]: option.value};
 
                                         let forceOptions = option.forceOptions;
 
                                         if (forceOptions)
-                                            queryParams = Object.assign({}, {[paramName]: option.value}, this.updateForceOptionContext(forceOptions, configOptions.append));
+                                            queryParams = Object.assign({}, queryParams, this.updateForceOptionContext(forceOptions, configOptions.append));
 
                                         return (
                                             <MenuItem
