@@ -72,6 +72,10 @@ class AreaGraph extends XYGraph {
     return this.yColumns;
   }
 
+  getSequence() {
+    return this.sequence
+  }
+
   getRefinedData() {
     return this.refinedData;
   }
@@ -153,15 +157,23 @@ class AreaGraph extends XYGraph {
         stacked
     } = this.getConfiguredProperties();
 
-    this.data = [];
+    this.data = []
+    this.sequence = []
 
     if(linesColumn) {
 
-      //Finding all the distinct lines
-      this.yColumns = [...new Set(data.map(item => item[linesColumn]))]
-        .map(d => ({key: d}))
+      let filteredData = data.filter(item => {
+        return (item[linesColumn] && typeof item[linesColumn] !== 'object')
+      })
 
-      this.data = data;
+      //Finding all the distinct lines
+      this.yColumns = [
+        ...new Set(
+          filteredData.map(item => item[linesColumn])
+        )
+      ].map(d => ({key: d}))
+
+      this.data = filteredData;
       this.updateTooltipConfiguration();
       
     } else {
@@ -172,7 +184,7 @@ class AreaGraph extends XYGraph {
       this.yColumns = typeof yColumn === 'object' ? yColumn : [{ key: yColumn }];
 
       data.forEach((d) => {
-        this.getYColumns().forEach((ld, index) => {
+        this.yColumns.forEach((ld, index) => {
           this.data.push(Object.assign({
               [this.yValue]: d[ld.key] !== null ? d[ld.key] : 0,
               [this.yKey]: ld.key,
@@ -181,21 +193,54 @@ class AreaGraph extends XYGraph {
       })
     }
 
-    let sequence = nest({
+    //Finding the sequence for yAxis ordering to have smaller area at bottom
+    this.sequence = nest({
       data: this.data,
       key: this.yKey,
-      sortColumn: 'yValue',
+      sortColumn: this.yValue,
       sortOrder: 'DESC'
     }).sort((a, b) => {
-       return b.values[0].yValue - a.values[0].yValue
+       return b.values[0][this.yValue] - a.values[0][this.yValue]
     }).map(d => d.key)
 
-    let nestedXData = nest({
+    //Nesting the data as per x AXIS
+    let nestedXPartialData = nest({
         data: this.data,
         key: xColumn,
         sortColumn: this.yKey,
         sortOrder: 'DESC',
-        sequence
+        sequence: this.sequence
+    })
+
+    /**
+     * INSERTING THE MISSING DATA
+     */
+
+    let reverseSequence = this.sequence.slice(0).reverse()
+    let sequenceLength = this.sequence.length
+
+    let nestedXData = nestedXPartialData.map(item => {
+        let d = Object.assign({}, item)
+
+        if(d.values.length === sequenceLength) {
+          return
+        }
+
+        d.values = reverseSequence.map(key => {
+            let index = (d.values).findIndex(o => {
+              return o[this.yKey] === key
+            })
+
+            return index !== -1
+              ? Object.assign({}, d.values[index])
+              : {
+                [xColumn]: parseInt(d.key),
+                [this.yKey]: key,
+                [this.yValue]: 0
+              }
+        })
+
+        return d
     })
 
     if(stacked === false) {
@@ -228,7 +273,7 @@ class AreaGraph extends XYGraph {
           key: this.yKey
         }).sort(sorter({
             column: 'key',
-            sequence
+            sequence: this.sequence
           })
         )
   }
@@ -486,9 +531,9 @@ class AreaGraph extends XYGraph {
 
     const label    = (d) => d.value ? d.value : d.key;
     const scale    = this.scaleColor(this.getYColumns(), 'key');
-    this.getColor  = (d) => scale ? scale(d.key) : stroke.color || colors[0];
+    this.getColor  = (d) => scale ? scale(d.key ? d.key : d ) : stroke.color || colors[0];
     
-    this.renderNewLegend(this.getYColumns(), this.getLegendConfig(), this.getColor, label);
+    this.renderNewLegend(this.getSequence(), this.getLegendConfig(), this.getColor);
   }
 
   // Create tooltip data
