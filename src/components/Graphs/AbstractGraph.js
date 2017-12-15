@@ -99,17 +99,21 @@ export default class AbstractGraph extends React.Component {
         return (
             <div>
                 {/* Display each tooltip column as "label : value". */}
-                {tooltip.map(({column, label}, i) => (
-                    <div key={column}>
+                {tooltip.map(({column, label}, i) => {
+                    let data = accessors[i](this.hoveredDatum)
+
+                    return data ?
+                     (<div key={column}>
                         <strong>
                             {/* Use label if present, fall back to column name. */}
                             {label || column}
                         </strong> : <span>
                             {/* Apply number and date formatting to the value. */}
-                            {accessors[i](this.hoveredDatum)}
+                            {data}
                         </span>
                     </div>
-                ))}
+                    ) : null
+                })}
             </div>
         )
     }
@@ -495,6 +499,9 @@ export default class AbstractGraph extends React.Component {
 
         if (!legendConfig.show)
             return;
+
+        if(!label)
+          label = (d) => d;
 
         const {
             width,

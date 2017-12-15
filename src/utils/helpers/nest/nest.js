@@ -9,7 +9,8 @@ export default ({
     data,
     key,
     sortColumn = null,
-    sortOrder = null
+    sortOrder = null,
+    sequence = null
   }) => {
 
   return nest()
@@ -17,7 +18,8 @@ export default ({
     .sortValues(sortColumn
       ? sorter({
         column: sortColumn,
-        order: sortOrder
+        order: sortOrder,
+        sequence: sequence || null
       })
       : null)
     .entries(data)
