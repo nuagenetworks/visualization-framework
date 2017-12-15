@@ -84,10 +84,11 @@ export default class AbstractGraph extends React.Component {
         this.accessors[type] = tooltip.map(columnAccessor);
 
         // This function is invoked to produce the content of a tooltip.
-        this.getTooltipContent = (data) => {
+        this.getTooltipContent = () => {
             // The value of this.hoveredDatum should be set by subclasses
             // on mouseEnter and mouseMove of visual marks
             // to the data entry corresponding to the hovered mark.
+
             if(this.hoveredDatum) {
                 let type = this.hoveredDatum.tooltipName || 'default'
                 return this.tooltipContent({tooltip: this.tooltips[type], accessors: this.accessors[type]})

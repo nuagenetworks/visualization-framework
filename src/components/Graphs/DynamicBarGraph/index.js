@@ -251,7 +251,6 @@ class BarGraph extends XYGraph {
     // set bar width
     this.setBarWidth()
 
-
     svg.select("#clip")
     .select("rect")
       .attr("x", this.isVertical() ? 0 : -this.getYlabelWidth())
@@ -439,7 +438,8 @@ class BarGraph extends XYGraph {
         .on('end', function () {
           d3.select(this)
             .on('mousemove', d => {
-                self.handleMove(self.getTooltipContent(d))
+                self.hoveredDatum = d
+                self.handleMove()
               }
             )
             .on('mouseleave', self.handleLeave)
@@ -449,12 +449,21 @@ class BarGraph extends XYGraph {
     bars.exit().remove()
   }
 
-  handleMove(data) {
-    this.props.showTooltip(data)
+  handleMove() {
+    const { tooltip } = this.configuredProperties
+
+    if (tooltip) {
+      this.props.showTooltip(this.getTooltipContent())
+    }
   }
 
   handleLeave() {
-    this.props.hideTooltip()
+    const { tooltip } = this.configuredProperties
+    
+    if (tooltip) {
+      this.hoveredDatum = null
+      this.props.hideTooltip()
+    }
   }
 
   configureMinGraph() {
@@ -494,7 +503,7 @@ class BarGraph extends XYGraph {
       minScale.y.range([this.getAvailableMinHeight(), 0])
 
       brushXY = d3.brushX()
-      .extent([[0, 0], [this.getAvailableWidth(), this.getAvailableMinHeight()]])
+        .extent([[0, 0], [this.getAvailableWidth(), this.getAvailableMinHeight()]])
 
       range = [0, this.getAvailableWidth()]
 
@@ -526,10 +535,10 @@ class BarGraph extends XYGraph {
     const brushing = brushXY
       .on("brush end", () => {
 
-         const scale = this.getScale(),
+        const scale = this.getScale(),
           originalRange = mainZoom.range()
 
-         let [start, end] = d3.event.selection || range;
+        let [start, end] = d3.event.selection || range;
 
         if(this.isVertical()) {
           mainZoom.domain([start, end]);
@@ -540,6 +549,7 @@ class BarGraph extends XYGraph {
           scale.y.range([mainZoom(originalRange[0]), mainZoom(originalRange[1])]);
           this.getGraph().select(".yAxis").call(this.getAxis().y);
         }
+        
         const {
           x,
           y,
