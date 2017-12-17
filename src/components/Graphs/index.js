@@ -3,7 +3,7 @@ import VariationTextGraph from "./VariationTextGraph";
 
 import BarGraph from "./BarGraph/index";
 import LineGraph from "./LineGraph";
-import MultiLineGraph from "./MultiLineGraph";
+import MultiLineGraph from "./LineGraph";
 
 import PieGraph from "./PieGraph";
 import Table from "./Table";

@@ -31,7 +31,7 @@
         "tooltip": [
             { "column": "columnType", "label": "Type"},
             { "column": "yColumn", "label": "Value", "format": "0.2f"},
-            { "column": "ts", "label": "Timestamp"}
+            { "column": "ts", "label": "Timestamp", "timeFormat": "%b %d, %y %X"}
         ]
     },
     "query": {
