@@ -51,6 +51,10 @@ class Table extends AbstractGraph {
 
     componentWillReceiveProps(nextProps) {
         if(this.props !== nextProps) {
+            // reset font size on resize
+            if(this.props.height !== nextProps.height || this.props.width !== nextProps.width) {
+                this.setState({ fontSize: style.defaultFontsize})
+            }
             this.initiate();
         }
     }
@@ -86,7 +90,7 @@ class Table extends AbstractGraph {
     }
 
     checkFontsize() {
-        if(this.container.querySelector('table').clientWidth > this.container.clientWidth) {
+        if(this.container && this.container.querySelector('table').clientWidth > this.container.clientWidth) {
             this.decrementFontSize();
         }
     }
@@ -359,10 +363,13 @@ class Table extends AbstractGraph {
         );
     }
 
-    removeHighlighter(data) {
+    removeHighlighter(data = []) {
         const {
             highlight
         } = this.getConfiguredProperties();
+
+        if(!data.length)
+          return data
 
         if(highlight) {
             this.state.selected.map( (key) => {
@@ -393,11 +400,11 @@ class Table extends AbstractGraph {
             hidePagination
         } = this.getConfiguredProperties();
 
-        let tableData = this.getTableData(this.getColumns())
-
-        if(!tableData || !tableData.length) {
+        if(!data || !data.length) {
             return
         }
+
+        let tableData = this.getTableData(this.getColumns())
 
         // overrite style of highlighted selected row
         tableData = this.removeHighlighter(tableData)
