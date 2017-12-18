@@ -6,44 +6,34 @@
         "index":"{{index:nuage_dpi_flowstats}}",
         "type":"{{type:nuage_doc_type}}",
         "body":{
-                "size":0,
-                "query":{
-                    "bool":{
-                        "must":[
-                            {
-                                "range":{
-                                    "timestamp":{
-                                        "gte":"{{startTime:now-24h}}",
-                                        "lte":"{{endTime:now}}",
-                                        "format":"epoch_millis"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                },
-                "aggs":{
-                    "1":{
-                        "filters":{
-                            "filters":{
-                                "Enterprise":{
-                                    "query":{
-                                        "term":{
-                                            "EnterpriseName":"{{enterpriseName:test_org}}"
-                                        }
-                                    }
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
                                 }
                             }
                         },
-                        "aggs":{
-                            "slastatus":{
-                                "terms":{
-                                    "field":"SlaStatus"
-                                }
+                        {
+                            "term":{
+                                "EnterpriseName":"{{enterpriseName:test_org}}"
                             }
                         }
+                    ]
+                }
+            },
+            "aggs":{
+                "slastatus":{
+                    "terms":{
+                        "field":"SlaStatus"
                     }
                 }
+            }
         }
     }
 }

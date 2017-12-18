@@ -23,28 +23,40 @@
                             "term": {
                                 "EgressBytes": 0
                             }
+                        },
+                        {
+                            "term":{
+                                "SourceNSG": "{{snsg:ovs-114}}"
+                            }
                         }
                     ]
                 }
             },
             "aggs": {
-                "5": {
-                    "filters": {
-                        "filters": {
-                            "SourceNSG": {
-                                "query": {
-                                    "term": {
-                                        "SourceNSG": "{{snsg:ovs-114}}"
-                                    }
-                                }
-                            }
+                "SourceIP": {
+                    "terms": {
+                        "field": "SrcIp",
+                        "size": 5,
+                        "order": {
+                            "Bytes": "desc"
                         }
                     },
                     "aggs": {
-                        "SourceIP": {
+                        "Packets": {
+                            "sum": {
+                                "field": "IngressPackets"
+                            }
+                        },
+                        "Bytes": {
+                            "sum": {
+                                "field": "IngressBytes"
+                            }
+                        },
+                        "L3Domain": {
                             "terms": {
-                                "field": "SrcIp",
+                                "field": "Domain",
                                 "size": 5,
+                                "missing":"N/A",
                                 "order": {
                                     "Bytes": "desc"
                                 }
@@ -60,9 +72,9 @@
                                         "field": "IngressBytes"
                                     }
                                 },
-                                "L3Domain": {
+                                "L2Domain": {
                                     "terms": {
-                                        "field": "Domain",
+                                        "field": "L2Domain",
                                         "size": 5,
                                         "missing":"N/A",
                                         "order": {
@@ -78,28 +90,6 @@
                                         "Bytes": {
                                             "sum": {
                                                 "field": "IngressBytes"
-                                            }
-                                        },
-                                        "L2Domain": {
-                                            "terms": {
-                                                "field": "L2Domain",
-                                                "size": 5,
-                                                "missing":"N/A",
-                                                "order": {
-                                                    "Bytes": "desc"
-                                                }
-                                            },
-                                            "aggs": {
-                                                "Packets": {
-                                                    "sum": {
-                                                        "field": "IngressPackets"
-                                                    }
-                                                },
-                                                "Bytes": {
-                                                    "sum": {
-                                                        "field": "IngressBytes"
-                                                    }
-                                                }
                                             }
                                         }
                                     }

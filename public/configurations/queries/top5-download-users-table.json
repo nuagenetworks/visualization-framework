@@ -23,27 +23,38 @@
                             "term": {
                                 "IngressBytes": 0
                             }
-                        }
+                        },
+                        {
+                            "term":{
+                                "EnterpriseName":"{{enterpriseName:test_org}}"
+                            }
+                        }                        
                     ]
                 }
             },
             "aggs": {
-                "5": {
-                    "filters": {
-                        "filters": {
-                            "Enterprise": {
-                                "query": {
-                                    "term": {
-                                        "EnterpriseName": "{{enterpriseName:test_org}}"
-                                    }
-                                }
-                            }
+                "DstIP": {
+                    "terms": {
+                        "field": "DstIp",
+                        "size": 5,
+                        "order": {
+                            "EgressBytes": "desc"
                         }
                     },
                     "aggs": {
-                        "DstIP": {
+                        "EgressPackets": {
+                            "sum": {
+                                "field": "EgressPackets"
+                            }
+                        },
+                        "EgressBytes": {
+                            "sum": {
+                                "field": "EgressBytes"
+                            }
+                        },
+                        "DestinationNSG": {
                             "terms": {
-                                "field": "DstIp",
+                                "field": "DestinationNSG",
                                 "size": 5,
                                 "order": {
                                     "EgressBytes": "desc"
@@ -60,10 +71,11 @@
                                         "field": "EgressBytes"
                                     }
                                 },
-                                "DestinationNSG": {
+                                "L3Domain": {
                                     "terms": {
-                                        "field": "DestinationNSG",
+                                        "field": "Domain",
                                         "size": 5,
+                                        "missing":"N/A",
                                         "order": {
                                             "EgressBytes": "desc"
                                         }
@@ -79,9 +91,9 @@
                                                 "field": "EgressBytes"
                                             }
                                         },
-                                        "L3Domain": {
+                                        "L2Domain": {
                                             "terms": {
-                                                "field": "Domain",
+                                                "field": "L2Domain",
                                                 "size": 5,
                                                 "missing":"N/A",
                                                 "order": {
@@ -97,28 +109,6 @@
                                                 "EgressBytes": {
                                                     "sum": {
                                                         "field": "EgressBytes"
-                                                    }
-                                                },
-                                                "L2Domain": {
-                                                    "terms": {
-                                                        "field": "L2Domain",
-                                                        "size": 5,
-                                                        "missing":"N/A",
-                                                        "order": {
-                                                            "EgressBytes": "desc"
-                                                        }
-                                                    },
-                                                    "aggs": {
-                                                        "EgressPackets": {
-                                                            "sum": {
-                                                                "field": "EgressPackets"
-                                                            }
-                                                        },
-                                                        "EgressBytes": {
-                                                            "sum": {
-                                                                "field": "EgressBytes"
-                                                            }
-                                                        }
                                                     }
                                                 }
                                             }
