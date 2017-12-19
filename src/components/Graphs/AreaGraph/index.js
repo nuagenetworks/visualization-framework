@@ -223,7 +223,7 @@ class AreaGraph extends XYGraph {
         let d = Object.assign({}, item)
 
         if(d.values.length === sequenceLength) {
-          return
+          return d
         }
 
         d.values = reverseSequence.map(key => {
@@ -245,13 +245,14 @@ class AreaGraph extends XYGraph {
 
     if(stacked === false) {
       nestedXData.forEach(data => {
-        data.values.map(value => {
-          return Object.assign( value, {
+        data.values.forEach(value => {
+          Object.assign( value, {
             y0: 0,
             y1: value[this.yValue]
           })
         })
       })
+
     } else {
       nestedXData = nestStack({
         data: nestedXData,
