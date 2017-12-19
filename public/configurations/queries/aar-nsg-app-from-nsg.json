@@ -18,34 +18,56 @@
                                     "format":"epoch_millis"
                                 }
                             }
+                        },
+                        {
+                            "term":{
+                                "EnterpriseName":"{{enterpriseName:test_organization}}"
+                            }
+                        },
+                        {
+                            "term":{
+                                "SourceNSG": "{{snsg:default}}"
+                            }
                         }
                     ]
                 }
             },
             "aggs":{
-                "12":{
-                    "filters":{
-                        "filters":{
-                            "Enterprise":{
-                                "query":{
-                                    "term":{
-                                        "EnterpriseName":"{{enterpriseName:test_organization}}"
-                                    }
-                                }
-                            }
+                "SumofBytes": {
+                    "sum": {
+                        "field": "IngressBytes"
+                    }
+                },
+                "SumofPackets": {
+                    "sum": {
+                        "field": "IngressPackets"
+                    }
+                },
+                "APMGroup": {
+                    "terms": {
+                        "field": "APMGroup",
+                        "size": 5,
+                        "order": {
+                            "SumofBytes": "desc"
                         }
                     },
                     "aggs": {
-                        "11": {
-                            "filters": {
-                                "filters": {
-                                    "SourceNSG": {
-                                        "query": {
-                                            "term": {
-                                                "SourceNSG": "{{snsg:default}}"
-                                            }
-                                        }
-                                    }
+                        "SumofBytes": {
+                            "sum": {
+                                "field": "IngressBytes"
+                            }
+                        },
+                        "SumofPackets": {
+                            "sum": {
+                                "field": "IngressPackets"
+                            }
+                        },
+                        "Application": {
+                            "terms": {
+                                "field": "Application",
+                                "size": 5,
+                                "order": {
+                                    "SumofBytes": "desc"
                                 }
                             },
                             "aggs": {
@@ -59,9 +81,9 @@
                                         "field": "IngressPackets"
                                     }
                                 },
-                                "APMGroup": {
+                                "L7Classification": {
                                     "terms": {
-                                        "field": "APMGroup",
+                                        "field": "L7ClassEnhanced",
                                         "size": 5,
                                         "order": {
                                             "SumofBytes": "desc"
@@ -78,9 +100,9 @@
                                                 "field": "IngressPackets"
                                             }
                                         },
-                                        "Application": {
+                                        "SrcVportName": {
                                             "terms": {
-                                                "field": "Application",
+                                                "field": "SrcVportName",
                                                 "size": 5,
                                                 "order": {
                                                     "SumofBytes": "desc"
@@ -97,9 +119,9 @@
                                                         "field": "IngressPackets"
                                                     }
                                                 },
-                                                "L7Classification": {
+                                                "DestinationNSG": {
                                                     "terms": {
-                                                        "field": "L7ClassEnhanced",
+                                                        "field": "DestinationNSG",
                                                         "size": 5,
                                                         "order": {
                                                             "SumofBytes": "desc"
@@ -114,48 +136,6 @@
                                                         "SumofPackets": {
                                                             "sum": {
                                                                 "field": "IngressPackets"
-                                                            }
-                                                        },
-                                                        "SrcVportName": {
-                                                            "terms": {
-                                                                "field": "SrcVportName",
-                                                                "size": 5,
-                                                                "order": {
-                                                                    "SumofBytes": "desc"
-                                                                }
-                                                            },
-                                                            "aggs": {
-                                                                "SumofBytes": {
-                                                                    "sum": {
-                                                                        "field": "IngressBytes"
-                                                                    }
-                                                                },
-                                                                "SumofPackets": {
-                                                                    "sum": {
-                                                                        "field": "IngressPackets"
-                                                                    }
-                                                                },
-                                                                "DestinationNSG": {
-                                                                    "terms": {
-                                                                        "field": "DestinationNSG",
-                                                                        "size": 5,
-                                                                        "order": {
-                                                                            "SumofBytes": "desc"
-                                                                        }
-                                                                    },
-                                                                    "aggs": {
-                                                                        "SumofBytes": {
-                                                                            "sum": {
-                                                                                "field": "IngressBytes"
-                                                                            }
-                                                                        },
-                                                                        "SumofPackets": {
-                                                                            "sum": {
-                                                                                "field": "IngressPackets"
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
                                                             }
                                                         }
                                                     }

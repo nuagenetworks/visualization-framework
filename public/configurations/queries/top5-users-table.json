@@ -18,66 +18,56 @@
                                     "format":"epoch_millis"
                                 }
                             }
-                        }
+                        },
+                        {
+                            "term":{
+                                "EnterpriseName":"{{enterpriseName:test_org}}"
+                            }
+                        }  
                     ]
                 }
             },
             "aggs":{
-                "5":{
-                    "filters":{
-                        "filters":{
-                            "Enterprise":{
-                                "query":{
-                                    "term":{
-                                        "EnterpriseName":"{{enterpriseName:test_org}}"
-                                    }
-                                }
-                            }
+                "SourceIP":{
+                    "terms":{
+                        "field":"SrcIp",
+                        "size":5,
+                        "order":{
+                            "TotalBytesCount":"desc"
                         }
                     },
                     "aggs":{
-                        "SourceIP":{
+                        "TotalPacketsCount":{
+                            "sum":{
+                                "field":"TotalPacketsCount"
+                            }
+                        },
+                        "TotalBytesCount":{
+                            "sum":{
+                                "field":"TotalBytesCount"
+                            }
+                        },
+                        "SourceNSG":{
                             "terms":{
-                                "field":"SrcIp",
+                                "field":"SourceNSG",
                                 "size":5,
                                 "order":{
                                     "TotalBytesCount":"desc"
                                 }
                             },
-                            "aggs":{
-                                "TotalPacketsCount":{
-                                    "sum":{
-                                        "field":"TotalPacketsCount"
-                                    }
-                                },
-                                "TotalBytesCount":{
-                                    "sum":{
-                                        "field":"TotalBytesCount"
-                                    }
-                                },
-                                "SourceNSG":{
-                                    "terms":{
-                                        "field":"SourceNSG",
-                                        "size":5,
-                                        "order":{
-                                            "TotalBytesCount":"desc"
-                                        }
-                                    },
-                                "aggs":{
-                                    "TotalPacketsCount":{
-                                        "sum":{
-                                            "field":"TotalPacketsCount"
-                                        }
-                                    },
-                                    "TotalBytesCount":{
-                                        "sum":{
-                                            "field":"TotalBytesCount"
-                                        }
-                                    }
+                        "aggs":{
+                            "TotalPacketsCount":{
+                                "sum":{
+                                    "field":"TotalPacketsCount"
                                 }
-                              }
+                            },
+                            "TotalBytesCount":{
+                                "sum":{
+                                    "field":"TotalBytesCount"
+                                }
                             }
                         }
+                      }
                     }
                 }
             }

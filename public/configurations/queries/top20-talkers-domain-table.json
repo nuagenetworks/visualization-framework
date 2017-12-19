@@ -18,40 +18,62 @@
                                     "format": "epoch_millis"
                                 }
                             }
+                        },
+                        {
+                            "term":{
+                                "EnterpriseName": "{{enterpriseName:test_org}}"
+                            }
+                        },
+                        {
+                            "term":{
+                                "{{domainType:Domain}}": "{{domainName:Domain1}}"
+                            }
                         }
                     ]
                 }
             },
             "aggs": {
-                "2": {
-                    "filters": {
-                        "filters": {
-                            "Enterprise": {
-                                "query": {
-                                    "term": {
-                                        "EnterpriseName": "{{enterpriseName:test_org}}"
-                                    }
-                                }
-                            }
+                "Application": {
+                    "terms": {
+                        "field": "Application",
+                        "size": 20,
+                        "order": {
+                            "1": "desc"
                         }
                     },
                     "aggs": {
-                        "3": {
-                            "filters": {
-                                "filters": {
-                                    "Domain": {
-                                        "query": {
-                                            "term": {
-                                                "{{domainType:Domain}}": "{{domainName:Domain1}}"
-                                            }
-                                        }
-                                    }
+                        "1": {
+                            "sum": {
+                                "field": "TotalBytesCount"
+                            }
+                        },
+                        "11": {
+                            "sum": {
+                                "field": "TotalPacketsCount"
+                            }
+                        },
+                        "L7Classification": {
+                            "terms": {
+                                "field": "L7ClassEnhanced",
+                                "size": 20,
+                                "order": {
+                                    "1": "desc"
                                 }
                             },
                             "aggs": {
-                                "Application": {
+                                "1": {
+                                    "sum": {
+                                        "field": "TotalBytesCount"
+                                    }
+                                },
+                                "11": {
+                                    "sum": {
+                                        "field": "TotalPacketsCount"
+                                    }
+                                },
+                                "SrcVportName": {
                                     "terms": {
-                                        "field": "Application",
+                                        "field": "SrcVportName",
                                         "size": 20,
                                         "order": {
                                             "1": "desc"
@@ -68,9 +90,9 @@
                                                 "field": "TotalPacketsCount"
                                             }
                                         },
-                                        "L7Classification": {
+                                        "SourceNSG": {
                                             "terms": {
-                                                "field": "L7ClassEnhanced",
+                                                "field": "SourceNSG",
                                                 "size": 20,
                                                 "order": {
                                                     "1": "desc"
@@ -82,14 +104,14 @@
                                                         "field": "TotalBytesCount"
                                                     }
                                                 },
-                                                "11": {
+                                                "11":{
                                                     "sum": {
                                                         "field": "TotalPacketsCount"
                                                     }
                                                 },
-                                                "SrcVportName": {
+                                                "DestinationNSG": {
                                                     "terms": {
-                                                        "field": "SrcVportName",
+                                                        "field": "DestinationNSG",
                                                         "size": 20,
                                                         "order": {
                                                             "1": "desc"
@@ -106,9 +128,9 @@
                                                                 "field": "TotalPacketsCount"
                                                             }
                                                         },
-                                                        "SourceNSG": {
+                                                        "DestVportName": {
                                                             "terms": {
-                                                                "field": "SourceNSG",
+                                                                "field": "DestVportName",
                                                                 "size": 20,
                                                                 "order": {
                                                                     "1": "desc"
@@ -120,51 +142,9 @@
                                                                         "field": "TotalBytesCount"
                                                                     }
                                                                 },
-                                                                "11":{
+                                                                "11": {
                                                                     "sum": {
                                                                         "field": "TotalPacketsCount"
-                                                                    }
-                                                                },
-                                                                "DestinationNSG": {
-                                                                    "terms": {
-                                                                        "field": "DestinationNSG",
-                                                                        "size": 20,
-                                                                        "order": {
-                                                                            "1": "desc"
-                                                                        }
-                                                                    },
-                                                                    "aggs": {
-                                                                        "1": {
-                                                                            "sum": {
-                                                                                "field": "TotalBytesCount"
-                                                                            }
-                                                                        },
-                                                                        "11": {
-                                                                            "sum": {
-                                                                                "field": "TotalPacketsCount"
-                                                                            }
-                                                                        },
-                                                                        "DestVportName": {
-                                                                            "terms": {
-                                                                                "field": "DestVportName",
-                                                                                "size": 20,
-                                                                                "order": {
-                                                                                    "1": "desc"
-                                                                                }
-                                                                            },
-                                                                            "aggs": {
-                                                                                "1": {
-                                                                                    "sum": {
-                                                                                        "field": "TotalBytesCount"
-                                                                                    }
-                                                                                },
-                                                                                "11": {
-                                                                                    "sum": {
-                                                                                        "field": "TotalPacketsCount"
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
                                                                     }
                                                                 }
                                                             }

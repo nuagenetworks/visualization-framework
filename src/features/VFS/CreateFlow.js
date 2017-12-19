@@ -480,6 +480,7 @@ class CreateFlow extends React.Component {
                 open={this.state.opened}
                 name={this.state.formName}
                 onCancel={this.props.handleClose}
+                configuration={this.postConfiguration}
                 width='60%'
                 errored={true}
             >

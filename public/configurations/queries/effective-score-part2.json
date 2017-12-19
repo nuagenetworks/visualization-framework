@@ -22,29 +22,19 @@
                         "term":{
                             "SlaTransition":"True"
                         }
+                    },
+                    {
+                        "term":{
+                            "EnterpriseName":"test_org"
+                        }
                     }
                 ]
             }
         },
         "aggs":{
-            "5":{
-                "filters":{
-                    "filters":{
-                        "Enterprise":{
-                            "query":{
-                                "term":{
-                                    "EnterpriseName":"test_org"
-                                }
-                            }
-                        }
-                    }
-                },
-                "aggs":{
-                    "Application":{
-                        "cardinality":{
-                            "field":"Application"
-                        }
-                    }
+            "Application":{
+                "cardinality":{
+                    "field":"Application"
                 }
             }
         }

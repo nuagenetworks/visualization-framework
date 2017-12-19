@@ -20,29 +20,19 @@
                         "term":{
                             "SlaStatus":"IN"
                         }
+                    },
+                    {
+                        "term":{
+                            "SourceNSG":"ovs-186"
+                        }
                     }
                 ]
             }
         },
         "aggs":{
-            "5":{
-                "filters":{
-                    "filters":{
-                        "SourceNSG":{
-                            "query":{
-                                "term":{
-                                    "SourceNSG":"ovs-186"
-                                }
-                            }
-                        }
-                    }
-                },
-                "aggs":{
-                    "Application":{
-                        "cardinality":{
-                            "field":"Application"
-                        }
-                    }
+            "Application":{
+                "cardinality":{
+                    "field":"Application"
                 }
             }
         }

@@ -59,6 +59,7 @@ class VisualizationView extends React.Component {
         this.initialize(this.props.id);
     }
 
+
     componentDidMount = () => {
         const {
             registerResize,
@@ -545,7 +546,6 @@ class VisualizationView extends React.Component {
                         { this.renderFiltersToolBar() }
                         <div className="clearfix"></div>
                     </div>
-
                     <CardText style={cardText}>
                         { this.renderVisualizationIfNeeded() }
                         {description}

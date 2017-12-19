@@ -14,27 +14,33 @@
                                 "format":"epoch_millis"
                             }
                         }
+                    },
+                    {
+                        "term":{
+                            "Enterprise":"test_org"
+                        }
                     }
                 ]
             }
         },
         "aggs":{
-            "5":{
-                "filters":{
-                    "filters":{
-                        "Enterprise":{
-                            "query":{
-                                "term":{
-                                    "Enterprise":"test_org"
-                                }
-                            }
-                        }
+            "SourceNSG":{
+                "terms":{
+                    "field":"SourceNSG",
+                    "size":5,
+                    "order":{
+                        "1":"desc"
                     }
                 },
                 "aggs":{
-                    "SourceNSG":{
+                    "1":{
+                        "sum":{
+                            "field":"AvgDelay"
+                        }
+                    },
+                    "SrcUplink":{
                         "terms":{
-                            "field":"SourceNSG",
+                            "field":"SrcUplink",
                             "size":5,
                             "order":{
                                 "1":"desc"
@@ -46,9 +52,9 @@
                                     "field":"AvgDelay"
                                 }
                             },
-                            "SrcUplink":{
+                            "DestinationNSG":{
                                 "terms":{
-                                    "field":"SrcUplink",
+                                    "field":"DestinationNSG",
                                     "size":5,
                                     "order":{
                                         "1":"desc"
@@ -60,9 +66,9 @@
                                             "field":"AvgDelay"
                                         }
                                     },
-                                    "DestinationNSG":{
+                                    "DstUplink":{
                                         "terms":{
-                                            "field":"DestinationNSG",
+                                            "field":"DstUplink",
                                             "size":5,
                                             "order":{
                                                 "1":"desc"
@@ -72,22 +78,6 @@
                                             "1":{
                                                 "sum":{
                                                     "field":"AvgDelay"
-                                                }
-                                            },
-                                            "DstUplink":{
-                                                "terms":{
-                                                    "field":"DstUplink",
-                                                    "size":5,
-                                                    "order":{
-                                                        "1":"desc"
-                                                    }
-                                                },
-                                                "aggs":{
-                                                    "1":{
-                                                        "sum":{
-                                                            "field":"AvgDelay"
-                                                        }
-                                                    }
                                                 }
                                             }
                                         }
