@@ -1,18 +1,17 @@
-import SimpleTextGraph from "./SimpleTextGraph";
-import VariationTextGraph from "./VariationTextGraph";
+import SimpleTextGraph from "./SimpleTextGraph"
+import VariationTextGraph from "./VariationTextGraph"
+import BarGraph from "./BarGraph/index"
+import LineGraph from "./LineGraph"
+import MultiLineGraph from "./MultiLineGraph"
+import PieGraph from "./PieGraph"
+import Table from "./Table"
+import ChordGraph from "./ChordGraph"
+import GaugeGraph from "./GaugeGraph"
+import HeatmapGraph from "./HeatmapGraph"
+import AreaGraph from "./AreaGraph"
+import DynamicBarGraph from "./DynamicBarGraph"
 
-import BarGraph from "./BarGraph/index";
-import LineGraph from "./LineGraph";
-import MultiLineGraph from "./MultiLineGraph";
-
-import PieGraph from "./PieGraph";
-import Table from "./Table";
-import ChordGraph from "./ChordGraph";
-import GaugeGraph from "./GaugeGraph";
-import HeatmapGraph from "./HeatmapGraph";
-import AreaGraph from "./AreaGraph";
-
-import { theme } from "../../theme";
+import { theme } from "../../theme"
 
 /*
     Stores all graphs.
@@ -28,7 +27,8 @@ let registry = {
     GaugeGraph,
     VariationTextGraph,
     HeatmapGraph,
-    AreaGraph
+    AreaGraph,
+    DynamicBarGraph
 };
 
 /*
@@ -51,6 +51,7 @@ const getGraphComponent = function (name) {
 
 // Define all default properties for graphs
 const defaults = {
+    loadSpeed: 300,
     margin: { top: 10, bottom: 10, left: 10, right: 10 },
     padding: 0.1,
     yTickGrid: true,

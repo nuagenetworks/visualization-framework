@@ -327,6 +327,7 @@ export default class BarGraph extends XYGraph {
                                         // Otherwise, set onClick and style to "undefined".
                                     }
                                 );
+
                                 return (
                                     <rect
                                         x={ x }
