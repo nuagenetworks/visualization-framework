@@ -3,7 +3,7 @@ import { theme } from "../../../theme"
 export const properties = {
     stroke: {
         color: "red",
-        width: "4px"
+        width: "2px"
     },
     legend: {
         show: false
