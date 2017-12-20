@@ -373,7 +373,7 @@ class LineGraph extends XYGraph {
                         <g>
                           {linesData.map((d, i) =>
                               (d.values.length === 1) ?
-                                  <circle key={d.key} cx={xScale(d.values[0][xColumn])} cy={yScale(d.values[0][this.yValue])} r={circleRadius} fill={colors[0]} />
+                                  <circle key={d.key} cx={xScale(d.values[0][xColumn])} cy={yScale(d.values[0][this.yValue])} r={circleRadius} fill={getColor(d.values[0])} />
                               :
                               <path
                                   key={ d.key }
