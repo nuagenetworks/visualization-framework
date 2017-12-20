@@ -2,7 +2,7 @@
     "id": "aar-nsg-per-port-delay-linechart",
     "graph": "MultiLineGraph",
     "title": "SLA Delay for {{app}}",
-    "description": "",
+    "description": "Line graph displays the Latency measurements (ms) for the application based on the APM probes. The green line is the application’s configured value of Latency SLA in VSD",
     "author": "Bharat Mukheja",
     "creationDate": "11/17/2017",
     "data": {
@@ -11,7 +11,7 @@
         "yColumn": ["Delay"],
         "yTickFormat": ".2s",
         "xLabel": "Time",
-        "yLabel": "Delay",
+        "yLabel": "Delay (ms)",
         "linesColumn":["Delay"],
         "stroke": {
           "color": "#f76159",

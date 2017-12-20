@@ -2,7 +2,7 @@
     "id": "aar-domain-nsg-per-app",
     "graph": "BarGraph",
     "title": "Data Usage per NSG for {{app}} App",
-    "description": "Domain Level. Shows Domain wide data usage per nsg for an app.",
+    "description": "Bar graph displays the data usage per NSG location for a selected application",
     "author": "Bharat Mukheja",
     "creationDate": "10/15/2017",
     "data": {

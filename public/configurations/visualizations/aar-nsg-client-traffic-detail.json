@@ -2,7 +2,7 @@
     "id": "aar-nsg-client-traffic-detail",
     "graph": "AreaGraph",
     "title": "Branch Client {{trafficType}} traffic detail on {{nsg}}",
-    "description": "Client traffic history on NSG",
+    "description": "This area graph displays the data usage per host (IP address) on the NSG ",
     "author": "Bharat Mukheja",
     "creationDate": "10/20/2017",
     "data": {
