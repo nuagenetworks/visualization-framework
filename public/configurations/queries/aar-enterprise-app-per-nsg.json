@@ -38,23 +38,23 @@
                         "field": "{{NsgType:SourceNSG}}",
                         "order": {
                             "SumofBytes": "desc"
-                        }
+                        },
+                        "size": 1000
                     },
-                        "aggs": {
-                            "SumofBytes": {
-                                "sum": {
-                                    "field": "{{bytesType:IngressBytes}}"
-                                }
+                    "aggs": {
+                        "SumofBytes": {
+                            "sum": {
+                                "field": "{{bytesType:IngressBytes}}"
+                            }
+                        },
+                        "L7Classification": {
+                            "terms": {
+                                "field": "L7Classification"
                             },
-                            "L7Classification": {
-                                "terms": {
-                                    "field": "L7Classification"
-                                },
-                                "aggs": {
-                                    "SumofBytes": {
-                                        "sum": {
-                                            "field": "{{bytesType:IngressBytes}}"
-                                        }
+                            "aggs": {
+                                "SumofBytes": {
+                                    "sum": {
+                                        "field": "{{bytesType:IngressBytes}}"
                                     }
                                 }
                             }
@@ -64,3 +64,4 @@
             }
         }
     }
+}

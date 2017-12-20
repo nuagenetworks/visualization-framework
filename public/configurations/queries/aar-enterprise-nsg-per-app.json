@@ -43,7 +43,8 @@
                         "field": "{{NsgType:SourceNSG}}",
                         "order": {
                             "SumofBytes": "desc"
-                        }
+                        },
+                        "size": 1000
                     },
                     "aggs": {
                         "SumofBytes": {
