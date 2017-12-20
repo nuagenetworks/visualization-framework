@@ -46,11 +46,10 @@ class LineGraph extends XYGraph {
           chartHeightToPixel,
           chartWidthToPixel,
           circleToPixel,
-          colorColumn,
           colors,
           dateHistogram,
           legend,
-          linesColumn,
+          linesColumn: configLinesColumn,
           margin,
           stroke,
           xColumn,
@@ -78,6 +77,9 @@ class LineGraph extends XYGraph {
         let finalYColumn = typeof yColumn === 'object' ? yColumn : [yColumn];
 
         let updatedLinesLabel = [];
+
+        let linesColumn = configLinesColumn || [yColumn]
+
         if(linesColumn) {
             updatedLinesLabel = typeof linesColumn === 'object' ? linesColumn : [linesColumn];
         }
@@ -86,13 +88,12 @@ class LineGraph extends XYGraph {
             return {
                 'key'   : d,
                 'value' : finalYColumn[i] ? finalYColumn[i] : d
-            };
-        });
-
+            }
+        })
 
         let filterDatas = []
         data.forEach((d) => {
-            if(dateHistogram && d[xColumn] <= Date.now()) {
+            if(!dateHistogram || d[xColumn] <= Date.now()) {
                 legendsData.forEach((ld) => {
                     let key = typeof linesColumn === 'object' ? ld['key'] : d[ld['key']]
 
@@ -136,7 +137,7 @@ class LineGraph extends XYGraph {
             // Inserting new object if data not found
             nestedXData.forEach(list => {
                 let index = (d.values).findIndex(o => {
-                   return o[xColumn] == list.key
+                   return `${o[xColumn]}` === `${list.key}`
                 })
 
                 if(index !== -1
