@@ -14,6 +14,11 @@ const FILTER_KEY = ['data', 'height', 'width', 'context']
 
 class BarGraph extends XYGraph {
 
+  origin = {
+    x: 0,
+    y: 0
+  }
+
   constructor(props) {
     super(props, properties)
     this.handleLeave = this.handleLeave.bind(this)
@@ -453,7 +458,16 @@ class BarGraph extends XYGraph {
     const { tooltip } = this.configuredProperties
 
     if (tooltip) {
-      this.props.showTooltip(this.getTooltipContent())
+      let x = d3.event.pageX
+      let y = d3.event.pageY
+
+      if(this.origin.x != x  || this.origin.y != y) {
+        this.origin = {
+          x,
+          y
+        }
+        this.props.showTooltip(this.getTooltipContent(), this.origin)
+      }
     }
   }
 
@@ -620,12 +634,9 @@ const mapStateToProps = (state, ownProps) =>  {
 
 const actionCreators = (dispatch) => ({
 
-  showTooltip: function(data) {
+  showTooltip: function(data, origin) {
       dispatch(actions.show({
-        origin: {
-          x: d3.event.pageX,
-          y: d3.event.pageY
-        },
+        origin,
         content: data
       }))
   },

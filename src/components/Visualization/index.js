@@ -91,7 +91,12 @@ class VisualizationView extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.initialize(nextProps.id);
+
+        //If tooltip is not moving then we will fetch the data again, else there is no need for it
+        if(nextProps.tooltip.default.origin === null
+        || JSON.stringify(nextProps.tooltip.default) === JSON.stringify(this.props.tooltip.default)) {
+            this.initialize(nextProps.id)
+        }
     }
 
     componentDidUpdate() {
@@ -298,7 +303,6 @@ class VisualizationView extends React.Component {
                 }
             }
         }
-
 
 
         let graphHeight = d3.select(`#filter_${id}`).node() ? this.state.height - d3.select(`#filter_${id}`).node().getBoundingClientRect().height : this.state.height;
