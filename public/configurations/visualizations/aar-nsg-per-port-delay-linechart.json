@@ -13,6 +13,7 @@
         "xLabel": "Time",
         "yLabel": "Delay (ms)",
         "linesColumn":["Delay"],
+        "showNull": false,
         "stroke": {
           "color": "#f76159",
           "width": "2px"
@@ -32,7 +33,7 @@
             "labelOffset": 5
         },
         "tooltip": [
-            { "column": "Delay","label":"Actual Delay" }
+            { "column": "yColumn","label":"Actual Delay" }
         ]
     },
     "query": {

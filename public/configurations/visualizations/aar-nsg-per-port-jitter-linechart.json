@@ -13,6 +13,7 @@
         "xLabel": "Time",
         "yLabel": "Jitter (ms)",
         "linesColumn":["Jitter"],
+        "showNull": false,
         "stroke": {
           "color": "#f76159",
           "width": "2px"
@@ -32,7 +33,7 @@
             "#000000"
         ],
         "tooltip": [
-            { "column": "Jitter","label":"Actual Jitter" }
+            { "column": "yColumn","label":"Actual Jitter" }
         ]
     },
     "query": {

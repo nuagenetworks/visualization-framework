@@ -13,6 +13,7 @@
         "xLabel": "Time",
         "yLabel": "Packet Loss (%)",
         "linesColumn": ["PacketLoss"],
+        "showNull": false,
         "stroke": {
           "color": "#f76159",
           "width": "2px"
@@ -32,7 +33,7 @@
             "#000000"
             ],
         "tooltip": [
-            { "column": "PacketLoss","label":"Actual Packet Loss" }
+            { "column": "yColumn","label":"Actual Packet Loss" }
         ]
     },
     "query": {
