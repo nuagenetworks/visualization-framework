@@ -619,6 +619,7 @@ const mapStateToProps = (state, ownProps) => {
         orgContext: orgContext,
         configuration: configuration ? contextualize(configuration.toJS(), context) : null,
         headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
+        tooltip: state.tooltip,
         isFetching: true,
         error: state.configurations.getIn([
             ConfigurationsActionKeyStore.VISUALIZATIONS,
