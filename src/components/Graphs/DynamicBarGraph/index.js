@@ -223,15 +223,13 @@ class BarGraph extends XYGraph {
     svg.insert('g',':first-child')
       .attr('class', 'yAxis')
 
-    if(this.isBrush()) {
-      this.getMinGraph()
+    this.getMinGraph()
         .append("g")
         .attr("class", "brush")
-    }
 
     svg.append("defs").append("clipPath")
-    .attr("id", "clip")
-    .append('rect')
+      .attr("id", `#clip${this.getGraphId()}`)
+      .append('rect')
 
     // generate elements for X and Y titles
    this.generateAxisTitleElement()
@@ -255,7 +253,7 @@ class BarGraph extends XYGraph {
     // set bar width
     this.setBarWidth()
 
-    svg.select("#clip")
+    svg.select(`#clip${this.getGraphId()}`)
     .select("rect")
       .attr("x", this.isVertical() ? 0 : -this.getYlabelWidth())
       .attr("width", this.getAvailableWidth())
@@ -263,7 +261,7 @@ class BarGraph extends XYGraph {
 
     //Add the X Axis
     const xAxis = svg.select('.xAxis')
-      .style('clip-path', 'url(#clip)')
+      .style('clip-path', `url(#clip${this.getGraphId()})`)
       .attr('transform', 'translate(0,'+ this.getAvailableHeight() +')')
       .call(this.getAxis().x)
       .selectAll('.tick text')
@@ -280,7 +278,7 @@ class BarGraph extends XYGraph {
       .call(this.getAxis().y)
 
     if(!this.isVertical())
-      yAxis.style('clip-path', 'url(#clip)')
+      yAxis.style('clip-path', `url(#clip${this.getGraphId()})`)
 
     if(!this.isVertical() && !dateHistogram) {
       yAxis.selectAll('.tick text')
@@ -290,13 +288,17 @@ class BarGraph extends XYGraph {
     this.setAxisTitles()
     this.renderLegendIfNeeded()
 
-    if(this.isBrush())
+    if(this.isBrush()) {
       this.configureMinGraph()
+    } else {
+      this.getSVG().select('.brush').select('*').remove()
+      this.getSVG().select('.min-graph-bars').select('*').remove()
+    }
 
     this.drawGraph({
       scale: this.getScale(),
       brush: false,
-      svg: this.getSVG()
+      svg
     })
   }
 
@@ -395,7 +397,7 @@ class BarGraph extends XYGraph {
 
     const newBars = bars.enter().append('g')
       .attr('class', `${classPrefix}bar-block`)
-      .style('clip-path', 'url(#clip)')
+      .style('clip-path', `url(#clip${this.getGraphId()})`)
 
     newBars.append('rect')
       .style('stroke', stroke.color)

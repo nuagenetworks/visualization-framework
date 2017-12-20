@@ -105,7 +105,7 @@ export default class AbstractGraph extends React.Component {
                 {tooltip.map(({column, label}, i) => {
                     let data = accessors[i](this.hoveredDatum)
 
-                    return data ?
+                    return (data !== null && data !== 'undefined') ?
                      (<div key={column}>
                         <strong>
                             {/* Use label if present, fall back to column name. */}

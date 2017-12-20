@@ -162,7 +162,18 @@ const getMockResponse = (configuration) => {
                 return [
                     {
                         ID: parentID,
+                        name: "Enterprise Test"
+                    }
+                ]
+
+            case "applications":
+                return [
+                    {
+                        ID: parentID,
                         name: "Enterprise Test",
+                        oneWayLoss: 10,
+                        oneWayJitter: 20,
+                        oneWayDelay: 15
                     }
                 ]
             default:
