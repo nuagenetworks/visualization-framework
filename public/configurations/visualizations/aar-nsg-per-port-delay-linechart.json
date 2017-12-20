@@ -32,7 +32,7 @@
             "labelOffset": 5
         },
         "tooltip": [
-            { "column": "Delay","label":"Actual Delay" }
+            { "column": "yColumn","label":"Actual Delay" }
         ]
     },
     "query": {

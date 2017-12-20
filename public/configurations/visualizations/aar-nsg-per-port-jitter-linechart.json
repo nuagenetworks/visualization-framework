@@ -32,7 +32,7 @@
             "#000000"
         ],
         "tooltip": [
-            { "column": "Jitter","label":"Actual Jitter" }
+            { "column": "yColumn","label":"Actual Jitter" }
         ]
     },
     "query": {

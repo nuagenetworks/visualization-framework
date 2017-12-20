@@ -32,7 +32,7 @@
             "#000000"
             ],
         "tooltip": [
-            { "column": "PacketLoss","label":"Actual Packet Loss" }
+            { "column": "yColumn","label":"Actual Packet Loss" }
         ]
     },
     "query": {

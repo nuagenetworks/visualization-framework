@@ -73,7 +73,6 @@ class LineGraph extends XYGraph {
           showNull
         } = this.getConfiguredProperties();
 
-
         let finalYColumn = typeof yColumn === 'object' ? yColumn : [yColumn];
 
         let updatedLinesLabel = [];
@@ -91,17 +90,17 @@ class LineGraph extends XYGraph {
             }
         })
 
-        let filterDatas = []
+        let flatData = []
         data.forEach((d) => {
             if(!dateHistogram || d[xColumn] <= Date.now()) {
                 legendsData.forEach((ld) => {
-                    let key = typeof linesColumn === 'object' ? ld['key'] : d[ld['key']]
 
+                    let key = typeof linesColumn === 'object' ? ld['key'] : d[ld['key']]
                     if(typeof key === "object" || key === "") {
                         return
                     }
 
-                    filterDatas.push(Object.assign({
+                    flatData.push(Object.assign({
                         [this.yValue]: d[ld['value']],
                         [this.yKey]: key
                     }, d));
@@ -111,13 +110,13 @@ class LineGraph extends XYGraph {
 
         // Nesting data on the basis of yAxis
         let nestLinesData = nest({
-            data: filterDatas,
+            data: flatData,
             key: this.yKey
         })
 
         // Nesting data on the basis of xAxis (timestamp)
         let nestedXData = nest({
-            data: filterDatas,
+            data: flatData,
             key: xColumn,
             sortColumn: xColumn
         })
@@ -173,6 +172,16 @@ class LineGraph extends XYGraph {
             }
         })
 
+        if(!linesData.length) {
+            return (
+                <div style={{paddingTop: '10px', textAlign: 'center'}}>
+                    No data to display
+                </div>
+            )
+        }
+
+        let filterDatas = merge(linesData.map(function(d) { return d.values; }))
+
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
         const yLabelFn         = (d) => d[this.yValue];
@@ -183,18 +192,16 @@ class LineGraph extends XYGraph {
         const getColor         = (d) => scale ? scale(d[this.yKey] || d["key"]) : stroke.color || colors[0];
 
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
-        let legendWidth       = legend.show && linesData.length > 1 ? this.longestLabelLength(filterDatas, legendFn) * chartWidthToPixel : 0;
+        let legendWidth       = legend.show ? this.longestLabelLength(filterDatas, legendFn) * chartWidthToPixel : 0;
 
         let yLabelWidth       = this.longestLabelLength(filterDatas, yLabelFn, yTickFormat) * chartWidthToPixel;
         let leftMargin        = margin.left + yLabelWidth;
         let availableWidth    = width - (margin.left + margin.right + yLabelWidth);
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
 
-
-
         if (legend.show)
         {
-            legend.width = legendWidth;
+            legend.width = legendWidth || 1;
 
             // Compute the available space considering a legend
             if (isVerticalLegend)
@@ -208,6 +215,7 @@ class LineGraph extends XYGraph {
                 availableHeight         -= nbLines * legend.circleSize * circleToPixel + chartHeightToPixel;
             }
         }
+
 
         let yExtent = this.updateYExtent(extent(filterDatas, yLabelFn), zeroStart);
 
@@ -305,7 +313,7 @@ class LineGraph extends XYGraph {
             .x( d => xScale(d[xColumn]))
             .y( d => yScale(d[this.yValue]))
             .extent([[-leftMargin, -margin.top], [width + margin.right, height + margin.bottom]])
-            .polygons(merge(linesData.map(function(d) { return d.values; })));
+            .polygons(filterDatas);
 
         const tooltipOffset = (d) => JSON.stringify({
           'bottom': margin.top + yScale(d[this.yValue]),

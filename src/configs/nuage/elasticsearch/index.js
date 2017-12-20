@@ -3,6 +3,8 @@ import tabify from "./tabify";
 import { ActionKeyStore } from "./redux/actions";
 import { getUsedParameters } from "../../../utils/configurations";
 
+import { parameterizedConfiguration } from "../../../utils/configurations";
+
 const ERROR_MESSAGE = "unable to fetch data."
 
 var client = null;
@@ -79,6 +81,11 @@ const ping = function (queryConfiguration, state) {
 /* Computes the request ID based on the queryConfiguration that are actually used
  */
 const getRequestID = function (queryConfiguration, context) {
+    const tmpConfiguration = parameterizedConfiguration(queryConfiguration, context);
+
+    if (!tmpConfiguration)
+        return;
+
     const parameters = getUsedParameters(queryConfiguration, context);
 
     if (Object.keys(parameters).length === 0)

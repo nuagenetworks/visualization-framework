@@ -156,14 +156,8 @@ class VisualizationView extends React.Component {
 
                             executeQueryIfNeeded(queryConfigurations[query], context).then(
                                 () => {
-                                    this.setState({
-                                        parameterizable: true,
-                                    });
                                 },
                                 (error) => {
-                                    this.setState({
-                                        parameterizable: false,
-                                    });
                                 }
                             );
                         });
@@ -507,10 +501,11 @@ class VisualizationView extends React.Component {
         const {
             configuration,
             context,
-            id
+            id,
+            hideGraph
         } = this.props;
 
-        if (!this.state.parameterizable || !configuration)
+        if (hideGraph || !configuration)
             return (<div></div>);
 
         let description;
@@ -621,6 +616,7 @@ const mapStateToProps = (state, ownProps) => {
         headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
         tooltip: state.tooltip,
         isFetching: true,
+        hideGraph: false,
         error: state.configurations.getIn([
             ConfigurationsActionKeyStore.VISUALIZATIONS,
             configurationID,
@@ -664,18 +660,28 @@ const mapStateToProps = (state, ownProps) => {
                 if (props.queryConfigurations[query] || scriptName) {
 
                     const requestID = ServiceManager.getRequestID(props.queryConfigurations[query] || scriptName, context);
-                    let response = state.services.getIn([
-                        ServiceActionKeyStore.REQUESTS,
-                        requestID
-                    ]);
 
-                    if (response && !response.get(ServiceActionKeyStore.IS_FETCHING)) {
-                        let responseJS = response.toJS();
-                        if(responseJS.error) {
-                            props.error = responseJS.error;
-                        } else if(responseJS.results) {
-                            successResultCount++;
-                            props.response[query] =responseJS.results
+                    if(typeof requestID === 'undefined') {
+                        props.hideGraph = true
+                    } else {
+
+                        let response = state.services.getIn([
+                            ServiceActionKeyStore.REQUESTS,
+                            requestID
+                        ]);
+
+                        if(!response) {
+                            props.error = 'Not able to load data'
+                        }
+
+                        if (response && !response.get(ServiceActionKeyStore.IS_FETCHING)) {
+                            let responseJS = response.toJS();
+                            if(responseJS.error) {
+                                props.error = responseJS.error;
+                            } else if(responseJS.results) {
+                                successResultCount++;
+                                props.response[query] =responseJS.results
+                            }
                         }
                     }
                 }
