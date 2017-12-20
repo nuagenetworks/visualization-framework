@@ -13,6 +13,7 @@
         "xLabel": "Time",
         "yLabel": "Jitter (ms)",
         "linesColumn":["Jitter"],
+        "showNull": false,
         "stroke": {
           "color": "#f76159",
           "width": "2px"
