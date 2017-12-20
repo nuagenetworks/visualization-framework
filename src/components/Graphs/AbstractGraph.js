@@ -384,7 +384,7 @@ export default class AbstractGraph extends React.Component {
             brush
         } = this.getConfiguredProperties()
 
-        this.brush = brush && brush <= data.length
+        this.brush = brush && brush < data.length
     }
 
     isBrush() {
