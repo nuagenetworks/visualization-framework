@@ -370,8 +370,8 @@ export default class AbstractGraph extends React.Component {
         return this.yLabelWidth;
     }
 
-    setDimensions(props, data = null) {
-        this.setYlabelWidth(data ? data : props.data);
+    setDimensions(props, data = null, column = null) {
+        this.setYlabelWidth(data ? data : props.data, column);
 
         this.setLeftMargin();
         this.setAvailableWidth(props);
