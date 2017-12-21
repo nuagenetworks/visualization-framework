@@ -228,7 +228,7 @@ class BarGraph extends XYGraph {
         .attr("class", "brush")
 
     svg.append("defs").append("clipPath")
-      .attr("id", `#clip${this.getGraphId()}`)
+      .attr("id", `clip${this.getGraphId()}`)
       .append('rect')
 
     // generate elements for X and Y titles
