@@ -6,17 +6,22 @@ import AbstractGraph from "../AbstractGraph"
 import columnAccessor from "../../../utils/columnAccessor"
 import CopyToClipboard from 'react-copy-to-clipboard'
 import {Tooltip} from 'react-lightweight-tooltip'
+import _ from 'lodash'
 
 import tooltipStyle from './tooltipStyle'
 import "./style.css"
 import style from './style'
 import {properties} from "./default.config"
+import { pick } from '../../../utils/helpers'
 
 import SearchBar from "../../SearchBar"
 
 import {
     Actions as VFSActions,
 } from '../../../features/redux/actions'
+
+const PROPS_FILTER_KEY = ['data', 'height', 'width', 'context']
+const STATE_FILTER_KEY = ['selected', 'data', 'fontSize', 'contextMenu']
 
 class Table extends AbstractGraph {
 
@@ -49,18 +54,23 @@ class Table extends AbstractGraph {
         this.initiate();
     }
 
+    componentDidMount() {
+        this.checkFontsize()
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return !_.isEqual(pick(this.props, ...PROPS_FILTER_KEY), pick(nextProps, ...PROPS_FILTER_KEY))
+          || !_.isEqual(pick(this.state, ...STATE_FILTER_KEY), pick(nextState, ...STATE_FILTER_KEY))
+    }
+
     componentWillReceiveProps(nextProps) {
-        if(this.props !== nextProps) {
+        if (!_.isEqual(pick(this.props, ...PROPS_FILTER_KEY), pick(nextProps, ...PROPS_FILTER_KEY))) {
             // reset font size on resize
             if(this.props.height !== nextProps.height || this.props.width !== nextProps.width) {
                 this.setState({ fontSize: style.defaultFontsize})
             }
             this.initiate();
         }
-    }
-
-    componentDidMount() {
-        this.checkFontsize();
     }
 
     componentDidUpdate() {
@@ -406,7 +416,8 @@ class Table extends AbstractGraph {
             selectable,
             multiSelectable,
             showCheckboxes,
-            hidePagination
+            hidePagination,
+            searchBar
         } = this.getConfiguredProperties();
 
         if(!data || !data.length) {
@@ -419,7 +430,9 @@ class Table extends AbstractGraph {
         tableData = this.removeHighlighter(tableData)
 
         let showFooter = (data.length <= limit && hidePagination !== false) ? false : true,
-          heightMargin  =  showFooter ?  100 : 70
+          heightMargin  =  showFooter ?  100 : 80
+
+          heightMargin = searchBar === false ? heightMargin * 0.3 : heightMargin
 
         return (
             <div ref={(input) => { this.container = input; }}
