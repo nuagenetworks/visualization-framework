@@ -1,0 +1,21 @@
+{
+    "id": "aar-domain-probe-table",
+    "graph": "Table",
+    "title": "{{snsg}} ({{fromPersonality}}) to {{dnsg}} ({{toPersonality}}) Probe Detail",
+    "description": "Domain level, 10 most recent Path Performance Measurements from local NSG or NSGUBR as source to remote NSG or NSGUBR as destination. Computation: Order by time in descending order.",
+    "author": "Ronak Shah",
+    "creationDate": "11/02/2016",
+    "data": {
+        "columns": [
+            { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+            { "column": "SrcUplink", "label": "Source Uplink" },
+            { "column": "DstUplink", "label": "Destination Uplink" },
+            { "column": "UnderlayName", "label": "Underlay Name" },
+            { "column": "PerfMonitor", "label": "Perf Monitor" },
+            { "column": "AvgJitter", "label": "Avg Jitter", "format": ",.2f" },
+            { "column": "AvgDelay", "label": "Avg Latency", "format": ",.2f" },
+            { "column": "AvgPktLoss", "label": "Avg Pkt Loss", "format": ",.2f"}
+        ]
+    },
+    "query": "aar-domain-probe-table"
+}

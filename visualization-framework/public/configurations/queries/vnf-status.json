@@ -1,0 +1,24 @@
+{
+    "id":"vnf-status",
+    "title":"TBD",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_vnf}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":1,
+            "sort": [
+            	{ "timestamp": { "order": "desc" } }
+            ],
+            "query": {
+                "bool": {
+                    "must": [
+                        { "term": { "enterpriseName": "{{enterpriseName:enterprise-1}}"}},
+                        { "term": { "nsg": "{{nsg:NSG-1}}" } },
+                        { "term": { "vnf": "{{vnf:NSG-1-VNF-1}}" } }
+                    ]
+                }
+            }
+        }
+    }
+}

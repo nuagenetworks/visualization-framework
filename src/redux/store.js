@@ -1,27 +1,39 @@
-import {createStore, applyMiddleware, compose, combineReducers} from "redux";
+import {createStore, applyMiddleware, combineReducers, compose} from "redux";
 import { reduxReactRouter, routerStateReducer } from "redux-router";
 import { createHistory } from "history";
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 import thunkMiddleware from "redux-thunk";
 import createLogger from "redux-logger";
+import { reducer as formReducer } from 'redux-form';
 import { updateContextMiddleware, updateVisualizationTypeMiddleware, updateConfigurationMiddleware } from "./middlewares";
 
 import configurationsReducer from "../services/configurations/redux/reducer";
+import ESReducer from "../configs/nuage/elasticsearch/redux/reducer";
 import interfaceReducer from "../components/App/redux/reducer";
 import messageBoxReducer from "../components/MessageBox/redux/reducer";
 import serviceReducer from "../services/servicemanager/redux/reducer";
 import testingReducer from "../components/Testing/redux/reducer";
+import VSDReducer from "../configs/nuage/vsd/redux/reducer";
+import VFSReducer from "../features/redux/reducer";
+
+import { reducer as tooltip } from 'redux-tooltip';
 
 
 const loggerMiddleware = createLogger();
 
 const appReducer = combineReducers({
     configurations: configurationsReducer,
+    ES: ESReducer,
     interface: interfaceReducer,
     messageBox: messageBoxReducer,
     router: routerStateReducer,
     services: serviceReducer,
-    testReducer: testingReducer
+    testReducer: testingReducer,
+    VSD: VSDReducer,
+    VFS: VFSReducer,
+    form: formReducer,
+    tooltip
 });
 
 const rootReducer = (state, action) => {
@@ -32,7 +44,7 @@ const composeEnhancers =
   typeof window === 'object' &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-    }) : compose;
+    }) : compose
 
 const enhancer = composeEnhancers(
   applyMiddleware(
@@ -45,6 +57,7 @@ const enhancer = composeEnhancers(
   // other store enhancers if any
 );
 
+// TODO - replace compose with composeWithDevTools
 const createStoreWithRouterAndMiddleware = compose(
     reduxReactRouter({createHistory}),
     enhancer

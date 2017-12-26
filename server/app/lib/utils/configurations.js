@@ -1,4 +1,4 @@
-import parse from "json-templates";
+import parse from "./jsonTemplates";
 
 /*
     Check if the context can parameterized all parameters.

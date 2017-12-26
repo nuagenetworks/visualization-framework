@@ -8,7 +8,7 @@ import { checkStatus, parseJSON } from "../common";
 
 let config = {
     timingCache: 30000,
-    api: process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/middleware/api/",
+    api: process.env.REACT_APP_API_URL || "http://localhost:8010/middleware/api/",
 }
 
 /*
@@ -62,18 +62,35 @@ const getRequestID = function (queryConfiguration, context) {
     return service.getRequestID(queryConfiguration, context);
 }
 
-const fetchData = function(visualizationId, context) {
-    let url = `${config.api}visualizations/fetch/${visualizationId}`;
 
-    return fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(context)
-      })
-      .then(checkStatus)
-      .then(parseJSON);
+/*
+    Tabify the results according to the service that has been used
+    Arguments:
+    * serviceName: the service name
+    * response: the response results
+    Returns:
+        An array of results
+*/
+const tabify = function (queryConfiguration, response) {
+    const serviceName = queryConfiguration ? queryConfiguration.service : "VSD"; // In case of scripts...
+    const service = getService(serviceName)
+
+    if (!service || !service.hasOwnProperty("tabify"))
+        return response;
+
+    return service.tabify(response);
+}
+
+// TODO: Temporary - Replace this part in the middleware
+const executeScript = function (scriptName, context) {
+    // TODO: For now, let's put the script in the treeview as discussed on 11/03
+    // Later, this part should be done in our middleware
+    let main =  require(`./scripts/${scriptName}.js`).main;
+
+    if (main)
+        return main(context);
+
+    return false;
 }
 
 export const ServiceManager = {
@@ -81,5 +98,6 @@ export const ServiceManager = {
     register,
     getService,
     getRequestID,
-    fetchData
+    executeScript,
+    tabify
 }

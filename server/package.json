@@ -26,6 +26,7 @@
     "express": "^4.14.0",
     "helmet": "^3.1.0",
     "http": "0.0.0",
+    "json-template": "^0.1.0",
     "lodash": "^4.16.4",
     "method-override": "^2.3.6",
     "mkdirp": "^0.5.1",

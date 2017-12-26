@@ -1,0 +1,15 @@
+{
+    "id": "vss-enterprise-flows-metric",
+    "title": "# Packets (24h)",
+    "query": "vss-enterprise-flows-metric",
+    "graph": "VariationTextGraph",
+    "data": {
+        "titlePosition": "top",
+        "target":{
+            "column": "timezones",
+            "value": "Last 24",
+            "field": "value",
+            "format": ",.4s"
+        }
+    }
+}

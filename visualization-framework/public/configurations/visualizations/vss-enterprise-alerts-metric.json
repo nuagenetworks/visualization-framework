@@ -1,0 +1,15 @@
+{
+    "id": "vss-enterprise-alerts-metric",
+    "title": "# Alerts (24h)",
+    "query": "vss-enterprise-alerts-metric",
+    "graph": "VariationTextGraph",
+    "data": {
+        "titlePosition": "top",
+        "target":{
+            "column": "timezones",
+            "value": "Last 24",
+            "field": "doc_count",
+            "format": ",.4s"
+        }
+    }
+}

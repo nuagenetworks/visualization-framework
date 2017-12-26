@@ -1,0 +1,20 @@
+{
+    "id":"vss-domain-flow-explorer",
+    "title":"Flow Information",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_flow}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+          "size": 1000,
+          "sort": [
+            { "timestamp": { "order": "desc" } }
+          ],
+          "query": {
+            "bool": {
+     
+            }
+          }
+        }
+    }
+}

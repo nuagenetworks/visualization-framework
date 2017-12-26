@@ -1,0 +1,17 @@
+{
+    "id": "wifi-branch-active-ssids",
+    "title": "Active SSIDs",
+    "description": "Active SSIDs for last 10 min and last 24hrs",
+    "query": "wifi-branch-active-ssids",
+    "graph": "VariationTextGraph",
+    "showTitleBar": true,
+    "data": {
+        "titlePosition": "top",
+        "target":{
+            "column": "timezones",
+            "value": "Last 10",
+            "field": "value"
+        },
+        "absolute": true
+    }
+}

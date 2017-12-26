@@ -1,0 +1,18 @@
+{
+    "id": "vss-domain-service-table",
+    "graph": "Table",
+    "title": "Service Detail",
+    "description": "Detail in a reverse chronological order about services found in this domain.",
+    "author": "Ronak Shah",
+    "creationDate": "09/27/2017",
+    "data": {
+        "columns": [
+            { "column": "nuage_metadata.service", "label": "Service" },
+            { "column": "nuage_metadata.serviceGroup", "label": "Service Group" },
+            { "column": "type", "label": "Action"},
+            { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+            { "column": "nuage_metadata.aclId", "label": "ACL", "totalCharacters": 8, "tooltip" : {"column": "nuage_metadata.aclId"} }
+        ]
+    },
+    "query": "vss-domain-service-table"
+}

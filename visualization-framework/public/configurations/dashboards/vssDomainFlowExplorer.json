@@ -1,0 +1,40 @@
+{
+    "id": "vssDomainFlowExplorer",
+    "author": "Ronak Shah",
+    "creationDate": "10/23/2017",
+    "title": "{{domainName:VSS Domain}}",
+    "titleIcon": "domain",
+    "visualizations": [
+        { "id": "vss-domain-flow-explorer", "x": 1, "y": 0, "w": 15, "h": 25, "minW": 2, "minH": 12}
+    ],
+    "links": [
+        {
+            "label": "Traffic Analytics",
+            "url": "/dashboards/vssDomainTraffic"
+        },
+        {
+            "label": "Flow Analytics",
+            "url": "/dashboards/vssDomainFlow"
+        },
+        {
+            "label": "Event Analytics",
+            "url": "/dashboards/vssDomainEvent"
+        },
+        {
+            "label": "ACL Analytics",
+            "url": "/dashboards/vssDomainACL"
+        },
+        {
+            "label": "Service Analytics",
+            "url": "/dashboards/vssDomainService"
+        },
+        {
+            "label": "Application Analytics",
+            "url": "/dashboards/vssDomainApplication"
+        },
+        {
+            "label": "Flow Explorer",
+            "url": "/dashboards/vssDomainFlowExplorer"
+        }
+    ]
+}

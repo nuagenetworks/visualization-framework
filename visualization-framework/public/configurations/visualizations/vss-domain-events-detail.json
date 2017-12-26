@@ -1,0 +1,18 @@
+{
+    "id": "vss-domain-events-detail",
+    "graph": "Table",
+    "title": "Event Detail - {{eventType}}",
+    "description": "Detail for selected event in reverse chronological order within context of this domain.",
+    "author": "Ronak Shah",
+    "creationDate": "11/15/2016",
+    "data": {
+        "columns": [
+            { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+            { "column": "value", "label": "Value"},
+            { "column": "nuage_metadata.vportId", "label": "Vport UUID", "totalCharacters": 8, "tooltip" : {"column": "nuage_metadata.vportId"} },
+            { "column": "nuage_metadata.subnetName", "label": "Subnet Name" },
+            { "column": "nuage_metadata.zoneName", "label": "Zone Name" }
+        ]
+    },
+    "query": "vss-domain-events-detail"
+}

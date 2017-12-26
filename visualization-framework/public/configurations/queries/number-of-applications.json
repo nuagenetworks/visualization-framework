@@ -1,0 +1,10 @@
+{
+    "id":"number-of-applications",
+    "title":"Applications",
+    "service":"VSD",
+    "query":{
+        "parentResource":"enterprises",
+        "parentID":"{{enterpriseID}}",
+        "resource":"applications"
+    }
+}

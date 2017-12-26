@@ -1,0 +1,10 @@
+enterprise.name: "chord_enterprise"
+#domain name prefix
+domain.name: "chord_domain"
+# no of domains per enterprise
+no_of_domains: 3
+no_of_l2domains: 3
+# no of pgs per domain
+no_of_pgs: 5
+# no of vports per pgs
+no_of_vports_per_pgs: 5

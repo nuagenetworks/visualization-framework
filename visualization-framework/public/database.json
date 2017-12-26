@@ -1,0 +1,4862 @@
+[
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "1896"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 5,
+    "year": "1896"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 6,
+    "year": "1896"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 2,
+    "year": "1896"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 11,
+    "year": "1896"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1896"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 4,
+    "year": "1896"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 5,
+    "year": "1896"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 3,
+    "year": "1896"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 7,
+    "year": "1896"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "1896"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 2,
+    "year": "1896"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 2,
+    "year": "1896"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 2,
+    "year": "1896"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1896"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 2,
+    "year": "1896"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1900"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1900"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 26,
+    "year": "1900"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 4,
+    "year": "1900"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 15,
+    "year": "1900"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 2,
+    "year": "1900"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1900"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1900"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1900"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 19,
+    "year": "1900"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 3,
+    "year": "1900"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1900"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 41,
+    "year": "1900"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 2,
+    "year": "1900"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 6,
+    "year": "1900"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 2,
+    "year": "1900"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1900"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1900"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1900"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 14,
+    "year": "1900"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 3,
+    "year": "1900"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1900"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 34,
+    "year": "1900"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 2,
+    "year": "1900"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 9,
+    "year": "1900"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 0,
+    "year": "1900"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1900"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1900"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1900"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 14,
+    "year": "1900"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 4,
+    "year": "1904"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 1,
+    "year": "1904"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 78,
+    "year": "1904"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 4,
+    "year": "1904"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 1,
+    "year": "1904"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 82,
+    "year": "1904"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1904"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 5,
+    "year": "1904"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1904"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 79,
+    "year": "1904"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 5,
+    "year": "1908"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 3,
+    "year": "1908"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 56,
+    "year": "1908"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 2,
+    "year": "1908"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 23,
+    "year": "1908"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 5,
+    "year": "1908"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 5,
+    "year": "1908"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 51,
+    "year": "1908"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 2,
+    "year": "1908"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 12,
+    "year": "1908"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1908"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 9,
+    "year": "1908"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 5,
+    "year": "1908"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 39,
+    "year": "1908"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1908"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 12,
+    "year": "1908"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1912"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1912"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 7,
+    "year": "1912"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 5,
+    "year": "1912"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 10,
+    "year": "1912"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 3,
+    "year": "1912"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1912"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1912"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1912"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 25,
+    "year": "1912"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "1912"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1912"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 4,
+    "year": "1912"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 13,
+    "year": "1912"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 15,
+    "year": "1912"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 1,
+    "year": "1912"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1912"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1912"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1912"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 19,
+    "year": "1912"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "1912"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1912"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 3,
+    "year": "1912"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 7,
+    "year": "1912"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 16,
+    "year": "1912"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 2,
+    "year": "1912"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1912"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1912"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1912"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 19,
+    "year": "1912"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 9,
+    "year": "1920"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 15,
+    "year": "1920"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 13,
+    "year": "1920"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 41,
+    "year": "1920"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 19,
+    "year": "1920"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 15,
+    "year": "1920"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 5,
+    "year": "1920"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 27,
+    "year": "1920"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 13,
+    "year": "1920"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 13,
+    "year": "1920"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 5,
+    "year": "1920"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1920"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 27,
+    "year": "1920"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 13,
+    "year": "1924"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 9,
+    "year": "1924"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 8,
+    "year": "1924"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 45,
+    "year": "1924"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 3,
+    "year": "1924"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 15,
+    "year": "1924"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 13,
+    "year": "1924"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 3,
+    "year": "1924"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 27,
+    "year": "1924"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1924"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 10,
+    "year": "1924"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 12,
+    "year": "1924"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 5,
+    "year": "1924"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1924"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 27,
+    "year": "1924"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "1928"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1928"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 6,
+    "year": "1928"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 10,
+    "year": "1928"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 3,
+    "year": "1928"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 7,
+    "year": "1928"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1928"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1928"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1928"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 22,
+    "year": "1928"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1928"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1928"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 10,
+    "year": "1928"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 7,
+    "year": "1928"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 10,
+    "year": "1928"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 5,
+    "year": "1928"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1928"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1928"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1928"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 18,
+    "year": "1928"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1928"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1928"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 5,
+    "year": "1928"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 14,
+    "year": "1928"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 7,
+    "year": "1928"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 7,
+    "year": "1928"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1928"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1928"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1928"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 16,
+    "year": "1928"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1932"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1932"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 10,
+    "year": "1932"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 3,
+    "year": "1932"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 4,
+    "year": "1932"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 12,
+    "year": "1932"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1932"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1932"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1932"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 41,
+    "year": "1932"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1932"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1932"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 5,
+    "year": "1932"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 12,
+    "year": "1932"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 7,
+    "year": "1932"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 12,
+    "year": "1932"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1932"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1932"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1932"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 32,
+    "year": "1932"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 3,
+    "year": "1932"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1932"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 4,
+    "year": "1932"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 5,
+    "year": "1932"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 5,
+    "year": "1932"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 12,
+    "year": "1932"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1932"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1932"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1932"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 30,
+    "year": "1932"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 4,
+    "year": "1936"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1936"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 7,
+    "year": "1936"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 33,
+    "year": "1936"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 4,
+    "year": "1936"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 8,
+    "year": "1936"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1936"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1936"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1936"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 24,
+    "year": "1936"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 6,
+    "year": "1936"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1936"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 6,
+    "year": "1936"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 26,
+    "year": "1936"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 7,
+    "year": "1936"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 9,
+    "year": "1936"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1936"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1936"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1936"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 20,
+    "year": "1936"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 3,
+    "year": "1936"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1936"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 6,
+    "year": "1936"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 30,
+    "year": "1936"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 3,
+    "year": "1936"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 5,
+    "year": "1936"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1936"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1936"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1936"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 12,
+    "year": "1936"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1948"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 10,
+    "year": "1948"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 3,
+    "year": "1948"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 8,
+    "year": "1948"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 38,
+    "year": "1948"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 6,
+    "year": "1948"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 14,
+    "year": "1948"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 11,
+    "year": "1948"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 27,
+    "year": "1948"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 3,
+    "year": "1948"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 13,
+    "year": "1948"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 6,
+    "year": "1948"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 8,
+    "year": "1948"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 2,
+    "year": "1948"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1948"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 19,
+    "year": "1948"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1952"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1952"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 6,
+    "year": "1952"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1952"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 1,
+    "year": "1952"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 8,
+    "year": "1952"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1952"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1952"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1952"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 40,
+    "year": "1952"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1952"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1952"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 6,
+    "year": "1952"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 7,
+    "year": "1952"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 2,
+    "year": "1952"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 9,
+    "year": "1952"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1952"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1952"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1952"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 19,
+    "year": "1952"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1952"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1952"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 6,
+    "year": "1952"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 17,
+    "year": "1952"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 8,
+    "year": "1952"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 4,
+    "year": "1952"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1952"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 2,
+    "year": "1952"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1952"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 17,
+    "year": "1952"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1956"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1956"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 4,
+    "year": "1956"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 6,
+    "year": "1956"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 6,
+    "year": "1956"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 8,
+    "year": "1956"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1956"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1956"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1956"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 32,
+    "year": "1956"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1956"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1956"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 4,
+    "year": "1956"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 13,
+    "year": "1956"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 7,
+    "year": "1956"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 8,
+    "year": "1956"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1956"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 1,
+    "year": "1956"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1956"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 25,
+    "year": "1956"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "1956"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1956"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 6,
+    "year": "1956"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 7,
+    "year": "1956"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 11,
+    "year": "1956"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 9,
+    "year": "1956"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1956"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 1,
+    "year": "1956"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1956"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 17,
+    "year": "1956"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1960"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1960"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 0,
+    "year": "1960"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 12,
+    "year": "1960"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 2,
+    "year": "1960"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 13,
+    "year": "1960"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1960"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1960"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1960"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 34,
+    "year": "1960"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1960"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1960"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 2,
+    "year": "1960"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 19,
+    "year": "1960"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 6,
+    "year": "1960"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 10,
+    "year": "1960"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1960"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1960"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1960"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 21,
+    "year": "1960"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1960"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1960"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 3,
+    "year": "1960"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 11,
+    "year": "1960"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 12,
+    "year": "1960"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 13,
+    "year": "1960"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1960"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1960"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1960"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 16,
+    "year": "1960"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1964"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1964"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 1,
+    "year": "1964"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 10,
+    "year": "1964"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 4,
+    "year": "1964"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 10,
+    "year": "1964"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1964"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1964"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1964"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 36,
+    "year": "1964"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1964"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1964"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 8,
+    "year": "1964"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 22,
+    "year": "1964"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 12,
+    "year": "1964"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 10,
+    "year": "1964"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1964"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 2,
+    "year": "1964"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1964"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 26,
+    "year": "1964"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1964"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1964"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 6,
+    "year": "1964"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 18,
+    "year": "1964"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 2,
+    "year": "1964"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 7,
+    "year": "1964"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1964"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 1,
+    "year": "1964"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1964"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 28,
+    "year": "1964"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1968"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1968"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 7,
+    "year": "1968"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1968"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 5,
+    "year": "1968"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 3,
+    "year": "1968"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1968"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1968"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1968"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 45,
+    "year": "1968"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "1968"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1968"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 3,
+    "year": "1968"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1968"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 5,
+    "year": "1968"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 4,
+    "year": "1968"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1968"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 1,
+    "year": "1968"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1968"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 28,
+    "year": "1968"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "1968"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1968"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 5,
+    "year": "1968"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1968"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 3,
+    "year": "1968"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 9,
+    "year": "1968"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1968"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 1,
+    "year": "1968"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1968"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 34,
+    "year": "1968"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 2,
+    "year": "1972"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 4,
+    "year": "1972"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 5,
+    "year": "1972"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 33,
+    "year": "1972"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1972"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 4,
+    "year": "1972"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 5,
+    "year": "1972"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 3,
+    "year": "1972"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 1,
+    "year": "1972"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 31,
+    "year": "1972"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "1972"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 7,
+    "year": "1972"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 9,
+    "year": "1972"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 10,
+    "year": "1972"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1972"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 30,
+    "year": "1972"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1976"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1976"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 2,
+    "year": "1976"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1976"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 3,
+    "year": "1976"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 2,
+    "year": "1976"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1976"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 1,
+    "year": "1976"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1976"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 34,
+    "year": "1976"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1976"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1976"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 3,
+    "year": "1976"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1976"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 5,
+    "year": "1976"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 7,
+    "year": "1976"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1976"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 1,
+    "year": "1976"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1976"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 35,
+    "year": "1976"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1976"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1976"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 4,
+    "year": "1976"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1976"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 5,
+    "year": "1976"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 4,
+    "year": "1976"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1976"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 4,
+    "year": "1976"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1976"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 25,
+    "year": "1976"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1980"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 6,
+    "year": "1980"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 5,
+    "year": "1980"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 8,
+    "year": "1980"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "1980"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 5,
+    "year": "1980"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 7,
+    "year": "1980"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 3,
+    "year": "1980"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1980"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 3,
+    "year": "1980"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 9,
+    "year": "1980"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 4,
+    "year": "1980"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 0,
+    "year": "1980"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1984"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 15,
+    "year": "1984"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 5,
+    "year": "1984"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1984"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 5,
+    "year": "1984"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 14,
+    "year": "1984"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1984"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 6,
+    "year": "1984"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1984"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 83,
+    "year": "1984"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1984"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 8,
+    "year": "1984"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 7,
+    "year": "1984"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1984"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 11,
+    "year": "1984"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 6,
+    "year": "1984"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1984"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 6,
+    "year": "1984"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1984"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 61,
+    "year": "1984"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1984"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 9,
+    "year": "1984"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 16,
+    "year": "1984"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1984"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 21,
+    "year": "1984"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 12,
+    "year": "1984"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1984"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 7,
+    "year": "1984"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1984"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 30,
+    "year": "1984"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1988"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 5,
+    "year": "1988"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 6,
+    "year": "1988"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1988"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 5,
+    "year": "1988"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 6,
+    "year": "1988"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1988"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 12,
+    "year": "1988"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1988"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 36,
+    "year": "1988"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1988"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 11,
+    "year": "1988"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 4,
+    "year": "1988"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1988"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 10,
+    "year": "1988"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 4,
+    "year": "1988"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1988"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 10,
+    "year": "1988"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1988"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 31,
+    "year": "1988"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1988"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 12,
+    "year": "1988"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 6,
+    "year": "1988"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 0,
+    "year": "1988"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 9,
+    "year": "1988"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 4,
+    "year": "1988"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1988"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 11,
+    "year": "1988"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1988"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 27,
+    "year": "1988"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1992"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 16,
+    "year": "1992"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 8,
+    "year": "1992"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 33,
+    "year": "1992"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 5,
+    "year": "1992"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 6,
+    "year": "1992"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1992"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 12,
+    "year": "1992"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1992"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 37,
+    "year": "1992"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "1992"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 22,
+    "year": "1992"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 5,
+    "year": "1992"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 21,
+    "year": "1992"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 3,
+    "year": "1992"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 5,
+    "year": "1992"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1992"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 5,
+    "year": "1992"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1992"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 34,
+    "year": "1992"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1992"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 16,
+    "year": "1992"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 16,
+    "year": "1992"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 28,
+    "year": "1992"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 12,
+    "year": "1992"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 8,
+    "year": "1992"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 0,
+    "year": "1992"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 12,
+    "year": "1992"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 0,
+    "year": "1992"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 37,
+    "year": "1992"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "1996"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 16,
+    "year": "1996"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 15,
+    "year": "1996"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 20,
+    "year": "1996"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 1,
+    "year": "1996"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 13,
+    "year": "1996"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 26,
+    "year": "1996"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 7,
+    "year": "1996"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 9,
+    "year": "1996"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 44,
+    "year": "1996"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "1996"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 22,
+    "year": "1996"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 7,
+    "year": "1996"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 18,
+    "year": "1996"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 8,
+    "year": "1996"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 10,
+    "year": "1996"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 21,
+    "year": "1996"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 15,
+    "year": "1996"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 2,
+    "year": "1996"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 32,
+    "year": "1996"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "1996"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 12,
+    "year": "1996"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 15,
+    "year": "1996"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 27,
+    "year": "1996"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 6,
+    "year": "1996"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 12,
+    "year": "1996"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 16,
+    "year": "1996"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 5,
+    "year": "1996"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 12,
+    "year": "1996"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 25,
+    "year": "1996"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "2000"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 28,
+    "year": "2000"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 13,
+    "year": "2000"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 13,
+    "year": "2000"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 11,
+    "year": "2000"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 13,
+    "year": "2000"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 32,
+    "year": "2000"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 8,
+    "year": "2000"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 3,
+    "year": "2000"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 37,
+    "year": "2000"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "2000"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 16,
+    "year": "2000"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 14,
+    "year": "2000"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 17,
+    "year": "2000"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 10,
+    "year": "2000"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 8,
+    "year": "2000"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 28,
+    "year": "2000"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 10,
+    "year": "2000"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 10,
+    "year": "2000"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 24,
+    "year": "2000"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "2000"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 14,
+    "year": "2000"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 11,
+    "year": "2000"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 26,
+    "year": "2000"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 7,
+    "year": "2000"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 13,
+    "year": "2000"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 29,
+    "year": "2000"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 10,
+    "year": "2000"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 10,
+    "year": "2000"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 32,
+    "year": "2000"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "2004"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 32,
+    "year": "2004"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 11,
+    "year": "2004"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 13,
+    "year": "2004"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 9,
+    "year": "2004"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 10,
+    "year": "2004"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 28,
+    "year": "2004"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 9,
+    "year": "2004"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 8,
+    "year": "2004"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 36,
+    "year": "2004"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 4,
+    "year": "2004"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 17,
+    "year": "2004"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 9,
+    "year": "2004"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 16,
+    "year": "2004"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 9,
+    "year": "2004"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 11,
+    "year": "2004"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 26,
+    "year": "2004"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 12,
+    "year": "2004"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 5,
+    "year": "2004"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 39,
+    "year": "2004"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "2004"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 14,
+    "year": "2004"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 13,
+    "year": "2004"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 20,
+    "year": "2004"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 12,
+    "year": "2004"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 11,
+    "year": "2004"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 36,
+    "year": "2004"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 9,
+    "year": "2004"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 9,
+    "year": "2004"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 26,
+    "year": "2004"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "2008"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 51,
+    "year": "2008"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 7,
+    "year": "2008"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 16,
+    "year": "2008"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 19,
+    "year": "2008"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 8,
+    "year": "2008"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 23,
+    "year": "2008"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 13,
+    "year": "2008"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 7,
+    "year": "2008"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 36,
+    "year": "2008"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 1,
+    "year": "2008"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 21,
+    "year": "2008"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 16,
+    "year": "2008"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 10,
+    "year": "2008"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 13,
+    "year": "2008"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 9,
+    "year": "2008"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 21,
+    "year": "2008"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 10,
+    "year": "2008"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 5,
+    "year": "2008"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 38,
+    "year": "2008"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 2,
+    "year": "2008"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 28,
+    "year": "2008"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 18,
+    "year": "2008"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 15,
+    "year": "2008"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 15,
+    "year": "2008"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 10,
+    "year": "2008"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 29,
+    "year": "2008"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 8,
+    "year": "2008"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 15,
+    "year": "2008"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 36,
+    "year": "2008"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "2012"
+  },
+  {
+    "medalType": "Gold",
+    "country": "China",
+    "nbMedals": 38,
+    "year": "2012"
+  },
+  {
+    "medalType": "Gold",
+    "country": "France",
+    "nbMedals": 11,
+    "year": "2012"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Germany",
+    "nbMedals": 11,
+    "year": "2012"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Great Britain",
+    "nbMedals": 29,
+    "year": "2012"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Italy",
+    "nbMedals": 8,
+    "year": "2012"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Russia",
+    "nbMedals": 24,
+    "year": "2012"
+  },
+  {
+    "medalType": "Gold",
+    "country": "South Korea",
+    "nbMedals": 13,
+    "year": "2012"
+  },
+  {
+    "medalType": "Gold",
+    "country": "Ukraine",
+    "nbMedals": 6,
+    "year": "2012"
+  },
+  {
+    "medalType": "Gold",
+    "country": "United States",
+    "nbMedals": 46,
+    "year": "2012"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "2012"
+  },
+  {
+    "medalType": "Silver",
+    "country": "China",
+    "nbMedals": 27,
+    "year": "2012"
+  },
+  {
+    "medalType": "Silver",
+    "country": "France",
+    "nbMedals": 11,
+    "year": "2012"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Germany",
+    "nbMedals": 19,
+    "year": "2012"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Great Britain",
+    "nbMedals": 17,
+    "year": "2012"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Italy",
+    "nbMedals": 9,
+    "year": "2012"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Russia",
+    "nbMedals": 25,
+    "year": "2012"
+  },
+  {
+    "medalType": "Silver",
+    "country": "South Korea",
+    "nbMedals": 8,
+    "year": "2012"
+  },
+  {
+    "medalType": "Silver",
+    "country": "Ukraine",
+    "nbMedals": 5,
+    "year": "2012"
+  },
+  {
+    "medalType": "Silver",
+    "country": "United States",
+    "nbMedals": 29,
+    "year": "2012"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Austria",
+    "nbMedals": 0,
+    "year": "2012"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "China",
+    "nbMedals": 23,
+    "year": "2012"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "France",
+    "nbMedals": 12,
+    "year": "2012"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Germany",
+    "nbMedals": 14,
+    "year": "2012"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Great Britain",
+    "nbMedals": 19,
+    "year": "2012"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Italy",
+    "nbMedals": 11,
+    "year": "2012"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Russia",
+    "nbMedals": 32,
+    "year": "2012"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "South Korea",
+    "nbMedals": 7,
+    "year": "2012"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "Ukraine",
+    "nbMedals": 9,
+    "year": "2012"
+  },
+  {
+    "medalType": "Bronze",
+    "country": "United States",
+    "nbMedals": 29,
+    "year": "2012"
+  }
+]
