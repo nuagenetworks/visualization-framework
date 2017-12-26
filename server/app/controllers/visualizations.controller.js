@@ -12,12 +12,18 @@ class VisualizationsController extends BaseController {
 
     try {
       let visualizationConfig = FetchManager.fetchAndParseJSON(visualization, DirectoryTypes.VISUALIZATION);
-      if(visualizationConfig && visualizationConfig.query) {
-        visualizationConfig.queryConfiguration = FetchManager.fetchAndParseJSON(visualizationConfig.query, DirectoryTypes.QUERY);
-      } else if(visualizationConfig.script) {
-        visualizationConfig.queryConfiguration = ServiceManager.executeScript(visualizationConfig.script);
-      }
+      visualizationConfig.queryConfiguration = {}
 
+      if(visualizationConfig && visualizationConfig.query) {
+        let queries = typeof visualizationConfig.query === 'string' ? {'data' : viz.query} : viz.query
+        for(let query in queries) {
+          if (queries.hasOwnProperty(query)) {
+            visualizationConfig.queryConfiguration[query] = FetchManager.fetchAndParseJSON(queries[query], DirectoryTypes.QUERY);
+          }
+        }
+      } else if(visualizationConfig.script) {
+        visualizationConfig.queryConfiguration[visualizationConfig.script] = ServiceManager.executeScript(visualizationConfig.script);
+      }
       return res.json(visualizationConfig);
     } catch(err) {
       next(err);

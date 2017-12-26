@@ -16,7 +16,7 @@ routes.get('/visualizations/:visualization', VisualizationsController.index);
 routes.post('/visualizations/fetch/:visualization', VisualizationsController.fetch);
 
 // testing routes
-routes.get('/testing/reports', TestingController.reports);
+routes.post('/testing/reports', TestingController.reports);
 routes.get('/testing/reports/:report_id', TestingController.detail);
 routes.post('/testing/update/reports', TestingController.updateDataSet);
 routes.get('/testing/reports/delete/:report_id', TestingController.deleteReports);

@@ -5,7 +5,11 @@ import { executeReport } from '../lib/selenium/pool'
 
 class TestingController extends BaseController {
 	reports(req, res, next) {
-		model.getReports(function(err, results) {
+		let pageId = req.body.page;
+		let search = req.body.search;
+		let sortBy = req.body.sortBy;
+		let limit = req.body.limit;
+		model.getReports(pageId, search, sortBy, limit, function(err, results) {
 			if(err) {
 				next(err)
 			} else{

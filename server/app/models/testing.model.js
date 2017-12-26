@@ -3,6 +3,7 @@ import DB from '../middleware/connection.js';
 import moment from 'moment';
 import async from 'async';
 
+
 class TestingModel extends BaseModel {
 
     getStatusCode(status) {
@@ -16,11 +17,54 @@ class TestingModel extends BaseModel {
       return statuses[status];
     }
 
-    getReports(callback) {
-      DB.select('*')
-        .order_by('id', 'desc')
-        .where('deleted_at',null)
-        .get('t_reports', callback);
+    getReports(pageId, searchString, sortBy, limit, callback) {
+
+      let start_from = 0;
+      if(typeof pageId !== 'undefined') {
+        start_from = parseInt(pageId-1) * limit;
+      }
+      DB.order_by(sortBy.column, sortBy.order);
+      if(typeof searchString !== 'undefined') {
+        DB.like('status', searchString);
+      }
+
+
+      DB.limit(limit, start_from)
+      .select('*')
+      .where('deleted_at',null)
+      .get('t_reports', function(err, response){
+        
+        this.countReports( searchString, sortBy, function(err,resp) {
+          let result = JSON.stringify(response);
+          let parseResult = JSON.parse(result);
+          let finalRes = [];
+          for(let par of parseResult) {
+            par.totalRecords = resp;
+            finalRes.push(par);
+          }
+          callback(null,finalRes);
+        });
+          
+      }.bind(this));
+
+    }
+
+    countReports(searchString, sortBy, callb) {
+        const select = ['COUNT(*) totalReports'];
+        DB.order_by(sortBy.column, sortBy.order);
+        if(typeof searchString !== 'undefined') {
+          DB.like('status', searchString);
+        }
+        DB.select(select).from('t_reports')
+        .where('deleted_at', null)
+        .get((err, response) => {
+          let countReports=0;
+          for (let resp in response) {
+            countReports = response[resp].totalReports;
+          }
+          callb(null, countReports);
+        });
+
     }
 
     initiate(callback) {
@@ -33,7 +77,6 @@ class TestingModel extends BaseModel {
           .join('t_dashboard_datasets as ds', 'ds.dashboard_id = d.id and ds.is_active = 1', 'left')
           .where('d.is_active', '1')
           .get(callback);
-        //.get_compiled_select();
     }
 
     updateStatus(data, where, callback) {
@@ -45,7 +88,21 @@ class TestingModel extends BaseModel {
     }
 
     insertReportDetails(data, callback) {
-      DB.insert_batch('t_report_dashboard_widgets', data, callback);
+        DB.insert_batch('t_report_dashboard_widgets', data, function(err,response){
+          for(let widgets of data) {
+            const select = ['report_id'];
+            DB.select(select).from('t_report_dashboards rd')
+              .where('rd.id', widgets.report_dashboard_id)
+              .get((err, response) => {
+              let report_id;
+              for (let resp in response) {
+                report_id = response[resp].report_id;
+              }
+              this.updateReportsPassFailCount(report_id, widgets.report_dashboard_id);
+          });
+        }
+        callback(null, 'success');
+      }.bind(this));
     }
 
     updateDataSet(chart_id, report_id, report_dashboard_id, callback) {

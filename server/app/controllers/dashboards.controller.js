@@ -19,6 +19,7 @@ class DashboardsController extends BaseController {
             viz.queryConfiguration = {}
             if(viz.query) {
               let queries = typeof viz.query === 'string' ? {'data' : viz.query} : viz.query
+
               for(let query in queries) {
                 if (queries.hasOwnProperty(query)) {
                   viz.queryConfiguration[query] = FetchManager.fetchAndParseJSON(queries[query], DirectoryTypes.QUERY);
@@ -27,10 +28,10 @@ class DashboardsController extends BaseController {
             } else if(viz.script) {
               viz.queryConfiguration[viz.script] = ServiceManager.executeScript(viz.script);
             }
-
             dasboardData.visualizations[index].visualization = viz;
             visualizations.push(dasboardData.visualizations[index]);
           } catch(err) {
+            console.log(`ERROR OCCURED: Visualization configurations issue - ${err.message}`)
             //LOG ALL THE ERRORS HERE FOR ANY MISS CONFIGURATIONS
           }
         });

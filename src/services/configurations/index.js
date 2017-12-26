@@ -5,7 +5,7 @@ import { checkStatus, parseJSON } from "../common";
 const config = {
     path: process.env.PUBLIC_URL + "/configurations/",
     api: process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : "http://localhost:8010/middleware/api/",
-    cachingTime: 900000, // (ms) -> default 30s
+    cachingTime: 120000, // (ms) -> default 30s
 }
 
 const fetchConfiguration = function (id, configType) {

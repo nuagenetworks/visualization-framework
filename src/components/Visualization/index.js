@@ -133,15 +133,15 @@ class VisualizationView extends React.Component {
             if (!showInDashboard)
                 setPageTitle("Visualization");
 
-                const { context, queryConfiguration, executeIfNeeded } = this.props;
+            const { context, queryConfiguration, executeIfNeeded } = this.props;
 
-                if(queryConfiguration) {
-                    for(let query in queryConfiguration) {
-                        if (queryConfiguration.hasOwnProperty(query)) {
-                            executeIfNeeded(configuration, context, queryConfiguration[query])
-                        }
+            if(queryConfiguration) {
+                for(let query in queryConfiguration) {
+                    if (queryConfiguration.hasOwnProperty(query)) {
+                        executeIfNeeded(configuration, context, queryConfiguration[query])
                     }
                 }
+            }
 
             // Handle configured listeners (e.g. navigate when clicking on a bar).
             if(configuration.listeners) {
@@ -564,8 +564,8 @@ const updateFilterOptions = (state, configurations, context) => {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    //Fetching Configurations of Visualizations
 
+    //Fetching Configurations of Visualizations
     const configurationID = ownProps.id || ownProps.params.id,
           orgContext = state.interface.get(InterfaceActionKeyStore.CONTEXT),
           configuration = state.configurations.getIn([
@@ -613,7 +613,6 @@ const mapStateToProps = (state, ownProps) => {
     if (props.configuration && props.configuration.query) {
 
         props.queryConfiguration =  configuration.get('queryConfiguration') ? configuration.get('queryConfiguration').toJS() : null
-
         //Checking whether all the queries configurations has been fetched
         for(let query in props.queryConfiguration) {
             if (props.queryConfiguration.hasOwnProperty(query)) {

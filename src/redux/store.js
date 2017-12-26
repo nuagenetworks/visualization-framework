@@ -19,6 +19,9 @@ import VFSReducer from "../features/redux/reducer";
 
 import { reducer as tooltip } from 'redux-tooltip';
 
+import { Actions as VSDActions, ActionKeyStore as VSDActionKeyStore} from "../configs/nuage/vsd/redux/actions"
+import { Actions as ESActions, ActionKeyStore as ESActionKeyStore} from "../configs/nuage/elasticsearch/redux/actions"
+import { Actions as ServiceActions } from "../services/servicemanager/redux/actions";
 
 const loggerMiddleware = createLogger();
 

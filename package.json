@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
-    "cross-safe-eval": "0.0.4",
     "crossfilter2": "^1.4.1",
     "d3": "4.10.0",
     "elasticsearch": "^11.0.1",
@@ -28,6 +27,7 @@
     "material-ui": "^0.16.7",
     "material-ui-datatables": "0.18.2",
     "moment": "^2.18.1",
+    "node-resemble-js": "^0.2.0",
     "react": "15.6.0",
     "react-collapsible": "^2.0.3",
     "react-copy-to-clipboard": "^4.3.1",

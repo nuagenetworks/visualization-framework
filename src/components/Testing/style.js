@@ -105,6 +105,12 @@ const style = {
   },
   fullWidth: {
     width: "100%",
+  },
+  hideBtn: {
+    display:'none'
+  },
+  showBtn: {
+    display:'block'
   }
 }
 
