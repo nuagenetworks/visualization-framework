@@ -93,11 +93,26 @@ const executeScript = function (scriptName, context) {
     return false;
 }
 
+const fetchData = function(visualizationId, context) {
+    let url = `${config.api}visualizations/fetch/${visualizationId}`;
+
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(context)
+    })
+        .then(checkStatus)
+        .then(parseJSON);
+    }
+
 export const ServiceManager = {
     config,
     register,
     getService,
     getRequestID,
     executeScript,
-    tabify
+    tabify,
+    fetchData
 }

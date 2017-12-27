@@ -15,7 +15,7 @@ class VisualizationsController extends BaseController {
       visualizationConfig.queryConfiguration = {}
 
       if(visualizationConfig && visualizationConfig.query) {
-        let queries = typeof visualizationConfig.query === 'string' ? {'data' : viz.query} : viz.query
+        let queries = typeof visualizationConfig.query === 'string' ? {'data' : visualizationConfig.query} :  visualizationConfig.query
         for(let query in queries) {
           if (queries.hasOwnProperty(query)) {
             visualizationConfig.queryConfiguration[query] = FetchManager.fetchAndParseJSON(queries[query], DirectoryTypes.QUERY);
