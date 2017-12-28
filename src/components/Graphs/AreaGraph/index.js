@@ -3,7 +3,7 @@ import XYGraph from '../XYGraph'
 import { connect } from 'react-redux'
 import ReactTooltip from 'react-tooltip'
 
-import { nest, nestStack, nestMax, merge, sorter } from "../../../utils/helpers"
+import { nest, nestStack, merge, sorter } from "../../../utils/helpers"
 
 import {
     line,
@@ -530,7 +530,6 @@ class AreaGraph extends XYGraph {
       colors
     } = this.getConfiguredProperties();
 
-    const label    = (d) => d.value ? d.value : d.key;
     const scale    = this.scaleColor(this.getYColumns(), 'key');
     this.getColor  = (d) => scale ? scale(d.key ? d.key : d ) : stroke.color || colors[0];
     

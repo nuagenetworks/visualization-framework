@@ -122,9 +122,7 @@ class VisualizationView extends React.Component {
 
         this.props.fetchConfigurationIfNeeded(id).then((c) => {
             const {
-                configuration,
-                showInDashboard,
-                setPageTitle
+                configuration
             } = this.props;
 
             if (!configuration || !configuration.id)

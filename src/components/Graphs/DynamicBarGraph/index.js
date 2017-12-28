@@ -463,7 +463,7 @@ class BarGraph extends XYGraph {
       let x = d3.event.pageX
       let y = d3.event.pageY
 
-      if(this.origin.x != x  || this.origin.y != y) {
+      if(this.origin.x !== x  || this.origin.y !== y) {
         this.origin = {
           x,
           y

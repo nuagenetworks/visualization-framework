@@ -70,24 +70,24 @@ let store = createStoreWithRouterAndMiddleware(rootReducer);
 
 store.subscribe(function() {
 
-    //const state = store.getState();
-    /*if (state.router) {
+    const state = store.getState();
+    if (state.router) {
 
         if (state.router.location.query.token && state.router.location.query.token !== state.VSD.get(VSDActionKeyStore.TOKEN))
             store.dispatch(VSDActions.setSettings(state.router.location.query.token, state.router.location.query.api, state.router.location.query.org));
 
         if (state.router.location.query.eshost && state.router.location.query.eshost !== state.ES.get(ESActionKeyStore.ES_HOST))
             store.dispatch(ESActions.setSettings(state.router.location.query.eshost));
-    }*/
+    }
 
     // Try to fetch the enterprises to verify the given token
-    /*let configuration = {
+    let configuration = {
         service: "VSD",
         query: {
             parentResource: "enterprises",
         }
     }
-    store.dispatch(ServiceActions.fetchIfNeeded(configuration, null, null, true)) // No context and force cache*/
+    //store.dispatch(ServiceActions.fetchIfNeeded(configuration, null, configuration, true)) // No context and force cache*/
 });
 
 export default store;

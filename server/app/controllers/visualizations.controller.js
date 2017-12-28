@@ -62,10 +62,8 @@ class VisualizationsController extends BaseController {
       if(!queryConfig)
         next(this.formatError('Unkown service', 422));
 
-      let serviceType = context.hasOwnProperty("dataset") ? `dataset` : queryConfig.service;
-
       //Fethcing the service manager
-      let service = ServiceManager.getService(serviceType);
+      let service = ServiceManager.getService(queryConfig.service);
 
       //Not able to reterive service from Service Manager
       if(!service)

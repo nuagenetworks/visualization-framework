@@ -131,7 +131,6 @@ export default class BarGraph extends XYGraph {
 
         const isVerticalLegend = legend.orientation === 'vertical';
 
-        const xLabelFn         = (d) => d[xColumn];
         const yLabelFn         = (d) => d[yColumn];
 
         const stackLabelFn     = (d) => d[stack];
@@ -145,7 +144,6 @@ export default class BarGraph extends XYGraph {
 
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
         
-        let xAxisLabelWidth   = this.longestLabelLength(data, xLabelFn, xTickFormat) * chartWidthToPixel;
         let yAxisLabelWidth   = this.longestLabelLength(data, yLabelFn, yTickFormat) * chartWidthToPixel;
 
         let overAllAvailableWidth = width - (margin.left + margin.right);
