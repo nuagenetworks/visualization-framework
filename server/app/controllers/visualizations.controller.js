@@ -31,17 +31,32 @@ class VisualizationsController extends BaseController {
   }
 
   fetch = async (req, res, next) => {
-    let { visualization } = req.params;
+    let { visualization, query } = req.params;
     let context = req.body;
 
     try {
       let visualizationConfig = FetchManager.fetchAndParseJSON(visualization, DirectoryTypes.VISUALIZATION);
       let queryConfig = null;
 
-      if(visualizationConfig.query)
-        queryConfig = FetchManager.fetchAndParseJSON(visualizationConfig.query, DirectoryTypes.QUERY);
-      else if(visualizationConfig.script)
+      if(visualizationConfig.query) {
+
+        let queries = typeof visualizationConfig.query === 'string' ? {'data' : visualizationConfig.query} :  visualizationConfig.query
+        let queryExist = false
+        for(let queryParam in queries) {
+          if (queries.hasOwnProperty(queryParam) && queries[queryParam] === query) {
+            queryExist = true
+          }
+        }
+
+        if(!queryExist) {
+          next(this.formatError(`${query} - Query not found`, 422));
+        }
+
+        queryConfig = FetchManager.fetchAndParseJSON(query, DirectoryTypes.QUERY);
+      }
+      else if(visualizationConfig.script) {
         queryConfig = ServiceManager.executeScript(visualizationConfig.script);
+      }
 
       //If neither query and nor script
       if(!queryConfig)

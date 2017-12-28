@@ -336,6 +336,8 @@ Display nice Pie or Donut graphs
 - **enableSelectAll** To enable/disable select all feature - Default is `true`
 - **highlight** (Array of columns) Highlighted the rows if value of columns is not null
 - **hidePagination** Hide paging and search bar if data size is less than pagination limit - Default is `true`
+- **searchBar** Hide/Show search bar - Default is `true`
+- **searchText** (string) Default text for search
 - **border**
   - **top** set top border. Default is `solid 1px #ccc`
   - **bottom** set bottom border. Default is `0`

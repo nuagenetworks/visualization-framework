@@ -130,9 +130,6 @@ class VisualizationView extends React.Component {
             if (!configuration || !configuration.id)
                 return;
 
-            if (!showInDashboard)
-                setPageTitle("Visualization");
-
             const { context, queryConfiguration, executeIfNeeded } = this.props;
 
             if(queryConfiguration) {

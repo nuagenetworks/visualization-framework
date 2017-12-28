@@ -62,7 +62,7 @@ function fetch(configuration, context, queryConfiguration, forceCache) {
 
         dispatch(didStartRequest(requestID));
 
-        return ServiceManager.fetchData(configuration.id, context)
+        return ServiceManager.fetchData(configuration.id, queryConfiguration.id, context)
             .then(
             (results) => {
 

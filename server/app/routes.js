@@ -13,7 +13,7 @@ routes.get('/', IndexController.index);
 // Users
 routes.get('/dashboards/:dashboard', DashboardsController.index);
 routes.get('/visualizations/:visualization', VisualizationsController.index);
-routes.post('/visualizations/fetch/:visualization', VisualizationsController.fetch);
+routes.post('/visualizations/fetch/:visualization/:query', VisualizationsController.fetch);
 
 // testing routes
 routes.post('/testing/reports', TestingController.reports);

@@ -93,8 +93,8 @@ const executeScript = function (scriptName, context) {
     return false;
 }
 
-const fetchData = function(visualizationId, context) {
-    let url = `${config.api}visualizations/fetch/${visualizationId}`;
+const fetchData = function(visualizationId, query, context) {
+    let url = `${config.api}visualizations/fetch/${visualizationId}/${query}`;
 
     return fetch(url, {
         method: 'POST',
