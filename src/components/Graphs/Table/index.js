@@ -6,17 +6,22 @@ import AbstractGraph from "../AbstractGraph"
 import columnAccessor from "../../../utils/columnAccessor"
 import CopyToClipboard from 'react-copy-to-clipboard'
 import {Tooltip} from 'react-lightweight-tooltip'
+import _ from 'lodash'
 
 import tooltipStyle from './tooltipStyle'
 import "./style.css"
 import style from './style'
 import {properties} from "./default.config"
+import { pick } from '../../../utils/helpers'
 
 import SearchBar from "../../SearchBar"
 
 import {
     Actions as VFSActions,
 } from '../../../features/redux/actions'
+
+const PROPS_FILTER_KEY = ['data', 'height', 'width', 'context']
+const STATE_FILTER_KEY = ['selected', 'data', 'fontSize', 'contextMenu']
 
 class Table extends AbstractGraph {
 
@@ -49,8 +54,17 @@ class Table extends AbstractGraph {
         this.initiate();
     }
 
+    componentDidMount() {
+        this.checkFontsize()
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return !_.isEqual(pick(this.props, ...PROPS_FILTER_KEY), pick(nextProps, ...PROPS_FILTER_KEY))
+          || !_.isEqual(pick(this.state, ...STATE_FILTER_KEY), pick(nextState, ...STATE_FILTER_KEY))
+    }
+
     componentWillReceiveProps(nextProps) {
-        if(this.props !== nextProps) {
+        if (!_.isEqual(pick(this.props, ...PROPS_FILTER_KEY), pick(nextProps, ...PROPS_FILTER_KEY))) {
             // reset font size on resize
             if(this.props.height !== nextProps.height || this.props.width !== nextProps.width) {
                 this.setState({ fontSize: style.defaultFontsize})
@@ -182,22 +196,22 @@ class Table extends AbstractGraph {
                 let originalData = accessor(d),
                     columnData   = originalData
 
-                if(columns[i].tooltip) {
-                    let fullText = tooltipAccessor[i](d, true);
-                    columnData = <div>
-                            <Tooltip key={`tooltip_${j}_${i}`}
-                            content={
-                                [
-                                fullText,
-                                <CopyToClipboard text={fullText ? fullText : ''}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>,
-                                ]
-                            }
-                            styles={tooltipStyle}>
-                            <a className="pointer">
-                                {columnData}
-                            </a>
-                            </Tooltip>
+                if(columnData && columns[i].tooltip) {
+                    let fullText = tooltipAccessor[i](d, true)
+                    let hoverContent = (
+                        <div key={`tooltip_${j}_${i}`}>
+                            {fullText}
+                            <CopyToClipboard text={fullText ? fullText : ''}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>
                         </div>
+                    )
+
+                    columnData = (
+                        <Tooltip key={`tooltip_${j}_${i}`}
+                            content={[hoverContent]}
+                            styles={tooltipStyle}>
+                                {columnData}
+                        </Tooltip>
+                    )
                 }
 
                 if(highlight && highlight.includes(columns[i].column) && originalData) {
@@ -212,6 +226,7 @@ class Table extends AbstractGraph {
                 return data[key] = <div style={{background: highlightColor, height: style.row.height, padding: "10px 0"}}>{data[key]}</div>
             })
 
+
             return data
         })
     }
@@ -222,7 +237,10 @@ class Table extends AbstractGraph {
 
         this.filterData = this.filterData.sort(
           (a, b) => {
-            return order === 'desc' ? value(b) > value(a) : value(a) > value(b);
+             if(order === 'desc')
+               return value(b) > value(a) ? 1 : -1
+
+            return value(a) > value(b) ? 1 : -1
           }
         );
 
@@ -256,6 +274,7 @@ class Table extends AbstractGraph {
         if(!multiSelectable) {
             this.handleClick(...selectedRows)
         }
+
         this.selectedRows[this.currentPage] = selectedRows.slice();
         this.setState({
             selected: this.selectedRows[this.currentPage]
@@ -397,7 +416,8 @@ class Table extends AbstractGraph {
             selectable,
             multiSelectable,
             showCheckboxes,
-            hidePagination
+            hidePagination,
+            searchBar
         } = this.getConfiguredProperties();
 
         if(!data || !data.length) {
@@ -410,7 +430,9 @@ class Table extends AbstractGraph {
         tableData = this.removeHighlighter(tableData)
 
         let showFooter = (data.length <= limit && hidePagination !== false) ? false : true,
-          heightMargin  =  showFooter ?  100 : 70
+          heightMargin  =  showFooter ?  100 : 80
+
+          heightMargin = searchBar === false ? heightMargin * 0.3 : heightMargin
 
         return (
             <div ref={(input) => { this.container = input; }}
