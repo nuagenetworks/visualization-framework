@@ -32,7 +32,7 @@ class VisualizationsController extends BaseController {
 
   fetch = async (req, res, next) => {
     let { visualization, query } = req.params;
-    let context = req.body;
+    let context = req.body.context;
 
     try {
       let visualizationConfig = FetchManager.fetchAndParseJSON(visualization, DirectoryTypes.VISUALIZATION);
@@ -62,6 +62,33 @@ class VisualizationsController extends BaseController {
       if(!queryConfig)
         next(this.formatError('Unkown service', 422));
 
+      return this.fetchData({
+        queryConfig,
+        context,
+        next,
+        res
+      })
+
+    } catch(err) {
+      next(err);
+    }
+  }
+
+  fetchVSD = async (req, res, next) => {
+    let queryConfig = req.body.query,
+      context = req.body.context
+
+    return this.fetchData({
+      queryConfig,
+      context,
+      next,
+      res
+    })
+  }
+
+  // Fetch data from query configuration
+  fetchData({queryConfig, context, next, res}) {
+    try {
       //Fethcing the service manager
       let service = ServiceManager.getService(queryConfig.service);
 
@@ -83,12 +110,15 @@ class VisualizationsController extends BaseController {
       service.fetch(queryConfig, context).then(function(result) {
         if(service.tabify)
           result = service.tabify(result);
-
-         return res.json(result);
+          return res.json(result);
       }, function(err) {
-         next(err);
+        if (Constants.env === "development" && service.hasOwnProperty("getMockResponse")) {
+           console.error(err)
+           return res.json([])
+        } else {
+          next(err);
+        }
       })
-
     } catch(err) {
       next(err);
     }

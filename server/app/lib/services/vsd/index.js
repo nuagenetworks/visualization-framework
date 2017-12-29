@@ -170,9 +170,9 @@ export const VSDServiceTest = {
 }
 
 const fetch = (configuration, context) => {
-    let token          = context.TOKEN,
-          api          = context.API || Constants.vsdApiEndPoint,
-          organization = context.organization;
+    let token          = context.token,
+          api          = context.api || Constants.vsdApiEndPoint,
+          organization = context.org;
 
     if (!api || !token)
         return Promise.reject({message: "No VSD API endpoint specified. To configure the VSD API endpoint, provide the endpoint URL via the environment variable REACT_APP_VSD_API_ENDPOINT at compile time. For a development environment, you can set an invalid value, which will cause the system to provide mock data for testing. For example, you can add the following line to your .bashrc or .profile startup script: 'export REACT_APP_VSD_API_ENDPOINT=http://something.invalid'"});

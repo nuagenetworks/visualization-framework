@@ -87,7 +87,7 @@ store.subscribe(function() {
             parentResource: "enterprises",
         }
     }
-    //store.dispatch(ServiceActions.fetchIfNeeded(configuration, null, configuration, true)) // No context and force cache*/
+    store.dispatch(ServiceActions.fetchIfNeeded(configuration, {}, {}, true)) // No context and force cache*/
 });
 
 export default store;

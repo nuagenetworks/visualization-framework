@@ -672,7 +672,7 @@ const actionCreators = (dispatch) => ({
     },
 
     executeIfNeeded: function(configuration, context, queryConfiguration) {
-        return dispatch(ServiceActions.fetchIfNeeded(configuration, context, queryConfiguration));
+        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context, configuration));
     }
 
  });

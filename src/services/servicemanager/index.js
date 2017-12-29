@@ -93,15 +93,26 @@ const executeScript = function (scriptName, context) {
     return false;
 }
 
-const fetchData = function(visualizationId, query, context) {
-    let url = `${config.api}visualizations/fetch/${visualizationId}/${query}`;
+const fetchData = function(visualizationId = null, query = {}, context) {
+
+    let url,
+        body = {
+        context
+    }
+
+    if(!query.id && query.service === 'VSD') {
+        url = `${config.api}visualizations/fetch/vsd`;
+        body['query'] = query
+    } else {
+        url = `${config.api}visualizations/fetch/${visualizationId}/${query.id}`
+    }
 
     return fetch(url, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json'
         },
-        body: JSON.stringify(context)
+        body: JSON.stringify(body)
     })
         .then(checkStatus)
         .then(parseJSON);

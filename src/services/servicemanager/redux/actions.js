@@ -44,7 +44,7 @@ function executeScript(scriptName, context) {
     * context: the context if the query should be parameterized
     * forceCache: a boolean to force storing the value for a long period
 */
-function fetch(configuration, context, queryConfiguration, forceCache) {
+function fetch({queryConfiguration, context, configuration, forceCache}) {
 
     let service = ServiceManager.getService(queryConfiguration.service);
 
@@ -62,7 +62,7 @@ function fetch(configuration, context, queryConfiguration, forceCache) {
 
         dispatch(didStartRequest(requestID));
 
-        return ServiceManager.fetchData(configuration.id, queryConfiguration.id, context)
+        return ServiceManager.fetchData(configuration.id, queryConfiguration, context)
             .then(
             (results) => {
 
@@ -102,7 +102,18 @@ function shouldFetch(request) {
     return !request.get(ActionKeyStore.IS_FETCHING) && currentDate > expireDate;
 }
 
-function fetchIfNeeded(configuration, context, queryConfiguration, forceCache) {
+
+/*
+    Make a request on the service based on the service name.
+
+    Arguments:
+    * query: the visualization configuration
+    * context: the context if the query should be parameterized
+    * queryConfiguration" : the query configuration
+    * forceCache: a boolean to force storing the value for a long period
+*/
+
+function fetchIfNeeded(queryConfiguration, context = {}, configuration = {}, forceCache = false) {
     const isScript = configuration.query ? false : true;
     let requestID;
 
@@ -121,10 +132,10 @@ function fetchIfNeeded(configuration, context, queryConfiguration, forceCache) {
             request = state.services.getIn([ActionKeyStore.REQUESTS, requestID]);
 
         if (shouldFetch(request)) {
-            return dispatch(fetch(configuration, context, queryConfiguration, forceCache));
+            return dispatch(fetch({queryConfiguration, context, configuration, forceCache}))
 
         } else {
-            return Promise.resolve();
+            return Promise.resolve()
         }
     }
 }

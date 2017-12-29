@@ -14,6 +14,8 @@ routes.get('/', IndexController.index);
 routes.get('/dashboards/:dashboard', DashboardsController.index);
 routes.get('/visualizations/:visualization', VisualizationsController.index);
 routes.post('/visualizations/fetch/:visualization/:query', VisualizationsController.fetch);
+routes.get('/visualizations/:visualization', VisualizationsController.index);
+routes.post('/visualizations/fetch/vsd', VisualizationsController.fetchVSD);
 
 // testing routes
 routes.post('/testing/reports', TestingController.reports);

@@ -1,5 +1,5 @@
 {
-    "id":"medalsPerCountry",
+    "id":"medalsTable",
     "title":"Country Medals",
     "service":"memory",
     "query": {
