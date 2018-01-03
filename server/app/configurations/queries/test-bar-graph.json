@@ -1,5 +1,12 @@
 {
     "id": "test-bar-graph",
     "title": "BarGraph",
-    "service": "dataset"
+    "service": "dataset",
+    "query": {
+      "timestamp":{
+        "lte":"{{endTime:now}}",
+        "gte":"{{startTime:now-7d}}",
+        "fieldType":"timestamp"
+      }
+    }
 }

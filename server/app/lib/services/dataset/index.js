@@ -18,9 +18,8 @@ const fetch = (parameters, context) => {
 
         let db = taffy(databaseConfig);
 
-        let params = parameters.query ? TaffyFilter.converter(parameters.query) : {};
-
-        let query = db().filter(params);
+        let params = parameters.query ? TaffyFilter.converter(parameters.query) : [];
+        let query = db().filter(...params);
 
         if (parameters.sortBy)
             query = query.order(parameters.sortBy);

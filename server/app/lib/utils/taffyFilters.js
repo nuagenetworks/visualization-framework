@@ -5,13 +5,15 @@ const TimeUnit = {
 }
 
 const Fields = {
-  TIMESTAMP : "timestamp"
+  TIMESTAMP : "timestamp",
+  LTE: "lte",
+  GTE: "gte"
 }
 
 const convertIntoTimestamp = function (field) {
         let time = 0;
         let unit = 0;
-        let params = {};
+        let params = [];
         let currentTime = Math.round((new Date()).getTime());
 
         for(let key in field) {
@@ -37,25 +39,31 @@ const convertIntoTimestamp = function (field) {
               }
             }
 
-            params[key] = eval(currentTime - (time * unit));
+            params.push({[key]: eval(currentTime - (time * unit))});
         }
 
         return params;
 }
 
 const converter = function (parameters) {
-  let params = {};
+  let params = [];
   for(let key in parameters) {
+      let formatter
       let fieldType = parameters[key].fieldType;
       delete parameters[key].fieldType;
       switch (fieldType) {
           case Fields.TIMESTAMP:
-              params[key] = convertIntoTimestamp(parameters[key]);
+              let values = convertIntoTimestamp(parameters[key]);
+              for(let index in values) {
+                params.push({[key]: values[index]})
+              }
               break;
           default:
-              params[key] = parameters[key]
+            params.push({[key]: parameters[key]})
       }
+
   }
+
   return params;
 }
 
