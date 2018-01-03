@@ -245,8 +245,9 @@ class LineGraph extends XYGraph {
             defaultYvalue = defaultY
             let [startRange, endRange] = yScale.domain()
 
-            if(typeof defaultY === 'object' && defaultY.source && defaultY.column && this.props[defaultY.source]) {
-                horizontalLineData = this.props[defaultY.source][0] || {}
+            if(typeof defaultY === 'object' && defaultY.column) {
+                const dataSource = defaultY.source || 'data'
+                horizontalLineData = this.props[dataSource] ? this.props[dataSource][0] : {}
                 defaultYvalue = horizontalLineData[defaultY.column] || null
             }
 
