@@ -17,16 +17,26 @@ import { pick } from '../../../utils/helpers'
 import SearchBar from "../../SearchBar"
 
 import {
+    Actions as InterfaceActions,
+} from "../../App/redux/actions";
+
+import {
     Actions as VFSActions,
 } from '../../../features/redux/actions'
-
-const PROPS_FILTER_KEY = ['data', 'height', 'width', 'context']
-const STATE_FILTER_KEY = ['selected', 'data', 'fontSize', 'contextMenu']
+import limit from '../../../utils/helpers/limit/limit';
 
 class Table extends AbstractGraph {
 
-    constructor(props, context) {
+    constructor(props) {
         super(props, properties)
+
+        const {
+            searchText
+        } = this.getConfiguredProperties()
+
+        let { context } = props
+
+        this.filterContextId = `${this.props.configuration.id}-searchText`
 
         this.handleSortOrderChange   = this.handleSortOrderChange.bind(this)
         this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this)
@@ -42,34 +52,32 @@ class Table extends AbstractGraph {
         this.filterData = false
         this.selectedRows = {}
         this.htmlData = {}
+
         this.state = {
             selected: [],
             data: [],
-            fontSize: style.defaultFontsize,
             contextMenu: null,
+            fontSize: style.defaultFontsize,
+            search:  context.hasOwnProperty(this.filterContextId) ? context[this.filterContextId] : searchText
         }
     }
 
     componentWillMount() {
-        this.initiate();
+        this.filterData = this.props.data
+        this.initiate()
     }
 
     componentDidMount() {
         this.checkFontsize()
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        return !_.isEqual(pick(this.props, ...PROPS_FILTER_KEY), pick(nextProps, ...PROPS_FILTER_KEY))
-          || !_.isEqual(pick(this.state, ...STATE_FILTER_KEY), pick(nextState, ...STATE_FILTER_KEY))
-    }
-
     componentWillReceiveProps(nextProps) {
-        if (!_.isEqual(pick(this.props, ...PROPS_FILTER_KEY), pick(nextProps, ...PROPS_FILTER_KEY))) {
-            // reset font size on resize
-            if(this.props.height !== nextProps.height || this.props.width !== nextProps.width) {
-                this.setState({ fontSize: style.defaultFontsize})
-            }
-            this.initiate();
+        // reset font size on resize
+        if(this.props.height !== nextProps.height || this.props.width !== nextProps.width) {
+            this.setState({ fontSize: style.defaultFontsize})
+        } else if(!_.isEqual(nextProps.data, this.props.data)) {
+            this.filterData = this.props.data
+            this.initiate()
         }
     }
 
@@ -86,13 +94,10 @@ class Table extends AbstractGraph {
 
         if (!columns)
             return;
-
         /*
          * On data change, resetting the paging and filtered data to 1 and false respectively.
          */
-        this.resetFilters();
-
-        this.filterData = this.props.data;
+        this.resetFilters()
         this.setHeaderData(columns);
         this.updateData();
     }
@@ -110,28 +115,34 @@ class Table extends AbstractGraph {
     }
 
     resetFilters() {
-        this.currentPage = 1;
-        this.selectedRows = {};
+        this.currentPage  = 1
+        this.selectedRows = {}
     }
 
-    handleSearch(data) {
-        this.resetFilters();
+    handleSearch(data, query) {
 
-        this.filterData = data;
-        this.updateData();
+        // reset pagination and selected row data
+        this.resetFilters()
+
+        this.filterData = data
+        this.updateData({
+            search: query
+        })
+
+        this.props.goTo(window.location.pathname, Object.assign({}, this.props.context, {[this.filterContextId]: query}))
     }
 
-    updateData() {
+    updateData(state = {}) {
         const {
             limit,
         } = this.getConfiguredProperties();
 
         let offset = limit * (this.currentPage - 1);
 
-        this.setState({
+        this.setState(Object.assign({
             data : this.filterData.slice(offset, offset + limit),
             selected: this.selectedRows[this.currentPage] ? this.selectedRows[this.currentPage]: []
-        });
+        }, state))
     }
 
     getColumns() {
@@ -252,13 +263,13 @@ class Table extends AbstractGraph {
     }
 
     handlePreviousPageClick() {
-        --this.currentPage;
-        this.updateData();
+        --this.currentPage
+        this.updateData()
     }
 
     handleNextPageClick() {
-        ++this.currentPage;
-        this.updateData();
+        ++this.currentPage
+        this.updateData()
     }
 
     handleClick(key) {
@@ -363,18 +374,26 @@ class Table extends AbstractGraph {
     }
 
     renderSearchBarIfNeeded() {
+
         const {
-            searchBar,
-            searchText
+            context
+        } = this.props
+
+        const {
+            search
+        } = this.state
+
+        const {
+            searchBar
         } = this.getConfiguredProperties();
 
         if(searchBar === false)
-           return;
+           return
 
         return (
           <SearchBar
             data={this.props.data}
-            searchText={searchText}
+            searchText={search}
             options={this.getHeaderData()}
             handleSearch={this.handleSearch}
             columns={this.getColumns()}
@@ -434,7 +453,7 @@ class Table extends AbstractGraph {
 
           heightMargin = searchBar === false ? heightMargin * 0.3 : heightMargin
 
-        return (
+          return (
             <div ref={(input) => { this.container = input; }}
                 onContextMenu={this.handleContextMenu}
                 >
