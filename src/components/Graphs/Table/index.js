@@ -12,18 +12,12 @@ import tooltipStyle from './tooltipStyle'
 import "./style.css"
 import style from './style'
 import {properties} from "./default.config"
-import { pick } from '../../../utils/helpers'
 
 import SearchBar from "../../SearchBar"
 
 import {
-    Actions as InterfaceActions,
-} from "../../App/redux/actions";
-
-import {
     Actions as VFSActions,
 } from '../../../features/redux/actions'
-import limit from '../../../utils/helpers/limit/limit';
 
 class Table extends AbstractGraph {
 
@@ -114,15 +108,30 @@ class Table extends AbstractGraph {
         }
     }
 
-    resetFilters() {
-        this.currentPage  = 1
-        this.selectedRows = {}
+    resetFilters(page = null, select = null) {
+        const {
+            configuration,
+            context
+        } = this.props
+
+        this.currentPage  = page || (context.hasOwnProperty(`${configuration.id}-pagination`) ? JSON.parse(context[`${configuration.id}-pagination`]) : 1)
+        this.selectedRows = select || (context.hasOwnProperty(`${configuration.id}-searchSelect`) ? JSON.parse(context[`${configuration.id}-searchSelect`]) : {})
     }
 
     handleSearch(data, query) {
+        const {
+            context
+        } = this.props
 
-        // reset pagination and selected row data
-        this.resetFilters()
+        // reset pagination and selected row data on new query
+        if(context[this.filterContextId] !== query){
+            this.currentPage = 1
+            this.selectedRows = {}
+            this.updatePaginationContext()
+            this.updateSelectableContext()
+        } else {
+            this.resetFilters()
+        }
 
         this.filterData = data
         this.updateData({
@@ -258,17 +267,41 @@ class Table extends AbstractGraph {
         /**
          * Resetting the paging due to sorting
          */
-        this.resetFilters();
+
+        this.updateSelectableContext()
+        this.resetFilters(null, {});
         this.updateData();
+    }
+
+    // update selected rows in context
+    updateSelectableContext(selectable = {}) {
+        const {
+            context,
+            configuration
+        } = this.props
+
+        this.props.goTo(window.location.pathname, Object.assign({}, context, {[`${configuration.id}-searchSelect`]: JSON.stringify(selectable)}))
+    }
+
+    // update current pagination in context
+    updatePaginationContext() {
+        const {
+            context,
+            configuration
+        } = this.props
+
+        this.props.goTo(window.location.pathname, Object.assign({}, context, {[`${configuration.id}-pagination`]: this.currentPage}))
     }
 
     handlePreviousPageClick() {
         --this.currentPage
+        this.updatePaginationContext()
         this.updateData()
     }
 
     handleNextPageClick() {
         ++this.currentPage
+        this.updatePaginationContext()
         this.updateData()
     }
 
@@ -278,6 +311,10 @@ class Table extends AbstractGraph {
     }
 
     handleRowSelection(selectedRows) {
+        const {
+            configuration
+        } = this.props;
+
         const {
             multiSelectable
         } = this.getConfiguredProperties();
@@ -290,11 +327,14 @@ class Table extends AbstractGraph {
         this.setState({
             selected: this.selectedRows[this.currentPage]
         })
+
+        this.updateSelectableContext(this.selectedRows)
+
         const { selectRow, location } = this.props;
         if (selectRow) {
             const selectedRows = this.getSelectedRows();
             const flow = selectedRows ? selectedRows[0] : {};
-            selectRow(this.props.configuration.id, flow, location.query, location.pathname);
+            selectRow(configuration.id, flow, location.query, location.pathname);
         }
 
     }
@@ -374,11 +414,6 @@ class Table extends AbstractGraph {
     }
 
     renderSearchBarIfNeeded() {
-
-        const {
-            context
-        } = this.props
-
         const {
             search
         } = this.state
@@ -506,4 +541,4 @@ const actionCreators = (dispatch) => ({
     }
 });
 
-export default connect ( mapStateToProps, actionCreators) (Table);
+export default connect (mapStateToProps, actionCreators) (Table);
