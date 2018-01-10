@@ -4,9 +4,14 @@
     "creationDate": "09/29/2016",
     "title": "AAR Enterprise({{enterpriseName}}) - L7Classification Detail",
     "visualizations": [
-        { "id": "top20-talkers-enterprise",             "x": 0, "y": 0,  "w": 12, "h": 15, "minW": 8, "minH": 12, "static": true},
-        { "id": "top20-talkers-enterprise-defaultapp",  "x": 0, "y": 15, "w": 12, "h": 15, "minW": 2, "minH": 12, "static": true},
-        { "id": "app-specific-date-histogram",          "x": 0, "y": 30, "w": 12, "h": 15, "minW": 8, "minH": 12, "static": true}
+        { "id": "aar-enterprise-all-app-usage",         "x": 0, "y": 0,  "w": 3, "h": 15, "minW": 3, "minH": 15, "static": true},
+        { "id": "aar-enterprise-app-per-nsg",           "x": 3, "y": 0,  "w": 6, "h": 15, "minW": 6, "minH": 15, "static": true},
+        { "id": "aar-enterprise-nsg-per-app",           "x": 9, "y": 0,  "w": 3, "h": 15, "minW": 3, "minH": 15, "static": true},
+        { "id": "aar-enterprise-nsg-app-cumulative",    "x": 0, "y": 15,  "w": 3, "h": 15, "minW": 3, "minH": 15, "static": true},
+        { "id": "aar-enterprise-nsg-app-traffic-detail","x": 3, "y": 15, "w": 9, "h": 15, "minW": 9, "minH": 12, "static": true},
+        { "id": "top20-talkers-enterprise",             "x": 0, "y": 30,  "w": 6, "h": 15, "minW": 6, "minH": 15, "static": true},
+        { "id": "top20-talkers-enterprise-defaultapp",  "x": 6, "y": 30, "w": 6, "h": 15, "minW": 6, "minH": 15, "static": true},
+        { "id": "app-specific-date-histogram",          "x": 0, "y": 45, "w": 12, "h": 15, "minW": 12, "minH": 15, "static": true}
     ],
     "links": [
         {
@@ -17,5 +22,34 @@
             "label": "Detail View",
             "url": "/dashboards/aarEnterpriseDetail"
         }
-    ]
+    ],
+    "filterOptions": {
+        "Traffic Type": {
+            "parameter": "trafficType",
+            "default": "Upload",
+            "options": [
+                {
+                    "label": "Upload",
+                    "value": "Upload",
+                    "default": true,
+                    "forceOptions": {
+                        "bytesType": "IngressBytes",
+                        "zeroBytesType":"EgressBytes",
+                        "IpType": "SrcIp",
+                        "NsgType":"SourceNSG"
+                    }
+                },
+                {
+                    "label": "Download",
+                    "value": "Download",
+                    "forceOptions": {
+                        "bytesType": "EgressBytes",
+                        "zeroBytesType":"IngressBytes",
+                        "IpType": "DstIp",
+                        "NsgType":"DestinationNSG"
+                    }
+                }
+            ]
+        }
+    }
 }

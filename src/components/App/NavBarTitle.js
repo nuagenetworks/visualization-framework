@@ -12,7 +12,7 @@ class NavBarTitleView extends React.Component {
         if (context && context.hasOwnProperty("fullScreen"))
             return (<div></div>);
 
-        let icon = (titleIcon) ? <img style={style.iconNavBarMenu} src={`/icons/icon-${titleIcon}.png`} alt="" /> : '';
+        let icon = (titleIcon) ? <img style={style.iconNavBarMenu} src={`${process.env.PUBLIC_URL}/icons/icon-${titleIcon}.png`} alt="" /> : '';
 
         return (
             <div>

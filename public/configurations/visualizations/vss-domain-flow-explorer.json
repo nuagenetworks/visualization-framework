@@ -1,0 +1,40 @@
+
+{
+    "id": "vss-domain-flow-explorer",
+    "graph": "Table",
+    "title": "Flow Explorer",
+    "description": "Detail in a reverse chronological order about flows",
+    "author": "Ronak Shah",
+    "creationDate": "10/23/2017",
+    "data": {
+        "limit": 100,
+        "columns": [
+            { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+            { "column": "sourceip", "label": "SIP" },
+            { "column": "destinationip", "label": "DIP" },
+            { "column": "sourceport", "label": "S-Port" },
+            { "column": "destinationport", "label": "D-Port" },
+            { "column": "protocol", "label": "Proto" },
+            { "column": "type", "label": "Type"},
+            { "column": "nuage_metadata.subnetName", "label": "Subnet", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.subnetName"} },
+            { "column": "nuage_metadata.zoneName", "label": "Zone", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.zoneName"}  },
+            { "column": "nuage_metadata.acl_source_type", "label": "Asso-Source-Type" },
+            { "column": "nuage_metadata.acl_source_name", "label": "Asso-Source-Name", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.acl_source_name"} },
+            { "column": "nuage_metadata.acl_destination_type", "label": "Asso-Dest-Type" },
+            { "column": "nuage_metadata.acl_destination_name", "label": "Asso-Dest-Name", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.acl_destination_name"} },
+            { "column": "nuage_metadata.l7ApplicationName", "label": "L7Application"},
+            { "column": "nuage_metadata.service", "label": "Service" },
+            { "column": "nuage_metadata.serviceGroup", "label": "Service-Group" },
+            { "column": "sourcemac", "label": "SMAC" },
+            { "column": "destinationmac", "label": "DMAC" },
+            { "column": "packets", "label": "Packets" },
+            { "column": "nuage_metadata.aclId", "label": "ACL", "totalCharacters": 13, "tooltip" : {"column": "nuage_metadata.aclId"} },
+            { "column": "nuage_metadata.vfrPolicyID", "label": "PolicyID", "totalCharacters": 13, "tooltip" : {"column": "nuage_metadata.vfrPolicyID"} }
+        ]
+    },
+    "menu": [
+        { "text": "Create Virtual Firewall Rule", "rootpath": "vfs/new", "params": { "operation": "create"} },
+        { "text": "Add to Virtual Firewall Rule", "rootpath": "vfs/new", "params": { "operation": "add"} }
+    ],
+    "query": "vss-domain-flow-explorer"
+}

@@ -1,0 +1,42 @@
+.filter {
+  position: relative;
+  flex: 1;
+  padding-right: 5px;
+}
+
+.filter-icon {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+}
+
+.submit-icon {
+  position: absolute;
+  top: 0px;
+  right: 4px;
+}
+
+.react-filter-box {
+  height: 38px !important;
+}
+
+.search-btn {
+  height: 38px;
+  width: 38px;
+  color: #555555;
+  vertical-align: middle;
+  border-radius: 4px;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.search-btn:focus {
+  border-color: #66afe9;
+  outline: 0;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+.pad-4 {
+  padding: 4px;
+}

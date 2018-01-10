@@ -6,10 +6,9 @@
     "creationDate": "23/01/2016",
     "data": {
         "columns": [
-            { "column": "name"},
-            { "column": "description" },
-            { "column": "ID"}
-        ]
+            { "column": "name"}
+        ],
+        "searchBar": false
     },
     "listeners": [{
       "params": {

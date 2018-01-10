@@ -7,6 +7,8 @@ import CircularProgress from "material-ui/CircularProgress";
 import { Responsive, WidthProvider } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
+import { Tooltip } from 'redux-tooltip';
+
 import Visualization from "../Visualization";
 import FiltersToolBar from "../FiltersToolBar";
 
@@ -26,7 +28,7 @@ import { contextualize } from "../../utils/configurations"
 import { defaultFilterOptions } from "./default.js"
 
 import style from "./styles";
-
+import "./style.css";
 
 export class DashboardView extends React.Component {
 
@@ -107,7 +109,8 @@ export class DashboardView extends React.Component {
     renderNavigationBarIfNeeded() {
         const {
             configuration,
-            context
+            context,
+            filterContext
         } = this.props;
 
         const links = configuration.get("links");
@@ -116,6 +119,7 @@ export class DashboardView extends React.Component {
             return;
 
         const currentUrl = window.location.pathname;
+        let contextWithFilter = Object.assign({}, context, filterContext)
 
         return (
             <div style={style.navigationContainer}>
@@ -128,7 +132,7 @@ export class DashboardView extends React.Component {
                         return <li key={index}
                                    style={highlight}
                                    >
-                                    <Link to={{ pathname:targetURL, query: context}}
+                                    <Link to={{ pathname:targetURL, query: contextWithFilter}}
                                     style={style.noneTextDecoration}
                                     >
                                         {link.get("label")}
@@ -166,11 +170,16 @@ export class DashboardView extends React.Component {
 
             let filterOptions;
 
-            if (configuration.get("filterOptions")) {
-                filterOptions = Object.assign({}, defaultFilterOptions, configuration.get("filterOptions").toJS());
-            }
+            if (configuration.get("defaultFilterOptionsOverride")) {
+                filterOptions = configuration.get("defaultFilterOptionsOverride").toJS();
+            } 
             else {
-                filterOptions = defaultFilterOptions;
+                if (configuration.get("filterOptions")) {
+                    filterOptions = Object.assign({}, defaultFilterOptions, configuration.get("filterOptions").toJS());
+                }
+                else {
+                    filterOptions = defaultFilterOptions;
+                }
             }
 
             let verticalCompact = true;
@@ -183,7 +192,7 @@ export class DashboardView extends React.Component {
                     {this.renderNavigationBarIfNeeded()}
 
                     <FiltersToolBar filterOptions={filterOptions} />
-
+                    <Tooltip className='tooltip-container'/>
                     <div style={style.gridContainer}>
                         <ResponsiveReactGridLayout
                             rowHeight={10}
@@ -220,6 +229,8 @@ export class DashboardView extends React.Component {
 
 const mapStateToProps = (state, ownProps) => ({
     context: state.interface.get(InterfaceActionKeyStore.CONTEXT),
+
+    filterContext: state.interface.get(InterfaceActionKeyStore.FILTER_CONTEXT),
 
     configuration: state.configurations.getIn([
         ConfigurationsActionKeyStore.DASHBOARDS,

@@ -36,7 +36,7 @@
                 "services": {
                     "terms": {
                         "field": "nuage_metadata.service",
-                        "size": 0,
+                        "size": 100,
                         "order": {
                             "SumOf": "desc"
                         }

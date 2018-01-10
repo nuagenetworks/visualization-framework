@@ -3,7 +3,7 @@ import { theme } from "../../../theme"
 export const properties = {
     stroke: {
         color: "red",
-        width: "4px"
+        width: "2px"
     },
     legend: {
         show: false
@@ -18,5 +18,6 @@ export const properties = {
         theme.palette.yellowDarkColor,
     ],
     zeroStart: true,
-    circleRadius: 5
+    circleRadius: 5,
+    defaultYColor: theme.palette.greenColor
 }

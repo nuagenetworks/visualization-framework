@@ -1,10 +1,12 @@
-import {createStore, applyMiddleware, compose, combineReducers} from "redux";
+import {createStore, applyMiddleware, combineReducers} from "redux";
 import { reduxReactRouter, routerStateReducer } from "redux-router";
 import { createHistory } from "history";
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 import thunkMiddleware from "redux-thunk";
 import createLogger from "redux-logger";
-import { updateContextMiddleware, updateVisualizationTypeMiddleware, updateConfigurationMiddleware } from "./middlewares";
+import { reducer as formReducer } from 'redux-form';
+import { updateContextMiddleware, updateVisualizationTypeMiddleware } from "./middlewares";
 
 import configurationsReducer from "../services/configurations/redux/reducer";
 import ESReducer from "../configs/nuage/elasticsearch/redux/reducer";
@@ -12,6 +14,9 @@ import interfaceReducer from "../components/App/redux/reducer";
 import messageBoxReducer from "../components/MessageBox/redux/reducer";
 import serviceReducer from "../services/servicemanager/redux/reducer";
 import VSDReducer from "../configs/nuage/vsd/redux/reducer";
+import VFSReducer from "../features/redux/reducer";
+
+import { reducer as tooltip } from 'redux-tooltip';
 
 import { Actions as VSDActions, ActionKeyStore as VSDActionKeyStore} from "../configs/nuage/vsd/redux/actions"
 import { Actions as ESActions, ActionKeyStore as ESActionKeyStore} from "../configs/nuage/elasticsearch/redux/actions"
@@ -27,20 +32,22 @@ const appReducer = combineReducers({
     router: routerStateReducer,
     services: serviceReducer,
     VSD: VSDReducer,
+    VFS: VFSReducer,
+    form: formReducer,
+    tooltip
 });
 
 const rootReducer = (state, action) => {
   return appReducer(state, action);
 };
 
-const createStoreWithRouterAndMiddleware = compose(
+const createStoreWithRouterAndMiddleware = composeWithDevTools(
     reduxReactRouter({createHistory}),
     applyMiddleware(
         thunkMiddleware,
         loggerMiddleware,
         updateContextMiddleware,
-        updateVisualizationTypeMiddleware,
-        updateConfigurationMiddleware
+        updateVisualizationTypeMiddleware
     )
 )(createStore);
 

@@ -53,6 +53,11 @@ const customTheme = {
     yellowDarkerColor: "#f7d31e",
     yellowLightColor: "#faf78e",
     yellowLighterColor: "#f9f7bc",
+    aquaLightColor: "#97c5c1",
+    blueviolet: "#8A2BE3",
+    lightBrown: "#deb887",
+    darkCyan: "#008B8F",
+    peach: "#FFDABA"
 }
 
 export const lightTheme = getMuiTheme(lightMuiTheme, {
@@ -141,6 +146,12 @@ export const lightTheme = getMuiTheme(lightMuiTheme, {
         yellowDarkerColor: customTheme.yellowDarkerColor,
         yellowLightColor: customTheme.yellowLightColor,
         yellowLighterColor: customTheme.yellowLighterColor,
+
+        aquaLightColor: customTheme.aquaLightColor,
+        blueviolet: customTheme.blueviolet,
+        lightBrown: customTheme.lightBrown,
+        darkCyan: customTheme.darkCyan,
+        peach: customTheme.peach
     },
     drawer: {
         color: customTheme.whiteColor,

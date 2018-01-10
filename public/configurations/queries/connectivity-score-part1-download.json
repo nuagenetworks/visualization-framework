@@ -15,29 +15,19 @@
                                 "format":"epoch_millis"
                             }
                         }
+                    },
+                    {
+                        "term":{
+                            "DestinationNSG":"ovs-186"
+                        }
                     }
                 ]
             }
         },
         "aggs":{
-            "5":{
-                "filters":{
-                    "filters":{
-                        "DestNSG":{
-                            "query":{
-                                "term":{
-                                    "DestinationNSG":"ovs-186"
-                                }
-                            }
-                        }
-                    }
-                },
-                "aggs":{
-                    "Application":{
-                        "cardinality":{
-                            "field":"Application"
-                        }
-                    }
+            "Application":{
+                "cardinality":{
+                    "field":"Application"
                 }
             }
         }

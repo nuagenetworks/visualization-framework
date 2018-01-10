@@ -18,68 +18,58 @@
                                     "format":"epoch_millis"
                                 }
                             }
+                        },
+                        {
+                            "term":{
+                                "DestinationNSG": "{{snsg:default}}"
+                            }
                         }
                     ]
                 }
             },
            "aggs": {
-                "11": {
-                    "filters": {
-                        "filters": {
-                            "DestinationNSG": {
-                                "query": {
-                                    "term": {
-                                        "DestinationNSG": "{{snsg:default}}"
-                                    }
-                                }
-                            }
+                "ts": {
+                    "terms": {
+                        "field": "timestamp",
+                        "size": 10,
+                        "order": {
+                            "_count": "desc"
                         }
                     },
                     "aggs": {
-                        "ts": {
+                        "SourceNSG": {
                             "terms": {
-                                "field": "timestamp",
+                                "field": "SourceNSG",
                                 "size": 10,
                                 "order": {
                                     "_count": "desc"
                                 }
                             },
                             "aggs": {
-                                "SourceNSG": {
+                                "Application": {
                                     "terms": {
-                                        "field": "SourceNSG",
+                                        "field": "Application",
                                         "size": 10,
                                         "order": {
                                             "_count": "desc"
                                         }
                                     },
                                     "aggs": {
-                                        "Application": {
+                                        "APMGroup": {
                                             "terms": {
-                                                "field": "Application",
+                                                "field": "APMGroup",
                                                 "size": 10,
                                                 "order": {
                                                     "_count": "desc"
                                                 }
                                             },
                                             "aggs": {
-                                                "APMGroup": {
+                                                "ViolationType": {
                                                     "terms": {
-                                                        "field": "APMGroup",
+                                                        "field": "ViolationType",
                                                         "size": 10,
                                                         "order": {
                                                             "_count": "desc"
-                                                        }
-                                                    },
-                                                    "aggs": {
-                                                        "ViolationType": {
-                                                            "terms": {
-                                                                "field": "ViolationType",
-                                                                "size": 10,
-                                                                "order": {
-                                                                    "_count": "desc"
-                                                                }
-                                                            }
                                                         }
                                                     }
                                                 }

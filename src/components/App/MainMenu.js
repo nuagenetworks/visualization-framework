@@ -75,14 +75,14 @@ class MainMenuView extends React.Component {
             return;
 
         const targetedDashboard = visualizationType === "VSS" ? "vssDomainFlow" : "aarDomain";
-        const domainType = "nuage_metadata.domainName"
+        const domainType = visualizationType === "VSS" ? "nuage_metadata.domainName" : "Domain";
 
         return (
             <div>
                 {domains.map((domain) => {
 
 
-                    let queryParams = Object.assign({}, context, {domainName: domain.name, domainType: domainType});
+                    let queryParams = Object.assign({}, context, {domainName: domain.name, domainType: domainType, domainID: domain.ID});
 
                     return (
                         <ListItem
@@ -90,9 +90,9 @@ class MainMenuView extends React.Component {
                             primaryText={domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, queryParams)}}
+                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, queryParams)}}
                             leftIcon={
-                                <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-domain.png"} alt="D" />
+                                <img style={style.iconMenu} src={`${process.env.PUBLIC_URL}/icons/icon-domain.png`} alt="D" />
                             }
                         />
                     )
@@ -112,13 +112,13 @@ class MainMenuView extends React.Component {
             return;
 
         const targetedDashboard = visualizationType === "VSS" ? "vssDomainFlow" : "aarDomain";
-        const domainType = "nuage_metadata.l2domainName"
+        const domainType = visualizationType === "VSS" ? "nuage_metadata.l2domainName" : "L2Domain";
 
         return (
             <div>
                 {l2Domains.map((l2Domain) => {
 
-                    let queryParams = Object.assign({}, context, {domainName: l2Domain.name, domainType: domainType});
+                    let queryParams = Object.assign({}, context, {domainName: l2Domain.name, domainType: domainType, domainID: l2Domain.ID});
 
                     return (
                         <ListItem
@@ -126,9 +126,9 @@ class MainMenuView extends React.Component {
                             primaryText={l2Domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, queryParams)}}
+                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, queryParams)}}
                             leftIcon={
-                                <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-l2domain.png"} alt="L2D" />
+                                <img style={style.iconMenu} src={`${process.env.PUBLIC_URL}/icons/icon-l2domain.png`} alt="L2D" />
                             }
                         />
                     )
@@ -160,9 +160,9 @@ class MainMenuView extends React.Component {
                             innerDivStyle={style.innerNestedItem}
                             initiallyOpen={true}
                             open={true}
-                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/aarNSG", queryParams)}}
+                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/aarNSG`, queryParams)}}
                             leftIcon={
-                                <img style={style.iconMenu} src={process.env.PUBLIC_URL + "/icons/icon-nsgateway.png"} alt="N" />
+                                <img style={style.iconMenu} src={`${process.env.PUBLIC_URL}/icons/icon-nsgateway.png`} alt="N" />
                             }
                         />
                     )
@@ -191,7 +191,7 @@ class MainMenuView extends React.Component {
                             key={enterprise.ID}
                             primaryText={enterprise.name}
                             style={style.listItem}
-                            onTouchTap={() => { this.props.goTo(process.env.PUBLIC_URL + "/dashboards/" + targetedDashboard, context)}}
+                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, context)}}
                             nestedItems={[
                                 <div key={"sub-enterprise" + enterprise.ID} style={style.nestedItems}>
                                     {this.renderDomainsMenu()}
@@ -218,7 +218,13 @@ class MainMenuView extends React.Component {
                     <p>{visualizationType} Analytics</p>
                 </div>
 
-                <Subheader style={style.subHeader}>ENTERPRISES <span className="pull-right"><img style={style.iconSubMenu} src="/icons/icon-enterprise.png" alt="" /></span></Subheader>
+                <Subheader style={style.subHeader}>
+                    ENTERPRISES
+                    <span className="pull-right">
+                      <img style={style.iconSubMenu} src={`${process.env.PUBLIC_URL}/icons/icon-enterprise.png`} alt="" />
+                    </span>
+                </Subheader>
+
                 <List>
                     {this.renderEnterprisesMenu()}
                 </List>

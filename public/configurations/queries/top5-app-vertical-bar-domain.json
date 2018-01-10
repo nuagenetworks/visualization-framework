@@ -18,53 +18,33 @@
                                     "format":"epoch_millis"
                                 }
                             }
+                        },
+                        {
+                            "term":{
+                                "EnterpriseName":"{{enterpriseName:test_organization}}"
+                            }
+                        },
+                        {
+                            "term":{
+                                "{{domainType:Domain}}":"{{domainName:Domain1}}"
+                            }
                         }
                     ]
                 }
             },
             "aggs":{
-                "3":{
-                    "filters":{
-                        "filters":{
-                            "Enterprise":{
-                                "query":{
-                                    "term":{
-                                        "EnterpriseName":"{{enterpriseName:test_org}}"
-                                    }
-                                }
-                            }
+                "Application":{
+                    "terms":{
+                        "field":"Application",
+                        "size":5,
+                        "order":{
+                            "SumofBytes":"desc"
                         }
                     },
                     "aggs":{
-                        "3":{
-                            "filters":{
-                                "filters":{
-                                    "Domain":{
-                                        "query":{
-                                            "term":{
-                                                "Domain":"{{domainName:Domain1}}"
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            "aggs":{
-                                "Application":{
-                                    "terms":{
-                                        "field":"Application",
-                                        "size":5,
-                                        "order":{
-                                            "SumofBytes":"desc"
-                                        }
-                                    },
-                                    "aggs":{
-                                        "SumofBytes":{
-                                            "sum":{
-                                                "field":"TotalBytesCount"
-                                            }
-                                        }
-                                    }
-                                }
+                        "SumofBytes":{
+                            "sum":{
+                                "field":"TotalBytesCount"
                             }
                         }
                     }

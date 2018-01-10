@@ -10,6 +10,7 @@
         "dateHistogram": true,
         "xColumn": "year",
         "xLabel": "Year",
+        "showNull": false,
         "xTickFormat": "1",
         "yColumn": "nbMedals",
         "yLabel": "Number of Medals",

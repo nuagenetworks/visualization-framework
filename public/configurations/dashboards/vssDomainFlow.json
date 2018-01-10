@@ -32,8 +32,11 @@
         {
             "label": "Application Analytics",
             "url": "/dashboards/vssDomainApplication"
+        },
+        {
+            "label": "Flow Explorer",
+            "url": "/dashboards/vssDomainFlowExplorer"
         }
-
     ],
     "filterOptions": {
         "Source Field": {
