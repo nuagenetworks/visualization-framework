@@ -1,0 +1,83 @@
+{
+    "id": "testDashboard",
+    "author": "Anil Chauhan",
+    "creationDate": "08/03/2017",
+    "title": "Test Dashboard",
+    "visualizations": [
+        {
+            "id": "test-bar-graph",
+            "x": 0,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },                                
+        {
+            "id": "test-bar-graph-percentage-limit",
+            "x": 3,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+
+            "id": "test-bar-graph-horizontal",
+            "x": 6,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-bar-graph-horizontal-number-limit",
+            "x": 9,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-stackbar-graph",
+            "x": 0,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-stackbar-graph-percentage-limit",
+            "x": 3,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+
+            "id": "test-stackbar-graph-horizontal",
+            "x": 6,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-stackbar-graph-horizontal-number-limit",
+            "x": 9,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        }
+        
+    ]
+}

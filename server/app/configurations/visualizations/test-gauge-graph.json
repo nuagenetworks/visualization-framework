@@ -9,5 +9,5 @@
         "currentValue": "10",
         "gauzeTicks": "10"
     },
-    "query": "test-heatmap-graph"
+    "query": "test-gauge-graph"
 }

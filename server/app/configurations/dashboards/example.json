@@ -5,7 +5,7 @@
     "title": "Example",
     "visualizations": [
         { 
-            "id": "dynamic-bar-graph",
+            "id": "test-area-graph",
             "x": 0,
             "y": 0,
             "w": 12,

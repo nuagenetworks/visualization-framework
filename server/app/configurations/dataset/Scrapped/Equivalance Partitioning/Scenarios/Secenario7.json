@@ -1,0 +1,46 @@
+[
+	{
+	    "timestamp": 0,
+	    "Application": "Default Application",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":12500,
+		"DISK":-12500,
+		"MEMORY":75,
+		"value": 28347823482
+	},
+	{
+	    "timestamp": 1503120340000,
+	    "Application": "1 Application",
+	    "key_as_string": "2017-07-27T03:30:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",	    
+	    "CPU":15000,
+		"DISK":-15000,
+		"MEMORY":100,
+		"value": 38347823482
+	},
+	{
+	    "timestamp": 1503206740000,
+	    "Application": "2 Application",
+	    "key_as_string": "2017-07-27T03:15:00.000Z",
+	    "SlaStatus": "InSla",
+            "timezones": "Prev 24",	   
+		"CPU":17500,
+		"DISK":-17500,
+		"MEMORY":125,
+		"value": 48347823482
+	},
+	{
+	    "timestamp": 1503293140000,
+	    "Application": "3 Application",
+	    "key_as_string": "2017-07-27T03:45:00.000Z",
+            "timezones": "Prev 24",	
+	    "SlaStatus": "InSla",
+	    "CPU":20000,
+		"DISK":-20000,
+		"MEMORY":175,
+		"value": 5834782348
+	}
+]

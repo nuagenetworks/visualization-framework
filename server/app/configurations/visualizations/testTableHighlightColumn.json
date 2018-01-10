@@ -1,0 +1,38 @@
+{
+    "id": "testTableHighlightColumn",
+    "graph": "Table",
+    "title": "Test Table Highlight Column",
+    "description": "Testing table graph",
+    "author": "Anil Chauhan",
+    "creationDate": "12/21/2016",
+    "query": "testTable",
+    "data": {
+        "highlight": ["nbMedals"],
+        "columns": [
+            { "column": "country", "label": "Country"},
+            { "column": "nbMedals", "label": "Medals" },
+            { "column": "medalType", "label": "Medal" }
+        ]
+    },
+    "filterOptions": {
+        "Medal": {
+            "parameter": "medalType",
+            "default": "Gold",
+            "options": [
+                {
+                    "label": "Gold",
+                    "value": "Gold"
+                },
+                {
+                    "label": "Silver",
+                    "value": "Silver"
+                },
+                {
+                    "label": "Bronze",
+                    "value": "Bronze",
+                    "disabled": true
+                }
+            ]
+        }
+    }
+}

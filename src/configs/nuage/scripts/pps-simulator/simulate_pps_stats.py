@@ -344,7 +344,7 @@ class SimulateFlowStats(object):
         sla_prob_new = 0.6
         write_data = []
         chunk_size = es_chunk_size
-        with open('log/flowstats_new.log', 'w') as flowstats:
+        with open('/var/log/flowstats_new.log', 'w') as flowstats:
             timestamp = startTime
             t_increment = 0
             while timestamp != endTime:
@@ -490,7 +490,7 @@ class SimulateProbeStats(object):
         control_down_prob = 0.005
         write_data = []
         chunk_size = es_chunk_size
-        with open('log/probestats_new.log', 'w') as probestats:
+        with open('/var/log/probestats_new.log', 'w') as probestats:
             timestamp = startTime
             t_increment = 0
             while timestamp != endTime:
@@ -608,7 +608,7 @@ class SimulateSLAStats(object):
         sla_cnt = 0
         write_data = []
         chunk_size = es_chunk_size
-        with open('log/slastats_new.log', 'w') as slastats:
+        with open('/var/log/slastats_new.log', 'w') as slastats:
             sla_record = {}
             for flow_entry in sla_flows:
                 s_vport = flow_entry["src_vport"]

@@ -8,7 +8,7 @@
         "titlePosition": "top",
         "target":{
             "column": "timezones",
-            "value": "Last 24",
+            "value": "1503120370000",
             "field": "value"
         }
     }

@@ -9,7 +9,7 @@
         "dateHistogram": true,
         "xColumn": "ts",
         "xLabel": "Time",
-        "stacked": true,
+        "stacked": false,
         "yColumn": [
             {
                 "key": "CPU"
@@ -36,8 +36,8 @@
             { "column": "CPU", "label": "CPU", "format": "0.2f"},
             { "column": "MEMORY", "label": "MEMORY", "format": "0.2f"},
             { "column": "DISK", "label": "DISK", "format": "0.2f"},
-            { "column": "ts", "label": "Timestamp", "timeFormat": "%b %d, %y %X"}
+            { "column": "ts", "label": "Timestamp"}
         ]
     },
-    "query": "vnf-status-linechart"
+    "query": "test-area-graph"
 }

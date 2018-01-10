@@ -1,0 +1,38 @@
+{
+    "id": "testTableShowSearchBar",
+    "graph": "Table",
+    "title": "Test Table Show Search Graph",
+    "description": "Testing table graph",
+    "author": "Anil Chauhan",
+    "creationDate": "12/21/2016",
+    "query": "testTable",
+    "data": {
+        "searchBar":true,
+        "columns": [
+            { "column": "country", "label": "Country"},
+            { "column": "nbMedals", "label": "Medals" },
+            { "column": "medalType", "label": "Medal" }
+        ]
+    },
+    "filterOptions": {
+        "Medal": {
+            "parameter": "medalType",
+            "default": "Gold",
+            "options": [
+                {
+                    "label": "Gold",
+                    "value": "Gold"
+                },
+                {
+                    "label": "Silver",
+                    "value": "Silver"
+                },
+                {
+                    "label": "Bronze",
+                    "value": "Bronze",
+                    "disabled": true
+                }
+            ]
+        }
+    }
+}

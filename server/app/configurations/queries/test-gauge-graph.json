@@ -1,0 +1,5 @@
+{
+    "id": "test-gauge-graph",
+    "title": "TestGaugeGraph",
+    "service": "dataset"
+}

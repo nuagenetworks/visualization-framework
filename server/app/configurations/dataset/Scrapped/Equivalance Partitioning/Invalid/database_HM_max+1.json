@@ -1,0 +1,149 @@
+[
+	{
+	    "timestamp": 1500883469600,
+	    "Application": "Default Application",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":56.72727272727273,
+		"DISK":43.09090909090909,
+		"MEMORY":50.54545454545455,
+		"value": 2422791762
+	},
+	{
+	    "timestamp": 1500883469600,
+	    "Application": "1 Application",
+	    "key_as_string": "2017-07-27T03:30:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Prev 24",	    
+	    "CPU":58.72727272727273,
+		"DISK":45.09090909090909,
+		"MEMORY":52.54545454545455,
+		"value": 3143532309
+	},
+	{
+	    "timestamp": 1500883469600,
+	    "Application": "2 Application",
+	    "key_as_string": "2017-07-27T03:30:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Prev 24",	    
+	    "CPU":58.72727272727273,
+		"DISK":45.09090909090909,
+		"MEMORY":52.54545454545455,
+		"value": 3143532309
+	},
+	{
+	    "timestamp": 1500883469600,
+	    "Application": "3 Application",
+	    "key_as_string": "2017-07-27T03:30:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Prev 24",	    
+	    "CPU":58.72727272727273,
+		"DISK":45.09090909090909,
+		"MEMORY":52.54545454545455,
+		"value": 3143532309
+	}
+	,
+	{
+	    "timestamp": 1500883469600,
+	    "Application": "4 Application",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":56.72727272727273,
+		"DISK":43.09090909090909,
+		"MEMORY":50.54545454545455,
+		"value": 2422791762
+	},
+	{
+	    "timestamp": 1500883469600,
+	    "Application": "5 Application",
+	    "key_as_string": "2017-07-27T03:30:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Prev 24",	    
+	    "CPU":58.72727272727273,
+		"DISK":45.09090909090909,
+		"MEMORY":52.54545454545455,
+		"value": 3143532309
+	},
+	{
+	    "timestamp": 1500883469600,
+	    "Application": "6 Application",
+	    "key_as_string": "2017-07-27T03:30:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Prev 24",	    
+	    "CPU":58.72727272727273,
+		"DISK":45.09090909090909,
+		"MEMORY":52.54545454545455,
+		"value": 3143532309
+	},
+	{
+	    "timestamp": 1500883469600,
+	    "Application": "7 Application",
+	    "key_as_string": "2017-07-27T03:30:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Prev 24",	    
+	    "CPU":58.72727272727273,
+		"DISK":45.09090909090909,
+		"MEMORY":52.54545454545455,
+		"value": 3143532309
+	}
+,
+	{
+	    "timestamp": 1500883469600,
+	    "Application": "8 Application",
+	    "key_as_string": "2017-07-27T03:30:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Prev 24",	    
+	    "CPU":58.72727272727273,
+		"DISK":45.09090909090909,
+		"MEMORY":52.54545454545455,
+		"value": 3143532309
+	}
+,
+	{
+	    "timestamp": 1500883469600,
+	    "Application": "9 Application",
+	    "key_as_string": "2017-07-27T03:30:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Prev 24",	    
+	    "CPU":58.72727272727273,
+		"DISK":45.09090909090909,
+		"MEMORY":52.54545454545455,
+		"value": 3143532309
+	}
+,
+	{
+	    "timestamp": 1500883469600,
+	    "Application": "10 Application",
+	    "key_as_string": "2017-07-27T03:30:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Prev 24",	    
+	    "CPU":58.72727272727273,
+		"DISK":45.09090909090909,
+		"MEMORY":52.54545454545455,
+		"value": 3143532309
+	},
+{
+	    "timestamp": 1500883469600,
+	    "Application": "11 Application",
+	    "key_as_string": "2017-07-27T03:30:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Prev 24",	    
+	    "CPU":58.72727272727273,
+		"DISK":45.09090909090909,
+		"MEMORY":52.54545454545455,
+		"value": 3143532309
+	},
+{
+	    "timestamp": 1500883469600,
+	    "Application": "12 Application",
+	    "key_as_string": "2017-07-27T03:30:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Prev 24",	    
+	    "CPU":58.72727272727273,
+		"DISK":45.09090909090909,
+		"MEMORY":52.54545454545455,
+		"value": 3143532309
+	}
+]

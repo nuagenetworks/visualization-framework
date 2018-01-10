@@ -1,0 +1,24 @@
+[
+	{
+	    "timestamp": 0,
+	    "Application": "Default Application",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":0,
+		"DISK":0.09090909090909,
+		"MEMORY":58,
+		"value": 2422791762
+	},
+	{
+	    "timestamp": 1997,
+	    "Application": "Default Application",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Prev 24",    
+	    "CPU":0,
+		"DISK":0.09090909090909,
+		"MEMORY":60,
+		"value": 2422791762
+	}
+]

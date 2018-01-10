@@ -8,7 +8,7 @@
     "data": {
         "xColumn": "Application",
         "xLabel": "Application",
-        "yColumn": "CPU",
+        "yColumn": "value",
         "yLabel": "Total Bytes",
         "yTicks": 5,
         "yTickFormat": ".2s",
@@ -21,7 +21,7 @@
         ],
         "tooltip": [
             { "column": "Application", "label": "Application" },
-            { "column": "CPU", "format": ",.2s"}
+            { "column": "value", "format": ",.2s"}
         ]
     },
     "listeners": [

@@ -12,11 +12,7 @@
             ],
             "query": {
                 "bool": {
-                    "must": [
-                        { "term": { "enterpriseName": "{{enterpriseName:enterprise-1}}"}},
-                        { "term": { "nsg": "{{nsg:NSG-1}}" } },
-                        { "term": { "vnf": "{{vnf:NSG-1-VNF-1}}" } }
-                    ]
+                  
                 }
             }
         }
