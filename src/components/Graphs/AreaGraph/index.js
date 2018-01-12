@@ -474,7 +474,7 @@ class AreaGraph extends XYGraph {
     // add transition effect
     svg.select(`#clip-${this.getGraphId()} rect`)
         .transition().duration(transition)
-        .attr('width', this.availableWidth);
+        .attr('width', this.getAvailableWidth());
 
     lines.exit().remove();
     areas.exit().remove();  

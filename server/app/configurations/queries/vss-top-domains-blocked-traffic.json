@@ -1,5 +1,5 @@
 {
-    "id":"vss-topdomains-blocked-traffic",
+    "id":"vss-top-domains-blocked-traffic",
     "title":"Top Domains with Blocked Traffic",
     "service":"elasticsearch",
     "query":{

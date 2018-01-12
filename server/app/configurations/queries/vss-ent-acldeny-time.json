@@ -1,5 +1,5 @@
 {
-    "id":"vss-enterprise-acldeny-time",
+    "id":"vss-ent-acldeny-time",
     "title":"ACL Deny vs Time",
     "service":"elasticsearch",
     "query":{

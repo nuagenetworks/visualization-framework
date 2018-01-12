@@ -19,7 +19,7 @@
             "labelOffset": 2
         },
         "tooltip": [
-            { "column": "timestamp", "label": "Timestamp"},
+            { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
             { "column": "Application", "label": "Application" },
             { "column": "SlaStatus", "label": "Status" }
         ]
