@@ -73,7 +73,7 @@ export default class XYGraph extends AbstractGraph {
         } = this.getConfiguredProperties();
 
         const xLabelFn = (d) => d[xColumn];
-        const yLabelFn = (d) => d[customYColumn ? customYColumn : yColumn];
+        const yLabelFn = (d) => parseFloat(d[customYColumn ? customYColumn : yColumn]);
         const yExtent  = this.updateYExtent(extent(data, yLabelFn), zeroStart);
 
         this.scale = {};
