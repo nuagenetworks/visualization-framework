@@ -18,7 +18,7 @@ export default class SearchBar extends React.Component {
         this.state = {
             data: [],
             isOk: true,
-            query: this.props.searchText || ''
+            query: (this.props.searchText && typeof (this.props.searchText) === 'string') ? this.props.searchText : ''
         }
 
         const {
