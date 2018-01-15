@@ -175,6 +175,19 @@ export default class BarGraph extends XYGraph {
             }
         }
 
+
+        // calculate range and make starting point from zero
+        let range = () => {
+            let ext = d3.extent(nestedData, metricFn)
+            if(ext[0] > 0)
+                ext[0] = 0
+
+            if(ext[1] < 0)
+                ext[1] = 0
+
+            return ext
+        }
+
         let xScale, yScale;
 
         if (dateHistogram) {
@@ -184,7 +197,7 @@ export default class BarGraph extends XYGraph {
               .domain(d3.extent(nestedData, dimensionFn))
 
             yScale = d3.scaleLinear()
-              .domain([0, d3.max(nestedData, metricFn)])
+              .domain(range())
 
         } else if (vertical) {
 
@@ -194,12 +207,12 @@ export default class BarGraph extends XYGraph {
               .padding(padding)
 
             yScale = d3.scaleLinear()
-              .domain([0, d3.max(nestedData, metricFn)])
+              .domain(range())
 
         } else {
             // Handle the case of a horizontal bar chart.
             xScale = d3.scaleLinear()
-              .domain([0, d3.max(nestedData, metricFn)])
+              .domain(range())
             
             yScale = d3.scaleBand()
               .domain(nestedData.map(dimensionFn))
@@ -273,6 +286,41 @@ export default class BarGraph extends XYGraph {
                 }
         />
 
+        let horizontalLine = (
+            vertical ? <line
+                x1="0"
+                y1={yScale(0)}
+                x2={availableWidth}
+                y2={yScale(0)}
+                stroke={"rgb(0,0,0)"}
+                strokeWidth="0.7"
+            /> :
+            <line
+                x1={xScale(0)}
+                y1="0"
+                x2={xScale(0)}
+                y2={availableHeight}
+                stroke={"rgb(0,0,0)"}
+                strokeWidth="0.7"
+            />
+        )
+
+        // calculate y axis coordinate to draw bar
+        let yPosition = (d) => {
+            if(vertical)
+                return d.y1 >= 0 ? yScale(d.y1) : yScale(d.y0)
+
+            return d.y1 >= 0 ? xScale(d.y0) : xScale(d.y1)
+        }
+
+        // calculate bar height
+        let barHeight = (d) => {
+            if(vertical)
+              return d.y1 >= 0 ? yScale(d.y0) - yScale(d.y1) : yScale(d.y1) - yScale(d.y0)
+
+            return d.y1 >= 0 ? xScale(d.y1) - xScale(d.y0) : xScale(d.y0) - xScale(d.y1)
+        }
+
         return (
             <div className="bar-graph">
                 {this.tooltip}
@@ -286,6 +334,7 @@ export default class BarGraph extends XYGraph {
                     <g transform={ `translate(${leftMargin},${margin.top})` } >
                         { xAxisGraph }
                         { yAxisGraph }
+                        { horizontalLine }
                         {
                             nestedData.map((nest, i) => {
                                 return nest.values.map((d, i) => {
@@ -299,13 +348,13 @@ export default class BarGraph extends XYGraph {
                                     } = (
                                         vertical ? {
                                             x: xScale(nest.key),
-                                            y: yScale(d.y1),
+                                            y: yPosition(d),
                                             width: barWidth,
-                                            height: yScale(d.y0) - yScale(d.y1)
+                                            height: barHeight(d)
                                         } : {
-                                            x: xScale(d.y0),
+                                            x: yPosition(d),
                                             y: yScale(nest.key),
-                                            width: xScale(d.y1) - xScale(d.y0),
+                                            width: barHeight(d),
                                             height: yScale.bandwidth()
                                         }
                                     );
