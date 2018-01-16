@@ -184,7 +184,7 @@ class LineGraph extends XYGraph {
 
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
-        const yLabelFn         = (d) => d[this.yValue];
+        const yLabelFn         = (d) => parseFloat(d[this.yValue]);
         const legendFn         = (d) => d[this.yKey];
         const label            = (d) => d[this.yKey];
 
@@ -215,7 +215,6 @@ class LineGraph extends XYGraph {
                 availableHeight         -= nbLines * legend.circleSize * circleToPixel + chartHeightToPixel;
             }
         }
-
 
         let yExtent = this.updateYExtent(extent(filterDatas, yLabelFn), zeroStart);
 
