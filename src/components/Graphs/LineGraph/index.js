@@ -216,7 +216,9 @@ class LineGraph extends XYGraph {
             }
         }
 
-        let yExtent = this.updateYExtent(extent(filterDatas, yLabelFn), zeroStart);
+        let range = extent(filterDatas, yLabelFn)
+
+        let yExtent = this.updateYExtent(range, zeroStart);
 
         let xScale;
 
@@ -355,6 +357,19 @@ class LineGraph extends XYGraph {
             )
         }
 
+
+        let defaultLine =
+            range[0] < 0 && range[1] > 0 ?
+                <line
+                    x1="0"
+                    y1={yScale(0)}
+                    x2={availableWidth}
+                    y2={yScale(0)}
+                    stroke={ "rgb(0,0,0)"}
+                    opacity="0.3"
+                />
+                : ''
+
         return (
             <div className="bar-graph">
                 {this.tooltip}
@@ -370,6 +385,8 @@ class LineGraph extends XYGraph {
                             key="yAxis"
                             ref={ (el) => select(el).call(yAxis) }
                         />
+
+
                         <g>
                           {linesData.map((d, i) =>
                               (d.values.length === 1) ?
@@ -417,6 +434,7 @@ class LineGraph extends XYGraph {
                               </g>
                           )}
                         </g>
+                        { defaultLine }
                         { horizontalLine }
                         {
                             brushEnabled &&
