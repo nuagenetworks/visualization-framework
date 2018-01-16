@@ -20,6 +20,8 @@ class BarGraph extends XYGraph {
     y: 0
   }
 
+  customExtent = []
+
   constructor(props) {
     super(props, properties)
     this.handleLeave = this.handleLeave.bind(this)
@@ -172,14 +174,17 @@ class BarGraph extends XYGraph {
 
   // calculate range and make starting point from zero
   range(data, metricFn) {
-      let ext = d3.extent(data, metricFn)
-      if(ext[0] > 0)
-          ext[0] = 0
+      this.customExtent = d3.extent(data, metricFn)
+      if(this.customExtent[0] > 0)
+        this.customExtent[0] = 0
 
-      if(ext[1] < 0)
-          ext[1] = 0
+      if(this.customExtent[1] < 0)
+        this.customExtent[1] = 0
 
-      return ext
+      if(this.customExtent[0] < 0)
+        this.customExtent[0] = this.customExtent[0]/0.9
+
+      return this.customExtent
   }
 
   setScale(data) {
@@ -486,7 +491,7 @@ class BarGraph extends XYGraph {
       let x = d3.event.pageX
       let y = d3.event.pageY
 
-      if(this.origin.x != x  || this.origin.y != y) {
+      if(this.origin.x !== x  || this.origin.y !== y) {
         this.origin = {
           x,
           y
@@ -508,18 +513,20 @@ class BarGraph extends XYGraph {
   // draw line from which bars will be draw
   drawHorizontalLine(svg, scale) {
 
-    this.isVertical() ?
-      svg.select("line")
-      .attr("x1", 0)
-      .attr("y1", scale.y(0))
-      .attr("x2", this.getAvailableWidth())
-      .attr("y2", scale.y(0))
-    :
-      svg.select("line")
-      .attr("x1", scale.x(0))
-      .attr("y1", 0)
-      .attr("x2", scale.x(0))
-      .attr("y2", this.getAvailableHeight())
+    if(this.customExtent.length && this.customExtent[0] < 0 && this.customExtent[1] > 0) {
+      this.isVertical() ?
+        svg.select("line")
+        .attr("x1", 0)
+        .attr("y1", scale.y(0))
+        .attr("x2", this.getAvailableWidth())
+        .attr("y2", scale.y(0))
+      :
+        svg.select("line")
+        .attr("x1", scale.x(0))
+        .attr("y1", 0)
+        .attr("x2", scale.x(0))
+        .attr("y2", this.getAvailableHeight())
+    }
   }
 
   configureMinGraph() {
