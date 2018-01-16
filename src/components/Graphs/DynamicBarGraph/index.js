@@ -7,6 +7,7 @@ import _ from 'lodash'
 
 import { properties } from './default.config'
 import XYGraph from '../XYGraph'
+import "./style.css";
 
 import { dataParser, pick, barWidth } from '../../../utils/helpers'
 
@@ -169,6 +170,18 @@ class BarGraph extends XYGraph {
     return this.legendConfig
   }
 
+  // calculate range and make starting point from zero
+  range(data, metricFn) {
+      let ext = d3.extent(data, metricFn)
+      if(ext[0] > 0)
+          ext[0] = 0
+
+      if(ext[1] < 0)
+          ext[1] = 0
+
+      return ext
+  }
+
   setScale(data) {
     const {
       dateHistogram,
@@ -184,7 +197,7 @@ class BarGraph extends XYGraph {
         .domain(d3.extent(data, this.getDimensionFn()))
 
         this.scale.y = d3.scaleLinear()
-        .domain([0, d3.max(data, this.getMetricFn())])
+        .domain(this.range(data, this.getMetricFn()))
 
     } else if (this.isVertical()) {
 
@@ -194,12 +207,12 @@ class BarGraph extends XYGraph {
         .padding(padding)
 
       this.scale.y = d3.scaleLinear()
-        .domain([0, d3.max(data, this.getMetricFn())])
+        .domain(this.range(data, this.getMetricFn()))
 
     } else {
       // Handle the case of a horizontal bar chart.
       this.scale.x = d3.scaleLinear()
-        .domain([0, d3.max(data, this.getMetricFn())])
+        .domain(this.range(data, this.getMetricFn()))
 
       this.scale.y = d3.scaleBand()
         .domain(data.map(this.getDimensionFn()).reverse())
@@ -231,6 +244,14 @@ class BarGraph extends XYGraph {
       .attr("id", `clip${this.getGraphId()}`)
       .append('rect')
 
+    svg.select('.horizontal-line').append("line")
+      .style("stroke", "black")
+      .style("stroke-width", "0.4")
+
+    this.getMinGraph().select('.min-horizontal-line').append("line")
+      .style("stroke", "black")
+      .style("stroke-width", "0.4")
+
     // generate elements for X and Y titles
    this.generateAxisTitleElement()
 
@@ -256,12 +277,12 @@ class BarGraph extends XYGraph {
     svg.select(`#clip${this.getGraphId()}`)
     .select("rect")
       .attr("x", this.isVertical() ? 0 : -this.getYlabelWidth())
-      .attr("width", this.getAvailableWidth())
+      .attr("width", this.isVertical() ? this.getAvailableWidth() : this.getAvailableWidth() + this.getYlabelWidth())
       .attr("height", this.getAvailableHeight());
 
     //Add the X Axis
     const xAxis = svg.select('.xAxis')
-      .style('clip-path', `url(#clip${this.getGraphId()})`)
+      .style('clip-path',this.isVertical() ? `url(#clip${this.getGraphId()})` : null)
       .attr('transform', 'translate(0,'+ this.getAvailableHeight() +')')
       .call(this.getAxis().x)
       .selectAll('.tick text')
@@ -350,17 +371,17 @@ class BarGraph extends XYGraph {
     return (
         this.isVertical() ? {
             x: d => scale.x(d.key),
-            y: d => scale.y(d.y1),
+            y: d => scale.y(d.y1 >= 0 ? d.y1 : d.y0),
             width: scale.x.bandwidth(),
-            height: d => scale.y(d.y0) - scale.y(d.y1),
+            height: d => d.y1 >= 0 ? scale.y(d.y0) - scale.y(d.y1) : scale.y(d.y1) - scale.y(d.y0),
             initialY: d => scale.y(0),
             initialHeight: 0,
             get initialX() { return this.x},
             get initialWidth() { return this.width}
         } : {
-            x: d => scale.x(d.y0),
+            x: d => scale.x(d.y1 >= 0 ? d.y0 : d.y1),
             y: d => scale.y(d.key),
-            width: d => scale.x(d.y1) - scale.x(d.y0),
+            width: d => d.y1 >= 0 ? scale.x(d.y1) - scale.x(d.y0) : scale.x(d.y0) - scale.x(d.y1),
             height: d => scale.y.bandwidth(),
             initialWidth: 0,
             initialX: d => scale.x(0),
@@ -389,6 +410,8 @@ class BarGraph extends XYGraph {
     } = this.getConfiguredProperties()
 
     const classPrefix = brush ? 'min-' : ''
+
+    this.drawHorizontalLine(svg.select(`.${classPrefix}horizontal-line`), scale)
 
     // draw stacked bars
     const bars = svg.select(`.${classPrefix}graph-bars`)
@@ -482,6 +505,23 @@ class BarGraph extends XYGraph {
     }
   }
 
+  // draw line from which bars will be draw
+  drawHorizontalLine(svg, scale) {
+
+    this.isVertical() ?
+      svg.select("line")
+      .attr("x1", 0)
+      .attr("y1", scale.y(0))
+      .attr("x2", this.getAvailableWidth())
+      .attr("y2", scale.y(0))
+    :
+      svg.select("line")
+      .attr("x1", scale.x(0))
+      .attr("y1", 0)
+      .attr("x2", scale.x(0))
+      .attr("y2", this.getAvailableHeight())
+  }
+
   configureMinGraph() {
     const {
       data
@@ -522,7 +562,6 @@ class BarGraph extends XYGraph {
       brushXY = d3.brushX()
         .extent([[0, 0], [this.getAvailableWidth(), this.getAvailableMinHeight()]])
 
-
       range = [0, (this.getAvailableWidth()/this.getNestedData().length) * brush]
 
     } else {
@@ -547,7 +586,6 @@ class BarGraph extends XYGraph {
 
       brushXY = d3.brushY()
         .extent([[0, 0], [this.getAvailableMinWidth(), this.getAvailableHeight()]])
-
     }
 
     this.brushing = brushXY
@@ -610,10 +648,12 @@ class BarGraph extends XYGraph {
         <svg width={width} height={height}>
           <g ref={node => this.node = node}>
             <g className='graph-container' transform={`translate(${this.getLeftMargin()},${margin.top})`}>
+              <g className='horizontal-line'></g>
               <g className='graph-bars'></g>
               <g className='tooltip-section'></g>
             </g>
             <g className='mini-graph-container'>
+              <g className='min-horizontal-line'></g>
               <g className='min-graph-bars'></g>
             </g>
             <g className='axis-title'></g>
