@@ -13,6 +13,63 @@ export default class SimpleTextGraph extends AbstractGraph {
 
     constructor(props) {
         super(props, properties);
+
+        this.state = {
+            fontSize: 4,
+        }
+    }
+
+    componentDidMount() {
+        this.checkFontsize()
+    }
+
+    componentDidUpdate() {
+        this.checkFontsize()
+    }
+
+    componentWillReceiveProps(nextProps) {
+
+        const {
+            fontSize
+          } = this.getConfiguredProperties();
+        // reset font size on resize
+        if(this.props.height !== nextProps.height || this.props.width !== nextProps.width) {
+            this.setState({ fontSize: 10})
+        }
+    }
+
+    checkFontsize() {
+        const {
+            height,
+            width,
+            data
+        } = this.props;
+
+        const {
+          innerHeight,
+          innerWidth,
+          targetedColumn,
+          defaultFontSize
+        } = this.getConfiguredProperties();
+
+        if (!data || !data.length)
+            return;
+
+        const text = this.displayText(data, targetedColumn)
+
+        const blockWidth = width * innerWidth
+        const textSize = this.state.fontSize * text.toString().length * 0.7
+
+        if(text.toString().length <= 3) {
+            this.setState({
+                fontSize: defaultFontSize
+            })
+        }
+        else if(blockWidth > textSize ) {
+            this.setState({
+                fontSize: this.state.fontSize + 1
+            })
+        }
     }
 
     currentTitle() {
@@ -55,7 +112,7 @@ export default class SimpleTextGraph extends AbstractGraph {
           borderRadius,
           colors,
           fontColor,
-          fontSize,
+          defaultFontSize,
           innerHeight,
           innerWidth,
           margin,
@@ -64,39 +121,52 @@ export default class SimpleTextGraph extends AbstractGraph {
           textAlign,
           titlePosition,
           targetedColumn,
+          chartWidthToPixel
         } = this.getConfiguredProperties();
 
         if (!data || !data.length)
             return;
 
         const cursor = onMarkClick ? "pointer" : undefined
+        const text = this.displayText(data, targetedColumn)
+        const blockWidth = width * innerWidth
+        const blockHeight = height * innerHeight
 
         return (
                 <div
                     style={{
                         margin: [margin.top, margin.right, margin.bottom, margin.left].join(" "),
-                        textAlign: textAlign
+                        textAlign: textAlign,
+                        display: "table",
+                        fontSize: defaultFontSize
                     }}
                     onClick={onMarkClick}
                     >
                         {this.renderTitleIfNeeded(titlePosition, "top")}
 
                         <div style={{
-                            width: width * innerWidth,
-                            height: height * innerHeight,
+                            width: blockWidth,
+                            height: blockHeight,
                             borderRadius: borderRadius,
                             borderColor: stroke.color,
                             borderWidth: stroke.width,
                             background: colors[0],
                             color: fontColor,
-                            display: "block",
-                            margin: [margin.top, margin.right, margin.bottom, margin.left].join(" "),
-                            padding: [padding.top, padding.right, padding.bottom, padding.left].join(" "),
-                            fontSize: fontSize,
+                            fontSize: this.state.fontSize,
                             cursor:cursor,
                             }}
                           >
-                          {this.displayText(data, targetedColumn)}
+                          <div style={{
+                              marginLeft: "auto",
+                              marginRight: "auto",
+                              width: blockWidth,
+                              padding: [padding.top, padding.right, padding.bottom, padding.left].join(" "),
+                              height: blockHeight,
+                              display: "table-cell",
+                              verticalAlign: "middle"
+                            }}>
+                              {this.displayText(data, targetedColumn)}
+                            </div>
                         </div>
 
                         {this.renderTitleIfNeeded(titlePosition, "bottom")}
