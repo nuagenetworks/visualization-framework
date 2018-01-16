@@ -184,7 +184,7 @@ class LineGraph extends XYGraph {
 
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
-        const yLabelFn         = (d) => d[this.yValue];
+        const yLabelFn         = (d) => parseFloat(d[this.yValue]);
         const legendFn         = (d) => d[this.yKey];
         const label            = (d) => d[this.yKey];
 
@@ -216,7 +216,6 @@ class LineGraph extends XYGraph {
             }
         }
 
-
         let yExtent = this.updateYExtent(extent(filterDatas, yLabelFn), zeroStart);
 
         let xScale;
@@ -245,8 +244,9 @@ class LineGraph extends XYGraph {
             defaultYvalue = defaultY
             let [startRange, endRange] = yScale.domain()
 
-            if(typeof defaultY === 'object' && defaultY.source && defaultY.column && this.props[defaultY.source]) {
-                horizontalLineData = this.props[defaultY.source][0] || {}
+            if(typeof defaultY === 'object' && defaultY.column) {
+                const dataSource = defaultY.source || 'data'
+                horizontalLineData = this.props[dataSource] ? this.props[dataSource][0] : {}
                 defaultYvalue = horizontalLineData[defaultY.column] || null
             }
 
