@@ -269,6 +269,17 @@ class AddToFlowEditor extends React.Component {
         }
     }
 
+    shouldDisplayPort = () => {
+        const {
+            data,
+        } = this.props;
+
+        const protocol = data && data.protocol ? data.protocol : '';
+        const proto = getNetworkProtocolForText(protocol);
+        return (proto === '6' || proto === '17');
+
+    }
+
     renderAdd = () => {
         const {
             data,
@@ -299,7 +310,7 @@ class AddToFlowEditor extends React.Component {
         const srcEntity = locationIDValue && srcList ? getEntityNameForID(locationIDValue, srcList) : null;
         const destEntity = networkIDValue && destList ? getEntityNameForID(networkIDValue, destList) : null;
         const networkDestinations = getNetworkTypeOptions(resourceName);
-
+        const isDestPortEnabled = this.shouldDisplayPort();
         return (
             <ModalEditor
                 title={title}
@@ -333,7 +344,7 @@ class AddToFlowEditor extends React.Component {
                 {
                     (locationTypeValue && networkTypeValue && this.buildVFRuleField(srcEntity, destEntity)) || <span>Select a source and destination type </span>
                 }
-                { resourceName === 'domains' &&
+                { isDestPortEnabled &&
                     <TwoColumnRow firstColumnProps={{
                         name: 'protocol',
                         label: 'Protocol',
@@ -344,7 +355,7 @@ class AddToFlowEditor extends React.Component {
                         text: dPort,
                     }}/>
                 }
-                { resourceName !== 'domains' &&
+                { !isDestPortEnabled &&
                     <TwoColumnRow firstColumnProps={{
                         name: 'protocol',
                         label: 'Protocol',
@@ -356,10 +367,9 @@ class AddToFlowEditor extends React.Component {
     }
 
     renderError = () => {
-        const { resourceName } = this.props;
         const title = "Add to Firewall Rule";
         const buttonLabel = "Add";
-        const errorMsg = resourceName === 'l2domains' ? "Adding to a rule is not supported for L2 Domains" : 'No Flow Selected';
+        const errorMsg = !this.shouldDisplayPort() ? "Nothing to add to rules" : 'No Flow Selected';
 
         return(
             <ModalEditor
@@ -378,9 +388,7 @@ class AddToFlowEditor extends React.Component {
     }
 
     render() {
-        const { resourceName } = this.props;
-        const isError = !showMessageBoxOnNoFlow({...this.props, toggleError: this.toggleError})
-            || resourceName === 'l2domains';
+        const isError = !showMessageBoxOnNoFlow({...this.props, toggleError: this.toggleError}) || !this.shouldDisplayPort();
         if (isError) {
             return this.renderError();
         }
