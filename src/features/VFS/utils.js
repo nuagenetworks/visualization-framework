@@ -13,6 +13,14 @@ export const buildOptions = (options) => {
     return "No Data available";
 }
 
+export const isL3Domain = resourceName => {
+    return resourceName === 'domains';
+}
+
+export const getDomainID = (resourceName, data) => {
+    return isL3Domain(resourceName) ? getMetaDataAttribute(data, 'domainId') : getMetaDataAttribute(data, 'l2domainId');
+}
+
 export const getNetworkItems = (type, props) => {
     const {
         zones,

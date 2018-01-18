@@ -27,8 +27,8 @@ import {
 } from "../../components/MessageBox/redux/actions";
 
 import {
-    getMetaDataAttribute,
     getEnterpriseID,
+    getDomainID
 } from './utils';
 
 const getRequestResponse = (state, path) => {
@@ -139,7 +139,7 @@ export const fetchAssociatedObjectIfNeeded = (props) => {
         resourceName,
     } = props;
     const enterpriseID = getEnterpriseID(props);
-    const domainID = resourceName === 'domains' ? getMetaDataAttribute(data, 'domainId') : getMetaDataAttribute(data, 'l2domainId');
+    const domainID = getDomainID(resourceName, data);
 
     switch (type) {
         case 'ZONE':
@@ -229,10 +229,7 @@ export const mapStateToProps = (state, ownProps) => {
         ...fieldValues,
     };
 
-    const domainID = resourceName === 'domains' ?
-        (props.data && props.data.nuage_metadata && props.data.nuage_metadata.domainId) ? props.data.nuage_metadata.domainId : null
-        :
-        (props.data && props.data.nuage_metadata && props.data.nuage_metadata.l2domainId) ? props.data.nuage_metadata.l2domainId : null;
+    const domainID = getDomainID(resourceName, props.data);
 
     const enterpriseID = props.context && props.context.enterpriseID ? props.context.enterpriseID : null;
     props.mirrordestinations = getRequestResponse(state, "mirrordestinations");

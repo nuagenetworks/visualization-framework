@@ -5,9 +5,10 @@ import { TextInput, Select, Checkbox, Header } from '../../ui-components';
 import { TwoColumnRow } from '../components';
 
 import {
-    getMetaDataAttribute,
     buildOptions,
     getNetworkItems,
+    getDomainID,
+    isL3Domain,
 } from './utils';
 
 import {
@@ -224,7 +225,7 @@ class CreateFlow extends React.Component {
                     onChange: (e) => this.resetFieldsOnChange(e, 'networkID')
                 }} />
                 { (srcList || destList) &&  <TwoColumnRow firstColumnProps={srcList} secondColumnProps={destList} /> }
-                {resourceName === 'domains' &&
+                { isL3Domain(resourceName) &&
                     <TwoColumnRow secondColumnProps={{
                         name: 'destinationPort',
                         label: 'Destination Port',
@@ -276,7 +277,7 @@ class CreateFlow extends React.Component {
             resourceName
         } = props;
         if (operation !== 'add') {
-            const domainID = resourceName === 'domains' ? getMetaDataAttribute(data, 'domainId') : getMetaDataAttribute(data, 'l2domainId');
+            const domainID = getDomainID(resourceName, data);
             if (domainID) {
                 fetchDomainFirewallPoliciesIfNeeded (domainID, resourceName);
             }
@@ -305,10 +306,10 @@ class CreateFlow extends React.Component {
         return errorObject;
     }
 
-    initialValues = (data, resourceName) => {
+    initialValues = (data) => {
         const actions = data && data.type ? getSecurityPolicyActionsForValue(data.type) : [];
         const protocol = getNetworkProtocolForText(data.protocol);
-        const destPort = (protocol === '6' || protocol === '17') ? resourceName === 'domains' ? data && data.destinationport ? data.destinationport : '*' : '*' : null;
+        const destPort = (protocol === '6' || protocol === '17') ? data && data.destinationport ? data.destinationport : '*' : null;
 
         return ({
             protocol: protocol ? protocol : '6',
@@ -463,7 +464,7 @@ class CreateFlow extends React.Component {
                 onCancel={this.props.handleClose}
                 width='60%'
                 onValidate={this.validate}
-                getInitialValues={() => this.initialValues(data, resourceName)}
+                getInitialValues={() => this.initialValues(data)}
                 configuration={this.postConfiguration}
                 errored={this.state.error}
                 onDone={this.handleDone}
