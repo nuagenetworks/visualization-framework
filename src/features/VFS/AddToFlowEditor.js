@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import ModalEditor from '../../components/Editor/ModalEditor';
 import { Form, Label, Select, Header } from '../../ui-components';
-import { buildOptions, getNetworkItems } from './utils';
+import {buildOptions, getDomainID, getEnterpriseID } from './utils';
 import { TwoColumnRow } from '../components';
 
 import {
@@ -13,8 +13,10 @@ import {
 
 import {
     fetchAssociatedObjectIfNeeded,
+    getNetworkItems,
+    NetworkObjectTypes,
     showMessageBoxOnNoFlow
- } from './actions';
+} from './actions';
 
 const getEntityNameForID = (ID, entityCollection) => {
     const entities = entityCollection && entityCollection.options && entityCollection.options.length > 0 ? entityCollection.options.find(item => item.value === ID) : null;
@@ -71,7 +73,7 @@ class AddToFlowEditor extends React.Component {
         const { preventDefault, ...values } = evt;
         const ID = values ? Object.values(values).join('') : null;
         if (ID) {
-            const vfrules = getNetworkItems('virtualfirewallrules', this.props);
+            const vfrules = getNetworkItems(NetworkObjectTypes.VIRTUAL_FIREWALL_RULE, this.props);
             if (vfrules && vfrules.data && vfrules.data.length > 0) {
                 const { selectRule, data } = this.props;
                 if (selectRule && data) {
@@ -143,12 +145,13 @@ class AddToFlowEditor extends React.Component {
             networkTypeValue,
             networkIDValue,
             operation,
+            resourceName,
         } = props;
         if (!data || Object.getOwnPropertyNames(data).length <= 0
             || operation !== 'add') {
             return;
         }
-        const vfRules = getNetworkItems('virtualfirewallrules', this.props);
+        const vfRules = getNetworkItems(NetworkObjectTypes.VIRTUAL_FIREWALL_RULE, this.props);
         if (vfRules && vfRules.data && Object.getOwnPropertyNames(vfRules.data).length > 0)
             return;
          if (!locationTypeValue || (locationTypeValue !== 'ANY' && locationTypeValue !== 'UNDERLAY_INTERNET_POLICYGROUP' && !locationIDValue)) {
@@ -158,15 +161,19 @@ class AddToFlowEditor extends React.Component {
             return;
         }
         const proto = getNetworkProtocolForText(data.protocol);
+
+        const enterpriseID = getEnterpriseID(props);
+        const domainID = getDomainID(resourceName, data);
+
         fetchAssociatedObjectIfNeeded({
-            type: 'virtualfirewallrules',
+            type: NetworkObjectTypes.VIRTUAL_FIREWALL_RULE,
             args: {
                 locationType: locationTypeValue,
                 locationID: locationIDValue,
                 networkType: networkTypeValue,
                 networkID: networkIDValue,
                 protocol: proto ? proto : '6',
-            }, ...props});
+            }, domainID, enterpriseID, ...props});
     }
 
     componentWillReceiveProps(nextProps) {
@@ -176,11 +183,16 @@ class AddToFlowEditor extends React.Component {
             locationIDValue,
             networkTypeValue,
             networkIDValue,
+            resourceName,
         } = nextProps;
 
         if (!data || Object.getOwnPropertyNames(data).length <= 0) {
             return;
         }
+
+        const enterpriseID = getEnterpriseID(nextProps);
+        const domainID = getDomainID(resourceName, data);
+
         const srcNetworkItems = {
             ...getNetworkItems(locationTypeValue, nextProps),
             type: locationTypeValue,
@@ -192,14 +204,14 @@ class AddToFlowEditor extends React.Component {
             ID: networkIDValue,
         };
         if (!srcNetworkItems.data) {
-            fetchAssociatedObjectIfNeeded({ type: locationTypeValue, ...nextProps});
+            fetchAssociatedObjectIfNeeded({ type: locationTypeValue, domainID, enterpriseID, ...nextProps});
         }
         if (!destNetworkItems.data) {
-            fetchAssociatedObjectIfNeeded({ type: networkTypeValue, ...nextProps});
+            fetchAssociatedObjectIfNeeded({ type: networkTypeValue, domainID, enterpriseID, ...nextProps});
         }
 
         this.fetchVFRulesIfNeeded(nextProps);
-        const vfrules = getNetworkItems('virtualfirewallrules', nextProps);
+        const vfrules = getNetworkItems(NetworkObjectTypes.VIRTUAL_FIREWALL_RULE, nextProps);
         if (vfrules && vfrules.data && vfrules.data.length > 0) {
             this.toggleError(false);
         }
@@ -225,7 +237,7 @@ class AddToFlowEditor extends React.Component {
     }
 
     buildVFRuleField = (srcEntity, destEntity) => {
-        const vfrules = getNetworkItems('virtualfirewallrules', this.props);
+        const vfrules = getNetworkItems(NetworkObjectTypes.VIRTUAL_FIREWALL_RULE, this.props);
         const vfRuleOptions = buildVFRuleOptions(vfrules, srcEntity, destEntity);
         if (vfRuleOptions && Array.isArray(vfRuleOptions)) {
             return (
