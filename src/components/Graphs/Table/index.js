@@ -232,9 +232,7 @@ class Table extends AbstractGraph {
     }
 
     handleSortOrderChange(column, order) {
-        const keys = column.split(".");
-        const value = (d) => keys.reduce((d, key) => d[key], d);
-
+        const value = columnAccessor({column})
         this.filterData = this.filterData.sort(
           (a, b) => {
              if(order === 'desc')
@@ -268,7 +266,12 @@ class Table extends AbstractGraph {
 
     handleRowSelection(selectedRows) {
         const {
-            multiSelectable
+            data
+        } = this.props
+
+        const {
+            multiSelectable,
+            selectedColumn
         } = this.getConfiguredProperties();
 
         if(!multiSelectable) {
@@ -281,9 +284,24 @@ class Table extends AbstractGraph {
         })
         const { selectRow, location } = this.props;
         if (selectRow) {
+
+            let matchingRows = []
             const selectedRows = this.getSelectedRows();
-            const flow = selectedRows ? selectedRows[0] : {};
-            selectRow(this.props.configuration.id, flow, location.query, location.pathname);
+            const row = selectedRows ? selectedRows[0] : {};
+
+            /**
+             * Compare `selectedColumn` value with all available datas and if equal to selected row,
+             * then save all matched records in store under "matchedRows",
+            **/
+
+            if(selectedColumn) {
+
+                const value = columnAccessor({column: selectedColumn})
+                matchingRows = data.filter( (d) => {
+                    return value(row) && row !== d && value(row) === value(d)
+                });
+            }
+           selectRow(this.props.configuration.id, row, matchingRows, location.query, location.pathname);
         }
 
     }
@@ -481,7 +499,7 @@ const mapStateToProps = (state) => {
 }
 
 const actionCreators = (dispatch) => ({
-    selectRow: (vssID, row, currentQueryParams, currentPath) => dispatch(VFSActions.selectRow(vssID, row, currentQueryParams, currentPath)),
+    selectRow: (vssID, row, matchingRows, currentQueryParams, currentPath) => dispatch(VFSActions.selectRow(vssID, row, matchingRows, currentQueryParams, currentPath)),
     goTo: (link, queryParams) => {
         dispatch(push({pathname: link, query: queryParams}));
     }
