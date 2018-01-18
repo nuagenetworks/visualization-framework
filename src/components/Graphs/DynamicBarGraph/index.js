@@ -174,18 +174,23 @@ class BarGraph extends XYGraph {
 
   // calculate range and make starting point from zero
   range(data, metricFn) {
-      this.customExtent = d3.extent(data, metricFn)
-      if(this.customExtent[0] > 0)
-        this.customExtent[0] = 0
+    this.customExtent = d3.extent(data, metricFn)
+    if(this.customExtent[0] > 0)
+      this.customExtent[0] = 0
 
-      if(this.customExtent[1] < 0)
-        this.customExtent[1] = 0
+    if(this.customExtent[1] < 0)
+      this.customExtent[1] = 0
 
-      if(this.customExtent[0] < 0)
-        this.customExtent[0] = this.customExtent[0]/0.9
+    let difference = (this.customExtent[1] - this.customExtent[0]) * 0.05;
 
-      return this.customExtent
-  }
+    if(this.customExtent[0] < 0)
+      this.customExtent[0] = this.customExtent[0] - Math.abs(difference);
+
+    if(this.customExtent[1] > 0)
+      this.customExtent[1] = this.customExtent[1] + Math.abs(difference);
+
+    return this.customExtent
+}
 
   setScale(data) {
     const {
