@@ -5,9 +5,8 @@ import { buildOptions, getNetworkItems } from './utils';
 import { TwoColumnRow } from '../components';
 
 import {
-    getNetworkProtocolForValue,
     getNetworkProtocolForText,
-    NetworkTypeOptions,
+    getNetworkTypeOptions,
     getNetworkTypeForValue,
     getSecurityPolicyActionsForValue,
 } from './NetworkData';
@@ -37,7 +36,8 @@ const buildVFRuleOptions = (options, srcEntity, destEntity) => {
             const to = destEntityName ? `${networkType[0].text} ${destEntityName}` : networkType[0].text;
             const priority = item.priority;
             const templateName = item.ACLTemplateName ? `Policy: ${item.ACLTemplateName}: ` : "";
-            const text = `${templateName}${desc}D-Port: ${item.destinationPort}: From ${from} To: ${to} Action: ${action} Priority: ${priority}`;
+            const destPort = item.destinationPort ? `D-Port: ${item.destinationPort}` : '';
+            const text = `${templateName}${desc}${destPort}: From ${from} To: ${to} Action: ${action} Priority: ${priority}`;
             return ({ text, value: item.ID });
         });
     }
@@ -129,14 +129,6 @@ class AddToFlowEditor extends React.Component {
             return { ID: "Please select a valid virtual firewall rule"};
         }
         return {};
-    }
-
-    initialValues = (data) => {
-        const protocol = getNetworkProtocolForValue(data.protocol);
-
-        return ({
-            protocol: protocol
-        });
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -277,6 +269,17 @@ class AddToFlowEditor extends React.Component {
         }
     }
 
+    shouldDisplayPort = () => {
+        const {
+            data,
+        } = this.props;
+
+        const protocol = data && data.protocol ? data.protocol : '';
+        const proto = getNetworkProtocolForText(protocol);
+        return (proto === '6' || proto === '17');
+
+    }
+
     renderAdd = () => {
         const {
             data,
@@ -284,6 +287,7 @@ class AddToFlowEditor extends React.Component {
             networkTypeValue,
             locationIDValue,
             networkIDValue,
+            resourceName,
         } = this.props;
 
         const title = "Add to Firewall Rule";
@@ -305,7 +309,8 @@ class AddToFlowEditor extends React.Component {
         const destList = this.buildDestField(destNetworkItems);
         const srcEntity = locationIDValue && srcList ? getEntityNameForID(locationIDValue, srcList) : null;
         const destEntity = networkIDValue && destList ? getEntityNameForID(networkIDValue, destList) : null;
-
+        const networkDestinations = getNetworkTypeOptions(resourceName);
+        const isDestPortEnabled = this.shouldDisplayPort();
         return (
             <ModalEditor
                 title={title}
@@ -324,13 +329,13 @@ class AddToFlowEditor extends React.Component {
                     name: 'locationType',
                     label: 'Source',
                     component: Select,
-                    options: NetworkTypeOptions,
+                    options: networkDestinations,
                     onChange:(e) => this.resetFieldsOnChange(e, 'locationID')
                 }} secondColumnProps={{
                     name: 'networkType',
                     label: 'Destination',
                     component: Select,
-                    options: NetworkTypeOptions,
+                    options: networkDestinations,
                     onChange:(e) => this.resetFieldsOnChange(e, 'networkID')
                 }} />
                 { (srcList || destList) &&  <TwoColumnRow firstColumnProps={srcList} secondColumnProps={destList} /> }
@@ -339,16 +344,24 @@ class AddToFlowEditor extends React.Component {
                 {
                     (locationTypeValue && networkTypeValue && this.buildVFRuleField(srcEntity, destEntity)) || <span>Select a source and destination type </span>
                 }
-
-                <TwoColumnRow firstColumnProps={{
-                    name: 'protocol',
-                    label: 'Protocol',
-                    text: protocol,
-                }} secondColumnProps={{
-                    name: 'dPort',
-                    label: 'Destination Port',
-                    text: dPort,
-                }} />
+                { isDestPortEnabled &&
+                    <TwoColumnRow firstColumnProps={{
+                        name: 'protocol',
+                        label: 'Protocol',
+                        text: protocol,
+                    }} secondColumnProps={{
+                        name: 'dPort',
+                        label: 'Destination Port',
+                        text: dPort,
+                    }}/>
+                }
+                { !isDestPortEnabled &&
+                    <TwoColumnRow firstColumnProps={{
+                        name: 'protocol',
+                        label: 'Protocol',
+                        text: protocol,
+                    }}/>
+                }
             </ModalEditor>
         );
     }
@@ -356,6 +369,7 @@ class AddToFlowEditor extends React.Component {
     renderError = () => {
         const title = "Add to Firewall Rule";
         const buttonLabel = "Add";
+        const errorMsg = !this.shouldDisplayPort() ? "Nothing to add to rules" : 'No Flow Selected';
 
         return(
             <ModalEditor
@@ -368,13 +382,14 @@ class AddToFlowEditor extends React.Component {
                 width='60%'
                 errored={true}
             >
-                <span>No flow selected</span>
+                <span>{errorMsg}</span>
             </ModalEditor>
         );
     }
 
     render() {
-        if (!showMessageBoxOnNoFlow({...this.props, toggleError: this.toggleError})) {
+        const isError = !showMessageBoxOnNoFlow({...this.props, toggleError: this.toggleError}) || !this.shouldDisplayPort();
+        if (isError) {
             return this.renderError();
         }
         return this.renderAdd();

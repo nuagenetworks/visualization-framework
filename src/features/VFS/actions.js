@@ -61,12 +61,12 @@ const buildMapStateToProps = (state, ownProps) => {
     };
 
 }
-const vfsPoliciesConfig = (domainID) => {
+const vfsPoliciesConfig = (domainID, resourceName = 'domains') => {
     return (
             {
                 service: "VSD",
                 query: {
-                    parentResource: "domains",
+                    parentResource: resourceName,
                     parentID: domainID,
                     resource: "virtualfirewallpolicies",
                     filter: 'policyState == "DRAFT"',
@@ -75,7 +75,7 @@ const vfsPoliciesConfig = (domainID) => {
         );
 }
 
-const vfsRulesConfig = (domainID, protocol, { locationType, locationID, networkType, networkID } ) => {
+const vfsRulesConfig = (domainID, protocol, { locationType, locationID, networkType, networkID }, resourceName = 'domains' ) => {
 
     let xNuageFilter = `protocol == "${protocol}"`;
     if (locationType) {
@@ -96,7 +96,7 @@ const vfsRulesConfig = (domainID, protocol, { locationType, locationID, networkT
     const configuration = {
         service: "VSD",
         query: {
-            parentResource: "domains",
+            parentResource: resourceName,
             parentID: domainID,
             resource: "virtualfirewallrules",
             filter: xNuageFilter,
@@ -136,22 +136,23 @@ export const fetchAssociatedObjectIfNeeded = (props) => {
         fetchOverlayMirrorDestinationsIfNeeded,
         fetchL7ApplicationSignaturesIfNeeded,
         fetchFirewallRulesIfNeeded,
+        resourceName,
     } = props;
     const enterpriseID = getEnterpriseID(props);
-    const domainID = getMetaDataAttribute(data, 'domainId');
+    const domainID = resourceName === 'domains' ? getMetaDataAttribute(data, 'domainId') : getMetaDataAttribute(data, 'l2domainId');
 
     switch (type) {
         case 'ZONE':
-            fetchZonesIfNeeded(domainID);
+            fetchZonesIfNeeded(domainID, resourceName, ID);
             break;
         case 'SUBNET':
-            fetchSubnetsIfNeeded(domainID);
+            fetchSubnetsIfNeeded(domainID, resourceName, ID);
             break;
         case 'POLICYGROUP':
-            fetchPGsIfNeeded(domainID);
+            fetchPGsIfNeeded(domainID, resourceName, ID);
             break;
         case 'PGEXPRESSION':
-            fetchPGExpressionsIfNeeded(domainID);
+            fetchPGExpressionsIfNeeded(domainID, resourceName, ID);
             break;
         case 'ENTERPRISE_NETWORK':
             fetchNetworkMacrosIfNeeded(enterpriseID);
@@ -175,7 +176,7 @@ export const fetchAssociatedObjectIfNeeded = (props) => {
             const { locationType, networkType } = args;
             if (locationType && networkType ) {
                 const protocol = getNetworkProtocolForText(data.protocol);
-                fetchFirewallRulesIfNeeded(domainID, protocol, args);
+                fetchFirewallRulesIfNeeded(domainID, protocol, args, resourceName);
             }
             break;
         default:
@@ -185,7 +186,7 @@ export const fetchAssociatedObjectIfNeeded = (props) => {
 
 export const mapStateToProps = (state, ownProps) => {
     const query = state.router.location.query;
-    const { operation } = query ? query : {};
+    const { operation, domainType } = query ? query : {};
     const queryConfiguration = {
         service: "VSD",
         query: {
@@ -214,6 +215,9 @@ export const mapStateToProps = (state, ownProps) => {
         );
     const formObject = state.form ? state.form[formName] : null;
 
+    const resourceName = (domainType === 'nuage_metadata.domainName' || domainType === 'Domain') ?
+        'domains' : 'l2domains';
+
     const props = {
         ...buildMapStateToProps(state, ownProps),
         operation,
@@ -221,10 +225,15 @@ export const mapStateToProps = (state, ownProps) => {
         formObject,
         getFieldError: (fieldName) => getError(state, formName, fieldName),
         query,
+        resourceName,
         ...fieldValues,
     };
 
-    const domainID = (props.data && props.data.nuage_metadata && props.data.nuage_metadata.domainId) ? props.data.nuage_metadata.domainId : null;
+    const domainID = resourceName === 'domains' ?
+        (props.data && props.data.nuage_metadata && props.data.nuage_metadata.domainId) ? props.data.nuage_metadata.domainId : null
+        :
+        (props.data && props.data.nuage_metadata && props.data.nuage_metadata.l2domainId) ? props.data.nuage_metadata.l2domainId : null;
+
     const enterpriseID = props.context && props.context.enterpriseID ? props.context.enterpriseID : null;
     props.mirrordestinations = getRequestResponse(state, "mirrordestinations");
     const l2DomainID = (props.formObject && props.formObject.values) ? props.formObject.values.l2domainID : null;
@@ -236,15 +245,15 @@ export const mapStateToProps = (state, ownProps) => {
         props.l7applicationsignatures = getRequestResponse(state, `enterprises/${enterpriseID}/l7applicationsignatures`);
     }
     if (domainID) {
-        props.policygroups = getRequestResponse(state, `domains/${domainID}/policygroups`);
-        props.pgexpressions = getRequestResponse(state, `domains/${domainID}/pgexpressions`);
-        props.zones = getRequestResponse(state, `domains/${domainID}/zones`);
-        props.subnets = getRequestResponse(state, `domains/${domainID}/subnets`);
+        props.policygroups = getRequestResponse(state, `${resourceName}/${domainID}/policygroups`);
+        props.pgexpressions = getRequestResponse(state, `${resourceName}/${domainID}/pgexpressions`);
+        props.zones = getRequestResponse(state, `${resourceName}/${domainID}/zones`);
+        props.subnets = getRequestResponse(state, `${resourceName}/${domainID}/subnets`);
         const formValues = formObject ? formObject.values : [];
         const protocol = props.data ? getNetworkProtocolForText(props.data.protocol) : null;
-        const vfrulesReqID = ServiceManager.getRequestID(vfsRulesConfig(domainID, protocol, formValues))
+        const vfrulesReqID = ServiceManager.getRequestID(vfsRulesConfig(domainID, protocol, formValues, resourceName))
         props.vfrules = getRequestResponse(state, vfrulesReqID);
-        const reqID = ServiceManager.getRequestID(vfsPoliciesConfig(domainID));
+        const reqID = ServiceManager.getRequestID(vfsPoliciesConfig(domainID, resourceName));
         props.vfpolicies = getRequestResponse(state, reqID);
     }
 
@@ -256,21 +265,26 @@ export const mapStateToProps = (state, ownProps) => {
 }
 
 export const actionCreators = (dispatch) => ({
-    fetchDomainFirewallPoliciesIfNeeded: (domainID) => {
-        return dispatch(ServiceActions.fetchIfNeeded(vfsPoliciesConfig(domainID)));
+    fetchDomainFirewallPoliciesIfNeeded: (domainID, resourceName = 'domains') => {
+        return dispatch(ServiceActions.fetchIfNeeded(vfsPoliciesConfig(domainID, resourceName)));
     },
-    fetchFirewallRulesIfNeeded: ( domainID, protocol, values ) => {
-        const configuration = vfsRulesConfig(domainID, protocol, values);
+    fetchFirewallRulesIfNeeded: ( domainID, protocol, values, resourceName = 'domains' ) => {
+        const configuration = vfsRulesConfig(domainID, protocol, values, resourceName);
         return dispatch(ServiceActions.fetchIfNeeded(configuration));
     },
-    fetchSubnetsIfNeeded: (domainID) => {
+    fetchSubnetsIfNeeded: (domainID, resourceName = 'domains', ID) => {
+        const query = ID ? {
+            parentResource: "subnets",
+            parentID: ID
+        } : {
+            parentResource: resourceName,
+            parentID: domainID,
+            resource: "subnets"
+        };
+
         const configuration = {
             service: "VSD",
-            query: {
-                parentResource: "domains",
-                parentID: domainID,
-                resource: "subnets"
-            }
+            query
         }
         return dispatch(ServiceActions.fetchIfNeeded(configuration));
     },
@@ -283,14 +297,19 @@ export const actionCreators = (dispatch) => ({
         }
         return dispatch(ServiceActions.fetchIfNeeded(configuration));
     },
-    fetchZonesIfNeeded: (domainID) => {
+    fetchZonesIfNeeded: (domainID, resourceName = 'domains', ID) => {
+        const query = ID ? {
+            parentResource: "zones",
+            parentID: ID
+        } : {
+            parentResource: resourceName,
+            parentID: domainID,
+            resource: "zones"
+        };
+
         const configuration = {
             service: "VSD",
-            query: {
-                parentResource: "domains",
-                parentID: domainID,
-                resource: "zones"
-            }
+            query
         }
         return dispatch(ServiceActions.fetchIfNeeded(configuration));
     },
@@ -327,25 +346,35 @@ export const actionCreators = (dispatch) => ({
         }
         return dispatch(ServiceActions.fetchIfNeeded(configuration));
     },
-    fetchPGsIfNeeded: (domainID) => {
+    fetchPGsIfNeeded: (domainID, resourceName = 'domains', ID) => {
+        const query = ID ? {
+            parentResource: "policygroups",
+            parentID: ID
+        } : {
+            parentResource: resourceName,
+            parentID: domainID,
+            resource: "policygroups"
+        };
+
         const configuration = {
             service: "VSD",
-            query: {
-                parentResource: "domains",
-                parentID: domainID,
-                resource: "policygroups"
-            }
+            query
         }
         return dispatch(ServiceActions.fetchIfNeeded(configuration));
     },
-    fetchPGExpressionsIfNeeded: (domainID) => {
+    fetchPGExpressionsIfNeeded: (domainID, resourceName = 'domains', ID) => {
+        const query = ID ? {
+            parentResource: "pgexpressions",
+            parentID: ID
+        } : {
+            parentResource: resourceName,
+            parentID: domainID,
+            resource: "pgexpressions"
+        };
+
         const configuration = {
             service: "VSD",
-            query: {
-                parentResource: "domains",
-                parentID: domainID,
-                resource: "pgexpressions"
-            }
+            query
         }
         return dispatch(ServiceActions.fetchIfNeeded(configuration));
     },
