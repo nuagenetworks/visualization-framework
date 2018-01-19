@@ -13,7 +13,11 @@ import {
 
 import {
     fetchAssociatedObjectIfNeeded,
+    fetchDestinationNetworkItems,
+    fetchSourceNetworkItems,
+    getDestinationNetworkItems,
     getNetworkItems,
+    getSourceNetworkItems,
     NetworkObjectTypes,
     showMessageBoxOnNoFlow
 } from './actions';
@@ -194,20 +198,20 @@ class AddToFlowEditor extends React.Component {
         const domainID = getDomainID(resourceName, data);
 
         const srcNetworkItems = {
-            ...getNetworkItems(locationTypeValue, nextProps),
+            ...getSourceNetworkItems(nextProps),
             type: locationTypeValue,
             ID: locationIDValue,
         };
         const destNetworkItems = {
-            ...getNetworkItems(networkTypeValue, nextProps),
+            ...getDestinationNetworkItems(nextProps),
             type: networkTypeValue,
             ID: networkIDValue,
         };
         if (!srcNetworkItems.data) {
-            fetchAssociatedObjectIfNeeded({ type: locationTypeValue, domainID, enterpriseID, ...nextProps});
+            fetchSourceNetworkItems(nextProps, domainID, enterpriseID);
         }
         if (!destNetworkItems.data) {
-            fetchAssociatedObjectIfNeeded({ type: networkTypeValue, domainID, enterpriseID, ...nextProps});
+            fetchDestinationNetworkItems(nextProps, domainID, enterpriseID);
         }
 
         this.fetchVFRulesIfNeeded(nextProps);
@@ -307,12 +311,12 @@ class AddToFlowEditor extends React.Component {
         const protocol = data && data.protocol ? data.protocol : '';
         const dPort = data && data.destinationport ? data.destinationport : '';
         const srcNetworkItems = {
-            ...getNetworkItems(locationTypeValue, this.props),
+            ...getSourceNetworkItems(this.props),
             type: locationTypeValue,
             ID: locationIDValue,
         };
         const destNetworkItems = {
-            ...getNetworkItems(networkTypeValue, this.props),
+            ...getDestinationNetworkItems(this.props),
             type: networkTypeValue,
             ID: networkIDValue,
         };

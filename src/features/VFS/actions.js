@@ -28,7 +28,8 @@ import {
 
 import {
     getEnterpriseID,
-    getDomainID
+    getDomainID,
+    getMetaDataAttribute
 } from './utils';
 
 export const NetworkObjectTypes = {
@@ -57,6 +58,50 @@ export const getNetworkItems = (type, props) => {
     const reqID = getRequestID({type, domainID, enterpriseID, parentResource, ...props});
 
     return reqID ? props.getRequestResponse(reqID) : null;
+}
+
+export const getSourceNetworkItems = (props) => {
+    const { data, locationTypeValue } = props;
+    const flowDir = getIDForResource('direction', data);
+    const idForLocationType = getIDForResource(locationTypeValue, data);
+    return flowDir === 'ingress' && idForLocationType ?
+        getNetworkItems(locationTypeValue, {ID: idForLocationType, ...props}) :
+        getNetworkItems(locationTypeValue, props);
+}
+
+export const getDestinationNetworkItems = (props) => {
+    const { data, networkTypeValue } = props;
+    const flowDir = getIDForResource('direction', data);
+    const idForNetworkType = getIDForResource(networkTypeValue, data);
+    return flowDir === 'egress' && idForNetworkType ?
+        getNetworkItems(networkTypeValue, {ID: idForNetworkType, ...props}) :
+        getNetworkItems(networkTypeValue, props);
+}
+
+export const fetchSourceNetworkItems = (props, domainID, enterpriseID) => {
+    const { data, locationTypeValue } = props;
+    const flowDir = getIDForResource('direction', data);
+    const query = { type: locationTypeValue, domainID, enterpriseID, ...props};
+    const idForLocationType = getIDForResource(locationTypeValue, data);
+    if (idForLocationType) {
+        if (flowDir === 'ingress') {
+            query.ID = idForLocationType;
+        }
+    }
+    fetchAssociatedObjectIfNeeded(query);
+}
+
+export const fetchDestinationNetworkItems = (props, domainID, enterpriseID) => {
+    const { data, networkTypeValue } = props;
+    const flowDir = getIDForResource('direction', data);
+    const query = { type: networkTypeValue, domainID, enterpriseID, ...props};
+    const idForNetworkType = getIDForResource(networkTypeValue, data);
+    if (idForNetworkType) {
+        if (flowDir === 'egress') {
+            query.ID = idForNetworkType;
+        }
+    }
+    fetchAssociatedObjectIfNeeded(query);
 }
 
 const getRequestResponse = (state, path) => {
@@ -131,6 +176,23 @@ const vfsRulesConfig = (domainID, protocol, { locationType, locationID, networkT
         }
     }
     return configuration;
+}
+
+export const getIDForResource = (type, data) => {
+    if (!type) {
+        return null;
+    }
+
+    switch (type) {
+        case NetworkObjectTypes.ZONE:
+            return getMetaDataAttribute(data, 'zoneId');
+        case NetworkObjectTypes.SUBNET:
+            return getMetaDataAttribute(data, 'subnetId');
+        case 'direction':
+            return getMetaDataAttribute(data, 'direction');
+        default:
+            return null;
+    }
 }
 
 export const showMessageBoxOnNoFlow = (props) => {
@@ -337,7 +399,8 @@ export const mapStateToProps = (state, ownProps) => {
         'networkType',
         'locationID',
         'networkID',
-        'ID') :
+        'ID',
+        'parentID',) :
         selectFieldValues(state,
             formName,
             'locationType',

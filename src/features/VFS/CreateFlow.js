@@ -23,8 +23,12 @@ import {
     fetchAssociatedObjectIfNeeded,
     showMessageBoxOnNoFlow,
     NetworkObjectTypes,
-    getNetworkItems
- } from './actions';
+    getNetworkItems,
+    getSourceNetworkItems,
+    getDestinationNetworkItems,
+    fetchSourceNetworkItems,
+    fetchDestinationNetworkItems,
+} from './actions';
 
 class CreateFlow extends React.Component {
     constructor(...props) {
@@ -355,20 +359,21 @@ class CreateFlow extends React.Component {
         const domainID = getDomainID(resourceName, data);
 
         const srcNetworkItems = {
-            ...getNetworkItems(locationTypeValue, nextProps),
+            ...getSourceNetworkItems(nextProps),
             type: locationTypeValue,
             ID: locationIDValue,
         };
         const destNetworkItems = {
-            ...getNetworkItems(networkTypeValue, nextProps),
+            ...getDestinationNetworkItems(nextProps),
             type: networkTypeValue,
             ID: networkIDValue,
         };
+
         if (!srcNetworkItems.data) {
-            fetchAssociatedObjectIfNeeded({ type: locationTypeValue, domainID, enterpriseID, ...nextProps});
+            fetchSourceNetworkItems(nextProps, domainID, enterpriseID);
         }
         if (!destNetworkItems.data) {
-            fetchAssociatedObjectIfNeeded({ type: networkTypeValue, domainID, enterpriseID, ...nextProps});
+            fetchDestinationNetworkItems(nextProps, domainID, enterpriseID);
         }
         let mirrordestinations = null;
         if (mirrorDestinationTypeValue ) {
@@ -436,12 +441,12 @@ class CreateFlow extends React.Component {
         const vfpolicies = getNetworkItems(NetworkObjectTypes.VIRTUAL_FIREWALL_POLICIES, this.props);
 
         const srcNetworkItems = {
-            ...getNetworkItems(locationTypeValue, this.props),
+            ...getSourceNetworkItems(this.props),
             type: locationTypeValue,
             ID: locationIDValue,
         };
         const destNetworkItems = {
-            ...getNetworkItems(networkTypeValue, this.props),
+            ...getDestinationNetworkItems(this.props),
             type: networkTypeValue,
             ID: networkIDValue,
         };
