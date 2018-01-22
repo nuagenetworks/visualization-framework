@@ -7,6 +7,7 @@ import * as d3 from "d3";
 import "./style.css";
 
 import {properties} from "./default.config"
+import { filterEmptyData, limit } from "../../../utils/helpers"
 
 
 export default class PieGraph extends AbstractGraph {
@@ -60,10 +61,16 @@ export default class PieGraph extends AbstractGraph {
         const settings = {
             "metric": sliceColumn,
             "dimension": labelColumn,
-            "otherOptions": otherOptions
+            "limitOption": otherOptions
           };
 
-        const data = this.getGroupedData(originalData, settings);
+        const data =  limit({
+            data: filterEmptyData({
+                data: originalData,
+                column: sliceColumn
+            }),
+            ...settings
+        })
 
         let availableWidth     = width - (margin.left + margin.right);
         let availableHeight    = height - (margin.top + margin.bottom);
