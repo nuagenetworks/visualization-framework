@@ -150,7 +150,7 @@ const vfsPoliciesConfig = (domainID, resourceName = 'domains') => {
 
 const vfsRulesConfig = (domainID, protocol, { locationType, locationID, networkType, networkID }, resourceName = 'domains' ) => {
 
-    let xNuageFilter = `protocol == "${protocol}"`;
+    let xNuageFilter = `protocol == "${protocol}" AND policyState == "DRAFT"`;
     if (locationType) {
         xNuageFilter = `${xNuageFilter} AND locationType == "${locationType}"`
     }
