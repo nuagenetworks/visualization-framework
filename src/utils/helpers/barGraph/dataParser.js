@@ -1,5 +1,5 @@
 
-import { nest, nestStack, nestSum, limit } from '../../helpers'
+import { nest, nestStack, nestMinMaxSum, limit } from '../../helpers'
 
 export default ({
   data,
@@ -10,10 +10,9 @@ export default ({
   vertical
     }) => {
 
-
   return nestStack({
     data: limit({
-      data: nestSum({
+      data: nestMinMaxSum({
         data: nest({
           data,
           key: dimension,

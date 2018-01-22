@@ -58,6 +58,23 @@ class BarGraph extends XYGraph {
     return (d) => d.total
   }
 
+  // find min value (in case of others data, return sum of negative value)
+  getMinFn() {
+    return (d) => {
+      return typeof d.min === 'undefined'
+        ?
+        d.values.reduce((total, curr) => {
+          return total + parseFloat(curr[this.metric] < 0 ? curr[this.metric] : 0)
+        }, 0)
+       :
+       d.min
+    }
+  }
+
+  getMaxFn() {
+    return (d) => typeof d.max === 'undefined' && d.total > 0 ? d.total : d.max
+  }
+
   getDimensionFn() {
     return (d) => d.key
   }
@@ -173,8 +190,8 @@ class BarGraph extends XYGraph {
   }
 
   // calculate range and make starting point from zero
-  range(data, metricFn) {
-    this.customExtent = d3.extent(data, metricFn)
+  range(data) {
+    this.customExtent = [d3.min(data, this.getMinFn()), d3.max(data, this.getMaxFn())]
     if(this.customExtent[0] > 0)
       this.customExtent[0] = 0
 
@@ -207,7 +224,7 @@ class BarGraph extends XYGraph {
         .domain(d3.extent(data, this.getDimensionFn()))
 
         this.scale.y = d3.scaleLinear()
-        .domain(this.range(data, this.getMetricFn()))
+        .domain(this.range(data))
 
     } else if (this.isVertical()) {
 
@@ -217,12 +234,12 @@ class BarGraph extends XYGraph {
         .padding(padding)
 
       this.scale.y = d3.scaleLinear()
-        .domain(this.range(data, this.getMetricFn()))
+        .domain(this.range(data))
 
     } else {
       // Handle the case of a horizontal bar chart.
       this.scale.x = d3.scaleLinear()
-        .domain(this.range(data, this.getMetricFn()))
+        .domain(this.range(data))
 
       this.scale.y = d3.scaleBand()
         .domain(data.map(this.getDimensionFn()).reverse())
@@ -702,4 +719,3 @@ const actionCreators = (dispatch) => ({
 })
 
 export default connect(mapStateToProps, actionCreators)(BarGraph)
-
