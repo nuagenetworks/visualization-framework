@@ -1,0 +1,41 @@
+{
+    "id": "test-heatmap-graph",
+    "graph": "HeatmapGraph",
+    "title": "HeatmapGraph",
+    "author": "Anil Chauhan",
+    "creationDate": "08/03/2017",
+    "data": {
+        "xColumn": "timestamp",
+        "xLabel": "Time",
+        "yColumn": "Application",
+        "yTickGrid": false,
+        "yLabel": "Application",
+        "legendColumn": "SlaStatus",
+        "cellColumn": "SlaStatus",
+        "legend": {
+            "show": true,
+            "orientation": "horizontal",
+            "circleSize": 4,
+            "labelOffset": 2
+        },
+        "tooltip": [
+<<<<<<< Updated upstream
+            { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+=======
+            { "column": "timestamp", "label": "Timestamp","timeFormat": "%b %d, %y %X"},
+>>>>>>> Stashed changes
+            { "column": "Application", "label": "Application" },
+            { "column": "SlaStatus", "label": "Status" }
+        ]
+ 
+   },
+   "listeners": [
+        {
+            "params": {
+                "appName": "Application",
+                "queryStartTime": "timestamp"
+            }
+        }
+    ],
+    "query": "test-heatmap-graph"
+}

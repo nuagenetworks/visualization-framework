@@ -1,4 +1,4 @@
-import Connection from '../configurations/database.js';
-import { QueryBuilder } from 'node-querybuilder';
+let databaseSettings = require('../configurations/database.js');
+const DB = require('node-querybuilder').QueryBuilder(databaseSettings, 'mysql');
 
-export default QueryBuilder(Connection, 'mysql');
+module.exports = DB;

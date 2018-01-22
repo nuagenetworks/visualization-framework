@@ -1,20 +1,20 @@
 [
     {
         "timestamp": "1503120340000",
-        "CPU": "-20",
-        "DISK": "-100",
+        "CPU": 0,
+        "DISK": 0,
 		"MEMORY":null
     },
     {
         "timestamp": "1503120340000",
         "CPU": null,
-        "DISK": "-100",
+        "DISK": "undefined",
 		"MEMORY":"undefined"
     },
     {
         "timestamp": "1503120340000",
         "CPU": null,
-        "DISK": "-100",
+        "DISK": 0,
 		"MEMORY":null
     },
     {

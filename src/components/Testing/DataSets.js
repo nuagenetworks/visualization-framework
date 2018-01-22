@@ -57,18 +57,46 @@ class DataSets extends Component {
   renderDataSet() {
   	let collaspableData = [];
     let datasets = this.props.datasets;
+    let styles1 = {
+      backgroundColor: 'rgb(160, 160, 160)',
+      color: 'white',
+      textAlign: 'center',
+      padding: '10px',
+    };
+    console.log('===',datasets);
 	  for(let datasetID in datasets) {
 	 	  if (datasets.hasOwnProperty(datasetID)) {
-			  let chartsDetails = datasets[datasetID].charts.map((response, index) =>
-			    <div key={response.chart_id}  style={{marginTop: "20px"}}>
+        
+        let graphType;
+			  let chartsDetails = datasets[datasetID].charts.map((response, index) => {
+          let check = 0;
+          if(graphType !== response.graph_type) {
+            graphType = response.graph_type;
+            check=1;
+          }
+			    return (<div key={response.chart_id}  style={{marginTop: "20px"}}>
+            {index === 0 && response.graph_type==='before_click' ? (<div style={styles1} >Before Click</div>) : null }
+            {check === 1 && response.graph_type==='after_click' ? (<div style={styles1} >After Click</div>) : null }
 				    <div className="" style={{ display: "flex"}}>
               {response.dataset_file}
-              {datasets[datasetID].dataset_id ? 
+              { datasets[datasetID].dataset_id && response.graph_type==='before_click' ? 
   					    (
                   <Image data={`${this.getBaseURL()}dashboards/original/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/${response.chart_name}.png`}  />
-                ) : null
+                ) : 
+                (
+                  <Image data={`${this.getBaseURL()}dashboards/original/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/bar/${response.chart_name}.png`}  />
+                )
               }
-              <Image data={`${this.getBaseURL()}dashboards/${response.report_id}/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/${response.chart_name}.png`}  />
+              { response.graph_type==='before_click' ? 
+                (
+                  <Image data={`${this.getBaseURL()}dashboards/${response.report_id}/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/${response.chart_name}.png`}  />
+                )
+                :
+                (
+                  <Image data={`${this.getBaseURL()}dashboards/${response.report_id}/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/bar/${response.chart_name}.png`}  />
+                )
+              }
+              
               {
                 this.props.editMode ?
   						  (<div style={style.isfailedBtn}>
@@ -83,13 +111,15 @@ class DataSets extends Component {
                   </div>
                 )
               }
-           </div>
+            </div>
            <hr />
-			  </div>
+          </div>)
+
+          }
 		    );
 
 		    collaspableData.push(
-          <SubPanel key={datasets[datasetID].dataset_name} title={datasets[datasetID].dataset_name ? datasets[datasetID].dataset_name : 'Standard'}>
+          <SubPanel key={datasets[datasetID].dataset_id} title={datasets[datasetID].dataset_name ? datasets[datasetID].dataset_name : 'Standard'}>
               <Infobox data={datasets[datasetID].dataset_description} />
               <Error data={datasets[datasetID].errors}></Error>
               {chartsDetails}

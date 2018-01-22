@@ -1,17 +1,7 @@
 [
     {
-        "timestamp": "1513598400000",
+        "timestamp": "",
         "Application": "Proin maecenas",
         "SlaStatus": "test1"
-    },
-    {
-        "timestamp": "1513602000000",
-        "Application": "maecenas",
-        "SlaStatus": "test2"
-    },
-    {
-        "timestamp": "1513605600000",
-        "Application": "Fecatus",
-        "SlaStatus": "test3"
     }
 ]

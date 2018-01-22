@@ -10,7 +10,7 @@
         "yLabel": "Application",
         "xColumn": "Sum of MB",
         "xLabel": "Total Bytes",
-        "xTicks": 5,
+        "xTicks": 15,
         "xTickFormat": ".2s",
         "orientation": "horizontal",
         "brush": 2,

@@ -3,7 +3,6 @@ import DB from '../middleware/connection.js';
 import moment from 'moment';
 import async from 'async';
 
-
 class TestingModel extends BaseModel {
 
     getStatusCode(status) {
@@ -12,7 +11,7 @@ class TestingModel extends BaseModel {
         'COMPLETED': 'completed',
         'QUEUE': 'queue',
         'EXECUTING': 'executing',
-        'PROCESSED': 'processed'
+        'PROCESSED': 'processed',
       }
       return statuses[status];
     }
@@ -42,7 +41,7 @@ class TestingModel extends BaseModel {
             par.totalRecords = resp;
             finalRes.push(par);
           }
-          callback(null,finalRes);
+          callback(null, finalRes);
         });
           
       }.bind(this));
@@ -72,7 +71,7 @@ class TestingModel extends BaseModel {
     }
 
     getDashboards(callback) {
-      DB.select(['d.id as dashboard_id', 'd.name as dashboard_name', 'concat(d.url, IF(ds.datafile IS NOT NULL, concat("?dataset=", ds.datafile), "")) as url', 'ds.id as dataset_id'])
+      DB.select(['d.id as dashboard_id', 'd.name as dashboard_name', 'd.settings as settings', 'concat(d.url, IF(ds.datafile IS NOT NULL, concat("?dataset=", ds.datafile), "")) as url', 'ds.id as dataset_id'])
           .from('t_dashboards as d')
           .join('t_dashboard_datasets as ds', 'ds.dashboard_id = d.id and ds.is_active = 1', 'left')
           .where('d.is_active', '1')
@@ -212,7 +211,7 @@ class TestingModel extends BaseModel {
     getDetailReport(reportID, callback) {
         const select = [
           'r.created_at', 'r.started_at', 'r.completed_at', 'r.id report_id', 'r.total', 'r.pass', 'r.fail', 'r.message', 'r.status',
-          'rdw.id chart_id', 'rdw.chart_name', 'rdw.status chart_status','rdw.report_dashboard_id report_dashboard_id',
+          'rdw.id chart_id', 'rdw.chart_name', 'rdw.type as graph_type', 'rdw.status chart_status','rdw.report_dashboard_id report_dashboard_id',
           'rd.errors as dataset_errors',
           'dd.id dataset_id, dd.datafile dataset_file', 'dd.name dataset_name', 'dd.description dataset_description',
           'd.id dashboard_id', 'd.name dashboard_name', 'd.url dashboard_url'];
@@ -270,6 +269,10 @@ class TestingModel extends BaseModel {
 
                 callback(null, results);
             });
+    }
+
+    insertSeederData(data) {
+      console.log(data);
     }
 
     successResponse(response, res) {

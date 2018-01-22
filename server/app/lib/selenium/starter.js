@@ -60,7 +60,7 @@ function capture(reportID) {
                             widget.report_dashboard_id = reportDashboardId;
                             return widget;
                           });
-
+                          console.log('+++++++++++widgets++++++++++++', widgets);
                           model.insertReportDetails(widgets, function(err, response) {
                             if(err) {
                               console.log(err);

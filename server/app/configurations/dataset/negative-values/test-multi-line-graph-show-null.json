@@ -1,26 +1,26 @@
 [
     {
         "timestamp": "1503120340000",
-        "CPU": "100",
-        "DISK": "25",
-		"MEMORY":"75"
+        "CPU": "-100",
+        "DISK": "-25",
+		"MEMORY":"-75"
     },
     {
         "timestamp": "1503120450000",
-        "CPU": "25",
-        "DISK": "50",
+        "CPU": "-25",
+        "DISK": "-50",
 		"MEMORY":null
     },
     {
         "timestamp": "1503120550000",
-        "CPU": "25",
-        "DISK": "50",
+        "CPU": "-25",
+        "DISK": "-50",
 		"MEMORY":"100"
     },
     {
         "timestamp": "1503120650000",
-        "CPU": "25",
-        "DISK": "50",
-		"MEMORY":"125"
+        "CPU": "-25",
+        "DISK": "-50",
+		"MEMORY":"-125"
     }
 ]

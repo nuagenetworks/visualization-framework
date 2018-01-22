@@ -1,11 +1,11 @@
-import {Builder, By, Key, until} from 'selenium-webdriver';
+import { Builder, By } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
 import http from 'http';
 import url from 'url';
 import easyimg from 'easyimage';
 import mkdirp from 'mkdirp';
-import fs from 'fs'
-import {dirname} from 'path'
+import fs from 'fs';
+import { dirname } from 'path';
 import resemble from 'node-resemble-js';
 import async from 'async';
 
@@ -16,9 +16,11 @@ let driver = null;
 let finalCallback = null;
 let currentDashboard = null;
 let currentReportId = null;
+let dashboardSettings = null;
+let graphType = 'default';
+let checkSubsetCall = false;
 
 let errors = [];
-let results = [];
 let widgets = [];
 let chromeOptions = new chrome.Options();
 
@@ -28,17 +30,17 @@ const MESSAGES = {
     URL_NOT_FOUND: 'Provided url does not exists',
     NO_WIDGET: 'Seems like an invalid Dashboard, no widgets found',
     WIDGETS_NOT_LOADING: 'Some of the widgets are still waiting for data.',
-    WIDGET_DATA_ISSUE: ` widgets haven't loaded due to console errors.`
-}
+    WIDGET_DATA_ISSUE: ` widgets haven't loaded due to console errors.`,
+};
 
-export const crawl = function (reportId, dashboard, callback) {
+export const crawl = function(reportId, dashboard, callback) {
   currentReportId = reportId;
   finalCallback = callback;
   currentDashboard = dashboard;
+  dashboardSettings = dashboard.settings;
   widgets = [];
   errors = [];
-
-  checkAndProcess(dashboard.url)
+  checkAndProcess(dashboard.url);
 };
 
 const callback = function(type, message) {
@@ -48,30 +50,51 @@ const callback = function(type, message) {
     }
 
     if(message)
-      errors.push(message)
-    
+      errors.push(message);
     finalCallback({
       type: type,
       widgets: widgets,
-      errors: errors
+      errors: errors,
     });
 };
 
 
-const getMatchPercentage = function({size, location, srcFile, orgFile, dstFile, chartName}, matchCallback) {
-
+const getMatchPercentage = function({ size, location, srcFile, orgFile, dstFile, chartName }, matchCallback) {
   if (fs.existsSync(dstFile) && fs.existsSync(orgFile)) {
-    let diff = resemble(dstFile).compareTo(orgFile).onComplete(function(data) {
+    resemble(dstFile).compareTo(orgFile).onComplete(function(data) {
       matchCallback(null, (data.misMatchPercentage > 10) ? 'fail' : 'pass');
       return;
     });
   } else {
     matchCallback(null, null);
   }
+};
 
-}
 
-const cropImage = function({size, location, srcFile, orgFile, dstFile, chartName}, matchCallback) {
+const goToUrl = function(driver, Id, indexToClick) {
+    driver.findElement(By.id(Id))
+    .findElements(By.className('bar-block'))
+    .then(function(elements) {
+        elements.forEach(function(element, index) {
+            if(index==0) {
+                element.click().then(function() {
+                    driver.wait(function() {
+                        return driver.findElements(By.xpath('//div[contains(@class,"react-grid-layout")]/div')).then(function(elements) {
+                            return elements.length;
+                        });
+                    }, 5000).then(function() {
+                        driver.getCurrentUrl().then((url)=>{
+                            fetchWidgets(url, 'bar');
+                        });
+                    });
+                });
+            }
+        });
+    });
+    return true;
+};
+
+const cropImage = function({ size, location, srcFile, orgFile, dstFile, chartName }, matchCallback) {
     easyimg.crop({
         src: srcFile,
         dst: dstFile,
@@ -80,26 +103,26 @@ const cropImage = function({size, location, srcFile, orgFile, dstFile, chartName
         quality: 100,
         x: location.x,
         y: location.y,
-        gravity: 'NorthWest'
+        gravity: 'NorthWest',
     }).then(
       function(image) {
         matchCallback();
       },
-      function (err) {
+      function(err) {
         console.log(err);
       }
     );
 };
 
 const checkAndProcess = function(URL) {
-    var options = {
+    let options = {
           method: 'HEAD',
           host: url.parse(URL).hostname,
-          port: url.parse(URL).port
+          port: url.parse(URL).port,
       };
       try {
-          var req = http.request(options, function (r) {
-              console.log('here')
+          let req = http.request(options, function(r) {
+              console.log('here');
               if(r.statusCode == 200) {
                   initiate(URL);
               } else {
@@ -113,15 +136,14 @@ const checkAndProcess = function(URL) {
 
           req.end();
       } catch(e) {
-          console.log(e)
+          console.log(e);
       }
-
-}
+};
 
 const initiate = function(URL) {
     driver = new Builder()
         .forBrowser('chrome')
-        .setChromeOptions(chromeOptions.headless().windowSize({width, height}))
+        .setChromeOptions(chromeOptions.headless().windowSize({ width, height }))
         .build();
 
     driver.get(URL);
@@ -131,13 +153,15 @@ const initiate = function(URL) {
             return elements.length;
         });
       }, 5000).then(function() {
-         fetchWidgets();
+            //goToUrl(driver, 'test-stackbar-graph-horizontal-number-limit');
+            fetchWidgets(URL,'default');
       }).catch(function() {
           callback(MESSAGES.ERROR, MESSAGES.NO_WIDGET);
       });
 }
 
-const fetchWidgets = function() {
+const fetchWidgets = function(URL,typeUrl) {
+    
     driver.wait(function() {
         return driver.findElements(By.className('fa-spin')).then(function(elements) {
           return !elements.length;
@@ -153,21 +177,20 @@ const fetchWidgets = function() {
       let chartStatus;
       let allElementsDetails=[];
 
+
       driver.findElements(By.xpath("//div[contains(@class,'react-grid-layout')]/div/div")).then(function(elems) {
-          elems.forEach(function (elem) {
+          elems.forEach( function(elem) {
               elem.getAttribute('id').then(function(name, index){
                   if(name == "") {
                     allChartsLoaded++;
                   } else {
-                    
                     elem.getLocation().then(function(location){
                         chartLocation = location;
                     });
-
                     elem.getSize().then(function(size){
                         chartSize = size;
                     });
-
+                    
                     elem.findElements(By.xpath(".//span[contains(@class,'fa-spin') or contains(@class,'fa-bar-chart') or contains(@class,'fa-meh-o')]")).then(function(elements) {
                       chartStatus = elements.length ? 'fail' : null;
 
@@ -175,7 +198,7 @@ const fetchWidgets = function() {
                           name: name,
                           location: chartLocation,
                           size: chartSize,
-                          status: chartStatus
+                          status: chartStatus,
                         });
 
                     });
@@ -187,13 +210,22 @@ const fetchWidgets = function() {
 
       driver.takeScreenshot().then(
           function(image, err) {
+                
+                let filePath;    
+                let filePath2;
+                
+                if(graphType=='default') {
+                        filePath = `public/dashboards/${currentReportId}/${currentDashboard.dashboard_id}/${currentDashboard.dataset_id ? currentDashboard.dataset_id : 0}`;
+                } else {
 
-              let filePath = `public/dashboards/${currentReportId}/${currentDashboard.dashboard_id}/${currentDashboard.dataset_id ? currentDashboard.dataset_id : 0}`;
-              let originalPath = `public/dashboards/original/${currentDashboard.dashboard_id}/${currentDashboard.dataset_id ? currentDashboard.dataset_id : 0}`;
-              
-              mkdirp(dirname(`${filePath}/dashboard.png`), function (err) {
+                    filePath = `public/dashboards/${currentReportId}/${currentDashboard.dashboard_id}/${currentDashboard.dataset_id ? currentDashboard.dataset_id : 0}/${graphType}`;
+                    graphType='default';       
+                }
+                let originalPath = `public/dashboards/original/${currentDashboard.dashboard_id}/${currentDashboard.dataset_id ? currentDashboard.dataset_id : 0}`;
+
+                mkdirp(dirname(`${filePath}/dashboard.png`), function (err) {
                 if (err)
-                  return callback(MESSAGES.ERROR, {});
+                    return callback(MESSAGES.ERROR, {});
 
                 fs.writeFile(`${filePath}/dashboard.png`, image, 'base64', function(err) {
                     if (err) {
@@ -202,48 +234,63 @@ const fetchWidgets = function() {
                         if(allChartsLoaded) {
                             errors.push(`${allChartsLoaded}${MESSAGES.WIDGET_DATA_ISSUE}`)
                         }
-
+                        let count = 0;
                         async.forEachOf(allElementsDetails, function (result, key, callback) {
-
+                            
                             let imageDetails = {
-                              size: result.size,
-                              location: result.location,
-                              srcFile: `${filePath}/dashboard.png`,
-                              orgFile:`${originalPath}/${result.name}.png`,
-                              dstFile: `${filePath}/${result.name}.png`,
-                              chartName: result.name
+                                size: result.size,
+                                location: result.location,
+                                srcFile: `${filePath}/dashboard.png`,
+                                orgFile: `${originalPath}/${result.name}.png`,
+                                dstFile: `${filePath}/${result.name}.png`,
+                                chartName: result.name,
                             };
 
                             let widget = {
-                              chart_name : result.name
+                                chart_name: result.name,
+                                type: 'before_click',
                             };
+                            
+                            if(typeUrl!='default') {
+                                widget.type = 'after_click';
+                            }
+
+                            let settingsData = dashboardSettings ? JSON.parse(dashboardSettings) : null;
 
                             cropImage(imageDetails, function(err, response) {
-                              if(result.status) {
-                                 widgets.push(Object.assign({}, widget, {
-                                      status: result.status
-                                 }));
 
-                                callback(null);
-                                return;
-                              }
-
-                              getMatchPercentage(imageDetails, function(err, response) {
-                                console.log('RESPONSE.....', response)
-                                if(response) {
-                                  widgets.push(Object.assign({}, widget, {
-                                    status: response
-                                  }));
+                                if(result.status) {
+                                    widgets.push(Object.assign({}, widget, {
+                                        status: result.status,
+                                    }));
+                                    if( settingsData && settingsData.bar && result.name === settingsData.bar && !checkSubsetCall ) {
+                                        checkSubsetCall = true;
+                                        graphType = 'bar';
+                                        return goToUrl(driver, settingsData.bar);
+                                    }
+                                    callback(null);
+                                    return;
                                 }
 
-                                callback(null);
-                                return;
-                              });
-                            });
-                         
+                                getMatchPercentage(imageDetails, function(err, response) {
+                                    console.log('RESPONSE.....', response)
+                                    if(response) {
+                                        widgets.push(Object.assign({}, widget, {
+                                            status: response,
+                                        }));
+                                    }
+                                    if( settingsData && settingsData.bar && result.name === settingsData.bar && !checkSubsetCall ) {
+                                        checkSubsetCall = true;
+                                        graphType = 'bar';
+                                        return goToUrl(driver, settingsData.bar);
+                                    }
+                                    callback(null);
+                                    return;
+                                });
 
+                            });
                         }, function done() {
-                          callback(MESSAGES.SUCCESS);
+                            callback(MESSAGES.SUCCESS);
                         });
                     }
 
