@@ -513,7 +513,7 @@ class BarGraph extends XYGraph {
       let x = d3.event.pageX
       let y = d3.event.pageY
 
-      if(this.origin.x != x  || this.origin.y != y) {
+      if(this.origin.x !== x  || this.origin.y !== y) {
         this.origin = {
           x,
           y
@@ -672,31 +672,12 @@ class BarGraph extends XYGraph {
       margin
     } = this.getConfiguredProperties()
 
-    let horizontalLine = (
-        this.isVertical() ? <line
-            x1="0"
-            y1={this.scale.y(0)}
-            x2={this.getAvailableWidth()}
-            y2={this.scale.y(0)}
-            stroke={"rgb(0,0,0)"}
-            strokeWidth="0.7"
-        /> :
-        <line
-            x1={this.scale.x(0)}
-            y1="0"
-            x2={this.scale.x(0)}
-            y2={this.getAvailableHeight()}
-            stroke={"rgb(0,0,0)"}
-            strokeWidth="0.7"
-        />
-    )
-
     return (
       <div className='dynamic-bar-graph'>
         <svg width={width} height={height}>
           <g ref={node => this.node = node}>
             <g className='graph-container' transform={`translate(${this.getLeftMargin()},${margin.top})`}>
-            {horizontalLine}
+              <g className='horizontal-line'></g>
               <g className='graph-bars'></g>
               <g className='tooltip-section'></g>
             </g>
