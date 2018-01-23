@@ -80,8 +80,9 @@ class AddToFlowEditor extends React.Component {
             const vfrules = getNetworkItems(NetworkObjectTypes.VIRTUAL_FIREWALL_RULE, this.props);
             if (vfrules && vfrules.data && vfrules.data.length > 0) {
                 const { selectRule, data } = this.props;
+                const selectedRule = vfrules.data.find(item => item.ID === ID);
                 if (selectRule && data) {
-                    const object = Object.assign({}, vfrules.data[0]);
+                    const object = Object.assign({}, selectedRule);
                     var re = new RegExp(data.destinationport, 'gi');
                     object.destinationPort = object.destinationPort === '*' || object.destinationPort.match(re) ? object.destinationPort :
                         `${object.destinationPort},${data.destinationport}`;
