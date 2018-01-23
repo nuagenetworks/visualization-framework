@@ -284,7 +284,6 @@ class Table extends AbstractGraph {
         })
         const { selectRow, location } = this.props;
         if (selectRow) {
-
             let matchingRows = []
             const selectedRows = this.getSelectedRows();
             const row = selectedRows ? selectedRows[0] : {};
