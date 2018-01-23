@@ -1,4 +1,4 @@
 export default (value) => {
-    var d = new Date(parseInt("1516668720000"));
+    var d = new Date(parseInt(value));
     return d.toLocaleTimeString();
 }
