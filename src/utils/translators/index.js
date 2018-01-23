@@ -3,9 +3,13 @@
  */
 
 import demo from './demo'
+import time_convert from './time'
+import status from './status'
 
 const translatorList = {
-  demo
+  demo,
+  time_convert,
+  status
 }
 
 export default (method, value) => {

@@ -20,6 +20,10 @@
         {
             "label": "Detail View",
             "url": "/dashboards/aarNSGDetail"
+        },
+        {
+            "label": "NATT Events",
+            "url": "/dashboards/aarNSGNATTEvents"
         }
     ],
     "filterOptions": {

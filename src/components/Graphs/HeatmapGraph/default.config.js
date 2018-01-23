@@ -20,7 +20,7 @@ export const properties = {
         'Orange': theme.palette.yellowLightColor
     },
     otherColors: [
-        theme.palette.orangeLightColor,
+        theme.palette.greenColor,
         theme.palette.blueLightColor,
         theme.palette.pinkLightColor,
         theme.palette.orangeLighterColor,
