@@ -493,6 +493,17 @@ export default class AbstractGraph extends React.Component {
         return (!context[vkey] || !configuration.key || context[vkey]  === evalExpression("(" + configuration.key + ")")(d)) ? "1" : "0.5"
     }
 
+    // to show message at the center of container
+    renderMessage(message) {
+        return (
+            <div style={{display: "table", width: this.props.width, height: this.props.height}}>
+                <div className="center-content">
+                    {message}
+                </div>
+            </div>
+        )
+    }
+
     renderNewLegend(data, legendConfig, getColor, label) {
 
         if (!legendConfig || !legendConfig.show)
