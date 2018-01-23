@@ -1,0 +1,23 @@
+{
+    "id": "aar-nsg-natt-details-timestamp",
+    "graph": "Table",
+    "title": "NAT Probe Results at {{event_timestamp:call('time_convert')}}",
+    "author": "Bharat Mukheja",
+    "creationDate": "1/19/2018",
+    "data": {
+        "searchBar": false,
+        "columns": [
+            { "column": "timestamp","label":"Time Stamp","timeFormat": "%b %d, %y %X" },
+            { "column": "VscIPSecIP","label":"VSC IPSec IP Addr" },
+            { "column": "VscIPSecPort", "label": "VSC IPSec Port"},
+            { "column": "VscVxLanIP", "label": "VSC VxLan IP Addr" },
+            { "column": "VscVxLanPort", "label": "VSC VxLan Port" },
+            { "column": "ProbeIPSecIP","label":"Probe IPSec IP Addr" },
+            { "column": "ProbeIPSecPort", "label": "Probe IPSec Port"},
+            { "column": "ProbeVxLanIP", "label": "Probe VxLan IP Addr" },
+            { "column": "ProbeVxLanPort", "label": "Probe VxLan Port" },
+            { "column": "Reason", "label": "Change Reason" }
+        ]
+    },
+    "query": "aar-nsg-natt-details-timestamp"
+}
