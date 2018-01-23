@@ -13,14 +13,15 @@ export const properties = {
         'OutSla': theme.palette.redColor,
         'UnMonitored': theme.palette.yellowLightColor,
         '0': theme.palette.greenColor,
-        '1': theme.palette.redColor,
-        '2': theme.palette.yellowLightColor,
+        '1': theme.palette.yellowLightColor,
+        '2': theme.palette.redColor,
         'Green': theme.palette.greenColor,
         'Red': theme.palette.redColor,
         'Orange': theme.palette.yellowLightColor
     },
     otherColors: [
-        theme.palette.greenColor,
+        theme.palette.bluePaleColor,
+        theme.palette.orangeLightColor,
         theme.palette.blueLightColor,
         theme.palette.pinkLightColor,
         theme.palette.orangeLighterColor,
@@ -34,6 +35,5 @@ export const properties = {
         theme.palette.windowBodyColor,
         theme.palette.orangeBlindColor,
         theme.palette.mauveColor,
-        theme.palette.bluePaleColor,
     ]
 }
