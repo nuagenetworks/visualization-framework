@@ -44,8 +44,15 @@ export const NetworkObjectTypes = {
     OVERLAY_MIRROR_DESTINATION_ID: 'overlayMirrorDestinationID',
     L7_APP_SIGNATURE_ID: 'associatedL7ApplicationSignatureID',
     VIRTUAL_FIREWALL_RULE: 'virtualfirewallrules',
-    VIRTUAL_FIREWALL_POLICIES: 'virtualfirewallpolicies'
+    VIRTUAL_FIREWALL_POLICIES: 'virtualfirewallpolicies',
+    ANY: 'ANY',
+    UNDERLAY_INTERNET_POLICYGROUP: 'UNDERLAY_INTERNET_POLICYGROUP',
 };
+
+export const FlowDirection = {
+    'EGRESS': 'egress',
+    'INGRESS': 'ingress'
+}
 
 export const getIDForResource = (type, data) => {
     if (!type) {
@@ -293,31 +300,46 @@ export const getNetworkItems = (type, props) => {
     return reqID ? props.getRequestResponse(reqID) : null;
 }
 
-export const getSourceNetworkItems = (props) => {
-    const { data, locationTypeValue } = props;
+const getSourceData = (props) => {
+    const { data, matchedData } = props;
     const flowDir = getIDForResource('direction', data);
-    const idForLocationType = getIDForResource(locationTypeValue, data);
-    return flowDir === 'ingress' && idForLocationType ?
-        getNetworkItems(locationTypeValue, {ID: idForLocationType, ...props}) :
+    return flowDir === FlowDirection.INGRESS ? data : matchedData && matchedData.hasOwnProperty('nuage_metadata') ? matchedData : data;
+}
+
+const getDestinationData = (props) => {
+    const { data, matchedData } = props;
+    const flowDir = getIDForResource('direction', data);
+    return flowDir === FlowDirection.EGRESS ? data : matchedData && matchedData.hasOwnProperty('nuage_metadata') ? matchedData : data;
+}
+
+export const getSourceNetworkItems = (props) => {
+    const { locationTypeValue } = props;
+    const srcData = getSourceData(props);
+    const flowDir = getIDForResource('direction', srcData);
+    const idForLocationType = getIDForResource(locationTypeValue, srcData);
+    return flowDir === FlowDirection.INGRESS && idForLocationType ?
+        getNetworkItems(locationTypeValue, {ID: idForLocationType, ...props, data: srcData}) :
         getNetworkItems(locationTypeValue, props);
 }
 
 export const getDestinationNetworkItems = (props) => {
-    const { data, networkTypeValue } = props;
-    const flowDir = getIDForResource('direction', data);
-    const idForNetworkType = getIDForResource(networkTypeValue, data);
-    return flowDir === 'egress' && idForNetworkType ?
-        getNetworkItems(networkTypeValue, {ID: idForNetworkType, ...props}) :
+    const { networkTypeValue } = props;
+    const destData = getDestinationData(props);
+    const flowDir = getIDForResource('direction', destData);
+    const idForNetworkType = getIDForResource(networkTypeValue, destData);
+    return flowDir === FlowDirection.EGRESS && idForNetworkType ?
+        getNetworkItems(networkTypeValue, {ID: idForNetworkType, ...props, data: destData}) :
         getNetworkItems(networkTypeValue, props);
 }
 
 export const fetchSourceNetworkItems = (props, domainID, enterpriseID) => {
-    const { data, locationTypeValue } = props;
-    const flowDir = getIDForResource('direction', data);
-    const query = { type: locationTypeValue, domainID, enterpriseID, ...props};
-    const idForLocationType = getIDForResource(locationTypeValue, data);
+    const { locationTypeValue } = props;
+    const srcData = getSourceData(props);
+    const flowDir = getIDForResource('direction', srcData);
+    const query = { type: locationTypeValue, domainID, enterpriseID, ...props, data: srcData};
+    const idForLocationType = getIDForResource(locationTypeValue, srcData);
     if (idForLocationType) {
-        if (flowDir === 'ingress') {
+        if (flowDir === FlowDirection.INGRESS) {
             query.ID = idForLocationType;
         }
     }
@@ -325,12 +347,13 @@ export const fetchSourceNetworkItems = (props, domainID, enterpriseID) => {
 }
 
 export const fetchDestinationNetworkItems = (props, domainID, enterpriseID) => {
-    const { data, networkTypeValue } = props;
-    const flowDir = getIDForResource('direction', data);
-    const query = { type: networkTypeValue, domainID, enterpriseID, ...props};
-    const idForNetworkType = getIDForResource(networkTypeValue, data);
+    const { networkTypeValue } = props;
+    const destData = getDestinationData(props);
+    const flowDir = getIDForResource('direction', destData);
+    const query = { type: networkTypeValue, domainID, enterpriseID, ...props, data: destData};
+    const idForNetworkType = getIDForResource(networkTypeValue, destData);
     if (idForNetworkType) {
-        if (flowDir === 'egress') {
+        if (flowDir === FlowDirection.EGRESS) {
             query.ID = idForNetworkType;
         }
     }
@@ -344,6 +367,16 @@ const getRequestResponse = (state, path) => {
         error: state.services.getIn([ServiceActionKeyStore.REQUESTS, path, ServiceActionKeyStore.ERROR]),
     }
 }
+
+export const getMatchedData = (state, data, id) => {
+    const direction = getIDForResource('direction', data);
+    const oppositeDirection = direction === FlowDirection.EGRESS ? FlowDirection.INGRESS : FlowDirection.EGRESS;
+    const matchedRows = state.VFS.getIn([VFSActionKeyStore.SELECTED_ROW, id, VFSActionKeyStore.SELECTED_MATCHED_ROW_DATA]);
+    const matchedData = matchedRows && matchedRows.length > 0 ?
+        matchedRows.find( item => item.nuage_metadata.direction === oppositeDirection) : {};
+    return matchedData;
+}
+
 const buildMapStateToProps = (state, ownProps) => {
     const query = state.router.location.query;
     const { id } = query;
@@ -358,8 +391,11 @@ const buildMapStateToProps = (state, ownProps) => {
         parentPath = `${process.env.PUBLIC_URL}/dashboards/vssDomainFlowExplorer`;
     }
 
+    const data = state.VFS.getIn([VFSActionKeyStore.SELECTED_ROW, id, VFSActionKeyStore.SELECTED_ROW_DATA]);
+
     return {
-        data: state.VFS.getIn([VFSActionKeyStore.SELECTED_ROW, id, VFSActionKeyStore.SELECTED_ROW_DATA]),
+        data,
+        matchedData: getMatchedData(state, data, id),
         parentQuery,
         parentPath,
         context,
