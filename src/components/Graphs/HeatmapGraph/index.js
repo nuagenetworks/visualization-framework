@@ -78,8 +78,19 @@ export default class HeatmapGraph extends XYGraph {
         const legendFn         = (d) => d[legendColumn];
         const label            = (d) => d["key"];
         const scale            = this.getMappedScaleColor(data, legendColumn);
-        const getColor         = (d) => scale ? scale(d[colorColumn] || d[legendColumn] || d["key"]) : stroke.color || colors[0];
+        const getColor         = (d) => {
+            let value = null;
 
+            if(d.hasOwnProperty(legendColumn)) {
+                value = d[legendColumn]
+            } else if(d.hasOwnProperty(colorColumn)) {
+                value = d[colorColumn]
+            } else if (d.hasOwnProperty("key")) {
+                value = d["key"]
+            }
+
+            return scale ? scale(value) : stroke.color || colors[0];
+        }
         const cellColumnsData  = nest()
             .key((d) => legendColumn ? d[legendColumn] : "Cell")
             .entries(data);
