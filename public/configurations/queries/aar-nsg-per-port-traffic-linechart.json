@@ -13,8 +13,8 @@
                         {
                             "range":{
                                 "timestamp":{
-                                    "gte":"{{startTime:now-24h}}",
-                                    "lte":"{{endTime:now}}",
+                                    "gte":"{{nsgSlaDetailsstartTime:now-20m}}",
+                                    "lte":"{{nsgSlaDetailsendTime:now}}",
                                     "format":"epoch_millis"
                                 }
                             }
@@ -43,6 +43,11 @@
                             "term": {
                                 "DstUplink": "{{dstUplink}}"
                             }
+                        },
+                        {
+                            "term": {
+                                "Application": "{{app}}"
+                            }
                         }
                     ]
                 }
@@ -51,7 +56,12 @@
                 "ts": {
                     "date_histogram": {
                         "field": "timestamp",
-                        "interval": "{{interval:1h}}"
+                        "interval": "{{interval:1m}}",
+                        "min_doc_count":0,
+                        "extended_bounds" : {
+                            "min" : "{{nsgSlaDetailsstartTime:now-20m}}",
+                            "max" : "{{nsgSlaDetailsendTime:now}}"
+                        }
                     },
                     "aggs": {
                         "Traffic": {

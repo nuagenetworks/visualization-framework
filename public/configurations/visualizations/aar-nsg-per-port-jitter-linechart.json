@@ -1,18 +1,19 @@
 {
     "id": "aar-nsg-per-port-jitter-linechart",
     "graph": "MultiLineGraph",
-    "title": "SLA Jitter",
-    "description": "",
+    "title": "SLA Jitter for {{app}}",
+    "description": "Line graph displays the Jitter measurements (ms) for the application based on the APM probes. The green line is the application’s configured value of Jitter SLA in VSD",
     "author": "Bharat Mukheja",
     "creationDate": "11/17/2017",
     "data": {
         "dateHistogram": true,
         "xColumn": "ts",
-        "yColumn": ["Jitter","Configured SLA Jitter"],
+        "yColumn": ["Jitter"],
         "yTickFormat": ".2s",
         "xLabel": "Time",
-        "yLabel": "Jitter",
-        "linesColumn":["Jitter","Configured SLA Jitter"],
+        "yLabel": "Jitter (ms)",
+        "linesColumn":["Jitter"],
+        "showNull": false,
         "stroke": {
           "color": "#f76159",
           "width": "2px"
@@ -32,7 +33,7 @@
             "#000000"
         ],
         "tooltip": [
-            { "column": "Jitter","label":"Actual Jitter" }
+            { "column": "yColumn","label":"Actual Jitter" }
         ]
     },
     "query": {

@@ -13,7 +13,8 @@
             { "column": "L3Domain", "label": "L3 Domain" },
             { "column": "EgressPackets", "label": "Packets", "format": ",.2s"},
             { "column": "EgressBytes", "label": "Bytes", "format": ",.2s" }
-        ]
+        ],
+        "searchBar": false
     },
     "query": "top5-download-users-table"
 }

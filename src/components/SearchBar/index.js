@@ -18,7 +18,7 @@ export default class SearchBar extends React.Component {
         this.state = {
             data: [],
             isOk: true,
-            query: this.props.searchText || ''
+            query: (this.props.searchText && typeof (this.props.searchText) === 'string') ? this.props.searchText : ''
         }
 
         const {
@@ -27,6 +27,10 @@ export default class SearchBar extends React.Component {
         } = this.props
         
         this.autoCompleteHandler = new AutoCompleteHandler(data, options)
+        this.onChange = this.onChange.bind(this)
+        this.onParseOk = this.onParseOk.bind(this)
+
+        this.setTimeout = null
     }
 
     componentDidMount () {
@@ -39,6 +43,7 @@ export default class SearchBar extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         return JSON.stringify(nextProps.data) !== JSON.stringify(this.props.data)
+          || JSON.stringify(nextState) !== JSON.stringify(this.state)
     }
 
     componentDidUpdate () {
@@ -61,10 +66,14 @@ export default class SearchBar extends React.Component {
             columns = false
         } = this.props
 
-        const filteredData = new AdvancedResultProcessing(options, columns).process(data, expressions)
-        this.props.handleSearch(filteredData)
+        clearTimeout(this.setTimeout)
+
+        this.setTimeout = setTimeout(() => {
+            const filteredData = new AdvancedResultProcessing(options, columns).process(data, expressions)
+            this.props.handleSearch(filteredData)
+        }, 1000)
     }
-    
+
     renderIcon () {
         var style = {
             marginTop: 10,
@@ -90,11 +99,11 @@ export default class SearchBar extends React.Component {
             <div className="filter">
                 <ReactFilterBox
                     ref="filterBox"
-                    onChange={this.onChange.bind(this)}
+                    onChange={this.onChange}
                     autoCompleteHandler={this.autoCompleteHandler}
                     query={query}
                     options={options}
-                    onParseOk={this.onParseOk.bind(this) }
+                    onParseOk={this.onParseOk}
                 />
 
                 <div className="filter-icon">

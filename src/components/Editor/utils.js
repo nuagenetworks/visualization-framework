@@ -5,19 +5,7 @@ import {
     ActionKeyStore as ServiceActionKeyStore
 } from "../../services/servicemanager/redux/actions";
 
-export const getPOSTRequestID = (parent, resourceName) => {
-    if (!(parent && parent.resource && parent.ID && resourceName)) {
-        return undefined;
-    }
-    let configuration = {
-        service: "VSD",
-        query: {
-            parentResource: parent.resource,
-            parentID: parent.ID,
-            resource: resourceName
-        }
-    }
-
+export const getPOSTRequestID = (configuration) => {
     return ServiceManager.getRequestID(configuration);
 }
 
@@ -50,20 +38,25 @@ export const parseServerErrors = (response) => {
     return errors;
 }
 
-export const getServerErrors = (state, parent, resourceName, ) => {
-    const requestID = getPOSTRequestID(parent, resourceName);
+export const getServerErrors = (state, configuration ) => {
+    const requestID = getPOSTRequestID(configuration);
     const errorResponse = state.services.getIn([ServiceActionKeyStore.REQUESTS, requestID, ServiceActionKeyStore.ERROR]);
-    return errorResponse ? parseServerErrors(errorResponse.responseJSON) : null;
+    return errorResponse && errorResponse.responseJSON ? parseServerErrors(errorResponse.responseJSON) : null;
 }
 
-export const isSubmitSuccessfull = (state, parent, resourceName) => {
-    const requestID = getPOSTRequestID(parent, resourceName);
+export const isSubmitSuccessfull = (state, configuration) => {
+    const requestID = getPOSTRequestID(configuration);
     if (!requestID) {
         return false;
     }
-
+    const isRequest = state.services.getIn([ServiceActionKeyStore.REQUESTS, requestID]);
+    if (!isRequest) {
+        return false;
+    }
+    const isFetching = state.services.getIn([ServiceActionKeyStore.REQUESTS, requestID, ServiceActionKeyStore.IS_FETCHING]);
     const results = state.services.getIn([ServiceActionKeyStore.REQUESTS, requestID, ServiceActionKeyStore.RESULTS]);
-    return results && results.length > 0;
+    const errors = state.services.getIn([ServiceActionKeyStore.REQUESTS, requestID, ServiceActionKeyStore.ERROR]);
+    return !isFetching && !errors;
 
 }
 

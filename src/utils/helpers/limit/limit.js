@@ -23,10 +23,6 @@ export default ({
     } = {}
   }) => {
 
-    if (!limit) {
-      return data
-    }
-
     /**
      * Sorting the array
      */
@@ -48,15 +44,22 @@ export default ({
       })
 
       if(minimum && counter < minimum) {
-        //counter = minimum
+        counter = minimum
       }
     } else {
       counter = limit
     }
 
+    if (!limit) {
+      return sortedData
+    }
+
     limitedData = sortedData.slice(0, counter)
     othersData = sortedData.slice(counter)
 
+    if(!othersData.length) {
+      return limitedData
+    }
     /**
      * Merging of Data
      */

@@ -1,18 +1,19 @@
 {
     "id": "aar-nsg-per-port-pktloss-linechart",
     "graph": "MultiLineGraph",
-    "title": "SLA Packet Loss",
-    "description": "",
+    "title": "SLA Packet Loss for {{app}}",
+    "description": "Line graph displays the Packet Loss measurements (%) for the application based on the APM probes. The green line is the application’s configured value of Packet Loss SLA in VSD",
     "author": "Bharat Mukheja",
     "creationDate": "11/17/2017",
     "data": {
         "dateHistogram": true,
         "xColumn": "ts",
-        "yColumn": ["PacketLoss","Configured SLA PacketLoss"],
+        "yColumn": ["PacketLoss"],
         "yTickFormat": ".2s",
         "xLabel": "Time",
-        "yLabel": "Packet Loss",
-        "linesColumn": ["PacketLoss","Configured SLA PacketLoss"],
+        "yLabel": "Packet Loss (%)",
+        "linesColumn": ["PacketLoss"],
+        "showNull": false,
         "stroke": {
           "color": "#f76159",
           "width": "2px"
@@ -32,8 +33,7 @@
             "#000000"
             ],
         "tooltip": [
-            { "column": "PacketLoss","label":"Actual Packet Loss" },
-            { "column": "oneWayLoss","label":"Configured SLA Packet Loss" }
+            { "column": "yColumn","label":"Actual Packet Loss" }
         ]
     },
     "query": {

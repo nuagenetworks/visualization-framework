@@ -2,7 +2,7 @@
     "id": "aar-nsg-all-app-usage",
     "graph": "PieGraph",
     "title": "NSG Applications",
-    "description":"Usage chart for all the applications discovered in the NSG",
+    "description":"Pie chart displays the share of all applications (%) flowing through the NSG",
     "author": "Bharat Mukheja",
     "creationDate": "11/31/2017",
     "data": {

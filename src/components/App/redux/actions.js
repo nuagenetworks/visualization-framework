@@ -5,6 +5,7 @@ export const ActionTypes = {
     ACTION_UPDATE_CONTEXT: "ACTION_UPDATE_CONTEXT",
     ACTION_RESET_CONTEXT: "ACTION_RESET_CONTEXT",
     PENDING_DASHBOARD_CONTEXT: "PENDING_DASHBOARD_CONTEXT",
+    ACTION_FILTER_CONTEXT: "ACTION_FILTER_CONTEXT",
     ACTION_UPDATE_VISUALIZATION_TYPE: "ACTION_UPDATE_VISUALIZATION_TYPE",
     ACTION_NAV_BAR_HAS_LINKS: "ACTION_NAV_BAR_HAS_LINKS",
     ACTION_UPDATE_HEADER_COLOR: "ACTION_UPDATE_HEADER_COLOR",
@@ -18,7 +19,8 @@ export const ActionKeyStore = {
     CONTEXT: "context",
     VISUALIZATION_TYPE: "visualizationType",
     HEADERCOLOR: "headerColor",
-    UPDATEPAGE: "updatePage"
+    UPDATEPAGE: "updatePage",
+    FILTER_CONTEXT: "filterContext"
 };
 
 
@@ -49,6 +51,12 @@ export const Actions = {
     resetContext: (aContext) => {
         return {
             type: ActionTypes.ACTION_RESET_CONTEXT,
+            context: aContext
+        }
+    },
+    filterContext: (aContext) => {
+        return {
+            type: ActionTypes.ACTION_FILTER_CONTEXT,
             context: aContext
         }
     },

@@ -24,6 +24,9 @@ export default class AbstractGraph extends React.Component {
 
         this.yLabelWidth = 0;
         this.accessors = {}
+        this.tooltips = {}
+
+        this.brush = false;
 
         this.setGraphId();
 
@@ -49,7 +52,7 @@ export default class AbstractGraph extends React.Component {
                     place="top"
                     type="dark"
                     effect="float"
-                    getContent={[() => this.getTooltipContent(), 200]}
+                    getContent={[() => this.getTooltipContent(this.hoveredDatum), 200]}
                     afterHide={() =>  this.handleHideEvent()}
                     afterShow={() =>  this.handleShowEvent()}
                 />
@@ -76,6 +79,7 @@ export default class AbstractGraph extends React.Component {
         if(!tooltip)
             return;
 
+        this.tooltips[type] = tooltip
         // Generate accessors that apply number and date formatters.
         this.accessors[type] = tooltip.map(columnAccessor);
 
@@ -84,9 +88,10 @@ export default class AbstractGraph extends React.Component {
             // The value of this.hoveredDatum should be set by subclasses
             // on mouseEnter and mouseMove of visual marks
             // to the data entry corresponding to the hovered mark.
+
             if(this.hoveredDatum) {
                 let type = this.hoveredDatum.tooltipName || 'default'
-                return this.tooltipContent({tooltip, accessors: this.accessors[type]})
+                return this.tooltipContent({tooltip: this.tooltips[type], accessors: this.accessors[type]})
             } else {
                 return null;
             }
@@ -97,17 +102,21 @@ export default class AbstractGraph extends React.Component {
         return (
             <div>
                 {/* Display each tooltip column as "label : value". */}
-                {tooltip.map(({column, label}, i) => (
-                    <div key={column}>
+                {tooltip.map(({column, label}, i) => {
+                    let data = accessors[i](this.hoveredDatum)
+
+                    return (data !== null && data !== 'undefined') ?
+                     (<div key={column}>
                         <strong>
                             {/* Use label if present, fall back to column name. */}
                             {label || column}
                         </strong> : <span>
                             {/* Apply number and date formatting to the value. */}
-                            {accessors[i](this.hoveredDatum)}
+                            {data}
                         </span>
                     </div>
-                ))}
+                    ) : null
+                })}
             </div>
         )
     }
@@ -188,6 +197,10 @@ export default class AbstractGraph extends React.Component {
       let padding = 0.10;
 
       if(zeroStart && yExtent[0] > 0) {
+        yExtent[0] = 0;
+      }
+
+      if(zeroStart && yExtent[1] < 0) {
         yExtent[0] = 0;
       }
 
@@ -339,18 +352,19 @@ export default class AbstractGraph extends React.Component {
         );
     }
 
-    setYlabelWidth(data) {
+    setYlabelWidth(data, yColumn = null) {
         const {
           chartWidthToPixel,
           yTickFormat
         } = this.getConfiguredProperties();
 
+        yColumn = yColumn ? yColumn : 'yColumn'
         const yLabelFn = (d) => {
             if(!yTickFormat) {
-                return d['yColumn'];
+                return d[yColumn];
             }
             const formatter = format(yTickFormat);
-            return formatter(d['yColumn']);
+            return formatter(d[yColumn]);
         };
 
         this.yLabelWidth = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
@@ -360,14 +374,27 @@ export default class AbstractGraph extends React.Component {
         return this.yLabelWidth;
     }
 
-    setDimensions(props, data = null) {
-        this.setYlabelWidth(data ? data : props.data);
+    setDimensions(props, data = null, column = null) {
+        this.setYlabelWidth(data ? data : props.data, column);
 
+        this.setLeftMargin();
         this.setAvailableWidth(props);
         this.setAvailableHeight(props);
-        this.setLeftMargin();
     }
 
+    // check condition to apply brush on chart
+    isBrushable(data = []) {
+        const {
+            brush
+        } = this.getConfiguredProperties()
+
+        this.brush = brush && brush < data.length
+    }
+
+    isBrush() {
+        return this.brush
+    }
+    
     setLeftMargin() {
       const {
           margin
@@ -382,14 +409,28 @@ export default class AbstractGraph extends React.Component {
 
     setAvailableWidth({width}) {
         const {
-          margin,
+          margin
         } = this.getConfiguredProperties();
 
         this.availableWidth = width - (margin.left + margin.right + this.getYlabelWidth());
+
+        if(this.isBrush() && !this.isVertical()) {
+            this.availableWidth = this.availableWidth * 0.80
+            this.availableMinWidth = width - (this.availableWidth + this.getLeftMargin() + margin.left + margin.right + margin.left )
+            this.minMarginLeft = this.availableWidth + this.getLeftMargin() + margin.left           
+        }
     }
 
     getAvailableWidth() {
        return this.availableWidth;
+    }
+
+    getAvailableMinWidth() {
+        return this.availableMinWidth;
+    }
+
+    getMinMarginLeft() {
+        return this.minMarginLeft;
     }
 
     // height of x-axis
@@ -403,18 +444,39 @@ export default class AbstractGraph extends React.Component {
     }
 
     setAvailableHeight({height}) {
-
         const {
           chartHeightToPixel,
           margin
         } = this.getConfiguredProperties();
 
-        this.availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + this.getXAxisHeight());
+        this.availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + this.getXAxisHeight())        
 
+        if(this.isVertical() && this.isBrush()) {
+            this.availableHeight     = this.availableHeight * 0.75
+            this.availableMinHeight  = height - (this.availableHeight + (margin.top * 4) + margin.bottom + chartHeightToPixel + this.getXAxisHeight());
+            this.minMarginTop        = this.availableHeight + (margin.top * 2) + chartHeightToPixel + this.getXAxisHeight()
+        }
     }
 
     getAvailableHeight() {
         return this.availableHeight;
+    }
+
+    getAvailableMinHeight() {
+        return this.availableMinHeight;
+    }
+
+    getMinMarginTop() {
+        return this.minMarginTop;
+    }
+
+    // Check whether to display chart as vertical or horizontal
+    isVertical() {
+        const {
+          orientation
+        } = this.getConfiguredProperties()
+
+        return orientation === 'vertical'
     }
 
     // Check whether to display legend as vertical or horizontal
@@ -426,59 +488,6 @@ export default class AbstractGraph extends React.Component {
         return legend.orientation === 'vertical';
     }
 
-    getGroupedData(data, settings) {
-
-        const {
-          otherMinimumLimit
-        } = this.getConfiguredProperties();
-
-        if(settings.otherOptions && settings.otherOptions.limit) {
-
-            let cfData = crossfilter(data);
-            let metricDimension = cfData.dimension( d => d[settings.metric] );
-            let limit = settings.otherOptions.limit;
-
-            if(!settings.otherOptions.type || settings.otherOptions.type === "percentage") {
-                const sortedData = metricDimension.top(Infinity);
-                const total = sortedData.reduce((total, d) => +total + d[settings.metric], 0);
-
-                let sum = 0;
-                let index = sortedData.findIndex( (d, i) =>  {
-                    sum += +d[settings.metric];
-                    if(((sum / total) * 100) >= limit) {
-                        return true;
-                    }
-                });
-
-                limit = index !== -1 ? index + 1 : limit;
-
-                /**
-                  Limit must meet the minimum limit default to 10
-                **/
-                let min = settings.otherOptions.minimum ? settings.otherOptions.minimum : otherMinimumLimit;
-                if( limit < min)
-                  limit = min;
-            }
-
-
-            let topData = metricDimension.top(limit);
-            const otherDatas = metricDimension.top(Infinity, limit);
-
-            if(otherDatas.length) {
-                const sum = otherDatas.reduce( (total, d) => +total + d[settings.metric], 0);
-                topData.push({
-                    [settings.dimension]: settings.otherOptions.label ? settings.otherOptions.label : 'Others',
-                    [settings.metric]: sum,
-                });
-            }
-
-            cfData.remove();
-            return topData;
-        }
-
-        return data;
-    }
-
     getOpacity(d) {
         const {
             configuration,
@@ -488,10 +497,24 @@ export default class AbstractGraph extends React.Component {
         return (!context[vkey] || !configuration.key || context[vkey]  === evalExpression("(" + configuration.key + ")")(d)) ? "1" : "0.5"
     }
 
+    // to show message at the center of container
+    renderMessage(message) {
+        return (
+            <div style={{display: "table", width: this.props.width, height: this.props.height}}>
+                <div className="center-content">
+                    {message}
+                </div>
+            </div>
+        )
+    }
+
     renderNewLegend(data, legendConfig, getColor, label) {
 
-        if (!legendConfig.show)
+        if (!legendConfig || !legendConfig.show)
             return;
+
+        if(!label)
+          label = (d) => d;
 
         const {
             width,

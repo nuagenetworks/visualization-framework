@@ -72,9 +72,14 @@ function fetch(query, context, forceCache) {
             },
             (error) => {
                 if (process.env.NODE_ENV === "development" && service.hasOwnProperty("getMockResponse")) {
-                    const response = service.getMockResponse(query);
-                    dispatch(didReceiveResponse(requestID, response, forceCache));
-                    return Promise.resolve(response);
+                    try {
+                        const response = service.getMockResponse(query);
+                        dispatch(didReceiveResponse(requestID, response, forceCache));
+                    } catch(e) {
+                        dispatch(didReceiveError(requestID, e, forceCache));
+                    }
+
+                    return Promise.resolve();
                 }
                 else
                 {
@@ -179,6 +184,56 @@ function postIfNeeded(query, body, context, forceCache) {
     }
 }
 
+function update(query, body, context, forceCache) {
+    let service = ServiceManager.getService(query.service);
+
+    return (dispatch, getState) => {
+        let requestID = service.getRequestID(query, context);
+
+        if (context) {
+            const pQuery = parameterizedConfiguration(query, context);
+
+            if (pQuery)
+                query = pQuery;
+            else
+                return Promise.reject("Provided context does not allow to parameterized query " + query.id);
+        }
+
+        dispatch(didStartRequest(requestID));
+
+        return service.update(query, body, getState())
+            .then(
+            (results) => {
+                dispatch(didReceiveResponse(requestID, results));
+                return Promise.resolve(results);
+            },
+            (error) => {
+                dispatch(didReceiveError(requestID, error));
+                return Promise.resolve();
+            });
+    }
+}
+
+function updateIfNeeded(query, body, context, forceCache) {
+    const service = ServiceManager.getService(query.service);
+    const requestID = service.getRequestID(query, context);
+
+    return (dispatch, getState) => {
+        if (!requestID)
+            return Promise.reject();
+
+        const state = getState(),
+              request = state.services.getIn([ActionKeyStore.REQUESTS, requestID]);
+
+        if (shouldFetch(request)) {
+            return dispatch(update(query, body, context, forceCache));
+
+        } else {
+            return Promise.resolve();
+        }
+    }
+}
+
 function didStartRequest(requestID) {
     return {
         type: ActionTypes.SERVICE_MANAGER_DID_START_REQUEST,
@@ -218,4 +273,5 @@ export const Actions = {
     didReceiveError: didReceiveError,
     postIfNeeded: postIfNeeded,
     deleteRequest: deleteRequest,
+    updateIfNeeded: updateIfNeeded,
 };

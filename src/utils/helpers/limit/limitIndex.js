@@ -21,17 +21,18 @@ export default ({
       sum += data[index][metric]
 
       switch (type) {
-        case 'percentage':
-          if(((sum / total) * 100) >= limit) {
-            return index + 1;
-          }
-          break
-
         case 'sum':
           if(sum >= limit) {
             return index + 1;
           }
           break
+
+        default:
+          if(((sum / total) * 100) >= limit) {
+            return index + 1;
+          }
+          break
+
       }
     }
 

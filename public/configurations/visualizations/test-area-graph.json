@@ -9,7 +9,7 @@
         "dateHistogram": true,
         "xColumn": "ts",
         "xLabel": "Time",
-        "stackedArea": true,
+        "stacked": true,
         "yColumn": [
             {
                 "key": "CPU"

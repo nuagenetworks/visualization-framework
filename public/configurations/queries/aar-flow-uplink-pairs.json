@@ -13,8 +13,8 @@
                         {
                             "range": {
                                 "timestamp": {
-                                    "gte": "{{startTime:now-24h}}",
-                                    "lte": "{{endTime:now}}",
+                                    "gte": "{{nsgSlaDetailsstartTime:now-20m}}",
+                                    "lte": "{{nsgSlaDetailsendTime:now}}",
                                     "format": "epoch_millis"
                                 }
                             }

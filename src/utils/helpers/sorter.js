@@ -4,14 +4,17 @@
 
 export default ({
     column,
-    order
-
+    order,
+    sequence = null
   }) => {
   return (a, b) => {
-    let sortOrder = order || 'ASC'
+    let sortOrder = `${sequence ? 'SEQ' : ''}${order || 'ASC'}`
+    
     const operations = {
       'ASC': () => +(a[column] > b[column]),
-      'DESC': () => +(a[column] < b[column])
+      'DESC': () => +(a[column] < b[column]),
+      'SEQASC': () => (sequence.indexOf(a[column]) - sequence.indexOf(b[column])),
+      'SEQDESC': () => (sequence.indexOf(b[column]) - sequence.indexOf(a[column]))
     }
 
     return a[column] === b[column]

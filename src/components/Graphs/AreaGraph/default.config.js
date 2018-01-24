@@ -2,7 +2,7 @@ import { theme } from "../../../theme"
 
 export const properties = {
     strokeWidth: '2px',
-    opacity: '0.3',
+    opacity: '0.4',
     legend: {
         show: false
     },

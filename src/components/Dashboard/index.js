@@ -8,6 +8,8 @@ import CircularProgress from "material-ui/CircularProgress";
 import { Responsive, WidthProvider } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
+import { Tooltip } from 'redux-tooltip';
+
 import Visualization from "../Visualization";
 import FiltersToolBar from "../FiltersToolBar";
 
@@ -28,7 +30,7 @@ import { pick } from "../../utils/helpers"
 import { defaultFilterOptions, defaultGlobalContexts } from "./default.js"
 
 import style from "./styles";
-
+import "./style.css";
 
 export class DashboardView extends React.Component {
 
@@ -73,7 +75,7 @@ export class DashboardView extends React.Component {
         if (!configuration)
             return;
 
-        setPageTitle(this.currentTitle());
+        setPageTitle(this.currentTitle() || 'Dashboard');
     }
 
     updateTitleIconIfNecessary(prevProps) {
@@ -127,7 +129,8 @@ export class DashboardView extends React.Component {
     renderNavigationBarIfNeeded() {
         const {
             configuration,
-            context
+            context,
+            filterContext
         } = this.props;
 
         const links = configuration.get("links");
@@ -136,6 +139,7 @@ export class DashboardView extends React.Component {
             return;
 
         const currentUrl = window.location.pathname;
+        let contextWithFilter = Object.assign({}, context, filterContext)
 
         return (
             <div style={style.navigationContainer}>
@@ -148,7 +152,7 @@ export class DashboardView extends React.Component {
                         return <li key={index}
                                    style={highlight}
                                    >
-                                    <Link to={{ pathname:targetURL, query: context}}
+                                    <Link to={{ pathname:targetURL, query: contextWithFilter}}
                                     style={style.noneTextDecoration}
                                     >
                                         {link.get("label")}
@@ -208,7 +212,7 @@ export class DashboardView extends React.Component {
                     {this.renderNavigationBarIfNeeded()}
 
                     <FiltersToolBar filterOptions={filterOptions} />
-
+                    <Tooltip className='tooltip-container'/>
                     <div style={style.gridContainer}>
                         <ResponsiveReactGridLayout
                             rowHeight={10}
@@ -245,6 +249,8 @@ export class DashboardView extends React.Component {
 
 const mapStateToProps = (state, ownProps) => ({
     context: state.interface.get(InterfaceActionKeyStore.CONTEXT),
+
+    filterContext: state.interface.get(InterfaceActionKeyStore.FILTER_CONTEXT),
 
     configuration: state.configurations.getIn([
         ConfigurationsActionKeyStore.DASHBOARDS,

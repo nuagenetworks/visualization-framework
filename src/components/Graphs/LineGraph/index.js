@@ -1,6 +1,8 @@
 import React from "react";
 import XYGraph from "../XYGraph";
 import { connect } from "react-redux";
+import { nest } from "../../../utils/helpers"
+
 
 import {
     axisBottom,
@@ -8,7 +10,6 @@ import {
     extent,
     format,
     line,
-    nest,
     scaleLinear,
     scaleTime,
     select,
@@ -22,6 +23,9 @@ import {properties} from "./default.config";
 
 class LineGraph extends XYGraph {
 
+    yKey   = 'columnType'
+    yValue = 'yColumn'
+
     constructor(props) {
         super(props, properties);
         this.brush = brushX();
@@ -30,23 +34,22 @@ class LineGraph extends XYGraph {
     render() {
 
         const {
-            data: originalData,
+            data,
             width,
             height
         } = this.props;
 
-        if (!originalData || !originalData.length)
+        if (!data || !data.length)
             return;
 
         const {
           chartHeightToPixel,
           chartWidthToPixel,
           circleToPixel,
-          colorColumn,
           colors,
           dateHistogram,
           legend,
-          linesColumn,
+          linesColumn: configLinesColumn,
           margin,
           stroke,
           xColumn,
@@ -66,39 +69,139 @@ class LineGraph extends XYGraph {
           zeroStart,
           circleRadius,
           defaultY,
-          defaultYColor
+          defaultYColor,
+          showNull
         } = this.getConfiguredProperties();
+
+        let finalYColumn = typeof yColumn === 'object' ? yColumn : [yColumn];
+
+        let updatedLinesLabel = [];
+
+        let linesColumn = configLinesColumn || [yColumn]
+
+        if(linesColumn) {
+            updatedLinesLabel = typeof linesColumn === 'object' ? linesColumn : [linesColumn];
+        }
+
+        let legendsData = updatedLinesLabel.map((d, i) => {
+            return {
+                'key'   : d,
+                'value' : finalYColumn[i] ? finalYColumn[i] : d
+            }
+        })
+
+        let flatData = []
+        data.forEach((d) => {
+            if(!dateHistogram || d[xColumn] <= Date.now()) {
+                legendsData.forEach((ld) => {
+
+                    let key = typeof linesColumn === 'object' ? ld['key'] : d[ld['key']]
+                    if(typeof key === "object" || key === "") {
+                        return
+                    }
+
+                    flatData.push(Object.assign({
+                        [this.yValue]: d[ld['value']],
+                        [this.yKey]: key
+                    }, d));
+                });
+            }
+        });
+
+        // Nesting data on the basis of yAxis
+        let nestLinesData = nest({
+            data: flatData,
+            key: this.yKey
+        })
+
+        // Nesting data on the basis of xAxis (timestamp)
+        let nestedXData = nest({
+            data: flatData,
+            key: xColumn,
+            sortColumn: xColumn
+        })
+
+        let linesData = []
+        // Check x column data, if not found either skip or set to 0 (if showNull is true)
+        nestLinesData.forEach(item => {
+
+            let d = Object.assign({}, item)
+            let counter = 0
+            let elem = null
+
+            elem = {
+                key: `${item.key}${counter}`,
+                values: []
+            }
+            // Inserting new object if data not found
+            nestedXData.forEach(list => {
+                let index = (d.values).findIndex(o => {
+                   return `${o[xColumn]}` === `${list.key}`
+                })
+
+                if(index !== -1
+                    && d.values[index][this.yValue] !== ""
+                    && typeof d.values[index][this.yValue] !== 'undefined'
+                    && typeof d.values[index][this.yValue] !== 'object'
+                ) {
+                    elem.values.push(d.values[index])
+                } else {
+                    // If showNull is true, insert new object with yValue=0
+                    if(showNull !== false) {
+                        elem.values.push({
+                            [this.yValue]: 0,
+                            [this.yKey]: d.key,
+                            [xColumn]: list.key
+                        })
+                    } else {
+                        // Make new truncated line if yValue is null
+                        if(elem.values.length) {
+                            linesData.push(elem)
+                            counter++;
+                            elem = {
+                                key: `${item.key}${counter}`,
+                                values: []
+                            }
+                        }
+                    }
+                }
+            })
+
+            if(elem.values.length) {
+                linesData.push(elem)
+            }
+        })
+
+        if(!linesData.length) {
+            return (
+                <div style={{paddingTop: '10px', textAlign: 'center'}}>
+                    No data to display
+                </div>
+            )
+        }
+
+        let filterDatas = merge(linesData.map(function(d) { return d.values; }))
 
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
-        const yLabelFn         = (d) => d[yColumn];
-        const legendFn         = (d) => d[linesColumn];
-        const label            = (d) => d["key"];
+        const yLabelFn         = (d) => parseFloat(d[this.yValue]);
+        const legendFn         = (d) => d[this.yKey];
+        const label            = (d) => d[this.yKey];
 
-        const data = originalData.map(d => {
-          return Object.assign({}, d, yLabelFn(d) ? {} : {[yColumn]: 0});
-        });
-
-        const scale            = this.scaleColor(data, linesColumn);
-        const getColor         = (d) => scale ? scale(d[colorColumn] || d[linesColumn] || d["key"]) : stroke.color || colors[0];
-
-        const linesData = nest()
-            .key((d) => linesColumn ? d[linesColumn] : "Line")
-            .entries(data);
+        const scale            = this.scaleColor(filterDatas, this.yKey);
+        const getColor         = (d) => scale ? scale(d[this.yKey] || d["key"]) : stroke.color || colors[0];
 
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
-        let legendWidth       = legend.show && linesData.length > 1 ? this.longestLabelLength(data, legendFn) * chartWidthToPixel : 0;
+        let legendWidth       = legend.show ? this.longestLabelLength(filterDatas, legendFn) * chartWidthToPixel : 0;
 
-        let yLabelWidth       = this.longestLabelLength(data, yLabelFn, yTickFormat) * chartWidthToPixel;
+        let yLabelWidth       = this.longestLabelLength(filterDatas, yLabelFn, yTickFormat) * chartWidthToPixel;
         let leftMargin        = margin.left + yLabelWidth;
         let availableWidth    = width - (margin.left + margin.right + yLabelWidth);
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
 
-
-
         if (legend.show)
         {
-            legend.width = legendWidth;
+            legend.width = legendWidth || 1;
 
             // Compute the available space considering a legend
             if (isVerticalLegend)
@@ -113,16 +216,18 @@ class LineGraph extends XYGraph {
             }
         }
 
-        let yExtent = this.updateYExtent(extent(data, yLabelFn), zeroStart);
+        let range = extent(filterDatas, yLabelFn)
+
+        let yExtent = this.updateYExtent(range, zeroStart);
 
         let xScale;
 
         if (dateHistogram) {
             xScale = scaleTime()
-              .domain(extent(data, xLabelFn));
+              .domain(extent(filterDatas, xLabelFn));
         } else {
             xScale = scaleLinear()
-              .domain(extent(data, xLabelFn));
+              .domain(extent(filterDatas, xLabelFn));
         }
 
         const yScale = scaleLinear()
@@ -133,22 +238,24 @@ class LineGraph extends XYGraph {
 
         // calculate new range from defaultY
         let horizontalLine,
-          defaultYvalue,
-          horizontalLineData
+        defaultYvalue,
+        horizontalLineData
 
         if(defaultY) {
 
             defaultYvalue = defaultY
             let [startRange, endRange] = yScale.domain()
 
-            if(typeof defaultY === 'object' && defaultY.source && defaultY.column && this.props[defaultY.source]) {
-
-                horizontalLineData = this.props[defaultY.source][0] || {}
+            if(typeof defaultY === 'object' && defaultY.column) {
+                const dataSource = defaultY.source || 'data'
+                horizontalLineData = this.props[dataSource] ? this.props[dataSource][0] : {}
                 defaultYvalue = horizontalLineData[defaultY.column] || null
-                startRange = startRange > defaultYvalue ? defaultYvalue - 1 : startRange
-                endRange = endRange < defaultYvalue ? defaultYvalue + 1 : endRange
-                yScale.domain([startRange, endRange]);
             }
+
+            startRange = startRange > defaultYvalue ? defaultYvalue - 1 : startRange
+            endRange = endRange < defaultYvalue ? defaultYvalue + 1 : endRange
+            yScale.domain([startRange, endRange]);
+
         }
 
         const xAxis = axisBottom(xScale)
@@ -176,8 +283,8 @@ class LineGraph extends XYGraph {
         }
 
         const lineGenerator = line()
-          .x(function(d) { return xScale(d[xColumn]); })
-          .y(function(d) { return yScale(d[yColumn]); });
+          .x( d => xScale(d[xColumn]))
+          .y( d => yScale(d[this.yValue]))
 
         let xTitlePosition = {
             left: leftMargin + availableWidth / 2,
@@ -205,13 +312,13 @@ class LineGraph extends XYGraph {
         }
 
         const tooltipOverlay = voronoi()
-            .x(function(d) { return xScale(d[xColumn]); })
-            .y(function(d) { return yScale(d[yColumn]); })
+            .x( d => xScale(d[xColumn]))
+            .y( d => yScale(d[this.yValue]))
             .extent([[-leftMargin, -margin.top], [width + margin.right, height + margin.bottom]])
-            .polygons(merge(linesData.map(function(d) { return d.values; })));
+            .polygons(filterDatas);
 
         const tooltipOffset = (d) => JSON.stringify({
-          'bottom': margin.top + yScale(d[yColumn]),
+          'bottom': margin.top + yScale(d[this.yValue]),
           'right': xScale(d[xColumn]) + leftMargin
         });
 
@@ -221,7 +328,7 @@ class LineGraph extends XYGraph {
             height = 20,
             tooltip = []
 
-            if(horizontalLineData) {
+            if(horizontalLineData && defaultY.tooltip) {
                 tooltip = this.tooltipProps(Object.assign({}, horizontalLineData ,{tooltipName: 'defaultY'}))
             }
 
@@ -250,6 +357,19 @@ class LineGraph extends XYGraph {
             )
         }
 
+
+        let defaultLine =
+            range[0] < 0 && range[1] > 0 ?
+                <line
+                    x1="0"
+                    y1={yScale(0)}
+                    x2={availableWidth}
+                    y2={yScale(0)}
+                    stroke={ "rgb(0,0,0)"}
+                    opacity="0.3"
+                />
+                : ''
+
         return (
             <div className="bar-graph">
                 {this.tooltip}
@@ -265,16 +385,17 @@ class LineGraph extends XYGraph {
                             key="yAxis"
                             ref={ (el) => select(el).call(yAxis) }
                         />
-                        <g>
-                          {linesData.map((d) =>
 
+
+                        <g>
+                          {linesData.map((d, i) =>
                               (d.values.length === 1) ?
-                                  <circle cx={xScale(d.values[0][xColumn])} cy={yScale(d.values[0][yColumn])} r={circleRadius} fill={colors[0]} />
+                                  <circle key={d.key} cx={xScale(d.values[0][xColumn])} cy={yScale(d.values[0][this.yValue])} r={circleRadius} fill={getColor(d.values[0])} />
                               :
                               <path
                                   key={ d.key }
                                   fill="none"
-                                  stroke={ getColor(d) }
+                                  stroke={ getColor(d.values[0] || d) }
                                   strokeWidth={ stroke.width }
                                   d={ lineGenerator(d.values) }
                               />
@@ -313,6 +434,7 @@ class LineGraph extends XYGraph {
                               </g>
                           )}
                         </g>
+                        { defaultLine }
                         { horizontalLine }
                         {
                             brushEnabled &&
@@ -322,7 +444,7 @@ class LineGraph extends XYGraph {
                             />
                         }
                     </g>
-                    {this.renderLegend(linesData, legend, getColor, label)}
+                    {this.renderLegend(filterDatas, legend, getColor, label)}
                 </svg>
             </div>
         );

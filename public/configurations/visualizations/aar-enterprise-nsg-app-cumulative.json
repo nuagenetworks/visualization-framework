@@ -1,8 +1,8 @@
 {
     "id": "aar-enterprise-nsg-app-cumulative",
     "graph": "PieGraph",
-    "title": "Cumulative {{trafficType}} Data Usage on NSG {{nsg}} for {{app}} App ",
-    "description": "Enterprise Level. Shows enterprise wide cumulative data usage per nsg for an app.",
+    "title": "{{trafficType}} Data Usage on {{nsg}} for {{app}}",
+    "description": "Pie chart displays the source IP addresses of hosts generating selected application and selected NSG",
     "author": "Bharat Mukheja",
     "creationDate": "10/15/2017",
     "data": {

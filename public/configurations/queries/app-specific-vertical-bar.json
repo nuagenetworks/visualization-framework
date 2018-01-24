@@ -18,35 +18,25 @@
                                     "format":"epoch_millis"
                                 }
                             }
+                        },
+                        {
+                            "term":{
+                                "L7ClassEnhanced":"{{app}}"
+                            }
                         }
                     ]
                 }
             },
             "aggs":{
-                "4":{
-                    "filters":{
-                        "filters":{
-                            "L7Classification":{
-                                "query":{
-                                    "term":{
-                                        "L7ClassEnhanced":"{{app}}"
-                                    }
-                                }
-                            }
-                        }
+                "date-histo":{
+                    "date_histogram":{
+                        "field":"timestamp",
+                        "interval":"{{interval:1h}}"
                     },
                     "aggs":{
-                        "date-histo":{
-                            "date_histogram":{
-                                "field":"timestamp",
-                                "interval":"{{interval:1h}}"
-                            },
-                            "aggs":{
-                                "SumOfBytes":{
-                                    "sum":{
-                                        "field":"TotalBytesCount"
-                                    }
-                                }
+                        "SumOfBytes":{
+                            "sum":{
+                                "field":"TotalBytesCount"
                             }
                         }
                     }

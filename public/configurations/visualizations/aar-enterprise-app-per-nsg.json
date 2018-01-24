@@ -1,11 +1,12 @@
 {
     "id": "aar-enterprise-app-per-nsg",
-    "graph": "BarGraph",
+    "graph": "DynamicBarGraph",
     "title": "{{trafficType}} Data Usage on Apps per NSG",
-    "description": "Enterprise Level. Enterprise wide per NSG traffic detail",
+    "description": "Bar graph displays total application throughput for each NSG in an enterprise. Application share of total traffic is displayed as colors on the bar and are clickable.",
     "author": "Bharat Mukheja",
     "creationDate": "11/31/2017",
     "data": {
+        "brush": 10,
         "colors": [
             "#7da3f7",
             "#fec26a",
@@ -15,25 +16,19 @@
         ],
         "tooltip": [
             { "column": "L7Classification", "label": "App" },
-            { "column": "{{NsgType:SourceNSG}}", "label": "NSG" },
+            { "column": "NSG", "label": "NSG" },
             { "column": "SumofBytes", "label": "Total Bytes", "format": ",.2s"}
         ],
         "xLabel": "NSG",
         "yLabel": "Total Bytes",
         "yTickFormat": ".2s",
-        "xColumn": "{{NsgType:SourceNSG}}",
+        "xColumn": "NSG",
         "stackColumn":"L7Classification",
-        "yColumn": "SumofBytes",
-        "legend": {
-            "show": true,
-            "column":"L7Classification",
-            "circleSize": 4,
-            "labelOffset": 3
-        }
+        "yColumn": "SumofBytes"
     },
     "listeners": [{
       "params": {
-          "snsg": "SourceNSG",
+          "nsg": "NSG",
           "app":"L7Classification"
       }
     }],

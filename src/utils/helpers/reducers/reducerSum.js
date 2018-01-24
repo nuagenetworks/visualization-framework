@@ -26,6 +26,6 @@ export default ({
   }) => {
     
     return data.reduce((acc, curr) => {
-        return acc + (column ? curr[column] : curr)
+        return acc + parseFloat((column ? curr[column] : curr))
       }, 0);
   }

@@ -1,11 +1,12 @@
 {
     "id": "aar-enterprise-nsg-per-app",
-    "graph": "BarGraph",
+    "graph": "DynamicBarGraph",
     "title": "{{trafficType}} Data Usage per NSG for {{app}} App",
-    "description": "Enterprise Level. Shows enterprise wide {{trafficType}} data usage per nsg for an app.",
+    "description": "Bar graph displays the data usage per NSG location for a selected application",
     "author": "Bharat Mukheja",
     "creationDate": "10/15/2017",
     "data": {
+        "brush": 10,
         "colors": [
             "#7da3f7",
             "#fec26a",

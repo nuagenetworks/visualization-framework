@@ -19,7 +19,7 @@ export class NextPrevFilter extends React.Component {
 
         this.state = {
             page: 1,
-            duration: 15,
+            duration: "15",
             unit: "m",
             filterOptions: {
                 "startTime": "startTime",
@@ -68,7 +68,7 @@ export class NextPrevFilter extends React.Component {
         } = props;
 
         if(context.duration) {
-            this.setState({duration: context.duration});
+            this.setState({duration: parseInt(context.duration)});
             this.setState({unit: context.unit});
         }
 

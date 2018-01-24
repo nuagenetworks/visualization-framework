@@ -297,20 +297,20 @@ Display one or multiple lines
 ![multiline-chart](https://cloud.githubusercontent.com/assets/1447243/21205460/4672e4a6-c211-11e6-88a5-269bc32d2140.png)
 
 - **linesColumn** attribute name in your results to display line value
-- **defaultY** (string | object) default yAxis value used to draw straight horizontal line to show cut off value. It can be object which define data `source` and `column` to get data from another query and you may define separate `tooltip` for this staright line from data `source`.
-Example -
+- **showNull** (Boolean) If false, Show truncated line if yValue is null . Default is true
+- **defaultY** (string | object) default yAxis value used to draw straight horizontal line to show cut off value. It can be object which define data `source` and `column` to get data from another query and you may define separate `tooltip` for this staright line from data `source`. Example - 
 ```javascript
-{
-    `"defaultY": {
-        "source": "data2",
-        "column": "memory",
-        "tooltip": [
-            { "column": "memory", "label": "memory"},
-            { "column": "cpu", "label": "cpu"}
-        ]
-    }
-}
-```
+ {
+     `"defaultY": {
+         "source": "data2",
+         "column": "memory",
+         "tooltip": [
+             { "column": "memory", "label": "memory"},
+             { "column": "cpu", "label": "cpu"}
+         ]
+     }
+ }
+ ```
 
 See x-axis and y-axis sections in BarGraph for more information
 
@@ -335,6 +335,8 @@ Display nice Pie or Donut graphs
 - **multiSelectable** To enable/disable multi select feature - default is `false`
 - **showCheckboxes** To show checkboxes to select rows - default is `false`
 - **enableSelectAll** To enable/disable select all feature - Default is `true`
+- **selectedColumn** (string) Compare `selectedColumn` value with all available datas and if equal to selected row, then save all matched records in store under "matchedRows"
+
 - **highlight** (Array of columns) Highlighted the rows if value of columns is not null
 - **hidePagination** Hide paging and search bar if data size is less than pagination limit - Default is `true`
 - **border**
