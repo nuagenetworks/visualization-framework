@@ -333,6 +333,8 @@ Display nice Pie or Donut graphs
 - **multiSelectable** To enable/disable multi select feature - default is `false`
 - **showCheckboxes** To show checkboxes to select rows - default is `false`
 - **enableSelectAll** To enable/disable select all feature - Default is `true`
+- **selectedColumn** (string) Compare `selectedColumn` value with all available datas and if equal to selected row, then save all matched records in store under "matchedRows"
+
 - **highlight** (Array of columns) Highlighted the rows if value of columns is not null
 - **hidePagination** Hide paging and search bar if data size is less than pagination limit - Default is `true`
 - **border**

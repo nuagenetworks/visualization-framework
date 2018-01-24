@@ -72,7 +72,7 @@ export class DashboardView extends React.Component {
         if (!configuration)
             return;
 
-        setPageTitle(this.currentTitle());
+        setPageTitle(this.currentTitle() || 'Dashboard');
     }
 
     updateTitleIconIfNecessary(prevProps) {

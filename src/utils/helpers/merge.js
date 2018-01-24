@@ -26,7 +26,7 @@ export default ({
       fields.forEach(field => {
         switch(field.type) {
           case 'number':
-              mergedData[field.name] += d[field.name]
+            mergedData[field.name] += parseFloat(d[field.name])
             break
 
           case 'string':

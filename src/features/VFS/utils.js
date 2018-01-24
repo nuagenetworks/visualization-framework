@@ -13,46 +13,12 @@ export const buildOptions = (options) => {
     return "No Data available";
 }
 
-export const getNetworkItems = (type, props) => {
-    const {
-        zones,
-        subnets,
-        policygroups,
-        pgexpressions,
-        enterprisenetworks,
-        networkmacrogroups,
-        l2domains,
-        mirrordestinations,
-        overlaymirrordestinations,
-        l7applicationsignatures,
-        vfrules,
-    } = props;
-    switch (type) {
-        case 'ZONE':
-            return zones;
-        case 'SUBNET':
-            return subnets;
-        case 'POLICYGROUP':
-            return policygroups;
-        case 'PGEXPRESSION':
-            return pgexpressions;
-        case 'ENTERPRISE_NETWORK':
-            return enterprisenetworks;
-        case 'NETWORK_MACRO_GROUP':
-            return networkmacrogroups;
-        case 'l2domainID':
-            return l2domains;
-        case 'mirrorDestinationID':
-            return mirrordestinations;
-        case 'overlayMirrorDestinationID':
-            return overlaymirrordestinations;
-        case 'associatedL7ApplicationSignatureID':
-            return l7applicationsignatures;
-        case 'virtualfirewallrules':
-            return vfrules;
-        default:
-            return null;
-    }
+export const isL3Domain = resourceName => {
+    return resourceName === 'domains';
+}
+
+export const getDomainID = (resourceName, data) => {
+    return isL3Domain(resourceName) ? getMetaDataAttribute(data, 'domainId') : getMetaDataAttribute(data, 'l2domainId');
 }
 
 export const  getEnterpriseID = (props) => {
