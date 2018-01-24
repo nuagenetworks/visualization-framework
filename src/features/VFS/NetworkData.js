@@ -9,7 +9,7 @@ export const NetworkProtocols = [
     },
     {
         text: 'IGMP - 2',
-        value: '3',
+        value: '2',
     },
     {
         text: 'GGP - 3',
@@ -258,35 +258,43 @@ text: 'Testing 2 - 254',
 export const NetworkTypeOptions = [
     {
         text: 'Any',
-        value: 'ANY'
+        value: 'ANY',
+        resources: ['domains', 'l2domains']
     },
     {
         text: 'Zone',
-        value: 'ZONE'
+        value: 'ZONE',
+        resources: ['domains']
     },
     {
         text: 'Subnet',
-        value: 'SUBNET'
+        value: 'SUBNET',
+        resources: ['domains']
     },
     {
         text: 'Network Macro',
-        value: 'ENTERPRISE_NETWORK'
+        value: 'ENTERPRISE_NETWORK',
+        resources: ['domains', 'l2domains']
     },
     {
         text: 'Network Macro Group',
-        value: 'NETWORK_MACRO_GROUP'
+        value: 'NETWORK_MACRO_GROUP',
+        resources: ['domains', 'l2domains']
     },
     {
         text: 'Policy Group',
-        value: 'POLICYGROUP'
+        value: 'POLICYGROUP',
+        resources: ['domains', 'l2domains']
     },
     {
         text: 'Policy Group Expression',
-        value: 'PGEXPRESSION'
+        value: 'PGEXPRESSION',
+        resources: ['domains', 'l2domains']
     },
     {
         text: 'Underlay Internet Policy Group',
-        value: 'UNDERLAY_INTERNET_POLICYGROUP'
+        value: 'UNDERLAY_INTERNET_POLICYGROUP',
+        resources: ['domains']
     },
 ];
 
@@ -306,13 +314,27 @@ export const MirrorDestinationOptions = [
         text: 'Overlay Mirror Destination',
         value: 'l2domainID',
         label: 'L2 Domain',
+        resources: ['domains']
     },
     {
         text: 'Underlay Mirror Destination',
         value: 'mirrorDestinationID',
         label: 'Mirror Destination',
+        resources: ['domains', 'l2domains']
     }
 ];
+
+export const getMirrorDestinationOptions = (resourceName) => MirrorDestinationOptions.filter( item => {
+    const resources = item.resources.filter(resource => resource === resourceName);
+    return resources.length > 0;
+})
+
+export const getNetworkTypeOptions = (resourceName) => {
+    return NetworkTypeOptions.filter( item => {
+        const resources = item.resources.filter(resource => resource === resourceName);
+        return resources.length > 0;
+    })
+}
 
 export const getNetworkProtocolForValue = (value) => {
     const protocols = NetworkProtocols.filter(item => item.value.startsWith(value));

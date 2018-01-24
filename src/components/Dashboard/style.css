@@ -6,3 +6,12 @@
 .tooltip-container span {
     border-color: rgb(44, 44, 44) transparent transparent  !important;
 }
+
+.center-content {
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+    font-size: 14px
+}

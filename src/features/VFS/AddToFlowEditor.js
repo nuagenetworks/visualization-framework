@@ -1,21 +1,26 @@
 import React, { PropTypes } from 'react';
 import ModalEditor from '../../components/Editor/ModalEditor';
 import { Form, Label, Select, Header } from '../../ui-components';
-import { buildOptions, getNetworkItems } from './utils';
+import {buildOptions, getDomainID, getEnterpriseID } from './utils';
 import { TwoColumnRow } from '../components';
 
 import {
-    getNetworkProtocolForValue,
     getNetworkProtocolForText,
-    NetworkTypeOptions,
+    getNetworkTypeOptions,
     getNetworkTypeForValue,
     getSecurityPolicyActionsForValue,
 } from './NetworkData';
 
 import {
     fetchAssociatedObjectIfNeeded,
+    fetchDestinationNetworkItems,
+    fetchSourceNetworkItems,
+    getDestinationNetworkItems,
+    getNetworkItems,
+    getSourceNetworkItems,
+    NetworkObjectTypes,
     showMessageBoxOnNoFlow
- } from './actions';
+} from './actions';
 
 const getEntityNameForID = (ID, entityCollection) => {
     const entities = entityCollection && entityCollection.options && entityCollection.options.length > 0 ? entityCollection.options.find(item => item.value === ID) : null;
@@ -37,7 +42,8 @@ const buildVFRuleOptions = (options, srcEntity, destEntity) => {
             const to = destEntityName ? `${networkType[0].text} ${destEntityName}` : networkType[0].text;
             const priority = item.priority;
             const templateName = item.ACLTemplateName ? `Policy: ${item.ACLTemplateName}: ` : "";
-            const text = `${templateName}${desc}D-Port: ${item.destinationPort}: From ${from} To: ${to} Action: ${action} Priority: ${priority}`;
+            const destPort = item.destinationPort ? `D-Port: ${item.destinationPort}` : '';
+            const text = `${templateName}${desc}${destPort}: From ${from} To: ${to} Action: ${action} Priority: ${priority}`;
             return ({ text, value: item.ID });
         });
     }
@@ -71,11 +77,12 @@ class AddToFlowEditor extends React.Component {
         const { preventDefault, ...values } = evt;
         const ID = values ? Object.values(values).join('') : null;
         if (ID) {
-            const vfrules = getNetworkItems('virtualfirewallrules', this.props);
+            const vfrules = getNetworkItems(NetworkObjectTypes.VIRTUAL_FIREWALL_RULE, this.props);
             if (vfrules && vfrules.data && vfrules.data.length > 0) {
                 const { selectRule, data } = this.props;
+                const selectedRule = vfrules.data.find(item => item.ID === ID);
                 if (selectRule && data) {
-                    const object = Object.assign({}, vfrules.data[0]);
+                    const object = Object.assign({}, selectedRule);
                     var re = new RegExp(data.destinationport, 'gi');
                     object.destinationPort = object.destinationPort === '*' || object.destinationPort.match(re) ? object.destinationPort :
                         `${object.destinationPort},${data.destinationport}`;
@@ -131,14 +138,6 @@ class AddToFlowEditor extends React.Component {
         return {};
     }
 
-    initialValues = (data) => {
-        const protocol = getNetworkProtocolForValue(data.protocol);
-
-        return ({
-            protocol: protocol
-        });
-    }
-
     shouldComponentUpdate(nextProps, nextState) {
         return nextProps !== this.props || this.state !== nextState;
     }
@@ -151,12 +150,13 @@ class AddToFlowEditor extends React.Component {
             networkTypeValue,
             networkIDValue,
             operation,
+            resourceName,
         } = props;
         if (!data || Object.getOwnPropertyNames(data).length <= 0
             || operation !== 'add') {
             return;
         }
-        const vfRules = getNetworkItems('virtualfirewallrules', this.props);
+        const vfRules = getNetworkItems(NetworkObjectTypes.VIRTUAL_FIREWALL_RULE, this.props);
         if (vfRules && vfRules.data && Object.getOwnPropertyNames(vfRules.data).length > 0)
             return;
          if (!locationTypeValue || (locationTypeValue !== 'ANY' && locationTypeValue !== 'UNDERLAY_INTERNET_POLICYGROUP' && !locationIDValue)) {
@@ -166,15 +166,19 @@ class AddToFlowEditor extends React.Component {
             return;
         }
         const proto = getNetworkProtocolForText(data.protocol);
+
+        const enterpriseID = getEnterpriseID(props);
+        const domainID = getDomainID(resourceName, data);
+
         fetchAssociatedObjectIfNeeded({
-            type: 'virtualfirewallrules',
+            type: NetworkObjectTypes.VIRTUAL_FIREWALL_RULE,
             args: {
                 locationType: locationTypeValue,
                 locationID: locationIDValue,
                 networkType: networkTypeValue,
                 networkID: networkIDValue,
                 protocol: proto ? proto : '6',
-            }, ...props});
+            }, domainID, enterpriseID, ...props});
     }
 
     componentWillReceiveProps(nextProps) {
@@ -184,30 +188,35 @@ class AddToFlowEditor extends React.Component {
             locationIDValue,
             networkTypeValue,
             networkIDValue,
+            resourceName,
         } = nextProps;
 
         if (!data || Object.getOwnPropertyNames(data).length <= 0) {
             return;
         }
+
+        const enterpriseID = getEnterpriseID(nextProps);
+        const domainID = getDomainID(resourceName, data);
+
         const srcNetworkItems = {
-            ...getNetworkItems(locationTypeValue, nextProps),
+            ...getSourceNetworkItems(nextProps),
             type: locationTypeValue,
             ID: locationIDValue,
         };
         const destNetworkItems = {
-            ...getNetworkItems(networkTypeValue, nextProps),
+            ...getDestinationNetworkItems(nextProps),
             type: networkTypeValue,
             ID: networkIDValue,
         };
         if (!srcNetworkItems.data) {
-            fetchAssociatedObjectIfNeeded({ type: locationTypeValue, ...nextProps});
+            fetchSourceNetworkItems(nextProps, domainID, enterpriseID);
         }
         if (!destNetworkItems.data) {
-            fetchAssociatedObjectIfNeeded({ type: networkTypeValue, ...nextProps});
+            fetchDestinationNetworkItems(nextProps, domainID, enterpriseID);
         }
 
         this.fetchVFRulesIfNeeded(nextProps);
-        const vfrules = getNetworkItems('virtualfirewallrules', nextProps);
+        const vfrules = getNetworkItems(NetworkObjectTypes.VIRTUAL_FIREWALL_RULE, nextProps);
         if (vfrules && vfrules.data && vfrules.data.length > 0) {
             this.toggleError(false);
         }
@@ -233,7 +242,7 @@ class AddToFlowEditor extends React.Component {
     }
 
     buildVFRuleField = (srcEntity, destEntity) => {
-        const vfrules = getNetworkItems('virtualfirewallrules', this.props);
+        const vfrules = getNetworkItems(NetworkObjectTypes.VIRTUAL_FIREWALL_RULE, this.props);
         const vfRuleOptions = buildVFRuleOptions(vfrules, srcEntity, destEntity);
         if (vfRuleOptions && Array.isArray(vfRuleOptions)) {
             return (
@@ -277,6 +286,17 @@ class AddToFlowEditor extends React.Component {
         }
     }
 
+    shouldDisplayPort = () => {
+        const {
+            data,
+        } = this.props;
+
+        const protocol = data && data.protocol ? data.protocol : '';
+        const proto = getNetworkProtocolForText(protocol);
+        return (proto === '6' || proto === '17');
+
+    }
+
     renderAdd = () => {
         const {
             data,
@@ -284,6 +304,7 @@ class AddToFlowEditor extends React.Component {
             networkTypeValue,
             locationIDValue,
             networkIDValue,
+            resourceName,
         } = this.props;
 
         const title = "Add to Firewall Rule";
@@ -291,12 +312,12 @@ class AddToFlowEditor extends React.Component {
         const protocol = data && data.protocol ? data.protocol : '';
         const dPort = data && data.destinationport ? data.destinationport : '';
         const srcNetworkItems = {
-            ...getNetworkItems(locationTypeValue, this.props),
+            ...getSourceNetworkItems(this.props),
             type: locationTypeValue,
             ID: locationIDValue,
         };
         const destNetworkItems = {
-            ...getNetworkItems(networkTypeValue, this.props),
+            ...getDestinationNetworkItems(this.props),
             type: networkTypeValue,
             ID: networkIDValue,
         };
@@ -305,7 +326,8 @@ class AddToFlowEditor extends React.Component {
         const destList = this.buildDestField(destNetworkItems);
         const srcEntity = locationIDValue && srcList ? getEntityNameForID(locationIDValue, srcList) : null;
         const destEntity = networkIDValue && destList ? getEntityNameForID(networkIDValue, destList) : null;
-
+        const networkDestinations = getNetworkTypeOptions(resourceName);
+        const isDestPortEnabled = this.shouldDisplayPort();
         return (
             <ModalEditor
                 title={title}
@@ -324,13 +346,13 @@ class AddToFlowEditor extends React.Component {
                     name: 'locationType',
                     label: 'Source',
                     component: Select,
-                    options: NetworkTypeOptions,
+                    options: networkDestinations,
                     onChange:(e) => this.resetFieldsOnChange(e, 'locationID')
                 }} secondColumnProps={{
                     name: 'networkType',
                     label: 'Destination',
                     component: Select,
-                    options: NetworkTypeOptions,
+                    options: networkDestinations,
                     onChange:(e) => this.resetFieldsOnChange(e, 'networkID')
                 }} />
                 { (srcList || destList) &&  <TwoColumnRow firstColumnProps={srcList} secondColumnProps={destList} /> }
@@ -339,16 +361,24 @@ class AddToFlowEditor extends React.Component {
                 {
                     (locationTypeValue && networkTypeValue && this.buildVFRuleField(srcEntity, destEntity)) || <span>Select a source and destination type </span>
                 }
-
-                <TwoColumnRow firstColumnProps={{
-                    name: 'protocol',
-                    label: 'Protocol',
-                    text: protocol,
-                }} secondColumnProps={{
-                    name: 'dPort',
-                    label: 'Destination Port',
-                    text: dPort,
-                }} />
+                { isDestPortEnabled &&
+                    <TwoColumnRow firstColumnProps={{
+                        name: 'protocol',
+                        label: 'Protocol',
+                        text: protocol,
+                    }} secondColumnProps={{
+                        name: 'dPort',
+                        label: 'Destination Port',
+                        text: dPort,
+                    }}/>
+                }
+                { !isDestPortEnabled &&
+                    <TwoColumnRow firstColumnProps={{
+                        name: 'protocol',
+                        label: 'Protocol',
+                        text: protocol,
+                    }}/>
+                }
             </ModalEditor>
         );
     }
@@ -356,6 +386,7 @@ class AddToFlowEditor extends React.Component {
     renderError = () => {
         const title = "Add to Firewall Rule";
         const buttonLabel = "Add";
+        const errorMsg = !this.shouldDisplayPort() ? "Nothing to add to rules" : 'No Flow Selected';
 
         return(
             <ModalEditor
@@ -368,13 +399,14 @@ class AddToFlowEditor extends React.Component {
                 width='60%'
                 errored={true}
             >
-                <span>No flow selected</span>
+                <span>{errorMsg}</span>
             </ModalEditor>
         );
     }
 
     render() {
-        if (!showMessageBoxOnNoFlow({...this.props, toggleError: this.toggleError})) {
+        const isError = !showMessageBoxOnNoFlow({...this.props, toggleError: this.toggleError}) || !this.shouldDisplayPort();
+        if (isError) {
             return this.renderError();
         }
         return this.renderAdd();

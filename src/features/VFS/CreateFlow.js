@@ -5,24 +5,30 @@ import { TextInput, Select, Checkbox, Header } from '../../ui-components';
 import { TwoColumnRow } from '../components';
 
 import {
-    getMetaDataAttribute,
     buildOptions,
-    getNetworkItems,
+    getDomainID,
+    isL3Domain, getEnterpriseID,
 } from './utils';
 
 import {
     NetworkProtocols,
-    getNetworkProtocolForValue,
-    NetworkTypeOptions,
+    getNetworkProtocolForText,
+    getNetworkTypeOptions,
     SecurityPolicyActions,
     getSecurityPolicyActionsForValue,
-    MirrorDestinationOptions,
+    getMirrorDestinationOptions,
     getMirrorDestinationForValue,
 } from './NetworkData';
 import {
     fetchAssociatedObjectIfNeeded,
-    showMessageBoxOnNoFlow
- } from './actions';
+    showMessageBoxOnNoFlow,
+    NetworkObjectTypes,
+    getNetworkItems,
+    getSourceNetworkItems,
+    getDestinationNetworkItems,
+    fetchSourceNetworkItems,
+    fetchDestinationNetworkItems,
+} from './actions';
 
 class CreateFlow extends React.Component {
     constructor(...props) {
@@ -166,7 +172,7 @@ class CreateFlow extends React.Component {
             destination,
             overlaymirrordestinations,
             l7applicationsignatures,
-            changeFieldValue,
+            resourceName,
         ) => {
         const { getFieldError } = this.props;
         const mirrors = this.buildMirrorDestinations(mirrordestinations);
@@ -190,6 +196,7 @@ class CreateFlow extends React.Component {
         const destList = this.buildDestField(destination);
 
         const l7Apps = this.buildL7AppField(l7applicationsignatures);
+        const networkDestinations = getNetworkTypeOptions(resourceName);
         return (
             <div>
                     <TwoColumnRow firstColumnProps={{
@@ -209,23 +216,27 @@ class CreateFlow extends React.Component {
                     name: 'locationType',
                     label: 'Source',
                     component: Select,
-                    options: NetworkTypeOptions,
+                    options: networkDestinations,
                     validate: [required],
-                    error: getFieldError('locationType')
+                    error: getFieldError('locationType'),
+                    onChange: (e) => this.resetFieldsOnChange(e, 'locationID')
                 }} secondColumnProps={{
                     name: 'networkType',
                     label: 'Destination',
                     component: Select,
-                    options: NetworkTypeOptions,
+                    options: networkDestinations,
                     validate: [required],
-                    error: getFieldError('networkType')
+                    error: getFieldError('networkType'),
+                    onChange: (e) => this.resetFieldsOnChange(e, 'networkID')
                 }} />
                 { (srcList || destList) &&  <TwoColumnRow firstColumnProps={srcList} secondColumnProps={destList} /> }
-                <TwoColumnRow secondColumnProps={{
-                    name: 'destinationPort',
-                    label: 'Destination Port',
-                    component: TextInput
-                }} />
+                { isL3Domain(resourceName) &&
+                    <TwoColumnRow secondColumnProps={{
+                        name: 'destinationPort',
+                        label: 'Destination Port',
+                        component: TextInput
+                    }}/>
+                }
                 <TwoColumnRow firstColumnProps={{
                         name: 'protocol',
                         label: 'Protocol',
@@ -243,7 +254,7 @@ class CreateFlow extends React.Component {
                     name: 'mirrorDestinationType',
                     label: "Mirror Destination Type",
                     component: Select,
-                    options: MirrorDestinationOptions,
+                    options: getMirrorDestinationOptions(resourceName),
                     onChange: (e) => this.resetFieldsOnChange(e, 'overlayMirrorDestinationID', 'mirrorDestinationID', 'l2domainID')
                 }} />
                 <TwoColumnRow secondColumnProps={mirrors} />
@@ -268,13 +279,15 @@ class CreateFlow extends React.Component {
             data,
             fetchDomainFirewallPoliciesIfNeeded,
             operation,
+            resourceName
         } = props;
         if (operation !== 'add') {
-            const domainID = getMetaDataAttribute(data, 'domainId');
+            const domainID = getDomainID(resourceName, data);
+            const enterpriseID = getEnterpriseID(props);
             if (domainID) {
-                fetchDomainFirewallPoliciesIfNeeded (domainID);
+                fetchDomainFirewallPoliciesIfNeeded (domainID, resourceName);
             }
-            fetchAssociatedObjectIfNeeded({ type: 'associatedL7ApplicationSignatureID', ...props});
+            fetchAssociatedObjectIfNeeded({ type: NetworkObjectTypes.L7_APP_SIGNATURE_ID, domainID, enterpriseID, ...props});
         }
     }
 
@@ -301,15 +314,16 @@ class CreateFlow extends React.Component {
 
     initialValues = (data) => {
         const actions = data && data.type ? getSecurityPolicyActionsForValue(data.type) : [];
-        const protocol = getNetworkProtocolForValue(data.protocol);
+        const protocol = getNetworkProtocolForText(data.protocol);
+        const destPort = (protocol === '6' || protocol === '17') ? data && data.destinationport ? data.destinationport : '*' : null;
 
         return ({
             protocol: protocol ? protocol : '6',
             locationType: 'ANY',
             networkType: 'ANY',
             action:  actions && Array.isArray(actions) && actions.length > 0 ? actions[0].value : 'FORWARD',
-            destinationPort: data && data.destinationport ? data.destinationport : '*',
-            sourcePort: '*',
+            destinationPort: destPort,
+            sourcePort: (protocol === '6' || protocol === '17') ? '*' : null,
         });
     }
 
@@ -334,26 +348,32 @@ class CreateFlow extends React.Component {
             mirrorDestinationTypeValue,
             l2domainIDValue,
             networkIDValue,
+            resourceName,
         } = nextProps;
 
         if (!data || Object.getOwnPropertyNames(data).length <= 0) {
             return;
         }
+
+        const enterpriseID = getEnterpriseID(nextProps);
+        const domainID = getDomainID(resourceName, data);
+
         const srcNetworkItems = {
-            ...getNetworkItems(locationTypeValue, nextProps),
+            ...getSourceNetworkItems(nextProps),
             type: locationTypeValue,
             ID: locationIDValue,
         };
         const destNetworkItems = {
-            ...getNetworkItems(networkTypeValue, nextProps),
+            ...getDestinationNetworkItems(nextProps),
             type: networkTypeValue,
             ID: networkIDValue,
         };
+
         if (!srcNetworkItems.data) {
-            fetchAssociatedObjectIfNeeded({ type: locationTypeValue, ...nextProps});
+            fetchSourceNetworkItems(nextProps, domainID, enterpriseID);
         }
         if (!destNetworkItems.data) {
-            fetchAssociatedObjectIfNeeded({ type: networkTypeValue, ...nextProps});
+            fetchDestinationNetworkItems(nextProps, domainID, enterpriseID);
         }
         let mirrordestinations = null;
         if (mirrorDestinationTypeValue ) {
@@ -363,16 +383,16 @@ class CreateFlow extends React.Component {
                 ID: l2domainIDValue,
             }
             if (!mirrordestinations.data) {
-                fetchAssociatedObjectIfNeeded({ type: mirrorDestinationTypeValue, ...nextProps});
+                fetchAssociatedObjectIfNeeded({ type: mirrorDestinationTypeValue, domainID, enterpriseID, ...nextProps});
             }
         }
         let overlaymirrordestinations = null;
         if (l2domainIDValue) {
             overlaymirrordestinations = {
-                ...getNetworkItems('overlayMirrorDestinationID', nextProps),
+                ...getNetworkItems(NetworkObjectTypes.OVERLAY_MIRROR_DESTINATION_ID, nextProps),
             }
             if (!overlaymirrordestinations.data) {
-                fetchAssociatedObjectIfNeeded({type: 'overlayMirrorDestinationID', ID: l2domainIDValue, ...nextProps});
+                fetchAssociatedObjectIfNeeded({type: NetworkObjectTypes.OVERLAY_MIRROR_DESTINATION_ID, domainID, enterpriseID, ID: l2domainIDValue, ...nextProps});
             }
         }
     }
@@ -405,26 +425,28 @@ class CreateFlow extends React.Component {
     renderModal = () => {
         const {
             data,
-            vfpolicies,
             locationTypeValue,
             locationIDValue,
             networkTypeValue,
             networkIDValue,
             mirrorDestinationTypeValue,
             l2domainIDValue,
+            resourceName,
         } = this.props;
 
         //associatedVirtualFirewallRuleID
         const title = "Create Firewall Rule";
         const buttonLabel = "Create";
 
+        const vfpolicies = getNetworkItems(NetworkObjectTypes.VIRTUAL_FIREWALL_POLICIES, this.props);
+
         const srcNetworkItems = {
-            ...getNetworkItems(locationTypeValue, this.props),
+            ...getSourceNetworkItems(this.props),
             type: locationTypeValue,
             ID: locationIDValue,
         };
         const destNetworkItems = {
-            ...getNetworkItems(networkTypeValue, this.props),
+            ...getDestinationNetworkItems(this.props),
             type: networkTypeValue,
             ID: networkIDValue,
         };
@@ -439,11 +461,11 @@ class CreateFlow extends React.Component {
         let overlaymirrordestinations = null;
         if (l2domainIDValue) {
             overlaymirrordestinations = {
-                ...getNetworkItems('overlayMirrorDestinationID', this.props),
+                ...getNetworkItems(NetworkObjectTypes.OVERLAY_MIRROR_DESTINATION_ID, this.props),
             }
         }
         const l7applicationsignatures = {
-            ...getNetworkItems('associatedL7ApplicationSignatureID', this.props),
+            ...getNetworkItems(NetworkObjectTypes.L7_APP_SIGNATURE_ID, this.props),
         }
 
         return(
@@ -462,7 +484,7 @@ class CreateFlow extends React.Component {
             >
 
             {
-                this.renderEditor(vfpolicies, mirrordestinations, srcNetworkItems, destNetworkItems, overlaymirrordestinations, l7applicationsignatures)
+                this.renderEditor(vfpolicies, mirrordestinations, srcNetworkItems, destNetworkItems, overlaymirrordestinations, l7applicationsignatures, resourceName)
             }
 
             </ModalEditor>

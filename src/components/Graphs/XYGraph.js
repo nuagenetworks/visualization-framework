@@ -73,7 +73,7 @@ export default class XYGraph extends AbstractGraph {
         } = this.getConfiguredProperties();
 
         const xLabelFn = (d) => d[xColumn];
-        const yLabelFn = (d) => d[customYColumn ? customYColumn : yColumn];
+        const yLabelFn = (d) => parseFloat(d[customYColumn ? customYColumn : yColumn]);
         const yExtent  = this.updateYExtent(extent(data, yLabelFn), zeroStart);
 
         this.scale = {};
@@ -113,6 +113,7 @@ export default class XYGraph extends AbstractGraph {
             yTickGrid,
             yTicks,
             yTickSizeInner,
+            yTickSizeOuter
         } = this.getConfiguredProperties();
 
         this.axis = {};
@@ -133,7 +134,7 @@ export default class XYGraph extends AbstractGraph {
         // Y axis
         this.axis.y = axisLeft(this.getScale().y)
             .tickSizeInner(yTickGrid ? -this.getAvailableWidth() : yTickSizeInner)
-            .tickSizeOuter(xTickSizeOuter);
+            .tickSizeOuter(yTickSizeOuter);
 
         if(yTickFormat){
             this.axis.y.tickFormat(format(yTickFormat));
