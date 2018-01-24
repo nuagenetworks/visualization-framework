@@ -199,6 +199,9 @@ class MainMenuView extends React.Component {
                                     {this.renderNSGsMenu()}
                                 </div>
                             ]}
+                            leftIcon={
+                                <img style={style.iconMenu} src={`${process.env.PUBLIC_URL}/icons/icon-enterprise.png`} alt="N" />
+                            }
                         />
                     )
                 })}
