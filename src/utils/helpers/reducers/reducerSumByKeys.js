@@ -59,7 +59,7 @@ export default ({
         r.push(o[key])
 
       } else {
-        metrics.forEach(metric => o[key][metric] += e[metric])
+        metrics.forEach(metric => o[key][metric] = parseFloat(o[key][metric]) + parseFloat(e[metric]))
       }
 
       return r

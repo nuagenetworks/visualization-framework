@@ -1,6 +1,6 @@
 import SimpleTextGraph from "./SimpleTextGraph"
 import VariationTextGraph from "./VariationTextGraph"
-import BarGraph from "./BarGraph/index"
+import BarGraph from "./DynamicBarGraph"
 import LineGraph from "./LineGraph"
 import MultiLineGraph from "./LineGraph"
 import PieGraph from "./PieGraph"

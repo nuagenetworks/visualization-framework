@@ -113,6 +113,7 @@ export default class XYGraph extends AbstractGraph {
             yTickGrid,
             yTicks,
             yTickSizeInner,
+            yTickSizeOuter
         } = this.getConfiguredProperties();
 
         this.axis = {};
@@ -133,7 +134,7 @@ export default class XYGraph extends AbstractGraph {
         // Y axis
         this.axis.y = axisLeft(this.getScale().y)
             .tickSizeInner(yTickGrid ? -this.getAvailableWidth() : yTickSizeInner)
-            .tickSizeOuter(xTickSizeOuter);
+            .tickSizeOuter(yTickSizeOuter);
 
         if(yTickFormat){
             this.axis.y.tickFormat(format(yTickFormat));
