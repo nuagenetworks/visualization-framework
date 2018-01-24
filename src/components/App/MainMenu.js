@@ -272,10 +272,6 @@ const actionCreators = (dispatch) => ({
       dispatch(InterfaceActions.toggleMainMenu());
     },
 
-    setPageTitle: (aTitle) => {
-      dispatch(InterfaceActions.updateTitle(aTitle));
-    },
-
     goTo: function(link, context) {
         dispatch(push({pathname:link, query:context}));
     },
