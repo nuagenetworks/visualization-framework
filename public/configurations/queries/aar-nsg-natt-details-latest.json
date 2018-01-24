@@ -6,7 +6,7 @@
         "index":"{{index:nuage_nat-t}}",
         "type":"{{type:nuage_doc_type}}",
         "body":{
-            "size": 1,
+            "size": "{{latest_size:4}}",
             "sort": [
                 {
                     "timestamp": {
