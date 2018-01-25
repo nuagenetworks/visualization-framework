@@ -66,6 +66,8 @@ export const getIDForResource = (type, data) => {
             return getMetaDataAttribute(data, 'subnetId');
         case 'direction':
             return getMetaDataAttribute(data, 'direction');
+        case NetworkObjectTypes.POLICYGROUP:
+            return getMetaDataAttribute(data, 'vportId');
         default:
             return null;
     }
@@ -300,13 +302,13 @@ export const getNetworkItems = (type, props) => {
     return reqID ? props.getRequestResponse(reqID) : null;
 }
 
-const getSourceData = (props) => {
+export const getSourceData = (props) => {
     const { data, matchedData } = props;
     const flowDir = getIDForResource('direction', data);
     return flowDir === FlowDirection.INGRESS ? data : matchedData && matchedData.hasOwnProperty('nuage_metadata') ? matchedData : data;
 }
 
-const getDestinationData = (props) => {
+export const getDestinationData = (props) => {
     const { data, matchedData } = props;
     const flowDir = getIDForResource('direction', data);
     return flowDir === FlowDirection.EGRESS ? data : matchedData && matchedData.hasOwnProperty('nuage_metadata') ? matchedData : data;
@@ -317,9 +319,18 @@ export const getSourceNetworkItems = (props) => {
     const srcData = getSourceData(props);
     const flowDir = getIDForResource('direction', srcData);
     const idForLocationType = getIDForResource(locationTypeValue, srcData);
-    return flowDir === FlowDirection.INGRESS && idForLocationType ?
-        getNetworkItems(locationTypeValue, {ID: idForLocationType, ...props, data: srcData}) :
-        getNetworkItems(locationTypeValue, props);
+    if (flowDir === FlowDirection.INGRESS && idForLocationType) {
+        const query = {...props, data: srcData};
+        if (locationTypeValue === NetworkObjectTypes.POLICYGROUP) {
+            query.resourceName = 'vports';
+            query.domainID = idForLocationType;
+        }
+        else {
+            query.ID = idForLocationType;
+        }
+        return getNetworkItems(locationTypeValue, query);
+    }
+    return getNetworkItems(locationTypeValue, props);
 }
 
 export const getDestinationNetworkItems = (props) => {
@@ -327,9 +338,18 @@ export const getDestinationNetworkItems = (props) => {
     const destData = getDestinationData(props);
     const flowDir = getIDForResource('direction', destData);
     const idForNetworkType = getIDForResource(networkTypeValue, destData);
-    return flowDir === FlowDirection.EGRESS && idForNetworkType ?
-        getNetworkItems(networkTypeValue, {ID: idForNetworkType, ...props, data: destData}) :
-        getNetworkItems(networkTypeValue, props);
+    if (flowDir === FlowDirection.EGRESS && idForNetworkType) {
+        const query = {...props, data: destData};
+        if (networkTypeValue === NetworkObjectTypes.POLICYGROUP ) {
+            query.resourceName = 'vports';
+            query.domainID = idForNetworkType;
+        }
+        else {
+            query.ID = idForNetworkType;
+        }
+        return getNetworkItems(networkTypeValue, query)
+    }
+    return getNetworkItems(networkTypeValue, props);
 }
 
 export const fetchSourceNetworkItems = (props, domainID, enterpriseID) => {
@@ -340,7 +360,14 @@ export const fetchSourceNetworkItems = (props, domainID, enterpriseID) => {
     const idForLocationType = getIDForResource(locationTypeValue, srcData);
     if (idForLocationType) {
         if (flowDir === FlowDirection.INGRESS) {
-            query.ID = idForLocationType;
+            if (locationTypeValue === NetworkObjectTypes.POLICYGROUP ) {
+                query.resourceName = 'vports';
+                query.domainID = idForLocationType;
+            }
+            else
+            {
+                query.ID = idForLocationType;
+            }
         }
     }
     fetchAssociatedObjectIfNeeded(query);
@@ -354,7 +381,14 @@ export const fetchDestinationNetworkItems = (props, domainID, enterpriseID) => {
     const idForNetworkType = getIDForResource(networkTypeValue, destData);
     if (idForNetworkType) {
         if (flowDir === FlowDirection.EGRESS) {
-            query.ID = idForNetworkType;
+            if (networkTypeValue === NetworkObjectTypes.POLICYGROUP ) {
+                query.resourceName = 'vports';
+                query.domainID = idForNetworkType;
+            }
+            else
+            {
+                query.ID = idForNetworkType;
+            }
         }
     }
     fetchAssociatedObjectIfNeeded(query);
@@ -405,13 +439,13 @@ const buildMapStateToProps = (state, ownProps) => {
 }
 
 export const showMessageBoxOnNoFlow = (props) => {
-    const { data, showMessageBox, toggleError } = props;
+    const { data, showMessageBox, toggleError, protocolValue } = props;
 
-    if (!data || Object.getOwnPropertyNames(data).length <= 0) {
+    if (!data || Object.getOwnPropertyNames(data).length <= 0 || (protocolValue === '1')) {
         const body = () =>
-            <span style={{ display: 'inline-flex', color: 'blue', fontSize: 12, padding: 20 }}>Select first a flow to use for creating a new Virtual Firewall Rule</span>;
-
-        showMessageBox('No flow selected', body());
+            <span style={{ display: 'inline-flex', color: 'blue', fontSize: 12, padding: 20 }}>Select first a flow with a valid protocol to create a new Virtual Firewall Rule</span>;
+        const errMsg = (protocolValue === '1') ? "ICMP is not yet supported" : 'No flow selected';
+        showMessageBox(errMsg, body());
         toggleError(true);
         return false;
     }
@@ -437,7 +471,8 @@ export const mapStateToProps = (state, ownProps) => {
         'locationID',
         'networkID',
         'ID',
-        'parentID',) :
+        'parentID',
+        'protocol',) :
         selectFieldValues(state,
             formName,
             'locationType',
@@ -447,6 +482,7 @@ export const mapStateToProps = (state, ownProps) => {
             'mirrorDestinationType',
             'l2domainID',
             'parentID',
+            'protocol'
         );
     const formObject = state.form ? state.form[formName] : null;
 
