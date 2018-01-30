@@ -47,7 +47,7 @@
                         "Users": {
                             "terms": {
                                 "field": "client_mac",
-                                "size": 0,
+                                "size": 100,
                                 "order": {
                                     "SumOf": "desc"
                                 }
