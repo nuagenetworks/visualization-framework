@@ -59,7 +59,6 @@ class VisualizationView extends React.Component {
         this.initialize(this.props.id);
     }
 
-
     componentDidMount = () => {
         const {
             registerResize,
@@ -130,8 +129,6 @@ class VisualizationView extends React.Component {
             if (!configuration)
                 return;
 
-            if (!showInDashboard)
-                setPageTitle("Visualization");
             const queryName  = configuration.query,
                   scriptName = configuration.script;
 

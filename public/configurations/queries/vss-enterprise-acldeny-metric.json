@@ -17,7 +17,7 @@
                         },
                         {
                             "term": {
-                                "type": "ACL_DENY"
+                                "type": "DENY"
                             }
                         }
                     ]
