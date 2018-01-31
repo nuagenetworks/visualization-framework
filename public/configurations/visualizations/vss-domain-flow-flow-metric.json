@@ -1,0 +1,15 @@
+{
+    "id": "vss-domain-flow-flow-metric",
+    "title": "# Flows",
+    "query": "vss-domain-flow-flow-metric",
+    "graph": "VariationTextGraph",
+    "data": {
+        "titlePosition": "top",
+        "target":{
+            "column": "timezones",
+            "value": "Last 24",
+            "field": "value",
+            "format": ",.4s"
+        }
+    }
+}

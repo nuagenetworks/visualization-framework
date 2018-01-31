@@ -1,0 +1,15 @@
+{
+    "id": "vss-domain-flow-default-deny-metric",
+    "title": "# Flows denied by default ACL",
+    "query": "vss-domain-flow-default-deny-metric",
+    "graph": "VariationTextGraph",
+    "data": {
+        "titlePosition": "top",
+        "target":{
+            "column": "timezones",
+            "value": "Last 24",
+            "field": "value",
+            "format": ",.4s"
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "id": "vss-domain-flow-explicit-deny-metric",
+    "title": "# Flows Denied by explicit ACL",
+    "query": "vss-domain-flow-explicit-deny-metric",
+    "graph": "VariationTextGraph",
+    "data": {
+        "titlePosition": "top",
+        "target":{
+            "column": "timezones",
+            "value": "Last 24",
+            "field": "value",
+            "format": ",.4s"
+        }
+    }
+}
