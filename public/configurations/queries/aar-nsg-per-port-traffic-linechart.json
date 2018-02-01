@@ -1,27 +1,27 @@
 {
-    "id":"aar-nsg-per-port-traffic-linechart",
-    "title":"TBD",
-    "service":"elasticsearch",
-    "query":{
-        "index":"{{index:nuage_dpi_flowstats}}",
-        "type":"{{type:nuage_doc_type}}",
-        "body":{
-            "size":0,
-            "query":{
-                "bool":{
-                    "must":[
+    "id": "aar-nsg-per-port-traffic-linechart",
+    "title": "TBD",
+    "service": "elasticsearch",
+    "query": {
+        "index": "{{index:nuage_dpi_flowstats}}",
+        "type": "{{type:nuage_doc_type}}",
+        "body": {
+            "size": 0,
+            "query": {
+                "bool": {
+                    "must": [
                         {
-                            "range":{
-                                "timestamp":{
-                                    "gte":"{{nsgSlaDetailsstartTime:now-20m}}",
-                                    "lte":"{{nsgSlaDetailsendTime:now}}",
-                                    "format":"epoch_millis"
+                            "range": {
+                                "timestamp": {
+                                    "gte": "{{nsgSlaDetailsstartTime:now-20m}}",
+                                    "lte": "{{nsgSlaDetailsendTime:now}}",
+                                    "format": "epoch_millis"
                                 }
                             }
                         },
                         {
                             "term": {
-                                 "EnterpriseName": "{{enterpriseName:test_org}}"
+                                "EnterpriseName": "{{enterpriseName:test_org}}"
                             }
                         },
                         {
@@ -32,16 +32,6 @@
                         {
                             "term": {
                                 "DestinationNSG": "{{dnsg}}"
-                            }
-                        },
-                        {
-                            "term": {
-                                "SrcUplink": "{{srcUplink}}"
-                            }
-                        },
-                        {
-                            "term": {
-                                "DstUplink": "{{dstUplink}}"
                             }
                         },
                         {
@@ -57,16 +47,26 @@
                     "date_histogram": {
                         "field": "timestamp",
                         "interval": "{{interval:1m}}",
-                        "min_doc_count":0,
-                        "extended_bounds" : {
-                            "min" : "{{nsgSlaDetailsstartTime:now-20m}}",
-                            "max" : "{{nsgSlaDetailsendTime:now}}"
+                        "min_doc_count": 0,
+                        "extended_bounds": {
+                            "min": "{{nsgSlaDetailsstartTime:now-20m}}",
+                            "max": "{{nsgSlaDetailsendTime:now}}"
                         }
                     },
                     "aggs": {
-                        "Traffic": {
-                            "avg": {
-                                "field": "IngressMB"
+                        "Path": {
+                            "terms": {
+                                "script": {
+                                    "inline": "doc['SrcUplink'].value + ' --> ' + doc['DstUplink'].value",
+                                    "lang": "painless"
+                                }
+                            },
+                            "aggs": {
+                                "Traffic": {
+                                    "avg": {
+                                        "field": "IngressMB"
+                                    }
+                                }
                             }
                         }
                     }

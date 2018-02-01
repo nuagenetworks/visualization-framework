@@ -1,6 +1,6 @@
 {
     "id": "aar-nsg-per-port-traffic-linechart",
-    "graph": "MultiLineGraph",
+    "graph": "LineGraph",
     "title": "Traffic for {{app}}",
     "description": "Line graph displays the throughput of the application over the selected path",
     "author": "Bharat Mukheja",
@@ -8,11 +8,11 @@
     "data": {
         "dateHistogram": true,
         "xColumn": "ts",
-        "yColumn": ["Traffic"],
+        "yColumn": "Traffic",
         "yTickFormat": ".2s",
         "xLabel": "Time",
         "yLabel": "Traffic",
-        "linesColumn": ["Traffic"],
+        "linesColumn": "Path",
         "showNull": false,
         "stroke": {
           "color": "#f76159",
@@ -24,11 +24,9 @@
             "circleSize": 5,
             "labelOffset": 5
         },
-        "colors": [
-            "#000000"
-            ],
         "tooltip": [
-            { "column": "yColumn","label":"Upload Traffic" }
+            { "column": "Path","label":"Traffic Flow Path" },
+            { "column": "Traffic","label":"Traffic","format":".2s" }
         ]
     },
     "query": "aar-nsg-per-port-traffic-linechart"

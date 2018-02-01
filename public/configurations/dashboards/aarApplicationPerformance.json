@@ -25,13 +25,13 @@
         { "id": "vsd-from-nsgs-table",  "x": 0, "y": 0,  "w": 2, "h": 15, "minW": 2, "minH": 15, "static": false},
         { "id": "vsd-to-nsgs-table",    "x": 2, "y": 0,  "w": 2, "h": 15, "minW": 2, "minH": 15, "static": false},
         { "id": "aar-flow-sla-heatmap", "x": 4, "y": 0, "w": 8, "h": 15, "minW": 8, "minH": 15, "static": false},
-        { "id": "aar-flow-uplink-pairs", "x": 0, "y": 15, "w": 2, "h": 40, "minW": 2, "minH": 40, "static": false},
-        { "id": "aar-nsg-per-port-traffic-linechart", "x": 2, "y": 15, "w": 10, "h": 10, "minW": 2, "minH": 10, "static": false},
-        { "id": "aar-nsg-per-port-pktloss-linechart", "x": 2, "y": 25, "w": 10, "h": 10, "minW": 2, "minH": 10, "static": false},
-        { "id": "aar-nsg-per-port-delay-linechart", "x": 2, "y": 35, "w": 10, "h": 10, "minW": 2, "minH": 10, "static": false},
-        { "id": "aar-nsg-per-port-jitter-linechart", "x": 2, "y": 45, "w": 10, "h": 10, "minW": 2, "minH": 10, "static": false},
-        { "id": "aar-nsg-sla-details",  "x": 0, "y": 55, "w": 6, "h": 15, "minW": 2, "minH": 12, "static": false},
-        { "id": "aar-nsg-sla-flow-details", "x": 6, "y": 70, "w": 6, "h": 15, "minW": 2, "minH": 12, "static": false}
+        { "id": "aar-flow-uplink-pairs", "x": 0, "y": 15, "w": 2, "h": 45, "minW": 2, "minH": 40, "static": false},
+        { "id": "aar-nsg-per-port-traffic-linechart", "x": 2, "y": 15, "w": 10, "h": 15, "minW": 2, "minH": 10, "static": false},
+        { "id": "aar-nsg-per-port-pktloss-linechart", "x": 2, "y": 30, "w": 10, "h": 10, "minW": 2, "minH": 10, "static": false},
+        { "id": "aar-nsg-per-port-delay-linechart", "x": 2, "y": 40, "w": 10, "h": 10, "minW": 2, "minH": 10, "static": false},
+        { "id": "aar-nsg-per-port-jitter-linechart", "x": 2, "y": 50, "w": 10, "h": 10, "minW": 2, "minH": 10, "static": false},
+        { "id": "aar-nsg-sla-details",  "x": 0, "y": 60, "w": 6, "h": 15, "minW": 2, "minH": 12, "static": false},
+        { "id": "aar-nsg-sla-flow-details", "x": 6, "y": 75, "w": 6, "h": 15, "minW": 2, "minH": 12, "static": false}
     ],
     "defaultFilterOptionsOverride": {
         "Time interval": {
