@@ -3,7 +3,7 @@
     "title":"NAT Probe Results at time",
     "service":"elasticsearch",
     "query":{
-        "index":"{{index:nuage_nat-t}}",
+        "index":"{{index:nuage_natt}}",
         "type":"{{type:nuage_doc_type}}",
         "body":{
             "size": "{{ts_size:4}}",
