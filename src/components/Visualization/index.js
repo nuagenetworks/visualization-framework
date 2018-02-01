@@ -314,14 +314,18 @@ class VisualizationView extends React.Component {
 
         const {
             error,
-            isFetching
+            isFetching,
+            updateVisualization,
+            configurationID
         } = this.props;
 
         if (error) {
+            updateVisualization(configurationID)
             return this.renderCardWithInfo("Oops, " + error, "meh-o");
         }
 
         if (isFetching) {
+            updateVisualization(configurationID)
             return this.renderCardWithInfo("Please wait while loading", "circle-o-notch", true);
         }
 
@@ -584,7 +588,6 @@ const updateFilterOptions = (state, configurations, context) => {
 
 const mapStateToProps = (state, ownProps) => {
     //Fetching Configurations of Visualizations
-
     const configurationID = ownProps.id || ownProps.params.id,
           orgContext = state.interface.get(InterfaceActionKeyStore.CONTEXT),
           configuration = state.configurations.getIn([
@@ -660,6 +663,7 @@ const mapStateToProps = (state, ownProps) => {
 
                     if(typeof requestID === 'undefined') {
                         props.hideGraph = true
+                        ownProps.updateVisualization(configurationID)
                     } else {
 
                         let response = state.services.getIn([
@@ -678,6 +682,10 @@ const mapStateToProps = (state, ownProps) => {
                             } else if(responseJS.results) {
                                 successResultCount++;
                                 props.response[query] =responseJS.results
+
+                                if(props.response.data && !props.response.data.length) {
+                                    ownProps.updateVisualization(configurationID)
+                                }
                             }
                         }
                     }

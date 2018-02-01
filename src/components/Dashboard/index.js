@@ -1,5 +1,4 @@
 import React from "react";
-
 import { connect } from "react-redux";
 import { Link } from "react-router";
 
@@ -12,15 +11,14 @@ import { Tooltip } from 'redux-tooltip';
 import Visualization from "../Visualization";
 import FiltersToolBar from "../FiltersToolBar";
 
-import { Actions as AppActions } from "../App/redux/actions";
-
 import {
     Actions as ConfigurationsActions,
     ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions";
 
 import {
-    ActionKeyStore as InterfaceActionKeyStore
+    ActionKeyStore as InterfaceActionKeyStore,
+    Actions as AppActions
 } from "../App/redux/actions";
 
 import { contextualize } from "../../utils/configurations"
@@ -32,9 +30,16 @@ import "./style.css";
 
 export class DashboardView extends React.Component {
 
+    visualizationStatus = {}
+
     constructor(props) {
         super(props);
         this.resizeCallbacks = [];
+        this.state = {
+            hideViz: false
+        }
+
+        this.updateVisualization = this.updateVisualization.bind(this)
     }
 
     componentWillMount() {
@@ -44,6 +49,24 @@ export class DashboardView extends React.Component {
 
     componentWillUnmount() {
         this.resizeCallbacks = null;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const {
+            configuration
+        } = nextProps
+
+        if(configuration) {
+            let vizList = {}
+            const {visualizations} = configuration.toJS()
+
+            // Update all visualizations status "true" on first load
+            if(visualizations && visualizations.length && visualizations.length !== this.visualizationStatus.length) {
+                visualizations.forEach( d => {
+                    this.visualizationStatus[d.id] = true
+                })
+            }
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -90,12 +113,15 @@ export class DashboardView extends React.Component {
     }
 
     updateConfiguration() {
-        const { params, fetchConfigurationIfNeeded } = this.props;
+        const {
+            params,
+            fetchConfigurationIfNeeded
+        } = this.props
 
         if (!params.id)
             return;
 
-        fetchConfigurationIfNeeded(params.id);
+        fetchConfigurationIfNeeded(params.id)
     }
 
     onResize() {
@@ -144,10 +170,65 @@ export class DashboardView extends React.Component {
         );
     }
 
+    updateVisualization(id) {
+        if(this.visualizationStatus.hasOwnProperty(id)) {
+            this.visualizationStatus[id] = false
+
+            let hideViz = true
+            for (let index in this.visualizationStatus) {
+                if(this.visualizationStatus.hasOwnProperty(index) && this.visualizationStatus[index] === true) {
+                    hideViz = false
+                }
+            }
+
+            if(hideViz) {
+                this.setState({hideViz})
+            }
+        }
+
+    }
+
+    renderVisualizationIfNeeded(visualizations, verticalCompact) {
+
+        const {
+            params
+        } = this.props
+
+        return (
+            <div style={style.gridContainer}>
+                <ResponsiveReactGridLayout
+                    rowHeight={10}
+                    margin={[12,12]}
+                    containerPadding={[10, 10]}
+                    onResize={this.onResize.bind(this)}
+                    onLayoutChange={this.onResize.bind(this)}
+                    verticalCompact={verticalCompact}
+                    >
+                    {
+                        visualizations.map((visualization) =>
+                            <div
+                                key={visualization.id}
+                                data-grid={visualization}
+                            >
+                                <Visualization
+                                    id={visualization.id}
+                                    registerResize={this.registerResize.bind(this)}
+                                    showInDashboard={true}
+                                    updateVisualization={this.updateVisualization}
+                                />
+                            </div>
+                        )
+                    }
+                </ResponsiveReactGridLayout>
+            </div>
+        )
+    }
+
     render() {
         const { configuration,
                 error,
-                fetching
+                fetching,
+                params
         } = this.props;
 
         if (fetching) {
@@ -168,6 +249,22 @@ export class DashboardView extends React.Component {
         if (configuration) {
             const { visualizations, settings } = configuration.toJS();
 
+            let verticalCompact = true;
+            if(settings && "verticalCompact" in settings) {
+              verticalCompact = settings.verticalCompact;
+            }
+
+            let message = null
+            if(this.state.hideViz) {
+                message =  (
+                    <div style={{display: "table", width: screen.availWidth, height: screen.availHeight - 200}}>
+                        <div className="center-content" style={{fontSize: '18px', fontWeight: 700, color:"rgb(107, 107, 107)"}}>
+                            Oops, something went wrong
+                        </div>
+                    </div>
+                );
+            }
+
             let filterOptions;
 
             if (configuration.get("defaultFilterOptionsOverride")) {
@@ -182,42 +279,12 @@ export class DashboardView extends React.Component {
                 }
             }
 
-            let verticalCompact = true;
-            if(settings && "verticalCompact" in settings) {
-              verticalCompact = settings.verticalCompact;
-            }
-
             return (
                 <div>
                     {this.renderNavigationBarIfNeeded()}
-
                     <FiltersToolBar filterOptions={filterOptions} />
                     <Tooltip className='tooltip-container'/>
-                    <div style={style.gridContainer}>
-                        <ResponsiveReactGridLayout
-                            rowHeight={10}
-                            margin={[12,12]}
-                            containerPadding={[10, 10]}
-                            onResize={this.onResize.bind(this)}
-                            onLayoutChange={this.onResize.bind(this)}
-                            verticalCompact={verticalCompact}
-                            >
-                            {
-                                visualizations.map((visualization) =>
-                                    <div
-                                        key={visualization.id}
-                                        data-grid={visualization}
-                                    >
-                                        <Visualization
-                                            id={visualization.id}
-                                            registerResize={this.registerResize.bind(this)}
-                                            showInDashboard={true}
-                                        />
-                                    </div>
-                                )
-                            }
-                        </ResponsiveReactGridLayout>
-                    </div>
+                    {message || this.renderVisualizationIfNeeded(visualizations, verticalCompact)}
                 </div>
             );
         }
