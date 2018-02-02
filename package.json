@@ -26,6 +26,7 @@
     "lodash": "^4.17.4",
     "material-ui": "^0.16.7",
     "material-ui-datatables": "0.18.2",
+    "material-ui-superselectfield": "^1.8.5",
     "react": "15.6.0",
     "react-copy-to-clipboard": "^4.3.1",
     "react-csv": "^1.0.8",

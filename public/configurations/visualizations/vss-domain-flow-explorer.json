@@ -9,6 +9,7 @@
     "data": {
         "limit": 100,
         "selectedColumn": "nuage_metadata.flowid",
+        "selectColumnOption": true,
         "columns": [
             { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
             { "column": "sourceip", "label": "SIP" },
@@ -18,7 +19,7 @@
             { "column": "protocol", "label": "Proto" },
             { "column": "type", "label": "Type"},
             { "column": "nuage_metadata.subnetName", "label": "Subnet", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.subnetName"} },
-            { "column": "nuage_metadata.zoneName", "label": "Zone", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.zoneName"}  },
+            { "column": "nuage_metadata.zoneName", "label": "Zone", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.zoneName"}, "display": false},
             { "column": "nuage_metadata.acl_source_type", "label": "Asso-Source-Type" },
             { "column": "nuage_metadata.acl_source_name", "label": "Asso-Source-Name", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.acl_source_name"} },
             { "column": "nuage_metadata.acl_destination_type", "label": "Asso-Dest-Type" },
