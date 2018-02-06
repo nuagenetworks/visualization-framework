@@ -36,8 +36,8 @@ class Table extends AbstractGraph {
         this.handleSearch            = this.handleSearch.bind(this)
         this.handleRowSelection      = this.handleRowSelection.bind(this)
         this.handleContextMenu       = this.handleContextMenu.bind(this)
-        this.handleSelection         = this.handleSelection.bind(this)
-        this.selectionsRenderer      = this.selectionsRenderer.bind(this)
+        this.handleColumnSelection   = this.handleColumnSelection.bind(this)
+        this.selectionColumnRenderer = this.selectionColumnRenderer.bind(this)
 
         this.columns = `${props.configuration.id}-columns`
 
@@ -465,14 +465,14 @@ class Table extends AbstractGraph {
     }
 
 
-    handleSelection(columns, name) {
+    handleColumnSelection(columns, name) {
         let columnsData = []
         columns.forEach( d => {columnsData.push(d.label)})
         this.setState({ columns })
         this.props.goTo(window.location.pathname, Object.assign({}, this.props.context, {[this.columns]: JSON.stringify(columnsData)}))
     }
 
-    getMenuListItem() {
+    getColumnListItem() {
 
         return  this.getColumns().map( column => {
           return (
@@ -490,7 +490,7 @@ class Table extends AbstractGraph {
         })
     }
 
-    selectionsRenderer(values, hintText) {
+    selectionColumnRenderer(values, hintText) {
         if (!values) return hintText
         const { value, label } = values
         if (Array.isArray(values)) {
@@ -518,16 +518,16 @@ class Table extends AbstractGraph {
                     multiple
                     checkPosition='left'
                     hintText='Select Columns'
-                    onSelect={this.handleSelection}
+                    onSelect={this.handleColumnSelection}
                     value={this.state.columns}
                     keepSearchOnSelect
                     elementHeight={40}
-                    selectionsRenderer={this.selectionsRenderer}
+                    selectionsRenderer={this.selectionColumnRenderer}
                     style={{ minWidth: 225, margin: 10, outline: "white", fontSize: 16}}
                     innerDivStyle={{border: "1px solid #dad1d1"}}
                     underlineFocusStyle={{outline: "white"}}
                 >
-                    {this.getMenuListItem()}
+                    {this.getColumnListItem()}
                 </SuperSelectField>
             </div>
         )
