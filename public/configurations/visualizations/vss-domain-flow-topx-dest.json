@@ -19,5 +19,22 @@
         "xLabel": "Total # of Packets",
         "yLabel": "Destination IP"
     },
+    "filterOptions": {
+        "ACL Action": {
+            "parameter": "actionType",
+            "default": "DENY",
+            "options": [
+                {
+                    "label": "Deny",
+                    "value": "DENY",
+                    "default": true
+                },
+                {
+                    "label": "Allow",
+                    "value": "ALLOW"
+                }
+            ]
+        }
+    },
     "query": "vss-domain-flow-topx-dest"
 }

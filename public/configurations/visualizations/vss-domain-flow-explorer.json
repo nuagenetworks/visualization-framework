@@ -29,6 +29,7 @@
             { "column": "nuage_metadata.l7ApplicationName", "label": "L7Application"},
             { "column": "nuage_metadata.service", "label": "Service" },
             { "column": "nuage_metadata.serviceGroup", "label": "Service-Group" },
+            { "column": "underlayflow", "label": "Underlay-flow" },
             { "column": "sourcemac", "label": "SMAC" },
             { "column": "destinationmac", "label": "DMAC" },
             { "column": "packets", "label": "Packets" }
