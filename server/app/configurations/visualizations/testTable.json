@@ -28,8 +28,7 @@
                 },
                 {
                     "label": "Bronze",
-                    "value": "Bronze",
-                    "disabled": true
+                    "value": "Bronze"
                 }
             ]
         }

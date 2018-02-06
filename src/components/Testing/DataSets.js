@@ -62,6 +62,7 @@ class DataSets extends Component {
       color: 'white',
       textAlign: 'center',
       padding: '10px',
+      marginBottom: '15px',
     };
     console.log('===',datasets);
 	  for(let datasetID in datasets) {
@@ -74,9 +75,16 @@ class DataSets extends Component {
             graphType = response.graph_type;
             check=1;
           }
+          let imageLocationType;
+          if(response.graph_type=='after_click') {
+            imageLocationType = 'chart';
+          } else if(response.graph_type=='after_filter') {
+            imageLocationType = 'filter';
+          }
 			    return (<div key={response.chart_id}  style={{marginTop: "20px"}}>
-            {index === 0 && response.graph_type==='before_click' ? (<div style={styles1} >Before Click</div>) : null }
+            
             {check === 1 && response.graph_type==='after_click' ? (<div style={styles1} >After Click</div>) : null }
+            {check === 1 && response.graph_type==='after_filter' ? (<div style={styles1} >After Filter</div>) : null }
 				    <div className="" style={{ display: "flex"}}>
               {response.dataset_file}
               { datasets[datasetID].dataset_id && response.graph_type==='before_click' ? 
@@ -84,7 +92,7 @@ class DataSets extends Component {
                   <Image data={`${this.getBaseURL()}dashboards/original/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/${response.chart_name}.png`}  />
                 ) : 
                 (
-                  <Image data={`${this.getBaseURL()}dashboards/original/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/bar/${response.chart_name}.png`}  />
+                  <Image data={`${this.getBaseURL()}dashboards/original/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/${imageLocationType}/${response.chart_name}.png`}  />
                 )
               }
               { response.graph_type==='before_click' ? 
@@ -93,7 +101,7 @@ class DataSets extends Component {
                 )
                 :
                 (
-                  <Image data={`${this.getBaseURL()}dashboards/${response.report_id}/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/bar/${response.chart_name}.png`}  />
+                  <Image data={`${this.getBaseURL()}dashboards/${response.report_id}/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/${imageLocationType}/${response.chart_name}.png`}  />
                 )
               }
               

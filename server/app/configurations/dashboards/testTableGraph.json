@@ -73,7 +73,7 @@
         "Medal": {
             "parameter": "medalType",
             "default": "Gold",
-            "disabled": true,
+            "disabled": false,
             "options": [
                 {
                     "label": "Gold",

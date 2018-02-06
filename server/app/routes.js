@@ -25,7 +25,7 @@ routes.post('/testing/update/reports', TestingController.updateDataSet);
 routes.get('/testing/reports/delete/:report_id', TestingController.deleteReports);
 routes.post('/testing/initiate', TestingController.initiate);
 
-routes.post('/testing/db-migrate', SeederController.seeder);
+routes.post('/testing/db-seed', SeederController.seeder);
 
 routes.use(errorHandler);
 

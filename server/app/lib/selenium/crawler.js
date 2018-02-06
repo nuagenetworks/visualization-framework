@@ -1,5 +1,6 @@
 import { Builder, By } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
+import firefox from 'selenium-webdriver/firefox';
 import http from 'http';
 import url from 'url';
 import easyimg from 'easyimage';
@@ -19,10 +20,17 @@ let currentReportId = null;
 let dashboardSettings = null;
 let graphType = 'default';
 let checkSubsetCall = false;
+let filterDashboard = false;
 
 let errors = [];
 let widgets = [];
+
+// browser driver options
 let chromeOptions = new chrome.Options();
+
+let binary = new firefox.Binary();
+binary.addArguments('--headless');
+
 
 const MESSAGES = {
     ERROR: 'error',
@@ -79,16 +87,35 @@ const goToUrl = function(driver, Id, indexToClick) {
             if(index==0) {
                 element.click().then(function() {
                     driver.wait(function() {
-                        return driver.findElements(By.xpath('//div[contains(@class,"react-grid-layout")]/div')).then(function(elements) {
+                        return driver.findElements(
+                            By.xpath('//div[contains(@class,"react-grid-layout")]/div')
+                        ).then(function(elements) {
                             return elements.length;
                         });
                     }, 5000).then(function() {
                         driver.getCurrentUrl().then((url)=>{
-                            fetchWidgets(url, 'bar');
+                            fetchWidgets(url, 'chart');
                         });
                     });
                 });
             }
+        });
+    });
+    return true;
+};
+
+const filterUrl = function(driver) {
+    driver.findElement(By.xpath('//*[@id="root"]/div/div/div/div[2]/div/div[1]/ul/li[3]/div/div[1]/div[2]')).click().then(function() {
+        driver.findElement(By.xpath('html/body/div[3]/div/div/div/div[2]/span/div/div')).click().then(function() {
+            driver.wait(function() {
+                return driver.findElements(By.xpath('//div[contains(@class,"react-grid-layout")]/div')).then(function(elements) {
+                    return elements.length;
+                });
+            }, 10000).then(function() {
+                driver.getCurrentUrl().then((url)=>{
+                    fetchWidgets(url, 'filter');
+                });
+            });
         });
     });
     return true;
@@ -142,8 +169,8 @@ const checkAndProcess = function(URL) {
 
 const initiate = function(URL) {
     driver = new Builder()
-        .forBrowser('chrome')
-        .setChromeOptions(chromeOptions.headless().windowSize({ width, height }))
+        .forBrowser('firefox')
+        .setFirefoxOptions(new firefox.Options().setBinary(binary))
         .build();
 
     driver.get(URL);
@@ -153,15 +180,13 @@ const initiate = function(URL) {
             return elements.length;
         });
       }, 5000).then(function() {
-            //goToUrl(driver, 'test-stackbar-graph-horizontal-number-limit');
-            fetchWidgets(URL,'default');
+            fetchWidgets(URL, 'default');
       }).catch(function() {
           callback(MESSAGES.ERROR, MESSAGES.NO_WIDGET);
       });
 }
 
-const fetchWidgets = function(URL,typeUrl) {
-    
+const fetchWidgets = function(URL, typeUrl) {
     driver.wait(function() {
         return driver.findElements(By.className('fa-spin')).then(function(elements) {
           return !elements.length;
@@ -190,7 +215,6 @@ const fetchWidgets = function(URL,typeUrl) {
                     elem.getSize().then(function(size){
                         chartSize = size;
                     });
-                    
                     elem.findElements(By.xpath(".//span[contains(@class,'fa-spin') or contains(@class,'fa-bar-chart') or contains(@class,'fa-meh-o')]")).then(function(elements) {
                       chartStatus = elements.length ? 'fail' : null;
 
@@ -210,14 +234,10 @@ const fetchWidgets = function(URL,typeUrl) {
 
       driver.takeScreenshot().then(
           function(image, err) {
-                
-                let filePath;    
-                let filePath2;
-                
+                let filePath;
                 if(graphType=='default') {
-                        filePath = `public/dashboards/${currentReportId}/${currentDashboard.dashboard_id}/${currentDashboard.dataset_id ? currentDashboard.dataset_id : 0}`;
+                    filePath = `public/dashboards/${currentReportId}/${currentDashboard.dashboard_id}/${currentDashboard.dataset_id ? currentDashboard.dataset_id : 0}`;
                 } else {
-
                     filePath = `public/dashboards/${currentReportId}/${currentDashboard.dashboard_id}/${currentDashboard.dataset_id ? currentDashboard.dataset_id : 0}/${graphType}`;
                     graphType='default';       
                 }
@@ -232,11 +252,9 @@ const fetchWidgets = function(URL,typeUrl) {
                         console.log(err);
                     } else {
                         if(allChartsLoaded) {
-                            errors.push(`${allChartsLoaded}${MESSAGES.WIDGET_DATA_ISSUE}`)
+                            errors.push(`${allChartsLoaded}${MESSAGES.WIDGET_DATA_ISSUE}`);
                         }
-                        let count = 0;
-                        async.forEachOf(allElementsDetails, function (result, key, callback) {
-                            
+                        async.forEachOf(allElementsDetails, function(result, key, callback) {
                             let imageDetails = {
                                 size: result.size,
                                 location: result.location,
@@ -250,9 +268,10 @@ const fetchWidgets = function(URL,typeUrl) {
                                 chart_name: result.name,
                                 type: 'before_click',
                             };
-                            
-                            if(typeUrl!='default') {
+                            if(typeUrl!='default' && typeUrl!='filter') {
                                 widget.type = 'after_click';
+                            } else if(typeUrl=='filter') {
+                                widget.type = 'after_filter';
                             }
 
                             let settingsData = dashboardSettings ? JSON.parse(dashboardSettings) : null;
@@ -263,10 +282,15 @@ const fetchWidgets = function(URL,typeUrl) {
                                     widgets.push(Object.assign({}, widget, {
                                         status: result.status,
                                     }));
-                                    if( settingsData && settingsData.bar && result.name === settingsData.bar && !checkSubsetCall ) {
+                                    if( settingsData && settingsData.chart && result.name === settingsData.chart && !checkSubsetCall ) {
                                         checkSubsetCall = true;
-                                        graphType = 'bar';
-                                        return goToUrl(driver, settingsData.bar);
+                                        graphType = 'chart';
+                                        return goToUrl(driver, settingsData.chart);
+                                    }
+                                    if( settingsData && settingsData.filter && settingsData.filter == "true" && !filterDashboard) {
+                                        filterDashboard = true;
+                                        graphType = 'filter';
+                                        return filterUrl(driver);
                                     }
                                     callback(null);
                                     return;
@@ -279,10 +303,15 @@ const fetchWidgets = function(URL,typeUrl) {
                                             status: response,
                                         }));
                                     }
-                                    if( settingsData && settingsData.bar && result.name === settingsData.bar && !checkSubsetCall ) {
+                                    if( settingsData && settingsData.chart && result.name === settingsData.chart && !checkSubsetCall ) {
                                         checkSubsetCall = true;
-                                        graphType = 'bar';
-                                        return goToUrl(driver, settingsData.bar);
+                                        graphType = 'chart';
+                                        return goToUrl(driver, settingsData.chart);
+                                    }
+                                    if( settingsData && settingsData.filter && settingsData.filter == "true" && !filterDashboard) {
+                                        filterDashboard = true;
+                                        graphType = 'filter';
+                                        return filterUrl(driver);
                                     }
                                     callback(null);
                                     return;
@@ -293,7 +322,6 @@ const fetchWidgets = function(URL,typeUrl) {
                             callback(MESSAGES.SUCCESS);
                         });
                     }
-
                 });
               });
           });

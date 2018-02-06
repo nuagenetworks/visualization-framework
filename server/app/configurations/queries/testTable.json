@@ -1,5 +1,10 @@
 {
     "id": "testTable",
     "title": "Testing Table Graph",
-    "service": "dataset"
+    "service": "dataset",
+    "query": {
+        "year": "{{year:2012}}",
+        "medalType": "{{medalType:Gold}}"
+    },
+    "sortBy": "nbMedals desc"
 }
