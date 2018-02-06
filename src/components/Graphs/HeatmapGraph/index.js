@@ -100,9 +100,8 @@ export default class HeatmapGraph extends XYGraph {
                 } else {
                     data.push({
                             [yColumn]: d.key,
-                            [legendColumn]: null,
-                            [xColumn]: parseInt(list.key),
-                            isEmpty: true
+                            [legendColumn]: 'Empty',
+                            [xColumn]: parseInt(list.key)
                         })
                 }
             })
@@ -119,17 +118,16 @@ export default class HeatmapGraph extends XYGraph {
         const scale            = this.getMappedScaleColor(data, legendColumn);
         const getColor         = (d) => {
             let value = null;
-
-            if(d.isEmpty) {
-                return emptyBoxColor
-            }
-
             if(d.hasOwnProperty(legendColumn)) {
                 value = d[legendColumn]
             } else if(d.hasOwnProperty(colorColumn)) {
                 value = d[colorColumn]
             } else if (d.hasOwnProperty("key")) {
                 value = d["key"]
+            }
+
+            if(value === 'Empty') {
+                return emptyBoxColor
             }
 
             return scale ? scale(value) : stroke.color || colors[0];
