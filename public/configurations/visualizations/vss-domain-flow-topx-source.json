@@ -2,7 +2,7 @@
     "id": "vss-domain-flow-topx-source",
     "graph": "BarGraph",
     "title": "Top Source IP by # packets",
-    "description": "This horizontal barchart represents top 5 source policygroups per ACL hits for a given period of time. By default its aggregated on deny hits count. One can select other ACL actions i.e from the drop down menu on this dashboard.",
+    "description": "This horizontal barchart represents top 5 source IP per no of packets sent in this domain. By default its aggregated on deny hits count. One can select other ACL actions i.e from the drop down menu on this visualization.",
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {

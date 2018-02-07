@@ -1,6 +1,7 @@
 {
     "id": "vss-domain-flow-flow-metric",
     "title": "# Flows",
+    "description": "No of unique flows in this domain",
     "query": "vss-domain-flow-flow-metric",
     "graph": "VariationTextGraph",
     "data": {

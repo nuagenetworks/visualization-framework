@@ -1,6 +1,7 @@
 {
     "id": "vss-domain-flow-explicit-deny-metric",
     "title": "# Flows Denied by explicit ACL",
+    "description": "No of unique flows denied by programmed/explicit ACLs in this domain",
     "query": "vss-domain-flow-explicit-deny-metric",
     "graph": "VariationTextGraph",
     "data": {

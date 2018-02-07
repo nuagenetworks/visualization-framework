@@ -1,6 +1,7 @@
 {
     "id": "vss-domain-flow-default-allow-metric",
     "title": "# Flows allowed by default ACL",
+    "description": "No of unique flows allowed by implicit ACLs in this domain",
     "query": "vss-domain-flow-default-allow-metric",
     "graph": "VariationTextGraph",
     "data": {
