@@ -1,0 +1,40 @@
+{
+    "id": "vss-domain-flow-topx-source",
+    "graph": "BarGraph",
+    "title": "Top Source IP by # packets",
+    "description": "This horizontal barchart represents top 5 source IP per no of packets sent in this domain. By default its aggregated on deny hits count. One can select other ACL actions i.e from the drop down menu on this visualization.",
+    "author": "Ronak Shah",
+    "creationDate": "10/18/2016",
+    "data": {
+        "xColumn": "SumOf",
+        "yColumn": "sip",
+        "orientation": "horizontal",
+        "tooltip": [
+            { "column": "sip", "label": "Source IP" },
+            { "column": "SumOf", "label": "# Packets", "format": ",.1f"}
+        ],
+        "xTickGrid": true,
+        "yTickGrid": false,
+        "xTickFormat": ".2s",
+        "xLabel": "Total # of Packets",
+        "yLabel": "Source IP"
+    },
+    "filterOptions": {
+        "ACL Action": {
+            "parameter": "actionType",
+            "default": "DENY",
+            "options": [
+                {
+                    "label": "Deny",
+                    "value": "DENY",
+                    "default": true
+                },
+                {
+                    "label": "Allow",
+                    "value": "ALLOW"
+                }
+            ]
+        }
+    },
+    "query": "vss-domain-flow-topx-source"
+}
