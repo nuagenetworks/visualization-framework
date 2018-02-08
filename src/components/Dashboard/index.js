@@ -224,6 +224,16 @@ export class DashboardView extends React.Component {
         )
     }
 
+    renderMessage(message) {
+        return (
+            <div style={{display: "table", width: screen.availWidth, height: screen.availHeight - 200}}>
+                <div className="center-content" style={{fontSize: '18px', fontWeight: 500, color:"rgb(107, 107, 107)"}}>
+                   {message}
+                </div>
+            </div>
+        )
+    }
+
     render() {
         const { configuration,
                 error,
@@ -232,18 +242,15 @@ export class DashboardView extends React.Component {
         } = this.props;
 
         if (fetching) {
-            return (
-                <div>
-                    <CircularProgress color="#eeeeee"/>
-                    This dashboard component is loading the configuration file...
-                </div>
-            );
+            let loaderMessage = (<div>
+                <CircularProgress color="#eeeeee"/>
+                This dashboard component is loading the configuration file...
+            </div>)
+            return this.renderMessage(loaderMessage);
         }
 
         if (error) {
-            return (
-                <div>{error}</div>
-            );
+            return this.renderMessage(error);
         }
 
         if (configuration) {
@@ -256,13 +263,7 @@ export class DashboardView extends React.Component {
 
             let message = null
             if(this.state.hideViz) {
-                message =  (
-                    <div style={{display: "table", width: screen.availWidth, height: screen.availHeight - 200}}>
-                        <div className="center-content" style={{fontSize: '18px', fontWeight: 700, color:"rgb(107, 107, 107)"}}>
-                            Oops, something went wrong
-                        </div>
-                    </div>
-                );
+                message =  this.renderMessage('Oops, something went wrong')
             }
 
             let filterOptions;
@@ -289,7 +290,7 @@ export class DashboardView extends React.Component {
             );
         }
 
-        return <div>No dashboard</div>;
+        return this.renderMessage('No dashboard')
     }
 }
 
