@@ -30,11 +30,10 @@ import "./style.css";
 
 export class DashboardView extends React.Component {
 
-    visualizationStatus = {}
-
     constructor(props) {
         super(props);
-        this.resizeCallbacks = [];
+        this.resizeCallbacks = []
+        this.visualizationStatus = {}
         this.state = {
             hideViz: false
         }
@@ -62,6 +61,10 @@ export class DashboardView extends React.Component {
 
             // Update all visualizations status "true" on first load
             if(visualizations && visualizations.length && visualizations.length !== this.visualizationStatus.length) {
+                this.visualizationStatus = {}
+                this.setState({
+                    hideViz: false
+                })
                 visualizations.forEach( d => {
                     this.visualizationStatus[d.id] = true
                 })
