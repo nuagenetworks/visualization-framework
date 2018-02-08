@@ -632,9 +632,13 @@ const mapStateToProps = (state, ownProps) => {
 
     let successResultCount = 0
     //If configuratrions of visualizations fetched proceed to query configurations
-    if (props.configuration && props.configuration.query) {
+    if (props.configuration && (props.configuration.query || props.configuration.script)) {
 
-        const queries =  typeof props.configuration.query === 'string' ? {'data' : props.configuration.query} : props.configuration.query
+        let queries =  typeof props.configuration.query === 'string' ? {'data' : props.configuration.query} : props.configuration.query
+
+        if(!queries) {
+            queries = {'data': props.configuration.script}
+        }
 
         //Checking whether all the queries configurations has been fetched
         for(let query in queries) {
