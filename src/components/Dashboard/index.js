@@ -58,13 +58,13 @@ export class DashboardView extends React.Component {
         if(configuration) {
             let vizList = {}
             const {visualizations} = configuration.toJS()
+            const prevConfiguration = this.props.configuration? this.props.configuration.toJS() : {}
 
             // Update all visualizations status "true" on first load
-            if(visualizations && visualizations.length && visualizations.length !== this.visualizationStatus.length) {
+            if(visualizations && visualizations.length && JSON.stringify(prevConfiguration.visualizations) !== JSON.stringify(visualizations)) {
                 this.visualizationStatus = {}
-                this.setState({
-                    hideViz: false
-                })
+                this.setState({ hideViz: false})
+
                 visualizations.forEach( d => {
                     this.visualizationStatus[d.id] = true
                 })
