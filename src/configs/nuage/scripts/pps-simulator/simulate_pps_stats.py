@@ -317,9 +317,9 @@ class SimulateFlowStats(object):
                             app_grpid = appgrp["appgrp_id"]
                             app_grpname = appgrp["appgrp_name"]
                             applist = appgrp["app_list"]
-                            #app_rand = randint(0, len(applist) - 1)
-                            #app = applist[app_rand]
-                            app = applist[0]
+                            app_rand = randint(0, len(applist) - 1)
+                            app = applist[app_rand]
+                            #app = applist[0]
                             proto = randint(0, len(protos) - 1)
                             l7 = randint(0, len(l7s) - 1)
 
