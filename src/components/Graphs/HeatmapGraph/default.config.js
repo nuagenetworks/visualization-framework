@@ -35,5 +35,6 @@ export const properties = {
         theme.palette.windowBodyColor,
         theme.palette.orangeBlindColor,
         theme.palette.mauveColor,
-    ]
+    ],
+    emptyBoxColor: theme.palette.greyLightColor
 }
