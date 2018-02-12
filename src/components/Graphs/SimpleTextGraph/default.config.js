@@ -17,7 +17,7 @@ export const properties = {
         right: "5px"
     },
     fontSize: "4em",
-    defaultFontSize: "16",
+    defaultFontSize: "25px",
     fontColor: theme.palette.whiteColor,
     innerWidth: 0.3,
     innerHeight: 0.4,

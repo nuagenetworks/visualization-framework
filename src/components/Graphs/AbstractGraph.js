@@ -169,7 +169,8 @@ export default class AbstractGraph extends React.Component {
 
     getMappedScaleColor(data, defaultColumn) {
         const {
-            colors,
+            heatmapColor,
+            otherColors,
             mapColors,
             colorColumn,
         } = this.getConfiguredProperties();
@@ -178,14 +179,18 @@ export default class AbstractGraph extends React.Component {
             return;
 
         let domainData = d3.map(data, (d) => d[colorColumn || defaultColumn]).keys().sort();
+        let colors = Object.assign({}, mapColors, heatmapColor ? heatmapColor : {})
 
         let propColors = [];
+        let index = 0;
         domainData.forEach((d) => {
-            if(mapColors[d]) {
-                propColors.push(mapColors[d]);
+            if(colors[d]) {
+                propColors.push(colors[d]);
+            } else {
+                propColors.push(otherColors[index++]);
             }
         })
-        propColors = propColors.concat(colors);
+        propColors = propColors.concat(otherColors);
 
         const scale = scaleOrdinal(propColors);
         scale.domain(domainData);

@@ -1,9 +1,9 @@
 {
-    "id":"wifi-branch-ssid-linechart",
-    "title":"TBD",
+    "id":"vss-domain-flow-topx-dest",
+    "title":"top x destination",
     "service":"elasticsearch",
     "query":{
-        "index":"{{index:nuage_wifi}}",
+        "index":"{{index:nuage_flow}}",
         "type":"{{type:nuage_doc_type}}",
         "body":{
             "size":0,
@@ -21,45 +21,35 @@
                         },
                         {
                             "term": {
-                                "enterpriseName":"{{enterpriseName:wifi_enterprise}}"
+                                "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
                             }
                         },
                         {
                             "term": {
-                                "nsg":"{{nsg:wifi_nsg}}"
+                                "nuage_metadata.domainName":"{{domainName:chord_domain}}"
                             }
                         },
                         {
                             "term": {
-                                "ssid-name":"{{ssid}}"
+                                "type":"{{actionType:DENY}}"
                             }
                         }
                     ]
                 }
             },
             "aggs": {
-                "ts": {
-                    "date_histogram": {
-                        "field": "timestamp",
-                        "interval": "{{interval:1h}}"
+                "dip": {
+                    "terms": {
+                        "field": "destinationip",
+                        "size": 5,
+                        "order": {
+                            "SumOf": "desc"
+                        }
                     },
                     "aggs": {
-                        "Users": {
-                            "terms": {
-                                "field": "client_mac",
-                                "size": 100,
-                                "order": {
-                                    "SumOf": "desc"
-                                }
-                            },
-                            "aggs": {
-                                "SumOf": {
-                                    "sum": {
-                                        "script": {
-                                            "inline": "doc['rx_bytes'].value + doc['tx_bytes'].value"
-                                        }
-                                    }
-                                }
+                        "SumOf": {
+                            "sum": {
+                                "field": "packets"
                             }
                         }
                     }
