@@ -216,12 +216,12 @@ class Table extends AbstractGraph {
                 let originalData = accessor(d),
                     columnData   = originalData
 
-                if(columnData && columns[i].tooltip) {
+                if((columnData || columnData === 0) && columns[i].tooltip) {
                     let fullText = tooltipAccessor[i](d, true)
                     let hoverContent = (
                         <div key={`tooltip_${j}_${i}`}>
                             {fullText}
-                            <CopyToClipboard text={fullText ? fullText : ''}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>
+                            <CopyToClipboard text={fullText ? fullText.toString() : ''}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>
                         </div>
                     )
 
@@ -246,15 +246,12 @@ class Table extends AbstractGraph {
                 return data[key] = <div style={{background: highlightColor, height: style.row.height, padding: "10px 0"}}>{data[key]}</div>
             })
 
-
             return data
         })
     }
 
     handleSortOrderChange(column, order) {
-        const keys = column.split(".");
-        const value = (d) => keys.reduce((d, key) => d[key], d);
-
+        const value = columnAccessor({column})
         this.filterData = this.filterData.sort(
           (a, b) => {
              if(order === 'desc')
@@ -312,11 +309,12 @@ class Table extends AbstractGraph {
 
     handleRowSelection(selectedRows) {
         const {
-            configuration
-        } = this.props;
+            data
+        } = this.props
 
         const {
-            multiSelectable
+            multiSelectable,
+            selectedColumn
         } = this.getConfiguredProperties();
 
         if(!multiSelectable) {
@@ -332,9 +330,22 @@ class Table extends AbstractGraph {
 
         const { selectRow, location } = this.props;
         if (selectRow) {
+            let matchingRows = []
             const selectedRows = this.getSelectedRows();
-            const flow = selectedRows ? selectedRows[0] : {};
-            selectRow(configuration.id, flow, location.query, location.pathname);
+            const row = selectedRows ? selectedRows[0] : {};
+
+            /**
+             * Compare `selectedColumn` value with all available datas and if equal to selected row,
+             * then save all matched records in store under "matchedRows",
+            **/
+
+            if(selectedColumn) {
+                const value = columnAccessor({column: selectedColumn})
+                matchingRows = data.filter( (d) => {
+                    return (value(row) || value(row) === 0) && row !== d && value(row) === value(d)
+                });
+            }
+           selectRow(this.props.configuration.id, row, matchingRows, location.query, location.pathname);
         }
 
     }
@@ -535,7 +546,7 @@ const mapStateToProps = (state) => {
 }
 
 const actionCreators = (dispatch) => ({
-    selectRow: (vssID, row, currentQueryParams, currentPath) => dispatch(VFSActions.selectRow(vssID, row, currentQueryParams, currentPath)),
+    selectRow: (vssID, row, matchingRows, currentQueryParams, currentPath) => dispatch(VFSActions.selectRow(vssID, row, matchingRows, currentQueryParams, currentPath)),
     goTo: (link, queryParams) => {
         dispatch(push({pathname: link, query: queryParams}));
     }

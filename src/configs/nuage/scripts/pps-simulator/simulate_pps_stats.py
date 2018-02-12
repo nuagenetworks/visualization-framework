@@ -19,6 +19,8 @@ class SimulateAARData(object):
         self.domain_count = defData["domain_count"]
         self.src_ip_prefix = defData["src_ip_prefix"]
         self.dest_ip_prefix = defData["dest_ip_prefix"]
+        self.natt_ip_prefix = defData["natt_ip_prefix"]
+        self.natt_port = defData["natt_port"]
         self.npm_count = defData["npm_count"]
         self.perf_mon_count = defData["perf_mon_count"]
         self.duc_count = defData["duc_count"]
@@ -35,13 +37,17 @@ class SimulateAARData(object):
         while i < self.nsg_count:
             #nsg_subnet_cidr = self.getRandomCidrPrefix()
             nsg_subnet_cidr = self.nsg_id_prefix
+            nsg_natt_cidr = self.natt_ip_prefix
+            nsg_natt_port = self.natt_port
             #nsg_last_octet = str(randint(2, 254))
             nsg_last_octet = str(i)
             nsg_ip = nsg_subnet_cidr + nsg_last_octet
             nsg = {
                 "nsg_subnet": nsg_subnet_cidr,
                 "nsg_id": nsg_ip,
-                "nsg_name": "ovs-" + nsg_last_octet
+                "nsg_name": "ovs-" + nsg_last_octet,
+                "nsg_natt_ip":nsg_natt_cidr + nsg_last_octet,
+                "nsg_natt_port":nsg_natt_port
             }
             nsgids.append(nsg)
             i += 1
@@ -676,6 +682,122 @@ class SimulateSLAStats(object):
         print "sla_cnt = " + str(sla_cnt)
 
 
+class SimulateNATTStats(object):
+    def __init__(self, flowData):
+        self.nsgs = flowData["nsgs"]
+        self.def_ent_name = flowData["def_ent_name"]
+        self.es = flowData["es"]
+        self.es_index_prefix = flowData["es_index_prefix"]
+        self.srcUplinks = flowData["srcuplinks"]
+        self.destUplinks = flowData["destuplinks"]
+        self.natt_summaries = ["Green","Orange","Red"]
+
+    def generate_natt_stats(self, startTime, endTime,es_chunk_size):
+        nsgs = self.nsgs
+        srcuplinks = self.srcUplinks
+        destuplinks = self.destUplinks
+        natt_stat_cnt = 0
+        write_data = []
+        chunk_size = es_chunk_size
+        with open('log/nattstats_new.log', 'w') as nattstats:
+            timestamp = startTime
+            t_increment = 0
+            while timestamp != endTime:
+                timestamp = startTime + t_increment * 1000
+                nattstat_record = {}
+                for s_nsg_ind, src_nsg in enumerate(nsgs):
+                    d_nsg_ind = s_nsg_ind + 1
+                    while d_nsg_ind < len(nsgs):
+                        dest_nsg = nsgs[d_nsg_ind]
+                        srcUp = randint(0, 1)
+                        destUp = randint(0, 1)
+                        nattstat_record["timestamp"] = long(timestamp)
+                        nattstat_record["SrcNSG"] = src_nsg["nsg_id"]
+                        nattstat_record["SourceNSG"] = src_nsg["nsg_name"]
+                        nattstat_record["DstNSG"] = dest_nsg["nsg_id"]
+                        nattstat_record["DestinationNSG"] = dest_nsg["nsg_name"]
+                        nattstat_record["SrcUplink"] = srcuplinks[srcUp]
+                        nattstat_record["DstUplink"] = destuplinks[destUp]
+                        nattstat_record["SrcUplinkIndex"] = srcuplinks[srcUp]
+                        nattstat_record["DstUplinkIndex"] = destuplinks[destUp]
+                        nattstat_record["SrcUplinkRole"] = srcuplinks[srcUp]
+                        nattstat_record["DstUplinkRole"] = destuplinks[destUp]
+                        nattstat_record["EnterpriseName"] = self.def_ent_name
+
+                        nattstat_record["VscVxLanIP"] = src_nsg["nsg_natt_ip"]
+                        nattstat_record["VscVxLanPort"] = src_nsg["nsg_natt_port"]
+                        nattstat_record["VscIPSecIP"] = src_nsg["nsg_natt_ip"]
+                        nattstat_record["VscIPSecPort"] = src_nsg["nsg_natt_port"]
+                        nattstat_record["ProbeVxLanIP"] = src_nsg["nsg_natt_ip"]
+                        nattstat_record["ProbeVxLanPort"] = src_nsg["nsg_natt_port"]
+                        nattstat_record["ProbeIPSecIP"] = src_nsg["nsg_natt_ip"]
+                        nattstat_record["ProbeIPSecPort"] = src_nsg["nsg_natt_port"]
+
+                        nattstat_record["Reason"] = "Reason"
+
+
+                        json.dump(nattstat_record, nattstats,
+                                  default=json_serial)
+                        nattstats.write("\n")
+                        index_name = "nuage_nat-t" + '_' + self.es_index_prefix
+                        nattstat_record['_index']=index_name
+                        nattstat_record['_type'] = 'nuage_doc_type'
+                        write_data.append(nattstat_record)
+                        if len(write_data)>=chunk_size:
+                            helpers.bulk(self.es,iter(write_data),request_timeout=50)
+                            write_data = []
+                        natt_stat_cnt += 1
+                        d_nsg_ind += 1
+                if len(write_data):
+                    helpers.bulk(self.es,iter(write_data),request_timeout=50)
+                    write_data = []
+                t_increment += 30
+
+        print "natt_stat_cnt = " + str(natt_stat_cnt)
+
+    def generate_natt_summary(self, startTime, endTime,es_chunk_size):
+        nsgs = self.nsgs
+        natt_summary_cnt = 0
+        write_data = []
+        chunk_size = es_chunk_size
+        with open('log/natt_summary_new.log', 'w') as natt_summary:
+            timestamp = startTime
+            t_increment = 0
+            while timestamp != endTime:
+                timestamp = startTime + t_increment * 1000
+                natt_summary_record = {}
+                for s_nsg_ind, src_nsg in enumerate(nsgs):
+                    d_nsg_ind = s_nsg_ind + 1
+                    while d_nsg_ind < len(nsgs):
+                        dest_nsg = nsgs[d_nsg_ind]
+                        natt_summary_record["timestamp"] = long(timestamp)
+                        natt_summary_record["EnterpriseName"] = self.def_ent_name
+                        natt_summary_record["SrcNSG"] = src_nsg["nsg_id"]
+                        natt_summary_record["SourceNSG"] = src_nsg["nsg_name"]
+                        natt_summary_record["DstNSG"] = dest_nsg["nsg_id"]
+                        natt_summary_record["DestinationNSG"] = dest_nsg["nsg_name"]
+                        natt_status = random.choice([0,1,2])
+                        natt_summary_record["ReachabilityStatus"] = self.natt_summaries[natt_status]
+
+                        json.dump(natt_summary_record, natt_summary,
+                                  default=json_serial)
+                        natt_summary.write("\n")
+                        index_name = "nuage_nat-t" + '_' + self.es_index_prefix
+                        natt_summary_record['_index']=index_name
+                        natt_summary_record['_type'] = 'nuage_doc_type'
+                        write_data.append(natt_summary_record)
+                        if len(write_data)>=chunk_size:
+                            helpers.bulk(self.es,iter(write_data),request_timeout=50)
+                            write_data = []
+                        natt_summary_cnt += 1
+                        d_nsg_ind += 1
+                if len(write_data):
+                    helpers.bulk(self.es,iter(write_data),request_timeout=50)
+                    write_data = []
+                t_increment += 30
+
+        print "natt_summary_cnt = " + str(natt_summary_cnt)
+
 def main():
     #  Load the configuration file
     config = ConfigParser.ConfigParser()
@@ -688,6 +810,8 @@ def main():
     defData["vport_count"] = config.getint('default', 'vport_count')
     defData["src_ip_prefix"] = config.get('default', 'src_ip_prefix')
     defData["dest_ip_prefix"] = config.get('default', 'dest_ip_prefix')
+    defData["natt_ip_prefix"] = config.get('default', 'natt_ip_prefix')
+    defData["natt_port"] = config.get('default', 'natt_port')
     defData["domain_count"] = config.getint('default', 'domain_count')
     defData["npm_count"] = config.getint('default', 'npm_count')
     defData["perf_mon_count"] = config.getint('default', 'perf_mon_count')
@@ -747,6 +871,10 @@ def main():
 
     sla_stats = SimulateSLAStats(flowData)
     sla_stats.generate_sla_stats(sla_flows,es_chunk_size)
+
+    natt_stats = SimulateNATTStats(flowData)
+    natt_stats.generate_natt_stats(startTime, endTime,es_chunk_size)
+    natt_stats.generate_natt_summary(startTime, endTime,es_chunk_size)
 
 
 if __name__ == '__main__':

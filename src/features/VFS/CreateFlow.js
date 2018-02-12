@@ -7,7 +7,7 @@ import { TwoColumnRow } from '../components';
 import {
     buildOptions,
     getDomainID,
-    isL3Domain, getEnterpriseID,
+    getEnterpriseID,
 } from './utils';
 
 import {
@@ -28,6 +28,7 @@ import {
     getDestinationNetworkItems,
     fetchSourceNetworkItems,
     fetchDestinationNetworkItems,
+    getSourceData,
 } from './actions';
 
 class CreateFlow extends React.Component {
@@ -174,12 +175,12 @@ class CreateFlow extends React.Component {
             l7applicationsignatures,
             resourceName,
         ) => {
-        const { getFieldError } = this.props;
+        const { getFieldError, protocolValue } = this.props;
         const mirrors = this.buildMirrorDestinations(mirrordestinations);
         const overlaymirrordestinationsField = this.buildOverlayMirrors(mirrordestinations, overlaymirrordestinations);
 
         const policyOptions = buildOptions(vfsPolicies);
-        if (!policyOptions || !Array.isArray(policyOptions)) {
+        if (!policyOptions || !Array.isArray(policyOptions) || protocolValue === '1') {
 
             if (vfsPolicies && vfsPolicies.isFetching) {
                 return (<div>Fetching...</div>);
@@ -188,7 +189,8 @@ class CreateFlow extends React.Component {
                 this.toggleError(true);
                 return vfsPolicies.error;
             }
-            return <div>No Virtual Firewall Policies Available</div>;
+            const errMsg = (protocolValue === '1') ? "ICMP is not yet supported" : 'No Virtual Firewall Policies Available';
+            return <div>{errMsg}</div>;
         }
         this.toggleError(false);
         const srcList = this.buildSourceField(source);
@@ -197,6 +199,7 @@ class CreateFlow extends React.Component {
 
         const l7Apps = this.buildL7AppField(l7applicationsignatures);
         const networkDestinations = getNetworkTypeOptions(resourceName);
+        const shouldDisplayDestPort = protocolValue === '6' || protocolValue === '17';
         return (
             <div>
                     <TwoColumnRow firstColumnProps={{
@@ -230,7 +233,7 @@ class CreateFlow extends React.Component {
                     onChange: (e) => this.resetFieldsOnChange(e, 'networkID')
                 }} />
                 { (srcList || destList) &&  <TwoColumnRow firstColumnProps={srcList} secondColumnProps={destList} /> }
-                { isL3Domain(resourceName) &&
+                { shouldDisplayDestPort &&
                     <TwoColumnRow secondColumnProps={{
                         name: 'destinationPort',
                         label: 'Destination Port',
@@ -315,7 +318,8 @@ class CreateFlow extends React.Component {
     initialValues = (data) => {
         const actions = data && data.type ? getSecurityPolicyActionsForValue(data.type) : [];
         const protocol = getNetworkProtocolForText(data.protocol);
-        const destPort = (protocol === '6' || protocol === '17') ? data && data.destinationport ? data.destinationport : '*' : null;
+        const destData = getSourceData(this.props);
+        const destPort = (protocol === '6' || protocol === '17') ? destData && destData.destinationport ? destData.destinationport : '*' : null;
 
         return ({
             protocol: protocol ? protocol : '6',

@@ -199,6 +199,9 @@ class MainMenuView extends React.Component {
                                     {this.renderNSGsMenu()}
                                 </div>
                             ]}
+                            leftIcon={
+                                <img style={style.iconMenu} src={`${process.env.PUBLIC_URL}/icons/icon-enterprise.png`} alt="N" />
+                            }
                         />
                     )
                 })}
@@ -270,10 +273,6 @@ const mapStateToProps = (state) => {
 const actionCreators = (dispatch) => ({
     onRequestChange: () => {
       dispatch(InterfaceActions.toggleMainMenu());
-    },
-
-    setPageTitle: (aTitle) => {
-      dispatch(InterfaceActions.updateTitle(aTitle));
     },
 
     goTo: function(link, context) {
