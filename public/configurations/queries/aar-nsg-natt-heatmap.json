@@ -3,7 +3,7 @@
     "title": "NAT-T Reachability HeatMap",
     "service": "elasticsearch",
     "query": {
-        "index": "{{index:nuage_nat-t}}",
+        "index": "{{index:nuage_natt}}",
         "type": "{{type:nuage_doc_type}}",
         "body": {
             "size": 0,
