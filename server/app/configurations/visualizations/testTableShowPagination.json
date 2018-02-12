@@ -1,0 +1,46 @@
+{
+    "id": "testTableShowPagination",
+    "graph": "Table",
+    "title": "Test Table Listeners",
+    "description": "Testing table graph",
+    "author": "Anil Chauhan",
+    "creationDate": "12/21/2016",
+    "query": "testTableShowPagination",
+    "data": {
+        "limit" : 25,
+        "hidePagination": true,
+        "columns": [
+            { "column": "country", "label": "Country"},
+            { "column": "nbMedals", "label": "Medals" },
+            { "column": "medalType", "label": "Medal" }
+        ]
+    },
+    "filterOptions": {
+        "Medal": {
+            "parameter": "medalType",
+            "default": "Gold",
+            "options": [
+                {
+                    "label": "Gold",
+                    "value": "Gold"
+                },
+                {
+                    "label": "Silver",
+                    "value": "Silver"
+                },
+                {
+                    "label": "Bronze",
+                    "value": "Bronze",
+                    "disabled": true
+                }
+            ]
+        }
+    },
+    "listeners": [
+        {
+            "redirect": "/dashboards/medals",
+            "params": {
+                "medalType": "medalType"
+            }
+    }]
+}

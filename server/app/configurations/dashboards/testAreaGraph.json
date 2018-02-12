@@ -1,0 +1,26 @@
+{
+    "id": "testAreaGraph",
+    "author": "Anil Chauhan",
+    "creationDate": "08/03/2017",
+    "title": "Test Area Graph",
+    "visualizations": [
+        {
+            "id": "test-area-graph",
+            "x": 0,
+            "y": 0,
+            "w": 6,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-area-stacked-graph",
+            "x": 6,
+            "y": 0,
+            "w": 6,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        }
+    ]
+}

@@ -116,7 +116,7 @@ export class FiltersToolBarView extends React.Component {
                 <div></div>
             );
         return (
-            <div className="text-right">
+            <div  className="text-right">
                 <ul className="list-inline" style={style.list}>
                 {
 
@@ -128,12 +128,14 @@ export class FiltersToolBarView extends React.Component {
                         return (
                             <li
                                 key={i}
-                                style={style.listItem}>
-                                <label style={style.label} htmlFor={name}>
+                                    
+                                    style={style.listItem} >
+                                <label style={style.label} htmlFor={name} >
                                     {name}
                                 </label>
                                 <DropDownMenu
                                     name={name}
+                                    className="filter-options"
                                     value={currentValue}
                                     style={style.dropdownMenu}
                                     disabled={configOptions.disabled}

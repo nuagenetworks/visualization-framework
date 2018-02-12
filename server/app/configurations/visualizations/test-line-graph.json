@@ -1,0 +1,26 @@
+{
+    "id": "test-line-graph",
+    "graph": "LineGraph",
+    "title": "LineGraph",
+    "description": "This line graph represents total no of ACL deny received for this domain over a period of specified time. By default it shows ACL Deny hits. One can select other ACL actions i.e from the drop down menu on this dashboard.",
+    "author": "Anil Chauhan",
+    "creationDate": "08/03/2017",
+    "data": {
+        "dateHistogram": true,
+        "xColumn": "timestamp",
+        "yColumn": "value",
+        "stroke": {
+          "color": "#f76159",
+          "width": "2px"
+        },
+        "xTickGrid": false,
+        "yTickGrid": true,
+        "yTickFormat": ".2s",
+        "xLabel": "Time",
+        "yLabel": "Total # ACL Hits",
+        "xColumn": "timestamp",
+        "yColumn": "value",
+        "brushEnabled": false
+    },
+    "query": "test-line-graph"
+}

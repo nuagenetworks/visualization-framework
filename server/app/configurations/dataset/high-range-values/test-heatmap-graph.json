@@ -1,0 +1,82 @@
+[
+    {
+        "timestamp": 1500883469000,
+        "Application": "Default Application",
+        "SlaStatus": "InSla"
+    },
+    {
+        "timestamp": 1500883469000,
+        "Application": "1 Application",
+        "SlaStatus": "OutSla"
+    },
+    {
+        "timestamp": 1500883469000,
+        "Application": "2 Application",
+        "SlaStatus": "1"
+    },
+    {
+        "timestamp": 1500883469000,
+        "Application": "3 Application",
+        "SlaStatus": "OutSla"
+    },
+    {
+        "timestamp": 1500883470000,
+        "Application": "Default Application",
+        "SlaStatus": "UnMonitored"
+    },
+    {
+        "timestamp": 1500883470000,
+        "Application": "1 Application",
+        "SlaStatus": "UnMonitored"
+    },
+    {
+        "timestamp": 1500883470000,
+        "Application": "2 Application",
+        "SlaStatus": "OutSla"
+    },
+    {
+        "timestamp": 1500883470000,
+        "Application": "3 Application",
+        "SlaStatus": "UnMonitored"
+    },
+    {
+        "timestamp": 1500883471000,
+        "Application": "Default Application",
+        "SlaStatus": "2"
+    },
+    {
+        "timestamp": 1500883471000,
+        "Application": "1 Application",
+        "SlaStatus": "InSla"
+    },
+    {
+        "timestamp": 1500883471000,
+        "Application": "2 Application",
+        "SlaStatus": "OutSla"
+    },
+    {
+        "timestamp": 1500883471000,
+        "Application": "3 Application",
+        "SlaStatus": "3"
+    },
+    {
+        "timestamp": 1500883472000,
+        "Application": "Default Application",
+        "SlaStatus": "OutSla"
+    },
+    {
+        "timestamp": 1500883472000,
+        "Application": "1 Application",
+        "SlaStatus": "OutSla"
+    },
+    {
+        "timestamp": 1500883472000,
+        "Application": "2 Application",
+        "SlaStatus": "InSla"
+    },
+    {
+        "timestamp": 1500883472000,
+        "Application": "3 Application",
+        "SlaStatus": "InSla"
+    }
+]

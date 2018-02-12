@@ -1,0 +1,42 @@
+{
+    "id":"vnf-status-linechart",
+    "title":"TBD",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_vnf}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query":{
+                "bool":{
+                    
+                }
+            },
+            "aggs": {
+                "ts": {
+                    "date_histogram": {
+                        "field": "timestamp",
+                        "interval": "{{interval:1h}}"
+                    },
+                    "aggs": {
+                        "CPU": {
+                            "avg": {
+                                "field": "cpu"
+                            }                                            
+                        },
+                        "MEMORY": {
+                            "avg": {
+                                "field": "memory"
+                            }                                            
+                        },
+                        "DISK": {
+                            "avg": {
+                                "field": "disk"
+                            }                                            
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

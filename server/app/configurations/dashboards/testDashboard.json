@@ -1,0 +1,99 @@
+{
+    "id": "testDashboard",
+    "author": "Anil Chauhan",
+    "creationDate": "08/03/2017",
+    "title": "Test Dashboard",
+    "visualizations": [
+        {
+            "id": "test-bar-graph",
+            "x": 0,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-table",
+            "x": 3,
+            "y": 0,
+            "w": 6,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-pie-graph",
+            "x": 9,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-chord-graph",
+            "x": 0,
+            "y": 15,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-simple-text-graph",
+            "x": 3,
+            "y": 15,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-line-graph",
+            "x": 6,
+            "y": 15,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12,
+            "graph": "LineGraph"
+        },
+        {
+            "id": "test-gauge-graph",
+            "x": 9,
+            "y": 15,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-multi-line-graph",
+            "x": 0,
+            "y": 30,
+            "w": 6,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-variation-text-graph",
+            "x": 6,
+            "y": 30,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-heatmap-graph",
+            "x": 0,
+            "y": 45,
+            "w": 6,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        }
+    ]
+}

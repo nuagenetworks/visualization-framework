@@ -1,0 +1,50 @@
+[
+    {
+        "ts": "1513598400000",
+        "CPU": "",
+        "DISK": "null",
+		"MEMORY":"undefined"
+    },
+    {
+        "ts": "1513602000000",
+        "CPU": "",
+        "DISK": "",
+		"MEMORY":"undefined"
+    },
+    {
+        "ts": "1513605600000",
+        "CPU": "",
+        "DISK": "",
+		"MEMORY":""
+    },
+    {
+        "ts": "1513609200000",
+        "CPU": "",
+        "DISK": "null",
+		"MEMORY":"undefined"
+    },
+    {
+        "ts": "1513612800000",
+        "CPU": "",
+        "DISK": "",
+		"MEMORY":"undefined"
+    },
+    {
+        "ts": "1513616400000",
+        "CPU": "",
+        "DISK": "null",
+		"MEMORY":""
+    },
+    {
+        "ts": "1513620000000",
+        "CPU": "",
+        "DISK": "",
+		"MEMORY":""
+    },
+    {
+        "ts": "1513623600000",
+        "CPU": "",
+        "DISK": "",
+		"MEMORY":"undefined"
+    }
+]

@@ -22,7 +22,6 @@ export default ({
       label
     } = {}
   }) => {
-
     /**
      * Sorting the array
      */

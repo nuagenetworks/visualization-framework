@@ -22,8 +22,7 @@ export const ActionKeyStore = {
       the configuration files will be fetched.
     */
     DASHBOARDS: "dashboards",
-    VISUALIZATIONS: "visualizations",
-    QUERIES: "queries"
+    VISUALIZATIONS: "visualizations"
 };
 
 /*
@@ -35,7 +34,6 @@ export const ActionKeyStore = {
 
         ActionKeyStore.DASHBOARDS
         ActionKeyStore.VISUALIZATIONS
-        ActionKeyStore.QUERIES
 */
 function fetch (id, configType) {
 
@@ -92,6 +90,7 @@ function didStartRequest (id, configType) {
         configType: configType
     };
 };
+
 function didReceiveResponse (id, configType, data) {
     return {
         type: ActionTypes.CONFIG_DID_RECEIVE_RESPONSE,
@@ -100,6 +99,7 @@ function didReceiveResponse (id, configType, data) {
         data: data
     };
 };
+
 function didReceiveError (id, configType, error) {
     return {
         type: ActionTypes.CONFIG_DID_RECEIVE_ERROR,

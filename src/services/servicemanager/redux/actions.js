@@ -37,43 +37,44 @@ function executeScript(scriptName, context) {
     }
 }
 
-
 /*
     Make a query on the service based on the service name.
-
     Arguments:
     * query: the query configuration
     * context: the context if the query should be parameterized
     * forceCache: a boolean to force storing the value for a long period
 */
-function fetch(query, context, forceCache) {
-    let service = ServiceManager.getService(query.service);
+function fetch({queryConfiguration, context, configuration, forceCache}) {
+
+    let service = ServiceManager.getService(queryConfiguration.service);
 
     return (dispatch, getState) => {
-        let requestID = service.getRequestID(query, context);
+        let requestID = service.getRequestID(queryConfiguration, context);
 
         if (context) {
-            const pQuery = parameterizedConfiguration(query, context);
+            const pQuery = parameterizedConfiguration(queryConfiguration, context);
 
             if (pQuery)
-                query = pQuery;
+               queryConfiguration = pQuery;
             else
-                return Promise.reject("Provided context does not allow to parameterized query " + query.id);
+                return Promise.reject("Provided context does not allow to parameterized query " + configuration.id);
         }
 
         dispatch(didStartRequest(requestID));
 
-        return service.fetch(query, getState())
+        return ServiceManager.fetchData(configuration.id, queryConfiguration, context)
             .then(
             (results) => {
-                const data = ServiceManager.tabify(query, results);
+
+                const data = ServiceManager.tabify(queryConfiguration, results);
+
                 dispatch(didReceiveResponse(requestID, data));
                 return Promise.resolve(data);
             },
             (error) => {
                 if (process.env.NODE_ENV === "development" && service.hasOwnProperty("getMockResponse")) {
                     try {
-                        const response = service.getMockResponse(query);
+                        const response = service.getMockResponse(queryConfiguration);
                         dispatch(didReceiveResponse(requestID, response, forceCache));
                     } catch(e) {
                         dispatch(didReceiveError(requestID, e, forceCache));
@@ -101,17 +102,26 @@ function shouldFetch(request) {
     return !request.get(ActionKeyStore.IS_FETCHING) && currentDate > expireDate;
 }
 
-function fetchIfNeeded(query, context, forceCache) {
 
-    // TODO: Temporary - Replace this part in the middleware
-    const isScript = typeof(query) === "string";
+/*
+    Make a request on the service based on the service name.
+
+    Arguments:
+    * query: the visualization configuration
+    * context: the context if the query should be parameterized
+    * queryConfiguration" : the query configuration
+    * forceCache: a boolean to force storing the value for a long period
+*/
+
+function fetchIfNeeded(queryConfiguration, context = {}, configuration = {}, forceCache = false) {
+    const isScript = configuration.query ? false : true;
     let requestID;
 
-    if (isScript)
-        requestID = ServiceManager.getRequestID(query, context);
-    else {
-        let service = ServiceManager.getService(query.service);
-        requestID = service.getRequestID(query, context);
+    if (isScript) {
+        requestID = ServiceManager.getRequestID(queryConfiguration, context);
+    } else {
+        let service = ServiceManager.getService(queryConfiguration.service);
+        requestID = service.getRequestID(queryConfiguration, context);
     }
 
     return (dispatch, getState) => {
@@ -119,16 +129,13 @@ function fetchIfNeeded(query, context, forceCache) {
             return Promise.reject();
 
         const state = getState(),
-              request = state.services.getIn([ActionKeyStore.REQUESTS, requestID]);
+            request = state.services.getIn([ActionKeyStore.REQUESTS, requestID]);
 
         if (shouldFetch(request)) {
-            if (isScript)
-                return dispatch(executeScript(query, context, forceCache));
-            else
-                return dispatch(fetch(query, context, forceCache));
+            return dispatch(fetch({queryConfiguration, context, configuration, forceCache}))
 
         } else {
-            return Promise.resolve();
+            return Promise.resolve()
         }
     }
 }

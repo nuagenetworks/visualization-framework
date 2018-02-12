@@ -139,7 +139,7 @@ export default class HeatmapGraph extends XYGraph {
         let xValues = extent(data, xLabelFn);
         const xPadding = distXDatas.length > 1 ? ((xValues[1] - xValues[0]) / (distXDatas.length - 1)) / 2 : 1;
 
-        let boxSize = min([xBandScale.bandwidth(), yBandScale.bandwidth()]);
+        let boxSize = min([xBandScale.bandwidth(), yBandScale.bandwidth()]) * 0.9;
 
         availableHeight = boxSize * distYDatas.length;
         availableWidth  = boxSize * distXDatas.length;
@@ -177,7 +177,7 @@ export default class HeatmapGraph extends XYGraph {
 
         let xTitlePosition = {
             left: leftMargin + availableWidth / 2,
-            top: margin.top + availableHeight + (chartHeightToPixel * 2) + xAxisHeight
+            top: margin.top + availableHeight + chartHeightToPixel + xAxisHeight
         }
 
         let yTitlePosition = {

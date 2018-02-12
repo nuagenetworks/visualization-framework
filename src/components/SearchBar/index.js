@@ -70,7 +70,7 @@ export default class SearchBar extends React.Component {
 
         this.setTimeout = setTimeout(() => {
             const filteredData = new AdvancedResultProcessing(options, columns).process(data, expressions)
-            this.props.handleSearch(filteredData)
+            this.props.handleSearch(filteredData, this.state.query)
         }, 1000)
     }
 

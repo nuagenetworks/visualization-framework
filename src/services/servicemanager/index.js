@@ -1,9 +1,14 @@
 import { ElasticSearchService } from "../../configs/nuage/elasticsearch/index";
 import { VSDService } from "../../configs/nuage/vsd/index";
 import { MemoryService } from "../memory";
+import { DatasetService } from "../dataset";
+
+import "whatwg-fetch";
+import { checkStatus, parseJSON } from "../common";
 
 let config = {
     timingCache: 30000,
+    api: process.env.REACT_APP_API_URL || "http://localhost:8010/middleware/api/",
 }
 
 /*
@@ -12,7 +17,8 @@ let config = {
 let services = {
     elasticsearch: ElasticSearchService,
     VSD: VSDService,
-    memory: MemoryService
+    memory: MemoryService,
+    dataset: DatasetService
 };
 
 /*
@@ -56,19 +62,17 @@ const getRequestID = function (queryConfiguration, context) {
     return service.getRequestID(queryConfiguration, context);
 }
 
+
 /*
     Tabify the results according to the service that has been used
-
     Arguments:
     * serviceName: the service name
     * response: the response results
-
     Returns:
         An array of results
 */
 const tabify = function (queryConfiguration, response) {
     const serviceName = queryConfiguration ? queryConfiguration.service : "VSD"; // In case of scripts...
-
     const service = getService(serviceName)
 
     if (!service || !service.hasOwnProperty("tabify"))
@@ -76,7 +80,6 @@ const tabify = function (queryConfiguration, response) {
 
     return service.tabify(response);
 }
-
 
 // TODO: Temporary - Replace this part in the middleware
 const executeScript = function (scriptName, context) {
@@ -90,12 +93,37 @@ const executeScript = function (scriptName, context) {
     return false;
 }
 
+const fetchData = function(visualizationId = null, query = {}, context) {
+
+    let url,
+        body = {
+        context
+    }
+
+    if(!query.id && query.service === 'VSD') {
+        url = `${config.api}visualizations/fetch/vsd`;
+        body['query'] = query
+    } else {
+        url = `${config.api}visualizations/fetch/${visualizationId}/${query.id}`
+    }
+
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    })
+        .then(checkStatus)
+        .then(parseJSON);
+    }
 
 export const ServiceManager = {
-    config: config,
-    register: register,
-    getService: getService,
-    getRequestID: getRequestID,
-    executeScript: executeScript,
-    tabify: tabify,
+    config,
+    register,
+    getService,
+    getRequestID,
+    executeScript,
+    tabify,
+    fetchData
 }

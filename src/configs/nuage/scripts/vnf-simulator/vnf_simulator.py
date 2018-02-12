@@ -37,6 +37,7 @@ def writeToES(es_data):
 	# Start with 24 hours a go
 	startTime = int(time.time()) * 1000 - (24 * 60 * 60 * 1000)
 	for i in range(1440):
+		es_data['enterpriseName'] = 'enterprise-1';
 		es_data['timestamp'] = startTime + (i * 300000)
 		es_data['cpu'] = random.randint(0, 100)
 		es_data['memory'] = random.randint(0, 100)

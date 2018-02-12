@@ -1,0 +1,10 @@
+{
+    "id":"medalsTable",
+    "title":"Country Medals",
+    "service":"memory",
+    "query": {
+        "year": "{{year:2012}}",
+        "medalType": "{{medalType:Gold}}"
+    },
+    "sortBy": "nbMedals desc"
+}

@@ -12,7 +12,7 @@ let config = function () {
     return {
         host: null,
         log: 'trace',
-        apiVersion: '2.2'   
+        apiVersion: '2.2'
     }
 }
 
@@ -35,9 +35,9 @@ let ESClient = function (state) {
 }
 
 const fetch = function (queryConfiguration, state) {
-  
-    if (client == null) { 
-        client = ESClient(state) ; 
+
+    if (client == null) {
+        client = ESClient(state)
     }
 
     if (!client)
@@ -73,7 +73,7 @@ const ping = function (queryConfiguration, state) {
                 console.error(error.body.error.reason + ": " + error.body.error["resource.id"])
                 reject(ERROR_MESSAGE);
             }
-                
+
         });
     });
 }

@@ -1,4 +1,4 @@
-import parse from "../utils/helpers/json_templates"
+import parse from "../utils/helpers/jsonTemplates"
 import translator from "../utils/translators"
 
 /**

@@ -22,6 +22,7 @@ The philosophy of the Visualization Framework is to provide a library to quickly
       - [VariationTextGraph](#variationtextgraph)
   - [Query configuration](#query-configuration)
 - [Services](#services)
+- [Testing Configuration](#testing-configuration)
 
 
 ## File structure
@@ -337,6 +338,8 @@ Display nice Pie or Donut graphs
 
 - **highlight** (Array of columns) Highlighted the rows if value of columns is not null
 - **hidePagination** Hide paging and search bar if data size is less than pagination limit - Default is `true`
+- **searchBar** Default is `true`
+- **searchText** Give column name === value,
 - **border**
   - **top** set top border. Default is `solid 1px #ccc`
   - **bottom** set bottom border. Default is `0`
@@ -398,6 +401,9 @@ The query configuration allows the Visualization to know which [service](#servic
 }
 ```
 
+  
+  
+    
 Important note: The visualization framework is using a `context` to determine all the information needed.
 If you need to pass a specific parameter, check out this example:
 
@@ -462,3 +468,36 @@ Just tell `ServiceManager` that you want to register the service using the follo
 ```
 
 The second argument is optional. If you do not provide a name, the service identifier will be automatically used.
+
+## Testing configuration
+### Installation Procedure
+
+1.Install **ChromeDriver** and **Selenium** on your machine.
+For reference, please follow the link for installation [install-chromedriver-selenium](https://gist.github.com/ziadoz/3e8ab7e944d02fe872c3454d17af31a5)
+    
+### Run tests
+1.Go to testing url http://localhost:3000/testing/ and click button **New Report** to start generating report.
+    
+![reports](https://user-images.githubusercontent.com/14901092/31492666-ba459f0e-af69-11e7-993a-5474cbc36e26.png)
+
+2.**Status column** will show **EXECUTING** status of that report. Keep on running this report until status changes to **COMPLETED**.
+
+3.We can also add as many **dashboards** in our testing platform by adding name of the dashboard in **name column** and associated **url** of the dashboard to test in **t_dashboards table**.
+![t_dashboards](https://user-images.githubusercontent.com/14901092/31498449-9057203a-af7f-11e7-887b-4167fad7f78f.png)
+
+4.We will fetch all the charts using the **url** column of **t_dashboards table** like **http://localhost:3000/dashboards/aarDomain**.
+
+5.If we want to add any scenario to the url of the dashboard just add query string like given in this url, **http://localhost:3000/dashboards/testDashboard?dataset=Scenario1**
+
+6.We will test visualization frameworks for different scenarios by adding multiple scenarios in **datafile column** of **t_dashboard_datasets** table.
+![t_dashboard_datasets](https://user-images.githubusercontent.com/14901092/31498636-26de4844-af80-11e7-8ce5-7a744fb9b690.png)
+
+Then url will look like below:
+**http://localhost:3000/dashboards/testDashboard?dataset=Scenario1**
+This will fetch all the scenarios given in **Scenario1** folder like given below :
+**[/visualization-framework/server/app/configurations/dataset/Scenario1/test-bar-graph.json]**
+
+
+7.When we run testing report it will save all the **screenshots** having directory structure in the form of **[report_id/dashboard_id/dataset_id/name_of_the_chart.png]** in **[/server/public/dashboards]** folder.
+    
+![report_deatil](https://user-images.githubusercontent.com/14901092/31492664-b9b1124e-af69-11e7-960e-c13036da4463.png)

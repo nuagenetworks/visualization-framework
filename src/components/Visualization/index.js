@@ -65,6 +65,7 @@ class VisualizationView extends React.Component {
             showInDashboard
         } = this.props;
 
+        this.initialize(this.props.id);
         this.updateSize();
 
         // If present, register the resize callback
@@ -121,43 +122,18 @@ class VisualizationView extends React.Component {
 
         this.props.fetchConfigurationIfNeeded(id).then((c) => {
             const {
-                configuration,
-                showInDashboard,
-                setPageTitle
+                configuration
             } = this.props;
 
-            if (!configuration)
+            if (!configuration || !configuration.id)
                 return;
 
-            const queryName  = configuration.query,
-                  scriptName = configuration.script;
+            const { context, queryConfiguration, executeIfNeeded } = this.props;
 
-            if (scriptName) {
-                const { executeScriptIfNeeded, context } = this.props;
-                executeScriptIfNeeded(scriptName, context);
-            }
-
-            if (queryName) {
-
-                const queries =  typeof queryName === 'string' ? {'data' : queryName} : queryName
-
-                for(let query in queries) {
-                    if (queries.hasOwnProperty(query)) {
-                        this.props.fetchQueryIfNeeded(queries[query]).then(() => {
-
-                            const { queryConfigurations, executeQueryIfNeeded, context } = this.props;
-
-                            if(!queryConfigurations[query]) {
-                                return
-                            }
-
-                            executeQueryIfNeeded(queryConfigurations[query], context).then(
-                                () => {
-                                },
-                                (error) => {
-                                }
-                            );
-                        });
+            if(queryConfiguration) {
+                for(let query in queryConfiguration) {
+                    if (queryConfiguration.hasOwnProperty(query)) {
+                        executeIfNeeded(configuration, context, queryConfiguration[query])
                     }
                 }
             }
@@ -294,7 +270,6 @@ class VisualizationView extends React.Component {
                 }
             }
         }
-
 
         let graphHeight = d3.select(`#filter_${id}`).node() ? this.state.height - d3.select(`#filter_${id}`).node().getBoundingClientRect().height : this.state.height;
         return (
@@ -533,6 +508,7 @@ class VisualizationView extends React.Component {
               style={Object.assign({}, style.card, configStyle.card)}
               containerStyle={style.cardContainer}
               ref={this.cardTextReference}
+              id={id}
             >
                 { this.renderTitleBarIfNeeded() }
                 <div>
@@ -583,8 +559,8 @@ const updateFilterOptions = (state, configurations, context) => {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    //Fetching Configurations of Visualizations
 
+    //Fetching Configurations of Visualizations
     const configurationID = ownProps.id || ownProps.params.id,
           orgContext = state.interface.get(InterfaceActionKeyStore.CONTEXT),
           configuration = state.configurations.getIn([
@@ -631,32 +607,16 @@ const mapStateToProps = (state, ownProps) => {
     //If configuratrions of visualizations fetched proceed to query configurations
     if (props.configuration && props.configuration.query) {
 
-        const queries =  typeof props.configuration.query === 'string' ? {'data' : props.configuration.query} : props.configuration.query
-
+        props.queryConfiguration =  configuration.get('queryConfiguration') ? configuration.get('queryConfiguration').toJS() : null
         //Checking whether all the queries configurations has been fetched
-        for(let query in queries) {
-            if (queries.hasOwnProperty(query)) {
-                let queryConfiguration = state.configurations.getIn([
-                    ConfigurationsActionKeyStore.QUERIES,
-                    queries[query]
-                ]);
-
-                if (queryConfiguration && !queryConfiguration.get(
-                    ConfigurationsActionKeyStore.IS_FETCHING
-                )) {
-                    queryConfiguration = queryConfiguration.get(
-                        ConfigurationsActionKeyStore.DATA
-                    );
-                    props.queryConfigurations[query] = queryConfiguration ? queryConfiguration.toJS() : null;
-
-                }
+        for(let query in props.queryConfiguration) {
+            if (props.queryConfiguration.hasOwnProperty(query)) {
 
                 const scriptName = configuration.get("script");
-
                 // Expose received response if it is available
-                if (props.queryConfigurations[query] || scriptName) {
+                if (props.queryConfiguration[query] || scriptName) {
 
-                    const requestID = ServiceManager.getRequestID(props.queryConfigurations[query] || scriptName, context);
+                   const requestID = ServiceManager.getRequestID(props.queryConfiguration[query] || scriptName, context);
 
                     if(typeof requestID === 'undefined') {
                         props.hideGraph = true
@@ -672,6 +632,7 @@ const mapStateToProps = (state, ownProps) => {
                         }
 
                         if (response && !response.get(ServiceActionKeyStore.IS_FETCHING)) {
+
                             let responseJS = response.toJS();
                             if(responseJS.error) {
                                 props.error = responseJS.error;
@@ -685,10 +646,9 @@ const mapStateToProps = (state, ownProps) => {
             }
         }
 
-        if(successResultCount === Object.keys(queries).length ) {
+        if(successResultCount === Object.keys(props.queryConfiguration).length ) {
             props.isFetching = false
         }
-
     }
 
     return props;
@@ -711,19 +671,8 @@ const actionCreators = (dispatch) => ({
         ));
     },
 
-    fetchQueryIfNeeded: function(id) {
-        return dispatch(ConfigurationsActions.fetchIfNeeded(
-            id,
-            ConfigurationsActionKeyStore.QUERIES
-        ));
-    },
-
-    executeQueryIfNeeded: function(queryConfiguration, context) {
-        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context));
-    },
-
-    executeScriptIfNeeded: function(scriptName, context) {
-        return dispatch(ServiceActions.fetchIfNeeded(scriptName, context));
+    executeIfNeeded: function(configuration, context, queryConfiguration) {
+        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context, configuration));
     }
 
  });

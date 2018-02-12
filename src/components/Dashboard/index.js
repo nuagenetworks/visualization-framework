@@ -20,6 +20,7 @@ import {
 } from "../../services/configurations/redux/actions";
 
 import {
+    Actions as InterfaceActions,
     ActionKeyStore as InterfaceActionKeyStore
 } from "../App/redux/actions";
 
@@ -27,7 +28,11 @@ import { contextualize } from "../../utils/configurations"
 
 import { defaultFilterOptions } from "./default.js"
 
+import { Card } from 'material-ui/Card';
+
 import style from "./styles";
+import visualizationStyle from "../Visualization/styles"
+
 import "./style.css";
 
 export class DashboardView extends React.Component {
@@ -95,6 +100,11 @@ export class DashboardView extends React.Component {
         if (!params.id)
             return;
 
+        /*console.log(this.props.id);
+        this.props.updateContext({
+          "dashboard": this.props.id
+        })*/
+
         fetchConfigurationIfNeeded(params.id);
     }
 
@@ -161,7 +171,11 @@ export class DashboardView extends React.Component {
 
         if (error) {
             return (
-                <div>{error}</div>
+                <Card
+                  style={Object.assign({}, visualizationStyle.card)}
+                  >
+                  <div>Oops, Configuration Error: {error}</div>
+                </Card>
             );
         }
 
@@ -212,6 +226,7 @@ export class DashboardView extends React.Component {
                                             id={visualization.id}
                                             registerResize={this.registerResize.bind(this)}
                                             showInDashboard={true}
+                                            configuration={visualization}
                                         />
                                     </div>
                                 )
@@ -258,6 +273,10 @@ const actionCreators = (dispatch) => ({
 
     setPageTitleIcon: (aTitleIcon) => {
         dispatch(AppActions.updateTitleIcon(aTitleIcon));
+    },
+
+    updateContext: function(context) {
+        dispatch(InterfaceActions.updateContext(context));
     },
 
     fetchConfigurationIfNeeded: (id) => {
