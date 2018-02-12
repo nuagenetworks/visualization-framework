@@ -110,7 +110,7 @@ class SimulateAARData(object):
             applist = []
             applist.append(appids[i])
             if i==self.app_group_count-1:
-                applist.append(appids[i+1:])
+                applist.extend(appids[i+1:])
             #while cnt < app_count:
             #   app_index = random.randrange(0, len(appids) - 1, 1)
             #   applist.append(appids[app_index])
