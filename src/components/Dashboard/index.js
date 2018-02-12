@@ -12,13 +12,13 @@ import Visualization from "../Visualization";
 import FiltersToolBar from "../FiltersToolBar";
 
 import {
-    Actions as ConfigurationsActions,
-    ActionKeyStore as ConfigurationsActionKeyStore
+  Actions as ConfigurationsActions,
+  ActionKeyStore as ConfigurationsActionKeyStore
 } from "../../services/configurations/redux/actions";
 
 import {
-    ActionKeyStore as InterfaceActionKeyStore,
-    Actions as AppActions
+  ActionKeyStore as InterfaceActionKeyStore,
+  Actions as AppActions
 } from "../App/redux/actions";
 
 import { contextualize } from "../../utils/configurations"
@@ -30,313 +30,313 @@ import "./style.css";
 
 export class DashboardView extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.resizeCallbacks = []
-        this.visualizationStatus = {}
-        this.state = {
-            hideViz: false
-        }
-
-        this.updateVisualization = this.updateVisualization.bind(this)
+  constructor(props) {
+    super(props);
+    this.resizeCallbacks = []
+    this.visualizationStatus = {}
+    this.state = {
+      hideViz: false
     }
 
-    componentWillMount() {
-        this.props.setPageTitle("Dashboard");
-        this.updateConfiguration();
-    }
+    this.updateVisualization = this.updateVisualization.bind(this)
+  }
 
-    componentWillUnmount() {
-        this.resizeCallbacks = null;
-    }
+  componentWillMount() {
+    this.props.setPageTitle("Dashboard");
+    this.updateConfiguration();
+  }
 
-    componentWillReceiveProps(nextProps) {
-        const {
+  componentWillUnmount() {
+    this.resizeCallbacks = null;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {
             configuration
         } = nextProps
 
-        if(configuration) {
-            let vizList = {}
-            const {visualizations} = configuration.toJS()
-            const prevConfiguration = this.props.configuration? this.props.configuration.toJS() : {}
+    if (configuration) {
+      let vizList = {}
+      const { visualizations } = configuration.toJS()
+      const prevConfiguration = this.props.configuration ? this.props.configuration.toJS() : {}
 
-            // Update all visualizations status "true" on first load
-            if(visualizations && visualizations.length && JSON.stringify(prevConfiguration.visualizations) !== JSON.stringify(visualizations)) {
-                this.visualizationStatus = {}
-                this.setState({ hideViz: false})
+      // Update all visualizations status "true" on first load
+      if (visualizations && visualizations.length && JSON.stringify(prevConfiguration.visualizations) !== JSON.stringify(visualizations)) {
+        this.visualizationStatus = {}
+        this.setState({ hideViz: false })
 
-                visualizations.forEach( d => {
-                    this.visualizationStatus[d.id] = true
-                })
-            }
-        }
+        visualizations.forEach(d => {
+          this.visualizationStatus[d.id] = true
+        })
+      }
     }
+  }
 
-    componentDidUpdate(prevProps) {
-        this.updateTitleIfNecessary(prevProps);
-        this.updateTitleIconIfNecessary(prevProps);
-        this.updateConfiguration();
-    }
+  componentDidUpdate(prevProps) {
+    this.updateTitleIfNecessary(prevProps);
+    this.updateTitleIconIfNecessary(prevProps);
+    this.updateConfiguration();
+  }
 
-    currentTitle() {
-        const {
+  currentTitle() {
+    const {
             configuration,
-            context
+      context
         } = this.props;
-        const title = configuration.get("title");
+    const title = configuration.get("title");
 
-        if (!title)
-            return ;
+    if (!title)
+      return;
 
-        return contextualize(title, context);
-    }
+    return contextualize(title, context);
+  }
 
 
-    updateTitleIfNecessary(prevProps) {
-        const { configuration, setPageTitle } = this.props;
+  updateTitleIfNecessary(prevProps) {
+    const { configuration, setPageTitle } = this.props;
 
-        if (!configuration)
-            return;
+    if (!configuration)
+      return;
 
-        setPageTitle(this.currentTitle() || 'Dashboard');
-    }
+    setPageTitle(this.currentTitle() || 'Dashboard');
+  }
 
-    updateTitleIconIfNecessary(prevProps) {
-        const { configuration, setPageTitleIcon } = this.props;
+  updateTitleIconIfNecessary(prevProps) {
+    const { configuration, setPageTitleIcon } = this.props;
 
-        if (!configuration)
-            return;
+    if (!configuration)
+      return;
 
-        const titleIcon = configuration.get("titleIcon");
+    const titleIcon = configuration.get("titleIcon");
 
-        if (!titleIcon)
-            return ;
+    if (!titleIcon)
+      return;
 
-        setPageTitleIcon(titleIcon);
-    }
+    setPageTitleIcon(titleIcon);
+  }
 
-    updateConfiguration() {
-        const {
+  updateConfiguration() {
+    const {
             params,
-            fetchConfigurationIfNeeded
+      fetchConfigurationIfNeeded
         } = this.props
 
-        if (!params.id)
-            return;
+    if (!params.id)
+      return;
 
-        fetchConfigurationIfNeeded(params.id)
-    }
+    fetchConfigurationIfNeeded(params.id)
+  }
 
-    onResize() {
-        this.resizeCallbacks.forEach((callback) => callback());
-    }
+  onResize() {
+    this.resizeCallbacks.forEach((callback) => callback());
+  }
 
-    registerResize(callback){
-        this.resizeCallbacks.push(callback);
-    }
+  registerResize(callback) {
+    this.resizeCallbacks.push(callback);
+  }
 
-    renderNavigationBarIfNeeded() {
-        const {
+  renderNavigationBarIfNeeded() {
+    const {
             configuration,
-            context,
-            filterContext
+      context,
+      filterContext
         } = this.props;
 
-        const links = configuration.get("links");
+    const links = configuration.get("links");
 
-        if (!links || links.count() === 0)
-            return;
+    if (!links || links.count() === 0)
+      return;
 
-        const currentUrl = window.location.pathname;
-        let contextWithFilter = Object.assign({}, context, filterContext)
+    const currentUrl = window.location.pathname;
+    let contextWithFilter = Object.assign({}, context, filterContext)
 
-        return (
-            <div style={style.navigationContainer}>
-                <ul className="list-inline" style={style.linksList}>
-                    {links.map((link, index) => {
+    return (
+      <div style={style.navigationContainer}>
+        <ul className="list-inline" style={style.linksList}>
+          {links.map((link, index) => {
 
-                        let targetURL = process.env.PUBLIC_URL + link.get("url");
-                        let highlight = currentUrl === link.get("url") ? style.activeLink : style.link;
+            let targetURL = process.env.PUBLIC_URL + link.get("url");
+            let highlight = currentUrl === link.get("url") ? style.activeLink : style.link;
 
-                        return <li key={index}
-                                   style={highlight}
-                                   >
-                                    <Link to={{ pathname:targetURL, query: contextWithFilter}}
-                                    style={style.noneTextDecoration}
-                                    >
-                                        {link.get("label")}
-                                    </Link>
-                               </li>;
-                    })}
-                </ul>
-            </div>
-        );
-    }
+            return <li key={index}
+              style={highlight}
+            >
+              <Link to={{ pathname: targetURL, query: contextWithFilter }}
+                style={style.noneTextDecoration}
+              >
+                {link.get("label")}
+              </Link>
+            </li>;
+          })}
+        </ul>
+      </div>
+    );
+  }
 
-    updateVisualization(id) {
-        if(this.visualizationStatus.hasOwnProperty(id)) {
-            this.visualizationStatus[id] = false
+  updateVisualization(id) {
+    if (this.visualizationStatus.hasOwnProperty(id)) {
+      this.visualizationStatus[id] = false
 
-            let hideViz = true
-            for (let index in this.visualizationStatus) {
-                if(this.visualizationStatus.hasOwnProperty(index) && this.visualizationStatus[index] === true) {
-                    hideViz = false
-                }
-            }
-
-            if(hideViz) {
-                this.setState({hideViz})
-            }
+      let hideViz = true
+      for (let index in this.visualizationStatus) {
+        if (this.visualizationStatus.hasOwnProperty(index) && this.visualizationStatus[index] === true) {
+          hideViz = false
         }
+      }
 
+      if (hideViz) {
+        this.setState({ hideViz })
+      }
     }
 
-    renderVisualizationIfNeeded(visualizations, verticalCompact) {
+  }
 
-        const {
+  renderVisualizationIfNeeded(visualizations, verticalCompact) {
+
+    const {
             params
         } = this.props
 
-        return (
-            <div style={style.gridContainer}>
-                <ResponsiveReactGridLayout
-                    rowHeight={10}
-                    margin={[12,12]}
-                    containerPadding={[10, 10]}
-                    onResize={this.onResize.bind(this)}
-                    onLayoutChange={this.onResize.bind(this)}
-                    verticalCompact={verticalCompact}
-                    >
-                    {
-                        visualizations.map((visualization) =>
-                            <div
-                                key={visualization.id}
-                                data-grid={visualization}
-                            >
-                                <Visualization
-                                    id={visualization.id}
-                                    registerResize={this.registerResize.bind(this)}
-                                    showInDashboard={true}
-                                    updateVisualization={this.updateVisualization}
-                                />
-                            </div>
-                        )
-                    }
-                </ResponsiveReactGridLayout>
-            </div>
-        )
-    }
+    return (
+      <div style={style.gridContainer}>
+        <ResponsiveReactGridLayout
+          rowHeight={10}
+          margin={[12, 12]}
+          containerPadding={[10, 10]}
+          onResize={this.onResize.bind(this)}
+          onLayoutChange={this.onResize.bind(this)}
+          verticalCompact={verticalCompact}
+        >
+          {
+            visualizations.map((visualization) =>
+              <div
+                key={visualization.id}
+                data-grid={visualization}
+              >
+                <Visualization
+                  id={visualization.id}
+                  registerResize={this.registerResize.bind(this)}
+                  showInDashboard={true}
+                  updateVisualization={this.updateVisualization}
+                />
+              </div>
+            )
+          }
+        </ResponsiveReactGridLayout>
+      </div>
+    )
+  }
 
-    renderMessage(message) {
-        return (
-            <div style={{display: "table", width: screen.availWidth, height: screen.availHeight - 200}}>
-                <div className="center-content" style={{fontSize: '18px', fontWeight: 500, color:"rgb(107, 107, 107)"}}>
-                   {message}
-                </div>
-            </div>
-        )
-    }
+  renderMessage(message) {
+    return (
+      <div style={{ display: "table", width: screen.availWidth, height: screen.availHeight - 200 }}>
+        <div className="center-content" style={{ fontSize: '18px', fontWeight: 500, color: "rgb(107, 107, 107)" }}>
+          {message}
+        </div>
+      </div>
+    )
+  }
 
-    render() {
-        const { configuration,
-                error,
-                fetching,
-                params
+  render() {
+    const { configuration,
+      error,
+      fetching,
+      params
         } = this.props;
 
-        if (fetching) {
-            let loaderMessage = (<div>
-                <CircularProgress color="#eeeeee"/>
-                This dashboard component is loading the configuration file...
+    if (fetching) {
+      let loaderMessage = (<div>
+        <CircularProgress color="#eeeeee" />
+        This dashboard component is loading the configuration file...
             </div>)
-            return this.renderMessage(loaderMessage);
-        }
-
-        if (error) {
-            return this.renderMessage(error);
-        }
-
-        if (configuration) {
-            const { visualizations, settings } = configuration.toJS();
-
-            let verticalCompact = true;
-            if(settings && "verticalCompact" in settings) {
-              verticalCompact = settings.verticalCompact;
-            }
-
-            let message = null
-            if(this.state.hideViz) {
-                message =  this.renderMessage('Oops, something went wrong')
-            }
-
-            let filterOptions;
-
-            if (configuration.get("defaultFilterOptionsOverride")) {
-                filterOptions = configuration.get("defaultFilterOptionsOverride").toJS();
-            } 
-            else {
-                if (configuration.get("filterOptions")) {
-                    filterOptions = Object.assign({}, defaultFilterOptions, configuration.get("filterOptions").toJS());
-                }
-                else {
-                    filterOptions = defaultFilterOptions;
-                }
-            }
-
-            return (
-                <div>
-                    {this.renderNavigationBarIfNeeded()}
-                    <FiltersToolBar filterOptions={filterOptions} />
-                    <Tooltip className='tooltip-container'/>
-                    {message || this.renderVisualizationIfNeeded(visualizations, verticalCompact)}
-                </div>
-            );
-        }
-
-        return this.renderMessage('No dashboard')
+      return this.renderMessage(loaderMessage);
     }
+
+    if (error) {
+      return this.renderMessage(error);
+    }
+
+    if (configuration) {
+      const { visualizations, settings } = configuration.toJS();
+
+      let verticalCompact = true;
+      if (settings && "verticalCompact" in settings) {
+        verticalCompact = settings.verticalCompact;
+      }
+
+      let message = null
+      if (this.state.hideViz) {
+        message = this.renderMessage('Unable to fetch data')
+      }
+
+      let filterOptions;
+
+      if (configuration.get("defaultFilterOptionsOverride")) {
+        filterOptions = configuration.get("defaultFilterOptionsOverride").toJS();
+      }
+      else {
+        if (configuration.get("filterOptions")) {
+          filterOptions = Object.assign({}, defaultFilterOptions, configuration.get("filterOptions").toJS());
+        }
+        else {
+          filterOptions = defaultFilterOptions;
+        }
+      }
+
+      return (
+        <div>
+          {this.renderNavigationBarIfNeeded()}
+          <FiltersToolBar filterOptions={filterOptions} />
+          <Tooltip className='tooltip-container' />
+          {message || this.renderVisualizationIfNeeded(visualizations, verticalCompact)}
+        </div>
+      );
+    }
+
+    return this.renderMessage('No dashboard')
+  }
 }
 
 
 const mapStateToProps = (state, ownProps) => ({
-    context: state.interface.get(InterfaceActionKeyStore.CONTEXT),
+  context: state.interface.get(InterfaceActionKeyStore.CONTEXT),
 
-    filterContext: state.interface.get(InterfaceActionKeyStore.FILTER_CONTEXT),
+  filterContext: state.interface.get(InterfaceActionKeyStore.FILTER_CONTEXT),
 
-    configuration: state.configurations.getIn([
-        ConfigurationsActionKeyStore.DASHBOARDS,
-        ownProps.params.id,
-        ConfigurationsActionKeyStore.DATA
-    ]),
+  configuration: state.configurations.getIn([
+    ConfigurationsActionKeyStore.DASHBOARDS,
+    ownProps.params.id,
+    ConfigurationsActionKeyStore.DATA
+  ]),
 
-    fetching: state.configurations.getIn([
-        ConfigurationsActionKeyStore.DASHBOARDS,
-        ownProps.params.id,
-        ConfigurationsActionKeyStore.IS_FETCHING
-    ]),
+  fetching: state.configurations.getIn([
+    ConfigurationsActionKeyStore.DASHBOARDS,
+    ownProps.params.id,
+    ConfigurationsActionKeyStore.IS_FETCHING
+  ]),
 
-    error: state.configurations.getIn([
-        ConfigurationsActionKeyStore.DASHBOARDS,
-        ownProps.params.id,
-        ConfigurationsActionKeyStore.ERROR
-    ])
+  error: state.configurations.getIn([
+    ConfigurationsActionKeyStore.DASHBOARDS,
+    ownProps.params.id,
+    ConfigurationsActionKeyStore.ERROR
+  ])
 });
 
 const actionCreators = (dispatch) => ({
-    setPageTitle: (aTitle) => {
-        dispatch(AppActions.updateTitle(aTitle));
-    },
+  setPageTitle: (aTitle) => {
+    dispatch(AppActions.updateTitle(aTitle));
+  },
 
-    setPageTitleIcon: (aTitleIcon) => {
-        dispatch(AppActions.updateTitleIcon(aTitleIcon));
-    },
+  setPageTitleIcon: (aTitleIcon) => {
+    dispatch(AppActions.updateTitleIcon(aTitleIcon));
+  },
 
-    fetchConfigurationIfNeeded: (id) => {
-        return dispatch(ConfigurationsActions.fetchIfNeeded(
-            id,
-            ConfigurationsActionKeyStore.DASHBOARDS
-        ));
-    }
+  fetchConfigurationIfNeeded: (id) => {
+    return dispatch(ConfigurationsActions.fetchIfNeeded(
+      id,
+      ConfigurationsActionKeyStore.DASHBOARDS
+    ));
+  }
 });
 
 
