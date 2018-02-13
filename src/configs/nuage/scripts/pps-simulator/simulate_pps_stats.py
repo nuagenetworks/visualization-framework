@@ -824,6 +824,7 @@ def main():
     def_ent_name = config.get('default', 'def_ent_name')
     es_server = config.get('default', 'es_server')
     es_chunk_size = config.get('default','es_chunk_size')
+    es_chunk_size = int(config.get('default','es_chunk_size'))
 
     startTime = float(int(time.time())) * 1000 - (24 * 60 * 60 * 1000)
     endTime = float(int(time.time()))*1000
