@@ -24,6 +24,7 @@ class SimulateAARData(object):
         self.npm_count = defData["npm_count"]
         self.perf_mon_count = defData["perf_mon_count"]
         self.duc_count = defData["duc_count"]
+        self.out_sla_app_count = defData['out_sla_app_count']
 
     def getRandomCidrPrefix(self):
         blockOne = random.randrange(1, 255, 1)
@@ -95,7 +96,8 @@ class SimulateAARData(object):
         return appids
 
     def getOutSlaApps(self):
-        outslas = ["myApp-0", "myApp-1"]
+        apps = random.sample(range(0,self.app_count),self.out_sla_app_count)
+        outslas = ['myApp-%d'%(app) for app in apps]
         return outslas
 
     # To simplify each appgroup will contain one application
@@ -278,8 +280,8 @@ class SimulateFlowStats(object):
         self.contro_states = ["Null", "Connecting", "Up", "Down", "Started"]
         self.duc_grps = flowData["duc_grps"]
         self.slastatus = ["InSla", "OutSla", "Unmonitored"]
-        self.outslaApps = 0.05
-        self.outslaApps = ["false", "true"]
+        #self.outslaApps = 0.05
+        self.outslaApps = flowData['outslaApps']
         self.protos = flowData["protos"]
         self.l7s = flowData["l7s"]
         self.perf_mons = flowData["perf_mons"]
@@ -358,7 +360,7 @@ class SimulateFlowStats(object):
             while timestamp != endTime:
                 timestamp = startTime + t_increment * 1000
                 i = 0
-                sla_status_ts = get_random_with_prob(sla_prob_new)
+                sla_status_ts = random.randint(0,2)
                 for flow_entry in pre_flows:
                     flow_record = {}
                     s_vport = flow_entry["src_vport"]
@@ -821,11 +823,11 @@ def main():
     #print config.getint('default', 'duc_count')
     defData["duc_count"] = config.getint('default', 'duc_count')
     #print defData["duc_count"]
+    defData['out_sla_app_count'] = config.getint('default','out_sla_apps')
 
     def_ent_name = config.get('default', 'def_ent_name')
     es_server = config.get('default', 'es_server')
-    es_chunk_size = config.get('default','es_chunk_size')
-    es_chunk_size = int(config.get('default','es_chunk_size'))
+    es_chunk_size = config.getint('default','es_chunk_size')
 
     startTime = float(int(time.time())) * 1000 - (24 * 60 * 60 * 1000)
     endTime = float(int(time.time()))*1000
