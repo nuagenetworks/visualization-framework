@@ -81,14 +81,14 @@ class SimulateAARData(object):
             "app_id": app_id,
             "app_name": "Default Application"
         }
-        appids.append(app)
+        appids.append(app.copy())
         while i < self.app_count:
             app_id = str(uuid.uuid4())
             app = {
                 "app_id": app_id,
                 "app_name": app_prefix + str(i)
             }
-            appids.append(app)
+            appids.append(app.copy())
             i += 1
 
 
@@ -121,7 +121,7 @@ class SimulateAARData(object):
                 "app_list": applist,
                 "appgrp_name": appGrp_prefix + str(i)
             }
-            appGrps.append(app_grp)
+            appGrps.append(app_grp.copy())
             i += 1
         return appGrps
 
@@ -135,7 +135,7 @@ class SimulateAARData(object):
                 "duc_id": duc_id,
                 "duc_name": duc_prefix + str(i)
             }
-            ducgrpids.append(duc)
+            ducgrpids.append(duc.copy())
             i += 1
         return ducgrpids
 
@@ -150,7 +150,7 @@ class SimulateAARData(object):
                 "npmgrp_name": npmGrp_prefix + str(i),
                 "perf_monitor": random.choice(perfmons)
             }
-            npmGrps.append(npm_grp)
+            npmGrps.append(npm_grp.copy())
             i += 1
         return npmGrps
 
@@ -172,7 +172,7 @@ class SimulateAARData(object):
                 "probe_interval": random.choice(probe_intervals),
                 "probe_num_pkts": random.choice(probe_pkts)
             }
-            perfmons.append(perfmon)
+            perfmons.append(perfmon.copy())
             i += 1
         return perfmons
 
@@ -199,7 +199,7 @@ class SimulateAARData(object):
                     "nsg_name": nsg["nsg_name"],
                     "domain": domain
                 }
-                vportlist.append(vport)
+                vportlist.append(vport.copy())
                 i += 1
 
             nsg_vport_hash[nsg["nsg_id"]] = vportlist
@@ -334,7 +334,7 @@ class SimulateFlowStats(object):
                                 "dest_vport": dvport
                             }
                             # flows[(svport["vport_id"], dvport["vport_id"])] = flow_entry
-                            flows.append(flow_entry)
+                            flows.append(flow_entry.copy())
                             app_grp_cnt += 1
                         dindex += 1
 
@@ -357,10 +357,10 @@ class SimulateFlowStats(object):
             t_increment = 0
             while timestamp != endTime:
                 timestamp = startTime + t_increment * 1000
-                flow_record = {}
                 i = 0
                 sla_status_ts = get_random_with_prob(sla_prob_new)
                 for flow_entry in pre_flows:
+                    flow_record = {}
                     s_vport = flow_entry["src_vport"]
                     d_vport = flow_entry["dest_vport"]
                     dom = s_vport["domain"]
@@ -394,7 +394,7 @@ class SimulateFlowStats(object):
                     if self.slastatus[sla_status_ts] == "OutSla":
                         if appname in self.outslaApps:
                             flow_entry["timestamp"] = timestamp
-                            sla_flows.append(flow_entry)
+                            sla_flows.append(flow_entry.copy())
                             sla_status = 1
                         else:
                             sla_status = 0
@@ -453,16 +453,16 @@ class SimulateFlowStats(object):
                     flow_record["L7ClassEnhanced"] = self.l7s[l7]
                     flow_record["UnderlayID"] = underlayId
                     flow_record["UnderlayName"] = "Underlay"+str(underlayId)
-
                     json.dump(flow_record, flowstats, default=json_serial)
                     flowstats.write("\n")
                     index_name = "nuage_dpi_flowstats" + '_' + self.es_index_prefix
                     flow_record['_index']= index_name
                     flow_record['_type'] = 'nuage_doc_type'
-                    write_data.append(flow_record)
+                    write_data.append(flow_record.copy())
                     if len(write_data)>=chunk_size:
                         helpers.bulk(self.es,iter(write_data),request_timeout=50)
                         write_data = []
+
                     flow_cnt += 1
                 t_increment += 30
         if len(write_data):
@@ -504,11 +504,11 @@ class SimulateProbeStats(object):
             while timestamp != endTime:
                 # timestamp = startTime + datetime.timedelta(0, t_increment)
                 timestamp = startTime + t_increment * 1000
-                probe_record = {}
                 for s_nsg_ind, src_nsg in enumerate(nsgs):
                     initPacket = 1
                     d_nsg_ind = s_nsg_ind + 1
                     while d_nsg_ind < len(nsgs):
+                        probe_record = {}
                         # d_nsg_ind = s_nsg_ind
                         # while d_nsg_ind == s_nsg_ind:
                         #     d_nsg_ind = random.randrange(0, len(nsgs) - 1)
@@ -570,7 +570,7 @@ class SimulateProbeStats(object):
                         index_name = "nuage_dpi_probestats" + '_' + self.es_index_prefix
                         probe_record['_index']=index_name
                         probe_record['_type'] = 'nuage_doc_type'
-                        write_data.append(probe_record)
+                        write_data.append(probe_record.copy())
                         if len(write_data)>=chunk_size:
                             helpers.bulk(self.es,iter(write_data),request_timeout=50)
                             write_data = []
@@ -617,8 +617,8 @@ class SimulateSLAStats(object):
         write_data = []
         chunk_size = es_chunk_size
         with open('log/slastats_new.log', 'w') as slastats:
-            sla_record = {}
             for flow_entry in sla_flows:
+                sla_record = {}
                 s_vport = flow_entry["src_vport"]
                 d_vport = flow_entry["dest_vport"]
                 dom = s_vport["domain"]
@@ -673,7 +673,7 @@ class SimulateSLAStats(object):
                 index_name = "nuage_dpi_slastats" + '_' + self.es_index_prefix
                 sla_record['_index'] = index_name
                 sla_record['_type']='nuage_doc_type'
-                write_data.append(sla_record)
+                write_data.append(sla_record.copy())
                 if len(write_data)>=chunk_size:
                     helpers.bulk(self.es,iter(write_data),request_timeout=50)
                     write_data = []
@@ -706,10 +706,11 @@ class SimulateNATTStats(object):
             t_increment = 0
             while timestamp != endTime:
                 timestamp = startTime + t_increment * 1000
-                nattstat_record = {}
                 for s_nsg_ind, src_nsg in enumerate(nsgs):
+
                     d_nsg_ind = s_nsg_ind + 1
                     while d_nsg_ind < len(nsgs):
+                        nattstat_record = {}
                         dest_nsg = nsgs[d_nsg_ind]
                         srcUp = randint(0, 1)
                         destUp = randint(0, 1)
@@ -744,7 +745,7 @@ class SimulateNATTStats(object):
                         index_name = "nuage_nat-t" + '_' + self.es_index_prefix
                         nattstat_record['_index']=index_name
                         nattstat_record['_type'] = 'nuage_doc_type'
-                        write_data.append(nattstat_record)
+                        write_data.append(nattstat_record.copy())
                         if len(write_data)>=chunk_size:
                             helpers.bulk(self.es,iter(write_data),request_timeout=50)
                             write_data = []
@@ -767,10 +768,10 @@ class SimulateNATTStats(object):
             t_increment = 0
             while timestamp != endTime:
                 timestamp = startTime + t_increment * 1000
-                natt_summary_record = {}
                 for s_nsg_ind, src_nsg in enumerate(nsgs):
                     d_nsg_ind = s_nsg_ind + 1
                     while d_nsg_ind < len(nsgs):
+                        natt_summary_record = {}
                         dest_nsg = nsgs[d_nsg_ind]
                         natt_summary_record["timestamp"] = long(timestamp)
                         natt_summary_record["EnterpriseName"] = self.def_ent_name
@@ -787,7 +788,7 @@ class SimulateNATTStats(object):
                         index_name = "nuage_nat-t" + '_' + self.es_index_prefix
                         natt_summary_record['_index']=index_name
                         natt_summary_record['_type'] = 'nuage_doc_type'
-                        write_data.append(natt_summary_record)
+                        write_data.append(natt_summary_record.copy())
                         if len(write_data)>=chunk_size:
                             helpers.bulk(self.es,iter(write_data),request_timeout=50)
                             write_data = []
