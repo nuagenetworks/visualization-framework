@@ -15,11 +15,11 @@
         "legendColumn": "ReachabilityStatus",
         "cellColumn": "ReachabilityStatus",
         "heatmapColor": {
-+            "0": "#b3d645",
-+            "1": "#faf78e",
-+            "2": "#f76159",
-+            "3": "#d9d9d9"
-+        },
+            "Healthy": "#b3d645",
+            "Degraded": "#faf78e",
+            "Down": "#f76159",
+            "No longer a valid neighbor": "#d9d9d9"
+        },
         "legend": {
             "show": true,
             "orientation": "horizontal",
