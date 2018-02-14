@@ -1,7 +1,7 @@
 {
     "id": "test-dynamic-bar-graph",
     "graph": "DynamicBarGraph",
-    "title": "Test Dynamic Bar Graph Without Brush",
+    "title": "Dynamic Bar Graph (Without Brush)",
     "description": "Enterprise level top 5 discovered applications. Computation: Sum of total Bytes sent and/or received in descending order across all domains.",
     "author": "Curran Kelleher",
     "creationDate": "10/13/2016",

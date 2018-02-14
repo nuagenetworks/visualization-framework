@@ -1,7 +1,7 @@
 {
     "id": "test-multi-line-graph-default-values",
     "graph": "MultiLineGraph",
-    "title": "MultiLineGraph Default Values",
+    "title": "Multi Line Graph (Set Default Value)",
     "description": "Memory, disk and CPU utilization over a period of time selected in interval",
     "author": "Anil Chauhan",
     "creationDate": "08/03/2017",

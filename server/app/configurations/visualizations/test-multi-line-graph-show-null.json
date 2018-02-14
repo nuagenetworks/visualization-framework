@@ -1,7 +1,7 @@
 {
     "id": "test-multi-line-graph-show-null",
     "graph": "MultiLineGraph",
-    "title": "MultiLineGraph Show Null",
+    "title": "Multi Line Graph (Show Null Values)",
     "description": "Memory, disk and CPU utilization over a period of time selected in interval",
     "author": "Anil Chauhan",
     "creationDate": "08/03/2017",

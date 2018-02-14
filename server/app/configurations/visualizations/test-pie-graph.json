@@ -1,7 +1,8 @@
 {
     "id": "test-pie-graph",
     "graph": "PieGraph",
-    "title": "PieGraph",
+    "title": "Pie Graph",
+    "description": "A pie chart (or a circle chart) is a circular statistical graphic which is divided into slices to illustrate numerical proportion. In a pie chart, the arc length of each slice is proportional to the quantity it represents.",
     "author": "Anil Chauhan",
     "creationDate": "08/03/2017",
     "data": {

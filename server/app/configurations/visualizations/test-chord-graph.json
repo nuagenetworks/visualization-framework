@@ -1,8 +1,9 @@
 {
     "id": "test-chord-graph",
     "graph": "ChordGraph",
-    "title": "ChordGraph",
+    "title": "Chord Graph",
     "author": "Anil Chauhan",
+    "description": "This type of diagram visualises the inter-relationships between entities. The connections between entities are used to display that they share something in common. This makes Chord Diagrams ideal for comparing the similarities within a dataset or between different groups of data.",
     "creationDate": "08/03/2017",
     "data": {
         "chordSourceColumn": "spg",

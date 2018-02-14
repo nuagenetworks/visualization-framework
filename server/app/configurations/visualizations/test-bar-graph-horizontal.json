@@ -1,8 +1,8 @@
 {
     "id": "test-bar-graph",
     "graph": "BarGraph",
-    "title": "BarGraph Horizontal",
-    "description": "Enterprise level top 5 discovered applications. Computation: Sum of total Bytes sent and/or received in descending order across all domains.",
+    "title": "Horizontal Bar Graph",
+    "description": "A horizontal bar graph is a graph whose dependent variable is shown on the horizontal scale. The length of each bar is proportional to the quantity to be presented and all bars go across from left to right.",
     "author": "Anil Chauhan",
     "creationDate": "08/03/2017",
     "data": {

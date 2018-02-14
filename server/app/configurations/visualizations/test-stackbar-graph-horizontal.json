@@ -1,8 +1,8 @@
 {
     "id": "test-stackbar-graph-horizontal",
     "graph": "BarGraph",
-    "title": "Stack BarGraph Horizontal",
-    "description": "Enterprise level top 5 discovered applications. Computation: Sum of total Bytes sent and/or received in descending order across all domains.",
+    "title": "Horizontal Stacked Bar Graph",
+    "description": "A stacked bar chart, also known as a stacked bar graph, is a graph that is used to break down and compare parts of a whole. Each bar in the chart represents a whole, and segments in the bar represent different parts or categories of that whole.",
     "author": "Anil Chauhan",
     "creationDate": "08/03/2017",
     "data": {

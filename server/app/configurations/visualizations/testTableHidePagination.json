@@ -1,11 +1,11 @@
 {
     "id": "testTableHidePagination",
     "graph": "Table",
-    "title": "Test Table Hide Pagination",
+    "title": "Table (Hide Pagination)",
     "description": "Testing table graph",
     "author": "Anil Chauhan",
     "creationDate": "12/21/2016",
-    "query": "testTableHidePagination",
+    "query": "testTable",
     "data": {
         "limit" : 50,
         "hidePagination": true,

@@ -1,7 +1,7 @@
 {
     "id": "testTable",
     "graph": "Table",
-    "title": "Test Table",
+    "title": "Table (Default)",
     "description": "Testing table graph",
     "author": "Anil Chauhan",
     "creationDate": "12/21/2016",

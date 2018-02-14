@@ -1,8 +1,8 @@
 {
     "id": "test-area-graph",
     "graph": "AreaGraph",
-    "title": "Area Graph",
-    "description": "New Graph - Area Graph Visualization",
+    "title": "Area Graph (Default)",
+    "description": "Area Graphs are Line Graphs but with the area below the line filled in with a certain colour or texture. Area Graphs are drawn by first plotting data points on a Cartesian coordinate grid, joining a line between the points and finally filling in the space below the completed line.",
     "author": "Anil Chauhan",
     "creationDate": "19/08/2017",
     "data": {

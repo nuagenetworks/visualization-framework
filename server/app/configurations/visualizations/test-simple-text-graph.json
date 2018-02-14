@@ -1,8 +1,9 @@
 {
     "id": "test-simple-text-graph",
-    "title": "SimpleTextGraph",
+    "title": "Simple Text Graph",
     "query": "test-simple-text-graph",
     "graph": "SimpleTextGraph",
+    "description": "A text graph is a graph representation of a text item (document, passage or sentence). It is typically created as a preprocessing step to support NLP tasks such as text condensation term disambiguation (topic-based) text summarization, relation extraction and textual entailment",
     "data": {
         "targetedColumn":"value"
     }

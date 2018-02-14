@@ -1,8 +1,9 @@
 {
     "id": "test-variation-text-graph",
-    "title": "VariationTextGraph",
+    "title": "Variation Text Graph",
     "query": "test-variation-text-graph",
     "graph": "VariationTextGraph",
+    "description": "Variation graphs, which represent genetic variation within a population, are replacing sequences as reference genomes. Path indexes are one of the most important tools for working with variation graphs.",    
     "showTitleBar": true,
     "data": {
         "titlePosition": "top",

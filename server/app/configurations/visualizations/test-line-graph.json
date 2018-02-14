@@ -1,7 +1,7 @@
 {
     "id": "test-line-graph",
     "graph": "LineGraph",
-    "title": "LineGraph",
+    "title": "Line Graph",
     "description": "This line graph represents total no of ACL deny received for this domain over a period of specified time. By default it shows ACL Deny hits. One can select other ACL actions i.e from the drop down menu on this dashboard.",
     "author": "Anil Chauhan",
     "creationDate": "08/03/2017",

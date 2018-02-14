@@ -1,7 +1,7 @@
 {
     "id": "test-multi-line-graph",
     "graph": "MultiLineGraph",
-    "title": "MultiLineGraph",
+    "title": "Multi Line Graph",
     "description": "Memory, disk and CPU utilization over a period of time selected in interval",
     "author": "Anil Chauhan",
     "creationDate": "08/03/2017",

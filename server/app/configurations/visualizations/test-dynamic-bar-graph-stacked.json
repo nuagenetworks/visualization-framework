@@ -1,8 +1,8 @@
 {
     "id": "test-dynamic-bar-graph",
     "graph": "DynamicBarGraph",
-    "title": "Test Dynamic Bar Graph Stacked",
-    "description": "Enterprise level top 5 discovered applications. Computation: Sum of total Bytes sent and/or received in descending order across all domains.",
+    "title": "Stacked Dynamic Bar Graph",
+    "description": "A bar chart or bar graph is a chart or graph that presents categorical data with rectangular bars with heights or lengths proportional to the values that they represent.",
     "author": "Curran Kelleher",
     "creationDate": "10/13/2016",
     "data": {

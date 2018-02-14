@@ -1,7 +1,7 @@
 {
     "id": "test-bar-graph",
     "graph": "BarGraph",
-    "title": "BarGraph",
+    "title": "Bar Graph (Default)",
     "description": "Enterprise level top 5 discovered applications. Computation: Sum of total Bytes sent and/or received in descending order across all domains.",
     "author": "Anil Chauhan",
     "creationDate": "08/03/2017",

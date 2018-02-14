@@ -1,7 +1,7 @@
 {
     "id": "test-stackbar-graph-horizontal-number-limit",
     "graph": "BarGraph",
-    "title": "Stack BarGraph Horizontal Limit Number",
+    "title": "Horizontal Limit Number Stacked",
     "description": "Enterprise level top 5 discovered applications. Computation: Sum of total Bytes sent and/or received in descending order across all domains.",
     "author": "Anil Chauhan",
     "creationDate": "08/03/2017",
@@ -33,7 +33,7 @@
     },
     "listeners": [
         {
-            "redirect": "/dashboards/aarEnterpriseDetail",
+            "redirect": "/dashboards/testBarGraph",
             "params": {
                 "app": "Application"
             }

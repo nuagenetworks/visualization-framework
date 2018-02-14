@@ -1,8 +1,8 @@
 {
     "id": "test-area-stacked-graph",
     "graph": "AreaGraph",
-    "title": "Area Graph Stacked",
-    "description": "New Graph - Area Graph Visualization",
+    "title": "Stacked Area Graph (stacked: true)",
+    "description": "Stacked Area Graphs work in the same way as simple Area Graphs do, except for the use of multiple data series that start each point from the point left by the previous data series.",
     "author": "Anil Chauhan",
     "creationDate": "19/08/2017",
     "data": {

@@ -1,8 +1,8 @@
 {
     "id": "test-bar-graph-percentage-limit",
     "graph": "BarGraph",
-    "title": "BarGraph Percentage Limit",
-    "description": "Enterprise level top 5 discovered applications. Computation: Sum of total Bytes sent and/or received in descending order across all domains.",
+    "title": "Bar Graph with percentage limit",
+    "description": "Use a vertical stacked 100 percent bar chart to show values for hierarchical data, for example sales total by car model, stacked by car maker. A vertical stacked 100 percent bar chart uses a scale of 100 percent. ",
     "author": "Anil Chauhan",
     "creationDate": "08/03/2017",
     "data": {

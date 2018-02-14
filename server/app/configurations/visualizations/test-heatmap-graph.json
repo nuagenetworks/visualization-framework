@@ -1,7 +1,8 @@
 {
     "id": "test-heatmap-graph",
     "graph": "HeatmapGraph",
-    "title": "HeatmapGraph",
+    "title": "Heat Map Graph",
+    "description": "A heat map (or heatmap) is a graphical representation of data where the individual values contained in a matrix are represented as colors.",
     "author": "Anil Chauhan",
     "creationDate": "08/03/2017",
     "data": {

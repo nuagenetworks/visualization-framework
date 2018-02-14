@@ -70,7 +70,8 @@ const callback = function(type, message) {
 const getMatchPercentage = function({ size, location, srcFile, orgFile, dstFile, chartName }, matchCallback) {
   if (fs.existsSync(dstFile) && fs.existsSync(orgFile)) {
     resemble(dstFile).compareTo(orgFile).onComplete(function(data) {
-      matchCallback(null, (data.misMatchPercentage > 10) ? 'fail' : 'pass');
+      console.log('+++++++++++++Image DIFFFF===========', Number(data.misMatchPercentage));
+      matchCallback(null, (Number(data.misMatchPercentage) <= 5) ? 'pass' : 'fail');
       return;
     });
   } else {

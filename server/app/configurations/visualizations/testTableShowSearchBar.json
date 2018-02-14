@@ -1,13 +1,13 @@
 {
     "id": "testTableShowSearchBar",
     "graph": "Table",
-    "title": "Test Table Show Search Graph",
+    "title": "Table (Hide Search Bar)",
     "description": "Testing table graph",
     "author": "Anil Chauhan",
     "creationDate": "12/21/2016",
     "query": "testTable",
     "data": {
-        "searchBar":true,
+        "searchBar":false,
         "columns": [
             { "column": "country", "label": "Country"},
             { "column": "nbMedals", "label": "Medals" },
@@ -29,10 +29,11 @@
                 },
                 {
                     "label": "Bronze",
-                    "value": "Bronze",
-                    "disabled": true
+                    "value": "Bronze"
                 }
             ]
         }
     }
 }
+
+

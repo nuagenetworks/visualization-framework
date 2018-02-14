@@ -1,11 +1,11 @@
 {
     "id": "testTableShowPagination",
     "graph": "Table",
-    "title": "Test Table Listeners",
+    "title": "Table Event Listeners (on row click)",
     "description": "Testing table graph",
     "author": "Anil Chauhan",
     "creationDate": "12/21/2016",
-    "query": "testTableShowPagination",
+    "query": "testTable",
     "data": {
         "limit" : 25,
         "hidePagination": true,

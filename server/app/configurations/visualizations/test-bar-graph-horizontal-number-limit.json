@@ -1,8 +1,8 @@
 {
     "id": "test-bar-graph",
     "graph": "BarGraph",
-    "title": "BarGraph Horizontal Limit Number",
-    "description": "Enterprise level top 5 discovered applications. Computation: Sum of total Bytes sent and/or received in descending order across all domains.",
+    "title": "Horizontal Limit Number Bar Graph",
+    "description": "Replace the x axis columns to the y axis columns",
     "author": "Anil Chauhan",
     "creationDate": "08/03/2017",
     "data": {

@@ -1,7 +1,7 @@
 {
     "id": "testTableEnableSelectAll",
     "graph": "Table",
-    "title": "Test Table Show Checkboxes",
+    "title": "Table (Show Checkboxes)",
     "description": "Testing table graph",
     "author": "Anil Chauhan",
     "creationDate": "12/21/2016",
