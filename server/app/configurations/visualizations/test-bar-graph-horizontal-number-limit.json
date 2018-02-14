@@ -32,9 +32,8 @@
     },
     "listeners": [
         {
-            "redirect": "/dashboards/aarEnterpriseDetail",
             "params": {
-                "app": "Application"
+                "app": "value"
             }
         }
     ],

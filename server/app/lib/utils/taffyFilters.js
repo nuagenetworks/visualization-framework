@@ -48,16 +48,28 @@ const convertIntoTimestamp = function (field) {
 const converter = function (parameters) {
   let params = [];
   for(let key in parameters) {
-      let formatter
+      let formatter, values
       let fieldType = parameters[key].fieldType;
       delete parameters[key].fieldType;
       switch (fieldType) {
           case Fields.TIMESTAMP:
-              let values = convertIntoTimestamp(parameters[key]);
+              values = convertIntoTimestamp(parameters[key]);
               for(let index in values) {
                 params.push({[key]: values[index]})
               }
-              break;
+              break
+          case Fields.LTE || Fields.GTE:
+              values = parameters[key];
+              for(let index in values) {
+                params.push({[key]: {[fieldType]: values[index]}})
+              }
+              break
+          case Fields.GTE:
+              values = parameters[key];
+              for(let index in values) {
+                params.push({[key]: {[fieldType]: values[index]}})
+              }
+              break
           default:
             params.push({[key]: parameters[key]})
       }
