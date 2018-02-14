@@ -1,0 +1,70 @@
+{
+    "id":"vss-domain-flow-explicit-allow-metric",
+    "title":"Flows count per enterprise",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_flow}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{    
+            "size": 0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "term": {
+                                "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "nuage_metadata.domainName":"{{domainName:chord_domain}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "type":"ALLOW"
+                            }
+                        }
+                    ],
+                    "must_not":
+                    {
+                        "term": {
+                            "nuage_metadata.aclId":"DEFAULT"
+                        }
+                    }
+                }
+            },
+            "aggs": {
+                "timezones": {
+                    "filters": {
+                        "filters": {
+                            "Prev 24": {
+                                "range": {
+                                    "timestamp": {
+                                        "gte": "{{prevStartTime:now-48h}}",
+                                        "lte": "{{startTime:now-24h}}"
+                                    }
+                                }
+                            },
+                            "Last 24": {
+                                "range": {
+                                    "timestamp": {
+                                        "gte": "{{startTime:now-24h}}",
+                                        "lte": "{{endTime:now}}"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "aggs": {
+                        "flows": {
+                            "cardinality": {
+                                "field": "nuage_metadata.flowid"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

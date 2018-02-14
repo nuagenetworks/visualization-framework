@@ -1,0 +1,45 @@
+{
+    "id": "aar-nsg-natt-details-timestamp",
+    "graph": "Table",
+    "title": "Last {{ts_size}} NAT Probe Results at {{event_timestamp:call('time_convert')}}",
+    "author": "Bharat Mukheja",
+    "creationDate": "1/19/2018",
+    "data": {
+        "searchBar": false,
+        "hidePagination":false,
+        "columns": [
+            { "column": "timestamp","label":"Time Stamp","timeFormat": "%b %d, %y %X" },
+            { "column": "ProbeIPSecIP","label":"Probe IPSec IP Addr" },
+            { "column": "ProbeIPSecPort", "label": "Probe IPSec Port"},
+            { "column": "ProbeVxLanIP", "label": "Probe VxLan IP Addr" },
+            { "column": "ProbeVxLanPort", "label": "Probe VxLan Port" },
+            { "column": "VscIPSecIP","label":"VSC IPSec IP Addr" },
+            { "column": "VscIPSecPort", "label": "VSC IPSec Port"},
+            { "column": "VscVxLanIP", "label": "VSC VxLan IP Addr" },
+            { "column": "VscVxLanPort", "label": "VSC VxLan Port" },
+            { "column": "SrcUplink", "label": "Source Uplink" },
+            { "column": "SrcUplinkIndex", "label": "Source Uplink Index" },
+            { "column": "DstUplink", "label": "Destination Uplink" },
+            { "column": "DstUplinkIndex", "label": "Destination Uplink Index" },
+            { "column": "Reason", "label": "Change Reason" }
+        ]
+    },
+    "filterOptions": {
+        "Size": {
+            "parameter": "ts_size",
+            "default": "4",
+            "options": [
+                {
+                    "label": "4",
+                    "value": "4",
+                    "default": true
+                },
+                {
+                    "label": "8",
+                    "value": "8"
+                }
+            ]
+        }
+    },
+    "query": "aar-nsg-natt-details-timestamp"
+}
