@@ -20,6 +20,9 @@ The philosophy of the Visualization Framework is to provide a library to quickly
       - [ChordGraph](#chordgraph)
       - [SimpleTextGraph](#simpletextgraph)
       - [VariationTextGraph](#variationtextgraph)
+      - [HeatmpaGraph](#heatmapgraph)
+      - [AreaGraph](#areagraph)
+      - [GuageGraph](#guagegraph)
   - [Query configuration](#query-configuration)
 - [Services](#services)
 
@@ -264,8 +267,25 @@ Display vertical or horizontal bar charts
 
 
 - **orientation** orientation of the graph. Default is `vertical`. Set to `horizontal` to have an horizontal bar chart.
-- **dateHistogram** [TO COMPLETE]
-- **interval** [TO COMPLETE - looks related to dateHistogram]
+- **otherOptions** (object) for grouping a data in order to show in single bar after defined limit of bars. Grouping can either be define in percentage or number. Default is percentage. E.g - 
+```javascript
+  "otherOptions": {
+        "label": "Others", //used to display name of bar
+        "limit": 5, // afer a given limit grouping is enable
+        "type": "number" // it can be percentage as well
+    }
+```
+- **stackColumn** - Used to show stacked data in bars. E.g-
+```javascript
+  "stackColumn": "social"
+```
+![stacked](https://user-images.githubusercontent.com/26645756/36251630-d603b8a0-1267-11e8-8efe-502c1046c7a8.png)
+
+- **brush** (Number) to enble brushing in bar graph with pre selected bars. E.g -
+```javascript
+  "brush": 3
+```
+![dynamicbargraph](https://user-images.githubusercontent.com/26645756/36250751-b6872a64-1264-11e8-961c-1cb895518fc0.png)
 
 __x-axis__
 
@@ -328,6 +348,10 @@ Display nice Pie or Donut graphs
 
 
 ##### Table
+This is used to show data in tabular form
+
+![table](https://user-images.githubusercontent.com/26645756/36247796-5c2f9d8e-125b-11e8-9a52-3b3c35087159.png)
+
 - **width** width of the table. Default is `100%`
 - **selectable** - To enable/disable selectable feature - Default is `true`
 - **multiSelectable** To enable/disable multi select feature - default is `false`
@@ -348,6 +372,11 @@ Display nice Pie or Donut graphs
 
 
 ##### ChordGraph
+
+This graph visualises the inter-relationships between entities and compare similarities between them
+
+![chordgraph](https://user-images.githubusercontent.com/26645756/36247609-a16c30de-125a-11e8-972a-56ebe41b4ca0.png)
+
 - **outerPadding** [TO COMPLETE]. Default is `30`
 - **arcThickness** [TO COMPLETE]. Default is `20`
 - **padAngle** [TO COMPLETE]. Default is `0.07`
@@ -357,7 +386,9 @@ Display nice Pie or Donut graphs
 - **fadedOpacity** [TO COMPLETE]. Default is `0.1`
 
 ##### SimpleTextGraph
-This graph allows you to display a simple text information. Text ba
+This graph allows you to display a simple text information.
+
+![textgraph](https://user-images.githubusercontent.com/26645756/36247536-666ad710-125a-11e8-937b-f110f812b5a0.png)
 
 - **targetedColumn** name of the attribute to use to display the value. If not specified, this graph will display the length of the result
 - **titlePosition** position title on `top` or at the `bottom` of the graph
@@ -372,12 +403,59 @@ This graph allows you to display a simple text information. Text ba
 ##### VariationTextGraph
 This graph shows a value and its variation from the previous one.
 
+![variationtextgraph](https://user-images.githubusercontent.com/26645756/36247500-454d43c4-125a-11e8-81f9-26f5edb42271.png)
+
 - **drawColor** color in case there is no variation
 - **negativeColor** color in case the variation is lower than 0
 - **positiveColor** color in case the variation is geater than 0
 - **textAlign** align text on `left`, `center` or `right`. Default is `center`
 - **fontSize** font size
 - **fontColor** font color
+
+#### HeatmpaGraph
+This graph shows a value of a column at given timestamp.
+It is a graphical representation of data where the individual values contained in a matrix are represented as colors
+
+![heatmap](https://user-images.githubusercontent.com/14901092/36245661-200c8ae6-1252-11e8-8d5c-5cdf63cad97e.png)
+
+- **legendColumn** used to display matrix
+- **nextPrevFilter** (boolean) show filter to see data of past timestamps. Default is false.
+- **heatmapColor** (object) used to define the color of the matrix of given `legendColumn` value. E.g -
+```javascript
+`"heatmapColor": {
+    "InSla": "#b3d645"
+}`
+```
+#### AreaGraph
+This graph displays graphically quantitative data. The area between axis and line are commonly emphasized with colors, textures and hatchings. Commonly one compares with an area chart two or more quantities.
+
+![AreaGraph](https://user-images.githubusercontent.com/26645756/36246339-536c5404-1255-11e8-9776-e4314a9fb07e.png)
+
+- **linesColumn** (Object) Its value is used to display area in graph
+```javascript
+"linesColumn": [
+    {
+        "key": "CPU"
+    },
+    {
+        "key": "MEMORY"
+    },
+    {
+        "key": "DISK",
+        "value": "DISK"
+    }
+]
+```
+- **stacked** (boolean) whether area shown as stacked or not. Default is false.
+
+#### GuageGraph
+Display a needle or dial to indicate where your data point(s) falls over a particular range
+
+![guagegraph](https://user-images.githubusercontent.com/26645756/36246894-d348b9ae-1257-11e8-94b1-44016460da17.png)
+
+- **maxValue** maximum value to draw speddometer
+- **currentColumn** column used to show needle value
+- **gauzeTicks** number of ticks on speedometer
 
 ### Query configuration
 The query configuration allows the Visualization to know which [service](#services) it should use and what is the query it should trigger.
