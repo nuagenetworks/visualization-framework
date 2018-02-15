@@ -1,5 +1,11 @@
 {
     "id": "test-bar-graph-stack",
     "title": "BarGraph Stack",
-    "service": "dataset"
+    "service": "dataset",
+    "query": {
+        "value": {
+            "fieldType": "gte",
+            "value":"{{app:0}}"
+        }
+    }
 }

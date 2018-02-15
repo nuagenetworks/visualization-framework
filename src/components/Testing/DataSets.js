@@ -63,8 +63,9 @@ class DataSets extends Component {
       textAlign: 'center',
       padding: '10px',
       marginBottom: '15px',
+      fontWeight: 'bold'
     };
-    console.log('===',datasets);
+    
 	  for(let datasetID in datasets) {
 	 	  if (datasets.hasOwnProperty(datasetID)) {
         
@@ -83,11 +84,11 @@ class DataSets extends Component {
           }
 			    return (<div key={response.chart_id}  style={{marginTop: "20px"}}>
             
-            {check === 1 && response.graph_type==='after_click' ? (<div style={styles1} >After Click</div>) : null }
+            {check === 1 && response.graph_type==='after_click' ? (<div style={styles1} >Screenshot after clicking on graph </div>) : null }
             {check === 1 && response.graph_type==='after_filter' ? (<div style={styles1} >After Filter</div>) : null }
 				    <div className="" style={{ display: "flex"}}>
-              {response.dataset_file}
-              { datasets[datasetID].dataset_id && response.graph_type==='before_click' ? 
+              
+              { datasets[datasetID].dataset_id && response.graph_type==='before_click' ?
   					    (
                   <Image data={`${this.getBaseURL()}dashboards/original/${response.dashboard_id}/${response.dataset_id ? response.dataset_id : 0}/${response.chart_name}.png`}  />
                 ) : 

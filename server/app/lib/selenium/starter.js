@@ -65,9 +65,11 @@ function capture(reportID) {
                             if(err) {
                               console.log(err);
                             }
+                            console.log('errrrrrrrrrrrrrrrrrrrr');
                             callback(null)
                           });
                         } else {
+                          console.log('else errooooooooooooooo');
                           callback(null)
                         }
                       }

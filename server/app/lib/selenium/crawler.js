@@ -173,7 +173,7 @@ const initiate = function(URL) {
         .forBrowser('firefox')
         .setFirefoxOptions(new firefox.Options().setBinary(binary))
         .build();
-
+    driver.manage().window().setSize(width, height);
     driver.get(URL);
 
     driver.wait(function() {

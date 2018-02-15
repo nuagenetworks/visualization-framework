@@ -33,9 +33,8 @@
     },
     "listeners": [
         {
-            "redirect": "/dashboards/testBarGraph",
             "params": {
-                "app": "Application"
+                "app": "value"
             }
         }
     ],

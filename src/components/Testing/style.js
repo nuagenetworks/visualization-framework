@@ -51,7 +51,7 @@ const style = {
   },
 
   image : {
-    width:'50%',
+    width:'90%',
     cursor:'pointer'
   },
 

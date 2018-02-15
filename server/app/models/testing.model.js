@@ -88,20 +88,67 @@ class TestingModel extends BaseModel {
 
     insertReportDetails(data, callback) {
         DB.insert_batch('t_report_dashboard_widgets', data, function(err,response){
-          for(let widgets of data) {
+
+          async.every(data, function(result, callbackNew) {
+            console.log('====result', result);
+
             const select = ['report_id'];
-            DB.select(select).from('t_report_dashboards rd')
-              .where('rd.id', widgets.report_dashboard_id)
-              .get((err, response) => {
-              let report_id;
-              for (let resp in response) {
-                report_id = response[resp].report_id;
+              DB.select(select).from('t_report_dashboards rd')
+                .where('rd.id', result.report_dashboard_id)
+                .get((err, response) => {
+                let reportId;
+                for (let resp in response) {
+                  reportId = response[resp].report_id;
+                }
+                //this.updateReportsPassFailCount(reportId, result.report_dashboard_id);
+
+
+                const select = ['GROUP_CONCAT( id SEPARATOR  "," ) report_dashboard_id'];
+                DB.select(select).from('t_report_dashboards rd')
+                    .where('rd.report_id', reportId)
+                    .get((err, response) => {
+                      let report_dashboard_ids;
+                      for (let resp in response) {
+                          report_dashboard_ids = response[resp].report_dashboard_id.split(',');
+                      }
+                      
+                      const select = ['COUNT(*) total, COUNT(status="pass" or null) pass_count', 'COUNT(status="fail" or null) fail_count'];
+                      DB.select(select).from('t_report_dashboard_widgets rdw')
+                          .where_in('rdw.report_dashboard_id', report_dashboard_ids)
+                          .get((err, response) => {
+                              let reportData;
+                              for (let resp in response) {
+                                  reportData = {
+                                      total: response[resp].total,
+                                      pass: parseInt(response[resp].pass_count),
+                                      fail: response[resp].fail_count,
+                                      status: 'completed'
+                                  };
+                              }
+        
+                              DB.where('rs.id', reportId)
+                                  .from('t_reports rs')
+                                  .set(reportData)
+                                  .update(null, null, null, (err, data) => {
+                                      if (err) return false;
+
+                                      callbackNew(null, true);
+                                      //return true;
+                              });
+                          });
+                  });
+
+              });
+
+              
+          },function(error, result){
+              if(result) {
+                callback(null, 'success');
               }
-              this.updateReportsPassFailCount(report_id, widgets.report_dashboard_id);
           });
-        }
-        callback(null, 'success');
-      }.bind(this));
+
+        
+      });
     }
 
     updateDataSet(chart_id, report_id, report_dashboard_id, callback) {
@@ -255,6 +302,7 @@ class TestingModel extends BaseModel {
                           results.dashboards[widget.dashboard_id]['datasets'][dataset_id] = {
                               'dataset_id': dataset_id,
                               'dataset_name': widget.dataset_name,
+                              'dataset_file': widget.dataset_file,
                               'dataset_description': widget.dataset_description,
                               'errors': widget.dataset_errors,
                               'charts': []

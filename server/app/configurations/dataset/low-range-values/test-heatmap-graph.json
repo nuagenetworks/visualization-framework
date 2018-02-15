@@ -7,12 +7,12 @@
     {
 	    "timestamp": 1500883469000,
 	    "Application": "1 Application",
-        "SlaStatus": "InSla"
+        "SlaStatus": "OutSla"
     },
     {
 	    "timestamp": 1500883469000,
 	    "Application": "2 Application",
-        "SlaStatus": "InSla"
+        "SlaStatus": "UnMonitored"
     },
     {
 	    "timestamp": 1500883469000,
@@ -28,11 +28,16 @@
 	    "timestamp": 1500883470000,
 	    "Application": "1 Application",
 	    "SlaStatus": "InSla"
+	},
+	{
+	    "timestamp": 1500883470000,
+	    "Application": "2 Application",
+	    "SlaStatus": "UnMonitored"
     },
     {
 	    "timestamp": 1500883470000,
 	    "Application": "3 Application",
-	    "SlaStatus": "InSla"
+	    "SlaStatus": "UnMonitored"
 	},
 	{
 	    "timestamp": 1500883471000,
@@ -42,7 +47,7 @@
     {
 	    "timestamp": 1500883471000,
 	    "Application": "1 Application",
-	    "SlaStatus": "InSla"
+	    "SlaStatus": "OutSla"
     },
     {
 	    "timestamp": 1500883471000,
@@ -52,18 +57,18 @@
     {
 	    "timestamp": 1500883471000,
 	    "Application": "3 Application",
-	    "SlaStatus": "InSla"
+	    "SlaStatus": "UnMonitored"
 	},
 	{
 	    "timestamp": 1500883472000,
 	    "Application": "Default Application",
-	    "SlaStatus": "InSla"
+	    "SlaStatus": "OutSla"
     }
     ,
 	{
 	    "timestamp": 1500883472000,
 	    "Application": "1 Application",
-	    "SlaStatus": "InSla"
+	    "SlaStatus": "OutSla"
     }
     ,
 	{
@@ -75,6 +80,6 @@
 	{
 	    "timestamp": 1500883472000,
 	    "Application": "3 Application",
-	    "SlaStatus": "InSla"
+	    "SlaStatus": "OutSla"
 	}
 ]
