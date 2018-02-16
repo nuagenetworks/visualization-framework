@@ -36,5 +36,6 @@ export const properties = {
         theme.palette.orangeBlindColor,
         theme.palette.mauveColor,
     ],
-    chartWidthToPixel: 4
+    chartWidthToPixel: 4,
+    emptyBoxColor: theme.palette.greyLightColor
 }

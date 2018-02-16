@@ -44,113 +44,52 @@ export const NetworkObjectTypes = {
     OVERLAY_MIRROR_DESTINATION_ID: 'overlayMirrorDestinationID',
     L7_APP_SIGNATURE_ID: 'associatedL7ApplicationSignatureID',
     VIRTUAL_FIREWALL_RULE: 'virtualfirewallrules',
-    VIRTUAL_FIREWALL_POLICIES: 'virtualfirewallpolicies'
+    VIRTUAL_FIREWALL_POLICIES: 'virtualfirewallpolicies',
+    ANY: 'ANY',
+    UNDERLAY_INTERNET_POLICYGROUP: 'UNDERLAY_INTERNET_POLICYGROUP',
 };
 
-export const getNetworkItems = (type, props) => {
-    const {
-        data,
-    } = props;
-
-    const enterpriseID = getEnterpriseID(props);
-    const domainID = getDomainID(props.resourceName, data);
-    const parentResource = props.resourceName;
-    const reqID = getRequestID({type, domainID, enterpriseID, parentResource, ...props});
-
-    return reqID ? props.getRequestResponse(reqID) : null;
+export const FlowDirection = {
+    'EGRESS': 'egress',
+    'INGRESS': 'ingress'
 }
 
-export const getSourceNetworkItems = (props) => {
-    const { data, locationTypeValue } = props;
-    const flowDir = getIDForResource('direction', data);
-    const idForLocationType = getIDForResource(locationTypeValue, data);
-    return flowDir === 'ingress' && idForLocationType ?
-        getNetworkItems(locationTypeValue, {ID: idForLocationType, ...props}) :
-        getNetworkItems(locationTypeValue, props);
-}
-
-export const getDestinationNetworkItems = (props) => {
-    const { data, networkTypeValue } = props;
-    const flowDir = getIDForResource('direction', data);
-    const idForNetworkType = getIDForResource(networkTypeValue, data);
-    return flowDir === 'egress' && idForNetworkType ?
-        getNetworkItems(networkTypeValue, {ID: idForNetworkType, ...props}) :
-        getNetworkItems(networkTypeValue, props);
-}
-
-export const fetchSourceNetworkItems = (props, domainID, enterpriseID) => {
-    const { data, locationTypeValue } = props;
-    const flowDir = getIDForResource('direction', data);
-    const query = { type: locationTypeValue, domainID, enterpriseID, ...props};
-    const idForLocationType = getIDForResource(locationTypeValue, data);
-    if (idForLocationType) {
-        if (flowDir === 'ingress') {
-            query.ID = idForLocationType;
-        }
-    }
-    fetchAssociatedObjectIfNeeded(query);
-}
-
-export const fetchDestinationNetworkItems = (props, domainID, enterpriseID) => {
-    const { data, networkTypeValue } = props;
-    const flowDir = getIDForResource('direction', data);
-    const query = { type: networkTypeValue, domainID, enterpriseID, ...props};
-    const idForNetworkType = getIDForResource(networkTypeValue, data);
-    if (idForNetworkType) {
-        if (flowDir === 'egress') {
-            query.ID = idForNetworkType;
-        }
-    }
-    fetchAssociatedObjectIfNeeded(query);
-}
-
-const getRequestResponse = (state, path) => {
-    return {
-        data: state.services.getIn([ServiceActionKeyStore.REQUESTS, path, ServiceActionKeyStore.RESULTS]),
-        isFetching: state.services.getIn([ServiceActionKeyStore.REQUESTS, path, ServiceActionKeyStore.IS_FETCHING]),
-        error: state.services.getIn([ServiceActionKeyStore.REQUESTS, path, ServiceActionKeyStore.ERROR]),
-    }
-}
-const buildMapStateToProps = (state, ownProps) => {
-    const query = state.router.location.query;
-    const { id } = query;
-    const context = state.interface.get(InterfaceActionKeyStore.CONTEXT);
-    let parentQuery = state.VFS.getIn([VFSActionKeyStore.SELECTED_ROW, id, VFSActionKeyStore.SELECTED_ROW_PARENT_QUERY]);
-    if (!parentQuery || Object.getOwnPropertyNames(parentQuery).length <= 0) {
-        parentQuery = context;
+export const getIDForResource = (type, data) => {
+    if (!type) {
+        return null;
     }
 
-    let parentPath = state.VFS.getIn([VFSActionKeyStore.SELECTED_ROW, id, VFSActionKeyStore.SELECTED_ROW_PARENT_PATHNAME]);
-    if (!parentPath) {
-        parentPath = `${process.env.PUBLIC_URL}/dashboards/vssDomainFlowExplorer`;
+    switch (type) {
+        case NetworkObjectTypes.ZONE:
+            return getMetaDataAttribute(data, 'zoneId');
+        case NetworkObjectTypes.SUBNET:
+            return getMetaDataAttribute(data, 'subnetId');
+        case 'direction':
+            return getMetaDataAttribute(data, 'direction');
+        case NetworkObjectTypes.POLICYGROUP:
+            return getMetaDataAttribute(data, 'vportId');
+        default:
+            return null;
     }
-
-    return {
-        data: state.VFS.getIn([VFSActionKeyStore.SELECTED_ROW, id, VFSActionKeyStore.SELECTED_ROW_DATA]),
-        parentQuery,
-        parentPath,
-        context,
-        visualizationType: state.interface.get(InterfaceActionKeyStore.VISUALIZATION_TYPE),
-    };
-
 }
+
 const vfsPoliciesConfig = (domainID, resourceName = 'domains') => {
     return (
-            {
-                service: "VSD",
-                query: {
-                    parentResource: resourceName,
-                    parentID: domainID,
-                    resource: "virtualfirewallpolicies",
-                    filter: 'policyState == "DRAFT"',
-                }
+        {
+            service: "VSD",
+            query: {
+                parentResource: resourceName,
+                parentID: domainID,
+                resource: "virtualfirewallpolicies",
+                filter: 'policyState == "DRAFT"',
             }
-        );
+        }
+    );
 }
 
 const vfsRulesConfig = (domainID, protocol, { locationType, locationID, networkType, networkID }, resourceName = 'domains' ) => {
 
-    let xNuageFilter = `protocol == "${protocol}"`;
+    let xNuageFilter = `protocol == "${protocol}" AND policyState == "DRAFT"`;
     if (locationType) {
         xNuageFilter = `${xNuageFilter} AND locationType == "${locationType}"`
     }
@@ -178,108 +117,20 @@ const vfsRulesConfig = (domainID, protocol, { locationType, locationID, networkT
     return configuration;
 }
 
-export const getIDForResource = (type, data) => {
-    if (!type) {
-        return null;
-    }
+const getConfiguration = ({ parentResource, parentID, resourceName, ID}) => {
+    const query = ID ? {
+        parentResource: resourceName,
+        parentID: ID
+    } : {
+        parentResource: parentResource,
+        parentID: parentID,
+        resource: resourceName
+    };
 
-    switch (type) {
-        case NetworkObjectTypes.ZONE:
-            return getMetaDataAttribute(data, 'zoneId');
-        case NetworkObjectTypes.SUBNET:
-            return getMetaDataAttribute(data, 'subnetId');
-        case 'direction':
-            return getMetaDataAttribute(data, 'direction');
-        default:
-            return null;
-    }
-}
-
-export const showMessageBoxOnNoFlow = (props) => {
-    const { data, showMessageBox, toggleError } = props;
-
-    if (!data || Object.getOwnPropertyNames(data).length <= 0) {
-        const body = () =>
-            <span style={{ display: 'inline-flex', color: 'blue', fontSize: 12, padding: 20 }}>Select first a flow to use for creating a new Virtual Firewall Rule</span>;
-
-        showMessageBox('No flow selected', body());
-        toggleError(true);
-        return false;
-    }
-    return true;
-}
-
-export const fetchAssociatedObjectIfNeeded = (props) => {
-    const {
-        type,
-        ID,
-        args,
-        data,
-        fetchSubnetsIfNeeded,
-        fetchZonesIfNeeded,
-        fetchPGsIfNeeded,
-        fetchPGExpressionsIfNeeded,
-        fetchNetworkMacroGroupsIfNeeded,
-        fetchNetworkMacrosIfNeeded,
-        fetchMirrorDestinationsIfNeeded,
-        fetchL2DomainsIfNeeded,
-        fetchOverlayMirrorDestinationsIfNeeded,
-        fetchL7ApplicationSignaturesIfNeeded,
-        fetchFirewallRulesIfNeeded,
-        fetchDomainFirewallPoliciesIfNeeded,
-        resourceName,
-        domainID,
-        enterpriseID
-    } = props;
-
-    if (!type) {
-        return;
-    }
-
-    switch (type) {
-        case NetworkObjectTypes.ZONE:
-            fetchZonesIfNeeded(domainID, resourceName, ID);
-            break;
-        case NetworkObjectTypes.SUBNET:
-            fetchSubnetsIfNeeded(domainID, resourceName, ID);
-            break;
-        case NetworkObjectTypes.POLICYGROUP:
-            fetchPGsIfNeeded(domainID, resourceName, ID);
-            break;
-        case NetworkObjectTypes.PGEXPRESSION:
-            fetchPGExpressionsIfNeeded(domainID, resourceName, ID);
-            break;
-        case NetworkObjectTypes.ENTERPRISE_NETWORK:
-            fetchNetworkMacrosIfNeeded(enterpriseID);
-            break;
-        case NetworkObjectTypes.NETWORK_MACRO_GROUP:
-            fetchNetworkMacroGroupsIfNeeded(enterpriseID);
-            break;
-        case NetworkObjectTypes.L2_DOMAIN_ID:
-            fetchL2DomainsIfNeeded(enterpriseID);
-            break;
-        case NetworkObjectTypes.MIRROR_DESTINATION_ID:
-            fetchMirrorDestinationsIfNeeded();
-            break;
-        case NetworkObjectTypes.OVERLAY_MIRROR_DESTINATION_ID:
-            fetchOverlayMirrorDestinationsIfNeeded(ID);
-            break;
-        case NetworkObjectTypes.L7_APP_SIGNATURE_ID:
-            fetchL7ApplicationSignaturesIfNeeded(enterpriseID);
-            break;
-        case NetworkObjectTypes.VIRTUAL_FIREWALL_RULE:
-            const { locationType, networkType } = args;
-            if (locationType && networkType ) {
-                const protocol = getNetworkProtocolForText(data.protocol);
-                fetchFirewallRulesIfNeeded(domainID, protocol, args, resourceName);
-            }
-            break;
-        case NetworkObjectTypes.VIRTUAL_FIREWALL_POLICIES:
-            fetchDomainFirewallPoliciesIfNeeded (domainID, resourceName);
-            break;
-        default:
-
-    }
+    return {
+        service: "VSD",
+        query
+    };
 }
 
 export const getRequestID = props => {
@@ -365,20 +216,240 @@ export const getRequestID = props => {
     return ServiceManager.getRequestID(getConfiguration({parentResource, parentID, resourceName, ID}));
 }
 
-const getConfiguration = ({ parentResource, parentID, resourceName, ID}) => {
-    const query = ID ? {
-        parentResource: resourceName,
-        parentID: ID
-    } : {
-        parentResource: parentResource,
-        parentID: parentID,
-        resource: resourceName
-    };
+export const fetchAssociatedObjectIfNeeded = (props) => {
+    const {
+        type,
+        ID,
+        args,
+        data,
+        fetchSubnetsIfNeeded,
+        fetchZonesIfNeeded,
+        fetchPGsIfNeeded,
+        fetchPGExpressionsIfNeeded,
+        fetchNetworkMacroGroupsIfNeeded,
+        fetchNetworkMacrosIfNeeded,
+        fetchMirrorDestinationsIfNeeded,
+        fetchL2DomainsIfNeeded,
+        fetchOverlayMirrorDestinationsIfNeeded,
+        fetchL7ApplicationSignaturesIfNeeded,
+        fetchFirewallRulesIfNeeded,
+        fetchDomainFirewallPoliciesIfNeeded,
+        resourceName,
+        domainID,
+        enterpriseID
+    } = props;
+
+    if (!type) {
+        return;
+    }
+
+    switch (type) {
+        case NetworkObjectTypes.ZONE:
+            fetchZonesIfNeeded(domainID, resourceName, ID);
+            break;
+        case NetworkObjectTypes.SUBNET:
+            fetchSubnetsIfNeeded(domainID, resourceName, ID);
+            break;
+        case NetworkObjectTypes.POLICYGROUP:
+            fetchPGsIfNeeded(domainID, resourceName, ID);
+            break;
+        case NetworkObjectTypes.PGEXPRESSION:
+            fetchPGExpressionsIfNeeded(domainID, resourceName, ID);
+            break;
+        case NetworkObjectTypes.ENTERPRISE_NETWORK:
+            fetchNetworkMacrosIfNeeded(enterpriseID);
+            break;
+        case NetworkObjectTypes.NETWORK_MACRO_GROUP:
+            fetchNetworkMacroGroupsIfNeeded(enterpriseID);
+            break;
+        case NetworkObjectTypes.L2_DOMAIN_ID:
+            fetchL2DomainsIfNeeded(enterpriseID);
+            break;
+        case NetworkObjectTypes.MIRROR_DESTINATION_ID:
+            fetchMirrorDestinationsIfNeeded();
+            break;
+        case NetworkObjectTypes.OVERLAY_MIRROR_DESTINATION_ID:
+            fetchOverlayMirrorDestinationsIfNeeded(ID);
+            break;
+        case NetworkObjectTypes.L7_APP_SIGNATURE_ID:
+            fetchL7ApplicationSignaturesIfNeeded(enterpriseID);
+            break;
+        case NetworkObjectTypes.VIRTUAL_FIREWALL_RULE:
+            const { locationType, networkType } = args;
+            if (locationType && networkType ) {
+                const protocol = getNetworkProtocolForText(data.protocol);
+                fetchFirewallRulesIfNeeded(domainID, protocol, args, resourceName);
+            }
+            break;
+        case NetworkObjectTypes.VIRTUAL_FIREWALL_POLICIES:
+            fetchDomainFirewallPoliciesIfNeeded (domainID, resourceName);
+            break;
+        default:
+
+    }
+}
+
+export const getNetworkItems = (type, props) => {
+    const {
+        data,
+    } = props;
+
+    const enterpriseID = getEnterpriseID(props);
+    const domainID = getDomainID(props.resourceName, data);
+    const parentResource = props.resourceName;
+    const reqID = getRequestID({type, domainID, enterpriseID, parentResource, ...props});
+
+    return reqID ? props.getRequestResponse(reqID) : null;
+}
+
+export const getSourceData = (props) => {
+    const { data, matchedData } = props;
+    const flowDir = getIDForResource('direction', data);
+    return flowDir === FlowDirection.INGRESS ? data : matchedData && matchedData.hasOwnProperty('nuage_metadata') ? matchedData : data;
+}
+
+export const getDestinationData = (props) => {
+    const { data, matchedData } = props;
+    const flowDir = getIDForResource('direction', data);
+    return flowDir === FlowDirection.EGRESS ? data : matchedData && matchedData.hasOwnProperty('nuage_metadata') ? matchedData : data;
+}
+
+export const getSourceNetworkItems = (props) => {
+    const { locationTypeValue } = props;
+    const srcData = getSourceData(props);
+    const flowDir = getIDForResource('direction', srcData);
+    const idForLocationType = getIDForResource(locationTypeValue, srcData);
+    if (flowDir === FlowDirection.INGRESS && idForLocationType) {
+        const query = {...props, data: srcData};
+        if (locationTypeValue === NetworkObjectTypes.POLICYGROUP) {
+            query.resourceName = 'vports';
+            query.domainID = idForLocationType;
+        }
+        else {
+            query.ID = idForLocationType;
+        }
+        return getNetworkItems(locationTypeValue, query);
+    }
+    return getNetworkItems(locationTypeValue, props);
+}
+
+export const getDestinationNetworkItems = (props) => {
+    const { networkTypeValue } = props;
+    const destData = getDestinationData(props);
+    const flowDir = getIDForResource('direction', destData);
+    const idForNetworkType = getIDForResource(networkTypeValue, destData);
+    if (flowDir === FlowDirection.EGRESS && idForNetworkType) {
+        const query = {...props, data: destData};
+        if (networkTypeValue === NetworkObjectTypes.POLICYGROUP ) {
+            query.resourceName = 'vports';
+            query.domainID = idForNetworkType;
+        }
+        else {
+            query.ID = idForNetworkType;
+        }
+        return getNetworkItems(networkTypeValue, query)
+    }
+    return getNetworkItems(networkTypeValue, props);
+}
+
+export const fetchSourceNetworkItems = (props, domainID, enterpriseID) => {
+    const { locationTypeValue } = props;
+    const srcData = getSourceData(props);
+    const flowDir = getIDForResource('direction', srcData);
+    const query = { type: locationTypeValue, domainID, enterpriseID, ...props, data: srcData};
+    const idForLocationType = getIDForResource(locationTypeValue, srcData);
+    if (idForLocationType) {
+        if (flowDir === FlowDirection.INGRESS) {
+            if (locationTypeValue === NetworkObjectTypes.POLICYGROUP ) {
+                query.resourceName = 'vports';
+                query.domainID = idForLocationType;
+            }
+            else
+            {
+                query.ID = idForLocationType;
+            }
+        }
+    }
+    fetchAssociatedObjectIfNeeded(query);
+}
+
+export const fetchDestinationNetworkItems = (props, domainID, enterpriseID) => {
+    const { networkTypeValue } = props;
+    const destData = getDestinationData(props);
+    const flowDir = getIDForResource('direction', destData);
+    const query = { type: networkTypeValue, domainID, enterpriseID, ...props, data: destData};
+    const idForNetworkType = getIDForResource(networkTypeValue, destData);
+    if (idForNetworkType) {
+        if (flowDir === FlowDirection.EGRESS) {
+            if (networkTypeValue === NetworkObjectTypes.POLICYGROUP ) {
+                query.resourceName = 'vports';
+                query.domainID = idForNetworkType;
+            }
+            else
+            {
+                query.ID = idForNetworkType;
+            }
+        }
+    }
+    fetchAssociatedObjectIfNeeded(query);
+}
+
+const getRequestResponse = (state, path) => {
+    return {
+        data: state.services.getIn([ServiceActionKeyStore.REQUESTS, path, ServiceActionKeyStore.RESULTS]),
+        isFetching: state.services.getIn([ServiceActionKeyStore.REQUESTS, path, ServiceActionKeyStore.IS_FETCHING]),
+        error: state.services.getIn([ServiceActionKeyStore.REQUESTS, path, ServiceActionKeyStore.ERROR]),
+    }
+}
+
+export const getMatchedData = (state, data, id) => {
+    const direction = getIDForResource('direction', data);
+    const oppositeDirection = direction === FlowDirection.EGRESS ? FlowDirection.INGRESS : FlowDirection.EGRESS;
+    const matchedRows = state.VFS.getIn([VFSActionKeyStore.SELECTED_ROW, id, VFSActionKeyStore.SELECTED_MATCHED_ROW_DATA]);
+    const matchedData = matchedRows && matchedRows.length > 0 ?
+        matchedRows.find( item => item.nuage_metadata.direction === oppositeDirection) : {};
+    return matchedData;
+}
+
+const buildMapStateToProps = (state, ownProps) => {
+    const query = state.router.location.query;
+    const { id } = query;
+    const context = state.interface.get(InterfaceActionKeyStore.CONTEXT);
+    let parentQuery = state.VFS.getIn([VFSActionKeyStore.SELECTED_ROW, id, VFSActionKeyStore.SELECTED_ROW_PARENT_QUERY]);
+    if (!parentQuery || Object.getOwnPropertyNames(parentQuery).length <= 0) {
+        parentQuery = context;
+    }
+
+    let parentPath = state.VFS.getIn([VFSActionKeyStore.SELECTED_ROW, id, VFSActionKeyStore.SELECTED_ROW_PARENT_PATHNAME]);
+    if (!parentPath) {
+        parentPath = `${process.env.PUBLIC_URL}/dashboards/vssDomainFlowExplorer`;
+    }
+
+    const data = state.VFS.getIn([VFSActionKeyStore.SELECTED_ROW, id, VFSActionKeyStore.SELECTED_ROW_DATA]);
 
     return {
-        service: "VSD",
-        query
+        data,
+        matchedData: getMatchedData(state, data, id),
+        parentQuery,
+        parentPath,
+        context,
+        visualizationType: state.interface.get(InterfaceActionKeyStore.VISUALIZATION_TYPE),
     };
+
+}
+
+export const showMessageBoxOnNoFlow = (props) => {
+    const { data, showMessageBox, toggleError, protocolValue } = props;
+
+    if (!data || Object.getOwnPropertyNames(data).length <= 0 || (protocolValue === '1')) {
+        const body = () =>
+            <span style={{ display: 'inline-flex', color: 'blue', fontSize: 12, padding: 20 }}>Select first a flow with a valid protocol to create a new Virtual Firewall Rule</span>;
+        const errMsg = (protocolValue === '1') ? "ICMP is not yet supported" : 'No flow selected';
+        showMessageBox(errMsg, body());
+        toggleError(true);
+        return false;
+    }
+    return true;
 }
 
 export const mapStateToProps = (state, ownProps) => {
@@ -400,7 +471,8 @@ export const mapStateToProps = (state, ownProps) => {
         'locationID',
         'networkID',
         'ID',
-        'parentID',) :
+        'parentID',
+        'protocol',) :
         selectFieldValues(state,
             formName,
             'locationType',
@@ -410,6 +482,7 @@ export const mapStateToProps = (state, ownProps) => {
             'mirrorDestinationType',
             'l2domainID',
             'parentID',
+            'protocol'
         );
     const formObject = state.form ? state.form[formName] : null;
 
