@@ -49,7 +49,7 @@ export default class GaugeGraph extends AbstractGraph {
                             .tween("text", function() {
                                 var that = d3.select(this),
                                 i = d3.interpolateNumber(minValue, currentValue);
-                                return function(t) { that.text(format(i(t)) + (gaugeCtrSuffix ? ' ' + gaugeCtrSuffix : '')); };
+                                return function(t) { that.text( i(t) ? format(i(t)) + ' ' + gaugeCtrSuffix : ""); }
                              });
                     });
         }, 500);
@@ -152,17 +152,9 @@ export default class GaugeGraph extends AbstractGraph {
         const pointerLine = d3.line()
             .curve(d3.curveMonotoneX);
 
-        this.angle        = angles.min + (scale(currentValue) * range);
+        this.angle        = angles.min + (scale(currentValue) * range) || -90
         this.minValue     = minValue
         this.currentValue = currentValue;
-
-        let needle = <path id={`gauge-needle-${configuration.id}`} d={ pointerLine(lineData) } fill={ gaugePtrColor } transform={ `rotate(${angles.min})` } />;
-
-        let counterStyle = {
-            fontSize: gaugeCtrFontSize
-        };
-
-        let counterText = <text id={`gauge-counter-${configuration.id}`} fill={ gaugeCtrColor } style={ counterStyle } transform={ `translate(0, ${height * (1 / 5)})` } > { minRange } </text>;
 
         return (
             <div className="gauge-graph">
@@ -187,13 +179,8 @@ export default class GaugeGraph extends AbstractGraph {
                                 </g>
                             })
                         }
-                        {
-                          needle
-                        }
-
-                        {
-                          counterText
-                        }
+                        <path id={`gauge-needle-${configuration.id}`} d={ pointerLine(lineData) } fill={ gaugePtrColor } transform={ `rotate(${angles.min})` } />
+                        <text id={`gauge-counter-${configuration.id}`} fill={ gaugeCtrColor } style={{fontSize: gaugeCtrFontSize}} transform={ `translate(0, ${height * (1 / 5)})` } > </text>
                     </g>
                 </svg>
             </div>
