@@ -20,5 +20,85 @@
           "destination": "destination"
       }
     }],
+    "filterOptions": {
+        "Source Field": {
+            "parameter": "source_field",
+            "default": "pg",
+            "options": [
+                {
+                    "label": "Endpoint's Domain",
+                    "value": "endpoint-domain"
+                },
+                {
+                    "label": "Endpoint's Subnet",
+                    "value": "endpoint-subnet"
+                },
+                {
+                    "label": "Endpoint's Zone",
+                    "value": "endpoint-zone"
+                },
+                {
+                    "label": "Subnet",
+                    "value": "subnet"
+                },
+                {
+                    "label": "Zone",
+                    "value": "zone"
+                },
+                {
+                    "label": "PG",
+                    "value": "pg",
+                    "default": true
+                },
+                {
+                    "label": "Network Macro Group",
+                    "value": "network-macro-group"
+                },
+                {
+                    "label": "Any",
+                    "value": "ANY"
+                }
+            ]
+        },
+        "Destination Field": {
+            "parameter": "destination_field",
+            "default": "pg",
+            "options": [
+                {
+                    "label": "Endpoint's Domain",
+                    "value": "endpoint-domain"
+                },
+                {
+                    "label": "Endpoint's Subnet",
+                    "value": "endpoint-subnet"
+                },
+                {
+                    "label": "Endpoint's Zone",
+                    "value": "endpoint-zone"
+                },
+                {
+                    "label": "Subnet",
+                    "value": "subnet"
+                },
+                {
+                    "label": "Zone",
+                    "value": "zone"
+                },
+                {
+                    "label": "PG",
+                    "value": "pg",
+                    "default": true
+                },
+                {
+                    "label": "Network Macro Group",
+                    "value": "network-macro-group"
+                },
+                {
+                    "label": "Any",
+                    "value": "ANY"
+                }
+            ]
+        }
+    },
     "query": "vss-domain-flow"
 }

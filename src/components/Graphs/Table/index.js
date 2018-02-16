@@ -216,12 +216,12 @@ class Table extends AbstractGraph {
                 let originalData = accessor(d),
                     columnData   = originalData
 
-                if(columnData && columns[i].tooltip) {
+                if((columnData || columnData === 0) && columns[i].tooltip) {
                     let fullText = tooltipAccessor[i](d, true)
                     let hoverContent = (
                         <div key={`tooltip_${j}_${i}`}>
                             {fullText}
-                            <CopyToClipboard text={fullText ? fullText : ''}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>
+                            <CopyToClipboard text={fullText ? fullText.toString() : ''}><button title="copy" className="btn btn-link btn-xs fa fa-copy pointer text-white"></button></CopyToClipboard>
                         </div>
                     )
 
@@ -245,7 +245,6 @@ class Table extends AbstractGraph {
                Object.keys(data).map( key => {
                 return data[key] = <div style={{background: highlightColor, height: style.row.height, padding: "10px 0"}}>{data[key]}</div>
             })
-
 
             return data
         })
@@ -341,10 +340,9 @@ class Table extends AbstractGraph {
             **/
 
             if(selectedColumn) {
-
                 const value = columnAccessor({column: selectedColumn})
                 matchingRows = data.filter( (d) => {
-                    return value(row) && row !== d && value(row) === value(d)
+                    return (value(row) || value(row) === 0) && row !== d && value(row) === value(d)
                 });
             }
            selectRow(this.props.configuration.id, row, matchingRows, location.query, location.pathname);
