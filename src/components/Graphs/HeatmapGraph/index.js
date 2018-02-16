@@ -31,7 +31,7 @@ export default class HeatmapGraph extends XYGraph {
         } = this.props;
 
         if (!cdata || !cdata.length)
-            return;
+            return this.renderMessage('No data to visualize')
 
         const {
             chartHeightToPixel,
@@ -70,7 +70,7 @@ export default class HeatmapGraph extends XYGraph {
         });
 
         if (!data || !data.length)
-            return;
+            return this.renderMessage('No data to visualize')
 
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
