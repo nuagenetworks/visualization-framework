@@ -96,7 +96,7 @@ export default class SimpleTextGraph extends AbstractGraph {
 
     displayText(data, targetedColumn) {
         if (!data)
-            return
+            return 0
 
         if (!targetedColumn)
             return data.length
