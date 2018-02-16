@@ -9,13 +9,16 @@ import {properties} from "./default.config"
 /*
     This is a very basic graph that displays a text message
 */
+
+const INITIAL_FONT_SIZE = 4
+
 export default class SimpleTextGraph extends AbstractGraph {
 
     constructor(props) {
         super(props, properties);
 
         this.state = {
-            fontSize: 4,
+            fontSize: INITIAL_FONT_SIZE,
         }
     }
 
@@ -34,7 +37,7 @@ export default class SimpleTextGraph extends AbstractGraph {
           } = this.getConfiguredProperties();
         // reset font size on resize
         if(this.props.height !== nextProps.height || this.props.width !== nextProps.width) {
-            this.setState({ fontSize: 10})
+            this.setState({ fontSize: INITIAL_FONT_SIZE})
         }
     }
 
@@ -46,8 +49,8 @@ export default class SimpleTextGraph extends AbstractGraph {
         } = this.props;
 
         const {
-          innerHeight,
           innerWidth,
+          innerHeight,
           targetedColumn,
           defaultFontSize
         } = this.getConfiguredProperties();
@@ -58,14 +61,15 @@ export default class SimpleTextGraph extends AbstractGraph {
         const text = this.displayText(data, targetedColumn)
 
         const blockWidth = width * innerWidth
+        const blockHeight = height * innerHeight
         const textSize = this.state.fontSize * text.toString().length * 0.7
 
-        if(text.toString().length <= 3) {
+        if(text.toString().length <= 3 && this.state.fontSize !== defaultFontSize) {
             this.setState({
                 fontSize: defaultFontSize
             })
         }
-        else if(blockWidth > textSize ) {
+        else if(blockWidth > textSize && blockHeight > textSize) {
             this.setState({
                 fontSize: this.state.fontSize + 1
             })
@@ -112,7 +116,6 @@ export default class SimpleTextGraph extends AbstractGraph {
           borderRadius,
           colors,
           fontColor,
-          defaultFontSize,
           innerHeight,
           innerWidth,
           margin,
@@ -138,7 +141,7 @@ export default class SimpleTextGraph extends AbstractGraph {
                         margin: [margin.top, margin.right, margin.bottom, margin.left].join(" "),
                         textAlign: textAlign,
                         display: "table",
-                        fontSize: defaultFontSize
+                        fontSize: "16px"
                     }}
                     onClick={onMarkClick}
                     >
@@ -154,6 +157,8 @@ export default class SimpleTextGraph extends AbstractGraph {
                             color: fontColor,
                             fontSize: this.state.fontSize,
                             cursor:cursor,
+                            margin: 'auto',
+                            marginTop: 20
                             }}
                           >
                           <div style={{
