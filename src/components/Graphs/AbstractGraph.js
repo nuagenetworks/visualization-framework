@@ -201,7 +201,7 @@ export default class AbstractGraph extends React.Component {
       }
 
       if(zeroStart && yExtent[1] < 0) {
-        yExtent[0] = 0;
+        yExtent[1] = 0;
       }
 
       let diff = Math.floor((yExtent[1] - yExtent[0]) * padding, 0);
