@@ -14,6 +14,12 @@
         "yLabel": "Destination",
         "legendColumn": "ReachabilityStatus",
         "cellColumn": "ReachabilityStatus",
+        "heatmapColor": {
+            "Healthy": "#b3d645",
+            "Degraded": "#faf78e",
+            "Down": "#f76159",
+            "No longer a valid neighbor": "#d9d9d9"
+        },
         "legend": {
             "show": true,
             "orientation": "horizontal",
