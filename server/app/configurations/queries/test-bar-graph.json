@@ -4,8 +4,8 @@
     "service": "dataset",
     "query": {
         "value": {
-            "fieldType": "gte",
-            "value":"{{app:0}}"
+            "fieldType": "lte",
+            "value":"{{app:500000000}}"
         }
     }
 }
