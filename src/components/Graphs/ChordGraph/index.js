@@ -127,7 +127,7 @@ export default class ChordGraph extends AbstractGraph {
         const { data, width, height } = this.props;
 
         if (!data || !data.length)
-            return;
+            return this.renderMessage('No data to visualize')
 
         return (
             <div className="pie-graph">

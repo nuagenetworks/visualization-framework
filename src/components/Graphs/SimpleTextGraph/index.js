@@ -128,7 +128,7 @@ export default class SimpleTextGraph extends AbstractGraph {
         } = this.getConfiguredProperties();
 
         if (!data || !data.length)
-            return;
+            return this.renderMessage('No data to visualize')
 
         const cursor = onMarkClick ? "pointer" : undefined
         const blockWidth = width * innerWidth
