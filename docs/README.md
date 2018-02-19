@@ -419,6 +419,10 @@ It is a graphical representation of data where the individual values contained i
 ![heatmap](https://user-images.githubusercontent.com/14901092/36245661-200c8ae6-1252-11e8-8d5c-5cdf63cad97e.png)
 
 - **legendColumn** used to display matrix
+- **key** (function) used to make unique combination using x and y columns to identify each matrix for event listener. E.g -
+```javascript
+    "key": "function(d) { return d['application'] + d['date_histo'];}"
+```
 - **nextPrevFilter** (boolean) show filter to see data of past timestamps. Default is false.
 - **heatmapColor** (object) used to define the color of the matrix of given `legendColumn` value. E.g -
 ```javascript
