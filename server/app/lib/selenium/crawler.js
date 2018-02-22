@@ -21,11 +21,14 @@ let dashboardSettings = null;
 let graphType = 'default';
 let checkSubsetCall = false;
 let filterDashboard = false;
+let clickDashboard = false;
+let selectMatrix = false;
 
 let errors = [];
 let widgets = [];
 
 // browser driver options
+
 let chromeOptions = new chrome.Options();
 
 let binary = new firefox.Binary();
@@ -70,7 +73,6 @@ const callback = function(type, message) {
 const getMatchPercentage = function({ size, location, srcFile, orgFile, dstFile, chartName }, matchCallback) {
   if (fs.existsSync(dstFile) && fs.existsSync(orgFile)) {
     resemble(dstFile).compareTo(orgFile).onComplete(function(data) {
-      console.log('+++++++++++++Image DIFFFF===========', Number(data.misMatchPercentage));
       matchCallback(null, (Number(data.misMatchPercentage) <= 5) ? 'pass' : 'fail');
       return;
     });
@@ -118,6 +120,38 @@ const filterUrl = function(driver) {
                 });
             });
         });
+    });
+    return true;
+};
+
+const afterPreviousHeatMap = function(driver) {
+    driver.findElement(By.xpath("//*[@id='filter_test-heatmap-graph']/div[1]/ul/li[1]/button")).click().then(function() {
+            driver.wait(function() {
+                return driver.findElements(By.xpath('//div[contains(@class,"react-grid-layout")]/div')).then(function(elements) {
+                    return elements.length;
+                });
+            }, 6000).then(function() {
+                driver.getCurrentUrl().then((url)=>{
+                    console.log('===============================5========================');
+                    fetchWidgets(url, 'prev_next');
+                });
+            });
+    });
+    return true;
+};
+
+const selectMatrixHeatMap = function(driver, Id, indexToClick) {
+    driver.findElement(By.xpath("//*[name()='svg']/*[name()='g'][2]/*[name()='g'][5]")).click().then(function() {
+            driver.wait(function() {
+                return driver.findElements(By.xpath('//div[contains(@class,"react-grid-layout")]/div')).then(function(elements) {
+                    return elements.length;
+                });
+            }, 6000).then(function() {
+                driver.getCurrentUrl().then((url)=>{
+                    console.log('===============================6========================');
+                    fetchWidgets(url, 'matrix');
+                });
+            });
     });
     return true;
 };
@@ -190,12 +224,14 @@ const initiate = function(URL) {
 const fetchWidgets = function(URL, typeUrl) {
     driver.wait(function() {
         return driver.findElements(By.className('fa-spin')).then(function(elements) {
-          return !elements.length;
+            driver.sleep(1000);
+            return !elements.length;
         });
       }, 60000).catch(function() {
           errors.push(MESSAGES.WIDGETS_NOT_LOADING)
       });
 
+      //return true;
 
       let allChartsLoaded = 0;
       let chartLocation;
@@ -269,10 +305,15 @@ const fetchWidgets = function(URL, typeUrl) {
                                 chart_name: result.name,
                                 type: 'before_click',
                             };
-                            if(typeUrl!='default' && typeUrl!='filter') {
+
+                            if(typeUrl=='chart') {
                                 widget.type = 'after_click';
                             } else if(typeUrl=='filter') {
                                 widget.type = 'after_filter';
+                            } else if(typeUrl=='matrix') {
+                                widget.type = 'after_matrix';
+                            } else if(typeUrl=='prev_next') {
+                                widget.type = 'after_prev_next';
                             }
 
                             let settingsData = dashboardSettings ? JSON.parse(dashboardSettings) : null;
@@ -288,14 +329,27 @@ const fetchWidgets = function(URL, typeUrl) {
                                         graphType = 'chart';
                                         return goToUrl(driver, settingsData.chart);
                                     }
-                                    if( settingsData && settingsData.filter && settingsData.filter == "true" && !filterDashboard) {
+                                    if( settingsData && settingsData.filter && settingsData.filter == 'true' && !filterDashboard) {
                                         filterDashboard = true;
                                         graphType = 'filter';
                                         return filterUrl(driver);
                                     }
+                                    if( settingsData && settingsData.dashboard_id && settingsData.dashboard_id == 12 && !clickDashboard) {
+                                        clickDashboard = true;
+                                        graphType = 'prev_next';
+                                        
+                                        return afterPreviousHeatMap(driver);
+                                    }
+                                    if( settingsData && settingsData.select_matrix && settingsData.select_matrix == 'true' && !selectMatrix) {
+                                        selectMatrix = true;
+                                        graphType = 'matrix';
+                                        
+                                        return selectMatrixHeatMap(driver);
+                                    }
                                     callback(null);
                                     return;
                                 }
+
 
                                 getMatchPercentage(imageDetails, function(err, response) {
                                     console.log('RESPONSE.....', response)
@@ -309,10 +363,22 @@ const fetchWidgets = function(URL, typeUrl) {
                                         graphType = 'chart';
                                         return goToUrl(driver, settingsData.chart);
                                     }
-                                    if( settingsData && settingsData.filter && settingsData.filter == "true" && !filterDashboard) {
+                                    if( settingsData && settingsData.filter && settingsData.filter == 'true' && !filterDashboard) {
                                         filterDashboard = true;
                                         graphType = 'filter';
                                         return filterUrl(driver);
+                                    }
+                                    if( settingsData && settingsData.dashboard_id && settingsData.dashboard_id == 12 && !clickDashboard) {
+                                        clickDashboard = true;
+                                        graphType = 'prev_next';
+                                        
+                                        return afterPreviousHeatMap(driver);
+                                    }
+                                    if( settingsData && settingsData.select_matrix && settingsData.select_matrix == 'true' && !selectMatrix) {
+                                        selectMatrix = true;
+                                        graphType = 'matrix';
+                                        
+                                        return selectMatrixHeatMap(driver);
                                     }
                                     callback(null);
                                     return;

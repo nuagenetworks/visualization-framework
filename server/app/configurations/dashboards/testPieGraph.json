@@ -12,6 +12,15 @@
             "h": 15,
             "minW": 2,
             "minH": 12
+        },
+        {
+            "id": "test-pie-graph-percentage-limit",
+            "x": 3,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
         }
         
     ]

@@ -1,110 +1,110 @@
 [
-    {
-      "id": 1,
-      "name": "Test AreaGraph",
-      "url": "http://localhost:3000/dashboards/testAreaGraph",
-      "settings": "",
-      "deleted_at": null,
-      "created_at": null,
-      "is_active": 1
-    },
-    {
-      "id": 2,
-      "name": "Test BarGraph",
-      "url": "http://localhost:3000/dashboards/testBarGraph",
-      "settings": "{\"bar\": \"test-stackbar-graph-horizontal-number-limit\"}",
-      "deleted_at": null,
-      "created_at": null,
-      "is_active": 1
-    },
-    {
-      "id": 4,
-      "name": "Test BasicGraph",
-      "url": "http://localhost:3000/dashboards/testBasicGraph",
-      "settings": "",
-      "deleted_at": null,
-      "created_at": null,
-      "is_active": 1
-    },
-    {
-      "id": 5,
-      "name": "Invalid URL",
-      "url": "http://invalidurl4testing.net/",
-      "settings": "",
-      "deleted_at": null,
-      "created_at": null,
-      "is_active": 0
-    },
-    {
-      "id": 6,
-      "name": "Invalid Dashboard",
-      "url": "http://localhost:3000/dashboards/vssDomainTrafficss",
-      "settings": "",
-      "deleted_at": null,
-      "created_at": null,
-      "is_active": 0
-    },
-    {
-      "id": 7,
-      "name": "Test Chord Graph",
-      "url": "http://localhost:3000/dashboards/testChordGraph",
-      "settings": "",
-      "deleted_at": null,
-      "created_at": null,
-      "is_active": 0
-    },
-    {
-      "id": 8,
-      "name": "Test Table Graph",
-      "url": "http://localhost:3000/dashboards/testTableGraph",
-      "settings": "",
-      "deleted_at": null,
-      "created_at": null,
-      "is_active": 0
-    },
-    {
-      "id": 9,
-      "name": "Test Pie Graph",
-      "url": "http://localhost:3000/dashboards/testPieGraph",
-      "settings": "",
-      "deleted_at": null,
-      "created_at": null,
-      "is_active": 0
-    },
-    {
-      "id": 10,
-      "name": "Test Multi Line Graph",
-      "url": "http://localhost:3000/dashboards/testMultiLineGraph",
-      "settings": "",
-      "deleted_at": null,
-      "created_at": null,
-      "is_active": 0
-    },
-    {
-      "id": 11,
-      "name": "Test Line Graph",
-      "url": "http://localhost:3000/dashboards/testLineGraph",
-      "settings": "",
-      "deleted_at": null,
-      "created_at": null,
-      "is_active": 0
-    },
-    {
-      "id": 12,
-      "name": "Test HeatMap Graph",
-      "url": "http://localhost:3000/dashboards/testHeatMapGraph",
-      "settings": "",
-      "deleted_at": null,
-      "created_at": null,
-      "is_active": 0
-    },
-    {
-      "id": 13,
-      "name": "Test Dynamic Bar Graph",
-      "url": "http://localhost:3000/dashboards/testDynamicBarGraph",
-      "settings": "",
-      "deleted_at": null,
-      "created_at": null,
-      "is_active": 0
-    }
-  ]
+  {
+    "id": 1,
+    "name": "Area Graph",
+    "url": "http://localhost:3000/dashboards/testAreaGraph",
+    "settings": "",
+    "deleted_at": null,
+    "created_at": null,
+    "is_active": 1
+  },
+  {
+    "id": 2,
+    "name": "Bar Graph",
+    "url": "http://localhost:3000/dashboards/testBarGraph",
+    "settings": "{\"chart\": \"test-stackbar-graph-horizontal-number-limit\"}",
+    "deleted_at": null,
+    "created_at": null,
+    "is_active": 1
+  },
+  {
+    "id": 4,
+    "name": "Basic Graph(Gauge, Simple and Variation Text Graph)",
+    "url": "http://localhost:3000/dashboards/testBasicGraph",
+    "settings": "",
+    "deleted_at": null,
+    "created_at": null,
+    "is_active": 1
+  },
+  {
+    "id": 5,
+    "name": "Invalid URL",
+    "url": "http://invalidurl4testing.net/",
+    "settings": "",
+    "deleted_at": null,
+    "created_at": null,
+    "is_active": 1
+  },
+  {
+    "id": 6,
+    "name": "Invalid Dashboard",
+    "url": "http://localhost:3000/dashboards/vssDomainTrafficss",
+    "settings": "",
+    "deleted_at": null,
+    "created_at": null,
+    "is_active": 1
+  },
+  {
+    "id": 7,
+    "name": "Chord Graph",
+    "url": "http://localhost:3000/dashboards/testChordGraph",
+    "settings": "",
+    "deleted_at": null,
+    "created_at": null,
+    "is_active": 1
+  },
+  {
+    "id": 8,
+    "name": "Table Graph",
+    "url": "http://localhost:3000/dashboards/testTableGraph",
+    "settings": "{\"filter\":\"true\"}",
+    "deleted_at": null,
+    "created_at": null,
+    "is_active": 1
+  },
+  {
+    "id": 9,
+    "name": "Pie Graph",
+    "url": "http://localhost:3000/dashboards/testPieGraph",
+    "settings": "",
+    "deleted_at": null,
+    "created_at": null,
+    "is_active": 1
+  },
+  {
+    "id": 10,
+    "name": "Multi Line Graph",
+    "url": "http://localhost:3000/dashboards/testMultiLineGraph",
+    "settings": "",
+    "deleted_at": null,
+    "created_at": null,
+    "is_active": 1
+  },
+  {
+    "id": 11,
+    "name": "Line Graph",
+    "url": "http://localhost:3000/dashboards/testLineGraph",
+    "settings": "",
+    "deleted_at": null,
+    "created_at": null,
+    "is_active": 1
+  },
+  {
+    "id": 12,
+    "name": "HeatMap Graph",
+    "url": "http://localhost:3000/dashboards/testHeatMapGraph",
+    "settings": "",
+    "deleted_at": null,
+    "created_at": null,
+    "is_active": 1
+  },
+  {
+    "id": 13,
+    "name": "Dynamic Bar Graph",
+    "url": "http://localhost:3000/dashboards/testDynamicBarGraph",
+    "settings": "",
+    "deleted_at": null,
+    "created_at": null,
+    "is_active": 1
+  }
+]

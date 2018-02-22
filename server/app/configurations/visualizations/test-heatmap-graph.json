@@ -34,5 +34,7 @@
             }
         }
     ],
+    "key": "function(d) { return d['timestamp'] + d['Application'];}",
+    "nextPrevFilter": true,
     "query": "test-heatmap-graph"
 }

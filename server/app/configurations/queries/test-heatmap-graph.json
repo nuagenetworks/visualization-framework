@@ -1,5 +1,12 @@
 {
     "id": "test-heatmap-graph",
     "title": "HeatmapGraph",
-    "service": "dataset"
+    "service": "dataset",
+    "query": {
+        "timestamp":{
+        "lte":"{{endTime:now}}",
+        "gte":"{{startTime:now-15m}}",
+        "fieldType":"timestamp"
+        }
+    }
 }

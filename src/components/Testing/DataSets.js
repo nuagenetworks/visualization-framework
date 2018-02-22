@@ -65,7 +65,7 @@ class DataSets extends Component {
       marginBottom: '15px',
       fontWeight: 'bold'
     };
-    
+    console.log(datasets);
 	  for(let datasetID in datasets) {
 	 	  if (datasets.hasOwnProperty(datasetID)) {
         
@@ -77,15 +77,24 @@ class DataSets extends Component {
             check=1;
           }
           let imageLocationType;
-          if(response.graph_type=='after_click') {
+          let textToShow;
+          if(response.graph_type==='after_click') {
             imageLocationType = 'chart';
-          } else if(response.graph_type=='after_filter') {
+            textToShow = 'After clicking on graph';
+          } else if(response.graph_type==='after_filter') {
             imageLocationType = 'filter';
+            textToShow = 'After applying filter given on top of the page';
+          } else if(response.graph_type==='after_matrix') {
+            imageLocationType = 'matrix';
+            textToShow = 'Selecting matrix on graph';
+          } else if(response.graph_type==='after_prev_next') {
+            imageLocationType = 'prev_next';
+            textToShow = 'Applying prev/next feature on graph';
           }
+
 			    return (<div key={response.chart_id}  style={{marginTop: "20px"}}>
             
-            {check === 1 && response.graph_type==='after_click' ? (<div style={styles1} >Screenshot after clicking on graph </div>) : null }
-            {check === 1 && response.graph_type==='after_filter' ? (<div style={styles1} >After Filter</div>) : null }
+            {check === 1 ? (<div style={styles1} >{textToShow} </div>) : null }
 				    <div className="" style={{ display: "flex"}}>
               
               { datasets[datasetID].dataset_id && response.graph_type==='before_click' ?

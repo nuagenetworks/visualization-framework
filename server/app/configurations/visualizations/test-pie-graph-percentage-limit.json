@@ -1,0 +1,38 @@
+{
+    "id": "test-pie-graph-percentage-limit",
+    "graph": "PieGraph",
+    "title": "Pie Graph Percentage Limit",
+    "description": "A pie chart (or a circle chart) is a circular statistical graphic which is divided into slices to illustrate numerical proportion. In a pie chart, the arc length of each slice is proportional to the quantity it represents.",
+    "author": "Anil Chauhan",
+    "creationDate": "08/03/2017",
+    "data": {
+        "sliceColumn": "value",
+        "labelColumn": "Application",
+        "otherOptions": {
+            "label": "Others",
+            "limit": 1,
+            "type": "number"
+        },
+        "tooltip": [
+            { "column": "Application", "label": "Application" },
+            { "column": "value", "format": ",.1f"}
+        ],
+        "percentages": true,
+        "percentagesFormat": ",.1%",
+        "pieLabelRadius": 0.55,
+        "pieOuterRadius": 0.95,
+        "legend": {
+            "show": true,
+            "orientation": "horizontal",
+            "circleSize": 4,
+            "labelOffset": 2
+        }
+    },
+    "listeners": [{
+      "redirect": "/dashboards/dateHistogramExample",
+      "params": {
+          "app": "Application"
+      }
+    }],
+    "query": "test-pie-graph"
+}

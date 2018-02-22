@@ -90,7 +90,6 @@ class TestingModel extends BaseModel {
         DB.insert_batch('t_report_dashboard_widgets', data, function(err,response){
 
           async.every(data, function(result, callbackNew) {
-            console.log('====result', result);
 
             const select = ['report_id'];
               DB.select(select).from('t_report_dashboards rd')
