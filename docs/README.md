@@ -471,9 +471,41 @@ The second argument is optional. If you do not provide a name, the service ident
 
 ## Testing configuration
 ### Installation Procedure
-
 1.Install **ChromeDriver** and **Selenium** on your machine.
 For reference, please follow the link for installation [install-chromedriver-selenium](https://gist.github.com/ziadoz/3e8ab7e944d02fe872c3454d17af31a5)
+
+
+2. Run all the migration files used for testing -  **db-migrate** up 
+   
+   This will run all the migrations files found in the folder - **/server/migrations** folder
+
+   Tables created after running migrations are : 
+   **t_dashboards**
+   **t_dashboard_datasets**
+   **t_reports**
+   **t_report_dashboards**
+   **t_report_dashboard_widgets**
+
+3. Now need to create dashboards and relative datasets.For this, we have created db seeder API to run the seed.
+
+    API: http://localhost:8010/middleware/api/testing/db-seed
+
+    There are seeder files we need to insert data in : 
+    1. server/seeds/seed-files/t_dashboard_datasets_seeder.json
+    2. server/seeds/seed-files/t_dashboards_seeder.json
+
+    Save the data and run the API this will insert data into t_dashboards    and t_dashboard_datasets tables.
+
+4.  All the datasets are defined in datasets folder:
+  **a) high-range-values
+  b) mid-range-values
+  c) low-range-values
+  d) negative-positive-combo-values
+  e) negative-vlues
+  f)  no-values
+  g) test-table-values**
+
+
     
 ### Run tests
 1.Go to testing url http://localhost:3000/testing/ and click button **New Report** to start generating report.
@@ -485,9 +517,9 @@ For reference, please follow the link for installation [install-chromedriver-sel
 3.We can also add as many **dashboards** in our testing platform by adding name of the dashboard in **name column** and associated **url** of the dashboard to test in **t_dashboards table**.
 ![t_dashboards](https://user-images.githubusercontent.com/14901092/31498449-9057203a-af7f-11e7-887b-4167fad7f78f.png)
 
-4.We will fetch all the charts using the **url** column of **t_dashboards table** like **http://localhost:3000/dashboards/aarDomain**.
+4.We will fetch all the charts using the **url** column of **t_dashboards table** like **http://localhost:3000/dashboards/testBarGraph?dashboard=testBarGraph**.
 
-5.If we want to add any scenario to the url of the dashboard just add query string like given in this url, **http://localhost:3000/dashboards/testDashboard?dataset=Scenario1**
+5.If we want to add any scenario to the url of the dashboard just add query string like given in this url, ** http://localhost:3000/dashboards/testBarGraph?dashboard=testBarGraph&dataset=low-range-values**
 
 6.We will test visualization frameworks for different scenarios by adding multiple scenarios in **datafile column** of **t_dashboard_datasets** table.
 ![t_dashboard_datasets](https://user-images.githubusercontent.com/14901092/31498636-26de4844-af80-11e7-8ce5-7a744fb9b690.png)

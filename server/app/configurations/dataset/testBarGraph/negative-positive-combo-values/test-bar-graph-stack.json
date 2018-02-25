@@ -1,0 +1,62 @@
+[
+    {
+        "Application": "Test1",
+        "value": "-10",
+        "social": "facebook"
+    },
+    {
+        "Application": "Test2",
+        "value": "-40",
+        "social": "facebook"
+    },
+    {
+        "Application": "Test1",
+        "value": "21",
+        "social": "twitter"
+    },
+    {
+        "Application": "Test3",
+        "value": "89",
+        "social": "google"
+    },
+    {
+        "Application": "Test5",
+        "value": "-16",
+        "social": "facebook"
+    },
+    {
+        "Application": "Test1",
+        "value": "-29",
+        "social": "google"
+    },
+    {
+        "Application": "Test3",
+        "value": "32",
+        "social": "facebook"
+    },
+    {
+        "Application": "Test8",
+        "value": "11",
+        "social": "twitter"        
+    },
+    {
+        "Application": "Test2",
+        "value": "-16",
+        "social": "twitter"        
+    },
+    {
+        "Application": "Test10",
+        "value": "-23",
+        "social": "twitter"
+    },
+    {
+        "Application": "Test11",
+        "value": "28",
+        "social": "twitter"
+    },
+    {
+        "Application": "Test2",
+        "value": "46",
+        "social": "google"
+    }
+]

@@ -89,6 +89,13 @@ class VisualizationsController extends BaseController {
   // Fetch data from query configuration
   fetchData({queryConfig, context, next, res}) {
     try {
+
+      
+      if( context.dataset && queryConfig.service !== 'dataset' ) {
+        queryConfig.service = 'dataset';
+        queryConfig.query = '';
+      }
+      
       //Fethcing the service manager
       let service = ServiceManager.getService(queryConfig.service);
 
@@ -99,6 +106,8 @@ class VisualizationsController extends BaseController {
       //If context on body then parameterized the query
       if (context) {
         const pQuery = parameterizedConfiguration(queryConfig, context);
+
+        //console.log('------------', pQuery);
 
         if (pQuery)
           queryConfig = pQuery;

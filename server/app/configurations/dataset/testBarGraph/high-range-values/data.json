@@ -1,0 +1,50 @@
+[
+    {
+        "Application": "Test1",
+        "value": "1000"
+    },
+    {
+        "Application": "Test2",
+        "value": "1200"
+    },
+    {
+        "Application": "Test3",
+        "value": "2200"
+    },
+    {
+        "Application": "Test4",
+        "value": "1180"
+    },
+    {
+        "Application": "Test5",
+        "value": "1578"
+    },
+    {
+        "Application": "Test6",
+        "value": "1367"
+    },
+    {
+        "Application": "Test7",
+        "value": "856"
+    },
+    {
+        "Application": "Test8",
+        "value": "900"
+    },
+    {
+        "Application": "Test9",
+        "value": "1999"
+    },
+    {
+        "Application": "Test10",
+        "value": "1500"
+    },
+    {
+        "Application": "Test11",
+        "value": "1700"
+    },
+    {
+        "Application": "Test12",
+        "value": "1800"
+    }
+]

@@ -1,6 +1,5 @@
 {
     "id": "test-bar-graph-stack",
-    "title": "BarGraph Stack",
     "service": "dataset",
     "query": {
         "value": {

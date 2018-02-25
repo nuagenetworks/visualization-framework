@@ -1,0 +1,50 @@
+[
+    {
+        "L7Classification": "Test1",
+        "Sum of MB": "1000"
+    },
+    {
+        "L7Classification": "Test2",
+        "Sum of MB": "1200"
+    },
+    {
+        "L7Classification": "Test3",
+        "Sum of MB": "2200"
+    },
+    {
+        "L7Classification": "Test4",
+        "Sum of MB": "1180"
+    },
+    {
+        "L7Classification": "Test5",
+        "Sum of MB": "1578"
+    },
+    {
+        "L7Classification": "Test6",
+        "Sum of MB": "1367"
+    },
+    {
+        "L7Classification": "Test7",
+        "Sum of MB": "856"
+    },
+    {
+        "L7Classification": "Test8",
+        "Sum of MB": "900"
+    },
+    {
+        "L7Classification": "Test9",
+        "Sum of MB": "1999"
+    },
+    {
+        "L7Classification": "Test10",
+        "Sum of MB": "1500"
+    },
+    {
+        "L7Classification": "Test11",
+        "Sum of MB": "1700"
+    },
+    {
+        "L7Classification": "Test12",
+        "Sum of MB": "1800"
+    }
+]

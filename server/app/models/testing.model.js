@@ -318,8 +318,13 @@ class TestingModel extends BaseModel {
             });
     }
 
-    insertSeederData(data) {
-      console.log(data);
+    getDashboardId(dashboardId, callback) {
+        let url = 'http://localhost:3000/dashboards/'+dashboardId;
+        DB.select('*').from('t_dashboards')
+        .where('url', url)
+        .get((err, response) => {
+          callback(null, JSON.stringify(response));
+        });
     }
 
     successResponse(response, res) {
