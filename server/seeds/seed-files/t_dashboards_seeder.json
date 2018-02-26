@@ -93,7 +93,7 @@
     "id": 12,
     "name": "HeatMap Graph",
     "url": "http://localhost:3000/dashboards/testHeatMapGraph",
-    "settings": "",
+    "settings": "{\"select_matrix\":\"true\",\"dashboard_id\":\"12\"}",
     "deleted_at": null,
     "created_at": null,
     "is_active": 1
