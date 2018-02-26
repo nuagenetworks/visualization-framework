@@ -473,10 +473,8 @@ The second argument is optional. If you do not provide a name, the service ident
 ### Installation Procedure
 1.Install **ChromeDriver** and **Selenium** on your machine.
 For reference, please follow the link for installation [install-chromedriver-selenium](https://gist.github.com/ziadoz/3e8ab7e944d02fe872c3454d17af31a5)
-
-
-2. Run all the migration files used for testing -  **db-migrate** up 
-   
+2.Run all the migration files used for testing -  **db-migrate** up 
+   **Note:** Update the database.json file for database connection found  **/server/database.json**
    This will run all the migrations files found in the folder - **/server/migrations** folder
 
    Tables created after running migrations are : 
@@ -486,17 +484,15 @@ For reference, please follow the link for installation [install-chromedriver-sel
    **t_report_dashboards**
    **t_report_dashboard_widgets**
 
-3. Now need to create dashboards and relative datasets.For this, we have created db seeder API to run the seed.
-
+3.Now need to create dashboards and relative datasets.For this, we have created db seeder API to run the seed.
     API: http://localhost:8010/middleware/api/testing/db-seed
-
     There are seeder files we need to insert data in : 
     1. server/seeds/seed-files/t_dashboard_datasets_seeder.json
     2. server/seeds/seed-files/t_dashboards_seeder.json
+    3. 
+Save the data and run the API this will insert data into **t_dashboards**    and **t_dashboard_datasets** tables.
 
-    Save the data and run the API this will insert data into t_dashboards    and t_dashboard_datasets tables.
-
-4.  All the datasets are defined in datasets folder:
+4.All the datasets are defined in datasets folder:
   **a) high-range-values
   b) mid-range-values
   c) low-range-values
