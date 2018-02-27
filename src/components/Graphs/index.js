@@ -10,6 +10,7 @@ import GaugeGraph from "./GaugeGraph"
 import HeatmapGraph from "./HeatmapGraph"
 import AreaGraph from "./AreaGraph"
 import DynamicBarGraph from "./DynamicBarGraph"
+import GeoMap from "./GeoMap"
 
 import { theme } from "../../theme"
 
@@ -28,7 +29,8 @@ let registry = {
     VariationTextGraph,
     HeatmapGraph,
     AreaGraph,
-    DynamicBarGraph
+    DynamicBarGraph,
+    GeoMap
 };
 
 /*

@@ -1,0 +1,15 @@
+{
+    "id": "test-geomap-graph",
+    "graph": "GeoMap",
+    "title": "Map Graph",
+    "description": "New Graph - Map Graph Visualization",
+    "author": "Anil Chauhan",
+    "creationDate": "22/02/2018",
+    "query": "test-geomap-graph",
+    "data": {
+        "latitudeColumn": "latitude",
+        "longitudeColumn": "longitude",
+        "nameColumn": "owner_name",
+        "idColumn": "id"
+    }
+}

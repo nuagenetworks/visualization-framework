@@ -5,13 +5,14 @@
     "title": "Example",
     "visualizations": [
         { 
-            "id": "dynamic-bar-graph",
+            "id": "test-geomap-graph",
             "x": 0,
             "y": 0,
             "w": 12,
             "h": 20,
             "minW": 6,
-            "minH": 15
+            "minH": 15,
+            "static": true
         }
     ]
 }
