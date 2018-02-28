@@ -1,8 +1,8 @@
 import workerpool from 'workerpool';
 import async from 'async';
-import model from '../../models/testing.model'
-import { crawl } from './crawler'
-import moment from 'moment'
+import model from '../../models/testing.model';
+import { crawl } from './crawler';
+import moment from 'moment';
 
 function capture(reportID) {
   return new Promise((resolve, reject) => {
@@ -11,7 +11,7 @@ function capture(reportID) {
       update: function(callback) {
         model.updateStatus({
           status: model.getStatusCode('EXECUTING'),
-          started_at: moment().format("YYYY-MM-DD HH:mm:ss"),
+          started_at: moment().format('YYYY-MM-DD HH:mm:ss'),
         }, {
           id: reportID,
         }, function(err, results) {
@@ -51,7 +51,7 @@ function capture(reportID) {
                           if(err) {
                             console.log(err);
                           }
-                          callback(null, response.insertId)
+                          callback(null, response.insertId);
                         });
                       },
                       function(reportDashboardId, callback) {
@@ -61,23 +61,19 @@ function capture(reportID) {
                             widget.report_id = reportID;
                             return widget;
                           });
-
-                         // console.log('+++++++++++widgets++++++++++++', widgets);
                           model.insertReportDetails(widgets, function(err, response) {
                             if(err) {
                               console.log(err);
                             }
-                            // console.log('errrrrrrrrrrrrrrrrrrrr');
                             callback(null);
                           });
                         } else {
-                          // console.log('else errooooooooooooooo');
                           callback(null);
                         }
                       },
                     ], function(err, result) {
                       // console.log('Next Dataset');
-                      callback(null)
+                      callback(null);
                     });
                 });
             }, function(err, response) {
@@ -95,7 +91,7 @@ function capture(reportID) {
               });
             });
         }
-    })
+    });
  });
 }
 

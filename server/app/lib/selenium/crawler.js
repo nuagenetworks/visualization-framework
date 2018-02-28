@@ -339,7 +339,7 @@ const fetchWidgets = function(URL, typeUrl) {
                                         }));
                                     } else {
                                         widgets.push(Object.assign({}, widget, {
-                                            status: 'pending',
+                                            status: 'fail',
                                         }));
                                     }
                                     if( settingsData && settingsData.chart && result.name === settingsData.chart && !checkSubsetCall ) {

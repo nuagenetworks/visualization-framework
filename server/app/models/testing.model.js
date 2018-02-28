@@ -44,7 +44,7 @@ class TestingModel extends BaseModel {
       }.bind(this));
     }
 
-    countReports(searchString, sortBy, callb) {
+    countReports(searchString, sortBy, callback) {
         const select = ['COUNT(*) totalReports'];
         DB.order_by(sortBy.column, sortBy.order);
         if(typeof searchString !== 'undefined') {
@@ -59,7 +59,7 @@ class TestingModel extends BaseModel {
                 countReports = response[resp].totalReports;
             }
           }
-          callb(null, countReports);
+          callback(null, countReports);
         });
     }
 
@@ -68,7 +68,8 @@ class TestingModel extends BaseModel {
     }
 
     getDashboards(callback) {
-      DB.select(['d.id as dashboard_id', 'd.name as dashboard_name', 'd.settings as settings', 'd.url as url', 'ds.id as dataset_id', 'ds.datafile as datafile'])
+      DB.select(['d.id as dashboard_id', 'd.name as dashboard_name',
+      'd.settings as settings', 'd.url as url', 'ds.id as dataset_id', 'ds.datafile as datafile'])
           .from('t_dashboards as d')
           .join('t_dashboard_datasets as ds', 'ds.dashboard_id = d.id and ds.is_active = 1', 'left')
           .where('d.is_active', '1')
@@ -91,135 +92,95 @@ class TestingModel extends BaseModel {
             }
             delete v.report_id;
         });
+        let that = this;
         DB.insert_batch('t_report_dashboard_widgets', data, function(err, response) {
-          async.every(data, function(result, callbackNew) {
-                const select = ['GROUP_CONCAT( id SEPARATOR  "," ) report_dashboard_id'];
-                DB.select(select).from('t_report_dashboards rd')
-                    .where('rd.report_id', reportId)
-                    .get((err, response) => {
-                      let reportDashboardIds;
-                      for (let resp in response) {
-                        if (response.hasOwnProperty(resp)) {
-                            reportDashboardIds = response[resp].report_dashboard_id.split(',');
-                        }
-                      }
-                      const select = ['COUNT(*) total, COUNT(status="pass" or null) pass_count', 'COUNT(status="fail" or null) fail_count'];
-                      DB.select(select).from('t_report_dashboard_widgets rdw')
-                          .where_in('rdw.report_dashboard_id', reportDashboardIds)
-                          .get((err, response) => {
-                              let reportData;
-                              for (let resp in response) {
-                                if (response.hasOwnProperty(resp)) {
-                                    reportData = {
-                                        total: response[resp].total,
-                                        pass: parseInt(response[resp].pass_count),
-                                        fail: response[resp].fail_count,
-                                    };
-                                }
-                              }
-        
-                              DB.where('rs.id', reportId)
-                                  .from('t_reports rs')
-                                  .set(reportData)
-                                  .update(null, null, null, (err, data) => {
-                                      if (err) return false;
-
-                                      callbackNew(null, true);
-                              });
-                          });
-                  });
-          }, function(error, result) {
-              if(result) {
-                callback(null, 'success');
-              }
-          });
-
-        
-      });
-    }
-
-    updateDataSet(chartId, reportId, reportDashboardId, callback) {
-        let status;
-
-        const select = ['status'];
-        DB.select(select).from('t_report_dashboard_widgets rdw')
-            .where('rdw.id', chart_id)
-            .get((err, response) => {
-              for (let resp in response) {
-                  status = response[resp].status;
-              }
-              if(status === 'fail') {
-                 status = 'pass';
-              }
-              else if(status==='pass') {
-                status = 'fail';
-              } 
-              else if(!status) {
-                status = 'fail';
-              }
-              this.updateChartStatus(status, chartId, reportId, reportDashboardId, callback)
+            async.every(data, function(result, callbackNew) {
+                that.updateGraphsFailPassCount(reportId, callbackNew);
+            }, function(error, result) {
+                if(result) {
+                    callback(null, 'success');
+                }
+            });
         });
     }
 
-    updateChartStatus(status, chartId, reportId, reportDashboardId, callback) {
-      let query = DB.where('rdw.id', chartId);
+    updateDataSet(chartId, reportId, callback) {
+        let status;
+        const select = ['status'];
+        DB.select(select).from('t_report_dashboard_widgets rdw')
+            .where('rdw.id', chartId)
+            .get((err, response) => {
+              for (let resp in response) {
+                if (response.hasOwnProperty(resp)) {
+                  status = response[resp].status;
+                }
+              }
+              if(status === 'fail') {
+                 status = 'pass';
+              } else if(status==='pass') {
+                status = 'fail';
+              } else if(!status) {
+                status = 'fail';
+              }
+              this.updateChartStatus(status, chartId, reportId, callback);
+        });
+    }
 
+    updateChartStatus(status, chartId, reportId, callback) {
+      let query = DB.where('rdw.id', chartId);
       query.from('t_report_dashboard_widgets rdw')
           .set('status', status)
           .update(null, null, null, (err, data) => {
-              if (err) return console.error(err);
+            if (err) return console.error(err);
 
-              DB.where('status',null)
-                  .from('t_report_dashboard_widgets rdw')
-                  .set('status', 'pass')
-                  .update(null, null, null, (err, data) => {
-                      if (err) return console.error(err);
+            DB.where('status', null)
+                .from('t_report_dashboard_widgets rdw')
+                .set('status', 'pass')
+                .update(null, null, null, (err, data) => {
+                    if (err) return console.error(err);
 
-                      if (this.updateReportsPassFailCount(reportId, reportDashboardId)) {
-                          callback(null, 'success');
-                      }
-
-              });
-
+                    this.updateGraphsFailPassCount(reportId, callback);
+            });
       });
     }
 
-    updateReportsPassFailCount(reportId, reportDashboardId) {
-      
+    updateGraphsFailPassCount(reportId, callback) {
         const select = ['GROUP_CONCAT( id SEPARATOR  "," ) report_dashboard_id'];
         DB.select(select).from('t_report_dashboards rd')
             .where('rd.report_id', reportId)
             .get((err, response) => {
-              let reportDashboardIds;
-              for (let resp in response) {
-                reportDashboardIds = response[resp].reportDashboardId.split(',');
-              }
-              const select = ['COUNT(*) total, COUNT(status="pass" or null) pass_count', 'COUNT(status="fail" or null) fail_count'];
-              DB.select(select).from('t_report_dashboard_widgets rdw')
-                  .where_in('rdw.report_dashboard_id', reportDashboardIds)
-                  .get((err, response) => {
-                      let reportData;
-                      for (let resp in response) {
-                          reportData = {
-                              total: response[resp].total,
-                              pass: parseInt(response[resp].pass_count),
-                              fail: response[resp].fail_count,
-                          };
-                      }
+                let reportDashboardIds;
+                for (let resp in response) {
+                    if (response.hasOwnProperty(resp)) {
+                        reportDashboardIds = response[resp].report_dashboard_id.split(',');
+                    }
+                }
+                const select = ['COUNT(*) total, COUNT(status="pass" or null) pass_count', 
+                'COUNT(status="fail" or null) fail_count'];
+                DB.select(select).from('t_report_dashboard_widgets rdw')
+                .where_in('rdw.report_dashboard_id', reportDashboardIds)
+                .get((err, response) => {
+                    let reportData;
+                    for (let resp in response) {
+                    if (response.hasOwnProperty(resp)) {
+                        reportData = {
+                            total: response[resp].total,
+                            pass: parseInt(response[resp].pass_count),
+                            fail: response[resp].fail_count,
+                        };
+                    }
+                    }
 
-                      DB.where('rs.id', reportId)
-                          .from('t_reports rs')
-                          .set(reportData)
-                          .update(null, null, null, (err, data) => {
-                              if (err) return false;
+                    DB.where('rs.id', reportId)
+                        .from('t_reports rs')
+                        .set(reportData)
+                        .update(null, null, null, (err, data) => {
+                            if (err) return false;
 
-                              return true;
-                      });
-                  });
-      });
-
-
-        return true;
+                            return callback(null, true);
+                    });
+                });
+        });
     }
 
     deleteReports(reportID, callback) {
@@ -235,11 +196,12 @@ class TestingModel extends BaseModel {
         });
     }
 
-
     getDetailReport(reportID, callback) {
         const select = [
-          'r.created_at', 'r.started_at', 'r.completed_at', 'r.id report_id', 'r.total', 'r.pass', 'r.fail', 'r.message', 'r.status',
-          'rdw.id chart_id', 'rdw.chart_name', 'rdw.type as graph_type', 'rdw.status chart_status','rdw.report_dashboard_id report_dashboard_id',
+          'r.created_at', 'r.started_at', 'r.completed_at', 'r.id report_id', 'r.total', 'r.pass', 'r.fail',
+          'r.message', 'r.status',
+          'rdw.id chart_id', 'rdw.chart_name', 'rdw.type as graph_type', 'rdw.status chart_status',
+          'rdw.report_dashboard_id report_dashboard_id',
           'rd.errors as dataset_errors',
           'dd.id dataset_id, dd.datafile dataset_file', 'dd.name dataset_name', 'dd.description dataset_description',
           'd.id dashboard_id', 'd.name dashboard_name', 'd.url dashboard_url'];
@@ -255,7 +217,7 @@ class TestingModel extends BaseModel {
                 console.log(err);
 
                 let results = {
-                  dashboards: {}
+                  dashboards: {},
                 };
 
                 if(response && response.length) {
@@ -266,7 +228,7 @@ class TestingModel extends BaseModel {
                     total: response[0].total,
                     pass: response[0].pass,
                     fail: response[0].fail,
-                    status: response[0].status
+                    status: response[0].status,
                   });
 
                   for (let widget of response) {
@@ -278,10 +240,10 @@ class TestingModel extends BaseModel {
                           };
                       }
 
-                      let dataset_id = widget.dataset_id ? widget.dataset_id : 0;
-                      if (typeof results.dashboards[widget.dashboard_id]['datasets'][dataset_id] == 'undefined') {
-                          results.dashboards[widget.dashboard_id]['datasets'][dataset_id] = {
-                              'dataset_id': dataset_id,
+                      let datasetId = widget.dataset_id ? widget.dataset_id : 0;
+                      if (typeof results.dashboards[widget.dashboard_id]['datasets'][datasetId] == 'undefined') {
+                          results.dashboards[widget.dashboard_id]['datasets'][datasetId] = {
+                              'dataset_id': datasetId,
                               'dataset_name': widget.dataset_name,
                               'dataset_file': widget.dataset_file,
                               'dataset_description': widget.dataset_description,
@@ -291,22 +253,12 @@ class TestingModel extends BaseModel {
                       }
 
                       if(widget.chart_id) {
-                        results.dashboards[widget.dashboard_id]['datasets'][dataset_id]['charts'].push(widget);
+                        results.dashboards[widget.dashboard_id]['datasets'][datasetId]['charts'].push(widget);
                       }
                   }
                 }
-
                 callback(null, results);
             });
-    }
-
-    getDashboardId(dashboardId, callback) {
-        let url = 'http://localhost:3000/dashboards/'+dashboardId;
-        DB.select('*').from('t_dashboards')
-        .where('url', url)
-        .get((err, response) => {
-          callback(null, JSON.stringify(response));
-        });
     }
 
     successResponse(response, res) {

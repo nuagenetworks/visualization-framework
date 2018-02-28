@@ -1,7 +1,7 @@
 import BaseController from './base.controller';
 import model from '../models/testing.model';
-import { successResponse } from '../lib/utils/response'
-import { executeReport } from '../lib/selenium/pool'
+import { successResponse } from '../lib/utils/response';
+import { executeReport } from '../lib/selenium/pool';
 
 class TestingController extends BaseController {
 	reports(req, res, next) {
@@ -11,7 +11,7 @@ class TestingController extends BaseController {
 		let limit = req.body.limit;
 		model.getReports(pageId, search, sortBy, limit, function(err, results) {
 			if(err) {
-				next(err)
+				next(err);
 			} else{
 				return successResponse(res, results);
 			}
@@ -21,7 +21,7 @@ class TestingController extends BaseController {
 	initiate(req, res, next) {
 			model.initiate(function(err, results) {
 				if(err || !results.insertId) {
-					next(err)
+					next(err);
 				} else {
 					executeReport(results.insertId);
 					return successResponse(res, 'Job has been successfully added to Queue');
@@ -29,7 +29,7 @@ class TestingController extends BaseController {
 			});
 	}
 
-	detail(req, res) {
+	detail(req, res, next) {
 		let reportID = req.params.report_id;
 
 		if(!reportID) {
@@ -38,7 +38,7 @@ class TestingController extends BaseController {
 
 		return model.getDetailReport(reportID, function(err, results, next) {
 			if(err) {
-				next(err)
+				next(err);
 			} else{
 				return successResponse(res, results);
 			}
@@ -49,12 +49,11 @@ class TestingController extends BaseController {
 		let {
             chart_id,
             report_id,
-            report_dashboard_id
         } = req.body;
 
-		return model.updateDataSet(chart_id, report_id, report_dashboard_id, function(err, results, next) {
+		return model.updateDataSet(chart_id, report_id, function(err, results, next) {
 			if(err) {
-				next(err)
+				next(err);
 			} else{
 				return successResponse(res, results);
 			}
@@ -65,7 +64,7 @@ class TestingController extends BaseController {
 		let reportID = req.params.report_id;
 		return model.deleteReports(reportID, function(err, results, next) {
 			if(err) {
-				next(err)
+				next(err);
 			} else{
 				return successResponse(res, results);
 			}
