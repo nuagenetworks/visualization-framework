@@ -114,17 +114,24 @@ function shouldFetch(request) {
 */
 
 function fetchIfNeeded(queryConfiguration, context = {}, configuration = {}, forceCache = false) {
+ 
+    // if( context.dataset && queryConfiguration.service !== 'dataset' ) {
+    //     queryConfiguration.service = 'dataset';
+    //     delete queryConfiguration.query;
+    // }
+    
     const isScript = configuration.query ? false : true;
     let requestID;
 
     if (isScript) {
         requestID = ServiceManager.getRequestID(queryConfiguration, context);
     } else {
-        let service = ServiceManager.getService(queryConfiguration.service);
+        let service = ServiceManager.getService(queryConfiguration.service);    
         requestID = service.getRequestID(queryConfiguration, context);
     }
-
+    
     return (dispatch, getState) => {
+        
         if (!requestID)
             return Promise.reject();
 

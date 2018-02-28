@@ -2,18 +2,18 @@ import workerpool from 'workerpool'
 
 let pool = workerpool.pool(__dirname + '/worker.js',
 {
-	maxWorkers: 1
+	maxWorkers: 1,
 });
 
-export const executeReport = function (reportId) {
+export const executeReport = function(reportId) {
   pool.exec('capture', [reportId])
-      .then(function (result) {
-        console.log('Result: ' + result);
+      .then(function(result) {
+         console.log('Test Completed Successfully');
       })
-      .catch(function (err) {
+      .catch(function(err) {
         console.error(err);
       })
-      .then(function () {
+      .then(function() {
         pool.terminate();
       });
 };

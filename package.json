@@ -28,6 +28,7 @@
     "material-ui-datatables": "0.18.2",
     "moment": "^2.18.1",
     "node-resemble-js": "^0.2.0",
+    "pngjs": "^3.3.2",
     "react": "15.6.0",
     "react-collapsible": "^2.0.3",
     "react-copy-to-clipboard": "^4.3.1",

@@ -6,18 +6,18 @@ import moment from 'moment'
 
 function capture(reportID) {
   return new Promise((resolve, reject) => {
-    //Updating Status of the Report
+    // Updating Status of the Report
     async.series({
       update: function(callback) {
         model.updateStatus({
           status: model.getStatusCode('EXECUTING'),
-          started_at: moment().format("YYYY-MM-DD HH:mm:ss")
+          started_at: moment().format("YYYY-MM-DD HH:mm:ss"),
         }, {
-          id: reportID
+          id: reportID,
         }, function(err, results) {
           if(err) {
-            console.log(err)
-            callback(err)
+            console.log(err);
+            callback(err);
             return;
           }
           callback(null, results);
@@ -27,7 +27,7 @@ function capture(reportID) {
         model.getDashboards(function(err, results) {
           callback(null, results);
         });
-      }
+      },
     }, function(err, results) {
         if(err) {
              // Something went wrong because of "reason"
@@ -38,7 +38,7 @@ function capture(reportID) {
 
              throw reason;
         } else if (results) {
-            async.eachSeries(results.dashboards, function(result, callback){
+            async.eachSeries(results.dashboards, function(result, callback) {
                 crawl(reportID, result, function(response) {
                     async.waterfall([
                       function(callback) {
@@ -58,39 +58,40 @@ function capture(reportID) {
                         if(response.widgets && response.widgets.length && reportDashboardId) {
                           let widgets = response.widgets.map(function(widget) {
                             widget.report_dashboard_id = reportDashboardId;
+                            widget.report_id = reportID;
                             return widget;
                           });
-                          console.log('+++++++++++widgets++++++++++++', widgets);
+
+                         // console.log('+++++++++++widgets++++++++++++', widgets);
                           model.insertReportDetails(widgets, function(err, response) {
                             if(err) {
                               console.log(err);
                             }
-                            console.log('errrrrrrrrrrrrrrrrrrrr');
-                            callback(null)
+                            // console.log('errrrrrrrrrrrrrrrrrrrr');
+                            callback(null);
                           });
                         } else {
-                          console.log('else errooooooooooooooo');
-                          callback(null)
+                          // console.log('else errooooooooooooooo');
+                          callback(null);
                         }
-                      }
+                      },
                     ], function(err, result) {
-                      console.log('AFTER Inserstion')
+                      // console.log('Next Dataset');
                       callback(null)
                     });
-
                 });
             }, function(err, response) {
               model.updateStatus({
-                status: model.getStatusCode('PROCESSED'),
-                completed_at: moment().format("YYYY-MM-DD HH:mm:ss")
+                status: model.getStatusCode('COMPLETED'),
+                completed_at: moment().format('YYYY-MM-DD HH:mm:ss'),
               }, {
-                id: reportID
+                id: reportID,
               }, function(err, results) {
                 if(err) {
-                  reject(reason);
+                  reject(err);
                   return;
                 }
-                resolve(response)
+                resolve(response);
               });
             });
         }
@@ -100,5 +101,5 @@ function capture(reportID) {
 
 // create a worker and register public functions
 workerpool.worker({
-  capture: capture
+  capture: capture,
 });

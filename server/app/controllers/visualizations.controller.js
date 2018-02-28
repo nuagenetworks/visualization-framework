@@ -58,7 +58,7 @@ class VisualizationsController extends BaseController {
         queryConfig = ServiceManager.executeScript(visualizationConfig.script);
       }
 
-      //If neither query and nor script
+      //  If neither query and nor script
       if(!queryConfig)
         next(this.formatError('Unkown service', 422));
 
@@ -66,9 +66,8 @@ class VisualizationsController extends BaseController {
         queryConfig,
         context,
         next,
-        res
-      })
-
+        res,
+      });
     } catch(err) {
       next(err);
     }
@@ -82,32 +81,29 @@ class VisualizationsController extends BaseController {
       queryConfig,
       context,
       next,
-      res
-    })
+      res,
+    });
   }
 
   // Fetch data from query configuration
-  fetchData({queryConfig, context, next, res}) {
+  fetchData({ queryConfig, context, next, res }) {
     try {
-
-      
       if( context.dataset && queryConfig.service !== 'dataset' ) {
         queryConfig.service = 'dataset';
-        queryConfig.query = '';
+        delete queryConfig.query;
       }
-      
-      //Fethcing the service manager
+      //  Fethcing the service manager
       let service = ServiceManager.getService(queryConfig.service);
 
-      //Not able to reterive service from Service Manager
+      //  Not able to reterive service from Service Manager
       if(!service)
         next(this.formatError('Cant find the mentioned service', 422));
 
-      //If context on body then parameterized the query
+      //  If context on body then parameterized the query
       if (context) {
         const pQuery = parameterizedConfiguration(queryConfig, context);
 
-        //console.log('------------', pQuery);
+        //  console.log('------------', pQuery);
 
         if (pQuery)
           queryConfig = pQuery;
@@ -115,7 +111,7 @@ class VisualizationsController extends BaseController {
         return res.json([]);
       }
 
-      //Executing the Service Fetch to reterive the response.
+      //  Executing the Service Fetch to reterive the response.
       service.fetch(queryConfig, context).then(function(result) {
         if(service.tabify)
           result = service.tabify(result);

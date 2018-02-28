@@ -29,7 +29,7 @@ let widgets = [];
 
 // browser driver options
 
-let chromeOptions = new chrome.Options();
+// let chromeOptions = new chrome.Options();
 
 let binary = new firefox.Binary();
 binary.addArguments('--headless');
@@ -51,7 +51,7 @@ export const crawl = function(reportId, dashboard, callback) {
   dashboardSettings = dashboard.settings;
   widgets = [];
   errors = [];
-  checkAndProcess(dashboard.url);
+  checkAndProcess(dashboard.url, dashboard.datafile);
 };
 
 const callback = function(type, message) {
@@ -132,7 +132,6 @@ const afterPreviousHeatMap = function(driver) {
                 });
             }, 6000).then(function() {
                 driver.getCurrentUrl().then((url)=>{
-                    console.log('===============================5========================');
                     fetchWidgets(url, 'prev_next');
                 });
             });
@@ -148,7 +147,6 @@ const selectMatrixHeatMap = function(driver, Id, indexToClick) {
                 });
             }, 6000).then(function() {
                 driver.getCurrentUrl().then((url)=>{
-                    console.log('===============================6========================');
                     fetchWidgets(url, 'matrix');
                 });
             });
@@ -176,7 +174,12 @@ const cropImage = function({ size, location, srcFile, orgFile, dstFile, chartNam
     );
 };
 
-const checkAndProcess = function(URL) {
+const checkAndProcess = function(URL, dataFile) {
+    if (URL.indexOf('?') > -1) {
+        URL = URL+'&dataset='+dataFile;
+    } else {
+        URL = URL+'?dataset='+dataFile;
+    }
     let options = {
           method: 'HEAD',
           host: url.parse(URL).hostname,
@@ -184,7 +187,7 @@ const checkAndProcess = function(URL) {
       };
       try {
           let req = http.request(options, function(r) {
-              console.log('here');
+              console.log('Checking Dashboard URL');
               if(r.statusCode == 200) {
                   initiate(URL);
               } else {
@@ -224,7 +227,7 @@ const initiate = function(URL) {
 const fetchWidgets = function(URL, typeUrl) {
     driver.wait(function() {
         return driver.findElements(By.className('fa-spin')).then(function(elements) {
-            driver.sleep(1000);
+            driver.sleep(4000);
             return !elements.length;
         });
       }, 60000).catch(function() {
@@ -319,43 +322,24 @@ const fetchWidgets = function(URL, typeUrl) {
                             let settingsData = dashboardSettings ? JSON.parse(dashboardSettings) : null;
 
                             cropImage(imageDetails, function(err, response) {
-
+                                
                                 if(result.status) {
                                     widgets.push(Object.assign({}, widget, {
                                         status: result.status,
                                     }));
-                                    if( settingsData && settingsData.chart && result.name === settingsData.chart && !checkSubsetCall ) {
-                                        checkSubsetCall = true;
-                                        graphType = 'chart';
-                                        return goToUrl(driver, settingsData.chart);
-                                    }
-                                    if( settingsData && settingsData.filter && settingsData.filter == 'true' && !filterDashboard) {
-                                        filterDashboard = true;
-                                        graphType = 'filter';
-                                        return filterUrl(driver);
-                                    }
-                                    if( settingsData && settingsData.dashboard_id && settingsData.dashboard_id == 12 && !clickDashboard) {
-                                        clickDashboard = true;
-                                        graphType = 'prev_next';
-                                        
-                                        return afterPreviousHeatMap(driver);
-                                    }
-                                    if( settingsData && settingsData.select_matrix && settingsData.select_matrix == 'true' && !selectMatrix) {
-                                        selectMatrix = true;
-                                        graphType = 'matrix';
-                                        
-                                        return selectMatrixHeatMap(driver);
-                                    }
                                     callback(null);
                                     return;
                                 }
 
-
                                 getMatchPercentage(imageDetails, function(err, response) {
-                                    console.log('RESPONSE.....', response)
+                                    console.log('Image Match RESPONSE....', response);
                                     if(response) {
                                         widgets.push(Object.assign({}, widget, {
                                             status: response,
+                                        }));
+                                    } else {
+                                        widgets.push(Object.assign({}, widget, {
+                                            status: 'pending',
                                         }));
                                     }
                                     if( settingsData && settingsData.chart && result.name === settingsData.chart && !checkSubsetCall ) {

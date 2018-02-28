@@ -9,5 +9,5 @@
         "currentValue": "10",
         "gauzeTicks": "10"
     },
-    "query": "aar-flow-sla-heatmap"
+    "query": "aar-nsg-gauge-chart"
 }

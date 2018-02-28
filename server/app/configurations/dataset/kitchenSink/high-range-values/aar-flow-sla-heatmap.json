@@ -1,6 +1,447 @@
 [
+	{
+	    "date_histo": 1518857714000,
+	    "application": "Default application",
+        "slastatus": "InSla"
+    },
     {
-        "maxValue": 25000,
-        "currentValue":1500
+	    "date_histo": 1518857714000,
+	    "application": "1 application",
+        "slastatus": "OutSla"
+    },
+    {
+	    "date_histo": 1518857714000,
+	    "application": "2 application",
+        "slastatus": "UnMonitored"
+    },
+    {
+	    "date_histo": 1518857714000,
+	    "application": "3 application",
+        "slastatus": "InSla"
+    },
+	{
+	    "date_histo": 1518684914000,
+	    "application": "Default application",
+	    "slastatus": "OutnSla"
+    },
+    {
+	    "date_histo": 1518684914000,
+	    "application": "1 application",
+	    "slastatus": "UnMonitored"
+	},
+	{
+	    "date_histo": 1518684914000,
+	    "application": "2 application",
+	    "slastatus": "UnMonitored"
+    },
+    {
+	    "date_histo": 1518684914000,
+	    "application": "3 application",
+	    "slastatus": "UnMonitored"
+	},
+	{
+	    "date_histo": 1518771314000,
+	    "application": "Default application",
+	    "slastatus": "InSla"
+    },
+    {
+	    "date_histo": 1518771314000,
+	    "application": "1 application",
+	    "slastatus": "OutSla"
+    },
+    {
+	    "date_histo": 1518771314000,
+	    "application": "2 application",
+	    "slastatus": "InSla"
+    },
+    {
+	    "date_histo": 1518771314000,
+	    "application": "3 application",
+	    "slastatus": "UnMonitored"
+	},
+	{
+	    "date_histo": 1518598514000,
+	    "application": "Default application",
+	    "slastatus": "OutSla"
     }
+    ,
+	{
+	    "date_histo": 1518598514000,
+	    "application": "1 application",
+	    "slastatus": "InSla"
+    }
+    ,
+	{
+	    "date_histo": 1518598514000,
+	    "application": "2 application",
+	    "slastatus": "InSla"
+    }
+    ,
+	{
+	    "date_histo": 1518598514000,
+	    "application": "3 application",
+	    "slastatus": "OutSla"
+	},
+	{
+	    "date_histo": 1519023314000,
+	    "application": "1 application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1519023314000,
+	    "application": "2 application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1519023314000,
+	    "application": "3 application",
+	    "slastatus": "InSla"
+	},
+	{
+	    "date_histo": 1519023314000,
+	    "application": "3 application",
+	    "slastatus": "UnMonitored"
+	},
+	{
+	    "date_histo": 1518944116000,
+	    "application": "1 application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1518944116000,
+	    "application": "2 application",
+	    "slastatus": "InSla"
+    }
+    ,
+	{
+	    "date_histo": 1518944116000,
+	    "application": "3 application",
+	    "slastatus": "OutSla"
+	},
+	{
+	    "date_histo": 1519110178000,
+	    "application": "Default application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1519110178000,
+	    "application": "1 application",
+	    "slastatus": "InSla"
+    }
+    ,
+	{
+	    "date_histo": 1519110178000,
+	    "application": "2 application",
+	    "slastatus": "InSla"
+    }
+    ,
+	{
+	    "date_histo": 1519110178000,
+	    "application": "3 application",
+	    "slastatus": "OutSla"
+	},
+	{
+	    "date_histo": 1519110178000,
+	    "application": "1 application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1519110178000,
+	    "application": "2 application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1519110178000,
+	    "application": "3 application",
+	    "slastatus": "InSla"
+	},
+	{
+	    "date_histo": 1519023314000,
+	    "application": "3 application",
+	    "slastatus": "UnMonitored"
+	},
+	{
+	    "date_histo": 1519110178000,
+	    "application": "1 application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1519110178000,
+	    "application": "2 application",
+	    "slastatus": "InSla"
+    }
+    ,
+	{
+	    "date_histo": 1519110178000,
+	    "application": "3 application",
+	    "slastatus": "OutSla"
+	},
+	{
+	    "date_histo": 1519099378000,
+	    "application": "Default application",
+	    "slastatus": "UnMonitored"
+    }
+    ,
+	{
+	    "date_histo": 1519099378000,
+	    "application": "1 application",
+	    "slastatus": "UnMonitored"
+    }
+    ,
+	{
+	    "date_histo": 1519099378000,
+	    "application": "2 application",
+	    "slastatus": "InSla"
+    }
+    ,
+	{
+	    "date_histo": 1519099378000,
+	    "application": "3 application",
+	    "slastatus": "OutSla"
+	},
+	{
+	    "date_histo": 1519099378000,
+	    "application": "1 application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1519099378000,
+	    "application": "2 application",
+	    "slastatus": "UnMonitored"
+    }
+    ,
+	{
+	    "date_histo": 1519099378000,
+	    "application": "3 application",
+	    "slastatus": "UnMonitored"
+	},
+	{
+	    "date_histo": 1519099378000,
+	    "application": "3 application",
+	    "slastatus": "UnMonitored"
+	},
+	{
+	    "date_histo": 1519099378000,
+	    "application": "1 application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1519099378000,
+	    "application": "2 application",
+	    "slastatus": "UnMonitored"
+    }
+    ,
+	{
+	    "date_histo": 1519099378000,
+	    "application": "3 application",
+	    "slastatus": "OutSla"
+	},
+	{
+	    "date_histo": 1519088578000,
+	    "application": "Default application",
+	    "slastatus": "InSla"
+    }
+    ,
+	{
+	    "date_histo": 1519088578000,
+	    "application": "1 application",
+	    "slastatus": "UnMonitored"
+    }
+    ,
+	{
+	    "date_histo": 1519088578000,
+	    "application": "2 application",
+	    "slastatus": "InSla"
+    }
+    ,
+	{
+	    "date_histo": 1519088578000,
+	    "application": "3 application",
+	    "slastatus": "OutSla"
+	},
+	{
+	    "date_histo": 1519088578000,
+	    "application": "1 application",
+	    "slastatus": "InSla"
+    }
+    ,
+	{
+	    "date_histo": 1519088578000,
+	    "application": "2 application",
+	    "slastatus": "UnMonitored"
+    }
+    ,
+	{
+	    "date_histo": 1519088578000,
+	    "application": "3 application",
+	    "slastatus": "UnMonitored"
+	},
+	{
+	    "date_histo": 1519088578000,
+	    "application": "3 application",
+	    "slastatus": "InSla"
+	},
+	{
+	    "date_histo": 1519088578000,
+	    "application": "1 application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1519088578000,
+	    "application": "2 application",
+	    "slastatus": "UnMonitored"
+    }
+    ,
+	{
+	    "date_histo": 1519088578000,
+	    "application": "3 application",
+	    "slastatus": "OutSla"
+	},
+
+	{
+	    "date_histo": 1519396256000,
+	    "application": "2 application",
+	    "slastatus": "UnMonitored"
+    }
+    ,
+	{
+	    "date_histo": 1519396256000,
+	    "application": "3 application",
+	    "slastatus": "UnMonitored"
+	},
+	{
+	    "date_histo": 1519396256000,
+	    "application": "3 application",
+	    "slastatus": "InSla"
+	},
+	{
+	    "date_histo": 1519396256000,
+	    "application": "1 application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1519396256000,
+	    "application": "2 application",
+	    "slastatus": "UnMonitored"
+    }
+    ,
+	{
+	    "date_histo": 1519396256000,
+	    "application": "3 application",
+	    "slastatus": "OutSla"
+	},
+
+	{
+	    "date_histo": 1519396256000,
+	    "application": "2 application",
+	    "slastatus": "UnMonitored"
+    }
+    ,
+	{
+	    "date_histo": 1519396256000,
+	    "application": "3 application",
+	    "slastatus": "UnMonitored"
+	},
+	{
+	    "date_histo": 1519396256000,
+	    "application": "3 application",
+	    "slastatus": "InSla"
+	},
+	{
+	    "date_histo": 1519396256000,
+	    "application": "1 application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1519396256000,
+	    "application": "2 application",
+	    "slastatus": "UnMonitored"
+    }
+    ,
+	{
+	    "date_histo": 1519396256000,
+	    "application": "3 application",
+	    "slastatus": "OutSla"
+	},
+
+	{
+	    "date_histo": 1519309856000,
+	    "application": "2 application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1519309856000,
+	    "application": "3 application",
+	    "slastatus": "OutSla"
+	},
+	{
+	    "date_histo": 1519309856000,
+	    "application": "3 application",
+	    "slastatus": "InSla"
+	},
+	{
+	    "date_histo": 1519309856000,
+	    "application": "1 application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1519309856000,
+	    "application": "2 application",
+	    "slastatus": "InSla"
+    }
+    ,
+	{
+	    "date_histo": 1519309856000,
+	    "application": "3 application",
+	    "slastatus": "InSla"
+	},
+
+	{
+	    "date_histo": 1519309856000,
+	    "application": "2 application",
+	    "slastatus": "InSla"
+    }
+    ,
+	{
+	    "date_histo": 1519309856000,
+	    "application": "3 application",
+	    "slastatus": "UnMonitored"
+	},
+	{
+	    "date_histo": 1519396256000,
+	    "application": "3 application",
+	    "slastatus": "InSla"
+	},
+	{
+	    "date_histo": 1519396256000,
+	    "application": "1 application",
+	    "slastatus": "OutSla"
+    }
+    ,
+	{
+	    "date_histo": 1519396256000,
+	    "application": "2 application",
+	    "slastatus": "UnMonitored"
+    }
+    ,
+	{
+	    "date_histo": 1519396256000,
+	    "application": "3 application",
+	    "slastatus": "OutSla"
+	}
+
 ]
