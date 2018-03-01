@@ -56,7 +56,7 @@ export class DashboardView extends React.Component {
         } = nextProps
 
     if (configuration) {
-      let vizList = {}
+
       const { visualizations } = configuration.toJS()
       const prevConfiguration = this.props.configuration ? this.props.configuration.toJS() : {}
 
@@ -193,10 +193,6 @@ export class DashboardView extends React.Component {
 
   renderVisualizationIfNeeded(visualizations, verticalCompact) {
 
-    const {
-            params
-        } = this.props
-
     return (
       <div style={style.gridContainer}>
         <ResponsiveReactGridLayout
@@ -229,8 +225,8 @@ export class DashboardView extends React.Component {
 
   renderMessage(message) {
     return (
-      <div style={{ display: "table", width: screen.availWidth, height: screen.availHeight - 200 }}>
-        <div className="center-content" style={{ fontSize: '18px', fontWeight: 500, color: "rgb(107, 107, 107)" }}>
+      <div style={{ display: "table", width: screen.availWidth, height: (screen.availHeight * 0.6) }}>
+        <div className="center-content" style={{ fontSize: '1.4em', fontWeight: 500, color: "rgb(107, 107, 107)" }}>
           {message}
         </div>
       </div>
@@ -238,11 +234,11 @@ export class DashboardView extends React.Component {
   }
 
   render() {
-    const { configuration,
+    const {
+      configuration,
       error,
-      fetching,
-      params
-        } = this.props;
+      fetching
+    } = this.props
 
     if (fetching) {
       let loaderMessage = (<div>
