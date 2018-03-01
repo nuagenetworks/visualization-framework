@@ -287,13 +287,13 @@ class Table extends AbstractGraph {
         if (selectRow) {
             let matchingRows = []
 
-            let row = {}
+            let rows = {}
             const selectedData = this.getSelectedRows()
 
             if(selectedData.length > 1) {
-                row = selectedData
+                rows = selectedData
             } else {
-                row =  selectedData.length ? selectedData[0] : {}
+                let row =  selectedData.length ? selectedData[0] : {}
                 /**
                  * Compare `selectedColumn` value with all available datas and if equal to selected row,
                  * then save all matched records in store under "matchedRows",
@@ -304,8 +304,10 @@ class Table extends AbstractGraph {
                         return (value(row) || value(row) === 0) && row !== d && value(row) === value(d)
                     });
                 }
+
+                rows = row
             }
-           selectRow(this.props.configuration.id, row, matchingRows, location.query, location.pathname);
+           selectRow(this.props.configuration.id, rows, matchingRows, location.query, location.pathname);
         }
 
     }
