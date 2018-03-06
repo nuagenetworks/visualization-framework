@@ -12,7 +12,7 @@ class GeoMap extends AbstractGraph {
   constructor(props) {
     super(props)
 
-    this.state =  {
+    this.state = {
       markers: [],
       infowindow: null
     }
@@ -26,7 +26,7 @@ class GeoMap extends AbstractGraph {
 
   componentWillReceiveProps(nextProps) {
 
-    if(JSON.stringify(this.props.data) !== JSON.stringify(nextProps.data)) {
+    if (JSON.stringify(this.props.data) !== JSON.stringify(nextProps.data)) {
       this.initiate(nextProps)
     }
   }
@@ -36,34 +36,14 @@ class GeoMap extends AbstractGraph {
 
   onMapMounted(map) {
     this.map = map
-    if(!this.map)
+    if (!this.map)
       return
 
-    this.map =  window.google.maps
+    this.map = window.google.maps
   }
 
   initiate(props) {
-    const {
-      latitudeColumn,
-      longitudeColumn,
-      nameColumn,
-      idColumn
-    } = this.getConfiguredProperties();
-
-    let filterData = []
-    props.data.forEach((d, i) => {
-      if(d[latitudeColumn] && d[longitudeColumn]) {
-        filterData.push({
-          'id': d[idColumn],
-          'lat': d[latitudeColumn],
-          'lng': d[longitudeColumn],
-          'name': d[nameColumn],
-          'links': d.links || []
-        })
-      }
-    })
-    
-    this.setState({ markers: filterData })
+    this.setState({ markers: props.data })
   }
 
   // toggle info window on marker click
@@ -73,90 +53,111 @@ class GeoMap extends AbstractGraph {
 
   // popup window display on marker's click
   infowindow(marker) {
+    const {
+      nameColumn,
+      idColumn
+    } = this.getConfiguredProperties();
+
     return (
-      this.state.infowindow === marker.id &&
-      <InfoWindow onCloseClick={ () => this.toggleInfoWindow}>
-        <div>{marker.name}</div>
+      this.state.infowindow === marker[idColumn] &&
+      <InfoWindow onCloseClick={() => this.toggleInfoWindow}>
+        <div>{marker[nameColumn]}</div>
       </InfoWindow>
     )
   }
 
   // Used to draw markers on map
   getMarkers() {
-    return (
-      this.state.markers.map( marker => (
-        <Marker
-          key={marker.id}
-          position={{ lat: marker.lat, lng: marker.lng }}
-          onClick={ () => this.toggleInfoWindow(marker.id)}
-        >
-          {this.infowindow(marker)}
-        </Marker>
+    const {
+      latitudeColumn,
+      longitudeColumn,
+      idColumn
+    } = this.getConfiguredProperties();
 
-      ))
+    return (
+      this.state.markers.map(marker => {
+        if (marker[latitudeColumn] && marker[longitudeColumn]) {
+          return <Marker
+            key={marker[idColumn]}
+            position={{ lat: marker[latitudeColumn], lng: marker[longitudeColumn] }}
+            onClick={() => this.toggleInfoWindow(marker[idColumn])}
+          >
+            {this.infowindow(marker)}
+          </Marker>
+        }
+      })
     )
   }
 
-  // draw line (polyline)  to connect markers
+  // draw line (polyline) to connect markers
   getPolyLine() {
+    const {
+      latitudeColumn,
+      longitudeColumn,
+      idColumn
+    } = this.getConfiguredProperties();
+
     return (
-      this.state.markers.map( marker => {
-        return marker.links.map(link => {
+      this.state.markers.map(marker => {
+        if (marker[latitudeColumn] && marker[longitudeColumn] && marker.links) {
 
-          let destMarker = this.state.markers.find( d => d.id === link.id )
-          let color = link.color || '#FF0000'
+          return marker.links.map(link => {
+            let destMarker = this.state.markers.find(d => d[idColumn] === link.id)
+            let color = link.color || '#FF0000'
 
-          if(destMarker) {
-            return <Polyline
-              defaultVisible={true}
-              options={{
-                icons: [{
-                  icon: {path: 2},
-                  offset: '100%'
-              }],
-                strokeColor: color,
-                strokeOpacity: 1.0,
-                strokeWeight: 2}}
+            if (destMarker) {
+
+              return <Polyline
+                defaultVisible={true}
+                options={{
+                  icons: [{
+                    icon: { path: 2 },
+                    offset: '100%'
+                  }],
+                  strokeColor: color,
+                  strokeOpacity: 1.0,
+                  strokeWeight: 2
+                }}
                 defaultPath={[
-                {lat: marker.lat, lng: marker.lng},
-                {lat: destMarker.lat, lng: destMarker.lng}
-              ]}
-            />
-          }
-        })
+                  { lat: marker[latitudeColumn], lng: marker[longitudeColumn] },
+                  { lat: destMarker[latitudeColumn], lng: destMarker[longitudeColumn] }
+                ]}
+              />
+            }
+          })
+        }
       })
     )
   }
 
   render() {
-
     const {
-        data,
-        height
+      data,
+      height
     } = this.props
 
     if (!data || !data.length)
-        return this.renderMessage('No data to visualize')
+      return this.renderMessage('No data to visualize')
 
-        return (
-          <GoogleMapsWrapper
-            onMapMounted={this.onMapMounted}
-            containerElement={<div style={{ height }} />}>
-            <MarkerClusterer
-              averageCenter
-              enableRetinaIcons
-              gridSize={60}
-            >
-              {this.getMarkers()}
-              {this.getPolyLine()}
-            </MarkerClusterer>
-          </GoogleMapsWrapper>
-        )
+    return (
+      <GoogleMapsWrapper
+        onMapMounted={this.onMapMounted}
+        containerElement={<div style={{ height }} />}>
+        <MarkerClusterer
+          averageCenter
+          enableRetinaIcons
+          gridSize={60}
+        >
+          {this.getMarkers()}
+          {this.getPolyLine()}
+        </MarkerClusterer>
+      </GoogleMapsWrapper>
+    )
   }
 }
 
 GeoMap.propTypes = {
-    data: React.PropTypes.array
+  data: React.PropTypes.array
 };
 
-export default connect ( null, null) (GeoMap);
+export default connect(null, null)(GeoMap);
