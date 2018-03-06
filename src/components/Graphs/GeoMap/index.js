@@ -1,7 +1,7 @@
 import React from 'react'
 import AbstractGraph from '../AbstractGraph'
 import { connect } from 'react-redux'
-import { Marker, InfoWindow } from 'react-google-maps'
+import { Marker, InfoWindow, Polyline } from 'react-google-maps'
 
 import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClusterer"
 import GoogleMapsWrapper from '../../Map'
@@ -16,6 +16,8 @@ class GeoMap extends AbstractGraph {
       markers: [],
       infowindow: null
     }
+
+    this.onMapMounted = this.onMapMounted.bind(this)
   }
 
   componentWillMount() {
@@ -27,6 +29,17 @@ class GeoMap extends AbstractGraph {
     if(JSON.stringify(this.props.data) !== JSON.stringify(nextProps.data)) {
       this.initiate(nextProps)
     }
+  }
+  componentDidMount() {
+  }
+
+
+  onMapMounted(map) {
+    this.map = map
+    if(!this.map)
+      return
+
+    this.map =  window.google.maps
   }
 
   initiate(props) {
@@ -44,7 +57,8 @@ class GeoMap extends AbstractGraph {
           'id': d[idColumn],
           'lat': d[latitudeColumn],
           'lng': d[longitudeColumn],
-          'name': d[nameColumn]
+          'name': d[nameColumn],
+          'links': d.links || []
         })
       }
     })
@@ -78,7 +92,39 @@ class GeoMap extends AbstractGraph {
         >
           {this.infowindow(marker)}
         </Marker>
+
       ))
+    )
+  }
+
+  // draw line (polyline)  to connect markers
+  getPolyLine() {
+    return (
+      this.state.markers.map( marker => {
+        return marker.links.map(link => {
+
+          let destMarker = this.state.markers.find( d => d.id === link.id )
+          let color = link.color || '#FF0000'
+
+          if(destMarker) {
+            return <Polyline
+              defaultVisible={true}
+              options={{
+                icons: [{
+                  icon: {path: 2},
+                  offset: '100%'
+              }],
+                strokeColor: color,
+                strokeOpacity: 1.0,
+                strokeWeight: 2}}
+                defaultPath={[
+                {lat: marker.lat, lng: marker.lng},
+                {lat: destMarker.lat, lng: destMarker.lng}
+              ]}
+            />
+          }
+        })
+      })
     )
   }
 
@@ -94,6 +140,7 @@ class GeoMap extends AbstractGraph {
 
         return (
           <GoogleMapsWrapper
+            onMapMounted={this.onMapMounted}
             containerElement={<div style={{ height }} />}>
             <MarkerClusterer
               averageCenter
@@ -101,6 +148,7 @@ class GeoMap extends AbstractGraph {
               gridSize={60}
             >
               {this.getMarkers()}
+              {this.getPolyLine()}
             </MarkerClusterer>
           </GoogleMapsWrapper>
         )
