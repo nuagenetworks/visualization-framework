@@ -4871,7 +4871,10 @@
     "upload_date": "25 June 2006",
     "owner_id": 4483,
     "owner_name": "Miguel Coranti",
-    "owner_url": "http://www.panoramio.com/user/4483"
+    "owner_url": "http://www.panoramio.com/user/4483",
+    "destination": 1578881,
+    "source": 522084,
+    "color": "green"
   },
   {
 
@@ -4879,45 +4882,34 @@
     "longitude": 17.470493,
     "latitude": 47.867077,
     "owner_name": "Busa Péter",
-    "links": [
-      {
-        "id": 27932,
-        "color": "yellow"
-      },
-      {
-        "id": 1578881,
-        "color": "green"
-      }
-    ]
+    "photo_title": "Atardecer en Embalse",
+    "destination": 27932,
+    "source": 73514,
+    "color": "yellow"
   },
    {
     "id": 1578881,
     "longitude": 145.141754,
     "latitude": -37.766372,
-    "links": [
-      {
-        "id": 97671,
-        "color": "red"
-      },
-      {
-        "id": 522084,
-        "color": "green"
-      }
-    ],
+    "photo_title": "Atardecer en Embalse",
+    "destination": 97671,
+    "source": 57819,
+    "color": "red",
     "owner_name": "rosina lamberti"
   }, {
     "id": 97671,
     "longitude": 30.785408,
     "latitude": 46.639301,
-    "links": [
-      {
-        "id": 57819,
-        "color": "red"
-      }
-    ],
+    "photo_title": "Atardecer en Embalse",
+    "destination": 57819,
+    "source": 1578881,
+    "color": "red",
     "owner_name": "Kyryl"
   }, {
     "id": 25514,
+    "destination": 522084,
+    "source": 1578881,
+    "color": "green",
     "photo_title": "Arenal",
     "photo_url": "http://www.panoramio.com/photo/25514",
     "photo_file_url": "http://mw2.google.com/mw-panoramio/photos/medium/25514.jpg",

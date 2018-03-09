@@ -5,11 +5,20 @@
     "description": "New Graph - Map Graph Visualization",
     "author": "Anil Chauhan",
     "creationDate": "22/02/2018",
-    "query": "test-geomap-graph",
     "data": {
         "latitudeColumn": "latitude",
         "longitudeColumn": "longitude",
         "nameColumn": "owner_name",
-        "idColumn": "id"
+        "localityColumn": "photo_title",
+        "idColumn": "id",
+        "links": {
+            "source": "data1",
+            "sourceColumn": "source",
+            "destinationColumn": "destination"
+        }
+    },
+    "query": {
+        "data": "test-geomap-graph",
+        "data1": "test-geomap-graph"
     }
 }

@@ -14,6 +14,7 @@ class GeoMap extends AbstractGraph {
 
     this.state = {
       markers: [],
+      links: [],
       infowindow: null
     }
 
@@ -43,7 +44,15 @@ class GeoMap extends AbstractGraph {
   }
 
   initiate(props) {
+    const {
+      links
+    } = this.getConfiguredProperties();
+
+    if(links && props[links.source].length)
+      this.setState({ links: props[links.source] })
+
     this.setState({ markers: props.data })
+
   }
 
   // toggle info window on marker click
@@ -54,6 +63,7 @@ class GeoMap extends AbstractGraph {
   // popup window display on marker's click
   infowindow(marker) {
     const {
+      localityColumn,
       nameColumn,
       idColumn
     } = this.getConfiguredProperties();
@@ -61,7 +71,7 @@ class GeoMap extends AbstractGraph {
     return (
       this.state.infowindow === marker[idColumn] &&
       <InfoWindow onCloseClick={() => this.toggleInfoWindow}>
-        <div>{marker[nameColumn]}</div>
+        <div>{marker[nameColumn]} <br/> {marker[localityColumn]}</div>
       </InfoWindow>
     )
   }
@@ -94,20 +104,22 @@ class GeoMap extends AbstractGraph {
     const {
       latitudeColumn,
       longitudeColumn,
-      idColumn
+      idColumn,
+      links
     } = this.getConfiguredProperties();
 
     return (
-      this.state.markers.map(marker => {
-        if (marker[latitudeColumn] && marker[longitudeColumn] && marker.links) {
+      this.state.links.map((link, i) => {
 
-          return marker.links.map(link => {
-            let destMarker = this.state.markers.find(d => d[idColumn] === link.id)
-            let color = link.color || '#FF0000'
+            let destMarker = this.state.markers.find( d => d[idColumn] && link[links.destinationColumn] === d[idColumn])
+            let sourceMarker = this.state.markers.find( d =>  d[idColumn] && link[links.sourceColumn] === d[idColumn])
 
-            if (destMarker) {
+            if (destMarker && sourceMarker) {
+
+              let color = link.color || '#FF0000'
 
               return <Polyline
+                key={i}
                 defaultVisible={true}
                 options={{
                   icons: [{
@@ -119,13 +131,11 @@ class GeoMap extends AbstractGraph {
                   strokeWeight: 2
                 }}
                 defaultPath={[
-                  { lat: marker[latitudeColumn], lng: marker[longitudeColumn] },
+                  { lat: sourceMarker[latitudeColumn], lng: sourceMarker[longitudeColumn] },
                   { lat: destMarker[latitudeColumn], lng: destMarker[longitudeColumn] }
                 ]}
               />
             }
-          })
-        }
       })
     )
   }
