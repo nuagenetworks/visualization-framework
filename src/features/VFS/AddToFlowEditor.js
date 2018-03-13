@@ -1,14 +1,14 @@
 import React, { PropTypes } from 'react';
 import ModalEditor from '../../components/Editor/ModalEditor';
 import { Form, Label, Select, Header } from '../../ui-components';
-import {buildOptions, getDomainID, getEnterpriseID } from './utils';
+import {buildOptions, getDomainID, getEnterpriseID, getMetaDataAttribute} from './utils';
 import { TwoColumnRow } from '../components';
 
 import {
     getNetworkProtocolForText,
     getNetworkTypeOptions,
     getNetworkTypeForValue,
-    getSecurityPolicyActionsForValue,
+    getSecurityPolicyActionsForValue, NetworkProtocols,
 } from './NetworkData';
 
 import {
@@ -74,6 +74,20 @@ class AddToFlowEditor extends React.Component {
         this.setState({opened: true, formName: 'add-flow-editor', error: true});
     }
 
+    handleChangeProtocol = (evt) => {
+        const { preventDefault, ...values} = evt;
+        const protocol = values ? Object.values(values).join('') : null;
+        if (protocol === '1') {
+            const { changeFieldValue, formName } = this.props;
+            if (changeFieldValue) {
+                const ICMPCode = getMetaDataAttribute(this.props.data, 'ICMPCode');
+                const ICMPType = getMetaDataAttribute(this.props.data, 'ICMPType');
+                changeFieldValue(formName, 'ICMPCode', ICMPCode);
+                changeFieldValue(formName, 'ICMPType', ICMPType);
+            }
+        }
+    }
+
     handleSelectRule = (evt) => {
         const { preventDefault, ...values } = evt;
         const ID = values ? Object.values(values).join('') : null;
@@ -132,10 +146,14 @@ class AddToFlowEditor extends React.Component {
     }
 
     validate = (values) => {
-        const { ID } = values;
+        const { ID, protocol, ICMPCode, ICMPType } = values;
 
         if (!ID) {
             return { ID: "Please select a valid virtual firewall rule"};
+        }
+
+        if (protocol === '1' && !(ICMPCode || ICMPType)) {
+            return { protocol: "ICMP Require valid ICMP code and type for the flow"};
         }
         return {};
     }
@@ -369,6 +387,7 @@ class AddToFlowEditor extends React.Component {
                         name: 'protocol',
                         label: 'Protocol',
                         text: protocol,
+                        onChange: (value) => this.handleChangeProtocol(value)
                     }} secondColumnProps={{
                         name: 'dPort',
                         label: 'Destination Port',

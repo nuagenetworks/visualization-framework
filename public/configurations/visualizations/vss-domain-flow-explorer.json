@@ -9,6 +9,7 @@
     "data": {
         "limit": 100,
         "selectedColumn": "nuage_metadata.flowid",
+        "multiSelectable": true,
         "columns": [
             { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
             { "column": "sourceip", "label": "SIP" },
@@ -40,8 +41,7 @@
         { "text": "Add to Virtual Firewall Rule", "rootpath": "vfs/new", "params": { "operation": "add"} }
     ],
     "multiMenu": [
-        { "text": "Create Virtual Firewall Rule", "rootpath": "vfs/new", "params": { "operation": "create"} },
-        { "text": "Add to Virtual Firewall Rule", "rootpath": "vfs/new", "params": { "operation": "add"} }
+        { "text": "Add VPorts to PGs", "rootpath": "vfs/new", "params": { "operation": "associate", "associator": "vports", "to": "pgs"} }
     ],
     "query": "vss-domain-flow-explorer"
 }
