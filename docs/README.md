@@ -346,6 +346,24 @@ Display nice Pie or Donut graphs
   - **border** same as before
   - **fontColor** color of the header text
 
+  - **columns** (Array) - Array of columns display in the table. Example -
+
+  ```javascript
+  "columns":
+    [
+        { "column": "type", "label": " ", "colors" : {
+            "OTHER": "green",
+            "DENY": "red"
+            }
+        },
+        { "column": "sourceip", "label": "SIP" },
+        { "column": "subnetName", "label": "Subnet", "totalCharacters":    16, "tooltip" : {"column": "nuage_metadata.subnetName"} }
+    ]```
+
+In above example, if a value of the column show via colors then add colors property in object and mentioned all values as a key and color as a value in order to replace color from value. Note: Add label property with space to declare empty column in the table. E.g -
+
+![table-status-with-color](https://user-images.githubusercontent.com/26645756/37336742-4d9023fc-26d8-11e8-80c9-1c14100bf85b.png)
+
 
 ##### ChordGraph
 - **outerPadding** [TO COMPLETE]. Default is `30`
