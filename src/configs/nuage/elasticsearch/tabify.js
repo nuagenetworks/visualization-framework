@@ -137,12 +137,16 @@ function flatten(tree, parentNode={}){
                 .map((key) => {
                     const value = node[key];
                     if (Array.isArray(value)) {
-                        return value;
+
+                        if(value.length) {
+                            return value;
+                        }
+
+                        node[key] = null;
                     }
                     return false;
                 })
                 .filter((d) => d);
-
             switch (childTrees.length) {
 
                 // Leaf node case, return the node.
