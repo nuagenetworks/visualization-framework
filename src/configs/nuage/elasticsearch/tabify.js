@@ -154,14 +154,14 @@ function flatten(tree, parentNode={}){
                     return node;
 
                 // Non-leaf node case, recurse on the child nodes.
-                case 1:
+                default:
                     const childTree = childTrees[0];
                     if(childTree.length === 0){
                         return node;
                     }
                     return flatten(childTree, node);
-                default:
-                    throw new Error("This case should never happen");
+                // default:
+                //     throw new Error("This case should never happen");
             }
         })
 
