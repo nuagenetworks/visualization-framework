@@ -13,7 +13,7 @@
         "idColumn": "nsgatewayID"
     },
     "query": {
-        "data": "geomap-graph",
-        "data1": "geomap-graph"
+        "data": "test-geomap-graph",
+        "data1": "test-geomap-graph"
     }
 }
