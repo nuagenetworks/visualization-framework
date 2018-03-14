@@ -82,7 +82,7 @@ class GeoMap extends AbstractGraph {
     onMarkClick
     } = this.props
 
-    return onMarkClick(marker)
+    return onMarkClick ? onMarkClick(marker) : ""
   }
 
   // draw markers on map
