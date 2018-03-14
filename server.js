@@ -1,7 +1,7 @@
 // server.js
 var express = require("express");
 var path = require("path");
-
+require('dotenv').load();
 var app = express();
 
 var homepage = "/reports"; // Quickly edit this line to test the build
