@@ -60,7 +60,7 @@ class GeoMap extends AbstractGraph {
     this.setState({ infowindow: key || null })
   }
 
-  // popup window display on marker's click
+  // popup info window on marker's click
   infowindow(marker) {
     const {
       localityColumn,
@@ -76,7 +76,16 @@ class GeoMap extends AbstractGraph {
     )
   }
 
-  // Used to draw markers on map
+  // call on marker click
+  handleMarkerClick(marker) {
+    const {
+    onMarkClick
+    } = this.props
+
+    return onMarkClick(marker)
+  }
+
+  // draw markers on map
   getMarkers() {
     const {
       latitudeColumn,
@@ -90,7 +99,7 @@ class GeoMap extends AbstractGraph {
           return <Marker
             key={marker[idColumn]}
             position={{ lat: marker[latitudeColumn], lng: marker[longitudeColumn] }}
-            onClick={() => this.toggleInfoWindow(marker[idColumn])}
+            onClick={() => this.handleMarkerClick(marker)}
           >
             {this.infowindow(marker)}
           </Marker>
