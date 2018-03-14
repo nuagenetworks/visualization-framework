@@ -122,7 +122,8 @@ class GeoMap extends AbstractGraph {
     const {
       latitudeColumn,
       longitudeColumn,
-      idColumn
+      idColumn,
+        nameColumn
     } = this.getConfiguredProperties();
 
     return (
@@ -134,6 +135,7 @@ class GeoMap extends AbstractGraph {
             key={d[idColumn]}
             position={{ lat: d[latitudeColumn], lng: d[longitudeColumn] }}
             onClick={() => this.handleMarkerClick(d)}
+              label={marker[nameColumn]}
             icon={'/icons/icon-nsgateway-resized.png'}
           >
             {this.infowindow(d)}
