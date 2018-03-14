@@ -4,15 +4,16 @@
     "creationDate": "09/29/2016",
     "title": "AAR Enterprise ({{enterpriseName}}) Dashboard",
     "visualizations": [
-        { "id": "newly-discovered-applications",    "x": 0,  "y": 0, "w": 3,  "h": 14, "minW": 3, "minH": 14, "static": true},
-        { "id": "top5-app-vertical-bar",            "x": 3,  "y": 0, "w": 5,  "h": 14, "minW": 5, "minH": 14, "static": true},
-        { "id": "number-of-apm-groups",             "x": 8,  "y": 0, "w": 2,  "h": 7,  "minW": 2, "minH": 7,  "static": true},
-        { "id": "number-of-applications",           "x": 10, "y": 0, "w": 2,  "h": 7,  "minW": 2, "minH": 7,  "static": true},
-        { "id": "number-of-performance-monitors",   "x": 8,  "y": 7, "w": 2,  "h": 7,  "minW": 2, "minH": 7,  "static": true},
-        { "id": "number-of-npms",                   "x": 10, "y": 7, "w": 2,  "h": 7,  "minW": 2, "minH": 7,  "static": true},
-        { "id": "aar-slastatus-enterprise",         "x": 0,  "y": 14, "w": 3, "h": 14, "minW": 3, "minH": 14, "static": true},
-        { "id": "top5-upload-users-table",          "x": 3,  "y": 14, "w": 9, "h": 14, "minW": 9, "minH": 14, "static": true},
-        { "id": "top5-download-users-table",        "x": 3,  "y": 28, "w": 9, "h": 14, "minW": 9, "minH": 14, "static": true}
+        { "id": "geomap-graph",                     "x": 0,  "y": 0, "w": 12,  "h": 30, "minW": 9, "minH": 15, "static": true},
+        { "id": "newly-discovered-applications",    "x": 0,  "y": 30, "w": 3,  "h": 14, "minW": 3, "minH": 14, "static": true},
+        { "id": "top5-app-vertical-bar",            "x": 3,  "y": 30, "w": 5,  "h": 14, "minW": 5, "minH": 14, "static": true},
+        { "id": "number-of-apm-groups",             "x": 8,  "y": 30, "w": 2,  "h": 7,  "minW": 2, "minH": 7,  "static": true},
+        { "id": "number-of-applications",           "x": 10, "y": 30, "w": 2,  "h": 7,  "minW": 2, "minH": 7,  "static": true},
+        { "id": "number-of-performance-monitors",   "x": 8,  "y": 37, "w": 2,  "h": 7,  "minW": 2, "minH": 7,  "static": true},
+        { "id": "number-of-npms",                   "x": 10, "y": 37, "w": 2,  "h": 7,  "minW": 2, "minH": 7,  "static": true},
+        { "id": "aar-slastatus-enterprise",         "x": 0,  "y": 44, "w": 3, "h": 14, "minW": 3, "minH": 14, "static": true},
+        { "id": "top5-upload-users-table",          "x": 3,  "y": 44, "w": 9, "h": 14, "minW": 9, "minH": 14, "static": true},
+        { "id": "top5-download-users-table",        "x": 3,  "y": 58, "w": 9, "h": 14, "minW": 9, "minH": 14, "static": true}
     ],
     "links": [
         {
