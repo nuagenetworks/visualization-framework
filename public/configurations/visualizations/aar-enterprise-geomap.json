@@ -1,5 +1,5 @@
 {
-    "id": "geomap-graph",
+    "id": "aar-enterprise-geomap",
     "graph": "GeoMap",
     "title": "All NSGSs in Enterprise {{enterpriseName}}",
     "description": "Map Graph Visualization",
