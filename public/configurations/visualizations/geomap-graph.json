@@ -1,0 +1,19 @@
+{
+    "id": "geomap-graph",
+    "graph": "GeoMap",
+    "title": "All NSGSs in Enterprise {{enterpriseName}}",
+    "description": "Map Graph Visualization",
+    "author": "Bharat Mukheja",
+    "creationDate": "03/13/2018",
+    "data": {
+        "latitudeColumn": "latitude",
+        "longitudeColumn": "longitude",
+        "nameColumn": "nsgatewayName",
+        "localityColumn": "locality",
+        "idColumn": "nsgatewayID"
+    },
+    "query": {
+        "data": "geomap-graph",
+        "data1": "geomap-graph"
+    }
+}

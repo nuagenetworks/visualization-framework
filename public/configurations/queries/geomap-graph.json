@@ -1,0 +1,10 @@
+{
+    "id":"test-geomap-graph",
+    "title":"Map",
+    "service":"VSD",
+    "query":{
+        "parentResource":"enterprises",
+        "parentID":"{{enterpriseID}}",
+        "resource":"nsgatewayslocations"
+    }
+}
