@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import AddToFlowEditor from './AddToFlowEditor';
 import CreateFlow from './CreateFlow';
+import VPortPGAssociator from "./VPortPGAssociator";
 
 import {
     mapStateToProps,
@@ -48,10 +49,14 @@ class VFS extends React.Component {
     render() {
         const { operation } = this.props;
 
-        if (operation === 'add') {
-            return <AddToFlowEditor handleClose={this.handleClose} {...this.props} />;
+        switch (operation) {
+            case 'add':
+                return <AddToFlowEditor handleClose={this.handleClose} {...this.props} />;
+            case 'create':
+                return <CreateFlow handleClose={this.handleClose} {...this.props} />;
+            case 'associate':
+                return <VPortPGAssociator handleClose={this.handleClose} {...this.props}/>
         }
-        return <CreateFlow handleClose={this.handleClose} {...this.props} />;
     }
 }
 

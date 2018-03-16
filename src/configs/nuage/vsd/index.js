@@ -8,7 +8,7 @@ const config = {
     end_point_prefix: "/nuage/api/"
 }
 
-const getHeaders = (token, organization, filter, page, orderBy, proxyUser) => {
+const getHeaders = (token, organization, filter, page, orderBy, proxyUser, patchType) => {
 
     // Default headers
     let headers = {
@@ -34,6 +34,10 @@ const getHeaders = (token, organization, filter, page, orderBy, proxyUser) => {
 
     if (proxyUser)
         headers["X-Nuage-ProxyUser"] = proxyUser
+
+    if (patchType) {
+        headers["X-Nuage-PatchType"] = patchType;
+    }
 
     // console.error(headers);
     return headers
@@ -134,6 +138,30 @@ const makePUTRequest = (url, headers, body) => {
     });
 }
 
+const makePATCHRequest = (url, headers, body) => {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            method: 'PATCH',
+            url: url,
+            headers: headers,
+            data: JSON.stringify(body),
+            dataType: 'json',
+            contentType: 'application/json',
+        })
+            .done((response) => {
+                return resolve(response)
+            })
+            .fail((error) => {
+                return reject(error)
+            })
+            .always((data, status, error) => {
+                console.log("PATCH DONE: payload = ", data, " status = ", status, " error = ", error);
+            });
+    }).catch((error) => {
+        return Promise.reject(error);
+    });
+}
+
 const getMockResponse = (configuration) => {
 
     let parent   = configuration.query.parentResource,
@@ -220,6 +248,7 @@ export const VSDServiceTest = {
     getURL: getURL,
     makePOSTRequest: makePOSTRequest,
     makePUTRequest: makePUTRequest,
+    makePATCHRequest: makePATCHRequest,
 }
 
 const fetch = (configuration, state) => {
@@ -264,6 +293,28 @@ const update = (configuration, body, state) => {
     return VSDServiceTest.makePUTRequest(url, headers, body);
 }
 
+const patch = (configuration, body, state, patchHeader = 'ADD') => {
+    let token          = state.VSD.get(ActionKeyStore.TOKEN),
+        api          = state.VSD.get(ActionKeyStore.API) || process.env.REACT_APP_VSD_API_ENDPOINT,
+        organization = state.VSD.get(ActionKeyStore.ORGANIZATION);
+
+    if (!api || !token)
+        return Promise.reject("No VSD API endpoint specified. To configure the VSD API endpoint, provide the endpoint URL via the environment variable REACT_APP_VSD_API_ENDPOINT at compile time. For a development environment, you can set an invalid value, which will cause the system to provide mock data for testing. For example, you can add the following line to your .bashrc or .profile startup script: 'export REACT_APP_VSD_API_ENDPOINT=http://something.invalid'");
+
+    const url     = VSDServiceTest.getURL(configuration, api),
+        headers = getHeaders(token, organization, configuration.query.filter, undefined, undefined, undefined, patchHeader);
+
+    return VSDServiceTest.makePATCHRequest(url, headers, body);
+}
+
+const remove = (configuration, body, state) => {
+    return patch(configuration, body, state, 'REMOVE');
+}
+
+const add = (configuration, body, state) => {
+    return patch(configuration, body, state);
+}
+
 export const VSDService = {
     id: "VSD",
     config: config,
@@ -272,4 +323,6 @@ export const VSDService = {
     fetch: fetch,
     post: post,
     update: update,
+    add: add,
+    remove: remove,
 }

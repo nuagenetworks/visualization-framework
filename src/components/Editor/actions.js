@@ -26,20 +26,35 @@ const update = ({ values, configuration, dispatch, getState }) => {
     dispatch(ServiceActions.updateIfNeeded(configuration, body, values));
 }
 
+const add = ({values, configuration, dispatch, getState}) => {
+    const { ID } = values;
+    const entity = getEntity(ID, getState());
+    dispatch(ServiceActions.addIfNeeded(configuration, entity, values));
+}
+
 export const formSubmit = (values, configuration) => (dispatch, getState) => {
     const { ID } = values;
-    if (ID) {
-        update({values, configuration, dispatch, getState});
+    const { action } = configuration;
+    if (action) {
+        if (action === 'ADD') {
+            add({values, configuration, dispatch, getState});
+        }
     }
     else {
-        post({values, configuration, dispatch});
+        if (ID) {
+            update({values, configuration, dispatch, getState});
+        }
+        else {
+            post({values, configuration, dispatch});
+        }
     }
 };
 
 export const submitFailure = (configuration, errors) => (dispatch, getState) => {
     if (errors && errors.length > 0) {
         const errorInfo = () => {
-            const errorDesc = errors.map(item => <span style={errorSpan}>{item.description}</span>);
+            const errorDesc = Array.isArray(errors) ? errors.map(item => <span style={errorSpan}>{item.description}</span>)
+                : <span style={errorSpan}>{errors}</span>;
             return (
                 <div style={errorField}>
                     {errorDesc}
