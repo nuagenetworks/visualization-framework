@@ -151,7 +151,7 @@ const makePATCHRequest = (url, headers, body) => {
             .done((response) => {
                 return resolve(response)
             })
-            .fail((data, status, error) => {
+            .fail((error) => {
                 return reject(error)
             })
             .always((data, status, error) => {
