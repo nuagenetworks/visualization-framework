@@ -2,10 +2,10 @@ import React from 'react'
 import AbstractGraph from '../AbstractGraph'
 import { connect } from 'react-redux'
 import { Marker, InfoWindow, Polyline } from 'react-google-maps'
+import _ from 'lodash'
 
 import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClusterer"
 import GoogleMapsWrapper from '../../Map'
-
 
 class GeoMap extends AbstractGraph {
 
@@ -13,27 +13,15 @@ class GeoMap extends AbstractGraph {
     super(props)
 
     this.state = {
-      markers: [],
-      links: [],
-      infowindow: null
+      infowindow: null,
+      lines: []
     }
+
+    this.clusters = null;
 
     this.onMapMounted = this.onMapMounted.bind(this)
+    this.handleClustererClick = this.handleClustererClick.bind(this)
   }
-
-  componentWillMount() {
-    this.initiate(this.props)
-  }
-
-  componentWillReceiveProps(nextProps) {
-
-    if (JSON.stringify(this.props.data) !== JSON.stringify(nextProps.data)) {
-      this.initiate(nextProps)
-    }
-  }
-  componentDidMount() {
-  }
-
 
   onMapMounted(map) {
     this.map = map
@@ -41,18 +29,6 @@ class GeoMap extends AbstractGraph {
       return
 
     this.map = window.google.maps
-  }
-
-  initiate(props) {
-    const {
-      links
-    } = this.getConfiguredProperties();
-
-    if(links && props[links.source].length)
-      this.setState({ links: props[links.source] })
-
-    this.setState({ markers: props.data })
-
   }
 
   // toggle info window on marker click
@@ -87,6 +63,11 @@ class GeoMap extends AbstractGraph {
 
   // draw markers on map
   getMarkers() {
+
+    const {
+      data
+    } = this.props
+
     const {
       latitudeColumn,
       longitudeColumn,
@@ -94,12 +75,13 @@ class GeoMap extends AbstractGraph {
     } = this.getConfiguredProperties();
 
     return (
-      this.state.markers.map(marker => {
+      data.map(marker => {
         if (marker[latitudeColumn] && marker[longitudeColumn]) {
           return <Marker
+            options={{id: marker[idColumn]}}
             key={marker[idColumn]}
             position={{ lat: marker[latitudeColumn], lng: marker[longitudeColumn] }}
-            onClick={() => this.handleMarkerClick(marker)}
+            onClick={() => this.toggleInfoWindow(marker)}
           >
             {this.infowindow(marker)}
           </Marker>
@@ -108,45 +90,119 @@ class GeoMap extends AbstractGraph {
     )
   }
 
-  // draw line (polyline) to connect markers
-  getPolyLine() {
+  handleClustererClick(clusterer) {
+
+    let markerList = []
+
+    clusterer.getClusters().forEach(cluster => {
+      let markers = cluster.getMarkers().map(d => {
+        return { [d.id]: cluster.getCenter().toJSON() }
+      })
+      markerList = markers ? [...markerList, ...markers] : markerList
+    })
+
+    if (!_.isEqual(this.clusters, markerList)) {
+      this.clusters = markerList
+      this.calculatePolylines(markerList)
+    }
+  }
+
+  // calculate the lines need to be drawn to shown connected markers
+  calculatePolylines(markers) {
+    const {
+      data
+    } = this.props
+
     const {
       latitudeColumn,
       longitudeColumn,
       idColumn,
       links
-    } = this.getConfiguredProperties();
+    } = this.getConfiguredProperties()
 
-    return (
-      this.state.links.map((link, i) => {
+    if (links && links.source && this.props[links.source].length) {
 
-            let destMarker = this.state.markers.find( d => d[idColumn] && link[links.destinationColumn] === d[idColumn])
-            let sourceMarker = this.state.markers.find( d =>  d[idColumn] && link[links.sourceColumn] === d[idColumn])
+      let filterData = [];
 
-            if (destMarker && sourceMarker) {
+      this.props[links.source].forEach((line, i) => {
+        let destMarker = null
+        let sourceMarker = null
 
-              let color = link.color || '#FF0000'
+        if (line[links.destinationColumn] && line[links.sourceColumn]) {
 
-              return <Polyline
-                key={i}
-                defaultVisible={true}
-                options={{
-                  icons: [{
-                    icon: { path: 2 },
-                    offset: '100%'
-                  }],
-                  strokeColor: color,
-                  strokeOpacity: 1.0,
-                  strokeWeight: 2
-                }}
-                defaultPath={[
-                  { lat: sourceMarker[latitudeColumn], lng: sourceMarker[longitudeColumn] },
-                  { lat: destMarker[latitudeColumn], lng: destMarker[longitudeColumn] }
-                ]}
-              />
+          // check link source and destination id's in marker list to get marker's latlng
+          markers.forEach((marker, key) => {
+
+            if (!destMarker && marker[line[links.destinationColumn]]) {
+              destMarker = marker[line[links.destinationColumn]]
             }
+            else if (!sourceMarker && marker[line[links.sourceColumn]]) {
+              sourceMarker = marker[line[links.sourceColumn]]
+            }
+          })
+
+          // if not found in bound, then find lat lng in data
+          if (!destMarker && sourceMarker) {
+            let destination = data.find(d => d[idColumn] === line[links.destinationColumn])
+            destMarker = {
+              lat: destination[latitudeColumn],
+              lng: destination[longitudeColumn],
+            }
+          }
+
+          // if not found in bound, then find lat lng in data
+          if (!sourceMarker && destMarker) {
+            let source = data.find(d => d[idColumn] === line[links.sourceColumn])
+            sourceMarker = {
+              lat: source[latitudeColumn],
+              lng: source[longitudeColumn],
+            }
+          }
+        }
+
+        if (destMarker && sourceMarker) {
+          let color = line.color || "#000"
+          if (!this.isPolylineExist(filterData, sourceMarker, destMarker)) {
+            filterData.push({
+              'source': { lat: sourceMarker.lat, lng: sourceMarker.lng },
+              'destination': { lat: destMarker.lat, lng: destMarker.lng },
+              color
+            })
+          }
+        }
       })
-    )
+      this.setState({ lines: filterData })
+    }
+  }
+
+  // check line is already drawn or not
+  isPolylineExist(filterData, sourceMarker, destMarker) {
+    return filterData.some(function (el) {
+      return ((el.source.lat === sourceMarker.lat && el.source.lng === sourceMarker.lng) && (el.destination.lat === destMarker.lat && el.destination.lng === destMarker.lng));
+    });
+  }
+
+  renderPolyline() {
+
+    return this.state.lines.map( (link, i) => {
+      return <Polyline
+        key={i}
+        defaultVisible={true}
+        options={{
+          icons: [{
+            icon: { path: 2 },
+            offset: '100%'
+          }],
+          strokeColor: link.color,
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        }}
+        path={[
+          { lat: link.source.lat, lng: link.source.lng },
+          { lat: link.destination.lat, lng: link.destination.lng }
+        ]}
+      />
+    })
   }
 
   render() {
@@ -163,12 +219,14 @@ class GeoMap extends AbstractGraph {
         onMapMounted={this.onMapMounted}
         containerElement={<div style={{ height }} />}>
         <MarkerClusterer
+          ignoreHidden={false}
           averageCenter
           enableRetinaIcons
           gridSize={60}
+          onClusteringEnd={ this.handleClustererClick}
         >
           {this.getMarkers()}
-          {this.getPolyLine()}
+          { this.renderPolyline()}
         </MarkerClusterer>
       </GoogleMapsWrapper>
     )

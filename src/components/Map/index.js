@@ -13,6 +13,7 @@ const GoogleMapsWrapper = withScriptjs(withGoogleMap(props => {
 }));
 
 GoogleMapsWrapper.defaultProps = {
+  options: {streetViewControl:false},
   containerElement: <div style={{ height: '380px' }} />,
   loadingElement: <div style={{ height: `100%` }} />,
   mapElement: <div style={{ height: `100%` }} />,
