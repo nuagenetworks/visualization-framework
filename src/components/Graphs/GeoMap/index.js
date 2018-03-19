@@ -161,7 +161,7 @@ class GeoMap extends AbstractGraph {
         }
 
         if (destMarker && sourceMarker) {
-          let color = line.color || "#000"
+          let color = line.color || "#228B22"
           if (!this.isPolylineExist(filterData, sourceMarker, destMarker)) {
             filterData.push({
               'source': { lat: sourceMarker.lat, lng: sourceMarker.lng },
@@ -191,7 +191,7 @@ class GeoMap extends AbstractGraph {
         options={{
           icons: [{
             icon: { path: 2 },
-            offset: '100%'
+            offset: '45%'
           }],
           strokeColor: link.color,
           strokeOpacity: 1.0,
