@@ -15,5 +15,11 @@
     "query": {
         "data": "test-geomap-graph",
         "data1": "test-geomap-graph"
-    }
+    },
+    "listeners": [{
+      "redirect": "/dashboards/aarNSG",
+      "params": {
+          "snsg": "nsgatewayName"
+      }
+    }]
 }
