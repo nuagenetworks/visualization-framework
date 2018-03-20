@@ -15,7 +15,14 @@
             "source": "data1",
             "sourceColumn": "source",
             "destinationColumn": "destination"
-        }
+        },
+        "filters": [
+            {
+                "columnText": "name",
+                "columField": "owner_name",
+                "type": "text"
+            }
+        ]
     },
     "query": {
         "data": "test-geomap-graph",

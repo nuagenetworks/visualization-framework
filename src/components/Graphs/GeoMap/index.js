@@ -3,9 +3,10 @@ import AbstractGraph from '../AbstractGraph'
 import { connect } from 'react-redux'
 import { Marker, InfoWindow, Polyline } from 'react-google-maps'
 import _ from 'lodash'
-
 import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClusterer"
+
 import GoogleMapsWrapper from '../../Map'
+import SearchBar from "../../SearchBar"
 
 class GeoMap extends AbstractGraph {
 
@@ -13,14 +14,45 @@ class GeoMap extends AbstractGraph {
     super(props)
 
     this.state = {
+      data: [],
       infowindow: null,
-      lines: []
+      lines: [],
+      defaultCenter: null
     }
 
     this.clusters = null;
+    this.center = null
 
-    this.onMapMounted = this.onMapMounted.bind(this)
+    this.onMapMounted         = this.onMapMounted.bind(this)
     this.handleClustererClick = this.handleClustererClick.bind(this)
+    this.handleSearch         = this.handleSearch.bind(this)
+    this.onBoundsChanged      = this.onBoundsChanged.bind(this);
+
+  }
+
+  componentWillMount() {
+    this.initiate(this.props)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!_.isEqual(this.props.data, nextProps.data))
+      this.initiate(nextProps)
+  }
+
+  componentWillUnmount() {
+    this.state = {
+      data: [],
+      infowindow: null,
+      lines: [],
+      defaultCenter: null
+    }
+
+    this.clusters = null;
+    this.center = null
+  }
+
+  initiate(props) {
+    this.setState({ data: props.data})
   }
 
   onMapMounted(map) {
@@ -29,6 +61,29 @@ class GeoMap extends AbstractGraph {
       return
 
     this.map = window.google.maps
+  }
+
+  onBoundsChanged() {
+    const {
+      latitudeColumn,
+      longitudeColumn
+    } = this.getConfiguredProperties()
+
+    const bounds = new window.google.maps.LatLngBounds()
+
+
+    this.state.data.map(marker => {
+      if (marker[latitudeColumn] && marker[longitudeColumn]) {
+        bounds.extend(new window.google.maps.LatLng(marker[latitudeColumn], marker[longitudeColumn]));
+      }
+    });
+
+    let newCenter = bounds.getCenter().toJSON()
+
+    if (newCenter && !_.isEqual(this.center, newCenter)) {
+      this.center = newCenter
+      this.setState({ defaultCenter: newCenter })
+    }
   }
 
   // toggle info window on marker click
@@ -62,12 +117,7 @@ class GeoMap extends AbstractGraph {
   }
 
   // draw markers on map
-  getMarkers() {
-
-    const {
-      data
-    } = this.props
-
+  renderMarkersIfNeeded() {
     const {
       latitudeColumn,
       longitudeColumn,
@@ -75,15 +125,16 @@ class GeoMap extends AbstractGraph {
     } = this.getConfiguredProperties();
 
     return (
-      data.map(marker => {
-        if (marker[latitudeColumn] && marker[longitudeColumn]) {
+      this.state.data.map(d => {
+        if (d[latitudeColumn] && d[longitudeColumn]) {
           return <Marker
-            options={{id: marker[idColumn]}}
-            key={marker[idColumn]}
-            position={{ lat: marker[latitudeColumn], lng: marker[longitudeColumn] }}
-            onClick={() => this.toggleInfoWindow(marker)}
+            noRedraw={false}
+            options={{id: d[idColumn]}}
+            key={d[idColumn]}
+            position={{ lat: d[latitudeColumn], lng: d[longitudeColumn] }}
+            onClick={() => this.toggleInfoWindow(d[idColumn])}
           >
-            {this.infowindow(marker)}
+            {this.infowindow(d)}
           </Marker>
         }
       })
@@ -109,10 +160,6 @@ class GeoMap extends AbstractGraph {
 
   // calculate the lines need to be drawn to shown connected markers
   calculatePolylines(markers) {
-    const {
-      data
-    } = this.props
-
     const {
       latitudeColumn,
       longitudeColumn,
@@ -143,19 +190,24 @@ class GeoMap extends AbstractGraph {
 
           // if not found in bound, then find lat lng in data
           if (!destMarker && sourceMarker) {
-            let destination = data.find(d => d[idColumn] === line[links.destinationColumn])
-            destMarker = {
-              lat: destination[latitudeColumn],
-              lng: destination[longitudeColumn],
+            let destination = this.state.data.find(d => d[idColumn] === line[links.destinationColumn])
+
+            if(destination) {
+              destMarker = {
+                lat: destination[latitudeColumn],
+                lng: destination[longitudeColumn],
+              }
             }
           }
 
           // if not found in bound, then find lat lng in data
           if (!sourceMarker && destMarker) {
-            let source = data.find(d => d[idColumn] === line[links.sourceColumn])
-            sourceMarker = {
-              lat: source[latitudeColumn],
-              lng: source[longitudeColumn],
+            let source = this.state.data.find(d => d[idColumn] === line[links.sourceColumn])
+            if(source) {
+              sourceMarker = {
+                lat: source[latitudeColumn],
+                lng: source[longitudeColumn],
+              }
             }
           }
         }
@@ -182,7 +234,7 @@ class GeoMap extends AbstractGraph {
     });
   }
 
-  renderPolyline() {
+  renderPolylineIfNeeded() {
 
     return this.state.lines.map( (link, i) => {
       return <Polyline
@@ -205,30 +257,75 @@ class GeoMap extends AbstractGraph {
     })
   }
 
+  // handle response after searching
+  handleSearch(data) {
+    this.setState({data})
+  }
+
+  renderSearchBarIfNeeded() {
+    const {
+        searchBar,
+        filters
+    } = this.getConfiguredProperties()
+
+    if(searchBar === false)
+       return
+
+    return (
+      <SearchBar
+        data={this.props.data}
+        options={filters}
+        handleSearch={this.handleSearch}
+      />
+    );
+  }
+
   render() {
     const {
       data,
       height
     } = this.props
 
+    const {
+        searchBar
+    } = this.getConfiguredProperties()
+
     if (!data || !data.length)
       return this.renderMessage('No data to visualize')
 
+
+    let mapHeight = height,
+        defaultCenter = {
+          lat: Number(process.env.REACT_APP_GOOGLE_MAP_LAT),
+          lng: Number(process.env.REACT_APP_GOOGLE_MAP_LNG)
+        }
+
+    let defaultLatLng = this.state.defaultCenter ? this.state.defaultCenter : defaultCenter;
+
+    if(searchBar !== false) {
+      mapHeight -= 69
+    }
+
     return (
-      <GoogleMapsWrapper
-        onMapMounted={this.onMapMounted}
-        containerElement={<div style={{ height }} />}>
-        <MarkerClusterer
-          ignoreHidden={false}
-          averageCenter
-          enableRetinaIcons
-          gridSize={60}
-          onClusteringEnd={ this.handleClustererClick}
-        >
-          {this.getMarkers()}
-          { this.renderPolyline()}
-        </MarkerClusterer>
-      </GoogleMapsWrapper>
+      <div>
+        {this.renderSearchBarIfNeeded()}
+        <GoogleMapsWrapper
+          onBoundsChanged={this.onBoundsChanged}
+          center={defaultLatLng}
+          onMapMounted={this.onMapMounted}
+          containerElement={<div style={{ height: mapHeight }} />}>
+          <MarkerClusterer
+            ignoreHidden={false}
+            averageCenter
+            enableRetinaIcons
+            gridSize={60}
+            onClusteringEnd={ this.handleClustererClick}
+          >
+            {this.renderMarkersIfNeeded()}
+            { this.renderPolylineIfNeeded()}
+          </MarkerClusterer>
+        </GoogleMapsWrapper>
+      </div>
     )
   }
 }
