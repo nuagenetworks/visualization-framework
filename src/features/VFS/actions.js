@@ -439,12 +439,12 @@ const buildMapStateToProps = (state, ownProps) => {
 }
 
 export const showMessageBoxOnNoFlow = (props) => {
-    const { data, showMessageBox, toggleError, protocolValue } = props;
+    const { data, showMessageBox, toggleError } = props;
 
-    if (!data || Object.getOwnPropertyNames(data).length <= 0 || (protocolValue === '1')) {
+    if (!data || Object.getOwnPropertyNames(data).length <= 0) {
         const body = () =>
             <span style={{ display: 'inline-flex', color: 'blue', fontSize: 12, padding: 20 }}>Select first a flow with a valid protocol to create a new Virtual Firewall Rule</span>;
-        const errMsg = (protocolValue === '1') ? "ICMP is not yet supported" : 'No flow selected';
+        const errMsg = 'No flow selected';
         showMessageBox(errMsg, body());
         toggleError(true);
         return false;
@@ -452,9 +452,30 @@ export const showMessageBoxOnNoFlow = (props) => {
     return true;
 }
 
+export const getFormNameBasedOnOperation = (props) => {
+    const { operation, associator, to } = props;
+    let formName = 'flow-editor';
+    if (!operation) {
+        return formName;
+    }
+    switch (operation) {
+        case 'add':
+            formName = 'add-flow-editor';
+            break;
+        case 'associate':
+            formName = `${operation}-${associator}-${to}`;
+            break;
+        case 'create':
+        default:
+            formName = 'flow-editor';
+            break;
+    }
+    return formName;
+}
+
 export const mapStateToProps = (state, ownProps) => {
     const query = state.router.location.query;
-    const { operation, domainType } = query ? query : {};
+    const { operation, domainType, associator, to } = query ? query : {};
     const queryConfiguration = {
         service: "VSD",
         query: {
@@ -462,7 +483,7 @@ export const mapStateToProps = (state, ownProps) => {
         }
     };
 
-    const formName = operation === 'add' ? 'add-flow-editor' : 'flow-editor';
+    let formName = getFormNameBasedOnOperation({...ownProps, operation, associator, to});
 
     const fieldValues = operation === 'add' ? selectFieldValues(state,
         formName,
@@ -482,7 +503,8 @@ export const mapStateToProps = (state, ownProps) => {
             'mirrorDestinationType',
             'l2domainID',
             'parentID',
-            'protocol'
+            'protocol',
+            'ID'
         );
     const formObject = state.form ? state.form[formName] : null;
 
@@ -491,7 +513,10 @@ export const mapStateToProps = (state, ownProps) => {
 
     return {
         ...buildMapStateToProps(state, ownProps),
+        formName,
         operation,
+        associator,
+        to,
         isConnected: state.services.getIn([ServiceActionKeyStore.REQUESTS, ServiceManager.getRequestID(queryConfiguration), ServiceActionKeyStore.RESULTS]),
         formObject,
         getFieldError: (fieldName) => getError(state, formName, fieldName),

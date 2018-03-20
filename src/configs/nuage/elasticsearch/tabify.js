@@ -137,12 +137,16 @@ function flatten(tree, parentNode={}){
                 .map((key) => {
                     const value = node[key];
                     if (Array.isArray(value)) {
-                        return value;
+
+                        if(value.length) {
+                            return value;
+                        }
+
+                        node[key] = null;
                     }
                     return false;
                 })
                 .filter((d) => d);
-
             switch (childTrees.length) {
 
                 // Leaf node case, return the node.
@@ -150,14 +154,14 @@ function flatten(tree, parentNode={}){
                     return node;
 
                 // Non-leaf node case, recurse on the child nodes.
-                case 1:
+                default:
                     const childTree = childTrees[0];
                     if(childTree.length === 0){
                         return node;
                     }
                     return flatten(childTree, node);
-                default:
-                    throw new Error("This case should never happen");
+                // default:
+                //     throw new Error("This case should never happen");
             }
         })
 
