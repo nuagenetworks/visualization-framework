@@ -9,6 +9,7 @@
     "data": {
         "limit": 100,
         "selectedColumn": "nuage_metadata.flowid",
+        "selectColumnOption": true,
         "multiSelectable": true,
         "columns": [
             { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
@@ -23,16 +24,16 @@
             { "column": "nuage_metadata.zoneName", "label": "Zone", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.zoneName"}  },
             { "column": "nuage_metadata.aclId", "label": "ACL-ID", "totalCharacters": 13, "tooltip" : {"column": "nuage_metadata.aclId"} },
             { "column": "nuage_metadata.vfrPolicyID", "label": "VFW-Rule-ID", "totalCharacters": 13, "tooltip" : {"column": "nuage_metadata.vfrPolicyID"} },
-            { "column": "nuage_metadata.acl_source_type", "label": "ACL-Source-Type" },
+            { "column": "nuage_metadata.acl_source_type", "label": "ACL-Source-Type", "display": false },
             { "column": "nuage_metadata.acl_source_name", "label": "ACL-Source-Name", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.acl_source_name"} },
-            { "column": "nuage_metadata.acl_destination_type", "label": "ACL-Dest-Type" },
+            { "column": "nuage_metadata.acl_destination_type", "label": "ACL-Dest-Type", "display": false },
             { "column": "nuage_metadata.acl_destination_name", "label": "ACL-Dest-Name", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.acl_destination_name"} },
             { "column": "nuage_metadata.l7ApplicationName", "label": "L7Application"},
             { "column": "nuage_metadata.service", "label": "Service" },
             { "column": "nuage_metadata.serviceGroup", "label": "Service-Group" },
-            { "column": "underlayflow", "label": "Underlay-flow" },
-            { "column": "sourcemac", "label": "SMAC" },
-            { "column": "destinationmac", "label": "DMAC" },
+            { "column": "underlayflow", "label": "Underlay-flow", "display": false },
+            { "column": "sourcemac", "label": "SMAC", "display": false },
+            { "column": "destinationmac", "label": "DMAC", "display": false },
             { "column": "packets", "label": "Packets" }
         ]
     },

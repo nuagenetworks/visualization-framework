@@ -334,7 +334,8 @@ Display nice Pie or Donut graphs
 - **showCheckboxes** To show checkboxes to select rows - default is `false`
 - **enableSelectAll** To enable/disable select all feature - Default is `true`
 - **selectedColumn** (string) Compare `selectedColumn` value with all available datas and if equal to selected row, then save all matched records in store under "matchedRows"
-
+- **selectColumnOption** (Boolean) To show columns selection dropdown set this value to `true` (default is `false`).
+In Columns array set `display: false` to hide any column (default is true, i.e. column will display inside the table if `display` is missing or set to `true`).
 - **highlight** (Array of columns) Highlighted the rows if value of columns is not null
 - **hidePagination** Hide paging and search bar if data size is less than pagination limit - Default is `true`
 - **border**
