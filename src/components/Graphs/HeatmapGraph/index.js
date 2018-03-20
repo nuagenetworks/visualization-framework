@@ -15,6 +15,7 @@ import {
 } from "d3";
 
 import {properties} from "./default.config"
+import { nest as dataNest } from "../../../utils/helpers"
 
 export default class HeatmapGraph extends XYGraph {
 
@@ -55,19 +56,56 @@ export default class HeatmapGraph extends XYGraph {
             yTickSizeInner,
             yTickSizeOuter,
             legendColumn,
-            yAxisPadding
+            yAxisPadding,
+            emptyBoxColor
         } = this.getConfiguredProperties();
 
+        let nestedXData = dataNest({
+            data: cdata,
+            key: xColumn,
+            sortColumn: xColumn
+        })
 
-        /*
-        Filtering Data for null
-        */
-        let data = [];
-        cdata.forEach(d => {
-          if(d[legendColumn] !== null && d[yColumn] !== null) {
-            data.push(d);
-          }
-        });
+        let nestedYData = dataNest({
+            data: cdata,
+            key: yColumn,
+            sortColumn: yColumn
+        })
+
+        let data = []
+
+        // Check x column data, if not found set to null
+        nestedYData.forEach(item => {
+
+            if(!item.key || typeof item.key === 'object')
+                return
+
+            let d = Object.assign({}, item)
+
+            // Inserting new object if data not found
+            nestedXData.forEach(list => {
+                if(!list.key || typeof list.key === 'object')
+                    return
+
+                let index = (d.values).findIndex(o => {
+                   return `${o[xColumn]}` === `${list.key}`
+                })
+
+                if(index !== -1
+                    && d.values[index][yColumn] !== ""
+                    && typeof d.values[index][yColumn] !== 'undefined'
+                    && typeof d.values[index][yColumn] !== 'object'
+                ) {
+                    data.push(d.values[index])
+                } else {
+                    data.push({
+                            [yColumn]: d.key,
+                            [legendColumn]: 'Empty',
+                            [xColumn]: parseInt(list.key)
+                        })
+                }
+            })
+        })
 
         if (!data || !data.length)
             return;
@@ -80,13 +118,16 @@ export default class HeatmapGraph extends XYGraph {
         const scale            = this.getMappedScaleColor(data, legendColumn);
         const getColor         = (d) => {
             let value = null;
-
             if(d.hasOwnProperty(legendColumn)) {
                 value = d[legendColumn]
             } else if(d.hasOwnProperty(colorColumn)) {
                 value = d[colorColumn]
             } else if (d.hasOwnProperty("key")) {
                 value = d["key"]
+            }
+
+            if(value === 'Empty') {
+                return emptyBoxColor
             }
 
             return scale ? scale(value) : stroke.color || colors[0];

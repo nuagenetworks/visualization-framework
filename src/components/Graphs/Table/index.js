@@ -317,38 +317,59 @@ class Table extends AbstractGraph {
 
         if(!multiSelectable) {
             this.handleClick(...selectedRows)
+            this.selectedRows = {}
         }
 
         this.selectedRows[this.currentPage] = selectedRows.slice();
         this.setState({
             selected: this.selectedRows[this.currentPage]
         })
+
         const { selectRow, location } = this.props;
         if (selectRow) {
             let matchingRows = []
-            const selectedRows = this.getSelectedRows();
-            const row = selectedRows ? selectedRows[0] : {};
 
-            /**
-             * Compare `selectedColumn` value with all available datas and if equal to selected row,
-             * then save all matched records in store under "matchedRows",
-            **/
+            let rows = {}
+            const selectedData = this.getSelectedRows()
 
-            if(selectedColumn) {
-                const value = columnAccessor({column: selectedColumn})
-                matchingRows = data.filter( (d) => {
-                    return (value(row) || value(row) === 0) && row !== d && value(row) === value(d)
-                });
+            if(selectedData.length > 1) {
+                rows = selectedData
+            } else {
+                let row =  selectedData.length ? selectedData[0] : {}
+                /**
+                 * Compare `selectedColumn` value with all available datas and if equal to selected row,
+                 * then save all matched records in store under "matchedRows",
+                **/
+                if(selectedColumn) {
+                    const value = columnAccessor({column: selectedColumn})
+                    matchingRows = data.filter( (d) => {
+                        return (value(row) || value(row) === 0) && row !== d && value(row) === value(d)
+                    });
+                }
+
+                rows = row
             }
-           selectRow(this.props.configuration.id, row, matchingRows, location.query, location.pathname);
+           selectRow(this.props.configuration.id, rows, matchingRows, location.query, location.pathname);
         }
 
     }
 
-    handleContextMenu(event) {
+    getMenu() {
         const {
-            menu
+            menu,
+            multiMenu,
+            multiSelectable
         } = this.getConfiguredProperties();
+
+        if (multiMenu && this.getSelectedRows().length > 1) {
+            return multiMenu
+        }
+
+        return menu || false
+    }
+
+    handleContextMenu(event) {
+        let menu = this.getMenu()
 
         if (!menu) {
             return false;
@@ -372,9 +393,7 @@ class Table extends AbstractGraph {
 
     openContextMenu = () => {
         const { contextMenu: { x, y } } = this.state;
-        const {
-            menu
-        } = this.getConfiguredProperties();
+        const menu = this.getMenu()
 
         this.closeContextMenu();
         document.body.addEventListener('click', this.handleCloseContextMenu);
