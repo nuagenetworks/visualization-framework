@@ -10,6 +10,7 @@
         "limit": 100,
         "selectedColumn": "nuage_metadata.flowid",
         "selectColumnOption": true,
+        "multiSelectable": true,
         "columns": [
             { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
             { "column": "sourceip", "label": "SIP" },
