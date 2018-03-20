@@ -17,7 +17,9 @@
             { "column": "packets", "label": "Packets" },
             { "column": "nuage_metadata.l7ApplicationName", "label": "L7 Application"},
             { "column": "nuage_metadata.service", "label": "Service" },
-            { "column": "nuage_metadata.serviceGroup", "label": "Service Group" }
+            { "column": "nuage_metadata.serviceGroup", "label": "Service Group" },
+            { "column": "nuage_metadata.src-pgmem", "label": "Source PG"},
+            { "column": "nuage_metadata.dst-pgmem", "label": "Destination PG"}
         ]
     },
     "query": "vss-domain-flow-table"

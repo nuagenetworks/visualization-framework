@@ -28,25 +28,15 @@
                             "term": {
                                 "nuage_metadata.domainName":"{{domainName:chord_domain}}"
                             }
-                        },
-                        {
-                            "term": {
-                                "nuage_metadata.acl_source_type":"{{source_field:pg}}"
-                            }
-                        },
-                        {
-                            "term": {
-                                "nuage_metadata.acl_destination_type":"{{destination_field:pg}}"
-                            }
                         }
                     ]
                 }
             },
             "aggs": {
-                "source": {
+                "hash": {
                     "terms": {
-                        "field": "nuage_metadata.acl_source_name",
-                        "size": 5,
+                        "field": "nuage_metadata.flowid",
+                        "size": 10,
                         "order": {
                             "SumOf": "desc"
                         }   
@@ -57,10 +47,26 @@
                                 "field": "packets"
                             }
                         },
+                        "source": {
+                            "terms": {
+                                "field": "{{source_field:nuage_metadata.src-pgmem}}",
+                                "size": 10,
+                                "order": {
+                                    "SumOf": "desc"
+                                }   
+                            },
+                            "aggs": {
+                                "SumOf": {
+                                    "sum": {
+                                        "field": "packets"
+                                    }
+                                }
+                            }
+                        },
                         "destination": {
                             "terms": {
-                                "field": "nuage_metadata.acl_destination_name",
-                                "size": 5,
+                                "field": "{{destination_field:nuage_metadata.dst-pgmem}}",
+                                "size": 10,
                                 "order": {
                                     "SumOf": "desc"
                                 }
