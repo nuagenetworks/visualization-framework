@@ -205,7 +205,7 @@ class CreateFlow extends React.Component {
                 this.toggleError(true);
                 return vfsPolicies.error;
             }
-            if (!vfsPolicies.data || !vfsPolicies.data.length) {
+            if (!vfsPolicies || !vfsPolicies.data || !vfsPolicies.data.length) {
                 const errMsg = 'No Virtual Firewall Policies Available';
                 return <div>{errMsg}</div>;
             }
