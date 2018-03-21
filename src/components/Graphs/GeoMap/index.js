@@ -132,7 +132,7 @@ class GeoMap extends AbstractGraph {
             options={{id: d[idColumn]}}
             key={d[idColumn]}
             position={{ lat: d[latitudeColumn], lng: d[longitudeColumn] }}
-            onClick={() => this.toggleInfoWindow(d[idColumn])}
+            onClick={() => this.handleMarkerClick(d)}
           >
             {this.infowindow(d)}
           </Marker>
