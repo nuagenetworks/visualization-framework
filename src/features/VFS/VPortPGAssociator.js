@@ -45,7 +45,8 @@ class VPortPGAssociator extends Component {
     getSelectedVPorts = (props) => {
         const { data } = props;
         const flows = data && Array.isArray(data) ? data : [data];
-        return flows.map(item => getMetaDataAttribute(item, 'vportId'));
+        const vports = new Set(flows.map(item => getMetaDataAttribute(item, 'vportId')));
+        return Array.from(vports);
     }
 
     initialValues = () => ({vports: this.getSelectedVPorts(this.props)})
