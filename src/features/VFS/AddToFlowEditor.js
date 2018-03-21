@@ -74,7 +74,7 @@ class AddToFlowEditor extends React.Component {
         this.setState({opened: true, formName: 'add-flow-editor', error: true});
     }
 
-    handleChangeProtocol = (evt) => {
+    handleChangeProtocol = (evt, value) => {
         const { preventDefault, ...values} = evt;
         const protocol = values ? Object.values(values).join('') : null;
         if (protocol === '1') {
