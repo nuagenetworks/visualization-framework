@@ -260,7 +260,7 @@ class Table extends AbstractGraph {
                     highlighter = true
                 }
 
-                data[columns[i].column] = columnData;
+                data[columns[i].column] = typeof(columnData) === "boolean" ? columnData.toString().toUpperCase() : columnData;
             });
 
             if(highlighter)
