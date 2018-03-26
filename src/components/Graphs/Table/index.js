@@ -260,13 +260,22 @@ class Table extends AbstractGraph {
                     highlighter = true
                 }
 
-                data[columns[i].column] = typeof(columnData) === "boolean" ? columnData.toString().toUpperCase() : columnData;
+                if (columns[i].colors) {
+                    columnData =  (
+                        <div style={{ background:  columns[i].colors[originalData] || '', width: "10px", height: "10px", borderRadius: "50%", marginLeft: "6px", marginRight: "6px" }}></div>
+                    )
+                } else {
+                    columnData = typeof(columnData) === "boolean" ? columnData.toString().toUpperCase() : columnData;    
+                }
+
+                data[columns[i].column] = columnData;
             });
 
             if(highlighter)
-               Object.keys(data).map( key => {
-                return data[key] = <div style={{background: highlightColor, height: style.row.height, padding: "10px 0"}}>{data[key]}</div>
-            })
+                Object.keys(data).map(key => {
+                    return data[key] = <div style={{ background: highlightColor || '', height: style.row.height, padding: "10px 0" }}>
+                        {data[key]}</div>
+                })
 
             return data
         })
