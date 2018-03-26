@@ -342,6 +342,11 @@ class CreateFlow extends React.Component {
         const protocol = getNetworkProtocolForText(data.protocol);
         const destData = getSourceData(this.props);
         const destPort = (protocol === '6' || protocol === '17') ? destData && destData.destinationport ? destData.destinationport : '*' : null;
+        let ICMPCode, ICMPType;
+        if (protocol === '1') {
+            ICMPCode = data && data.ICMPCode;
+            ICMPType = data && data.ICMPType;
+        }
 
         return ({
             protocol: protocol ? protocol : '6',
@@ -350,6 +355,8 @@ class CreateFlow extends React.Component {
             action:  actions && Array.isArray(actions) && actions.length > 0 ? actions[0].value : 'FORWARD',
             destinationPort: destPort,
             sourcePort: (protocol === '6' || protocol === '17') ? '*' : null,
+            ICMPType,
+            ICMPCode
         });
     }
 
