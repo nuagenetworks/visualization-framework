@@ -23,7 +23,12 @@ export default class AdvancedResultProcessing extends SimpleResultProcessing {
                 const formatter = columnAccessor(column)
                 const formattedValue = formatter(row, true)
                 originalValue = (formattedValue || formattedValue === 0) ? formattedValue.toString().toLowerCase() : "" 
-            }
+                const formattedValue = columnAccessor(column);
+                originalValue = (formattedValue(row, true));
+                if(['number', 'string', 'boolean'].includes(typeof(originalValue))) {
+                    originalValue = originalValue.toString();
+                }
+             }
         }
 
         switch(operator) {
