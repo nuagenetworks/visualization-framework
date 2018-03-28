@@ -23,6 +23,8 @@ export default function tabify(response) {
         throw new Error("Tabify() invoked with invalid result set. Result set must have either 'aggregations' or 'hits' defined.");
     }
 
+    table = flattenArray(table)
+
     if (process.env.NODE_ENV === "development") {
         console.log("Results from tabify (first 3 rows only):");
 
@@ -34,6 +36,41 @@ export default function tabify(response) {
     }
 
     return table;
+}
+
+function flattenArray(table) {
+    if(!table.length)
+        return [];
+
+    let flattenTable = []
+
+    //Extracting Array Keys
+    let arrKeys = Object.keys(table[0]).filter(key => {
+        return Array.isArray(table[0][key])
+    })
+
+    if(!arrKeys.length)
+        return table
+
+    table.forEach(o => {
+        //Creating base object to be used by the array keys for generating the object
+        //by resetting all array based key to {}
+        let baseObj = Object.assign({}, o)
+        arrKeys.forEach(key => baseObj[key] = {})
+
+        //Generating the Objects and pushing to flattenTable
+        arrKeys.forEach(key => {
+            if(o[key] && Array.isArray(o[key])) {
+                o[key].forEach(e => {
+                    flattenTable.push(Object.assign({}, baseObj, {
+                        [key]: e
+                    }))
+                })
+            }
+        })
+    })
+
+    return flattenTable
 }
 
 function collectBucket(node, stack=[]) {
