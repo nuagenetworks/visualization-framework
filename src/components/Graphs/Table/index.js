@@ -265,7 +265,7 @@ class Table extends AbstractGraph {
                         <div style={{ background:  columns[i].colors[originalData] || '', width: "10px", height: "10px", borderRadius: "50%", marginLeft: "6px", marginRight: "6px" }}></div>
                     )
                 }
-                data[columns[i].column] = columnData;
+                data[columns[i].column] = typeof(columnData) === "boolean" ? columnData.toString().toUpperCase() : columnData;
             });
 
             if(highlighter)
