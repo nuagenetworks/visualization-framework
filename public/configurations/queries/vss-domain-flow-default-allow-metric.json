@@ -1,9 +1,9 @@
 {
-    "id":"vss-enterprise-acldeny-metric",
-    "title":"ACL Deny count per enterprise",
+    "id":"vss-domain-flow-default-allow-metric",
+    "title":"Flows count per enterprise",
     "service":"elasticsearch",
     "query":{
-        "index":"{{index:nuage_event}}",
+        "index":"{{index:nuage_flow}}",
         "type":"{{type:nuage_doc_type}}",
         "body":{    
             "size": 0,
@@ -17,7 +17,17 @@
                         },
                         {
                             "term": {
-                                "type": "ACL_DENY"
+                                "nuage_metadata.domainName":"{{domainName:chord_domain}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "nuage_metadata.aclId":"DEFAULT"
+                            }
+                        },
+                        {
+                            "term": {
+                                "type":"ALLOW"
                             }
                         }
                     ]
@@ -42,6 +52,13 @@
                                         "lte": "{{endTime:now}}"
                                     }
                                 }
+                            }
+                        }
+                    },
+                    "aggs": {
+                        "flows": {
+                            "cardinality": {
+                                "field": "nuage_metadata.flowid"
                             }
                         }
                     }

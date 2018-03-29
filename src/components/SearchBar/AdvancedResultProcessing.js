@@ -12,17 +12,19 @@ export default class AdvancedResultProcessing extends SimpleResultProcessing {
 
         const field = this.tryToGetFieldCategory(fieldOrLabel);
         const searchedValue = value.toLowerCase();
-        let originalValue = (row[field]) ? row[field].toString().toLowerCase() : "";
+        let originalValue = (row[field] || row[field] === 0) ? row[field].toString().toLowerCase() : ""
 
         if(this.columns) {
-
             let column = this.columns.find(function(d) {
                 return d.column && d.column === field;
             });
 
             if(column) {
                 const formattedValue = columnAccessor(column);
-                originalValue = (formattedValue(row, true)) ? formattedValue(row, true).toString().toLowerCase() : "";  
+                originalValue = (formattedValue(row, true));
+                if(['number', 'string', 'boolean'].includes(typeof(originalValue))) {
+                    originalValue = originalValue.toString();
+                }
             }
         }
 

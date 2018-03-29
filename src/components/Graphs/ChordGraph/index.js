@@ -12,6 +12,11 @@ export default class ChordGraph extends AbstractGraph {
 
     constructor(props) {
         super(props, properties);
+        this.filterData = []
+    }
+
+    componentWillMount() {
+      this.parseData(this.props.data)
     }
 
     componentDidMount() {
@@ -61,12 +66,26 @@ export default class ChordGraph extends AbstractGraph {
     }
 
     componentWillReceiveProps(nextProps) {
+        this.parseData(nextProps.data)
         this.updateChord(nextProps);
+    }
+
+    parseData(data) {
+      const {
+        chordSourceColumn,
+        chordDestinationColumn
+      } = this.getConfiguredProperties();
+
+      this.filterData =  data.filter( d => d[chordSourceColumn] && d[chordDestinationColumn])
     }
 
     updateChord(props) {
 
-        const { data, width, height, onMarkClick } = this.props;
+        const { width, height, onMarkClick } = this.props;
+
+        if(!this.filterData || !this.filterData.length)
+          return
+
         const {
             chordWeightColumn,
             chordSourceColumn,
@@ -83,7 +102,7 @@ export default class ChordGraph extends AbstractGraph {
 
         // Pass values into the chord diagram via d3-style accessors.
         this.chordDiagram
-            .data(data)
+            .data(this.filterData)
             .width(width)
             .height(height)
             .chordWeightColumn(chordWeightColumn)
@@ -126,7 +145,8 @@ export default class ChordGraph extends AbstractGraph {
 
         const { data, width, height } = this.props;
 
-        if (!data || !data.length)
+
+        if (!data || !data.length || !this.filterData.length)
             return this.renderMessage('No data to visualize')
 
         return (

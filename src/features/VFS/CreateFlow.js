@@ -7,7 +7,7 @@ import { TwoColumnRow } from '../components';
 import {
     buildOptions,
     getDomainID,
-    getEnterpriseID,
+    getEnterpriseID, getMetaDataAttribute,
 } from './utils';
 
 import {
@@ -48,6 +48,22 @@ class CreateFlow extends React.Component {
     componentWillMount() {
         this.initialize(this.props);
         this.setState({opened: true, formName: 'flow-editor'});
+    }
+
+    handleChangeProtocol = (evt) => {
+        const { preventDefault, ...values} = evt;
+        const protocol = values ? Object.values(values).join('') : null;
+        if (protocol === '1') {
+            const { changeFieldValue, formName } = this.props;
+            if (changeFieldValue) {
+                const ICMPCode = getMetaDataAttribute(this.props.data, 'ICMPCode');
+                const ICMPType = getMetaDataAttribute(this.props.data, 'ICMPType');
+                if (ICMPCode && ICMPType) {
+                    changeFieldValue(formName, 'ICMPCode', ICMPCode);
+                    changeFieldValue(formName, 'ICMPType', ICMPType);
+                }
+            }
+        }
     }
 
     resetFieldsOnChange = (value, ...fields) => {
@@ -189,8 +205,10 @@ class CreateFlow extends React.Component {
                 this.toggleError(true);
                 return vfsPolicies.error;
             }
-            const errMsg = (protocolValue === '1') ? "ICMP is not yet supported" : 'No Virtual Firewall Policies Available';
-            return <div>{errMsg}</div>;
+            if (!vfsPolicies || !vfsPolicies.data || !vfsPolicies.data.length) {
+                const errMsg = 'No Virtual Firewall Policies Available';
+                return <div>{errMsg}</div>;
+            }
         }
         this.toggleError(false);
         const srcList = this.buildSourceField(source);
@@ -245,7 +263,8 @@ class CreateFlow extends React.Component {
                         label: 'Protocol',
                         component: Select,
                         options: NetworkProtocols,
-                        error: getFieldError('protocol')
+                        error: getFieldError('protocol'),
+                        onChange: (value) => this.handleChangeProtocol(value)
                     }} secondColumnProps={l7Apps} />
                 <Header>Actions</Header>
                 <TwoColumnRow firstColumnProps={{
@@ -296,7 +315,7 @@ class CreateFlow extends React.Component {
 
     validate = (values) => {
         const errorObject = {};
-        const { description, locationType, destinationType, locationID, networkID, action, parentID } = values;
+        const { description, locationType, destinationType, locationID, networkID, action, parentID, protocol, ICMPCode, ICMPType } = values;
         if (!description) {
             errorObject.description = "Policy Rule name is required";
         }
@@ -312,6 +331,9 @@ class CreateFlow extends React.Component {
         if (!parentID) {
             errorObject.parentID = "Please select a valid virtual firewall policy";
         }
+        if (protocol === '1' && !(ICMPCode || ICMPType)) {
+            errorObject.protocol = "ICMP Require valid ICMP code and type for the flow";
+        }
         return errorObject;
     }
 
@@ -320,6 +342,11 @@ class CreateFlow extends React.Component {
         const protocol = getNetworkProtocolForText(data.protocol);
         const destData = getSourceData(this.props);
         const destPort = (protocol === '6' || protocol === '17') ? destData && destData.destinationport ? destData.destinationport : '*' : null;
+        let ICMPCode, ICMPType;
+        if (protocol === '1') {
+            ICMPCode = data && data.ICMPCode;
+            ICMPType = data && data.ICMPType;
+        }
 
         return ({
             protocol: protocol ? protocol : '6',
@@ -328,6 +355,8 @@ class CreateFlow extends React.Component {
             action:  actions && Array.isArray(actions) && actions.length > 0 ? actions[0].value : 'FORWARD',
             destinationPort: destPort,
             sourcePort: (protocol === '6' || protocol === '17') ? '*' : null,
+            ICMPType,
+            ICMPCode
         });
     }
 

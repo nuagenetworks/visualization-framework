@@ -334,7 +334,8 @@ Display nice Pie or Donut graphs
 - **showCheckboxes** To show checkboxes to select rows - default is `false`
 - **enableSelectAll** To enable/disable select all feature - Default is `true`
 - **selectedColumn** (string) Compare `selectedColumn` value with all available datas and if equal to selected row, then save all matched records in store under "matchedRows"
-
+- **selectColumnOption** (Boolean) To show columns selection dropdown set this value to `true` (default is `false`).
+In Columns array set `display: false` to hide any column (default is true, i.e. column will display inside the table if `display` is missing or set to `true`).
 - **highlight** (Array of columns) Highlighted the rows if value of columns is not null
 - **hidePagination** Hide paging and search bar if data size is less than pagination limit - Default is `true`
 - **border**
@@ -345,6 +346,24 @@ Display nice Pie or Donut graphs
 - **header** header specific parameters includes
   - **border** same as before
   - **fontColor** color of the header text
+
+  - **columns** (Array) - Array of columns display in the table. Example -
+
+  ```javascript
+  "columns":
+    [
+        { "column": "type", "label": " ", "colors" : {
+            "OTHER": "green",
+            "DENY": "red"
+            }
+        },
+        { "column": "sourceip", "label": "SIP" },
+        { "column": "subnetName", "label": "Subnet", "totalCharacters":    16, "tooltip" : {"column": "nuage_metadata.subnetName"} }
+    ]```
+
+In above example, if a value of the column show via colors then add colors property in object and mentioned all values as a key and color as a value in order to replace color from value. Note: Add label property with space to declare empty column in the table. E.g -
+
+![table-status-with-color](https://user-images.githubusercontent.com/26645756/37336742-4d9023fc-26d8-11e8-80c9-1c14100bf85b.png)
 
 
 ##### ChordGraph
