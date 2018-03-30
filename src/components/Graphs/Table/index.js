@@ -266,8 +266,9 @@ class Table extends AbstractGraph {
                     )
                 }
 
-                if(columnData)
-                    data[columns[i].column] = columnData;
+                if(columnData) {
+                    data[columns[i].column] = typeof(columnData) === "boolean" ? columnData.toString().toUpperCase() : columnData;
+                }
             });
 
             if(highlighter)
