@@ -32,7 +32,7 @@ export default class HeatmapGraph extends XYGraph {
         } = this.props;
 
         if (!cdata || !cdata.length)
-            return;
+            return this.renderMessage('No data to visualize')
 
         const {
             chartHeightToPixel,
@@ -77,7 +77,7 @@ export default class HeatmapGraph extends XYGraph {
         // Check x column data, if not found set to null
         nestedYData.forEach(item => {
 
-            if(!item.key || typeof item.key === 'object')
+            if(!item.key || typeof item.key === 'object' || item.key === 'null')
                 return
 
             let d = Object.assign({}, item)
@@ -108,7 +108,7 @@ export default class HeatmapGraph extends XYGraph {
         })
 
         if (!data || !data.length)
-            return;
+            return this.renderMessage('No data to visualize')
 
         const isVerticalLegend = legend.orientation === 'vertical';
         const xLabelFn         = (d) => d[xColumn];
