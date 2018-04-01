@@ -1,0 +1,48 @@
+{
+    "id":"aar-nsg-ike-tunnel-detail-table",
+    "title":"NAT Tunnel Events at time",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_ike_tunnel_status}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "sort": [
+                {
+                    "timestamp": {
+                        "order": "desc"
+                    }
+                }
+            ],
+            "query": {
+                "bool": {
+
+                    "filter": {
+                        "bool":{
+                            "must":[
+                                {
+                            "range": {
+                                "timestamp": {
+                                    "lte": "{{ike_tunnel_timestamp}}",
+                                    "gte": "{{ike_tunnel_timestamp}}||-2m",
+                                    "format": "epoch_millis"
+                                }
+                            }
+                        },
+                        {
+                            "term":{
+                                "SourceNSG":"{{snsg}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "TunnelName": "{{tunnel}}"
+                            }
+                        }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

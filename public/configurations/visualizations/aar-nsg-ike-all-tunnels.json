@@ -1,0 +1,22 @@
+{
+    "id": "aar-nsg-ike-all-tunnels",
+    "graph": "Table",
+    "title": "Select IKE Tunnel for {{snsg}}",
+    "description": "Shows all tunnels on the NSG",
+    "author": "Bharat Mukheja",
+    "creationDate": "3/6/2018",
+    "query": "aar-nsg-ike-all-tunnels",
+    "listeners": [{
+      "params": {
+          "tunnel": "tunnel"
+      }
+    }],
+    "data": {
+        "searchBar": false,
+        "hidePagination":true,
+        "limit":10,
+        "columns": [
+            { "column": "tunnel", "label": "Tunnel"}
+        ]
+    }
+}

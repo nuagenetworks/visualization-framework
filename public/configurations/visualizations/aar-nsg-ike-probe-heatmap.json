@@ -1,0 +1,49 @@
+{
+    "id": "aar-nsg-ike-probe-heatmap",
+    "graph": "HeatmapGraph",
+    "title": "Probe Status for all Tunnels on {{snsg}}",
+    "description": "GREEN : Probe is Up, RED : Probe is Down, BLUE : Probe is in HOLD DOWN, GRAY : Probe has stopped, WHITE : There is no data for Probe, YELLOW : Probe has gone through Multiple State changes.",
+    "author": "Bharat Mukheja",
+    "creationDate": "3/6/2018",
+    "key": "function(d) { return d['dnsg'] + d['date_histo'];}",
+    "data": {
+        "xColumn": "date_histo",
+        "xLabel": "Time",
+        "yColumn": "tunnel",
+        "yTickGrid": false,
+        "yLabel": "Tunnel Probes",
+        "legendColumn": "ProbeStatus",
+        "colorColumn": "ProbeStatus",
+        "heatmapColor": {
+            "UP": "#b3d645",
+            "UNSTABLE": "#faf78e",
+            "DOWN": "#f76159",
+            "STOPPED": "#d9d9d9",
+            "UNKNOWN": "white",
+            "HOLD_DOWN": "lightBlue"
+        },
+        "legend": {
+            "show": true,
+            "orientation": "horizontal",
+            "circleSize": 4,
+            "labelOffset": 2
+        },
+        "tooltip": [
+            { "column": "date_histo", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+            { "column": "ProbeState", "label": "Probe State" },
+            { "column": "Tier1State", "label": "Tier 1 State" },
+            { "column": "Tier2State", "label": "Tier 2 State" }
+        ]
+   },
+   "listeners": [
+        {
+            "params": {
+                "ike_probe_timestamp": "date_histo",
+                "queryStartTime": "date_histo",
+                "tunnel":"tunnel"
+            }
+        }
+    ],
+    "nextPrevFilter": true,
+    "query": "aar-nsg-ike-probe-heatmap"
+}
