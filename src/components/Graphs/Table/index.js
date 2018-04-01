@@ -260,12 +260,15 @@ class Table extends AbstractGraph {
                     highlighter = true
                 }
 
-                if (columns[i].colors) {
+                if (columns[i].colors && columns[i].colors[originalData]) {
                     columnData =  (
                         <div style={{ background:  columns[i].colors[originalData] || '', width: "10px", height: "10px", borderRadius: "50%", marginLeft: "6px", marginRight: "6px" }}></div>
                     )
                 }
-                data[columns[i].column] = typeof(columnData) === "boolean" ? columnData.toString().toUpperCase() : columnData;
+
+                if(columnData) {
+                    data[columns[i].column] = typeof(columnData) === "boolean" ? columnData.toString().toUpperCase() : columnData;
+                }
             });
 
             if(highlighter)
@@ -275,7 +278,7 @@ class Table extends AbstractGraph {
                 })
 
             return data
-        })
+        }).filter(o => !_.isEmpty(o))
     }
 
     handleSortOrderChange(column, order) {
