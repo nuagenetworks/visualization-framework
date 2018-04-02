@@ -18,6 +18,7 @@ class VPortPGAssociator extends Component {
     state = {
         opened: false,
         error: false,
+        direction: null,
     }
     constructor(...props) {
         super(...props);
@@ -28,9 +29,17 @@ class VPortPGAssociator extends Component {
         const {
             data,
             fetchPGsIfNeeded,
-            resourceName
+            resourceName,
+            query
         } = props;
+        let { direction } = query ? query : {};
         const flows = data && Array.isArray(data) ? data : [data];
+        if (!direction && flows.length === 1) {
+            direction = getMetaDataAttribute(data, 'direction');
+        }
+        if (direction) {
+            this.setState({direction});
+        }
         const domainID = getDomainID(resourceName, flows[0]);
         if (domainID) {
             fetchPGsIfNeeded (domainID, resourceName);
@@ -42,9 +51,29 @@ class VPortPGAssociator extends Component {
         this.setState({opened: true, formName: getFormNameBasedOnOperation(this.props)});
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (!this.state.direction) {
+            const {
+                data,
+                query
+            } = nextProps;
+            let { direction } = query ? query : {};
+            const flows = data && Array.isArray(data) ? data : [data];
+            if (!direction && flows.length === 1) {
+                direction = getMetaDataAttribute(data, 'direction');
+            }
+            if (direction) {
+                this.setState({direction});
+            }
+        }
+    }
+
     getSelectedVPorts = (props) => {
         const { data } = props;
-        const flows = data && Array.isArray(data) ? data : [data];
+        let flows = (data && Array.isArray(data) ? data : [data]);
+        if (this.state.direction) {
+            flows = flows.filter(item => getMetaDataAttribute(item, 'direction') === this.state.direction);
+        }
         const vports = new Set(flows.map(item => getMetaDataAttribute(item, 'vportId')));
         return Array.from(vports);
     }
@@ -107,7 +136,8 @@ class VPortPGAssociator extends Component {
         const buttonLabel = "Associate";
         const pgs = this.getPGS(props);
         const vports = this.getSelectedVPorts(props);
-
+        const direction = this.state.direction === 'ingress' ? 'source' : this.state.direction === 'egress' ? 'destination' : '';
+        const vportsMsg = vports.length;
         return(
             <ModalEditor
                 title={title}
@@ -122,7 +152,7 @@ class VPortPGAssociator extends Component {
                 errored={this.state.error}
                 onDone={this.handleDone}
             >
-                <span>VPorts to add {vports.join(', ')}</span>
+                <span>{`Adding ${vportsMsg} ${direction} VPorts to PG`}</span>
                 <Label>Policy Group</Label>
                 <Form.Field
                     name='ID'
