@@ -39,10 +39,12 @@
     },
     "menu": [
         { "text": "Create Virtual Firewall Rule", "rootpath": "vfs/new", "params": { "operation": "create"} },
-        { "text": "Add to Virtual Firewall Rule", "rootpath": "vfs/new", "params": { "operation": "add"} }
+        { "text": "Add to Virtual Firewall Rule", "rootpath": "vfs/new", "params": { "operation": "add"} },
+        { "text": "Add VPorts to PGs", "rootpath": "vfs/new", "params": { "operation": "associate", "associator": "vports", "to": "pgs"} }
     ],
     "multiMenu": [
-        { "text": "Add VPorts to PGs", "rootpath": "vfs/new", "params": { "operation": "associate", "associator": "vports", "to": "pgs"} }
+        { "text": "Add Source VPorts to PGs", "rootpath": "vfs/new", "params": { "operation": "associate", "associator": "vports", "to": "pgs", "direction": "ingress"} },
+        { "text": "Add Destination VPorts to PGs", "rootpath": "vfs/new", "params": { "operation": "associate", "associator": "vports", "to": "pgs", "direction": "egress"} }
     ],
     "query": "vss-domain-flow-explorer"
 }
