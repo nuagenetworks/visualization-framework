@@ -6,18 +6,26 @@
     "author": "Ronak Shah",
     "creationDate": "11/02/2016",
     "data": {
+        "selectColumnOption": true,
         "columns": [
+            { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+            { "column": "nuage_metadata.flowid", "label": "Flow Hash"},
             { "column": "sourceip", "label": "Source IP" },
             { "column": "destinationip", "label": "Destination IP" },
             { "column": "protocol", "label": "Protocol" },
             { "column": "sourceport", "label": "Source Port" },
             { "column": "destinationport", "label": "Dest Port" },
-            { "column": "type", "label": "Type"},
-            { "column": "timestamp", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+            { "column": "type", "label": "Action"},
             { "column": "packets", "label": "Packets" },
-            { "column": "nuage_metadata.l7ApplicationName", "label": "L7 Application"},
             { "column": "nuage_metadata.service", "label": "Service" },
-            { "column": "nuage_metadata.serviceGroup", "label": "Service Group" }
+            { "column": "nuage_metadata.serviceGroup", "label": "Service Group", "display": false },
+            { "column": "nuage_metadata.l7ApplicationName", "label": "L7 Application", "display": false},
+            { "column": "nuage_metadata.src-pgmem", "label": "Source PG", "display": false, "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.src-pgmem"}},
+            { "column": "nuage_metadata.dst-pgmem", "label": "Destination PG", "display": false, "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.dst-pgmem"}},
+            { "column": "nuage_metadata.src-subnetmem", "label": "Source Subnet", "display": false},
+            { "column": "nuage_metadata.dst-subnetmem", "label": "Destination Subnet", "display": false},
+            { "column": "nuage_metadata.src-zonemem", "label": "Source Zone", "display": false},
+            { "column": "nuage_metadata.dst-zonemem", "label": "Destination Zone", "display": false}
         ]
     },
     "query": "vss-domain-flow-table"
