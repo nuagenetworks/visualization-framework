@@ -5,6 +5,6 @@
     "query":{
         "parentResource":"enterprises",
         "parentID":"{{enterpriseID}}",
-        "resource":"nsgatewayslocations"
+        "resource":"gatewayslocations"
     }
 }

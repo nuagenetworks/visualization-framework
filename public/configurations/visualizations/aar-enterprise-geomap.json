@@ -8,9 +8,9 @@
     "data": {
         "latitudeColumn": "latitude",
         "longitudeColumn": "longitude",
-        "nameColumn": "nsgatewayName",
+        "nameColumn": "assocEntityName",
         "localityColumn": "locality",
-        "idColumn": "nsgatewayID"
+        "idColumn": "associatedEntityID"
     },
     "query": {
         "data": "test-geomap-graph",
