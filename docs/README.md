@@ -3,7 +3,6 @@ Welcome to the documentation!
 The philosophy of the Visualization Framework is to provide a library to quickly shows your dashboards.
 **Dashboards** are split into multiple Visualizations. Each **Visualization** is making a **Query** to retrieve and display its data.
 
-
 ## Table of Contents
 
 - [File structure](#file-structure)
@@ -141,16 +140,23 @@ Here is the list of options:
 - **refreshInterval** set the time interval in `ms` between two refresh. Use `-1` to deactivate refresh.
 - **data** an object that helps you configure your visualization. (See below to find graphs specific data).
   - **colorColumn** attribute name in your results to use for color
-  - **padding**
+  - **padding** (only for text graph)
      - **top** set top padding in pixels
     - **bottom** set bottom padding in pixels
     - **right** set right padding in pixels
     - **left** set left padding in pixels
-  - **margin**
+
+       ![textgraph 1](https://user-images.githubusercontent.com/26645756/38319372-44c0eb02-384f-11e8-8bdb-a524b9ecdd19.png)
+
+
+  - **margin** - for all graphs
     - **top** set top margin in pixels
     - **bottom** set bottom margin in pixels
     - **right** set right margin in pixels
     - **left** set left margin in pixels
+
+        ![margin-example](https://user-images.githubusercontent.com/26645756/38317307-63aaaa26-384a-11e8-8dc3-6d0fc9862961.png)
+
   - **colors** list of colors to use to render the visualization
   - **stroke**
     - **width** define stroke width
@@ -424,6 +430,14 @@ It is a graphical representation of data where the individual values contained i
     "key": "function(d) { return d['application'] + d['date_histo'];}"
 ```
 - **nextPrevFilter** (boolean) show filter to see data of past timestamps. Default is false.
+        When we click on previous button to see past timestamp data, following variables in a context get updated by prepending visualization ID - 
+```javascript
+        `visualizationID + startTime`,
+        `visualizationID + endTime`,
+        `visualizationID + prevStartTime`,
+        `visualizationID + page`,
+```
+
 - **heatmapColor** (object) used to define the color of the matrix of given `legendColumn` value. E.g -
 ```javascript
 `"heatmapColor": {
