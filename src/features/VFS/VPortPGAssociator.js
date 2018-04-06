@@ -128,7 +128,12 @@ class VPortPGAssociator extends Component {
 
     getPGS = (props) => {
         const flow = props.data && Array.isArray(props.data) ? props.data[0] : props.data;
-        return getNetworkItems(NetworkObjectTypes.POLICYGROUP, {...props, data: flow});
+        const pgs = getNetworkItems(NetworkObjectTypes.POLICYGROUP, {...props, data: flow});
+        if (pgs && pgs.data && pgs.data.length) {
+            const data = pgs.data.filter(item => item.templateID === null);
+            pgs.data = data;
+        }
+        return pgs;
     }
 
     renderModal = (props) => {
