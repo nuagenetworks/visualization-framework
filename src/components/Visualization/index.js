@@ -35,6 +35,7 @@ import {
 
 import { resizeVisualization } from "../../utils/resize"
 import { contextualize } from "../../utils/configurations"
+import columnAccessor from "../../utils/columnAccessor"
 
 import { GraphManager } from "../Graphs/index";
 import { ServiceManager } from "../../services/servicemanager/index";
@@ -420,15 +421,15 @@ class VisualizationView extends React.Component {
 
     renderFiltersToolBar() {
         const {
-            configuration,
+            filterOptions,
             id
-        } = this.props;
+        } = this.props
 
-        if (!configuration || !configuration.filterOptions)
-            return;
+        if (!filterOptions)
+            return
 
         return (
-            <FiltersToolBar filterOptions={configuration.filterOptions} visualizationId={id} />
+            <FiltersToolBar filterOptions={filterOptions} visualizationId={id} />
         )
     }
 
@@ -557,29 +558,63 @@ class VisualizationView extends React.Component {
     }
 }
 
-const updateFilterOptions = (state, configurations, context) => {
-  if(configurations && configurations.filterOptions) {
-    for(let key in configurations.filterOptions) {
-        if(configurations.filterOptions[key].type) {
-          if(context && context.enterpriseID) {
-             let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${configurations.filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
+const updateFilterOptions = (state, configurations, context, results = []) => {
 
-             if(nsgs && nsgs.length) {
-               configurations.filterOptions[key].options = [];
-               configurations.filterOptions[key].default = nsgs[0].name;
+    if(configurations && configurations.filterOptions) {
+      let filterOptions = Object.assign({}, configurations.filterOptions)
 
-               nsgs.forEach((nsg) => {
-                 configurations.filterOptions[key].options.push({
-                   label: nsg.name,
-                   value: nsg.name
-                 });
-               });
-             }
+      for(let key in filterOptions) {
+
+          if (!filterOptions[key].options) {
+              filterOptions[key].options = []
           }
-        }
-    };
-  }
-  return configurations;
+
+          // append filters fetching from query
+          const {queryKey = null, label = null, value = null} = filterOptions[key].dynamicOptions
+          if (queryKey && value && queryKey) {
+
+              // format value and label
+              const formattedValue = columnAccessor({ column: value})
+              const formattedLabel = label ? columnAccessor({ column: label}) : formattedValue
+
+              if(results[queryKey]) {
+                  results[queryKey].forEach(d => {
+                      let dataValue = formattedValue(d, true)
+                      let dataLabel = label ? formattedLabel(d, true) : dataValue
+
+                      if(dataValue && !filterOptions[key].options.find( datum =>
+                          datum.value === dataValue.toString() || datum.label === dataLabel)) {
+                          // Add filters in existing filter options
+                          filterOptions[key].options.push({
+                              label: dataLabel,
+                              value: dataValue.toString()
+                          })
+                      }
+                  })
+              }
+          }
+
+          // TODO -
+          if(filterOptions[key].type) {
+            if(context && context.enterpriseID) {
+               let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
+
+               if(nsgs && nsgs.length) {
+                 filterOptions[key].options = [];
+                 filterOptions[key].default = nsgs[0].name;
+
+                 nsgs.forEach((nsg) => {
+                   filterOptions[key].options.push({
+                     label: nsg.name,
+                     value: nsg.name
+                   });
+                 });
+               }
+            }
+          }
+      }
+      return filterOptions || []
+    }
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -620,9 +655,6 @@ const mapStateToProps = (state, ownProps) => {
             ConfigurationsActionKeyStore.ERROR
         ])
     };
-
-    let vizConfig =  configuration ? contextualize(configuration.toJS(), context) : null;
-    props.configuration = updateFilterOptions(state, vizConfig, context);
 
     props.queryConfigurations = {}
     props.response = {}
@@ -687,6 +719,8 @@ const mapStateToProps = (state, ownProps) => {
 
         if(successResultCount === Object.keys(queries).length ) {
             props.isFetching = false
+            let vizConfig =  configuration ? contextualize(configuration.toJS(), context) : null;
+            props.filterOptions = updateFilterOptions(state, vizConfig, context, props.response);
         }
 
     }
