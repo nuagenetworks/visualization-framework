@@ -41,6 +41,7 @@
                     "forceOptions": {
                         "interval": "2m",
                         "prevStartTime": "now-30m",
+                        "aarnsgiketunnelheatmapstartTime":"now-15m",
                         "unit": "m",
                         "duration": "15"
                     }
@@ -51,6 +52,7 @@
                     "forceOptions": {
                         "interval": "2m",
                         "prevStartTime": "now-60m",
+                        "aarnsgiketunnelheatmapstartTime":"now-30m",
                         "unit": "m",
                         "duration": "30"
                     }
@@ -61,6 +63,7 @@
                     "forceOptions": {
                         "interval": "2m",
                         "prevStartTime": "now-120m",
+                        "aarnsgiketunnelheatmapstartTime":"now-60m",
                         "unit": "m",
                         "duration": "60"
                     }

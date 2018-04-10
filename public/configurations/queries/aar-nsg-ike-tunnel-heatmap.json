@@ -1,6 +1,5 @@
 {
     "id": "aar-nsg-ike-tunnel-heatmap",
-    "title": "NAT-T Reachability HeatMap",
     "service": "elasticsearch",
     "query": {
         "index": "{{index:nuage_ike_stats}}",

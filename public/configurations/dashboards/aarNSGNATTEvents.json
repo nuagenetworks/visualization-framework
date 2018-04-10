@@ -43,23 +43,23 @@
                     }
                 },
                 {
-                    "label": "Last 1 Hr",
+                    "label": "Last 30 min",
+                    "value": "now-30m",
+                    "forceOptions": {
+                        "interval": "2m",
+                        "prevStartTime": "now-60m",
+                        "unit": "m",
+                        "duration": "30"
+                    }
+                },
+                {
+                    "label": "Last 60 min",
                     "value": "now-60m",
                     "forceOptions": {
                         "interval": "2m",
                         "prevStartTime": "now-120m",
                         "unit": "m",
                         "duration": "60"
-                    }
-                },
-                {
-                    "label": "Last 1 Day",
-                    "value": "now-24h",
-                    "forceOptions": {
-                        "interval": "1h",
-                        "prevStartTime": "now-48h",
-                        "unit": "h",
-                        "duration": "24"
                     }
                 }
             ]

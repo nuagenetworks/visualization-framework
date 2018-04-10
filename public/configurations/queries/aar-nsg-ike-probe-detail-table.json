@@ -1,6 +1,5 @@
 {
     "id": "aar-nsg-ike-probe-detail-table",
-    "title": "NAT Probe Results at time",
     "service": "elasticsearch",
     "query": {
         "index": "{{index:nuage_ike_probestats}}",
@@ -22,7 +21,7 @@
                                 {
                                     "range": {
                                         "timestamp": {
-                                            "lte": "{{ike_probe_timestamp}}||+30s",
+                                            "lte": "{{ike_probe_timestamp}}||+150s",
                                             "format": "epoch_millis"
                                         }
                                     }
@@ -75,19 +74,22 @@
                                                                 "field": "Tier2State"
                                                             },
                                                             "aggs": {
-                                                                "RoundRobinState": {
+                                                                "MultipleStatesChanged": {
                                                                     "terms": {
-                                                                        "field": "RoundRobinState"
+                                                                        "script": {
+                                                                            "lang":"painless",
+                                                                            "inline": "doc['MultipleStatesChanged'].value== true? 'true':'false'"
+                                                                      }
                                                                     },
                                                                     "aggs": {
-                                                                        "ProbeFailureReason": {
+                                                                        "RoundRobinState": {
                                                                             "terms": {
-                                                                                "field": "ProbeFailureReason"
-                                                                            },
-                                                                            "aggs": {
-                                                                                "MultipleStatesChanged": {
+                                                                                "field": "RoundRobinState"
+                                                                            }
+                                                                        },
+                                                                             "ProbeFailureReason": {
                                                                                     "terms": {
-                                                                                        "field": "MultipleStatesChanged"
+                                                                                        "field": "ProbeFailureReason"
                                                                                     }
                                                                                 }
                                                                             }
@@ -108,5 +110,4 @@
                 }
             }
         }
-    }
-}
+

@@ -1,15 +1,15 @@
 {
     "id": "aar-nsg-ike-probe-tier1-detail-table",
     "graph": "Table",
-    "title": "{{tunnel}} Tier1 URL events",
+    "title": "{{tunnel}} Tier1 URL events at {{ikeProbeDetailTimestamp:call('time_convert')}}",
+    "description":"Green: URL is reachable.  Red: URL is unreachable  Empty: URL has not been probed in the 30 secs interval",
     "author": "Bharat Mukheja",
     "creationDate": "3/6/2018",
     "data": {
         "searchBar": false,
-        "hidePagination":false,
+        "hidePagination":true,
         "columns": [
-             { "column": "timestamp","label":"Time","timeFormat": "%b %d, %y %X"},
-            { "column": "Tier1URLInfo.UrlString","label":"Tier1 URL String"},
+             { "column": "Tier1URLInfo.UrlString","label":"Tier1 URL String"},
             { "column": "Tier1URLInfo.UrlState","label":"Tier1 URL State","colors":{"UP":"green","DOWN":"red"} },
             { "column": "Tier1URLInfo.UrlFailureReason ", "label": "Tier1 Failure Reason (If Any)"}
         ]

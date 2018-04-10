@@ -1,6 +1,5 @@
 {
     "id": "aar-nsg-nsg-ike-probe-heatmap",
-    "title": "NAT-T Reachability HeatMap",
     "service": "elasticsearch",
     "query": {
         "index": "{{index:nuage_ike_probe_status}}",

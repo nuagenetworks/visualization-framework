@@ -1,6 +1,5 @@
 {
     "id":"aar-nsg-ike-tunnel-traffic-linechart",
-    "title":"TBD",
     "service":"elasticsearch",
     "query":{
         "index":"{{index:nuage_ike_stats}}",
@@ -16,8 +15,8 @@
                         {
                             "range":{
                                 "timestamp":{
-                                    "gte":"{{startTime:now-15m}}",
-                                    "lte":"{{endTime:now}}",
+                                    "gte":"{{aarnsgiketunnelheatmapstartTime:now-15m}}",
+                                    "lte":"{{aarnsgiketunnelheatmapendTime:now}}",
                                     "format":"epoch_millis"
                                 }
                             }

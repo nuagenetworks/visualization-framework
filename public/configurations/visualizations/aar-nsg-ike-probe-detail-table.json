@@ -7,9 +7,9 @@
     "creationDate": "3/6/2018",
     "data": {
         "searchBar": false,
-        "hidePagination":false,
+        "hidePagination":true,
         "columns": [
-            { "column": "ProbeState","label":"","colors":{"UP":"green","DOWN":"red","UNKNOWN": "white","HOLD_DOWN": "Blue" }},
+            { "column": "ProbeState","label":"","colors":{"UP":"green","DOWN":"red","UNKNOWN": "white","HOLD_DOWN": "blue","UNSTABLE": "#faf78e","STOPPED": "#d9d9d9"}},
             { "column": "timestamp","label":"Time","timeFormat": "%b %d, %y %X" },
             { "column": "TunnelName", "label": "Tunnel Name"},
             { "column": "ProbeName", "label": "Probe Name"},
