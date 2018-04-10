@@ -5,7 +5,7 @@ curl -XPUT 'http://localhost:9200/_template/sample_generic_template' -d '
     "template" : "sample_index_*",
     "settings" : { },
     "mappings" : {
-      "sample_doc_type" : {
+      "nuage_doc_type" : {
         "dynamic_templates" : [ {
           "strings" : {
             "mapping" : {
