@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import ModalEditor from '../../components/Editor/ModalEditor';
-import { Form, Label, Select, Header } from '../../ui-components';
+import {Form, Label, Select, Header, Checkbox} from '../../ui-components';
 import {buildOptions, getDomainID, getEnterpriseID, getMetaDataAttribute} from './utils';
 import { TwoColumnRow } from '../components';
 
@@ -332,6 +332,8 @@ class AddToFlowEditor extends React.Component {
         const protocol = data && data.protocol ? data.protocol : '';
         const destData = getSourceData(this.props);
         const dPort = destData && destData.destinationport ? destData.destinationport : '';
+        const ICMPCode = protocol === '1' ? data && data.ICMPCode : undefined;
+        const ICMPType = protocol === '1' ? data && data.ICMPType : undefined;
         const srcNetworkItems = {
             ...getSourceNetworkItems(this.props),
             type: locationTypeValue,
@@ -361,8 +363,17 @@ class AddToFlowEditor extends React.Component {
                 onValidate={this.validate}
                 configuration={this.putConfiguration}
                 errored={this.state.error}
+                getInitialValues={() => ({stateful: true})}
             >
                 <Header>Match Criteria</Header>
+                <TwoColumnRow
+                    secondColumnProps={{
+                        name: 'stateful',
+                        label: 'Stateful entry',
+                        component: Checkbox,
+                        hideLabel: true,
+                    }}
+                />
                 <TwoColumnRow firstColumnProps={{
                     name: 'locationType',
                     label: 'Source',
@@ -400,6 +411,21 @@ class AddToFlowEditor extends React.Component {
                         label: 'Protocol',
                         text: protocol,
                     }}/>
+                }
+                {
+                    ICMPType && ICMPCode &&
+                        <TwoColumnRow
+                            firstColumnProps={{
+                                name: 'ICMPCode',
+                                label: 'ICMP Code',
+                                text: ICMPCode
+                            }}
+                            secondColumnProps={{
+                                name: 'ICMPType',
+                                label: 'ICMP Type',
+                                text: ICMPType
+                            }}
+                        />
                 }
             </ModalEditor>
         );

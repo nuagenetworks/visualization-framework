@@ -18,7 +18,7 @@
             { "column": "sourceport", "label": "S-Port" },
             { "column": "destinationport", "label": "D-Port" },
             { "column": "protocol", "label": "Proto" },
-            { "column": "type", "label": "Type"},
+            { "column": "type", "label": "Action"},
             { "column": "nuage_metadata.direction", "label": "Direction"},
             { "column": "nuage_metadata.subnetName", "label": "Subnet", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.subnetName"} },
             { "column": "nuage_metadata.zoneName", "label": "Zone", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.zoneName"}  },
@@ -34,15 +34,24 @@
             { "column": "underlayflow", "label": "Underlay-flow", "display": false },
             { "column": "sourcemac", "label": "SMAC", "display": false },
             { "column": "destinationmac", "label": "DMAC", "display": false },
-            { "column": "packets", "label": "Packets" }
+            { "column": "packets", "label": "Packets" },
+            { "column": "nuage_metadata.src-pgmem", "label": "Source PG", "display": false, "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.src-pgmem"}},
+            { "column": "nuage_metadata.dst-pgmem", "label": "Destination PG", "display": false, "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.dst-pgmem"}},
+            { "column": "nuage_metadata.src-subnetmem", "label": "Source Subnet", "display": false},
+            { "column": "nuage_metadata.dst-subnetmem", "label": "Destination Subnet", "display": false},
+            { "column": "nuage_metadata.src-zonemem", "label": "Source Zone", "display": false},
+            { "column": "nuage_metadata.dst-zonemem", "label": "Destination Zone", "display": false},
+            { "column": "nuage_metadata.flowid", "label": "Flow Hash", "display": false}
         ]
     },
     "menu": [
         { "text": "Create Virtual Firewall Rule", "rootpath": "vfs/new", "params": { "operation": "create"} },
-        { "text": "Add to Virtual Firewall Rule", "rootpath": "vfs/new", "params": { "operation": "add"} }
+        { "text": "Add to Virtual Firewall Rule", "rootpath": "vfs/new", "params": { "operation": "add"} },
+        { "text": "Add VPorts to PGs", "rootpath": "vfs/new", "params": { "operation": "associate", "associator": "vports", "to": "pgs"} }
     ],
     "multiMenu": [
-        { "text": "Add VPorts to PGs", "rootpath": "vfs/new", "params": { "operation": "associate", "associator": "vports", "to": "pgs"} }
+        { "text": "Add Source VPorts to PGs", "rootpath": "vfs/new", "params": { "operation": "associate", "associator": "vports", "to": "pgs", "direction": "ingress"} },
+        { "text": "Add Destination VPorts to PGs", "rootpath": "vfs/new", "params": { "operation": "associate", "associator": "vports", "to": "pgs", "direction": "egress"} }
     ],
     "query": "vss-domain-flow-explorer"
 }

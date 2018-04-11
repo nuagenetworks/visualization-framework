@@ -191,7 +191,7 @@ class CreateFlow extends React.Component {
             l7applicationsignatures,
             resourceName,
         ) => {
-        const { getFieldError, protocolValue } = this.props;
+        const { getFieldError, protocolValue, data } = this.props;
         const mirrors = this.buildMirrorDestinations(mirrordestinations);
         const overlaymirrordestinationsField = this.buildOverlayMirrors(mirrordestinations, overlaymirrordestinations);
 
@@ -218,6 +218,11 @@ class CreateFlow extends React.Component {
         const l7Apps = this.buildL7AppField(l7applicationsignatures);
         const networkDestinations = getNetworkTypeOptions(resourceName);
         const shouldDisplayDestPort = protocolValue === '6' || protocolValue === '17';
+        let ICMPCode, ICMPType;
+        if (protocolValue === '1') {
+            ICMPCode = data && data.ICMPCode;
+            ICMPType = data && data.ICMPType;
+        }
         return (
             <div>
                     <TwoColumnRow firstColumnProps={{
@@ -233,6 +238,14 @@ class CreateFlow extends React.Component {
                         validate: [required],
                     }} />
                 <Header>Match Criteria</Header>
+                <TwoColumnRow
+                    secondColumnProps={{
+                        name: 'stateful',
+                        label: 'Stateful entry',
+                        component: Checkbox,
+                        hideLabel: true,
+                    }}
+                />
                 <TwoColumnRow firstColumnProps={{
                     name: 'locationType',
                     label: 'Source',
@@ -258,6 +271,21 @@ class CreateFlow extends React.Component {
                         component: TextInput
                     }}/>
                 }
+                {
+                    ICMPCode && ICMPType &&
+                        <TwoColumnRow
+                            firstColumnProps={{
+                                name: 'ICMPCode',
+                                label: 'ICMP Code',
+                                text: ICMPCode
+                            }}
+                            secondColumnProps={{
+                                name: 'ICMPType',
+                                label: 'ICMP Type',
+                                text: ICMPType
+                            }}
+                        />
+                }
                 <TwoColumnRow firstColumnProps={{
                         name: 'protocol',
                         label: 'Protocol',
@@ -266,6 +294,7 @@ class CreateFlow extends React.Component {
                         error: getFieldError('protocol'),
                         onChange: (value) => this.handleChangeProtocol(value)
                     }} secondColumnProps={l7Apps} />
+
                 <Header>Actions</Header>
                 <TwoColumnRow firstColumnProps={{
                     name: 'action',
@@ -356,7 +385,8 @@ class CreateFlow extends React.Component {
             destinationPort: destPort,
             sourcePort: (protocol === '6' || protocol === '17') ? '*' : null,
             ICMPType,
-            ICMPCode
+            ICMPCode,
+            stateful: true,
         });
     }
 
