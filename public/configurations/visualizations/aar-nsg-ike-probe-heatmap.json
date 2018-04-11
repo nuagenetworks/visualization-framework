@@ -5,7 +5,7 @@
     "description": "GREEN : Probe is Up, RED : Probe is Down, BLUE : Probe is in HOLD DOWN, GRAY : Probe has stopped, WHITE : There is no data for Probe, YELLOW : Probe has gone through Multiple State changes.",
     "author": "Bharat Mukheja",
     "creationDate": "3/6/2018",
-    "key": "function(d) { return d['dnsg'] + d['date_histo'];}",
+    "key": "function(d) { return d['tunnel'] + d['date_histo'];}",
     "data": {
         "xColumn": "date_histo",
         "xLabel": "Time",
