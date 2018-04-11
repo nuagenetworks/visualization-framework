@@ -332,8 +332,8 @@ class AddToFlowEditor extends React.Component {
         const protocol = data && data.protocol ? data.protocol : '';
         const destData = getSourceData(this.props);
         const dPort = destData && destData.destinationport ? destData.destinationport : '';
-        const ICMPCode = protocol == '1' ? data && data.ICMPCode : undefined;
-        const ICMPType = protocol == '1' ? data && data.ICMPType : undefined;
+        const ICMPCode = protocol === '1' ? data && data.ICMPCode : undefined;
+        const ICMPType = protocol === '1' ? data && data.ICMPType : undefined;
         const srcNetworkItems = {
             ...getSourceNetworkItems(this.props),
             type: locationTypeValue,
