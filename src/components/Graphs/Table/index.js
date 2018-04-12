@@ -507,6 +507,7 @@ class Table extends AbstractGraph {
                 display: 'flex',
                 justifyContent: 'space-between',
                 lineHeight: 'normal',
+                fontSize: '0.8em'
               }}
               key={column.label}
               label={column.label}
@@ -537,21 +538,28 @@ class Table extends AbstractGraph {
             return
         }
 
+        const customHintTextAutocomplete = (
+            <span style={{ fontSize: '0.8em' }}>Type something</span>
+        )
+
         return (
-            <div style={{float:'right', display: "flex"}}>
+            <div style={{float:'right', display: 'flex', paddingRight: 15}}>
                 <SuperSelectField
                     name={id}
                     multiple
                     checkPosition='left'
+                    hintTextAutocomplete={customHintTextAutocomplete}
                     hintText='Select Columns'
                     onSelect={this.handleColumnSelection}
                     value={this.state.columns}
                     keepSearchOnSelect
                     elementHeight={40}
                     selectionsRenderer={this.selectionColumnRenderer}
-                    style={{ minWidth: 225, margin: 10, outline: "white", fontSize: 16}}
-                    innerDivStyle={{border: "1px solid #dad1d1"}}
-                    underlineFocusStyle={{outline: "white"}}
+                    style={{ minWidth: 150, margin: 10, outline: 'white', fontSize: '1em'}}
+                    innerDivStyle={{border: '1px solid #dad1d1'}}
+                    underlineFocusStyle={{outline: 'white'}}
+                    autocompleteStyle={{fontSize: '0.8em'}}
+                    errorStyle={{fontSize: '0.8em'}}
                 >
                     {this.getColumnListItem()}
                 </SuperSelectField>
