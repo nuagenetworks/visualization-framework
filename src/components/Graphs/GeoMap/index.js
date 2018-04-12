@@ -7,7 +7,7 @@ import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClust
 
 import GoogleMapsWrapper from '../../Map'
 import SearchBar from "../../SearchBar"
-import {properties} from "./default.config"
+//import {properties} from "./default.config"
 
 class GeoMap extends AbstractGraph {
 
@@ -323,7 +323,7 @@ class GeoMap extends AbstractGraph {
             averageCenter
             gridSize={60}
             onClusteringEnd={ this.handleClustererClick}
-            styles={properties.clusterStyle}
+            //styles={properties.clusterStyle}
           >
             {this.renderMarkersIfNeeded()}
             { this.renderPolylineIfNeeded()}
