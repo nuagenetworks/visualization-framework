@@ -10,7 +10,24 @@
         "longitudeColumn": "longitude",
         "nameColumn": "assocEntityName",
         "localityColumn": "locality",
-        "idColumn": "associatedEntityID"
+        "idColumn": "associatedEntityID",
+        "filters": [
+            {
+                "columnText": "name",
+                "columField": "assocEntityName",
+                "type": "text"
+            },
+            {
+                "columnText": "locality",
+                "columField": "locality",
+                "type": "text"
+            }
+        ],
+        "links": {
+            "source": "data1",
+            "sourceColumn": "source",
+            "destinationColumn": "destination"
+        }
     },
     "query": {
         "data": "aar-enterprise-geomap",
