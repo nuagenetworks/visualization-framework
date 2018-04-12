@@ -92,6 +92,7 @@ class GeoMap extends AbstractGraph {
     this.setState({ infowindow: key || null })
   }
 
+
   // popup info window on marker's click
   infowindow(marker) {
     const {
@@ -136,6 +137,8 @@ class GeoMap extends AbstractGraph {
             position={{ lat: d[latitudeColumn], lng: d[longitudeColumn] }}
             onClick={() => this.handleMarkerClick(d)}
               //label={marker[nameColumn]}
+            onMouseOver={() => this.toggleInfoWindow(d[idColumn])}
+            onMouseOut={() => this.toggleInfoWindow(d[idColumn])}
             icon={'/icons/icon-nsgateway-resized.png'}
           >
             {this.infowindow(d)}
