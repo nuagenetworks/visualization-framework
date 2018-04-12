@@ -13,13 +13,13 @@
         "idColumn": "associatedEntityID"
     },
     "query": {
-        "data": "test-geomap-graph",
+        "data": "aar-enterprise-geomap",
         "data1": "test-geomap-graph"
     },
     "listeners": [{
       "redirect": "/dashboards/aarNSG",
       "params": {
-          "snsg": "nsgatewayName"
+          "snsg": "assocEntityName"
       }
     }]
 }
