@@ -9,16 +9,16 @@
         "latitudeColumn": "latitude",
         "longitudeColumn": "longitude",
         "nameColumn": "associatedEntityName",
-        "localityColumn": "locality",
+        "localityColumn": "address",
         "idColumn": "associatedEntityID",
         "filters": [
             {
                 "columnText": "name",
-                "columField": "assocEntityName",
+                "columField": "associatedEntityName",
                 "type": "text"
             },
             {
-                "columnText": "locality",
+                "columnText": "region",
                 "columField": "locality",
                 "type": "text"
             }
