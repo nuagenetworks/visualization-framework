@@ -5,7 +5,7 @@
     "title": "Example",
     "visualizations": [
         { 
-            "id": "aar-enterprise-geomap",
+            "id": "test-geomap-graph",
             "x": 0,
             "y": 0,
             "w": 12,
