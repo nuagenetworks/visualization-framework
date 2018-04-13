@@ -59,7 +59,7 @@ const style = {
         width: "100%",
         height: "100%",
         display: "inline-block",
-        textAlign: "center",
+        textAlign: "center"
     },
     overlayText: {
         position: "relative",
@@ -89,15 +89,21 @@ const style = {
     descriptionContainer: {
         textAlign: "justify",
         background: theme.palette.greyLighterColor,
-        opacity: "0.8",
+        opacity: "0.9",
         cursor: "pointer",
+        zIndex: 9999,
+        display: "table",
+        height: '100%',
+        width: '100%'
     },
     descriptionText: {
-        position: "relative",
-        top: "50%",
-        transform: "translateY(-50%)",
-        fontSize: "1.1em",
-        color: theme.palette.blackColor,
+        position: "initial",
+        fontSize: "1.2em",
+        color: theme.palette.blackDarkerColor,
+        textAlign: "center",
+        padding: 10,
+        display: "table-cell",
+        verticalAlign: "middle"
     },
     fullWidth: {
         width: "100%",
