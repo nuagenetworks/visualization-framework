@@ -240,6 +240,7 @@ class Table extends AbstractGraph {
 
                 if((columnData || columnData === 0) && columns[i].tooltip) {
                     let fullText = tooltipAccessor[i](d, true)
+                    fullText = Array.isArray(fullText) ? fullText.join(", ") : fullText
                     let hoverContent = (
                         <div key={`tooltip_${j}_${i}`}>
                             {fullText}
