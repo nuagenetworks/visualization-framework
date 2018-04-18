@@ -57,7 +57,8 @@ export default class HeatmapGraph extends XYGraph {
             yTickSizeOuter,
             legendColumn,
             yAxisPadding,
-            emptyBoxColor
+            emptyBoxColor,
+            xAlign
         } = this.getConfiguredProperties();
 
         let nestedXData = dataNest({
@@ -185,8 +186,18 @@ export default class HeatmapGraph extends XYGraph {
         availableHeight = boxSize * distYDatas.length;
         availableWidth  = boxSize * distXDatas.length;
 
+        let minValue = xValues[0]
+        let maxValue = xValues[1]
+
+        if(xAlign) {
+            maxValue += xPadding * 2
+        } else {
+            minValue -= xPadding;
+            maxValue += xPadding;
+        }
+
         const xScale = scaleTime()
-            .domain([xValues[0] - xPadding, xValues[1] + xPadding]);
+            .domain([minValue, maxValue]);
 
         const yScale = scaleBand()
             .domain(distYDatas);
@@ -258,7 +269,7 @@ export default class HeatmapGraph extends XYGraph {
                                 height
                             } = (
                                 {
-                                    x: xScale(d[xColumn]) - boxSize / 2,
+                                    x: xScale(d[xColumn]) - (xAlign ? 0 : boxSize / 2),
                                     y: yScale(d[yColumn]) + yScale.bandwidth() / 2 - boxSize / 2,
                                     width: boxSize,
                                     height: boxSize
