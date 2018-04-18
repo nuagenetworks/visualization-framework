@@ -286,16 +286,6 @@ class VisualizationView extends React.Component {
             return this.renderCardWithInfo("No data to visualize", "bar-chart");
         }
 
-        for(let source in response) {
-            if(response.hasOwnProperty(source)) {
-                if (!response[source].length) {
-                    console.log(`Source "${source}": No data to visualize`)
-                    return this.renderCardWithInfo("No data to visualize", "bar-chart");
-                }
-            }
-        }
-
-
         let graphHeight = d3.select(`#filter_${id}`).node() ? this.state.height - d3.select(`#filter_${id}`).node().getBoundingClientRect().height : this.state.height;
         return (
             <GraphComponent
