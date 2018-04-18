@@ -58,7 +58,7 @@ export default class SimpleTextGraph extends AbstractGraph {
         if (!data || !data.length)
             return;
 
-        const text = this.displayText(data, targetedColumn)
+        const text = this.displayText(data, targetedColumn) || 0
 
         const blockWidth = width * innerWidth
         const blockHeight = height * innerHeight
@@ -128,10 +128,9 @@ export default class SimpleTextGraph extends AbstractGraph {
         } = this.getConfiguredProperties();
 
         if (!data || !data.length)
-            return;
+            return this.renderMessage('No data to visualize')
 
         const cursor = onMarkClick ? "pointer" : undefined
-        const text = this.displayText(data, targetedColumn)
         const blockWidth = width * innerWidth
         const blockHeight = height * innerHeight
 

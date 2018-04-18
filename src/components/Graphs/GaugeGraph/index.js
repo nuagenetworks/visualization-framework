@@ -66,7 +66,7 @@ export default class GaugeGraph extends AbstractGraph {
         let cData = data;
 
         if (!data)
-            return;
+            return this.renderMessage('No data to visualize')
 
         if(data.length)
             cData = data[0];

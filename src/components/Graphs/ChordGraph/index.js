@@ -149,6 +149,7 @@ export default class ChordGraph extends AbstractGraph {
 
         const { data, width, height } = this.props;
 
+
         if (!data || !data.length || !this.filterData.length)
             return this.renderMessage('No data to visualize')
 

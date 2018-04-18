@@ -585,7 +585,7 @@ class Table extends AbstractGraph {
         } = this.getConfiguredProperties();
 
         if(!data || !data.length) {
-            return
+            return this.renderMessage('No data to visualize')
         }
 
         let tableData  = this.getTableData(this.getColumns()),
