@@ -33,7 +33,7 @@ export default class AbstractGraph extends React.Component {
         this.defaults = GraphManager.getDefaultProperties(properties);
 
         // set all configuration into single object
-        this.setConfiguredProperties();
+        this.setConfiguredProperties(this.props);
 
         // Provide tooltips for subclasses.
         const { tooltip, defaultY } = this.getConfiguredProperties();
@@ -73,6 +73,10 @@ export default class AbstractGraph extends React.Component {
             this.getTooltipContent = () => null
             this.tooltipProps = () => null
         }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setConfiguredProperties(nextProps);
     }
 
     setTooltipAccessor(tooltip, type = 'default') {
@@ -159,8 +163,8 @@ export default class AbstractGraph extends React.Component {
       });
     };
 
-    setConfiguredProperties() {
-        this.configuredProperties = Object.assign({}, this.defaults, this.props.configuration.data, { multiMenu: this.props.configuration.multiMenu,  menu: this.props.configuration.menu });
+    setConfiguredProperties(props) {
+        this.configuredProperties = Object.assign({}, this.defaults, props.configuration.data, { multiMenu: props.configuration.multiMenu,  menu: props.configuration.menu });
     }
 
     getConfiguredProperties() {
