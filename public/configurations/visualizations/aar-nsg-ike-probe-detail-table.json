@@ -9,7 +9,7 @@
         "searchBar": false,
         "hidePagination":true,
         "columns": [
-            { "column": "ProbeState","label":"","colors":{"UP":"#7ace4d","DOWN":"#f3264c","UNKNOWN": "white","HOLD_DOWN": "#6b55ed","UNSTABLE": "#ffbb44","STOPPED": "gray"}},
+            { "column": "ProbeState","label":"","colors":{"UP":"green","DOWN":"red","UNKNOWN": "white","HOLD_DOWN": "blue","UNSTABLE": "#faf78e","STOPPED": "gray"}},
             { "column": "timestamp","label":"Time","timeFormat": "%b %d, %y %X" },
             { "column": "TunnelName", "label": "Tunnel Name"},
             { "column": "ProbeName", "label": "Probe Name"},

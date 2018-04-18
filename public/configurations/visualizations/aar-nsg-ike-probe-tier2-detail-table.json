@@ -10,7 +10,7 @@
         "hidePagination":true,
         "columns": [
              { "column": "Tier2URLInfo.UrlString","label":"Tier2 URL String"},
-            { "column": "Tier2URLInfo.UrlState","label":"Tier2 URL State","colors":{"UP":"#7ace4d","DOWN":"#f3264c","NOT_PROBED":"gray"} },
+            { "column": "Tier2URLInfo.UrlState","label":"Tier2 URL State","colors":{"UP":"green","DOWN":"red","NOT_PROBED":"gray"} },
             { "column": "Tier2URLInfo.UrlFailureReason ", "label": "Tier2 Failure Reason (If Any)"}
         ]
     },

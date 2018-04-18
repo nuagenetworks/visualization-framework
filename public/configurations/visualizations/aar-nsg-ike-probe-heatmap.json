@@ -16,12 +16,12 @@
         "legendColumn": "ProbeStatus",
         "colorColumn": "ProbeStatus",
         "heatmapColor": {
-            "UP": "#7ace4d",
-            "UNSTABLE": "#ffbb44",
-            "DOWN": "#f3264c",
-            "STOPPED": "#gray",
+            "UP": "#b3d645",
+            "UNSTABLE": "#faf78e",
+            "DOWN": "#f76159",
+            "STOPPED": "#d9d9d9",
             "UNKNOWN": "white",
-            "HOLD_DOWN": "#6b55ed"
+            "HOLD_DOWN": "lightBlue"
         },
         "legend": {
             "show": true,
