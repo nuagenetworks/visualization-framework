@@ -599,7 +599,7 @@ class AreaGraph extends XYGraph {
     } = this.props;
 
     if (!data || !data.length)
-        return;
+        return this.renderMessage('No data to visualize')
 
     const {
         margin

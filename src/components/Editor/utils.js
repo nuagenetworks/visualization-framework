@@ -41,7 +41,7 @@ export const parseServerErrors = (response) => {
 export const getServerErrors = (state, configuration ) => {
     const requestID = getPOSTRequestID(configuration);
     const errorResponse = state.services.getIn([ServiceActionKeyStore.REQUESTS, requestID, ServiceActionKeyStore.ERROR]);
-    return errorResponse && errorResponse.responseJSON ? parseServerErrors(errorResponse.responseJSON) : null;
+    return errorResponse && errorResponse.responseJSON ? parseServerErrors(errorResponse.responseJSON) : errorResponse;
 }
 
 export const isSubmitSuccessfull = (state, configuration) => {

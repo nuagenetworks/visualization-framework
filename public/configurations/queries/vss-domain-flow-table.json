@@ -18,11 +18,7 @@
              	    "must": [
                     {"term": {"nuage_metadata.enterpriseName": "{{enterpriseName:chord_enterprise}}"} },
                     {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
-                    {"term": {"nuage_metadata.acl_source_type": "{{source_field}}"} },
-                    {"term": {"nuage_metadata.acl_destination_type": "{{destination_field}}"} },
-                    {"term": {"nuage_metadata.acl_destination_name": "{{destination}}"} },
-                    {"term": {"nuage_metadata.acl_source_name": "{{source}}"} },
-                    {"term": {"nuage_metadata.acl_destination_name": "{{destination}}"} },
+                    {"term": {"{{source_field}}": "{{source}}"} },
                     {"range": { "timestamp": { "gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
                   ]
                 }
@@ -32,10 +28,27 @@
                   "must": [
                     {"term": {"nuage_metadata.enterpriseName": "{{enterpriseName:chord_enterprise}}"} },
                     {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
-                    {"term": {"nuage_metadata.acl_source_type": "{{source_field}}"} },
-                    {"term": {"nuage_metadata.acl_destination_type": "{{destination_field}}"} },
-                    { "term": {"nuage_metadata.acl_source_name": "{{destination}}"} },
-                    { "term": {"nuage_metadata.acl_destination_name": "{{source}}"} },
+                    { "term": {"{{destination_field}}": "{{destination}}"} },
+                    {"range": { "timestamp": {"gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "must": [
+                    {"term": {"nuage_metadata.enterpriseName": "{{enterpriseName:chord_enterprise}}"} },
+                    {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
+                    { "term": {"{{destination_field}}": "{{source}}"} },
+                    {"range": { "timestamp": {"gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "must": [
+                    {"term": {"nuage_metadata.enterpriseName": "{{enterpriseName:chord_enterprise}}"} },
+                    {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
+                    { "term": {"{{source_field}}": "{{destination}}"} },
                     {"range": { "timestamp": {"gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
                   ]
                 }
