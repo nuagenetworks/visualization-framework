@@ -1,12 +1,15 @@
 {
-    "id": "aarNSGNATTEvents",
+    "id": "aarNSGIKE",
     "author": "Bharat Mukheja",
-    "creationDate": "1/19/2018",
-    "title": "AAR NSG ({{snsg}}) NATT Events",
+    "creationDate": "3/6/2018",
+    "title": "AAR NSG ({{snsg}}) IKE",
     "visualizations": [
-        { "id": "aar-nsg-natt-heatmap",             "x": 0, "y": 0,  "w": 12, "h": 15, "minW": 5, "minH": 10, "static": true},
-        { "id": "aar-nsg-natt-details-latest",       "x": 0, "y": 15,  "w": 12, "h": 15, "minW": 5, "minH": 5, "static": true},
-        { "id": "aar-nsg-natt-details-timestamp",       "x": 0, "y": 30,  "w": 12, "h": 15, "minW": 5, "minH": 5, "static": true}
+        { "id": "aar-nsg-ike-tunnel-heatmap",           "x": 0, "y": 0,  "w": 12, "h": 15, "minW": 5, "minH": 10, "static": true},
+        { "id": "aar-nsg-ike-tunnel-traffic-linechart", "x": 0, "y": 15,  "w": 12, "h": 15, "minW": 5, "minH": 5, "static": true},
+        { "id": "aar-nsg-ike-probe-heatmap",            "x": 0, "y": 30,  "w": 12, "h": 15, "minW": 5, "minH": 5, "static": true},
+        { "id": "aar-nsg-ike-probe-detail-table",      "x": 0, "y": 45,  "w": 12, "h": 15, "minW": 5, "minH": 10, "static": true},
+        { "id": "aar-nsg-ike-probe-tier1-detail-table",       "x": 0, "y": 60,  "w": 6, "h": 15, "minW": 5, "minH": 5, "static": true},
+        { "id": "aar-nsg-ike-probe-tier2-detail-table",       "x": 6, "y": 60,  "w": 6, "h": 15, "minW": 5, "minH": 5, "static": true}
     ],
     "links": [
         {
@@ -38,6 +41,7 @@
                     "forceOptions": {
                         "interval": "2m",
                         "prevStartTime": "now-30m",
+                        "aarnsgiketunnelheatmapstartTime":"now-15m",
                         "unit": "m",
                         "duration": "15"
                     }
@@ -48,6 +52,7 @@
                     "forceOptions": {
                         "interval": "2m",
                         "prevStartTime": "now-60m",
+                        "aarnsgiketunnelheatmapstartTime":"now-30m",
                         "unit": "m",
                         "duration": "30"
                     }
@@ -58,6 +63,7 @@
                     "forceOptions": {
                         "interval": "2m",
                         "prevStartTime": "now-120m",
+                        "aarnsgiketunnelheatmapstartTime":"now-60m",
                         "unit": "m",
                         "duration": "60"
                     }

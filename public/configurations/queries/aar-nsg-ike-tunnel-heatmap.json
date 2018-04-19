@@ -1,0 +1,68 @@
+{
+    "id": "aar-nsg-ike-tunnel-heatmap",
+    "service": "elasticsearch",
+    "query": {
+        "index": "{{index:nuage_ike_stats}}",
+        "type": "{{type:nuage_doc_type}}",
+        "body": {
+            "size": 0,
+            "sort": [
+                {
+                    "timestamp": {
+                        "order": "desc"
+                    }
+                }
+            ],
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "range": {
+                                "timestamp": {
+                                    "gte":"{{startTime:now-15m}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format": "epoch_millis"
+                                }
+                            }
+                        }
+                    ],
+                    "filter": {
+                        "bool":{
+                            "must":[
+                                {
+                                    "term": {
+                                        "SourceNSG":"{{snsg}}"
+                                     }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "aggs": {
+                "date_histo": {
+                    "date_histogram": {
+                        "field": "timestamp",
+                        "interval": "1m"
+                    },
+                    "aggs":{
+                        "tunnel":{
+                            "terms": {
+                                "field": "TunnelName"
+                            },
+                            "aggs":{
+                                "TunnelState": {
+                                    "terms": {
+                                      "script": {
+                                        "inline": "doc['MultipleStatesChanged'].value==true?'UNSTABLE':doc['TunnelState']"
+                                      }
+                                    }
+                                  }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

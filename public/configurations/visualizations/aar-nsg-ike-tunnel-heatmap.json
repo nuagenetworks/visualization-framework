@@ -1,0 +1,46 @@
+{
+    "id": "aar-nsg-ike-tunnel-heatmap",
+    "graph": "HeatmapGraph",
+    "title": "Tunnel Status for all tunnels on {{snsg}}",
+    "description": "Heatmap showing IKE Tunnel status history. \n\nGREEN => Tunnel UP \nRED => Tunnel Down \nYELLOW => Tunnel has gone through multiple state changes",
+    "author": "Bharat Mukheja",
+    "creationDate": "3/6/2018",
+    "key": "function(d) { return d['dnsg'] + d['date_histo'];}",
+    "data": {
+        "xAlign": true,
+        "xColumn": "date_histo",
+        "xLabel": "Time",
+        "yTickGrid": false,
+        "yColumn":"tunnel",
+        "yLabel": "Destination",
+        "legendColumn": "TunnelState",
+        "cellColumn": "TunnelState",
+        "heatmapColor": {
+            "UP": "#7ace4d",
+            "UNSTABLE": "#ffbb44",
+            "DOWN": "#f3264c"
+        },
+        "legend": {
+            "show": true,
+            "orientation": "horizontal",
+            "circleSize": 4,
+            "labelOffset": 2
+        },
+        "tooltip": [
+            { "column": "date_histo", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+            { "column": "tunnel", "label": "Tunnel" },
+            { "column": "TunnelState", "label": "Tunnel State" }
+        ]
+   },
+   "listeners": [
+        {
+            "params": {
+                "ike_tunnel_timestamp": "date_histo",
+                "queryStartTime": "date_histo",
+                "tunnel": "tunnel"
+            }
+        }
+    ],
+    "nextPrevFilter": true,
+    "query": "aar-nsg-ike-tunnel-heatmap"
+}

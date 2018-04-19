@@ -1,0 +1,31 @@
+{
+    "id": "aar-nsg-ike-probe-detail-table",
+    "graph": "Table",
+    "title": "Last 8 IKE Probe Status Events",
+    "author": "Bharat Mukheja",
+    "description": "Detailed Events table for last 8 events occured on the Probe selected on the heatmap.\n\nFlapping Column = 'true' if probe has gone through multiple state change within 30sec \n\nFor the ProbeStates:\nGREEN => Probe is Up \nRED => Probe is Down \nBLUE => Probe is in HOLD DOWN",
+    "creationDate": "3/6/2018",
+    "data": {
+        "searchBar": false,
+        "hidePagination":true,
+        "columns": [
+            { "column": "ProbeState","label":"","colors":{"UP":"#7ace4d","DOWN":"#f3264c","UNKNOWN": "white","HOLD_DOWN": "#6b55ed","UNSTABLE": "#ffbb44","STOPPED": "gray"}},
+            { "column": "timestamp","label":"Time","timeFormat": "%b %d, %y %X" },
+            { "column": "TunnelName", "label": "Tunnel Name"},
+            { "column": "ProbeName", "label": "Probe Name"},
+            { "column": "ProbeFailureReason", "label": "Probe Failure Reason"},
+            { "column": "Tier1State","label":"Tier1 State" },
+            { "column": "Tier2State","label":"Tier2 State" },
+            { "column": "RoundRobinState","label":"Round Robin State" },
+            { "column": "MultipleStatesChanged", "label": "Flapping"}
+        ]
+    },
+    "listeners": [
+        {
+            "params": {
+                "ikeProbeDetailTimestamp": "timestamp"
+            }
+        }
+    ],
+    "query": "aar-nsg-ike-probe-detail-table"
+}
