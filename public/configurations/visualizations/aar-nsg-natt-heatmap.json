@@ -7,6 +7,7 @@
     "creationDate": "1/19/2018",
     "key": "function(d) { return d['dnsg'] + d['date_histo'];}",
     "data": {
+        "xAlign": true,
         "xColumn": "date_histo",
         "xLabel": "Time",
         "yColumn": "dnsg",
