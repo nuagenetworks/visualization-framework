@@ -139,7 +139,7 @@ class GeoMap extends AbstractGraph {
               //label={marker[nameColumn]}
             onMouseOver={() => this.toggleInfoWindow(d[idColumn])}
             onMouseOut={() => this.toggleInfoWindow(d[idColumn])}
-            icon={'/icons/icon-nsgateway-resized.png'}
+            icon={`${process.env.PUBLIC_URL}/icons/icon-nsgateway-resized.png`}
           >
             {this.infowindow(d)}
           </Marker>

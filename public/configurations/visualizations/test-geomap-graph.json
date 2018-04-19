@@ -10,7 +10,7 @@
         "longitudeColumn": "longitude",
         "nameColumn": "nsgatewayName",
         "localityColumn": "photo_title",
-        "idColumn": "id",
+        "idColumn": "nsgatewayID",
         "links": {
             "source": "data1",
             "sourceColumn": "source",
