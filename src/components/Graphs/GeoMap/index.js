@@ -7,12 +7,12 @@ import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClust
 
 import GoogleMapsWrapper from '../../Map'
 import SearchBar from "../../SearchBar"
-import {properties} from "./default.config"
+import { getIconPath } from '../../../utils/helpers'
 
 class GeoMap extends AbstractGraph {
 
   constructor(props) {
-    super(props, properties)
+    super(props)
 
     this.state = {
       data: [],
@@ -125,7 +125,6 @@ class GeoMap extends AbstractGraph {
       longitudeColumn,
       idColumn,
       nameColumn,
-      icons,
       markerIcon
     } = this.getConfiguredProperties();
 
@@ -141,7 +140,7 @@ class GeoMap extends AbstractGraph {
               //label={marker[nameColumn]}
             onMouseOver={() => this.toggleInfoWindow(d[idColumn])}
             onMouseOut={() => this.toggleInfoWindow(d[idColumn])}
-            icon={`${process.env.PUBLIC_URL}/icons/${icons[markerIcon]}`}
+            icon={getIconPath(markerIcon)}
           >
             {this.infowindow(d)}
           </Marker>
