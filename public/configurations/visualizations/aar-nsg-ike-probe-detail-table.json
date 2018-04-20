@@ -3,7 +3,7 @@
     "graph": "Table",
     "title": "Last 8 IKE Probe Status Events",
     "author": "Bharat Mukheja",
-    "description": "Detailed Events table for last 8 events occured on the Probe selected on the heatmap.\n\nFlapping Column = 'true' if probe has gone through multiple state change within 30sec \n\nFor the ProbeStates:\nGREEN => Probe is Up \nRED => Probe is Down \nBLUE => Probe is in HOLD DOWN",
+    "description": "The last 8 events, that occurred during or before the selected time interval in the heatmap, where a probe or probe tier state changed. The timestamp marks the end of the 30 second interval in which this event occurred.\n\nGREEN: Probe is Up\nRED: Probe is Down\nBLUE: Probe is in HOLD DOWN\nFlapping = 'true': the probe has gone through multiple state change within 30 seconds",
     "creationDate": "3/6/2018",
     "data": {
         "searchBar": false,

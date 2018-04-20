@@ -2,7 +2,7 @@
     "id": "aar-nsg-ike-tunnel-heatmap",
     "graph": "HeatmapGraph",
     "title": "Tunnel Status for all tunnels on {{snsg}}",
-    "description": "Heatmap showing IKE Tunnel status history. \n\nGREEN => Tunnel UP \nRED => Tunnel Down \nYELLOW => Tunnel has gone through multiple state changes",
+    "description": "Heatmap showing IKE Tunnel status\n\nGREEN: Tunnel UP\nRED: Tunnel DOWN\nYELLOW: Tunnel has gone through multiple state changes",
     "author": "Bharat Mukheja",
     "creationDate": "3/6/2018",
     "key": "function(d) { return d['dnsg'] + d['date_histo'];}",

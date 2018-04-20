@@ -2,7 +2,7 @@
     "id": "aar-nsg-ike-probe-tier1-detail-table",
     "graph": "Table",
     "title": "{{tunnel}} Tier1 URL events at {{ikeProbeDetailTimestamp:call('time_convert')}}",
-    "description":"Table gives IKE Tunnel Tier1 events for the timestamp clicked in Probe Events detail table.\n\nGreen => URL is reachable.\nRed => URL is unreachable\nGray => URL has not been probed in the 30 secs interval",
+    "description":"IKE Tunnel Tier1 events for the timestamp selected in Probe events detail table\n\nGreen: URL is reachable\nRed: URL is unreachable\nGray: URL has not been probed in the 30 secs interval",
     "author": "Bharat Mukheja",
     "creationDate": "3/6/2018",
     "data": {
