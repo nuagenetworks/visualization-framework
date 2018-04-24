@@ -135,7 +135,17 @@ Here is the list of options:
         data2: "query2"
     }
     ```
-    Note: data key is required in case of object.
+    or
+
+    ```
+    query: {
+        data: "query1",
+        data2: { "name": "query2", "required": false }
+    }
+    ```
+    By default all the queries are mandatory, to make any query (except data query) non-mandatory then set  `"required": false`  in object like above.
+
+    Note: data key is required in case of objec{ "name": "query2", "required": false }t.
 
 - **refreshInterval** set the time interval in `ms` between two refresh. Use `-1` to deactivate refresh.
 - **data** an object that helps you configure your visualization. (See below to find graphs specific data).
