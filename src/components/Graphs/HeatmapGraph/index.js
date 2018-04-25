@@ -58,7 +58,9 @@ export default class HeatmapGraph extends XYGraph {
             legendColumn,
             yAxisPadding,
             emptyBoxColor,
-            xAlign
+            xAlign,
+            yLabelLimit,
+            appendCharLength
         } = this.getConfiguredProperties();
 
         let nestedXData = dataNest({
@@ -140,7 +142,8 @@ export default class HeatmapGraph extends XYGraph {
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
         let legendWidth       = legend.show && cellColumnsData.length ? this.longestLabelLength(data, legendFn) * chartWidthToPixel : 0;
 
-        let yLabelWidth       = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
+        let yLabelWidth       = this.longestLabelLength(data, yLabelFn);
+        yLabelWidth = (yLabelWidth > yLabelLimit ?  yLabelLimit + appendCharLength : yLabelWidth)* chartWidthToPixel
 
         let leftMargin        = margin.left + yLabelWidth + yAxisPadding * chartWidthToPixel;
 
@@ -258,7 +261,11 @@ export default class HeatmapGraph extends XYGraph {
                         />
                         <g
                             key="yAxis"
-                            ref={ (el) => select(el).call(yAxis) }
+                            ref={ (el) => select(el)
+                                    .call(yAxis)
+                                    .selectAll('.tick text')
+                                    .call(this.wrapD3Text, yLabelLimit)
+                                }
                         />
                         {data.map((d, i) => {
                             // Compute rectangle depending on orientation (vertical or horizontal).
