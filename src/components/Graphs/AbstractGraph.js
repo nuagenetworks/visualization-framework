@@ -141,26 +141,21 @@ export default class AbstractGraph extends React.Component {
 
     handleHideEvent() {}
 
-    wrapD3Text (text, width) {
-      text.each(function() {
-        var text = d3.select(this),
-          words = text.text().split(/\s+/).reverse(),
-          word = words.pop(),
-          line = [],
-          y = text.attr("y"),
-          dy = parseFloat(text.attr("dy")),
-          tspan = text.text(null).append("tspan").attr("x", -2).attr("y", y).attr("dy", dy + "em");
+    wrapD3Text(text, width) {
+        text.each(function () {
+            var text = d3.select(this);
+            var words = text.text(),
 
-        while (word && tspan.node().getComputedTextLength() < width) {
-          line.push(word);
-          tspan.text(line.join(" "));
-          word = words.pop();
-        }
+                y = text.attr("y"),
+                dy = parseFloat(text.attr("dy")),
+                tspan = text.text(null).append("tspan").attr("x", -3).attr("y", y).attr("dy", dy + "em");
+            tspan.text(words);
 
-        if(word) {
-          tspan.text(line.join(" ") + '...');
-        }
-      });
+            if (words.length > width) {
+                text.style('cursor', 'pointer').append('title').text(words)
+                tspan.text(words.substr(0, width) + '...')
+            }
+        });
     };
 
     setConfiguredProperties(props) {
@@ -237,6 +232,7 @@ export default class AbstractGraph extends React.Component {
     }
 
     longestLabelLength(data, label, formatter) {
+
         // Basic function if none provided
         if (!label)
             label = (d) => d;
@@ -262,9 +258,10 @@ export default class AbstractGraph extends React.Component {
         }));
 
         const longestLabel = lab ? lab.toString() : '';
+        let labelSize = format(longestLabel).length
 
-        // and return its length + 1 to ensure we have enough space
-        return format(longestLabel).length + 1;
+        // and return its length + 2 to ensure we have enough space
+        return  labelSize > 8 ?  labelSize : labelSize + 2
     }
 
     renderLegend(data, legend, getColor, label) {
@@ -361,10 +358,13 @@ export default class AbstractGraph extends React.Component {
         );
     }
 
+
     setYlabelWidth(data, yColumn = null) {
         const {
           chartWidthToPixel,
-          yTickFormat
+          yTickFormat,
+          yLabelLimit,
+          appendCharLength
         } = this.getConfiguredProperties();
 
         yColumn = yColumn ? yColumn : 'yColumn'
@@ -373,10 +373,13 @@ export default class AbstractGraph extends React.Component {
                 return d[yColumn];
             }
             const formatter = format(yTickFormat);
+
             return formatter(d[yColumn]);
         };
 
-        this.yLabelWidth = this.longestLabelLength(data, yLabelFn) * chartWidthToPixel;
+        let labelLength = this.longestLabelLength(data, yLabelFn)
+        this.yLabelWidth = (labelLength > yLabelLimit ? yLabelLimit + appendCharLength : labelLength) * chartWidthToPixel
+
     }
 
     getYlabelWidth() {

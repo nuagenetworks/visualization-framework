@@ -648,8 +648,6 @@ const mapStateToProps = (state, ownProps) => {
                     queryConfig.required = true
                 }
 
-                console.log("zzzzzzzzzzz", props.configuration.query)
-
                 let queryConfiguration = state.configurations.getIn([
                     ConfigurationsActionKeyStore.QUERIES,
                     queryConfig.name

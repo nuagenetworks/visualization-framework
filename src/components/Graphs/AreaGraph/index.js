@@ -58,7 +58,7 @@ class AreaGraph extends XYGraph {
       this.yValue = yColumn
     }
 
-    this.parseData(); 
+    this.parseData(props)
 
     this.setDimensions(props, this.getRefinedData());
     this.updateLegend();
@@ -145,10 +145,10 @@ class AreaGraph extends XYGraph {
    
   }
 
-  parseData() {
+  parseData(props) {
     let {
         data
-    } = this.props;
+    } = props;
 
     const {
         yColumn,

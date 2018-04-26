@@ -95,18 +95,18 @@ class BarGraph extends XYGraph {
     if (!data || !data.length)
         return
 
-    this.parseData()
+    this.parseData(props)
     this.setDimensions(props, this.getNestedData(), this.isVertical() ? 'total' : 'key')
-    this.updateLegend()
+    this.updateLegend(props)
     this.configureAxis({
       data: this.getNestedData()
     })
   }
 
-  parseData() {
+  parseData(props) {
     const {
       data
-    } = this.props
+    } = props
 
     const {
       xColumn,
@@ -150,10 +150,10 @@ class BarGraph extends XYGraph {
     return this.stack
   }
 
-  updateLegend() {
+  updateLegend(props) {
     const {
       data
-    } = this.props
+    } = props
 
     const {
       chartHeightToPixel,
@@ -479,8 +479,8 @@ class BarGraph extends XYGraph {
       .attr('height', initialHeight)
       .attr('width', initialWidth)
       .on('click', d => {
-          this.handleLeave()
-          onMarkClick && (!otherOptions || d[this.getDimension()] !== otherOptions.label)
+        self.handleLeave()
+          onMarkClick && (!otherOptions || d[self.getDimension()] !== otherOptions.label)
           ?  onMarkClick(d) 
           : ''
         }
@@ -699,10 +699,6 @@ BarGraph.propTypes = {
   data: React.PropTypes.arrayOf(React.PropTypes.object)
 }
 
-const mapStateToProps = (state, ownProps) =>  {
-  return {}
-}
-
 const actionCreators = (dispatch) => ({
 
   showTooltip: function(data, origin) {
@@ -718,4 +714,4 @@ const actionCreators = (dispatch) => ({
 
 })
 
-export default connect(mapStateToProps, actionCreators)(BarGraph)
+export default connect(null, actionCreators)(BarGraph)
