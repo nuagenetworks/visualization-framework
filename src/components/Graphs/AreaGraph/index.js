@@ -316,28 +316,12 @@ class AreaGraph extends XYGraph {
 
     const svg =  this.getGraph();
 
-    //Add the X Axis
-    svg.append('g')
-      .attr('class', 'xAxis');
-  
-    //Add the Y Axis
-    svg.append('g')
-      .attr('class', 'yAxis');
-
-    // tooltip line and circles
-    svg.select('.tooltip-line').append('line')
-      .attr('class', 'hover-line')
-      .style('stroke', 'rgb(255,0,0)');
-
     // for generating transition   
     svg.select('.area-chart')
      .append('clipPath')
        .attr('id', `clip-${this.getGraphId()}`)
       .append('rect')
         .attr('width', 0);  
-
-    // generate elements for X and Y titles
-    this.generateAxisTitleElement();
   }
  
   // show circle if data length is 1.
@@ -614,10 +598,17 @@ class AreaGraph extends XYGraph {
               <g ref={node => this.node = node}>
                 <g className='graph-container' transform={ `translate(${this.getLeftMargin()},${margin.top})` }>
                     <g className='area-chart'></g>
-                    <g className='tooltip-line' transform={ `translate(0,0)` } style={{opacity : 0}}></g>
+                    <g className='tooltip-line' transform={ `translate(0,0)` } style={{opacity : 0}}>
+                      <line className='hover-line' style={{stroke:'rgb(255,0,0)'}}></line>
+                    </g>
                     <g className='tooltip-section'></g>
+                    <g className='xAxis'></g>
+                    <g className='yAxis'></g>
                 </g>
-                <g className='axis-title'></g>
+                <g className='axis-title'>
+                  <text className='x-axis-label' textAnchor="middle"></text>
+                  <text className='y-axis-label' textAnchor="middle"></text>
+                </g>
                 <g className='legend'></g>
               </g>  
             </svg>

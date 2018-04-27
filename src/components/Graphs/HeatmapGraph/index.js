@@ -40,7 +40,6 @@ class HeatmapGraph extends XYGraph {
   }
 
   componentDidMount() {
-    this.elementGenerator()
     this.updateElements()
   }
 
@@ -54,7 +53,6 @@ class HeatmapGraph extends XYGraph {
   }
 
   componentDidUpdate() {
-    this.elementGenerator()
     this.updateElements()
   }
 
@@ -299,29 +297,6 @@ class HeatmapGraph extends XYGraph {
     return this.getSVG().select('.graph-container')
   }
 
-  // generate methods which helps to create charts
-  elementGenerator() {
-    const {
-      data
-    } = this.props
-
-    if (!data || !data.length)
-      return
-
-    const svg = this.getGraph()
-
-    //Add the X Axis
-    svg.append('g')
-      .attr('class', 'xAxis')
-
-    //Add the Y Axis
-    svg.append('g')
-      .attr('class', 'yAxis')
-
-    // generate elements for X and Y titles
-    this.generateAxisTitleElement()
-  }
-
   // update data on props change or resizing
   updateElements() {
     const {
@@ -490,12 +465,12 @@ class HeatmapGraph extends XYGraph {
         height
     } = this.props
 
-    if (!data || !data.length || !this.getFilterData().length)
-      return this.renderMessage('No data to visualize')
-
     const {
       margin
     } = this.getConfiguredProperties()  
+
+    if (!data || !data.length || !this.getFilterData().length)
+      return this.renderMessage('No data to visualize')
 
     return (
       <div className='heatmap-graph'>
@@ -507,8 +482,13 @@ class HeatmapGraph extends XYGraph {
                 <g className='graph-container' transform={ `translate(${this.getLeftMargin()},${margin.top})` }>
                     <g className='heatmap'></g>
                     <g className='tooltip-section'></g>
+                    <g className='xAxis'></g>
+                    <g className='yAxis'></g>
                 </g>
-                <g className='axis-title'></g>
+                <g className='axis-title'>
+                  <text className='x-axis-label' textAnchor="middle"></text>
+                  <text className='y-axis-label' textAnchor="middle"></text>
+                </g>
                 <g className='legend'></g>
               </g>  
             </svg>
