@@ -1,7 +1,7 @@
 {
     "id": "aar-nsg-natt-details-latest",
     "graph": "Table",
-    "title": "Latest {{latest_size}} NAT Probe Results",
+    "title": "Latest {{latest_size}} NATT Probe Results",
     "author": "Bharat Mukheja",
     "creationDate": "1/19/2018",
     "data": {
