@@ -59,8 +59,7 @@ class AreaGraph extends XYGraph {
     }
 
     this.parseData(); 
-
-    this.setDimensions(props, this.getRefinedData());
+    this.setDimensions(props, this.getRefinedData(), this.yValue);
     this.updateLegend();
     this.configureAxis({
       data: this.getRefinedData(),
@@ -489,21 +488,25 @@ class AreaGraph extends XYGraph {
 
     const {
       xTickFontSize,
-      yTickFontSize
+      yTickFontSize,
+      yLabelLimit
     } = this.getConfiguredProperties();
 
     const svg =  this.getGraph();
 
     //Add the X Axis
-    svg.select('.xAxis')
+    const xAxis = svg.select('.xAxis')
       .style('font-size', xTickFontSize)
       .attr('transform', 'translate(0,'+ this.getAvailableHeight() +')')
       .call(this.getAxis().x);
   
     //Add the Y Axis
-    svg.select('.yAxis')
+    const yAxis = svg.select('.yAxis')
       .style('font-size', yTickFontSize)
       .call(this.getAxis().y);
+
+    yAxis.selectAll('.tick text')
+      .call(this.wrapD3Text, yLabelLimit)
 
     this.setAxisTitles();
     this.renderLegendIfNeeded();  

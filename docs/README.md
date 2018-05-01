@@ -168,6 +168,8 @@ Here is the list of options:
         ![margin-example](https://user-images.githubusercontent.com/26645756/38317307-63aaaa26-384a-11e8-8dc3-6d0fc9862961.png)
 
   - **colors** list of colors to use to render the visualization
+  - **yLabelLimit** (numeric) limit the character of y-axis label. Above the defined limit, the substring of the label will be display followed by the "..." and full label will be show on mouseover. 
+  - **appendCharLength**(numeric) the length of the "..." append after the label due to yLabelLimit to calculate the length of label.
   - **stroke**
     - **width** define stroke width
     - **color** define stroke color
@@ -454,6 +456,7 @@ It is a graphical representation of data where the individual values contained i
 ![heatmap](https://user-images.githubusercontent.com/14901092/36245661-200c8ae6-1252-11e8-8d5c-5cdf63cad97e.png)
 
 - **legendColumn** used to display matrix
+- **xAlign** (boolean) if true then align x-axis label to the left position , default align is middle
 - **key** (function) used to make unique combination using x and y columns to identify each matrix for event listener. E.g -
 ```javascript
     "key": "function(d) { return d['application'] + d['date_histo'];}"

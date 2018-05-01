@@ -290,7 +290,8 @@ class BarGraph extends XYGraph {
       yTickFormat,
       chartWidthToPixel,
       yColumn,
-      dateHistogram
+      dateHistogram,
+      yLabelLimit
     } = this.getConfiguredProperties()
 
     const svg =  this.getGraph()
@@ -319,7 +320,6 @@ class BarGraph extends XYGraph {
     }
 
     const yLabelFn = (d) => d[yColumn]
-    const yAxisLabelWidth = this.longestLabelLength(this.getNestedData(), yLabelFn, yTickFormat) * chartWidthToPixel
 
     //Add the Y Axis
     const yAxis = svg.select('.yAxis')
@@ -330,7 +330,7 @@ class BarGraph extends XYGraph {
 
     if(!this.isVertical() && !dateHistogram) {
       yAxis.selectAll('.tick text')
-        .call(this.wrapD3Text, yAxisLabelWidth)
+        .call(this.wrapD3Text, yLabelLimit)
     } 
 
     this.setAxisTitles()
