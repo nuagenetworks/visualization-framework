@@ -32,7 +32,7 @@ class SimulateAARData(object):
         blockThree = random.randrange(1, 255, 1)
         return str(blockOne) + "." + str(blockTwo) + "." + str(blockThree) + "."
 
-    def getNSGIds(self):
+    def getNSGIds(self, nsg_name):
         i = 0
         nsgids = []
         while i < self.nsg_count:
@@ -41,24 +41,18 @@ class SimulateAARData(object):
             nsg_natt_cidr = self.natt_ip_prefix
             nsg_natt_port = self.natt_port
             #nsg_last_octet = str(randint(2, 254))
-            nsg_last_octet = str(i)
+            nsg_last_octet = str(i + 1)
             nsg_ip = nsg_subnet_cidr + nsg_last_octet
             nsg = {
                 "nsg_subnet": nsg_subnet_cidr,
                 "nsg_id": nsg_ip,
-                "nsg_name": "ovs-" + nsg_last_octet,
+                "nsg_name": nsg_name + nsg_last_octet,
                 "nsg_natt_ip":nsg_natt_cidr + nsg_last_octet,
                 "nsg_natt_port":nsg_natt_port
             }
             nsgids.append(nsg)
             i += 1
         return nsgids
-
-    def getL7class(self):
-        l7class = ["HTTP", "SKYPE", "GOOGLE", "NETFLIX",
-                   "CISCOVPN", "MSOffice365", "MSOUTLOOK", "SLIDESHARE",
-                   "FACEBOOK", "WEBEX"]
-        return l7class
 
     def getL4class(self):
         l4class = ["TCP", "UDP"]
@@ -208,10 +202,10 @@ class SimulateAARData(object):
 
         return nsg_vport_hash
 
-    def getDomainNames(self):
+    def getDomainNames(self, domPrefix):
         i = 1
         domainNames = []
-        domPrefix = "Domain"
+        #domPrefix = "Domain"
         while i <= self.domain_count:
             domName = domPrefix + str(i)
             domainNames.append(domName)
@@ -281,7 +275,7 @@ class SimulateFlowStats(object):
         self.duc_grps = flowData["duc_grps"]
         self.slastatus = ["InSla", "OutSla", "Unmonitored"]
         #self.outslaApps = 0.05
-        self.outslaApps = flowData['outslaApps']
+        self.outslaApps = flowData["outslaApps"]
         self.protos = flowData["protos"]
         self.l7s = flowData["l7s"]
         self.perf_mons = flowData["perf_mons"]
@@ -349,7 +343,7 @@ class SimulateFlowStats(object):
                                          domains=self.domains, nsgs=self.nsgs,
                                          simData=self.simData)
         sla_flows = []
-
+        sla_status = 0
         flow_cnt = 0
         sla_prob_new = 0.6
         write_data = []
@@ -432,7 +426,7 @@ class SimulateFlowStats(object):
                         flow_record["IngressPackets"] = inpkts
                     else:
                         flow_record["IngressBytes"] = 0
-                        flow_record["IngressMB"] = 0
+                        flow_record["IngressMB"] = 0.0
                         flow_record["IngressPackets"] = 0
 
                     if not ingress_prob:
@@ -441,7 +435,7 @@ class SimulateFlowStats(object):
                         flow_record["EgressPackets"] = inpkts
                     else:
                         flow_record["EgressBytes"] = 0
-                        flow_record["EgressMB"] = 0
+                        flow_record["EgressMB"] = 0.0
                         flow_record["EgressPackets"] = 0
 
                     flow_record["TotalBytesCount"] = inbytes + inbytes
@@ -602,8 +596,7 @@ class SimulateSLAStats(object):
         self.destUplinks = flowData["destuplinks"]
         self.domains = flowData["domains"]
         self.slastatus = [1, 0]
-        self.slatype = ["latency", "jitter", "packetloss", "latency, jitter",
-                        "latency, packetloss", "jitter, packetloss", "latency, jitter, packetloss"]
+        self.slatype = ["Jitter", "Latency", "PktLoss", "LatencyJitter", "PktLossLatency", "PktLossJitterLatency"]
         self.l4class = ["TCP", "UDP"]
         self.sla_prob = 0.8
         self.def_ent_name = flowData["def_ent_name"]
@@ -810,6 +803,7 @@ def main():
     defData = {}
     defData["nsg_count"] = config.getint('default', 'nsg_count')
     defData["nsg_prefix"] = config.get('default', 'nsg_prefix')
+    defData["nsg_name"] = config.get('default', 'nsg_name_prefix')
     defData["app_count"] = config.getint('default', 'app_count')
     defData["app_group_count"] = config.getint('default', 'app_group_count')
     defData["vport_count"] = config.getint('default', 'vport_count')
@@ -818,12 +812,13 @@ def main():
     defData["natt_ip_prefix"] = config.get('default', 'natt_ip_prefix')
     defData["natt_port"] = config.get('default', 'natt_port')
     defData["domain_count"] = config.getint('default', 'domain_count')
+    defData["domain_name"] = config.get('default', 'domain_name_prefix')
     defData["npm_count"] = config.getint('default', 'npm_count')
     defData["perf_mon_count"] = config.getint('default', 'perf_mon_count')
     #print config.getint('default', 'duc_count')
     defData["duc_count"] = config.getint('default', 'duc_count')
     #print defData["duc_count"]
-    defData['out_sla_app_count'] = config.getint('default','out_sla_apps')
+    defData["out_sla_app_count"] = config.getint('default', 'out_sla_apps')
 
     def_ent_name = config.get('default', 'def_ent_name')
     es_server = config.get('default', 'es_server')
@@ -837,14 +832,14 @@ def main():
     es = Elasticsearch(es_server)
 
 
-    domains = simData.getDomainNames()
+    domains = simData.getDomainNames(defData["domain_name"])
     protos = simData.getProto()
     srcuplinks = simData.getSrcUplink()
     destuplinks = simData.getDestuplink()
-    l7s = simData.getL7class()
+    l7s = json.loads(config.get('app_list', 'l7class_list'))
     appids = simData.getAppIds()
     appgrpids = simData.getAppGroupIds(appids)
-    nsgs = simData.getNSGIds()
+    nsgs = simData.getNSGIds(defData["nsg_name"])
     perf_mons = simData.getPerfMons()
     npm_grps = simData.getNPMGrps(perf_mons)
 
