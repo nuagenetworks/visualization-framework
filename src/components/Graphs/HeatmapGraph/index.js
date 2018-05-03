@@ -216,7 +216,7 @@ class HeatmapGraph extends XYGraph {
       brush
     } = this.getConfiguredProperties()
 
-    const height =  this.getAvailableHeight()/(brush || this.getNestedYData().length),
+    const height =  this.getAvailableHeight()/( this.isBrush() ? brush : this.getNestedYData().length),
         width  = this.getAvailableWidth()/this.getNestedXData().length
 
     this.boxSize = { height, width}
