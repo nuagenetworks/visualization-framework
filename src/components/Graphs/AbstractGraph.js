@@ -1,6 +1,8 @@
 import React from "react";
 import { scaleOrdinal } from "d3";
 import ReactTooltip from "react-tooltip";
+import {Tooltip} from 'react-lightweight-tooltip';
+
 import evalExpression from "eval-expression"
 
 import * as d3 from "d3";
@@ -205,7 +207,7 @@ export default class AbstractGraph extends React.Component {
       }
 
       if(zeroStart && yExtent[1] < 0) {
-        yExtent[0] = 0;
+        yExtent[1] = 0;
       }
 
       let diff = Math.floor((yExtent[1] - yExtent[0]) * padding, 0);
