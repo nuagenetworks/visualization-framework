@@ -377,7 +377,7 @@ export default class AbstractGraph extends React.Component {
             return formatter(d[yColumn]);
         };
 
-        let labelLength = this.longestLabelLength(data, yLabelFn)
+        const labelLength = this.longestLabelLength(data, yLabelFn)
         this.yLabelWidth = (labelLength > yLabelLimit ? yLabelLimit + appendCharLength : labelLength) * chartWidthToPixel
 
     }
@@ -388,7 +388,6 @@ export default class AbstractGraph extends React.Component {
 
     setDimensions(props, data = null, column = null) {
         this.setYlabelWidth(data ? data : props.data, column);
-
         this.setLeftMargin();
         this.setAvailableWidth(props);
         this.setAvailableHeight(props);
@@ -421,13 +420,14 @@ export default class AbstractGraph extends React.Component {
 
     setAvailableWidth({width}) {
         const {
-          margin
+          margin,
+          brushArea
         } = this.getConfiguredProperties();
 
         this.availableWidth = width - (margin.left + margin.right + this.getYlabelWidth());
 
         if(this.isBrush() && !this.isVertical()) {
-            this.availableWidth = this.availableWidth * 0.80
+            this.availableWidth = this.availableWidth * (100 - brushArea)/100
             this.availableMinWidth = width - (this.availableWidth + this.getLeftMargin() + margin.left + margin.right + margin.left )
             this.minMarginLeft = this.availableWidth + this.getLeftMargin() + margin.left           
         }

@@ -3,19 +3,7 @@ import XYGraph from "../XYGraph"
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { actions } from 'redux-tooltip'
-
-import {
-    axisBottom,
-    axisLeft,
-    extent,
-    format,
-    nest,
-    scaleBand,
-    scaleTime,
-    map,
-    min,
-    event
-} from "d3"
+import * as d3 from "d3"
 
 import {properties} from "./default.config"
 import { nest as dataNest, pick } from "../../../utils/helpers"
@@ -40,10 +28,11 @@ class HeatmapGraph extends XYGraph {
   }
 
   componentDidMount() {
+    this.elementGenerator()
     this.updateElements()
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     return !_.isEqual(pick(this.props, ...FILTER_KEY), pick(nextProps, ...FILTER_KEY))
   }
 
@@ -87,13 +76,13 @@ class HeatmapGraph extends XYGraph {
       legendColumn
     } = this.getConfiguredProperties()
 
-    let nestedXData = dataNest({
+    this.nestedXData = dataNest({
       data: cdata,
       key: xColumn,
       sortColumn: xColumn
     })
 
-    let nestedYData = dataNest({
+    this.nestedYData = dataNest({
       data: cdata,
       key: yColumn,
       sortColumn: yColumn
@@ -102,19 +91,19 @@ class HeatmapGraph extends XYGraph {
     this.filterData = []
 
     // Check x column data, if not found set to null
-    nestedYData.forEach(item => {
+    this.nestedYData.forEach(item => {
 
       if (!item.key || typeof item.key === 'object' || item.key === 'null')
         return
 
-      let d = Object.assign({}, item)
+      const d = Object.assign({}, item)
 
       // Inserting new object if data not found
-      nestedXData.forEach(list => {
+      this.nestedXData.forEach(list => {
         if (!list.key || typeof list.key === 'object')
           return
 
-        let index = (d.values).findIndex(o => {
+        const index = (d.values).findIndex(o => {
           return `${o[xColumn]}` === `${list.key}`
         })
 
@@ -134,9 +123,21 @@ class HeatmapGraph extends XYGraph {
       })
     })
 
-    this.cellColumnsData  = nest()
+    this.cellColumnsData  = d3.nest()
       .key((d) => legendColumn ? d[legendColumn] : "Cell")
       .entries(this.filterData)
+
+    // check condition to apply brush on chart
+    if(this.filterData.length)
+      this.isBrushable(this.nestedYData)
+  }
+
+  getNestedYData() {
+    return this.nestedYData || []
+  }
+
+  getNestedXData() {
+    return this.nestedXData || []
   }
 
   getFilterData() {
@@ -162,7 +163,7 @@ class HeatmapGraph extends XYGraph {
 
     const legendWidth = this.longestLabelLength(this.getFilterData(), this.getLegendFn()) * chartWidthToPixel    
 
-    let legend = Object.assign({}, originalLegend)
+    const legend = Object.assign({}, originalLegend)
     
     if (legend.show) {
       legend.width = legendWidth
@@ -210,6 +211,17 @@ class HeatmapGraph extends XYGraph {
     return (d) => d[legendColumn]
   }
 
+  setBoxSize() {
+    const {
+      brush
+    } = this.getConfiguredProperties()
+
+    const height =  this.getAvailableHeight()/(brush || this.getNestedYData().length),
+        width  = this.getAvailableWidth()/this.getNestedXData().length
+
+    this.boxSize = { height, width}
+  }
+
   getBoxSize() {
     return this.boxSize || 0
   }
@@ -219,16 +231,13 @@ class HeatmapGraph extends XYGraph {
       xAlign
     } = this.getConfiguredProperties()
 
-    const distXDatas = map(data, this.getXLabelFn()).keys().sort()
-    const distYDatas = map(data, this.getYLabelFn()).keys().sort()
+    const distXDatas = d3.map(data, this.getXLabelFn()).keys().sort()
+    const distYDatas = d3.map(data, this.getYLabelFn()).keys().sort()
 
-    let xValues = extent(data, this.getXLabelFn())
+    const xValues = d3.extent(data, this.getXLabelFn())
     const xPadding = distXDatas.length > 1 ? ((xValues[1] - xValues[0]) / (distXDatas.length - 1)) / 2 : 1
 
-    this.boxSize = min([this.getBandScale().x.bandwidth(), this.getBandScale().y.bandwidth()])
-
-    this.availableHeight = this.boxSize * distYDatas.length
-    this.availableWidth  = this.boxSize * distXDatas.length
+    this.setBoxSize()
 
     let minValue = xValues[0]
     let maxValue = xValues[1]
@@ -242,10 +251,10 @@ class HeatmapGraph extends XYGraph {
 
     this.scale = {}
 
-    this.scale.x = scaleTime()
+    this.scale.x = d3.scaleTime()
         .domain([minValue, maxValue])
 
-    this.scale.y = scaleBand()
+    this.scale.y = d3.scaleBand()
         .domain(distYDatas)
 
     this.scale.x.range([0, this.getAvailableWidth()])
@@ -266,26 +275,26 @@ class HeatmapGraph extends XYGraph {
       yTickSizeOuter,
     } = this.getConfiguredProperties()
 
-    const distXDatas = map(data, this.getXLabelFn()).keys().sort()
+    const distXDatas = d3.map(data, this.getXLabelFn()).keys().sort()
 
     this.axis = {}
 
-    this.axis.x = axisBottom(this.getScale().x)
+    this.axis.x = d3.axisBottom(this.getScale().x)
       .tickSizeInner(xTickGrid ? -this.getAvailableHeight() : xTickSizeInner)
       .tickSizeOuter(xTickSizeOuter)
 
     if(xTickFormat){
-      this.axis.x.tickFormat(format(xTickFormat))
+      this.axis.x.tickFormat(d3.format(xTickFormat))
     }
 
     this.axis.x.tickValues(distXDatas)
 
-    this.axis.y = axisLeft(this.getScale().y)
+    this.axis.y = d3.axisLeft(this.getScale().y)
       .tickSizeInner(yTickGrid ? -this.getAvailableWidth() : yTickSizeInner)
       .tickSizeOuter(yTickSizeOuter)
 
     if(yTickFormat){
-      this.axis.y.tickFormat(format(yTickFormat))
+      this.axis.y.tickFormat(d3.format(yTickFormat))
     }
 
     if(yTicks){
@@ -295,6 +304,20 @@ class HeatmapGraph extends XYGraph {
 
   getGraph() {
     return this.getSVG().select('.graph-container')
+  }
+
+  getMinGraph() {
+    return this.getSVG().select('.mini-graph-container');
+  }
+
+  // generate methods which helps to create charts
+  elementGenerator() {
+    const svg =  this.getGraph()
+
+    svg.append("defs").append("clipPath")
+      .attr("id", `clip${this.getGraphId()}`)
+      .append('rect')
+
   }
 
   // update data on props change or resizing
@@ -314,6 +337,12 @@ class HeatmapGraph extends XYGraph {
 
     const svg = this.getGraph()
 
+    svg.select(`#clip${this.getGraphId()}`)
+    .select("rect")
+      .attr("x", -this.getYlabelWidth())
+      .attr("width", this.getAvailableWidth() + this.getYlabelWidth())
+      .attr("height", this.getAvailableHeight());
+
     //Add the X Axis
     svg.select('.xAxis')
       .style('font-size', xTickFontSize)
@@ -323,6 +352,7 @@ class HeatmapGraph extends XYGraph {
     //Add the Y Axis
     const yAxis = svg.select('.yAxis')
       .style('font-size', yTickFontSize)
+      .style('clip-path', `url(#clip${this.getGraphId()})`)
       .call(this.getAxis().y)
 
       yAxis.selectAll('.tick text')
@@ -330,6 +360,13 @@ class HeatmapGraph extends XYGraph {
 
     this.setAxisTitles()
     this.renderLegendIfNeeded()
+    // check to enable/disable brushing
+    if(this.isBrush()) {
+      this.configureMinGraph()
+    } else {
+      this.getSVG().select('.brush').select('*').remove()
+      this.getSVG().select('.min-heatmap').select('*').remove()
+    }
 
     this.drawGraph({
       scale: this.getScale(),
@@ -388,18 +425,17 @@ class HeatmapGraph extends XYGraph {
       xAlign
     } = this.getConfiguredProperties()
 
-    // scaling of color for heatmap cell
     const self = this,
-      boxSize = this.getBoxSize(),
-      classPrefix = brush ? 'min-' : ''
+      box = this.getBoxSize()
 
-    // draw heatmap cell
-    const cells = svg.select(`.${classPrefix}heatmap`)
+      // draw heatmap cell
+    const cells = svg.select('.heatmap')
       .selectAll('.heatmap-cell')
       .data(this.getFilterData(), d => d[xColumn] + d[yColumn])
 
     const newCells = cells.enter().append('g')
       .attr('class', 'heatmap-cell')
+      .style('clip-path', `url(#clip${this.getGraphId()})`)
 
     newCells.append('rect')
       .style('stroke', stroke.color)
@@ -411,10 +447,10 @@ class HeatmapGraph extends XYGraph {
     allCells.selectAll('rect')
       .style('fill', this.getColor())
       .style('opacity', d => self.getOpacity(d))
-      .attr('x', d => scale.x(d[xColumn]) - (xAlign ? 0 : boxSize / 2))
-      .attr('y', d => scale.y(d[yColumn]) + scale.y.bandwidth() / 2 - boxSize / 2)
-      .attr('height', boxSize)
-      .attr('width', boxSize)
+      .attr('x', d => scale.x(d[xColumn]) - (xAlign ? 0 : box.width / 2))
+      .attr('y', d => scale.y(d[yColumn]) + scale.y.bandwidth() / 2 - box.height / 2)
+      .attr('height', box.height)
+      .attr('width', box.width)
       .on('click', d => {
           self.handleLeave()
           onMarkClick ?  onMarkClick(d) : ''
@@ -436,14 +472,11 @@ class HeatmapGraph extends XYGraph {
     const { tooltip } = this.configuredProperties
 
     if (tooltip) {
-      let x = event.pageX
-      let y = event.pageY
+      const x = d3.event.pageX
+      const y = d3.event.pageY
 
       if(this.origin.x !== x  || this.origin.y !== y) {
-        this.origin = {
-          x,
-          y
-        }
+        this.origin = { x, y }
         this.props.showTooltip(this.getTooltipContent(), this.origin)
       }
     }
@@ -456,6 +489,106 @@ class HeatmapGraph extends XYGraph {
       this.hoveredDatum = null
       this.props.hideTooltip()
     }
+  }
+
+  configureMinGraph() {
+    const {
+      data
+    } = this.props
+
+    if (!data || !data.length || !this.filterData.length)
+      return
+
+    const {
+      margin,
+      brush,
+      xColumn,
+      yColumn,
+      xAlign,
+      stroke,
+      brushColor
+    } = this.getConfiguredProperties()
+
+    const svg   = this.getMinGraph(),
+          scale = this.getScale(),
+          minScale = { y: {}}
+
+    let range, mainZoom
+
+    svg.attr('transform', `translate(${this.getMinMarginLeft()}, ${margin.top})`)
+
+    mainZoom = d3.scaleLinear()
+      .rangeRound([this.getAvailableHeight(), 0])
+      .domain([0, this.getAvailableHeight()])
+
+
+    // set scale for mini heatmap graph
+    minScale.y = d3.scaleBand()
+      .domain(scale.y.domain())
+
+    minScale.y.rangeRound([this.getAvailableHeight(), 0])
+
+    range = [ 0, (this.getAvailableHeight()/this.getNestedYData().length) * brush]
+
+    // brushing event
+    this.brushing = d3.brushY()
+      .extent([[0, 0], [this.getAvailableMinWidth(), this.getAvailableHeight()]])
+      .on("brush end", () => {
+        const scale = this.getScale(),
+          originalRange = mainZoom.range()
+
+        let [start, end] = d3.event.selection || range
+        mainZoom.domain([end, start])
+
+        scale.y.rangeRound([mainZoom(originalRange[1]), mainZoom(originalRange[0])])
+
+        this.getGraph().select(".yAxis").call(this.getAxis().y)
+
+        const box = this.getBoxSize()
+
+        // re-render heatmap graph on brush end
+        this.getGraph().selectAll(".heatmap-cell").selectAll("rect")
+          .attr('x', d => scale.x(d[xColumn]) - (xAlign ? 0 : box.width / 2))
+          .attr('y', d => scale.y(d[yColumn]) + box.height / 2 - box.height / 2)
+          .attr('height', box.height)
+          .attr('width', box.width)
+
+      });
+
+    svg.select(".brush")
+      .call(this.brushing)
+      .call(this.brushing.move, range)
+
+    // removes handle to resize the brush
+    svg.selectAll('.brush>.handle').remove()
+    // removes crosshair cursor
+    svg.selectAll('.brush>.overlay').remove()
+
+    // draw min heatmap cells
+    const cells = svg.select('.min-heatmap')
+      .selectAll('.heatmap-cell')
+      .data(scale.y.domain())
+
+    const newCells = cells.enter().append('g')
+      .attr('class', 'heatmap-cell')
+
+    newCells.append('rect')
+      .style('stroke', stroke.color)
+      .style('stroke-width', stroke.width)
+
+    const allCells = newCells.merge(cells)
+
+    allCells.selectAll('rect')
+      .style('fill', brushColor)
+      .attr('x', 0)
+      .attr('y', d => minScale.y(d))
+      .attr('height', (this.getAvailableHeight()/scale.y.domain().length))
+      .attr('width', this.getAvailableMinWidth())
+
+    // Remove all remaining nodes
+    cells.exit().remove()
+
+
   }
 
   render() {
@@ -484,6 +617,10 @@ class HeatmapGraph extends XYGraph {
                     <g className='tooltip-section'></g>
                     <g className='xAxis'></g>
                     <g className='yAxis'></g>
+                </g>
+                <g className='mini-graph-container'>
+                  <g className='min-heatmap'></g>
+                  <g className='brush'></g>
                 </g>
                 <g className='axis-title'>
                   <text className='x-axis-label' textAnchor="middle"></text>
