@@ -12,6 +12,8 @@
         "xLabel": "Time",
         "yColumn": "dnsg",
         "yTickGrid": false,
+        "brush":3,
+        "brushArea":3,
         "yLabel": "Destination",
         "legendColumn": "ReachabilityStatus",
         "cellColumn": "ReachabilityStatus",
