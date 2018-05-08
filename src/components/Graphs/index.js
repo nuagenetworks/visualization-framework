@@ -89,7 +89,8 @@ const defaults = {
         labelOffset: 2,             // Space in pixels between the circle and the label
     },
     yLabelLimit: 20,
-    appendCharLength: 3
+    appendCharLength: 3,
+    brushWidth: 20 // // in percentage
 }
 
 const getDefaultProperties = (properties) => {

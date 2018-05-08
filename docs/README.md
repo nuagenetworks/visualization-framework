@@ -149,7 +149,13 @@ Here is the list of options:
 
 - **refreshInterval** set the time interval in `ms` between two refresh. Use `-1` to deactivate refresh.
 - **data** an object that helps you configure your visualization. (See below to find graphs specific data).
-  - **colorColumn** attribute name in your results to use for color
+  - **colorColumn** attribute name in your results to use for color.
+  - **brush** (Number) to enble brushing with pre selected bars.Currently support in bar graph and heatmap graph. E.g -
+```javascript
+"brush": 3,
+"brushArea": 20
+```
+  - **brushArea** (Number) space in visualization where brush slider display (in percentage). Default is 20.
   - **padding** (only for text graph)
      - **top** set top padding in pixels
     - **bottom** set bottom padding in pixels
@@ -299,10 +305,6 @@ Display vertical or horizontal bar charts
 ```
 ![stacked](https://user-images.githubusercontent.com/26645756/36251630-d603b8a0-1267-11e8-8efe-502c1046c7a8.png)
 
-- **brush** (Number) to enble brushing in bar graph with pre selected bars. E.g -
-```javascript
-  "brush": 3
-```
 ![dynamicbargraph](https://user-images.githubusercontent.com/26645756/36250751-b6872a64-1264-11e8-961c-1cb895518fc0.png)
 
 __x-axis__

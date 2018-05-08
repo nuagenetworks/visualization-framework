@@ -95,18 +95,18 @@ class BarGraph extends XYGraph {
     if (!data || !data.length)
         return
 
-    this.parseData()
+    this.parseData(props)
     this.setDimensions(props, this.getNestedData(), this.isVertical() ? 'total' : 'key')
-    this.updateLegend()
+    this.updateLegend(props)
     this.configureAxis({
       data: this.getNestedData()
     })
   }
 
-  parseData() {
+  parseData(props) {
     const {
       data
-    } = this.props
+    } = props
 
     const {
       xColumn,
@@ -150,10 +150,10 @@ class BarGraph extends XYGraph {
     return this.stack
   }
 
-  updateLegend() {
+  updateLegend(props) {
     const {
       data
-    } = this.props
+    } = props
 
     const {
       chartHeightToPixel,
@@ -255,32 +255,9 @@ class BarGraph extends XYGraph {
     
     const svg =  this.getGraph()
 
-    //Add the X Axis
-    svg.insert('g',':first-child')
-      .attr('class', 'xAxis')
-
-    //Add the Y Axis
-    svg.insert('g',':first-child')
-      .attr('class', 'yAxis')
-
-    this.getMinGraph()
-        .append("g")
-        .attr("class", "brush")
-
     svg.append("defs").append("clipPath")
       .attr("id", `clip${this.getGraphId()}`)
       .append('rect')
-
-    svg.select('.horizontal-line').append("line")
-      .style("stroke", "black")
-      .style("stroke-width", "0.4")
-
-    this.getMinGraph().select('.min-horizontal-line').append("line")
-      .style("stroke", "black")
-      .style("stroke-width", "0.4")
-
-    // generate elements for X and Y titles
-   this.generateAxisTitleElement()
 
   }
 
@@ -479,8 +456,8 @@ class BarGraph extends XYGraph {
       .attr('height', initialHeight)
       .attr('width', initialWidth)
       .on('click', d => {
-          this.handleLeave()
-          onMarkClick && (!otherOptions || d[this.getDimension()] !== otherOptions.label)
+        self.handleLeave()
+          onMarkClick && (!otherOptions || d[self.getDimension()] !== otherOptions.label)
           ?  onMarkClick(d) 
           : ''
         }
@@ -677,15 +654,28 @@ class BarGraph extends XYGraph {
         <svg width={width} height={height}>
           <g ref={node => this.node = node}>
             <g className='graph-container' transform={`translate(${this.getLeftMargin()},${margin.top})`}>
-              <g className='horizontal-line'></g>
+              <g className='xAxis'></g>
+              <g className='yAxis'></g>
+              <g className='horizontal-line'>
+                <line className='line' style={{stroke: 'black', strokeWidth: '0.4'}}></line>
+              </g>
               <g className='graph-bars'></g>
-              <g className='tooltip-section'></g>
+              <g className='tooltip-section'>
+              </g>
             </g>
             <g className='mini-graph-container'>
-              <g className='min-horizontal-line'></g>
+              <g className='min-horizontal-line'>
+                <line className='line' style={{stroke: 'black', strokeWidth: '0.4'}}></line>
+              </g>
               <g className='min-graph-bars'></g>
+              <g className='xAxis'></g>
+              <g className='yAxis'></g>
+              <g className='brush'></g>
             </g>
-            <g className='axis-title'></g>
+            <g className='axis-title'>
+              <text className='x-axis-label' textAnchor="middle"></text>
+              <text className='y-axis-label' textAnchor="middle"></text>
+            </g>
             <g className='legend'></g>
           </g>
         </svg>
@@ -697,10 +687,6 @@ class BarGraph extends XYGraph {
 BarGraph.propTypes = {
   configuration: React.PropTypes.object,
   data: React.PropTypes.arrayOf(React.PropTypes.object)
-}
-
-const mapStateToProps = (state, ownProps) =>  {
-  return {}
 }
 
 const actionCreators = (dispatch) => ({
@@ -718,4 +704,4 @@ const actionCreators = (dispatch) => ({
 
 })
 
-export default connect(mapStateToProps, actionCreators)(BarGraph)
+export default connect(null, actionCreators)(BarGraph)
