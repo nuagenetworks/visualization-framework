@@ -12,6 +12,8 @@
         "xLabel": "Time",
         "yTickGrid": false,
         "yColumn":"tunnel",
+        "brush":3,
+        "brushArea":2,
         "yLabel": "Destination",
         "legendColumn": "TunnelState",
         "cellColumn": "TunnelState",

@@ -12,6 +12,8 @@
         "xLabel": "Time",
         "yColumn": "tunnel",
         "yTickGrid": false,
+        "brush":3,
+        "brushArea":2,
         "yLabel": "Tunnel Probes",
         "legendColumn": "ProbeStatus",
         "colorColumn": "ProbeStatus",
