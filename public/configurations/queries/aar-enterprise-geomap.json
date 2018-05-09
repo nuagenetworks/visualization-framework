@@ -1,0 +1,10 @@
+{
+    "id":"aar-enterprise-geomap",
+    "title":"Map",
+    "service":"VSD",
+    "query":{
+        "parentResource":"enterprises",
+        "parentID":"{{enterpriseID}}",
+        "resource":"gatewayslocations"
+    }
+}

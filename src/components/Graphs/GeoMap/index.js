@@ -7,7 +7,7 @@ import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClust
 
 import GoogleMapsWrapper from '../../Map'
 import SearchBar from "../../SearchBar"
-import {properties} from "./default.config"
+import { getIconPath } from '../../../utils/helpers'
 
 class GeoMap extends AbstractGraph {
 
@@ -92,6 +92,7 @@ class GeoMap extends AbstractGraph {
     this.setState({ infowindow: key || null })
   }
 
+
   // popup info window on marker's click
   infowindow(marker) {
     const {
@@ -122,7 +123,9 @@ class GeoMap extends AbstractGraph {
     const {
       latitudeColumn,
       longitudeColumn,
-      idColumn
+      idColumn,
+      nameColumn,
+      markerIcon
     } = this.getConfiguredProperties();
 
     return (
@@ -134,6 +137,10 @@ class GeoMap extends AbstractGraph {
             key={d[idColumn]}
             position={{ lat: d[latitudeColumn], lng: d[longitudeColumn] }}
             onClick={() => this.handleMarkerClick(d)}
+              //label={marker[nameColumn]}
+            onMouseOver={() => this.toggleInfoWindow(d[idColumn])}
+            onMouseOut={() => this.toggleInfoWindow(d[idColumn])}
+            icon={getIconPath(markerIcon)}
           >
             {this.infowindow(d)}
           </Marker>
@@ -320,7 +327,7 @@ class GeoMap extends AbstractGraph {
             averageCenter
             gridSize={60}
             onClusteringEnd={ this.handleClustererClick}
-            styles={properties.clusterStyle}
+            //styles={properties.clusterStyle}
           >
             {this.renderMarkersIfNeeded()}
             { this.renderPolylineIfNeeded()}

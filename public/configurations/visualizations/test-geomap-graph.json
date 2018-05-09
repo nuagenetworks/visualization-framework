@@ -8,9 +8,9 @@
     "data": {
         "latitudeColumn": "latitude",
         "longitudeColumn": "longitude",
-        "nameColumn": "owner_name",
+        "nameColumn": "nsgatewayName",
         "localityColumn": "photo_title",
-        "idColumn": "id",
+        "idColumn": "nsgatewayID",
         "links": {
             "source": "data1",
             "sourceColumn": "source",
@@ -19,7 +19,7 @@
         "filters": [
             {
                 "columnText": "name",
-                "columField": "owner_name",
+                "columField": "nsgatewayName",
                 "type": "text"
             }
         ]

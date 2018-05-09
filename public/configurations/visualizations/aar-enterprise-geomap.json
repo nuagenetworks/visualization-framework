@@ -1,0 +1,42 @@
+{
+    "id": "aar-enterprise-geomap",
+    "graph": "GeoMap",
+    "title": "All NSGSs in Enterprise {{enterpriseName}}",
+    "description": "Map Graph Visualization",
+    "author": "Bharat Mukheja",
+    "creationDate": "03/13/2018",
+    "data": {
+        "latitudeColumn": "latitude",
+        "longitudeColumn": "longitude",
+        "nameColumn": "associatedEntityName",
+        "localityColumn": "address",
+        "idColumn": "associatedEntityID",
+        "filters": [
+            {
+                "columnText": "name",
+                "columField": "associatedEntityName",
+                "type": "text"
+            },
+            {
+                "columnText": "region",
+                "columField": "locality",
+                "type": "text"
+            }
+        ],
+        "links": {
+            "source": "data1",
+            "sourceColumn": "source",
+            "destinationColumn": "destination"
+        }
+    },
+    "query": {
+        "data": "aar-enterprise-geomap",
+        "data1": "aar-enterprise-all-flows"
+    },
+    "listeners": [{
+      "redirect": "/dashboards/aarNSG",
+      "params": {
+          "snsg": "associatedEntityName"
+      }
+    }]
+}
