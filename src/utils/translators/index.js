@@ -3,7 +3,7 @@
  */
 
 import demo from './demo'
-import time_convert from './time'
+import time_convert from './time_convert'
 import status from './status'
 
 const translatorList = {
