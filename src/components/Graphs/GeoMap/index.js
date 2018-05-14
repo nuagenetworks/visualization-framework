@@ -8,27 +8,38 @@ import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClust
 import GoogleMapsWrapper from '../../Map'
 import SearchBar from "../../SearchBar"
 import { getIconPath } from '../../../utils/helpers'
+import {properties} from "./default.config"
 
 class GeoMap extends AbstractGraph {
 
   constructor(props) {
-    super(props)
+
+    super(props, properties)
+
+    this.map = null
+    this.clusterCenter = null
 
     this.state = {
       data: [],
-      infowindow: null,
+      infowindow: {
+        data: null,
+        position: null
+      },
       lines: [],
-      defaultCenter: null
+      defaultCenter: null,
+      spiderifyMarkers: [],
+      spiderifyLines: []
     }
 
     this.clusters = null;
     this.center = null
 
     this.onMapMounted         = this.onMapMounted.bind(this)
-    this.handleClustererClick = this.handleClustererClick.bind(this)
+    this.handleClusterClick   = this.handleClusterClick.bind(this)
+    this.handleClustererEnd   = this.handleClustererEnd.bind(this)
     this.handleSearch         = this.handleSearch.bind(this)
-    this.onBoundsChanged      = this.onBoundsChanged.bind(this);
-
+    this.onBoundsChanged      = this.onBoundsChanged.bind(this)
+    this.onZoomChanged        = this.onZoomChanged.bind(this)
   }
 
   componentWillMount() {
@@ -57,11 +68,10 @@ class GeoMap extends AbstractGraph {
   }
 
   onMapMounted(map) {
-    this.map = map
-    if (!this.map)
+    if (!map)
       return
 
-    this.map = window.google.maps
+    this.map = map
   }
 
   onBoundsChanged() {
@@ -71,7 +81,6 @@ class GeoMap extends AbstractGraph {
     } = this.getConfiguredProperties()
 
     const bounds = new window.google.maps.LatLngBounds()
-
 
     this.state.data.map(marker => {
       if (marker[latitudeColumn] && marker[longitudeColumn]) {
@@ -88,68 +97,185 @@ class GeoMap extends AbstractGraph {
   }
 
   // toggle info window on marker click
-  toggleInfoWindow = (key) => {
-    this.setState({ infowindow: key || null })
+  toggleInfoWindow = (data = null, position = null) => {
+    if(!data || !_.isEqual(position, this.state.infowindow.position)) {
+      this.setState({
+        infowindow: {
+          data,
+          position
+        }
+      })
+    }
   }
 
-
   // popup info window on marker's click
-  infowindow(marker) {
+  renderInfowindow() {
     const {
       localityColumn,
       nameColumn,
       idColumn
     } = this.getConfiguredProperties();
 
+    let { data, position } = this.state.infowindow
+
     return (
-      this.state.infowindow === marker[idColumn] &&
-      <InfoWindow onCloseClick={() => this.toggleInfoWindow}>
-        <div>{marker[nameColumn]} <br/> {marker[localityColumn]}</div>
-      </InfoWindow>
+      data && (
+        <InfoWindow
+          position={position}
+          options={{
+            pixelOffset: new window.google.maps.Size(0,-25)
+          }}
+          onCloseClick={() => this.toggleInfoWindow}>
+          <div>{data[nameColumn]} <br/> {data[localityColumn]}</div>
+        </InfoWindow>
+      )
     )
   }
 
   // call on marker click
-  handleMarkerClick(marker) {
+  handleMarkerClick(data) {
     const {
     onMarkClick
     } = this.props
 
-    return onMarkClick ? onMarkClick(marker) : ""
+    return onMarkClick ? onMarkClick(data) : ""
   }
 
   // draw markers on map
   renderMarkersIfNeeded() {
     const {
       latitudeColumn,
-      longitudeColumn,
-      idColumn,
-      nameColumn,
-      markerIcon
-    } = this.getConfiguredProperties();
+      longitudeColumn
+    } = this.getConfiguredProperties()
 
-    return (
-      this.state.data.map(d => {
+    return this.state.data.map(d => {
         if (d[latitudeColumn] && d[longitudeColumn]) {
-          return <Marker
-            noRedraw={false}
-            options={{id: d[idColumn]}}
-            key={d[idColumn]}
-            position={{ lat: d[latitudeColumn], lng: d[longitudeColumn] }}
-            onClick={() => this.handleMarkerClick(d)}
-              //label={marker[nameColumn]}
-            onMouseOver={() => this.toggleInfoWindow(d[idColumn])}
-            onMouseOut={() => this.toggleInfoWindow(d[idColumn])}
-            icon={getIconPath(markerIcon)}
-          >
-            {this.infowindow(d)}
-          </Marker>
+          return this.drawMarker({
+            data: {...d},
+            position: {
+              lat: d[latitudeColumn],
+              lng: d[longitudeColumn]
+            }
+          })
         }
       })
+  }
+
+  drawMarker({ data, position, labelOrigin = null}) {
+    const {
+      idColumn,
+      markerIcon
+    } = this.getConfiguredProperties()
+
+    return (
+      <Marker
+        noRedraw={false}
+        options={{
+          id: data[idColumn],
+          data
+        }}
+        key={data[idColumn]}
+        position={position}
+        onClick={() => this.handleMarkerClick(data)}
+        onMouseOver={() => this.toggleInfoWindow(data, position)}
+        onMouseOut={() => this.toggleInfoWindow()}
+        icon={{
+          url: getIconPath(markerIcon),
+          labelOrigin,
+          anchor: labelOrigin
+        }}
+      />
     )
   }
 
-  handleClustererClick(clusterer) {
+
+  handleClusterClick(cluster) {
+    const {
+      maxZoom
+    } = this.getConfiguredProperties()
+
+    let zoom = this.map.getZoom()
+
+    //Tracking Zoom of the Cluster, when it clicked and not at finalzoom,
+    //Used to go back to that stage in case of Zoom out from MAX level
+    if(zoom < maxZoom) {
+      this.clusterZoom = this.map.getZoom()
+    }
+
+    let markers = cluster.getMarkers()
+    if(zoom >= maxZoom  && markers.length > 1) {
+
+      // check the cluster that is already expanded or not, if yes than collapse the clicked cluster
+      if(this.clusterCenter && _.isEqual(this.clusterCenter.toJSON(), cluster.getCenter().toJSON())) {
+
+        this.clusterCenter = null
+        this.setState({
+          spiderifyLines: [],
+          spiderifyMarkers: []
+        })
+
+      } else {
+
+        this.clusterCenter = cluster.getCenter()
+
+        let projection = this.map.getProjection(),
+        centerPoint = projection.fromLatLngToPoint(this.clusterCenter)
+
+        let radius = 0.0002,
+        step = markers.length < 10 ? markers.length : 10, counter = 0, remaining = markers.length,
+        theta = ((Math.PI*2) / step)
+
+        let spiderifyMarkers = markers.map((marker, i) => {
+          counter++;
+
+          let angle = (theta * counter),
+          x =  (radius * Math.cos(angle)) + centerPoint.x,
+          y = (radius * Math.sin(angle)) + centerPoint.y
+
+          const point = projection.fromPointToLatLng(new window.google.maps.Point(x, y)).toJSON()
+
+          if(counter === step) {
+            remaining -= step;
+            step += 5;
+            if(remaining < step)
+              step = remaining;
+
+            counter = 0;
+            radius += 0.00012;
+            theta = ((Math.PI*2) / step)
+          }
+
+          return this.drawMarker({
+            data: Object.assign({}, marker.data, {spiderify: true}),
+            position: point,
+            labelOrigin: new window.google.maps.Point(13, 13),
+          })
+        })
+
+        const spiderifyLines = spiderifyMarkers.map( (marker, i) => {
+          return (
+            <Polyline
+              key={i}
+              defaultVisible={true}
+              options={{
+                strokeColor: "red",
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+              }}
+              path={[
+                this.clusterCenter.toJSON(),
+                marker.props.position
+              ]}
+            />
+          )
+        })
+
+        this.setState({spiderifyMarkers, spiderifyLines})
+      }
+    }
+  }
+
+  handleClustererEnd(clusterer) {
 
     let markerList = []
 
@@ -288,6 +414,28 @@ class GeoMap extends AbstractGraph {
     );
   }
 
+  onZoomChanged() {
+    const {
+      maxZoom
+    } = this.getConfiguredProperties()
+
+    let zoom = this.map.getZoom()
+
+    if(zoom < maxZoom  && this.state.spiderifyLines.length) {
+      this.setState({
+        spiderifyLines: [],
+        spiderifyMarkers: []
+      })
+
+      //IN Case of Zoomout going back to initial zoom when cluster has been clicked
+      if(this.clusterZoom) {
+        //this.map.setZoom(this.clusterZoom)
+      }
+
+      this.clusterZoom = null;
+    }
+  }
+
   render() {
     const {
       data,
@@ -295,7 +443,10 @@ class GeoMap extends AbstractGraph {
     } = this.props
 
     const {
-        searchBar
+        searchBar,
+        maxZoom,
+        minZoom,
+        mapStyles
     } = this.getConfiguredProperties()
 
     if (!data || !data.length)
@@ -308,7 +459,7 @@ class GeoMap extends AbstractGraph {
           lng: Number(process.env.REACT_APP_GOOGLE_MAP_LNG)
         }
 
-    let defaultLatLng = this.state.defaultCenter ? this.state.defaultCenter : defaultCenter;
+    const defaultLatLng = this.state.defaultCenter ? this.state.defaultCenter : defaultCenter;
 
     if(searchBar !== false) {
       mapHeight -= 69
@@ -319,19 +470,34 @@ class GeoMap extends AbstractGraph {
         {this.renderSearchBarIfNeeded()}
         <GoogleMapsWrapper
           onBoundsChanged={this.onBoundsChanged}
+          onZoomChanged={this.onZoomChanged}
           center={defaultLatLng}
+          options={{
+            maxZoom,
+            minZoom,
+            mapTypeControlOptions: {
+              mapTypeIds: ['terrain']
+            },
+            streetViewControl:false,
+            mapTypeControl: false,
+            styles: mapStyles
+           }}
           onMapMounted={this.onMapMounted}
           containerElement={<div style={{ height: mapHeight }} />}>
+          { this.state.spiderifyLines }
+          { this.state.spiderifyMarkers }
           <MarkerClusterer
             ignoreHidden={false}
             averageCenter
             gridSize={60}
-            onClusteringEnd={ this.handleClustererClick}
-            //styles={properties.clusterStyle}
+            onClusteringEnd={ this.handleClustererEnd}
+            onClick={this.handleClusterClick}
           >
-            {this.renderMarkersIfNeeded()}
-            { this.renderPolylineIfNeeded()}
+            { this.renderMarkersIfNeeded() }
+            { this.renderPolylineIfNeeded() }
           </MarkerClusterer>
+
+          { this.renderInfowindow() }
         </GoogleMapsWrapper>
       </div>
     )
