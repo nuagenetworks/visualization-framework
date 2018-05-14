@@ -1,7 +1,7 @@
 {
     "id": "aar-nsg-natt-details-timestamp",
     "graph": "Table",
-    "title": "Last {{ts_size}} NAT Probe Results at {{event_timestamp:call('time_convert')}}",
+    "title": "Last {{ts_size}} NATT Probe Results on or before the selected cell.",
     "author": "Bharat Mukheja",
     "creationDate": "1/19/2018",
     "data": {

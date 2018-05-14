@@ -23,14 +23,9 @@
                                 {
                             "range": {
                                 "timestamp": {
-                                    "lte": "{{event_timestamp}}",
+                                    "lte": "{{event_timestamp}}||+{{heatmapinterval:2m}}",
                                     "format": "epoch_millis"
                                 }
-                            }
-                        },
-                                {
-                            "term":{
-                                "EnterpriseName":"{{enterpriseName:test_org}}"
                             }
                         },
                         {

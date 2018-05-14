@@ -36,5 +36,7 @@ export const properties = {
         theme.palette.orangeBlindColor,
         theme.palette.mauveColor,
     ],
-    emptyBoxColor: theme.palette.greyLightColor
+    emptyBoxColor: theme.palette.greyLightColor,
+    brushArea: 5, // in percentage
+    brushColor: theme.palette.yellowLightColor
 }
