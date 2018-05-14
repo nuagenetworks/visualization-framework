@@ -191,13 +191,13 @@ class VisualizationView extends React.Component {
                             let graphQueryParams = {};
                             let resetFilters = false;
 
-                            if(configuration.key) {
+                            if(configuration.graph === 'HeatmapGraph') {
                                 let vizID = `${id.replace(/-/g, '')}vkey`;
-                                let vKey = evalExpression("(" + configuration.key + ")")(d);
-                                if(this.props.orgContext[vizID] === vKey)
+                                let vKey = d => d[configuration.data.xColumn] + d[configuration.data.yColumn]
+                                if(this.props.orgContext[vizID] === vKey(d))
                                     resetFilters = true;
 
-                                graphQueryParams[vizID] = vKey;
+                                graphQueryParams[vizID] = vKey(d);
                             }
 
 

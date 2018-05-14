@@ -91,10 +91,12 @@ class HeatmapGraph extends XYGraph {
     this.filterData = []
 
     // Check x column data, if not found set to null
-    this.nestedYData.forEach(item => {
+    this.nestedYData.forEach((item, i) => {
 
-      if (!item.key || typeof item.key === 'object' || item.key === 'null')
+      if (!item.key || typeof item.key === 'object' || item.key === 'null' || item.key === 'undefined') {
+        this.nestedYData.splice(i, 1)
         return
+      }
 
       const d = Object.assign({}, item)
 
@@ -108,8 +110,8 @@ class HeatmapGraph extends XYGraph {
         })
 
         if (index !== -1
-          && d.values[index][yColumn] !== ""
-          && typeof d.values[index][yColumn] !== 'undefined'
+          && d.values[index][yColumn] !== ''
+          && d.values[index][yColumn] !== 'undefined'
           && typeof d.values[index][yColumn] !== 'object'
         ) {
           this.filterData.push(d.values[index])
@@ -406,6 +408,23 @@ class HeatmapGraph extends XYGraph {
 
   renderLegendIfNeeded() {   
     this.renderNewLegend(this.getCellColumnData(), this.getLegendConfig(), this.getColor(), (d) => d["key"])
+  }
+
+  // highlight selected cell
+  getOpacity(d) {
+    const {
+      configuration,
+      context,
+    } = this.props
+
+    const {
+      xColumn,
+      yColumn
+    } = this.getConfiguredProperties()
+
+    let vkey = `${configuration.id.replace(/-/g, '')}vkey`;
+    let keyValue = d => d[xColumn] + d[yColumn]
+    return (!context[vkey] || context[vkey] === keyValue(d)) ? "1" : "0.5"
   }
 
   drawGraph({
