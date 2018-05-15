@@ -8,7 +8,8 @@ import MarkerClusterer from "react-google-maps/lib/components/addons/MarkerClust
 import GoogleMapsWrapper from '../../Map'
 import SearchBar from "../../SearchBar"
 import { getIconPath } from '../../../utils/helpers'
-import {properties} from "./default.config"
+import {properties} from './default.config'
+import { theme } from '../../../theme'
 
 class GeoMap extends AbstractGraph {
 
@@ -258,9 +259,9 @@ class GeoMap extends AbstractGraph {
               key={i}
               defaultVisible={true}
               options={{
-                strokeColor: "red",
+                strokeColor: theme.palette.orangeLightColor,
                 strokeOpacity: 1.0,
-                strokeWeight: 2
+                strokeWeight: 1.2
               }}
               path={[
                 this.clusterCenter.toJSON(),
@@ -347,7 +348,7 @@ class GeoMap extends AbstractGraph {
         }
 
         if (destMarker && sourceMarker) {
-          let color = line.color || "#228B22"
+          let color = line.color || theme.palette.redColor
           if (!this.isPolylineExist(filterData, sourceMarker, destMarker)) {
             filterData.push({
               'source': { lat: sourceMarker.lat, lng: sourceMarker.lng },
@@ -381,7 +382,7 @@ class GeoMap extends AbstractGraph {
           }],
           strokeColor: link.color,
           strokeOpacity: 1.0,
-          strokeWeight: 2
+          strokeWeight: 1.5
         }}
         path={[
           { lat: link.source.lat, lng: link.source.lng },
