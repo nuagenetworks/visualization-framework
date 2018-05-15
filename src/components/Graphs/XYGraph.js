@@ -230,14 +230,12 @@ export default class XYGraph extends AbstractGraph {
         const axis = this.getSVG().select('.axis-title');
 
         if(xLabel) {
-            axis.append('text')
-            .attr('class', 'x-axis-label')
+            axis.select('.x-axis-label')
             .attr('text-anchor', 'middle');
         }
 
         if(yLabel) {
-            axis.append('text')
-              .attr('class', 'y-axis-label')
+            axis.select('.x-axis-label')
               .attr('text-anchor', 'middle')
         }
     }

@@ -1,0 +1,95 @@
+{
+    "id": "aar-nsg-ike-tunnel-traffic-linechart",
+    "graph": "MultiLineGraph",
+    "title": "Traffic {{ikeTrafficLabel}}",
+    "description": "Line graph displays the traffic and throughput of all tunnel over the selected direction",
+    "author": "Bharat Mukheja",
+    "creationDate": "3/6/2018",
+    "data": {
+        "dateHistogram": true,
+        "xColumn": "date_histo",
+        "yColumn": "{{ikeTrafficColumn}}",
+        "yTickFormat": ".2s",
+        "xLabel": "Time",
+        "yLabel": "{{ikeTrafficLabel}}",
+        "linesColumn": "tunnel",
+        "showNull": false,
+        "legend": {
+            "orientation": "horizontal",
+            "show": true,
+            "circleSize": 5,
+            "labelOffset": 5
+        },
+        "colors": [
+            "#e6194b",
+            "#3cb44b",
+            "#ffe119",
+            "#0082c8",
+            "#f58231",
+            "#911eb4",
+            "#46f0f0",
+            "#f032e6",
+            "#d2f53c",
+            "#fabebe",
+            "#008080",
+            "#e6beff",
+            "#aa6e28",
+            "#fffac8",
+            "#800000",
+            "#aaffc3",
+            "#808000",
+            "#ffd8b1",
+            "#000080",
+            "#808080",
+            "#FFFFFF",
+            "#000000"
+        ],
+        "tooltip": [
+            { "column": "tunnel","label":"Tunnel"},
+            { "column": "yColumn","label":"Total {{ikeTrafficLabel}}","format": ",.2s" },
+            { "column": "throughput","label":"Throughput({{ikeTrafficLabel}}/s)","format": ",.3s" }
+        ]
+    },
+    "query": "aar-nsg-ike-tunnel-traffic-linechart",
+    "filterOptions": {
+        "Traffic Type and Direction": {
+            "parameter": "ikeTrafficType",
+            "default": "TxBytes",
+            "options": [
+                {
+                    "label": "Tx Bytes",
+                    "value": "TxBytes",
+                    "default": true,
+                    "forceOptions": {
+                        "ikeTrafficColumn": "TxBytesCount",
+                        "ikeTrafficLabel": "Bytes"
+                    }
+                },
+                {
+                    "label": "Rx Bytes",
+                    "value": "RxBytes",
+                    "forceOptions": {
+                        "ikeTrafficColumn": "RxBytesCount",
+                        "ikeTrafficLabel": "Bytes"
+                    }
+                },
+                {
+                    "label": "Tx Packets",
+                    "value": "TxPackets",
+                    "forceOptions": {
+                        "ikeTrafficColumn": "TxPacketsCount",
+                        "ikeTrafficLabel": "Packets"
+                    }
+                },
+                {
+                    "label": "Rx Packets",
+                    "value": "RxPackets",
+                    "forceOptions": {
+                        "ikeTrafficColumn": "RxPacketsCount",
+                        "ikeTrafficLabel": "Packets"
+                    }
+                }
+            ]
+        }
+    }
+}

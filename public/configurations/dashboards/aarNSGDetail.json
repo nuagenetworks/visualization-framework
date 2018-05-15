@@ -24,6 +24,10 @@
         {
             "label": "NATT Events",
             "url": "/dashboards/aarNSGNATTEvents"
+        },
+        {
+            "label": "IKE",
+            "url": "/dashboards/aarNSGIKE"
         }
     ],
     "filterOptions": {
