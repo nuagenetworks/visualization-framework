@@ -1,10 +1,10 @@
 export const properties = {
     maxZoom: 18,
-    minZoom: 2,
+    minZoom: 3,
     mapStyles: [
       {
-        "featureType": "administrative.land_parcel",
-        "elementType": "labels",
+        "featureType": "administrative",
+        "elementType": "geometry",
         "stylers": [
           {
             "visibility": "off"
@@ -13,15 +13,6 @@ export const properties = {
       },
       {
         "featureType": "poi",
-        "elementType": "labels.text",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "poi.business",
         "stylers": [
           {
             "visibility": "off"
@@ -31,40 +22,6 @@ export const properties = {
       {
         "featureType": "road",
         "elementType": "labels.icon",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "road.arterial",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "road.highway",
-        "elementType": "labels",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "road.local",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "road.local",
-        "elementType": "labels",
         "stylers": [
           {
             "visibility": "off"
