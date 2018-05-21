@@ -1,0 +1,35 @@
+{
+    "id": "testMultiLineGraph",
+    "author": "Anil Chauhan",
+    "creationDate": "08/03/2017",
+    "title": "Test Line Graph",
+    "visualizations": [
+        {
+            "id": "test-multi-line-graph",
+            "x": 0,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-multi-line-graph-show-null",
+            "x": 3,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        },
+        {
+            "id": "test-multi-line-graph-default-values",
+            "x": 6,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        }
+    ]
+}

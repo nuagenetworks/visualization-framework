@@ -12,16 +12,22 @@ class DashboardsController extends BaseController {
       let visualizations = [];
       let viz = null;
       if(dasboardData.visualizations) {
+        
         dasboardData.visualizations.forEach((visualization, index, array) => {
           try {
             viz = FetchManager.fetchAndParseJSON(visualization.id, DirectoryTypes.VISUALIZATION);
-
+            viz.queryConfiguration = {}
             if(viz.query) {
-              viz.queryConfiguration = FetchManager.fetchAndParseJSON(viz.query, DirectoryTypes.QUERY);
-            } else if(viz.script) {
-              viz.queryConfiguration = ServiceManager.executeScript(viz.script);
-            }
+              let queries = typeof viz.query === 'string' ? {'data' : viz.query} : viz.query
 
+              for(let query in queries) {
+                if (queries.hasOwnProperty(query)) {
+                  viz.queryConfiguration[query] = FetchManager.fetchAndParseJSON(queries[query], DirectoryTypes.QUERY);
+                }
+              }
+            } else if(viz.script) {
+              viz.queryConfiguration[viz.script] = ServiceManager.executeScript(viz.script);
+            }
             dasboardData.visualizations[index].visualization = viz;
             visualizations.push(dasboardData.visualizations[index]);
           } catch(err) {

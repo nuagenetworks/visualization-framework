@@ -21,12 +21,12 @@
                         },
                         {
                             "term": {
-                                "IngressBytes": 0
+                                "{{zeroBytesType:EgressBytes}}": 0
                             }
                         },
                         {
                             "term": {
-                                "SourceNSG": "{{snsg}}"
+                                "{{NsgType:SourceNSG}}": "{{nsg}}"
                             }
                         }
                     ]
@@ -36,12 +36,12 @@
         "ts": {
           "date_histogram": {
             "field": "timestamp",
-            "interval": "1h"
+            "interval": "{{interval:1h}}"
           },
           "aggs": {
-            "{{client_trafficType:DstIp}}": {
+            "Ip": {
               "terms": {
-                "field": "{{client_trafficType:DstIp}}",
+                "field": "{{IpType:DstIp}}",
                 "size": 5,
                 "order": {
                   "SumofBytes": "desc"
@@ -50,7 +50,7 @@
               "aggs": {
                 "SumofBytes": {
                   "sum": {
-                    "field": "TotalBytesCount"
+                    "field": "{{bytesType:IngressBytes}}"
                   }
                 }
               }

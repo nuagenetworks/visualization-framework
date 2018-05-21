@@ -1,0 +1,18 @@
+{
+    "id": "testChordGraph",
+    "author": "Anil Chauhan",
+    "creationDate": "08/03/2017",
+    "title": "Test Chord Graph",
+    "visualizations": [
+        {
+            "id": "test-chord-graph",
+            "x": 0,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        }
+
+    ]
+}

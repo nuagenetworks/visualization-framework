@@ -10,5 +10,5 @@
     "APP_PREFIX": "/middleware/api",
     "HTTPS_KEY_PATH": null,
     "HTTPS_CERT_PATH": null,
-    "NODE_ENV": "development" // possible env - test, development, production    
+    "NODE_ENV": "development" // possible env - test, development, production
 }

@@ -1,0 +1,40 @@
+{
+    "id": "test-dynamic-bar-graph",
+    "graph": "DynamicBarGraph",
+    "title": "Test Dynamic Bar Graph",
+    "description": "Enterprise level top 5 discovered applications. Computation: Sum of total Bytes sent and/or received in descending order across all domains.",
+    "author": "Curran Kelleher",
+    "creationDate": "10/13/2016",
+    "data": {
+        "xColumn": "L7Classification",
+        "xLabel": "Application",
+        "yColumn": "Sum of MB",
+        "yLabel": "Total Bytes",
+        "yTicks": 5,
+        "yTickFormat": ".2s",
+        "brush": 2,
+        "colors": [
+            "#7da3f7",
+            "#b3d645",
+            "#fec26a",
+            "#e78ac3",
+            "#f79e99"
+        ],
+        "otherOptions": {
+            "label": "Others",
+            "limit": 5,
+            "type": "number"
+        },
+        "tooltip": [
+            { "column": "L7Classification", "label": "L7 Signature" },
+            { "column": "Sum of MB", "format": "s"}
+        ],
+        "legend": {
+            "show": true,
+            "orientation": "vertical",
+            "circleSize": 4,
+            "labelOffset": 2
+        }
+    },
+    "query": "test-dynamic-bar-graph"
+}

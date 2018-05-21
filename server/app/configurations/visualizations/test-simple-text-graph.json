@@ -1,0 +1,9 @@
+{
+    "id": "test-simple-text-graph",
+    "title": "SimpleTextGraph",
+    "query": "test-simple-text-graph",
+    "graph": "SimpleTextGraph",
+    "data": {
+        "targetedColumn":"value"
+    }
+}

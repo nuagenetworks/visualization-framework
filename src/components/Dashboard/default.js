@@ -10,7 +10,7 @@ export const defaultFilterOptions = {
                     "interval": "1m",
                     "prevStartTime": "now-30m",
                     "unit": "m",
-                    "duration": 15
+                    "duration": "15"
                 }
             },
             {
@@ -21,19 +21,17 @@ export const defaultFilterOptions = {
                     "interval": "1h",
                     "prevStartTime": "now-48h",
                     "unit": "h",
-                    "duration": 24
+                    "duration": "24"
                 }
             },
             {
                 "label": "Last 7 days",
                 "value": "now-7d",
-                "unit": "d",
-                "interval": 7,
                 "forceOptions": {
                     "interval": "12h",
                     "prevStartTime": "now-14d",
                     "unit": "d",
-                    "duration": 7
+                    "duration": "7"
                 }
             }
         ]

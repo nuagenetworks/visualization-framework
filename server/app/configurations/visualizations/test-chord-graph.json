@@ -1,0 +1,13 @@
+{
+    "id": "test-chord-graph",
+    "graph": "ChordGraph",
+    "title": "ChordGraph",
+    "author": "Anil Chauhan",
+    "creationDate": "08/03/2017",
+    "data": {
+        "chordSourceColumn": "spg",
+        "chordDestinationColumn": "dpg",
+        "colorColumn": "spg"
+    },
+    "query": "test-chord-graph"
+}

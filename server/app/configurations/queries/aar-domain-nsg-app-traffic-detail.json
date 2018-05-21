@@ -26,17 +26,22 @@
                         },
                         {
                             "term": {
+                                "{{zeroBytesType:EgressBytes}}": 0
+                            }
+                        },
+                        {
+                            "term": {
                                 "{{domainType:Domain}}":"{{domainName:Domain1}}"
                             }
                         },
                         {
                             "term": {
-                                "SrcIp":"{{SourceIP}}"
+                                "{{IpType:SrcIp}}":"{{Ip}}"
                             }
                         },
                         {
                             "term": {
-                                "SourceNSG":"{{snsg}}"
+                                "{{NsgType:SourceNSG}}":"{{nsg}}"
                             }
                         }
                     ]
@@ -46,7 +51,7 @@
         "ts": {
           "date_histogram": {
             "field": "timestamp",
-            "interval": "1h"
+            "interval": "{{interval:1h}}"
           },
           "aggs": {
             "L7Classification": {
@@ -60,7 +65,7 @@
               "aggs": {
                 "SumofBytes": {
                   "sum": {
-                    "field": "TotalBytesCount"
+                    "field": "{{bytesType:IngressBytes}}"
                   }
                 }
               }

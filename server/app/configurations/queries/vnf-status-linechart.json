@@ -9,32 +9,7 @@
             "size":0,
             "query":{
                 "bool":{
-                    "must":[
-                        {
-                            "range":{
-                                "timestamp":{
-                                    "gte":"{{startTime:now-24h}}",
-                                    "lte":"{{endTime:now}}",
-                                    "format":"epoch_millis"
-                                }
-                            }
-                        },
-                        {
-                            "term": {
-                                "enterpriseName":"{{enterpriseName:enterprise-1}}"
-                            }
-                        },
-                        {
-                            "term": {
-                                "nsg":"{{nsg:NSG-1}}"
-                            }
-                        },
-                        {
-                            "term": {
-                                "vnf": "{{vnf:NSG-1-VNF-1}}"
-                            }
-                        }
-                    ]
+                    
                 }
             },
             "aggs": {

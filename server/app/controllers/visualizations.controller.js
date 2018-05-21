@@ -12,12 +12,18 @@ class VisualizationsController extends BaseController {
 
     try {
       let visualizationConfig = FetchManager.fetchAndParseJSON(visualization, DirectoryTypes.VISUALIZATION);
-      if(visualizationConfig && visualizationConfig.query) {
-        visualizationConfig.queryConfiguration = FetchManager.fetchAndParseJSON(visualizationConfig.query, DirectoryTypes.QUERY);
-      } else if(visualizationConfig.script) {
-        visualizationConfig.queryConfiguration = ServiceManager.executeScript(visualizationConfig.script);
-      }
+      visualizationConfig.queryConfiguration = {}
 
+      if(visualizationConfig && visualizationConfig.query) {
+        let queries = typeof visualizationConfig.query === 'string' ? {'data' : visualizationConfig.query} :  visualizationConfig.query
+        for(let query in queries) {
+          if (queries.hasOwnProperty(query)) {
+            visualizationConfig.queryConfiguration[query] = FetchManager.fetchAndParseJSON(queries[query], DirectoryTypes.QUERY);
+          }
+        }
+      } else if(visualizationConfig.script) {
+        visualizationConfig.queryConfiguration[visualizationConfig.script] = ServiceManager.executeScript(visualizationConfig.script);
+      }
       return res.json(visualizationConfig);
     } catch(err) {
       next(err);
@@ -25,22 +31,64 @@ class VisualizationsController extends BaseController {
   }
 
   fetch = async (req, res, next) => {
-    let { visualization } = req.params;
-    let context = req.body;
+    let { visualization, query } = req.params;
+    let context = req.body.context;
 
     try {
       let visualizationConfig = FetchManager.fetchAndParseJSON(visualization, DirectoryTypes.VISUALIZATION);
       let queryConfig = null;
 
-      if(visualizationConfig.query)
-        queryConfig = FetchManager.fetchAndParseJSON(visualizationConfig.query, DirectoryTypes.QUERY);
-      else if(visualizationConfig.script)
+      if(visualizationConfig.query) {
+
+        let queries = typeof visualizationConfig.query === 'string' ? {'data' : visualizationConfig.query} :  visualizationConfig.query
+        let queryExist = false
+        for(let queryParam in queries) {
+          if (queries.hasOwnProperty(queryParam) && queries[queryParam] === query) {
+            queryExist = true
+          }
+        }
+
+        if(!queryExist) {
+          next(this.formatError(`${query} - Query not found`, 422));
+        }
+
+        queryConfig = FetchManager.fetchAndParseJSON(query, DirectoryTypes.QUERY);
+      }
+      else if(visualizationConfig.script) {
         queryConfig = ServiceManager.executeScript(visualizationConfig.script);
+      }
 
       //If neither query and nor script
       if(!queryConfig)
         next(this.formatError('Unkown service', 422));
 
+      return this.fetchData({
+        queryConfig,
+        context,
+        next,
+        res
+      })
+
+    } catch(err) {
+      next(err);
+    }
+  }
+
+  fetchVSD = async (req, res, next) => {
+    let queryConfig = req.body.query,
+      context = req.body.context
+
+    return this.fetchData({
+      queryConfig,
+      context,
+      next,
+      res
+    })
+  }
+
+  // Fetch data from query configuration
+  fetchData({queryConfig, context, next, res}) {
+    try {
       //Fethcing the service manager
       let service = ServiceManager.getService(queryConfig.service);
 
@@ -62,13 +110,15 @@ class VisualizationsController extends BaseController {
       service.fetch(queryConfig, context).then(function(result) {
         if(service.tabify)
           result = service.tabify(result);
-
-         return res.json(result);
+          return res.json(result);
       }, function(err) {
-         //return res.json([]);
-         next(err);
+        if (Constants.env === "development" && service.hasOwnProperty("getMockResponse")) {
+           console.error(err)
+           return res.json([])
+        } else {
+          next(err);
+        }
       })
-
     } catch(err) {
       next(err);
     }

@@ -5,8 +5,15 @@
     "title": "{{domainName:VSS Domain}}",
     "titleIcon": "domain",
     "visualizations": [
-        { "id": "vss-domain-flow", "x": 1, "y": 0, "w": 5, "h": 25, "minW": 2, "minH": 12},
-        { "id": "vss-domain-flow-table", "x": 6, "y": 0, "w": 5, "h": 25, "minW": 2 , "minH": 12}
+        { "id": "vss-domain-flow-flow-metric", "x": 1, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},
+        { "id": "vss-domain-flow-explicit-allow-metric", "x": 3, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},
+        { "id": "vss-domain-flow-explicit-deny-metric", "x": 5, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},
+        { "id": "vss-domain-flow-default-allow-metric", "x": 7, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},
+        { "id": "vss-domain-flow-default-deny-metric", "x": 9, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},
+        { "id": "vss-domain-flow-topx-source", "x": 1, "y": 2, "w": 5, "h": 25, "minW": 2, "minH": 12},
+        { "id": "vss-domain-flow-topx-dest", "x": 6, "y": 2, "w": 5, "h": 25, "minW": 2, "minH": 12},
+        { "id": "vss-domain-flow", "x": 1, "y": 27, "w": 5, "h": 25, "minW": 2, "minH": 12},
+        { "id": "vss-domain-flow-table", "x": 6, "y": 27, "w": 5, "h": 25, "minW": 2 , "minH": 12}
     ],
     "links": [
         {
@@ -32,87 +39,10 @@
         {
             "label": "Application Analytics",
             "url": "/dashboards/vssDomainApplication"
-        }
-
-    ],
-    "filterOptions": {
-        "Source Field": {
-            "parameter": "source_field",
-            "default": "pg",
-            "options": [
-                {
-                    "label": "Endpoint's Domain",
-                    "value": "endpoint-domain"
-                },
-                {
-                    "label": "Endpoint's Subnet",
-                    "value": "endpoint-subnet"
-                },
-                {
-                    "label": "Endpoint's Zone",
-                    "value": "endpoint-zone"
-                },
-                {
-                    "label": "Subnet",
-                    "value": "subnet"
-                },
-                {
-                    "label": "Zone",
-                    "value": "zone"
-                },
-                {
-                    "label": "PG",
-                    "value": "pg",
-                    "default": true
-                },
-                {
-                    "label": "Network Macro Group",
-                    "value": "network-macro-group"
-                },
-                {
-                    "label": "Any",
-                    "value": "ANY"
-                }
-            ]
         },
-        "Destination Field": {
-            "parameter": "destination_field",
-            "default": "pg",
-            "options": [
-                {
-                    "label": "Endpoint's Domain",
-                    "value": "endpoint-domain"
-                },
-                {
-                    "label": "Endpoint's Subnet",
-                    "value": "endpoint-subnet"
-                },
-                {
-                    "label": "Endpoint's Zone",
-                    "value": "endpoint-zone"
-                },
-                {
-                    "label": "Subnet",
-                    "value": "subnet"
-                },
-                {
-                    "label": "Zone",
-                    "value": "zone"
-                },
-                {
-                    "label": "PG",
-                    "value": "pg",
-                    "default": true
-                },
-                {
-                    "label": "Network Macro Group",
-                    "value": "network-macro-group"
-                },
-                {
-                    "label": "Any",
-                    "value": "ANY"
-                }
-            ]
+        {
+            "label": "Flow Explorer",
+            "url": "/dashboards/vssDomainFlowExplorer"
         }
-    }
+    ]
 }

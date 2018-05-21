@@ -13,32 +13,68 @@ import SearchIcon  from 'react-icons/lib/fa/search';
   
 export default class SearchBar extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
+
         this.state = {
             data: [],
             isOk: true,
+            query: (this.props.searchText && typeof (this.props.searchText) === 'string') ? this.props.searchText : ''
         }
 
-        // set props data
-        this.options = this.props.options;
-        this.data    = this.props.data;
-        this.columns = this.props.columns ? this.props.columns : false;
+        const {
+            options,
+            data,
+        } = this.props
+        
+        this.autoCompleteHandler = new AutoCompleteHandler(data, options)
+        this.onChange = this.onChange.bind(this)
+        this.onParseOk = this.onParseOk.bind(this)
 
-        this.autoCompleteHandler = new AutoCompleteHandler(this.data, this.options);
+        this.setTimeout = null
     }
 
-    onChange(query,result) {
+    componentDidMount () {
+        const { query } = this.state
+
+        if(query) {
+            this.refs.filterBox.onSubmit(query)
+        }
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return JSON.stringify(nextProps.data) !== JSON.stringify(this.props.data)
+          || JSON.stringify(nextState) !== JSON.stringify(this.state)
+    }
+
+    componentDidUpdate () {
+        const { query } = this.state
+
+        this.refs.filterBox.onSubmit(query)
+    }
+
+    onChange (query, result) {
         this.setState({
-            isOk: !result.isError
-        });
+            isOk: !result.isError,
+            query
+        })
     }
 
-    onParseOk(expressions) {
-        var newData = new AdvancedResultProcessing(this.options, this.columns).process(this.data, expressions);
-        this.props.handleSearch(newData);        
+    onParseOk (expressions) {
+        const {
+            options,
+            data,
+            columns = false
+        } = this.props
+
+        clearTimeout(this.setTimeout)
+
+        this.setTimeout = setTimeout(() => {
+            const filteredData = new AdvancedResultProcessing(options, columns).process(data, expressions)
+            this.props.handleSearch(filteredData, this.state.query)
+        }, 1000)
     }
-    
-    renderIcon() {
+
+    renderIcon () {
         var style = {
             marginTop: 10,
             marginLeft: 5
@@ -49,17 +85,25 @@ export default class SearchBar extends React.Component {
     }
 
     render() {
+        const {
+            query
+        } = this.state
+
+        const {
+            options
+        } = this.props
+
         return (
            
         <div style={{display: "flex", margin: "10px"}}>
             <div className="filter">
                 <ReactFilterBox
-                    onChange={this.onChange.bind(this)}
+                    ref="filterBox"
+                    onChange={this.onChange}
                     autoCompleteHandler={this.autoCompleteHandler}
-                    query={this.state.query}
-                    data={this.data}
-                    options={this.options}
-                    onParseOk={this.onParseOk.bind(this) }
+                    query={query}
+                    options={options}
+                    onParseOk={this.onParseOk}
                 />
 
                 <div className="filter-icon">

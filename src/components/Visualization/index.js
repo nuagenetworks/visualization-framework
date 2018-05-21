@@ -43,7 +43,6 @@ import style from "./styles"
 
 import FontAwesome from "react-fontawesome";
 
-
 class VisualizationView extends React.Component {
 
     constructor(props) {
@@ -57,7 +56,7 @@ class VisualizationView extends React.Component {
     }
 
     componentWillMount() {
-
+        this.initialize(this.props.id);
     }
 
     componentDidMount = () => {
@@ -92,7 +91,12 @@ class VisualizationView extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.initialize(nextProps.id);
+
+        //If tooltip is not moving then we will fetch the data again, else there is no need for it
+        if(nextProps.tooltip.default.origin === null
+        || JSON.stringify(nextProps.tooltip.default) === JSON.stringify(this.props.tooltip.default)) {
+            this.initialize(nextProps.id)
+        }
     }
 
     componentDidUpdate() {
@@ -118,31 +122,21 @@ class VisualizationView extends React.Component {
 
         this.props.fetchConfigurationIfNeeded(id).then((c) => {
             const {
-                configuration,
-                showInDashboard,
-                setPageTitle
+                configuration
             } = this.props;
 
             if (!configuration || !configuration.id)
                 return;
 
-            if (!showInDashboard)
-                setPageTitle("Visualization");
-
             const { context, queryConfiguration, executeIfNeeded } = this.props;
 
-            executeIfNeeded(configuration, context, queryConfiguration).then(
-                () => {
-                    this.setState({
-                        parameterizable: true,
-                    });
-                },
-                (error) => {
-                    this.setState({
-                        parameterizable: false,
-                    });
+            if(queryConfiguration) {
+                for(let query in queryConfiguration) {
+                    if (queryConfiguration.hasOwnProperty(query)) {
+                        executeIfNeeded(configuration, context, queryConfiguration[query])
+                    }
                 }
-            );
+            }
 
             // Handle configured listeners (e.g. navigate when clicking on a bar).
             if(configuration.listeners) {
@@ -231,11 +225,6 @@ class VisualizationView extends React.Component {
         });
     }
 
-    shouldShowVisualization() {
-        const { configuration, response } = this.props;
-
-        return configuration && response && !response.isFetching;
-    }
 
     renderCardWithInfo(message, iconName, spin = false) {
 
@@ -261,37 +250,31 @@ class VisualizationView extends React.Component {
     renderVisualization() {
         const {
             configuration,
-            queryConfiguration,
             response,
             id
         } = this.props;
 
         const graphName      = configuration.graph,
-              GraphComponent = GraphManager.getGraphComponent(graphName);
+              GraphComponent = GraphManager.getGraphComponent(graphName)
 
-        if (response.error) {
-            return this.renderCardWithInfo("Oops, " + response.error, "meh-o");
+        if (!response.data) {
+            console.log('Main source "data" key is not defined')
+            return this.renderCardWithInfo("No data to visualize", "bar-chart");
         }
 
-        const data = response.results;
-
-        // const data = [{
-        //     "key_as_string": "2017-07-05T00:00:00.000Z",
-        //     "ts": 1499212800000,
-        //     "doc_count": 144,
-        //     "MEMORY": 49.06944444444444,
-        //     "CPU": 60.958333333333336,
-        //     "DISK": 0.09722222222222
-        // }];
-
-        if (!data || !data.length) {
-            return this.renderCardWithInfo("No data to visualize", "bar-chart");
+        for(let source in response) {
+            if(response.hasOwnProperty(source)) {
+                if (!response[source].length) {
+                    console.log(`Source "${source}": No data to visualize`)
+                    return this.renderCardWithInfo("No data to visualize", "bar-chart");
+                }
+            }
         }
 
         let graphHeight = d3.select(`#filter_${id}`).node() ? this.state.height - d3.select(`#filter_${id}`).node().getBoundingClientRect().height : this.state.height;
         return (
             <GraphComponent
-              data={data}
+              {...response}
               context={this.props.orgContext}
               configuration={configuration}
               width={this.state.width}
@@ -303,11 +286,21 @@ class VisualizationView extends React.Component {
     }
 
     renderVisualizationIfNeeded() {
-        if (this.shouldShowVisualization()) {
-            return this.renderVisualization();
+
+        const {
+            error,
+            isFetching
+        } = this.props;
+
+        if (error) {
+            return this.renderCardWithInfo("Oops, " + error, "meh-o");
         }
 
-        return this.renderCardWithInfo("Please wait while loading", "circle-o-notch", true);
+        if (isFetching) {
+            return this.renderCardWithInfo("Please wait while loading", "circle-o-notch", true);
+        }
+
+        return this.renderVisualization();
     }
 
     shouldShowTitleBar() {
@@ -351,23 +344,22 @@ class VisualizationView extends React.Component {
 
     renderDownloadIcon() {
         const {
-            queryConfiguration,
             configuration,
-            response
+            response,
+            error,
+            isFetching
         } = this.props;
 
-        if (!this.shouldShowVisualization()) {
+        if (isFetching || error) {
             return false;
         }
 
-        const data = response.results;
-
-        if (!data || !data.length) {
+        if (!response.data || !response.data.length) {
             return null;
         }
 
         return (
-            <CSVLink data={data} filename={ `${configuration.title ? configuration.title : 'data'}.csv` } >
+            <CSVLink data={response.data} filename={ `${configuration.title ? configuration.title : 'data'}.csv` } >
                 <FontAwesome
                     name="cloud-download"
                     style={style.cardTitleIcon}
@@ -481,10 +473,11 @@ class VisualizationView extends React.Component {
         const {
             configuration,
             context,
-            id
+            id,
+            hideGraph
         } = this.props;
 
-        if (!this.state.parameterizable || !configuration)
+        if (hideGraph || !configuration)
             return (<div></div>);
 
         let description;
@@ -515,6 +508,7 @@ class VisualizationView extends React.Component {
               style={Object.assign({}, style.card, configStyle.card)}
               containerStyle={style.cardContainer}
               ref={this.cardTextReference}
+              id={id}
             >
                 { this.renderTitleBarIfNeeded() }
                 <div>
@@ -524,7 +518,6 @@ class VisualizationView extends React.Component {
                         { this.renderFiltersToolBar() }
                         <div className="clearfix"></div>
                     </div>
-
                     <CardText style={cardText}>
                         { this.renderVisualizationIfNeeded() }
                         {description}
@@ -566,6 +559,8 @@ const updateFilterOptions = (state, configurations, context) => {
 }
 
 const mapStateToProps = (state, ownProps) => {
+
+    //Fetching Configurations of Visualizations
     const configurationID = ownProps.id || ownProps.params.id,
           orgContext = state.interface.get(InterfaceActionKeyStore.CONTEXT),
           configuration = state.configurations.getIn([
@@ -592,6 +587,9 @@ const mapStateToProps = (state, ownProps) => {
         orgContext: orgContext,
         configuration: configuration ? contextualize(configuration.toJS(), context) : null,
         headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
+        tooltip: state.tooltip,
+        isFetching: true,
+        hideGraph: false,
         error: state.configurations.getIn([
             ConfigurationsActionKeyStore.VISUALIZATIONS,
             configurationID,
@@ -602,24 +600,54 @@ const mapStateToProps = (state, ownProps) => {
     let vizConfig =  configuration ? contextualize(configuration.toJS(), context) : null;
     props.configuration = updateFilterOptions(state, vizConfig, context);
 
-    // Expose the query template as a JS object if it is available.
-    if (configuration) {
-        props.queryConfiguration = configuration.get('queryConfiguration') ? configuration.get('queryConfiguration').toJS() : null;
-        const scriptName = configuration.get("script");
+    props.queryConfigurations = {}
+    props.response = {}
 
-        // Expose received response if it is available
-        if (props.queryConfiguration || scriptName) {
+    let successResultCount = 0
+    //If configuratrions of visualizations fetched proceed to query configurations
+    if (props.configuration && props.configuration.query) {
 
-            const query = props.queryConfiguration ? props.queryConfiguration : scriptName;
-            const requestID = ServiceManager.getRequestID(query, context);
+        props.queryConfiguration =  configuration.get('queryConfiguration') ? configuration.get('queryConfiguration').toJS() : null
+        //Checking whether all the queries configurations has been fetched
+        for(let query in props.queryConfiguration) {
+            if (props.queryConfiguration.hasOwnProperty(query)) {
 
-            let response = state.services.getIn([
-                ServiceActionKeyStore.REQUESTS,
-                requestID
-            ]);
+                const scriptName = configuration.get("script");
+                // Expose received response if it is available
+                if (props.queryConfiguration[query] || scriptName) {
 
-            if (response && !response.get(ServiceActionKeyStore.IS_FETCHING))
-                props.response = response.toJS();
+                   const requestID = ServiceManager.getRequestID(props.queryConfiguration[query] || scriptName, context);
+
+                    if(typeof requestID === 'undefined') {
+                        props.hideGraph = true
+                    } else {
+
+                        let response = state.services.getIn([
+                            ServiceActionKeyStore.REQUESTS,
+                            requestID
+                        ]);
+
+                        if(!response) {
+                            props.error = 'Not able to load data'
+                        }
+
+                        if (response && !response.get(ServiceActionKeyStore.IS_FETCHING)) {
+
+                            let responseJS = response.toJS();
+                            if(responseJS.error) {
+                                props.error = responseJS.error;
+                            } else if(responseJS.results) {
+                                successResultCount++;
+                                props.response[query] =responseJS.results
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if(successResultCount === Object.keys(props.queryConfiguration).length ) {
+            props.isFetching = false
         }
     }
 
@@ -644,7 +672,7 @@ const actionCreators = (dispatch) => ({
     },
 
     executeIfNeeded: function(configuration, context, queryConfiguration) {
-        return dispatch(ServiceActions.fetchIfNeeded(configuration, context, queryConfiguration));
+        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context, configuration));
     }
 
  });

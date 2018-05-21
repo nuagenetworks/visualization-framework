@@ -1,8 +1,8 @@
 {
     "id": "aar-enterprise-all-app-usage",
     "graph": "PieGraph",
-    "title": "Enterprise Applications",
-    "description":"Usage chart for all the applications discovered in the Enterprise",
+    "title": "Enterprise Applications by {{trafficType}} data",
+    "description":"Pie chart displays the share of all applications (%) flowing through NSGs at Enterprise level. Each application pie is clickable.",
     "author": "Bharat Mukheja",
     "creationDate": "09/21/2017",
     "data": {

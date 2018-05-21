@@ -82,7 +82,7 @@ class MainMenuView extends React.Component {
                 {domains.map((domain) => {
 
 
-                    let queryParams = Object.assign({}, context, {domainName: domain.name, domainType: domainType});
+                    let queryParams = Object.assign({}, context, {domainName: domain.name, domainType: domainType, domainID: domain.ID});
 
                     return (
                         <ListItem
@@ -118,7 +118,7 @@ class MainMenuView extends React.Component {
             <div>
                 {l2Domains.map((l2Domain) => {
 
-                    let queryParams = Object.assign({}, context, {domainName: l2Domain.name, domainType: domainType});
+                    let queryParams = Object.assign({}, context, {domainName: l2Domain.name, domainType: domainType, domainID: l2Domain.ID});
 
                     return (
                         <ListItem
@@ -199,6 +199,9 @@ class MainMenuView extends React.Component {
                                     {this.renderNSGsMenu()}
                                 </div>
                             ]}
+                            leftIcon={
+                                <img style={style.iconMenu} src={`${process.env.PUBLIC_URL}/icons/icon-enterprise.png`} alt="N" />
+                            }
                         />
                     )
                 })}
@@ -270,10 +273,6 @@ const mapStateToProps = (state) => {
 const actionCreators = (dispatch) => ({
     onRequestChange: () => {
       dispatch(InterfaceActions.toggleMainMenu());
-    },
-
-    setPageTitle: (aTitle) => {
-      dispatch(InterfaceActions.updateTitle(aTitle));
     },
 
     goTo: function(link, context) {

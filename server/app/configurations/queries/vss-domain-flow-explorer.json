@@ -12,7 +12,7 @@
           ],
           "query": {
             "bool": {
-         	    "must": [
+              "must": [
                 {"term": {"nuage_metadata.enterpriseName": "{{enterpriseName:chord_enterprise}}"} },
                 {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
                 {"range": { "timestamp": { "gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}

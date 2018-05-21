@@ -1,0 +1,80 @@
+[
+  {
+    "timestamp": 15008863469,
+	    "Application": "Default Application",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":46.72727272727273,
+		"DISK":43.09090909090909,
+		"MEMORY":100.54545454545455,
+		"value": 2422791762
+  },
+  {
+   "timestamp": 15008863600,
+	    "Application": "Application 1",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":50.72727272727273,
+		"DISK":50.09090909090909,
+		"MEMORY":200.54545454545455,
+		"value": 2422791762
+  },
+  {
+    "timestamp": 15008863900,
+	    "Application": "Application 2",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":52.72727272727273,
+		"DISK":60.09090909090909,
+		"MEMORY":300.54545454545455,
+		"value": 2422791762
+  },
+  {
+  "timestamp": 15008863469,
+	    "Application": "Default Application",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":46.72727272727273,
+		"DISK":43.09090909090909,
+		"MEMORY":100.54545454545455,
+		"value": 2422791762
+  }
+  ,
+  {
+  "timestamp": 15008863469,
+	    "Application": "Default Application",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":46.72727272727273,
+		"DISK":43.09090909090909,
+		"MEMORY":100.54545454545455,
+		"value": 2422791762
+  },
+  {
+  "timestamp": 15008863469,
+	    "Application": "Default Application",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":46.72727272727273,
+		"DISK":43.09090909090909,
+		"MEMORY":100.54545454545455,
+		"value": 2422791762
+  },
+  {
+  "timestamp": 15008863469,
+	    "Application": "Default Application",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":46.72727272727273,
+		"DISK":43.09090909090909,
+		"MEMORY":100.54545454545455,
+		"value": 2422791762
+  }
+]

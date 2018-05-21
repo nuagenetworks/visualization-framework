@@ -1,0 +1,15 @@
+{
+    "id": "test-variation-text-graph",
+    "title": "VariationTextGraph",
+    "query": "test-variation-text-graph",
+    "graph": "VariationTextGraph",
+    "showTitleBar": true,
+    "data": {
+        "titlePosition": "top",
+        "target":{
+            "column": "timezones",
+            "value": "1503120370000",
+            "field": "value"
+        }
+    }
+}

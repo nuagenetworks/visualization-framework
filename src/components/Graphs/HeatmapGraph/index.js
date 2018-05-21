@@ -78,8 +78,19 @@ export default class HeatmapGraph extends XYGraph {
         const legendFn         = (d) => d[legendColumn];
         const label            = (d) => d["key"];
         const scale            = this.getMappedScaleColor(data, legendColumn);
-        const getColor         = (d) => scale ? scale(d[colorColumn] || d[legendColumn] || d["key"]) : stroke.color || colors[0];
+        const getColor         = (d) => {
+            let value = null;
 
+            if(d.hasOwnProperty(legendColumn)) {
+                value = d[legendColumn]
+            } else if(d.hasOwnProperty(colorColumn)) {
+                value = d[colorColumn]
+            } else if (d.hasOwnProperty("key")) {
+                value = d["key"]
+            }
+
+            return scale ? scale(value) : stroke.color || colors[0];
+        }
         const cellColumnsData  = nest()
             .key((d) => legendColumn ? d[legendColumn] : "Cell")
             .entries(data);
@@ -128,7 +139,7 @@ export default class HeatmapGraph extends XYGraph {
         let xValues = extent(data, xLabelFn);
         const xPadding = distXDatas.length > 1 ? ((xValues[1] - xValues[0]) / (distXDatas.length - 1)) / 2 : 1;
 
-        let boxSize = min([xBandScale.bandwidth(), yBandScale.bandwidth()]);
+        let boxSize = min([xBandScale.bandwidth(), yBandScale.bandwidth()]) * 0.9;
 
         availableHeight = boxSize * distYDatas.length;
         availableWidth  = boxSize * distXDatas.length;
@@ -166,7 +177,7 @@ export default class HeatmapGraph extends XYGraph {
 
         let xTitlePosition = {
             left: leftMargin + availableWidth / 2,
-            top: margin.top + availableHeight + (chartHeightToPixel * 2) + xAxisHeight
+            top: margin.top + availableHeight + chartHeightToPixel + xAxisHeight
         }
 
         let yTitlePosition = {

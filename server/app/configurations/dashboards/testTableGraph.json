@@ -1,0 +1,93 @@
+{
+    "id": "test-table-graph",
+    "author": "Anil Chauhan",
+    "creationDate": "27/12/2017",
+    "title": "Test Table Graph",
+    "visualizations": [
+        { 
+            "id": "testTable",
+            "x": 0, 
+            "y": 0,  
+            "w": 3, 
+            "h": 15, 
+            "minW": 4, 
+            "minH": 12 
+        },
+        { 
+            "id": "testTableHidePagination",
+            "x": 3, 
+            "y": 0,  
+            "w": 3, 
+            "h": 15, 
+            "minW": 4, 
+            "minH": 12 
+        },
+        { 
+            "id": "testTableHighlightColumn",
+            "x": 6, 
+            "y": 0,  
+            "w": 3, 
+            "h": 15, 
+            "minW": 4, 
+            "minH": 12 
+        },
+        { 
+            "id": "testTableShowCheckboxes",
+            "x": 9, 
+            "y": 0,  
+            "w": 3, 
+            "h": 15, 
+            "minW": 4, 
+            "minH": 12 
+        },
+        { 
+            "id": "testTableShowPagination",
+            "x": 0, 
+            "y": 0,  
+            "w": 3, 
+            "h": 15, 
+            "minW": 4, 
+            "minH": 12 
+        },
+        { 
+            "id": "testTableShowSearchBar",
+            "x": 3, 
+            "y": 0,  
+            "w": 3, 
+            "h": 15, 
+            "minW": 4, 
+            "minH": 12 
+        },
+        { 
+            "id": "testTableShowSearchBarSearchText",
+            "x": 6, 
+            "y": 0,  
+            "w": 3, 
+            "h": 15, 
+            "minW": 4, 
+            "minH": 12 
+        }
+
+    ],
+    "filterOptions": {
+        "Medal": {
+            "parameter": "medalType",
+            "default": "Gold",
+            "disabled": false,
+            "options": [
+                {
+                    "label": "Gold",
+                    "value": "Gold"
+                },
+                {
+                    "label": "Silver",
+                    "value": "Silver"
+                },
+                {
+                    "label": "Bronze",
+                    "value": "Bronze"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "id": "aar-enterprise",
+    "title": "NSG Application traffic detail",
+    "service": "elasticsearch",
+    "query": {
+      "index": "{{index:nuage_dpi_flowstats}}",
+      "type": "{{type:nuage_doc_type}}",
+      "body": {
+        "size": 0,
+        "aggs": {
+          "ts": {
+            "date_histogram": {
+              "field": "timestamp",
+              "interval": "1h"
+            },
+            "aggs": {
+              "L7Classification": {
+                "terms": {
+                  "field": "L7ClassEnhanced",
+                  "size": 5,
+                  "order": {
+                    "SumofBytes": "desc"
+                  }
+                },
+                "aggs": {
+                  "SumofBytes": {
+                    "sum": {
+                      "field": "TotalBytesCount"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }

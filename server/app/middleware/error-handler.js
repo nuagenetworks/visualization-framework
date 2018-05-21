@@ -27,5 +27,10 @@ export default function errorHandler(err, req, res, next) {
       }
     }
   }
+  
+  if(error.message) {
+    res.statusMessage = error.message; 
+  }
+
   res.status(err.status || 500).json(error);
 }

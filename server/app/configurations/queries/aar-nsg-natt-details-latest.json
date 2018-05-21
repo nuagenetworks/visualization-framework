@@ -1,0 +1,50 @@
+{
+    "id":"aar-nsg-natt-details-latest",
+    "title":"Latest NAT Probe Results",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_nat-t}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size": "{{latest_size:4}}",
+            "sort": [
+                {
+                    "timestamp": {
+                        "order": "desc"
+                    }
+                }
+            ],
+            "query": {
+                "bool": {
+
+                    "filter": {
+                        "bool":{
+                            "must":[
+                                {
+                            "term":{
+                                "EnterpriseName":"{{enterpriseName:test_org}}"
+                            }
+                        },
+                        {
+                            "term":{
+                                "SourceNSG":"{{snsg}}"
+                            }
+                        },
+                        {
+                            "term":{
+                                "DestinationNSG":"{{dnsg}}"
+                            }
+                        },
+                                {
+                                    "exists":{
+                                        "field":"Reason"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

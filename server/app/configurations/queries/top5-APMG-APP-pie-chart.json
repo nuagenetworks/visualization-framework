@@ -15,27 +15,33 @@
                                 "format":"epoch_millis"
                             }
                         }
+                    },
+                    {
+                        "term":{
+                            "EnterpriseName":"{{enterpriseName:test_organization}}"
+                        }
                     }
                 ]
             }
         },
         "aggs":{
-            "3":{
-                "filters":{
-                    "filters":{
-                        "Enterprise":{
-                            "query":{
-                                "term":{
-                                    "EnterpriseName":"{{enterpriseName:test_org}}"
-                                }
-                            }
-                        }
+            "APMGroup":{
+                "terms":{
+                    "field":"APMGroup",
+                    "size":5,
+                    "order":{
+                        "Sum of MB":"desc"
                     }
                 },
                 "aggs":{
-                    "APMGroup":{
+                    "Sum of MB":{
+                        "sum":{
+                            "field":"TotalMB"
+                        }
+                    },
+                    "Application":{
                         "terms":{
-                            "field":"APMGroup",
+                            "field":"Application",
                             "size":5,
                             "order":{
                                 "Sum of MB":"desc"
@@ -45,22 +51,6 @@
                             "Sum of MB":{
                                 "sum":{
                                     "field":"TotalMB"
-                                }
-                            },
-                            "Application":{
-                                "terms":{
-                                    "field":"Application",
-                                    "size":5,
-                                    "order":{
-                                        "Sum of MB":"desc"
-                                    }
-                                },
-                                "aggs":{
-                                    "Sum of MB":{
-                                        "sum":{
-                                            "field":"TotalMB"
-                                        }
-                                    }
                                 }
                             }
                         }

@@ -1,0 +1,46 @@
+[
+	{
+	    "timestamp": 0,
+	    "Application": "Default Application",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":0,
+		"DISK":0.09090909090909,
+		"MEMORY":50.54545454545455,
+		"value": 2422791762
+	},
+	{
+	    "timestamp": 1503120340000,
+	    "Application": "1 Application",
+	    "key_as_string": "2017-07-27T03:30:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Prev 24",	    
+	    "CPU":25.72727272727273,
+		"DISK":25.09090909090909,
+		"MEMORY":25.54545454545455,
+		"value": 3143532309
+	},
+	{
+	    "timestamp": 1503206740000,
+	    "Application": "2 Application",
+	    "key_as_string": "2017-07-27T03:15:00.000Z",
+	    "SlaStatus": "InSla",
+            "timezones": "Last 24",	   
+		"CPU":50.72727272727273,
+		"DISK":50.09090909090909,
+		"MEMORY":50.54545454545455,
+		"value": 2329242342
+	},
+	{
+	    "timestamp": 1503293140000,
+	    "Application": "3 Application",
+	    "key_as_string": "2017-07-27T03:45:00.000Z",
+            "timezones": "Prev 24",	
+	    "SlaStatus": "InSla",
+	    "CPU":100.72727272727273,
+		"DISK":100.09090909090909,
+		"MEMORY":100.54545454545455,
+		"value": 4641503704
+	}
+]

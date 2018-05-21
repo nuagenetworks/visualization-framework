@@ -8,7 +8,7 @@ var client = null;
 let config = function (eshost) {
     return {
         host: eshost || Constants.elasticSearchHost ,
-        log: 'trace',
+        //log: 'trace',
         apiVersion: '2.2',
         sniffOnStart: true,
         sniffInterval: 60000,

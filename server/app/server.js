@@ -30,6 +30,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Lets you use HTTP verbs such as PUT or DELETE
 app.use(methodOverride());
+console.log(__dirname)
+app.use(express.static(__dirname + '/../public'));
 
 // Mount API routes
 app.use(Constants.apiPrefix, routes);

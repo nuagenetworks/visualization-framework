@@ -1,8 +1,8 @@
 {
     "id": "aar-nsg-app-traffic-detail",
     "graph": "AreaGraph",
-    "title": "NSG Application traffic detail on {{snsg}}",
-    "description": "Application traffic history on NSG",
+    "title": "NSG Application {{trafficType}} traffic detail on {{nsg}}",
+    "description": "This stacked area graph displays the total throughput and per application traffic history",
     "author": "Bharat Mukheja",
     "creationDate": "10/20/2017",
     "data": {
@@ -35,22 +35,5 @@
             "app": "L7Classification"
         }
     }],
-    "filterOptions": {
-        "Traffic Type": {
-            "parameter": "app_trafficType",
-            "default": "EgressBytes",
-            "options": [
-                {
-                    "label": "Download",
-                    "value": "EgressBytes",
-                    "default": true
-                },
-                {
-                    "label": "Upload",
-                    "value": "IngressBytes"
-                }
-            ]
-        }
-    },
     "query": "aar-nsg-app-traffic-detail"
 }

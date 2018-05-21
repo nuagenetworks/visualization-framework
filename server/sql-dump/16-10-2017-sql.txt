@@ -1,0 +1,53 @@
+CREATE TABLE `t_dashboard_datasets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `dashboard_id` int(11) NOT NULL,
+  `datafile` varchar(100) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` text NOT NULL,
+  `context` text,
+  `created_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `is_active` tinyint(4) NOT NULL,
+  PRIMARY KEY (`id`)
+)
+
+CREATE TABLE `t_dashboards` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `url` varchar(200) NOT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `is_active` tinyint(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+)
+
+CREATE TABLE `t_report_dashboards` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `report_id` int(11) NOT NULL,
+  `dashboard_id` int(11) NOT NULL,
+  `dataset_id` int(11) DEFAULT NULL,
+  `errors` varchar(1000) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)
+
+CREATE TABLE `t_report_dashboard_widgets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `report_dashboard_id` int(11) NOT NULL,
+  `chart_name` varchar(255) NOT NULL,
+  `status` enum('pass','fail') DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)
+
+CREATE TABLE `t_reports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `started_at` timestamp NULL DEFAULT NULL,
+  `completed_at` timestamp NULL DEFAULT NULL,
+  `total` int(11) DEFAULT NULL,
+  `pass` int(11) DEFAULT NULL,
+  `fail` int(11) DEFAULT NULL,
+  `status` enum('queue','executing','pending','completed','processed') NOT NULL DEFAULT 'queue',
+  `message` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)

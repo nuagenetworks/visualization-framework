@@ -22,6 +22,7 @@ The philosophy of the Visualization Framework is to provide a library to quickly
       - [VariationTextGraph](#variationtextgraph)
   - [Query configuration](#query-configuration)
 - [Services](#services)
+- [Testing Configuration](#testing-configuration)
 
 
 ## File structure
@@ -126,7 +127,15 @@ Here is the list of options:
 - **creationDate** creation date
 - **title*** title of the visualization
 - **description*** a description of the visualization
-- **query*** identifier of the query to execute for this visualization
+- **query*** (object | string) identifier of the query to execute for this visualization, it can be one or more than one, for objects key will be passed as data to all the graphs e.g. 
+    ```
+    query: {
+        data: "query1",
+        data2: "query2"
+    }
+    ```
+    Note: data key is required in case of object.
+
 - **refreshInterval** set the time interval in `ms` between two refresh. Use `-1` to deactivate refresh.
 - **data** an object that helps you configure your visualization. (See below to find graphs specific data).
   - **colorColumn** attribute name in your results to use for color
@@ -287,6 +296,20 @@ Display one or multiple lines
 ![multiline-chart](https://cloud.githubusercontent.com/assets/1447243/21205460/4672e4a6-c211-11e6-88a5-269bc32d2140.png)
 
 - **linesColumn** attribute name in your results to display line value
+- **showNull** (Boolean) If false, Show truncated line if yValue is null . Default is true
+- **defaultY** (string | object) default yAxis value used to draw straight horizontal line to show cut off value. It can be object which define data `source` and `column` to get data from another query and you may define separate `tooltip` for this staright line from data `source`. Example - 
+```javascript
+ {
+     `"defaultY": {
+         "source": "data2",
+         "column": "memory",
+         "tooltip": [
+             { "column": "memory", "label": "memory"},
+             { "column": "cpu", "label": "cpu"}
+         ]
+     }
+ }
+ ```
 
 See x-axis and y-axis sections in BarGraph for more information
 
@@ -308,9 +331,15 @@ Display nice Pie or Donut graphs
 ##### Table
 - **width** width of the table. Default is `100%`
 - **selectable** - To enable/disable selectable feature - Default is `true`
-- **multiSelectable** To enable/disable multi select feature - default is `true`
+- **multiSelectable** To enable/disable multi select feature - default is `false`
 - **showCheckboxes** To show checkboxes to select rows - default is `false`
 - **enableSelectAll** To enable/disable select all feature - Default is `true`
+- **selectedColumn** (string) Compare `selectedColumn` value with all available datas and if equal to selected row, then save all matched records in store under "matchedRows"
+
+- **highlight** (Array of columns) Highlighted the rows if value of columns is not null
+- **hidePagination** Hide paging and search bar if data size is less than pagination limit - Default is `true`
+- **searchBar** Default is `true`
+- **searchText** Give column name === value,
 - **border**
   - **top** set top border. Default is `solid 1px #ccc`
   - **bottom** set bottom border. Default is `0`
@@ -372,6 +401,9 @@ The query configuration allows the Visualization to know which [service](#servic
 }
 ```
 
+  
+  
+    
 Important note: The visualization framework is using a `context` to determine all the information needed.
 If you need to pass a specific parameter, check out this example:
 
@@ -381,7 +413,8 @@ If you need to pass a specific parameter, check out this example:
     "title":"Top 5 Statistics",
     "service":"elasticsearch",
     "query":{
-        "resourceName": "{{resourceName:defaultName}}"
+        "resourceName": "{{resourceName:defaultName}}",
+        "methodName": "{{methodName:call('demo')}}"
     }
 }
 ```
@@ -390,6 +423,10 @@ The query configuration will be "contextualized" which means:
 
 - if the `context` contains a parameter named `resourceName`, the query will send its value
 - if the `context` does NOT contain `resourceName`, the value sent will be `defaultName`
+- ###### Custom Translator
+    - You can also call the custom `Translator` placed at `\utils\translators\`, e.g. in above example translator `demo` will get called with value passed as parameter named as `methodName` in the URL.
+    - Just wrap the translator name inside `call` method.
+    - You can also add your custom translators by adding respective file inside `\utils\translators` and register it inside `\utils\translators\index.js`
 
 Visualization Framework is using [json-templates](https://github.com/datavis-tech/json-templates) thanks to [@curran](https://github.com/curran),
 
@@ -431,3 +468,36 @@ Just tell `ServiceManager` that you want to register the service using the follo
 ```
 
 The second argument is optional. If you do not provide a name, the service identifier will be automatically used.
+
+## Testing configuration
+### Installation Procedure
+
+1.Install **ChromeDriver** and **Selenium** on your machine.
+For reference, please follow the link for installation [install-chromedriver-selenium](https://gist.github.com/ziadoz/3e8ab7e944d02fe872c3454d17af31a5)
+    
+### Run tests
+1.Go to testing url http://localhost:3000/testing/ and click button **New Report** to start generating report.
+    
+![reports](https://user-images.githubusercontent.com/14901092/31492666-ba459f0e-af69-11e7-993a-5474cbc36e26.png)
+
+2.**Status column** will show **EXECUTING** status of that report. Keep on running this report until status changes to **COMPLETED**.
+
+3.We can also add as many **dashboards** in our testing platform by adding name of the dashboard in **name column** and associated **url** of the dashboard to test in **t_dashboards table**.
+![t_dashboards](https://user-images.githubusercontent.com/14901092/31498449-9057203a-af7f-11e7-887b-4167fad7f78f.png)
+
+4.We will fetch all the charts using the **url** column of **t_dashboards table** like **http://localhost:3000/dashboards/aarDomain**.
+
+5.If we want to add any scenario to the url of the dashboard just add query string like given in this url, **http://localhost:3000/dashboards/testDashboard?dataset=Scenario1**
+
+6.We will test visualization frameworks for different scenarios by adding multiple scenarios in **datafile column** of **t_dashboard_datasets** table.
+![t_dashboard_datasets](https://user-images.githubusercontent.com/14901092/31498636-26de4844-af80-11e7-8ce5-7a744fb9b690.png)
+
+Then url will look like below:
+**http://localhost:3000/dashboards/testDashboard?dataset=Scenario1**
+This will fetch all the scenarios given in **Scenario1** folder like given below :
+**[/visualization-framework/server/app/configurations/dataset/Scenario1/test-bar-graph.json]**
+
+
+7.When we run testing report it will save all the **screenshots** having directory structure in the form of **[report_id/dashboard_id/dataset_id/name_of_the_chart.png]** in **[/server/public/dashboards]** folder.
+    
+![report_deatil](https://user-images.githubusercontent.com/14901092/31492664-b9b1124e-af69-11e7-960e-c13036da4463.png)

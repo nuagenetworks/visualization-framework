@@ -18,20 +18,20 @@ export default ({
     
     let sum = 0
     for(let index = 0; index < data.length; index++) {
-      sum += data[index][metric]
-
+      sum += +Number(data[index][metric])
       switch (type) {
-        case 'percentage':
-          if(((sum / total) * 100) >= limit) {
-            return index + 1;
-          }
-          break
-
         case 'sum':
           if(sum >= limit) {
             return index + 1;
           }
           break
+
+        default:
+          if(((sum / total) * 100) >= limit) {
+            return index + 1;
+          }
+          break
+
       }
     }
 

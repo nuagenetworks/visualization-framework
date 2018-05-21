@@ -1,8 +1,8 @@
 {
     "id": "aar-domain-all-app-usage",
     "graph": "PieGraph",
-    "title": "Domain Applications",
-    "description":"Usage chart for all the applications discovered in the Domain",
+    "title": "Domain Applications by {{trafficType}} data",
+    "description":"Pie chart displays the share of all applications (%) flowing through NSGs for a Domain. Each application pie is clickable",
     "author": "Bharat Mukheja",
     "creationDate": "09/21/2017",
     "data": {

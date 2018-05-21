@@ -1,0 +1,17 @@
+{
+    "id": "testLineGraph",
+    "author": "Anil Chauhan",
+    "creationDate": "08/03/2017",
+    "title": "Test Line Graph",
+    "visualizations": [
+        {
+            "id": "test-line-graph",
+            "x": 0,
+            "y": 0,
+            "w": 3,
+            "h": 15,
+            "minW": 2,
+            "minH": 12
+        }
+    ]
+}

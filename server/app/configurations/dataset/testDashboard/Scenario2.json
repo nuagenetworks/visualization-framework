@@ -1,0 +1,118 @@
+[
+  {
+    "timestamp": 15008863469,
+	    "Application": "Application 2",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":46.72727272727273,
+		"DISK":90.09090909090909,
+		"MEMORY":300.54545454545455,
+		"value": 2422791762
+  },
+  {
+   "timestamp": 25008863469,
+	    "Application": "Application 2",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Prev 24",    
+	    "CPU":46.72727272727273,
+		"DISK":90.09090909090909,
+		"MEMORY":300.54545454545455,
+		"value": 2422791762
+  },
+  {
+    "timestamp": 35008863469,
+	    "Application": "Application 2",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":46.72727272727273,
+		"DISK":90.09090909090909,
+		"MEMORY":300.54545454545455,
+		"value": 2422791762
+  },
+   {
+    "timestamp": 45008863469,
+	    "Application": "Application 2",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":46.72727272727273,
+		"DISK":90.09090909090909,
+		"MEMORY":300.54545454545455,
+		"value": 2422791762
+  }
+  ,
+   {
+    "timestamp": 55008863469,
+	    "Application": "Application 2",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":46.72727272727273,
+		"DISK":90.09090909090909,
+		"MEMORY":300.54545454545455,
+		"value": 2422791762
+  }
+  ,
+   {
+    "timestamp": 65008863469,
+	    "Application": "Application 2",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":46.72727272727273,
+		"DISK":90.09090909090909,
+		"MEMORY":300.54545454545455,
+		"value": 2422791762
+  },
+   {
+    "timestamp": 75008863469,
+	    "Application": "Application 2",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":46.72727272727273,
+		"DISK":90.09090909090909,
+		"MEMORY":300.54545454545455,
+		"value": 2422791762
+  }
+  ,
+   {
+    "timestamp": 85008863469,
+	    "Application": "Application 2",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":46.72727272727273,
+		"DISK":90.09090909090909,
+		"MEMORY":300.54545454545455,
+		"value": 2422791762
+  }
+  ,
+   {
+    "timestamp": 95008863469,
+	    "Application": "Application 2",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":46.72727272727273,
+		"DISK":90.09090909090909,
+		"MEMORY":300.54545454545455,
+		"value": 2422791762
+  }
+  ,
+   {
+    "timestamp": 105008863469,
+	    "Application": "Application 2",
+	    "key_as_string": "2017-07-27T03:00:00.000Z",
+	    "SlaStatus": "InSla",
+		"timezones": "Last 24",    
+	    "CPU":46.72727272727273,
+		"DISK":90.09090909090909,
+		"MEMORY":300.54545454545455,
+		"value": 2422791762
+  }
+  
+]

@@ -1,0 +1,23 @@
+{
+    "id": "aarDomain",
+    "author": "Ronak Shah",
+    "creationDate": "10/14/2016",
+    "title": "AAR Domain ({{domainName}})",
+    "links": [
+        {
+            "label": "Applications",
+            "url": "/dashboards/aarDomain"
+        },
+        {
+            "label": "Network Performance",
+            "url": "/dashboards/aarNetworkPerformance"
+        },
+        {
+            "label": "Application Performance",
+            "url": "/dashboards/aarApplicationPerformance"
+        }
+    ],
+    "visualizations": [
+        { "id": "aar-enterprise-nsg-per-app",         "x": 0, "y": 0, "w": 6,  "h": 15, "minW": 2, "minH": 12, "static": true}
+    ]
+}
