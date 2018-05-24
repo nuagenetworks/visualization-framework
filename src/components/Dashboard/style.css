@@ -1,12 +1,3 @@
-.tooltip-container {
-    background: rgb(44, 44, 44)  !important;
-    color: #fff !important
-}
-
-.tooltip-container span {
-    border-color: rgb(44, 44, 44) transparent transparent  !important;
-}
-
 .center-content {
     text-align: center;
     display: table-cell;
