@@ -32,7 +32,6 @@ class Table extends AbstractGraph {
         this.handleSortOrderChange   = this.handleSortOrderChange.bind(this)
         this.handlePreviousPageClick = this.handlePreviousPageClick.bind(this)
         this.handleNextPageClick     = this.handleNextPageClick.bind(this)
-        this.handleClick             = this.handleClick.bind(this)
         this.handleSearch            = this.handleSearch.bind(this)
         this.handleRowSelection      = this.handleRowSelection.bind(this)
         this.handleContextMenu       = this.handleContextMenu.bind(this)
@@ -57,7 +56,7 @@ class Table extends AbstractGraph {
     }
 
     componentWillMount() {
-        this.initiate();
+        this.initiate(this.props);
     }
 
     componentDidMount() {
@@ -70,14 +69,16 @@ class Table extends AbstractGraph {
     }
 
     componentWillReceiveProps(nextProps) {
+
         if (!_.isEqual(pick(this.props, ...PROPS_FILTER_KEY), pick(nextProps, ...PROPS_FILTER_KEY))) {
             // reset font size on resize
             if(this.props.height !== nextProps.height || this.props.width !== nextProps.width) {
                 this.setState({ fontSize: style.defaultFontsize})
             }
 
-            if(this.props.context[this.columns] === nextProps.context[this.columns])
-                this.initiate();
+            if(this.props.context[this.columns] === nextProps.context[this.columns]) {
+                this.initiate(nextProps);
+            }
         }
     }
 
@@ -89,11 +90,11 @@ class Table extends AbstractGraph {
         }
     }
 
-    initiate() {
+    initiate(props) {
 
         const {
             context
-        } = this.props
+        } = props
 
         const {
             selectColumnOption
@@ -103,33 +104,30 @@ class Table extends AbstractGraph {
 
         if (!columns)
             return;
-
         /*
          * On data change, resetting the paging and filtered data to 1 and false respectively.
          */
         this.resetFilters();
 
-        this.filterData = this.props.data;
+        this.filterData = props.data;
 
         let columnsContext = context.hasOwnProperty(this.columns) ? context[this.columns] : false
 
         // filter columns who will be display in table
         let filteredColumns = columns.filter( d => {
-                Object.assign(d, {value: d.label})
-                if(!selectColumnOption) {
-                    return true
-                }
-                else if(columnsContext) {
-                    return columnsContext.indexOf(d.label) > -1 || false
-                }
-                else {
-                   return d.display !== false
-                }
-            })
+            Object.assign(d, {value: d.label})
+            if(!selectColumnOption) {
+                return true
+            }
+            else if(columnsContext) {
+                return columnsContext.indexOf(d.label) > -1 || false
+            }
+            else {
+                return d.display !== false
+            }
+        })
 
-        this.setState({columns: filteredColumns})
-
-        this.updateData();
+        this.updateData(filteredColumns);
     }
 
     decrementFontSize() {
@@ -156,16 +154,16 @@ class Table extends AbstractGraph {
         this.updateData();
     }
 
-    updateData() {
+    updateData(columns = this.state.columns) {
         const {
             limit,
         } = this.getConfiguredProperties();
 
         let offset = limit * (this.currentPage - 1);
-
         this.setState({
             data : this.filterData.slice(offset, offset + limit),
-            selected: this.selectedRows[this.currentPage] ? this.selectedRows[this.currentPage]: []
+            selected: this.selectedRows[this.currentPage] ? this.selectedRows[this.currentPage]: [],
+            columns
         });
     }
 
@@ -240,6 +238,7 @@ class Table extends AbstractGraph {
 
                 if((columnData || columnData === 0) && columns[i].tooltip) {
                     let fullText = tooltipAccessor[i](d, true)
+                    fullText = Array.isArray(fullText) ? fullText.join(", ") : fullText
                     let hoverContent = (
                         <div key={`tooltip_${j}_${i}`}>
                             {fullText}
@@ -507,6 +506,7 @@ class Table extends AbstractGraph {
                 display: 'flex',
                 justifyContent: 'space-between',
                 lineHeight: 'normal',
+                fontSize: '0.8em'
               }}
               key={column.label}
               label={column.label}
@@ -537,21 +537,28 @@ class Table extends AbstractGraph {
             return
         }
 
+        const customHintTextAutocomplete = (
+            <span style={{ fontSize: '0.8em' }}>Type something</span>
+        )
+
         return (
-            <div style={{float:'right', display: "flex"}}>
+            <div style={{float:'right', display: 'flex', paddingRight: 15}}>
                 <SuperSelectField
                     name={id}
                     multiple
                     checkPosition='left'
+                    hintTextAutocomplete={customHintTextAutocomplete}
                     hintText='Select Columns'
                     onSelect={this.handleColumnSelection}
                     value={this.state.columns}
                     keepSearchOnSelect
                     elementHeight={40}
                     selectionsRenderer={this.selectionColumnRenderer}
-                    style={{ minWidth: 225, margin: 10, outline: "white", fontSize: 16}}
-                    innerDivStyle={{border: "1px solid #dad1d1"}}
-                    underlineFocusStyle={{outline: "white"}}
+                    style={{ minWidth: 150, margin: 10, outline: 'white', fontSize: '1em'}}
+                    innerDivStyle={{border: '1px solid #dad1d1'}}
+                    underlineFocusStyle={{outline: 'white'}}
+                    autocompleteStyle={{fontSize: '0.8em'}}
+                    errorStyle={{fontSize: '0.8em'}}
                 >
                     {this.getColumnListItem()}
                 </SuperSelectField>
@@ -576,7 +583,7 @@ class Table extends AbstractGraph {
         } = this.getConfiguredProperties();
 
         if(!data || !data.length) {
-            return
+            return this.renderMessage('No data to visualize')
         }
 
         let tableData  = this.getTableData(this.getColumns()),
@@ -617,7 +624,6 @@ class Table extends AbstractGraph {
                     onRowSelection={this.handleRowSelection}
                     page={this.currentPage}
                     count={this.filterData.length}
-                    onCellClick={this.handleClick}
                     rowSize={limit}
                     tableStyle={style.table}
                     tableHeaderColumnStyle={Object.assign({}, style.headerColumn, {fontSize: this.state.fontSize})}

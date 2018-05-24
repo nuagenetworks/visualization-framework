@@ -21,9 +21,10 @@ export default class AdvancedResultProcessing extends SimpleResultProcessing {
 
             if(column) {
                 const formattedValue = columnAccessor(column);
-                originalValue = (formattedValue(row, true));
+                originalValue = (formattedValue(row, true))
+
                 if(['number', 'string', 'boolean'].includes(typeof(originalValue))) {
-                    originalValue = originalValue.toString();
+                    originalValue = originalValue.toString().toLowerCase()
                 }
             }
         }

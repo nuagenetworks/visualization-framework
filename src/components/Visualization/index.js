@@ -130,7 +130,7 @@ class VisualizationView extends React.Component {
             if (!configuration)
                 return;
 
-            const queryName  = configuration.query,
+            const queries  = configuration.query,
                   scriptName = configuration.script;
 
             if (scriptName) {
@@ -138,16 +138,13 @@ class VisualizationView extends React.Component {
                 executeScriptIfNeeded(scriptName, context);
             }
 
-            if (queryName) {
-
-                const queries =  typeof queryName === 'string' ? {'data' : queryName} : queryName
-
+            if (queries) {
                 for(let query in queries) {
                     if (queries.hasOwnProperty(query)) {
-                        this.props.fetchQueryIfNeeded(queries[query]).then(() => {
+
+                        this.props.fetchQueryIfNeeded(queries[query].name).then(() => {
 
                             const { queryConfigurations, executeQueryIfNeeded, context } = this.props;
-
                             if(!queryConfigurations[query]) {
                                 return
                             }
@@ -286,16 +283,6 @@ class VisualizationView extends React.Component {
             console.log('Main source "data" key is not defined')
             return this.renderCardWithInfo("No data to visualize", "bar-chart");
         }
-
-        for(let source in response) {
-            if(response.hasOwnProperty(source)) {
-                if (!response[source].length) {
-                    console.log(`Source "${source}": No data to visualize`)
-                    return this.renderCardWithInfo("No data to visualize", "bar-chart");
-                }
-            }
-        }
-
 
         let graphHeight = d3.select(`#filter_${id}`).node() ? this.state.height - d3.select(`#filter_${id}`).node().getBoundingClientRect().height : this.state.height;
         return (
@@ -663,14 +650,39 @@ const mapStateToProps = (state, ownProps) => {
     //If configuratrions of visualizations fetched proceed to query configurations
     if (props.configuration && props.configuration.query) {
 
-        const queries =  typeof props.configuration.query === 'string' ? {'data' : props.configuration.query} : props.configuration.query
+         /**
+         * Format the query as given below:
+         * "query": {
+                "data": "query-name-1",
+                "keyName": "query-name-2"
+            }
+        */
+        const queries =  typeof props.configuration.query === 'string' ? {'data' : {'name': props.configuration.query}} : props.configuration.query
+
+        props.configuration.query = {}
 
         //Checking whether all the queries configurations has been fetched
         for(let query in queries) {
             if (queries.hasOwnProperty(query)) {
+
+                /**
+                 * Format the query as given below:
+                 * "query": {
+                        "data": {"name": "query-name-1", "required": true},
+                        "keyName": {"name": "query-name-2", "required": false}
+                    }
+                */
+                let queryConfig = Object.assign({}, typeof queries[query] === 'string' ? { 'name': queries[query]} : queries[query])
+
+                props.configuration.query[query] = queryConfig
+
+                if(query === 'data') {
+                    queryConfig.required = true
+                }
+
                 let queryConfiguration = state.configurations.getIn([
                     ConfigurationsActionKeyStore.QUERIES,
-                    queries[query]
+                    queryConfig.name
                 ]);
 
                 if (queryConfiguration && !queryConfiguration.get(
@@ -699,13 +711,13 @@ const mapStateToProps = (state, ownProps) => {
                             requestID
                         ]);
 
-                        if(!response) {
+                        if(!response && queryConfig.required !== false) {
                             props.error = 'Not able to load data'
                         }
 
                         if (response && !response.get(ServiceActionKeyStore.IS_FETCHING)) {
                             let responseJS = response.toJS();
-                            if(responseJS.error) {
+                            if(responseJS.error && queryConfig.required !== false) {
                                 props.error = responseJS.error;
                             } else if(responseJS.results) {
                                 successResultCount++;

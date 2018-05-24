@@ -36,6 +36,6 @@
     },
     "query": {
         "data": "vnf-status-linechart",
-        "data2": "vnf-status"
+        "data2": {"name": "vnf-status", "required": false}
     }
 }

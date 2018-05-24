@@ -40,7 +40,7 @@ class LineGraph extends XYGraph {
         } = this.props;
 
         if (!data || !data.length)
-            return;
+            return this.renderMessage('No data to visualize')
 
         const {
           chartHeightToPixel,
@@ -70,7 +70,9 @@ class LineGraph extends XYGraph {
           circleRadius,
           defaultY,
           defaultYColor,
-          showNull
+          showNull,
+          yLabelLimit,
+          appendCharLength
         } = this.getConfiguredProperties();
 
         let finalYColumn = typeof yColumn === 'object' ? yColumn : [yColumn];
@@ -194,7 +196,8 @@ class LineGraph extends XYGraph {
         let xAxisHeight       = xLabel ? chartHeightToPixel : 0;
         let legendWidth       = legend.show ? this.longestLabelLength(filterDatas, legendFn) * chartWidthToPixel : 0;
 
-        let yLabelWidth       = this.longestLabelLength(filterDatas, yLabelFn, yTickFormat) * chartWidthToPixel;
+        let yLabelWidth       = this.longestLabelLength(filterDatas, yLabelFn, yTickFormat);
+        yLabelWidth = (yLabelWidth > yLabelLimit ?  yLabelLimit + appendCharLength : yLabelWidth)* chartWidthToPixel
         let leftMargin        = margin.left + yLabelWidth;
         let availableWidth    = width - (margin.left + margin.right + yLabelWidth);
         let availableHeight   = height - (margin.top + margin.bottom + chartHeightToPixel + xAxisHeight);
@@ -248,7 +251,7 @@ class LineGraph extends XYGraph {
 
             if(typeof defaultY === 'object' && defaultY.column) {
                 const dataSource = defaultY.source || 'data'
-                horizontalLineData = this.props[dataSource] ? this.props[dataSource][0] : {}
+                horizontalLineData = this.props[dataSource] && this.props[dataSource].length ? this.props[dataSource][0] : {}
                 defaultYvalue = horizontalLineData[defaultY.column] || null
             }
 
@@ -383,7 +386,11 @@ class LineGraph extends XYGraph {
                         />
                         <g
                             key="yAxis"
-                            ref={ (el) => select(el).call(yAxis) }
+                            ref={ (el) => select(el)
+                                .call(yAxis)
+                                .selectAll('.tick text')
+                                .call(this.wrapD3Text, yLabelLimit)
+                             }
                         />
 
 

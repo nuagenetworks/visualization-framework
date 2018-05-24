@@ -25,7 +25,7 @@
                         },
                         {
                             "term": {
-                                "nuage_metadata.domainName":"{{domainName:chord_domain}}"
+                                "{{domainType:nuage_metadata.domainName}}":"{{domainName:chord_domain}}"
                             }
                         },
                         {

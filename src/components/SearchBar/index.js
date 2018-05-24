@@ -96,6 +96,9 @@ export default class SearchBar extends React.Component {
         return (
            
         <div style={{display: "flex", margin: "10px"}}>
+            <div className="search-label">
+                Search: &nbsp;
+            </div>
             <div className="filter">
                 <ReactFilterBox
                     ref="filterBox"

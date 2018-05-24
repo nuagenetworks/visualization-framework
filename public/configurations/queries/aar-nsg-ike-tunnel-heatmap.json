@@ -1,9 +1,8 @@
 {
-    "id": "aar-nsg-natt-heatmap",
-    "title": "NAT-T Reachability HeatMap",
+    "id": "aar-nsg-ike-tunnel-heatmap",
     "service": "elasticsearch",
     "query": {
-        "index": "{{index:nuage_natt}}",
+        "index": "{{index:nuage_ike_stats}}",
         "type": "{{type:nuage_doc_type}}",
         "body": {
             "size": 0,
@@ -34,11 +33,6 @@
                                     "term": {
                                         "SourceNSG":"{{snsg}}"
                                      }
-                                },
-                                {
-                                    "exists": {
-                                        "field": "ReachabilityStatus"
-                                    }
                                 }
                             ]
                         }
@@ -49,19 +43,21 @@
                 "date_histo": {
                     "date_histogram": {
                         "field": "timestamp",
-                        "interval": "{{heatmapinterval:2m}}"
+                        "interval": "1m"
                     },
                     "aggs":{
-                        "dnsg":{
+                        "tunnel":{
                             "terms": {
-                                "field": "DestinationNSG"
+                                "field": "TunnelName"
                             },
                             "aggs":{
-                                "ReachabilityStatus":{
-                                    "terms":{
-                                        "field":"ReachabilityStatus"
+                                "TunnelState": {
+                                    "terms": {
+                                      "script": {
+                                        "inline": "doc['MultipleStatesChanged'].value==true?'UNSTABLE':doc['TunnelState']"
+                                      }
                                     }
-                                }
+                                  }
                             }
                         }
                     }

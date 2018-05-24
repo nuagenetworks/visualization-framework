@@ -20,6 +20,10 @@ export default class ChordGraph extends AbstractGraph {
     }
 
     componentDidMount() {
+
+        if(!this.svg)
+          return
+
         this.chordDiagram = ChordDiagram(this.svg);
         this.updateChord(this.props);
 
@@ -81,7 +85,7 @@ export default class ChordGraph extends AbstractGraph {
 
     updateChord(props) {
 
-        const { width, height, onMarkClick } = this.props;
+        const { width, height, onMarkClick } = props;
 
         if(!this.filterData || !this.filterData.length)
           return
@@ -144,6 +148,7 @@ export default class ChordGraph extends AbstractGraph {
     render() {
 
         const { data, width, height } = this.props;
+
 
         if (!data || !data.length || !this.filterData.length)
             return this.renderMessage('No data to visualize')

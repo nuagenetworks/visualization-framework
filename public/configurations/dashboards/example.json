@@ -5,7 +5,7 @@
     "title": "Example",
     "visualizations": [
         { 
-            "id": "dynamic-bar-graph",
+            "id": "aar-flow-sla-heatmap",
             "x": 0,
             "y": 0,
             "w": 12,
