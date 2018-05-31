@@ -185,7 +185,7 @@ class LineGraph extends XYGraph {
         let filterDatas = merge(linesData.map(function(d) { return d.values; }))
 
         const isVerticalLegend = legend.orientation === 'vertical';
-        const xLabelFn         = (d) => d[xColumn];
+        const xLabelFn         = (d) => parseFloat(d[xColumn]);
         const yLabelFn         = (d) => parseFloat(d[this.yValue]);
         const legendFn         = (d) => d[this.yKey];
         const label            = (d) => d[this.yKey];
@@ -227,11 +227,22 @@ class LineGraph extends XYGraph {
 
         if (dateHistogram) {
             xScale = scaleTime()
-              .domain(extent(filterDatas, xLabelFn));
         } else {
             xScale = scaleLinear()
-              .domain(extent(filterDatas, xLabelFn));
         }
+
+        let xExtent = extent(filterDatas, xLabelFn);
+
+        //Adding 1 Minute to both side, if only one timestamp is there
+        if(xExtent[0] === xExtent[1]) {
+
+            //Checking Time format either Year or Milliseconds - therefore adding 4 years or 1 HR respectively
+            let adder = xExtent[1].toString().length == 4 ? 4 : 3600000;
+            xExtent[0] = xExtent[0] - adder
+            xExtent[1] = xExtent[1] + adder
+        }
+
+        xScale.domain(xExtent);
 
         const yScale = scaleLinear()
           .domain(yExtent);
