@@ -17,9 +17,6 @@ class GeoMap extends AbstractGraph {
 
     super(props, properties)
 
-    this.map = null
-    this.clusterCenter = null
-
     this.state = {
       data: [],
       infowindow: {
@@ -32,8 +29,10 @@ class GeoMap extends AbstractGraph {
       spiderifyLines: []
     }
 
-    this.clusters = null;
-    this.center = null
+    this.markers       = new Map()
+    this.center        = null
+    this.map           = null
+    this.clusterCenter = null
 
     this.onMapMounted         = this.onMapMounted.bind(this)
     this.handleClusterClick   = this.handleClusterClick.bind(this)
@@ -60,8 +59,10 @@ class GeoMap extends AbstractGraph {
       defaultCenter: null
     }
 
-    this.clusters = null;
-    this.center = null
+    this.markers       = new Map()
+    this.center        = null
+    this.map           = null
+    this.clusterCenter = null
   }
 
   initiate(props) {
@@ -276,20 +277,21 @@ class GeoMap extends AbstractGraph {
     }
   }
 
-  handleClustererEnd(clusterer) {
+  handleClustererEnd(clusters) {
 
-    let markerList = []
+    let markers = new Map()
 
-    clusterer.getClusters().forEach(cluster => {
-      let markers = cluster.getMarkers().map(d => {
-        return { [d.id]: cluster.getCenter().toJSON() }
+    // get all markers from all clusters
+    clusters.getClusters().forEach( cluster => {
+      cluster.getMarkers().forEach( d => {
+        markers.set(d.id, cluster.getCenter().toJSON())
       })
-      markerList = markers ? [...markerList, ...markers] : markerList
     })
 
-    if (!_.isEqual(this.clusters, markerList)) {
-      this.clusters = markerList
-      this.calculatePolylines(markerList)
+
+    if (!_.isEqual(this.markers, markers)) {
+      this.markers = markers
+      this.calculatePolylines(markers)
     }
   }
 
@@ -304,26 +306,27 @@ class GeoMap extends AbstractGraph {
 
     if (links && links.source && this.props[links.source].length) {
 
-      let filterData = [];
+      let polylines = [];
 
       this.props[links.source].forEach((line, i) => {
-        let destMarker = null
-        let sourceMarker = null
+
+        let destMarker = null,
+         sourceMarker = null
+
 
         if (line[links.destinationColumn] && line[links.sourceColumn]) {
 
           // check link source and destination id's in marker list to get marker's latlng
-          markers.forEach((marker, key) => {
 
-            if (!destMarker && marker[line[links.destinationColumn]]) {
-              destMarker = marker[line[links.destinationColumn]]
-            }
-            else if (!sourceMarker && marker[line[links.sourceColumn]]) {
-              sourceMarker = marker[line[links.sourceColumn]]
-            }
-          })
+          if(!destMarker && markers.has(line[links.destinationColumn])) {
+            destMarker = markers.get(line[links.destinationColumn])
+          }
 
-          // if not found in bound, then find lat lng in data
+          if(!sourceMarker && markers.has(line[links.sourceColumn])) {
+            sourceMarker = markers.get(line[links.sourceColumn])
+          }
+
+          // if any source or destintion point not found in bound, then find lat lng in data
           if (!destMarker && sourceMarker) {
             let destination = this.state.data.find(d => d[idColumn] === line[links.destinationColumn])
 
@@ -335,7 +338,7 @@ class GeoMap extends AbstractGraph {
             }
           }
 
-          // if not found in bound, then find lat lng in data
+          // if any source or destintion point not found in bound, then find lat lng in data
           if (!sourceMarker && destMarker) {
             let source = this.state.data.find(d => d[idColumn] === line[links.sourceColumn])
             if(source) {
@@ -345,26 +348,27 @@ class GeoMap extends AbstractGraph {
               }
             }
           }
-        }
 
-        if (destMarker && sourceMarker) {
-          let color = line.color || theme.palette.redColor
-          if (!this.isPolylineExist(filterData, sourceMarker, destMarker)) {
-            filterData.push({
-              'source': { lat: sourceMarker.lat, lng: sourceMarker.lng },
-              'destination': { lat: destMarker.lat, lng: destMarker.lng },
-              color
-            })
+          if (destMarker && sourceMarker) {
+            let color = line.color || theme.palette.redColor
+            if (!this.isPolylineExist(polylines, sourceMarker, destMarker)) {
+              polylines.push({
+                'source': { lat: sourceMarker.lat, lng: sourceMarker.lng },
+                'destination': { lat: destMarker.lat, lng: destMarker.lng },
+                color
+              })
+            }
           }
         }
+
       })
-      this.setState({ lines: filterData })
+      this.setState({ lines: polylines })
     }
   }
 
   // check line is already drawn or not
-  isPolylineExist(filterData, sourceMarker, destMarker) {
-    return filterData.some(function (el) {
+  isPolylineExist(polylines, sourceMarker, destMarker) {
+    return polylines.some(function (el) {
       return ((el.source.lat === sourceMarker.lat && el.source.lng === sourceMarker.lng) && (el.destination.lat === destMarker.lat && el.destination.lng === destMarker.lng));
     });
   }
