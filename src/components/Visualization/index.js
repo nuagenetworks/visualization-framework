@@ -667,14 +667,19 @@ const mapStateToProps = (state, ownProps) => {
                     queryConfig.name
                 ]);
 
-                if (queryConfiguration && !queryConfiguration.get(
-                    ConfigurationsActionKeyStore.IS_FETCHING
-                )) {
+                if (queryConfiguration
+                    && queryConfiguration.get(ConfigurationsActionKeyStore.ERROR)
+                ) {
+                    props.error = 'Not able to load data'
+                }
+
+                if (queryConfiguration
+                    && !queryConfiguration.get(ConfigurationsActionKeyStore.IS_FETCHING)
+                ) {
                     queryConfiguration = queryConfiguration.get(
                         ConfigurationsActionKeyStore.DATA
                     );
                     props.queryConfigurations[query] = queryConfiguration ? queryConfiguration.toJS() : null;
-
                 }
 
                 const scriptName = configuration.get("script");
@@ -696,14 +701,14 @@ const mapStateToProps = (state, ownProps) => {
                         if(!response && queryConfig.required !== false) {
                             props.error = 'Not able to load data'
                         }
-
                         if (response && !response.get(ServiceActionKeyStore.IS_FETCHING)) {
                             let responseJS = response.toJS();
+
                             if(responseJS.error && queryConfig.required !== false) {
                                 props.error = responseJS.error;
                             } else if(responseJS.results) {
                                 successResultCount++;
-                                props.response[query] =responseJS.results
+                                props.response[query] = responseJS.results
                             }
                         }
                     }
