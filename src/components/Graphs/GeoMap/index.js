@@ -51,22 +51,22 @@ class GeoMap extends AbstractGraph {
       this.initiate(nextProps)
   }
 
-  componentWillUnmount() {
-    this.state = {
-      data: [],
-      infowindow: null,
-      lines: [],
-      defaultCenter: null
-    }
-
-    this.markers       = new Map()
-    this.center        = null
-    this.map           = null
-    this.clusterCenter = null
-  }
-
   initiate(props) {
-    this.setState({ data: props.data})
+
+    this.clusterCenter = null
+    this.markers       = new Map()
+
+    this.setState({
+      data: props.data,
+      infowindow: {
+        data: null,
+        position: null
+      },
+      lines: [],
+      defaultCenter: null,
+      spiderifyMarkers: [],
+      spiderifyLines: []
+    })
   }
 
   onMapMounted(map) {
@@ -288,7 +288,6 @@ class GeoMap extends AbstractGraph {
       })
     })
 
-
     if (!_.isEqual(this.markers, markers)) {
       this.markers = markers
       this.calculatePolylines(markers)
@@ -397,8 +396,16 @@ class GeoMap extends AbstractGraph {
   }
 
   // handle response after searching
-  handleSearch(data) {
-    this.setState({data})
+  handleSearch(data, isSuccess) {
+    if(isSuccess && !_.isEqual(this.state.data, data)) {
+      this.clusterCenter = null
+      this.setState({
+        spiderifyLines: [],
+        spiderifyMarkers: [],
+        lines: [],
+        data
+      })
+    }
   }
 
   renderSearchBarIfNeeded() {
@@ -496,13 +503,12 @@ class GeoMap extends AbstractGraph {
             averageCenter
             gridSize={60}
             onClusteringEnd={ this.handleClustererEnd}
-            onClick={this.handleClusterClick}
+            onClick={ this.handleClusterClick }
           >
             { this.renderMarkersIfNeeded() }
             { this.renderPolylineIfNeeded() }
           </MarkerClusterer>
-
-          { this.renderInfowindow() }
+            { this.renderInfowindow() }
         </GoogleMapsWrapper>
       </div>
     )

@@ -1,7 +1,7 @@
 {
     "id": "aar-enterprise-geomap",
     "graph": "GeoMap",
-    "title": "All NSGSs in Enterprise {{enterpriseName}}",
+    "title": "All NSGs in Enterprise {{enterpriseName}}",
     "description": "Map Graph Visualization",
     "author": "Bharat Mukheja",
     "creationDate": "03/13/2018",
@@ -31,7 +31,7 @@
     },
     "query": {
         "data": "aar-enterprise-geomap",
-        "data1": "aar-enterprise-all-flows"
+        "data1": {"name":"aar-enterprise-all-flows","required":false}
     },
     "listeners": [{
       "redirect": "/dashboards/aarNSG",
