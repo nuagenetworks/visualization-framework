@@ -1,4 +1,4 @@
-import { theme } from "../../theme";
+import { theme } from "../../lib/vis-graphs/theme";
 
 const style = {
     navigationContainer: {
