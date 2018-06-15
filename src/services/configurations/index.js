@@ -4,7 +4,7 @@ import { checkStatus, parseJSON } from "../common";
 
 const config = {
     path: process.env.PUBLIC_URL + "/configurations/",
-    cachingTime: 900000, // (ms) -> default 30s
+    cachingTime: process.env.REACT_APP_CACHING_CONFIG_TIME ? process.env.REACT_APP_CACHING_CONFIG_TIME : 900000 // (ms) -> default 15m
 }
 
 const fetchConfiguration = function (id, configType) {

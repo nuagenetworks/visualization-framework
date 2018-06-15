@@ -3,7 +3,7 @@ import { VSDService } from "../../configs/nuage/vsd/index";
 import { MemoryService } from "../memory";
 
 let config = {
-    timingCache: 30000,
+    timingCache: process.env.REACT_APP_CACHING_QUERY_TIME ? process.env.REACT_APP_CACHING_QUERY_TIME : 30000,
 }
 
 /*

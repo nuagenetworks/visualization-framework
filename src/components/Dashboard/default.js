@@ -1,3 +1,13 @@
+
+const timeLabel = function() {
+
+    let refreshInterval = process.env.REACT_APP_REFRESH_INTERVAL ? process.env.REACT_APP_REFRESH_INTERVAL : 30000;
+    let seconds = Math.floor(refreshInterval / 1000);
+    seconds +=  (seconds > 1) ? " seconds" : " second";
+
+    return seconds;
+}
+
 export const defaultFilterOptions = {
     "Time interval": {
         "parameter": "startTime",
@@ -45,8 +55,8 @@ export const defaultFilterOptions = {
                 "value": "-1",
             },
             {
-                "label": "30 seconds",
-                "value": "30000",
+                "label": timeLabel(),
+                "value": process.env.REACT_APP_REFRESH_INTERVAL,
             }
         ]
     }
