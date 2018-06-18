@@ -1,9 +1,9 @@
 import elasticsearch from "elasticsearch";
+
 import tabify from "./tabify";
 import { ActionKeyStore } from "./redux/actions";
-import { getUsedParameters } from "../../../utils/configurations";
-
-import { parameterizedConfiguration } from "../../../utils/configurations";
+import { parameterizedConfiguration, getUsedParameters } from "../../../utils/configurations";
+import configData from '../../../config'
 
 const ERROR_MESSAGE = "unable to fetch data."
 
@@ -18,9 +18,7 @@ let config = function () {
 
 export const getCurrentConfig = function (state) {
     let currentConfig = config()
-
-    currentConfig.host = state.ES.get(ActionKeyStore.ES_HOST) || process.env.REACT_APP_ELASTICSEARCH_HOST;
-
+    currentConfig.host = (state.ES.get(ActionKeyStore.ES_HOST) || configData.ELASTICSEARCH_HOST)
     return currentConfig;
 }
 
@@ -35,7 +33,7 @@ let ESClient = function (state) {
 }
 
 const fetch = function (queryConfiguration, state) {
-  
+
     if (client == null) { 
         client = ESClient(state) ; 
     }
@@ -43,9 +41,37 @@ const fetch = function (queryConfiguration, state) {
     if (!client)
         return Promise.reject();
 
+
     return new Promise((resolve, reject) => {
-        client.search(queryConfiguration.query).then(function (body) {
-            resolve(body);
+
+        let esRequest,
+            results = {
+                response: [],
+                nextQuery: null
+            };
+
+        //if data comes from scroll (if `scroll: true` in query config)
+        if(queryConfiguration.query && queryConfiguration.query.scroll_id) {
+            esRequest  = client.scroll(queryConfiguration.query)
+        } else {
+            esRequest  = client.search(Object.assign({}, queryConfiguration.query, {scroll: '1m'}))
+        }
+
+        esRequest.then(function (response) {
+            results.response = response
+
+            // if scrolling is enabled then update next query for fetching data via scrolling
+            if (response.hits.hits.length && response._scroll_id) {
+                results.nextQuery = {
+                    query: {
+                        scroll: "1m",
+                        scroll_id: response._scroll_id
+                    }
+                }
+            }
+
+            return resolve(results);
+
         }, function (error) {
             if (!error.body)
                 reject("Unable to connect to ElasticSearch datastore. Please check to ensure ElasticSearch datastore can be reached");

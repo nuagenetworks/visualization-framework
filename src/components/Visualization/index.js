@@ -2,13 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
 import evalExpression from "eval-expression"
-
 import $ from "jquery";
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { connect } from "react-redux";
 import { Link } from "react-router";
 import { push } from "redux-router";
+import { BarLoader } from 'react-spinners';
 
 import FiltersToolBar from "../FiltersToolBar";
 import NextPrevFilter from "../NextPrevFilter";
@@ -125,7 +125,8 @@ class VisualizationView extends React.Component {
             const {
                 configuration,
                 showInDashboard,
-                setPageTitle
+                setPageTitle,
+                context
             } = this.props;
 
             if (!configuration)
@@ -135,22 +136,22 @@ class VisualizationView extends React.Component {
                   scriptName = configuration.script;
 
             if (scriptName) {
-                const { executeScriptIfNeeded, context } = this.props;
+                const { executeScriptIfNeeded } = this.props;
                 executeScriptIfNeeded(scriptName, context);
             }
 
             if (queries) {
-                for(let query in queries) {
-                    if (queries.hasOwnProperty(query)) {
+                for(let key in queries) {
+                    if (queries.hasOwnProperty(key)) {
 
-                        this.props.fetchQueryIfNeeded(queries[query].name).then(() => {
+                        this.props.fetchQueryIfNeeded(queries[key].name).then(() => {
 
-                            const { queryConfigurations, executeQueryIfNeeded, context } = this.props;
-                            if(!queryConfigurations[query]) {
+                            const { queryConfigurations, executeQueryIfNeeded } = this.props;
+                            if(!queryConfigurations[key]) {
                                 return
                             }
 
-                            executeQueryIfNeeded(queryConfigurations[query], context).then(
+                            executeQueryIfNeeded(queryConfigurations[key], context, queries[key].scroll || false).then(
                                 () => {
                                 },
                                 (error) => {
@@ -405,6 +406,7 @@ class VisualizationView extends React.Component {
         let color = Object.assign({}, style.cardTitle, headerColor ? headerColor : {});
 
         return (
+            <div>
             <div style={color}>
                 <div className="pull-right">
                     {this.renderDescriptionIcon()}
@@ -416,6 +418,20 @@ class VisualizationView extends React.Component {
                 </div>
 
             </div>
+            { this.displayLoader() }
+            </div>
+        )
+    }
+
+    // show loader at header if data process through pagination
+    displayLoader() {
+        return (
+          <BarLoader
+            color={style.loader.color}
+            loading={this.props.loader}
+            width={this.state.width}
+            height={3}
+          />
         )
     }
 
@@ -619,7 +635,8 @@ const mapStateToProps = (state, ownProps) => {
             ConfigurationsActionKeyStore.VISUALIZATIONS,
             configurationID,
             ConfigurationsActionKeyStore.ERROR
-        ])
+        ]),
+        loader: false
     };
 
     let vizConfig =  configuration ? contextualize(configuration.toJS(), context) : null;
@@ -689,7 +706,7 @@ const mapStateToProps = (state, ownProps) => {
 
                     const requestID = ServiceManager.getRequestID(props.queryConfigurations[query] || scriptName, context);
 
-                    if(typeof requestID === 'undefined') {
+                    if (typeof requestID === 'undefined') {
                         props.hideGraph = true
                     } else {
 
@@ -698,15 +715,20 @@ const mapStateToProps = (state, ownProps) => {
                             requestID
                         ]);
 
-                        if(!response && queryConfig.required !== false) {
+                        if (!response && queryConfig.required !== false) {
                             props.error = 'Not able to load data'
                         }
+
                         if (response && !response.get(ServiceActionKeyStore.IS_FETCHING)) {
                             let responseJS = response.toJS();
 
-                            if(responseJS.error && queryConfig.required !== false) {
+                            if (response.get(ServiceActionKeyStore.LOADER)) {
+                                props.loader = true
+                            }
+
+                            if (responseJS.error && queryConfig.required !== false) {
                                 props.error = responseJS.error;
-                            } else if(responseJS.results) {
+                            } else if (responseJS.results) {
                                 successResultCount++;
                                 props.response[query] = responseJS.results
                             }
@@ -716,7 +738,7 @@ const mapStateToProps = (state, ownProps) => {
             }
         }
 
-        if(successResultCount === Object.keys(queries).length ) {
+        if (successResultCount === Object.keys(queries).length ) {
             props.isFetching = false
         }
 
@@ -749,8 +771,8 @@ const actionCreators = (dispatch) => ({
         ));
     },
 
-    executeQueryIfNeeded: function(queryConfiguration, context) {
-        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context));
+    executeQueryIfNeeded: function(queryConfiguration, context, scroll) {
+        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context, false, scroll));
     },
 
     executeScriptIfNeeded: function(scriptName, context) {

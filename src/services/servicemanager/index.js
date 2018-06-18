@@ -1,9 +1,10 @@
 import { ElasticSearchService } from "../../configs/nuage/elasticsearch/index";
 import { VSDService } from "../../configs/nuage/vsd/index";
 import { MemoryService } from "../memory";
+import configData from '../../config'
 
 let config = {
-    timingCache: 30000,
+    timingCache: configData.CACHING_QUERY_TIME,
 }
 
 /*

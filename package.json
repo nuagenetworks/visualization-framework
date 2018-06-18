@@ -40,6 +40,7 @@
     "react-redux": "4.4.5",
     "react-router": "2.8.1",
     "react-router-redux": "^4.0.8",
+    "react-spinners": "^0.3.2",
     "react-tap-event-plugin": "2.0.1",
     "react-tooltip": "^3.2.1",
     "reactive-model": "^0.13.0",
