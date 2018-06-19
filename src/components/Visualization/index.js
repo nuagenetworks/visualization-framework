@@ -39,7 +39,7 @@ import {
 
 import { resizeVisualization } from "../../utils/resize"
 import { contextualize } from "../../utils/configurations"
-import columnAccessor from "../../utils/columnAccessor"
+import columnAccessor from "../../lib/vis-graphs/utils/columnAccessor"
 
 import { GraphManager } from "../../lib/vis-graphs/index"
 import { ServiceManager } from "../../services/servicemanager/index";
@@ -571,48 +571,50 @@ const updateFilterOptions = (state, configurations, context, results = []) => {
           }
 
           // append filters fetching from query
-          const {queryKey = null, label = null, value = null} = filterOptions[key].dynamicOptions
-          if (queryKey && value && queryKey) {
+          if (filterOptions[key].dynamicOptions) {
+            const {queryKey = null, label = null, value = null} = filterOptions[key].dynamicOptions
+            if (queryKey && value) {
 
-              // format value and label
-              const formattedValue = columnAccessor({ column: value})
-              const formattedLabel = label ? columnAccessor({ column: label}) : formattedValue
+                // format value and label
+                const formattedValue = columnAccessor({ column: value})
+                const formattedLabel = label ? columnAccessor({ column: label}) : formattedValue
 
-              if(results[queryKey]) {
-                  results[queryKey].forEach(d => {
-                      let dataValue = formattedValue(d, true)
-                      let dataLabel = label ? formattedLabel(d, true) : dataValue
+                if(results[queryKey]) {
+                    results[queryKey].forEach(d => {
+                        let dataValue = formattedValue(d, true)
+                        let dataLabel = label ? formattedLabel(d, true) : dataValue
 
-                      if(dataValue && !filterOptions[key].options.find( datum =>
-                          datum.value === dataValue.toString() || datum.label === dataLabel)) {
-                          // Add filters in existing filter options
-                          filterOptions[key].options.push({
-                              label: dataLabel,
-                              value: dataValue.toString()
-                          })
-                      }
-                  })
-              }
-          }
-
-          // TODO -
-          if(filterOptions[key].type) {
-            if(context && context.enterpriseID) {
-               let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
-
-               if(nsgs && nsgs.length) {
-                 filterOptions[key].options = [];
-                 filterOptions[key].default = nsgs[0].name;
-
-                 nsgs.forEach((nsg) => {
-                   filterOptions[key].options.push({
-                     label: nsg.name,
-                     value: nsg.name
-                   });
-                 });
-               }
+                        if(dataValue && !filterOptions[key].options.find( datum =>
+                            datum.value === dataValue.toString() || datum.label === dataLabel)) {
+                            // Add filters in existing filter options
+                            filterOptions[key].options.push({
+                                label: dataLabel,
+                                value: dataValue.toString()
+                            })
+                        }
+                    })
+                }
             }
-          }
+        }
+
+        // TODO -
+        if(filterOptions[key].type) {
+            if(context && context.enterpriseID) {
+                let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
+
+                if(nsgs && nsgs.length) {
+                    filterOptions[key].options = [];
+                    filterOptions[key].default = nsgs[0].name;
+
+                    nsgs.forEach((nsg) => {
+                    filterOptions[key].options.push({
+                        label: nsg.name,
+                        value: nsg.name
+                    });
+                    });
+                }
+            }
+        }
       }
       return filterOptions || []
     }
