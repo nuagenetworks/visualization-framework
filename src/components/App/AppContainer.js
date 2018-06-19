@@ -10,7 +10,7 @@ import { Card,
          CardText
 } from 'material-ui/Card';
 
-import { theme } from "../../theme";
+import { theme } from "../../lib/vis-graphs/theme";
 
 import { ActionKeyStore as ServiceActionKeyStore } from "../../services/servicemanager/redux/actions";
 import { ServiceManager } from "../../services/servicemanager/index";

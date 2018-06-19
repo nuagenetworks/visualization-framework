@@ -1,4 +1,4 @@
-import parse from "../utils/helpers/json_templates"
+import parse from "../lib/vis-graphs/utils/helpers/json_templates"
 import translator from "../utils/translators"
 
 /**

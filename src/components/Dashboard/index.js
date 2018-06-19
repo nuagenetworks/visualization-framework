@@ -7,8 +7,6 @@ import CircularProgress from "material-ui/CircularProgress";
 import { Responsive, WidthProvider } from "react-grid-layout";
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
-import { Tooltip } from 'redux-tooltip';
-
 import Visualization from "../Visualization";
 import FiltersToolBar from "../FiltersToolBar";
 
@@ -192,7 +190,6 @@ export class DashboardView extends React.Component {
                     {this.renderNavigationBarIfNeeded()}
 
                     <FiltersToolBar filterOptions={filterOptions} />
-                    <Tooltip className='tooltip-container'/>
                     <div style={style.gridContainer}>
                         <ResponsiveReactGridLayout
                             rowHeight={10}

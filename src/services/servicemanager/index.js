@@ -46,14 +46,21 @@ const getRequestID = function (queryConfiguration, context) {
 
     // TODO: Temporary - Replace this part in the middleware
     // Note: It should actually be its own service !
+    if(!queryConfiguration)
+        return
+
     const isScript = typeof(queryConfiguration) === "string";
 
     if (isScript)
         return queryConfiguration + "[" + JSON.stringify(context) + "]";
     // End TODO
 
-    const service = getService(queryConfiguration.service)
-    return service.getRequestID(queryConfiguration, context);
+    try {
+        const service = getService(queryConfiguration.service)
+        return service.getRequestID(queryConfiguration, context)
+    } catch (error) {
+        return
+    }
 }
 
 /*
