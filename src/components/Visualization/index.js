@@ -33,11 +33,15 @@ import {
     ActionKeyStore as InterfaceActionKeyStore,
 } from "../App/redux/actions";
 
+import {
+    Actions as VFSActions,
+} from '../../features/redux/actions'
+
 import { resizeVisualization } from "../../utils/resize"
 import { contextualize } from "../../utils/configurations"
 import columnAccessor from "../../utils/columnAccessor"
 
-import { GraphManager } from "../Graphs/index";
+import { GraphManager } from "../../lib/vis-graphs/index"
 import { ServiceManager } from "../../services/servicemanager/index";
 
 import style from "./styles"
@@ -54,6 +58,8 @@ class VisualizationView extends React.Component {
             showDescription: false,
             showSharingOptions: false
         }
+
+        this.handleSelect = this.handleSelect.bind(this)
     }
 
     componentWillMount() {
@@ -92,11 +98,7 @@ class VisualizationView extends React.Component {
 
     componentWillReceiveProps(nextProps) {
 
-        //If tooltip is not moving then we will fetch the data again, else there is no need for it
-        if(nextProps.tooltip.default.origin === null
-        || JSON.stringify(nextProps.tooltip.default) === JSON.stringify(this.props.tooltip.default)) {
-            this.initialize(nextProps.id)
-        }
+        this.initialize(nextProps.id)
     }
 
     componentDidUpdate() {
@@ -269,6 +271,16 @@ class VisualizationView extends React.Component {
         )
     }
 
+    handleSelect({rows, matchingRows}) {
+        const {
+            selectRow,
+            location,
+            id
+        } = this.props
+
+        selectRow(id, rows, matchingRows, location.query, location.pathname)
+    }
+
     renderVisualization() {
         const {
             configuration,
@@ -285,9 +297,11 @@ class VisualizationView extends React.Component {
         }
 
         let graphHeight = d3.select(`#filter_${id}`).node() ? this.state.height - d3.select(`#filter_${id}`).node().getBoundingClientRect().height : this.state.height;
+
         return (
             <GraphComponent
               {...response}
+              onSelect={this.handleSelect}
               context={this.props.orgContext}
               configuration={configuration}
               width={this.state.width}
@@ -631,9 +645,9 @@ const mapStateToProps = (state, ownProps) => {
         id: configurationID,
         context: context,
         orgContext: orgContext,
+        location: state.router.location,
         configuration: configuration ? contextualize(configuration.toJS(), context) : null,
         headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
-        tooltip: state.tooltip,
         isFetching: true,
         hideGraph: false,
         error: state.configurations.getIn([
@@ -685,14 +699,19 @@ const mapStateToProps = (state, ownProps) => {
                     queryConfig.name
                 ]);
 
-                if (queryConfiguration && !queryConfiguration.get(
-                    ConfigurationsActionKeyStore.IS_FETCHING
-                )) {
+                if (queryConfiguration
+                    && queryConfiguration.get(ConfigurationsActionKeyStore.ERROR)
+                ) {
+                    props.error = 'Not able to load data'
+                }
+
+                if (queryConfiguration
+                    && !queryConfiguration.get(ConfigurationsActionKeyStore.IS_FETCHING)
+                ) {
                     queryConfiguration = queryConfiguration.get(
                         ConfigurationsActionKeyStore.DATA
                     );
                     props.queryConfigurations[query] = queryConfiguration ? queryConfiguration.toJS() : null;
-
                 }
 
                 const scriptName = configuration.get("script");
@@ -714,14 +733,14 @@ const mapStateToProps = (state, ownProps) => {
                         if(!response && queryConfig.required !== false) {
                             props.error = 'Not able to load data'
                         }
-
                         if (response && !response.get(ServiceActionKeyStore.IS_FETCHING)) {
                             let responseJS = response.toJS();
+
                             if(responseJS.error && queryConfig.required !== false) {
                                 props.error = responseJS.error;
                             } else if(responseJS.results) {
                                 successResultCount++;
-                                props.response[query] =responseJS.results
+                                props.response[query] = responseJS.results
                             }
                         }
                     }
@@ -770,6 +789,10 @@ const actionCreators = (dispatch) => ({
 
     executeScriptIfNeeded: function(scriptName, context) {
         return dispatch(ServiceActions.fetchIfNeeded(scriptName, context));
+    },
+
+    selectRow: function(vssID, row, matchingRows, currentQueryParams, currentPath) {
+        return dispatch(VFSActions.selectRow(vssID, row, matchingRows, currentQueryParams, currentPath))
     }
 
  });

@@ -37,16 +37,6 @@ const tabButton = {
     lineHeight: '25px',
 };
 
-const tooltip = {
-    transition: 'opacity .2s',
-    position: 'absolute',
-    transform: 'translateY(-100%)',
-    fontSize: 10,
-    background: backgroundColor,
-    padding: '2px 5px',
-    border: `1px solid ${gray}`,
-};
-
 const fieldWrapper = {
     display: 'flex',
     alignItems: 'center',
@@ -170,15 +160,6 @@ export default {
 
     modalActions: {
         padding: 0,
-    },
-
-    tooltipOpen: {
-        ...tooltip,
-        opacity: 1,
-    },
-    tooltipClosed: {
-        ...tooltip,
-        opacity: 0,
     },
 
     snackbarBackground: {
