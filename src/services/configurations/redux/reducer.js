@@ -21,13 +21,14 @@ function didReceiveResponse(state, id, configType, data) {
     return state
       .setIn([configType, id, ActionKeyStore.IS_FETCHING], false)
       .setIn([configType, id, ActionKeyStore.DATA], fromJS(data))
-      .setIn([configType, id, ActionKeyStore.EXPIRATION_DATE], expirationDate);
+      .setIn([configType, id, ActionKeyStore.EXPIRATION_DATE], expirationDate)
+      .setIn([configType, id, ActionKeyStore.ERROR], false)
 }
 
 function didReceiveError(state, id, configType, error) {
     return state
         .setIn([configType, id, ActionKeyStore.IS_FETCHING], false)
-        .setIn([configType, id, ActionKeyStore.DATA], fromJS([]))
+        .setIn([configType, id, ActionKeyStore.DATA], null)
         .setIn([configType, id, ActionKeyStore.ERROR], fromJS(error));
 }
 
