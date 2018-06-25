@@ -42,8 +42,8 @@ import { contextualize } from "../../utils/configurations"
 
 import { GraphManager } from "../../lib/vis-graphs/index"
 import { ServiceManager } from "../../services/servicemanager/index";
-
-import style from "./styles"
+import dataConfig from "../../config";
+import style from "./styles";
 
 import FontAwesome from "react-fontawesome";
 
@@ -147,11 +147,27 @@ class VisualizationView extends React.Component {
                         this.props.fetchQueryIfNeeded(queries[key].name).then(() => {
 
                             const { queryConfigurations, executeQueryIfNeeded } = this.props;
-                            if(!queryConfigurations[key]) {
+
+                            let queryConfiguration = queryConfigurations[key]
+
+                            if(!queryConfiguration) {
                                 return
                             }
 
-                            executeQueryIfNeeded(queryConfigurations[key], context, queries[key].scroll || false).then(
+                            /**
+                             * if scroll is enable then fetch only listed columns and increase per page size to 10000
+                             * from ES to make query execution faster
+                             */
+                            if(queries[key].scroll &&
+                                configuration.data &&
+                                configuration.data.columns &&
+                                queryConfiguration.query
+                            ) {
+                                queryConfiguration.query.body['_source'] = this.getColumns(configuration)
+                                queryConfiguration.query.body['size']    = dataConfig.DATA_PER_PAGE_LIMIT
+                            }
+
+                            executeQueryIfNeeded(queryConfiguration, context, queries[key].scroll || false).then(
                                 () => {
                                 },
                                 (error) => {
@@ -247,6 +263,11 @@ class VisualizationView extends React.Component {
                 });
             }
         });
+    }
+
+    // return the column array from configuration
+    getColumns(configuration) {
+        return configuration.data.columns.map( d => d.column)
     }
 
 
