@@ -6,9 +6,10 @@ import { DatasetService } from "../dataset";
 import "whatwg-fetch";
 import { checkStatus, parseJSON } from "../common";
 
+var os = require("os");
 let config = {
     timingCache: 30000,
-    api: process.env.REACT_APP_API_URL || "http://localhost:8010/middleware/api/",
+    api: process.env.REACT_APP_API_URL || "https://" + os.hostname() + ":8010/middleware/api/",
 }
 
 /*
