@@ -49,7 +49,7 @@
                         },
                         "source": {
                             "terms": {
-                                "field": "{{source_field:nuage_metadata.src-pgmem}}",
+                                "field": "{{source_field:nuage_metadata.src-pgmem.name}}",
                                 "size": 10,
                                 "order": {
                                     "SumOf": "desc"
@@ -65,7 +65,7 @@
                         },
                         "destination": {
                             "terms": {
-                                "field": "{{destination_field:nuage_metadata.dst-pgmem}}",
+                                "field": "{{destination_field:nuage_metadata.dst-pgmem.name}}",
                                 "size": 10,
                                 "order": {
                                     "SumOf": "desc"
