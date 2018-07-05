@@ -196,10 +196,32 @@ Here is the list of options:
             "parameter": "flagtype",
             "default": "SYN",
             "dynamicOptions": { // Dynamic filter option
-                "queryKey": "context", // query
-                "label": "vnf", // label of the filter
-                "value": "timestamp" // value of the filter
+                "queryKey": "{{context}}", // query
+                "label": "{{vnf}}", // label of the filter
+                "value": "{{timestamp}}", // value of the filter
+                "forceOptions": { // optional
+                    "param": "{{KEY}}" // KEY is the column name (from data) used to set `param` property which is static
+                }
             },
+            "options": [
+                {
+                    "label": "SYN",
+                    "value": "SYN",
+                    "default": true
+                },
+                {
+                    "label": "SYN-ACK",
+                    "value": "SYN-ACK"
+                },
+                {
+                    "label": "SYN-ACK",
+                    "onChange": "Categories" // in onChange event it will show another filter "Categories" and "parameter" property must be same for both filters i.e Categories & Flag-Type
+                }
+            ]
+        },
+        "Categories": {
+            "parameter": "flagtype",
+            "default": "SYN",
             "options": [
                 {
                     "label": "SYN",

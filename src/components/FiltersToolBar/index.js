@@ -16,39 +16,78 @@ import style from "./styles";
 
 export class FiltersToolBarView extends React.Component {
 
-    getFilteredVisualizationId() {
-      const {
-          visualizationId
-      } = this.props;
+    constructor(props) {
+        super(props);
+        this.state = {
+            filterOptions: []
+        }
 
-      return visualizationId ? visualizationId.replace(/-/g, '') : '';
+        this.onTouchTap = this.onTouchTap.bind(this)
     }
 
-    updateForceOptionContext(forceOptions, append) {
-      const {
-          context
-      } = this.props;
+    componentWillMount() {
+        this.setFilterOptions(this.props)
+    }
 
-      let forceContext = {};
-      let filteredID = append ? this.getFilteredVisualizationId() : '';
+    componentWillReceiveProps(nextProps) {
+        this.setFilterOptions(nextProps)
+    }
 
-      for(let key in forceOptions) {
-        if(forceOptions.hasOwnProperty(key) && (!context[key] || context[key] !== forceOptions[key])) {
-            forceContext[`${filteredID}${key}`] = forceOptions[key];
-        }
-      }
+    setFilterOptions(props) {
+        let filterOptions = {};
+        let childs = [];
 
-      return forceContext;
+        Object.keys(props.filterOptions).forEach((name, i) => {
+            let filter = {...props.filterOptions[name], options: [], childs: [], display: true, child: false, forceOptions: null};
+
+            props.filterOptions[name].options.forEach((option) => {
+                if (option.onChange) {
+                    filter.childs.push(option.onChange);
+                    childs.push(option.onChange);
+
+                    //Changing the value to match the label to make it preselected.
+                    filter.options.push({...option, value: option.onChange})
+                } else {
+                    filter.options.push({...option})
+                }
+
+                // update force options in top level for default value
+                if (option.forceOptions && filter.default === option.value)
+                    filter.forceOptions = option.forceOptions
+            })
+
+            filterOptions[name] = filter;
+        })
+
+        // Setting as Child and checking whether to display or not
+        childs.forEach(child => {
+            if(!filterOptions[child]) {
+                return;
+            }
+
+            filterOptions[child].child = true;
+            const contextName = `child_${filterOptions[child].parameter}`;
+            if(!props.context[contextName] || props.context[contextName] !== child) {
+                filterOptions[child].display = false;
+            }
+        });
+
+        // Cheching whether to display childs or not.
+        this.setState({
+            filterOptions
+        })
     }
 
     componentDidMount() {
         const {
             context,
-            filterOptions,
             filterContext,
             visualizationId,
             saveFilterContext
         } = this.props;
+
+        const { filterOptions } = this.state
+
 
         let configContexts = {};
         let filteredID = this.getFilteredVisualizationId();
@@ -60,8 +99,7 @@ export class FiltersToolBarView extends React.Component {
                     currentValue  = context[paramName],
                     defaultOption = []
 
-
-                if (configOptions.options) {
+                if (configOptions.options && configOptions.display) {
                     let value = currentValue ? currentValue : configOptions.default;
                     // check value present in config. If not, then set value from default option
                     for(let i = 0; i < configOptions.options.length; i++) {
@@ -100,70 +138,142 @@ export class FiltersToolBarView extends React.Component {
         }
     }
 
-
-
-    render() {
+    getFilteredVisualizationId() {
         const {
-            filterOptions,
+            visualizationId
+        } = this.props;
+
+        return visualizationId ? visualizationId.replace(/-/g, '') : '';
+      }
+
+      updateForceOptionContext(forceOptions, append) {
+        const {
+            context
+        } = this.props;
+
+        let forceContext = {};
+        let filteredID = append ? this.getFilteredVisualizationId() : '';
+
+        for(let key in forceOptions) {
+          if(forceOptions.hasOwnProperty(key) && (!context[key] || context[key] !== forceOptions[key])) {
+              forceContext[`${filteredID}${key}`] = forceOptions[key];
+          }
+        }
+
+        return forceContext;
+    }
+
+    onTouchTap(queryParams) {
+        const {
+            saveFilterContext,
+            context,
+            goTo
+        } = this.props;
+
+        saveFilterContext(queryParams);
+        goTo(window.location.pathname, Object.assign({}, context, queryParams));
+    }
+
+    renderDropdownContent() {
+        const {
             context,
             visualizationId
         } = this.props
 
-        let filteredID = this.getFilteredVisualizationId();
+        const { filterOptions } = this.state
+
+        let filteredID = this.getFilteredVisualizationId(),
+            content = []
 
         if (!filterOptions || Object.keys(filterOptions).lengh === 0)
-            return (
-                <div></div>
-            );
+            return (<div></div>);
+
+
+        Object.keys(filterOptions).forEach((name, i) => {
+
+            let configOptions = filterOptions[name],
+                paramName = visualizationId && configOptions.append ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
+                currentValue = !configOptions.child && context[`child_${paramName}`] || context[paramName] || configOptions.default;
+
+            // Hide all dependent child filters or show them if they are present in context
+            if (configOptions.display) {
+                content.push(
+                    <li
+                        key={i}
+                        style={style.listItem}>
+                        <label style={style.label} htmlFor={name}>
+                            {name}
+                        </label>
+                        <DropDownMenu
+                            name={name}
+                            value={currentValue}
+                            style={style.dropdownMenu}
+                            disabled={configOptions.disabled}
+                        >
+
+                            {configOptions.options.map((option, index) => {
+                                let queryParams  = null,
+                                    forceOptions = null,
+                                    onChange     = option.onChange || null
+
+
+                                // if option contain onChange then set default value and forceOptions for child filter
+                                if(onChange && filterOptions[onChange]) {
+                                    queryParams = { [paramName]: filterOptions[onChange].default };
+                                    forceOptions = filterOptions[onChange].forceOptions;
+                                } else {
+                                    queryParams = { [paramName]: option.value };
+                                    forceOptions = option.forceOptions;
+                                }
+
+                                if (forceOptions)
+                                    queryParams = Object.assign({}, queryParams, this.updateForceOptionContext(forceOptions, configOptions.append));
+
+                                let childParams = {}
+
+                                if (!configOptions.child) {
+                                    /**
+                                     * check if option have onChange property then update onchange property in context
+                                     * to show dependent filter (mention in onChange)
+                                     */
+                                    if (onChange && filterOptions[onChange]) {
+                                        childParams[`child_${filterOptions[onChange].parameter}`] = onChange
+                                    } else {
+                                        configOptions.childs.forEach(name => {
+                                            if (filterOptions[name])
+                                                childParams[`child_${filterOptions[name].parameter}`] = ''
+                                        })
+                                    }
+                                }
+
+                                queryParams = Object.assign({}, queryParams, childParams);
+
+                                return (
+                                    <MenuItem
+                                        key={index}
+                                        value={option.value}
+                                        primaryText={option.label}
+                                        style={style.menuItem}
+                                        disabled={option.disabled}
+                                        onTouchTap={() => this.onTouchTap(queryParams)}
+                                    />
+                                )
+                            })}
+                        </DropDownMenu>
+
+                    </li>
+                )
+            }
+        })
+
+        return content;
+    }
+
+    render() {
         return (
             <div className="text-right">
                 <ul className="list-inline" style={style.list}>
-                {
-
-                    Object.keys(filterOptions).map((name, i) => {
-
-                        let configOptions = filterOptions[name],
-                            paramName = visualizationId && configOptions.append  ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
-                            currentValue  = context[paramName] || configOptions.default;
-                        return (
-                            <li
-                                key={i}
-                                style={style.listItem}>
-                                <label style={style.label} htmlFor={name}>
-                                    {name}
-                                </label>
-                                <DropDownMenu
-                                    name={name}
-                                    value={currentValue}
-                                    style={style.dropdownMenu}
-                                    disabled={configOptions.disabled}
-                                    >
-
-                                    {configOptions.options.map((option, index) => {
-
-                                        let queryParams = {[paramName]: option.value};
-
-                                        let forceOptions = option.forceOptions;
-
-                                        if (forceOptions)
-                                            queryParams = Object.assign({}, queryParams, this.updateForceOptionContext(forceOptions, configOptions.append));
-
-                                        return (
-                                            <MenuItem
-                                                key={index}
-                                                value={option.value}
-                                                primaryText={option.label}
-                                                style={style.menuItem}
-                                                disabled={option.disabled}
-                                                onTouchTap={() => { this.props.saveFilterContext(queryParams); this.props.goTo(window.location.pathname, Object.assign({}, context, queryParams));}}
-                                                />
-                                        )
-                                    })}
-                                </DropDownMenu>
-
-                            </li>
-                        )
-                    })}
+                    { this.renderDropdownContent() }
                 </ul>
             </div>
         )

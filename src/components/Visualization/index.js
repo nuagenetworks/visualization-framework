@@ -569,15 +569,23 @@ const updateFilterOptions = (state, configurations, context, results = []) => {
           if (!filterOptions[key].options) {
               filterOptions[key].options = []
           }
-
           // append filters fetching from query
           if (filterOptions[key].dynamicOptions) {
-            const {queryKey = null, label = null, value = null} = filterOptions[key].dynamicOptions
+            const {queryKey = null, label = null, value = null, forceOptions = null} = filterOptions[key].dynamicOptions
             if (queryKey && value) {
 
                 // format value and label
                 const formattedValue = columnAccessor({ column: value})
                 const formattedLabel = label ? columnAccessor({ column: label}) : formattedValue
+                let forceOptionsConfig = {}
+
+                if (forceOptions) {
+                    for (let key in forceOptions) {
+                        if (forceOptions.hasOwnProperty(key)) {
+                            forceOptionsConfig[key] = columnAccessor({ column: forceOptions[key]})
+                        }
+                    }
+                }
 
                 if(results[queryKey]) {
                     results[queryKey].forEach(d => {
@@ -586,17 +594,28 @@ const updateFilterOptions = (state, configurations, context, results = []) => {
 
                         if(dataValue && !filterOptions[key].options.find( datum =>
                             datum.value === dataValue.toString() || datum.label === dataLabel)) {
+
+                            let forceOptionsData = {}
+                            // if forceOptions present then calculate forceOptions values and append it in options
+                            if (forceOptionsConfig) {
+                                for (let key in forceOptionsConfig) {
+                                    if (forceOptionsConfig.hasOwnProperty(key)) {
+                                        forceOptionsData[key] = forceOptionsConfig[key](d, true) || ''
+                                    }
+                                }
+                            }
                             // Add filters in existing filter options
                             filterOptions[key].options.push({
                                 label: dataLabel,
-                                value: dataValue.toString()
+                                value: dataValue.toString(),
+                                forceOptions: forceOptionsData
                             })
                         }
                     })
                 }
             }
         }
-
+        console.error("sssssssssss", filterOptions[key])
         // TODO -
         if(filterOptions[key].type) {
             if(context && context.enterpriseID) {

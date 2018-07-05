@@ -48,12 +48,10 @@
                 },
                 {
                     "label": "PG-Category",
-                    "AddedFilterOptions": "Categories"
+                    "onChange": "Categories"
                 }
             ]
-        }
-    },
-    "filterOptions": {
+        },
         "Categories": {
             "parameter": "source_field",
             "default": "nuage_metadata.src-pgmem.category",
