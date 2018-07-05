@@ -615,7 +615,7 @@ const updateFilterOptions = (state, configurations, context, results = []) => {
                 }
             }
         }
-        console.error("sssssssssss", filterOptions[key])
+
         // TODO -
         if(filterOptions[key].type) {
             if(context && context.enterpriseID) {
