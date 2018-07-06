@@ -34,51 +34,60 @@ export class FiltersToolBarView extends React.Component {
     }
 
     setFilterOptions(props) {
-        let filterOptions = {};
+        let { context, filterOptions } = props;
+
+        let updatedFilterOptions = {};
         let childs = [];
+        let selectedChilds = [];
 
-        Object.keys(props.filterOptions).forEach((name, i) => {
-            let filter = {...props.filterOptions[name], options: [], childs: [], display: true, child: false, forceOptions: null};
+        Object.keys(filterOptions).forEach((name, i) => {
+            let filter = {...filterOptions[name], options: [], display: true, child: false, forceOptions: []};
 
-            props.filterOptions[name].options.forEach((option) => {
-                if (option.onChange) {
-                    filter.childs.push(option.onChange);
-                    childs.push(option.onChange);
-
-                    //Changing the value to match the label to make it preselected.
-                    filter.options.push({...option, value: option.onChange})
-                } else {
-                    filter.options.push({...option})
+            filterOptions[name].options.forEach((option) => {
+                const { onChange, forceOptions } = option
+                if (onChange) {
+                    // add all available onChange options in the root of the object as an array
+                    childs.push(onChange);
+                    // check whether any child filter is selected or not
+                    if (context[filterOptions[name].parameter] == option.value) {
+                        selectedChilds.push(onChange);
+                    }
+                }
+                // add all available forceOptions properties in the root of the object as an array
+                if(forceOptions) {
+                    for (let key in forceOptions) {
+                        if(forceOptions.hasOwnProperty(key) && !filter.forceOptions.includes(key))
+                            filter.forceOptions.push(key)
+                    }
                 }
 
-                // update force options in top level for default value
-                if (option.forceOptions && filter.default === option.value)
-                    filter.forceOptions = option.forceOptions
+                filter.options.push({...option})
             })
 
-            filterOptions[name] = filter;
+            updatedFilterOptions[name] = filter;
         })
 
-        // Setting as Child and checking whether to display or not
+        // if any child filter is not pre-selected then make it hidden
         childs.forEach(child => {
-            if(!filterOptions[child]) {
-                return;
-            }
-
-            filterOptions[child].child = true;
-            const contextName = `child_${filterOptions[child].parameter}`;
-            if(!props.context[contextName] || props.context[contextName] !== child) {
-                filterOptions[child].display = false;
+            if(!selectedChilds.includes(child)) {
+                updatedFilterOptions[child].display = false;
             }
         });
 
         // Cheching whether to display childs or not.
         this.setState({
-            filterOptions
+            filterOptions: updatedFilterOptions
         })
+    }
+    componentDidUpdate() {
+        this.updateContext();
     }
 
     componentDidMount() {
+        this.updateContext();
+    }
+
+    updateContext() {
         const {
             context,
             filterContext,
@@ -125,12 +134,23 @@ export class FiltersToolBarView extends React.Component {
                             configContexts = Object.assign({}, configContexts, this.updateForceOptionContext(defaultOption[0].forceOptions, configOptions.append));
                         }
                     }
+                } else if (context[filterOptions[name].parameter]) {
+                    // reset all params from context if they are not selected
+                    configContexts[filterOptions[name].parameter] = '';
+                    filterOptions[name].forceOptions.forEach( d => {
+                        configContexts[d] = ''
+                    })
                 }
             }
         };
 
-        if(Object.keys(configContexts).length !== 0) {
+        // remove similar properties from new context (configContexts)
+        for (let name in configContexts) {
+            if(configContexts[name] === context[name])
+                delete configContexts[name];
+        };
 
+        if(Object.keys(configContexts).length !== 0) {
             if(!Object.keys(filterContext).length) {
                 saveFilterContext(configContexts)
             }
@@ -193,7 +213,7 @@ export class FiltersToolBarView extends React.Component {
 
             let configOptions = filterOptions[name],
                 paramName = visualizationId && configOptions.append ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
-                currentValue = !configOptions.child && context[`child_${paramName}`] || context[paramName] || configOptions.default;
+                currentValue = context[paramName] || configOptions.default;
 
             // Hide all dependent child filters or show them if they are present in context
             if (configOptions.display) {
@@ -212,41 +232,14 @@ export class FiltersToolBarView extends React.Component {
                         >
 
                             {configOptions.options.map((option, index) => {
-                                let queryParams  = null,
-                                    forceOptions = null,
+                                let queryParams  = { [paramName]: option.value },
+                                    forceOptions = option.forceOptions,
                                     onChange     = option.onChange || null
-
-
-                                // if option contain onChange then set default value and forceOptions for child filter
-                                if(onChange && filterOptions[onChange]) {
-                                    queryParams = { [paramName]: filterOptions[onChange].default };
-                                    forceOptions = filterOptions[onChange].forceOptions;
-                                } else {
-                                    queryParams = { [paramName]: option.value };
-                                    forceOptions = option.forceOptions;
-                                }
 
                                 if (forceOptions)
                                     queryParams = Object.assign({}, queryParams, this.updateForceOptionContext(forceOptions, configOptions.append));
 
-                                let childParams = {}
-
-                                if (!configOptions.child) {
-                                    /**
-                                     * check if option have onChange property then update onchange property in context
-                                     * to show dependent filter (mention in onChange)
-                                     */
-                                    if (onChange && filterOptions[onChange]) {
-                                        childParams[`child_${filterOptions[onChange].parameter}`] = onChange
-                                    } else {
-                                        configOptions.childs.forEach(name => {
-                                            if (filterOptions[name])
-                                                childParams[`child_${filterOptions[name].parameter}`] = ''
-                                        })
-                                    }
-                                }
-
-                                queryParams = Object.assign({}, queryParams, childParams);
+                                queryParams = Object.assign({}, queryParams);
 
                                 return (
                                     <MenuItem

@@ -62,5 +62,23 @@
     "query": {
         "data": "vss-domain-flow",
         "context": "vss-domain-flow-pg-categories"
+    },
+    "replace": {
+        "xyz": {
+            "context": "category_field",
+            "query": {
+                "term": {
+                    "{{domainType:nuage_metadata.domainName}}":"{{domainName:chord_domain}}"
+                }
+            }
+        },
+        "lmn": {
+            "context": "category_field",
+            "query": {
+                "term": {
+                    "{{domainType:nuage_metadata.domainName}}":"{{domainName:chord_domain}}"
+                }
+            }
+        }
     }
 }

@@ -1,7 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
-import evalExpression from "eval-expression"
+import evalExpression from "eval-expression";
+
+import objectPath from "object-path";
 
 import $ from "jquery";
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -639,6 +641,59 @@ const updateFilterOptions = (state, configurations, context, results = []) => {
     }
 }
 
+const replaceQuery = (replace, query, context) => {
+    let key = 'replace';
+
+    let config = findPropertyPath(query, key);
+
+    if(!config)
+      return;
+
+    // Hold the keys to insert
+    let indexKeys = [];
+    let insertString;
+
+    while(config) {
+        let replaceIndex = config.lastIndexOf('.', config.length - (key.length + 1));
+        let replaceStr = config.substr(0, replaceIndex);
+
+        let insertPosition = config.lastIndexOf('.', config.length - (key.length + 2));
+        insertString = config.substr(0, insertPosition);
+
+        indexKeys.push(objectPath.get(query, config));
+        objectPath.del(query, replaceStr);
+
+        config = findPropertyPath(query, "replace")
+    }
+
+    if(!replace)
+      return;
+
+    indexKeys.forEach(repKey => {
+        let replaceData = replace[repKey]
+        if(replaceData && context[replaceData.context]) {
+            for(let key in replaceData.query) {
+                objectPath.push(query, insertString, {
+                    [key]: replaceData.query[key]
+                });
+            }
+        }
+    })
+}
+
+function findPropertyPath(obj, name) {
+    for (var prop in obj) {
+        if (prop == name) {
+            return name;
+        } else if (typeof obj[prop] == "object") {
+            var result = findPropertyPath(obj[prop], name);
+            if (result) { return prop + '.' + result; }
+        }
+    }
+
+    return null;
+}
+
 const mapStateToProps = (state, ownProps) => {
     //Fetching Configurations of Visualizations
 
@@ -661,6 +716,8 @@ const mapStateToProps = (state, ownProps) => {
             context[filteredKey] = orgContext[key];
       }
     }
+
+    const realConfiguation = configuration && configuration.toJS();
 
     const props = {
         id: configurationID,
@@ -777,7 +834,10 @@ const mapStateToProps = (state, ownProps) => {
 
     }
 
-    return props;
+    if(realConfiguation && props.queryConfigurations)
+        replaceQuery(realConfiguation.replace, props.queryConfigurations, props.context);
+
+    return props
 };
 
 const actionCreators = (dispatch) => ({

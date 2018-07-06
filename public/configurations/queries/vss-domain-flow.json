@@ -28,6 +28,12 @@
                             "term": {
                                 "{{domainType:nuage_metadata.domainName}}":"{{domainName:chord_domain}}"
                             }
+                        },
+                        {
+                            "replace": "xyz"
+                        },
+                        {
+                            "replace": "lmn"
                         }
                     ]
                 }
