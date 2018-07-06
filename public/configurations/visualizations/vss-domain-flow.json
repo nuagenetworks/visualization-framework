@@ -64,7 +64,7 @@
         "context": "vss-domain-flow-pg-categories"
     },
     "replace": {
-        "src-pg-membership": {
+        "optional-src-pg-categories" : {
             "context": "category_field",
             "query": {
                 "term": {
@@ -72,7 +72,7 @@
                 }
             }
         },
-        "dst-pg-membership": {
+        "optional-dst-pg-categories" : {
             "context": "category_field",
             "query": {
                 "term": {
