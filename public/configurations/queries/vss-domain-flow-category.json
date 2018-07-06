@@ -1,6 +1,6 @@
 {
-    "id":"vss-domain-flow",
-    "title":"Flows per Domain",
+    "id":"vss-domain-flow-category",
+    "title":"Flows per Domain per category",
     "service":"elasticsearch",
     "query":{
         "index":"{{index:nuage_flow}}",
@@ -30,11 +30,14 @@
                             }
                         },
                         {
-                            "replace": "src-pg-membership"
+                            "term": {
+                                "nuage_metadata.src-pgmem.category":"{{category_field}}"
+                            }
                         },
                         {
-
-                            "replace": "dst-pg-membership"
+                            "term": {
+                                "nuage_metadata.dst-pgmem.category":"{{category_field}}"
+                            }
                         }
                     ]
                 }
@@ -56,7 +59,7 @@
                         },
                         "source": {
                             "terms": {
-                                "field": "{{source_field:nuage_metadata.src-pgmem.name}}",
+                                "field": "nuage_metadata.src-pgmem.name",
                                 "size": 10,
                                 "order": {
                                     "SumOf": "desc"
@@ -72,7 +75,7 @@
                         },
                         "destination": {
                             "terms": {
-                                "field": "{{destination_field:nuage_metadata.dst-pgmem.name}}",
+                                "field": "nuage_metadata.dst-pgmem.name",
                                 "size": 10,
                                 "order": {
                                     "SumOf": "desc"

@@ -64,19 +64,19 @@
         "context": "vss-domain-flow-pg-categories"
     },
     "replace": {
-        "xyz": {
+        "src-pg-membership": {
             "context": "category_field",
             "query": {
                 "term": {
-                    "{{domainType:nuage_metadata.domainName}}":"{{domainName:chord_domain}}"
+                    "nuage_metadata.src-pgmem.category":"{{category_field}}"
                 }
             }
         },
-        "lmn": {
+        "dst-pg-membership": {
             "context": "category_field",
             "query": {
                 "term": {
-                    "{{domainType:nuage_metadata.domainName}}":"{{domainName:chord_domain}}"
+                    "nuage_metadata.dst-pgmem.category":"{{category_field}}"
                 }
             }
         }
