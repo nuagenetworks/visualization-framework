@@ -23,7 +23,7 @@ export default function tabify(response) {
         throw new Error("Tabify() invoked with invalid result set. Result set must have either 'aggregations' or 'hits' defined.");
     }
 
-    table = flattenArray(table)
+    table = flatArray(table)
 
     if (process.env.NODE_ENV === "development") {
         console.log("Results from tabify (first 3 rows only):");
@@ -38,39 +38,50 @@ export default function tabify(response) {
     return table;
 }
 
-function flattenArray(table) {
-    if(!table.length)
-        return [];
+function flatArray(data) {
+  let finalData = [];
+  data.forEach(item => {
+      let result = cartesianProduct(item);
+      finalData = [...finalData, ...result];
+  })
 
-    let flattenTable = []
+  return finalData;
+}
 
-    //Extracting Array Keys
-    let arrKeys = Object.keys(table[0]).filter(key => {
-        return Array.isArray(table[0][key])
-    })
 
-    if(!arrKeys.length)
-        return table
+function cartesianProduct(data) {
+    let final = [];
+    let arrayExists = false;
 
-    table.forEach(o => {
-        //Creating base object to be used by the array keys for generating the object
-        //by resetting all array based key to {}
-        let baseObj = Object.assign({}, o)
-        arrKeys.forEach(key => baseObj[key] = {})
-
-        //Generating the Objects and pushing to flattenTable
-        arrKeys.forEach(key => {
-            if(o[key] && Array.isArray(o[key])) {
-                o[key].forEach(e => {
-                    flattenTable.push(Object.assign({}, baseObj, {
-                        [key]: e
-                    }))
-                })
+    let keys = Object.keys(data);
+    for(let i = 0; i < keys.length; i++) {
+        if(Array.isArray(data[keys[i]])) {
+            data[keys[i]].forEach(item => {
+                final.push({...data, [keys[i]]: item})
+            });
+            arrayExists = true;
+            break;
+        } else if (typeof data[keys[i]] === 'object') {
+            let products = cartesianProduct(data[keys[i]]);
+            if(products.length > 1) {
+                products.forEach(item => {
+                    final.push({...data, [keys[i]]: item})
+                });
+                arrayExists = true;
+                break;
+            } else if (products.length === 1) {
+                data[keys[i]] = products[0];
             }
-        })
-    })
+        }
+    };
 
-    return flattenTable
+    if(arrayExists) {
+        final = flatArray(final);
+    } else {
+        final.push(data);
+    }
+
+    return final;
 }
 
 function collectBucket(node, stack=[]) {
