@@ -9,31 +9,58 @@
             "size":0,
             "query":{
                 "bool":{
-                    "must":[
+                    "should": [
                         {
-                            "range":{
-                                "timestamp":{
-                                    "gte":"{{startTime:now-24h}}",
-                                    "lte":"{{endTime:now}}",
-                                    "format":"epoch_millis"
-                                }
+                            "bool": {
+                                "must":[
+                                    {
+                                        "range":{
+                                            "timestamp":{
+                                                "gte":"{{startTime:now-24h}}",
+                                                "lte":"{{endTime:now}}",
+                                                "format":"epoch_millis"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "term": {
+                                            "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
+                                        }
+                                    },
+                                    {
+                                        "term": {
+                                            "{{domainType:nuage_metadata.domainName}}":"{{domainName:chord_domain}}"
+                                        }
+                                    },
+                                    { "replace": "optional-src-pg-categories" }
+                                ]
                             }
                         },
                         {
-                            "term": {
-                                "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
+                            "bool": {
+                                "must":[
+                                    {
+                                        "range":{
+                                            "timestamp":{
+                                                "gte":"{{startTime:now-24h}}",
+                                                "lte":"{{endTime:now}}",
+                                                "format":"epoch_millis"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "term": {
+                                            "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
+                                        }
+                                    },
+                                    {
+                                        "term": {
+                                            "{{domainType:nuage_metadata.domainName}}":"{{domainName:chord_domain}}"
+                                        }
+                                    },
+                                    { "replace": "optional-dst-pg-categories"}
+                                ]
                             }
-                        },
-                        {
-                            "term": {
-                                "{{domainType:nuage_metadata.domainName}}":"{{domainName:chord_domain}}"
-                            }
-                        },
-                        {
-                            "replace": "xyz"
-                        },
-                        {
-                            "replace": "lmn"
                         }
                     ]
                 }
