@@ -646,39 +646,31 @@ const replaceQuery = (replace, query, context) => {
 
     let config = findPropertyPath(query, key);
 
-    if(!config)
-      return;
+    if (!config)
+        return;
 
-    // Hold the keys to insert
-    let indexKeys = [];
-    let insertString;
-
-    while(config) {
+    while (config) {
         let replaceIndex = config.lastIndexOf('.', config.length - (key.length + 1));
         let replaceStr = config.substr(0, replaceIndex);
 
         let insertPosition = config.lastIndexOf('.', config.length - (key.length + 2));
-        insertString = config.substr(0, insertPosition);
+        let insertString = config.substr(0, insertPosition);
+        let repKey = objectPath.get(query, config);
 
-        indexKeys.push(objectPath.get(query, config));
         objectPath.del(query, replaceStr);
 
-        config = findPropertyPath(query, "replace")
-    }
-
-    if(!replace)
-      return;
-
-    indexKeys.forEach(repKey => {
         let replaceData = replace[repKey]
-        if(replaceData && context[replaceData.context]) {
-            for(let key in replaceData.query) {
+
+        if (replaceData && context[replaceData.context]) {
+            for (let key in replaceData.query) {
                 objectPath.push(query, insertString, {
                     [key]: replaceData.query[key]
                 });
             }
         }
-    })
+
+        config = findPropertyPath(query, "replace")
+    }
 }
 
 function findPropertyPath(obj, name) {
