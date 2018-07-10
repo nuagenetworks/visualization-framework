@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { push } from "redux-router";
+import _ from 'lodash';
 
 import Drawer from "material-ui/Drawer";
 import Subheader from "material-ui/Subheader";
@@ -17,6 +18,10 @@ import {
     Actions as ServiceActions,
     ActionKeyStore as ServiceActionKeyStore
 } from "../../services/servicemanager/redux/actions";
+
+import {
+    Actions as VSDActions
+} from '../../configs/nuage/vsd/redux/actions';
 
 import style from "./styles";
 import Logo from "./logo.png";
@@ -40,7 +45,9 @@ class MainMenuView extends React.Component {
             fetchL2DomainsIfNeeded,
             fetchNSGsIfNeeded,
             isConnected,
-            visualizationType
+            visualizationType,
+            fetchUserContextIfNeeded,
+            updateUserContext
         } = this.props;
 
         if (!isConnected)
@@ -62,6 +69,16 @@ class MainMenuView extends React.Component {
                     fetchNSGsIfNeeded(enterprise.ID);
             }
         });
+
+        fetchUserContextIfNeeded().then(userContexts => {
+            if (_.isEmpty(userContexts))
+                return;
+            const userCtx = userContexts[0];
+            if (userCtx) {
+                updateUserContext(userCtx);
+                console.error(`REACT_APP_GOOGLE_MAP_API: ${userCtx.googleMapsAPIKey}`)
+            }
+        })
     }
 
     renderDomainsMenu() {
@@ -266,6 +283,8 @@ const mapStateToProps = (state) => {
             props.nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, "enterprises/" + props.context.enterpriseID + "/nsgateways", ServiceActionKeyStore.RESULTS]);
     }
 
+    props.userContexts = state.services.getIn([ServiceActionKeyStore.REQUESTS, "usercontexts", ServiceActionKeyStore.RESULTS]);
+
     return props;
 
 };
@@ -324,6 +343,20 @@ const actionCreators = (dispatch) => ({
             }
         }
         return dispatch(ServiceActions.fetchIfNeeded(configuration));
+    },
+
+    fetchUserContextIfNeeded: () => {
+        let configuration = {
+            service: "VSD",
+            query: {
+                parentResource: "usercontexts",
+            }
+        }
+        return dispatch(ServiceActions.fetchIfNeeded(configuration));
+    },
+
+    updateUserContext: (userContext) => {
+        dispatch(VSDActions.updateUserContext(userContext))
     }
 });
 
