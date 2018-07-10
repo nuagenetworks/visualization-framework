@@ -76,7 +76,6 @@ class MainMenuView extends React.Component {
             const userCtx = userContexts[0];
             if (userCtx) {
                 updateUserContext(userCtx);
-                console.error(`REACT_APP_GOOGLE_MAP_API: ${userCtx.googleMapsAPIKey}`)
             }
         })
     }
