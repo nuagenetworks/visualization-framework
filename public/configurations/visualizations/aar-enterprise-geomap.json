@@ -11,6 +11,41 @@
         "nameColumn": "gatewayName",
         "localityColumn": "address",
         "idColumn": "gatewayID",
+        "markerIcon": {
+            "default": "nsGatewayBlue",
+            "criteria": [
+                {
+                    "icon": "nsGatewayYellow",
+                    "fields": {
+                        "bootstrapStatus": "INACTIVE"
+                    }
+                },
+                {
+                    "icon": "nsGatewayYellow",
+                    "fields": {
+                        "bootstrapStatus": "NOTIFICATION_APP_REQ_SENT"
+                    }
+                },
+                {
+                    "icon": "nsGatewayYellow",
+                    "fields": {
+                        "bootstrapStatus": "NOTIFICATION_APP_REQ_ACK"
+                    }
+                },
+                {
+                    "icon": "nsGatewayYellow",
+                    "fields": {
+                        "bootstrapStatus": "CERTIFICATE_SIGNED"
+                    }
+                },
+                {
+                    "icon": "nsGatewayRed",
+                    "fields": {
+                        "majorAlarmsCount": 0
+                    }
+                }
+            ]
+        },
         "filters": [
             {
                 "columnText": "Name",
@@ -24,12 +59,12 @@
             },
             {
                 "columnText": "Bootstrap-Status",
-                "columField": "bootstrapStatus​",
-                "type": "selection"
+                "columField": "bootstrapStatus",
+                "type": "text"
             },
             {
                 "columnText": "Nsg-Version",
-                "columField": "nsgVersion​",
+                "columField": "NSGVersion",
                 "type": "text"
             }
         ],
