@@ -643,11 +643,7 @@ const updateFilterOptions = (state, configurations, context, results = []) => {
 
 const replaceQuery = (replace, query, context) => {
     let key = 'replace';
-
     let config = findPropertyPath(query, key);
-
-    if (!config)
-        return;
 
     while (config) {
         let replaceIndex = config.lastIndexOf('.', config.length - (key.length + 1));
@@ -660,8 +656,8 @@ const replaceQuery = (replace, query, context) => {
         objectPath.del(query, replaceStr);
 
         let replaceData = replace[repKey]
-
         if (replaceData && context[replaceData.context]) {
+
             for (let key in replaceData.query) {
                 objectPath.push(query, insertString, {
                     [key]: replaceData.query[key]
@@ -784,6 +780,10 @@ const mapStateToProps = (state, ownProps) => {
                     props.queryConfigurations[query] = queryConfiguration ? queryConfiguration.toJS() : null;
                 }
 
+                if(realConfiguation  && props.queryConfigurations[query]) {
+                    replaceQuery(realConfiguation.replace, props.queryConfigurations[query], props.context);
+                }
+
                 const scriptName = configuration.get("script");
 
                 // Expose received response if it is available
@@ -803,6 +803,7 @@ const mapStateToProps = (state, ownProps) => {
                         if(!response && queryConfig.required !== false) {
                             props.error = 'Not able to load data'
                         }
+
                         if (response && !response.get(ServiceActionKeyStore.IS_FETCHING)) {
                             let responseJS = response.toJS();
 
@@ -823,11 +824,7 @@ const mapStateToProps = (state, ownProps) => {
             let vizConfig =  configuration ? contextualize(configuration.toJS(), context) : null;
             props.filterOptions = updateFilterOptions(state, vizConfig, context, props.response);
         }
-
     }
-
-    if(realConfiguation && props.queryConfigurations)
-        replaceQuery(realConfiguation.replace, props.queryConfigurations, props.context);
 
     return props
 };
