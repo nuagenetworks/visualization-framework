@@ -37,12 +37,6 @@
                     "fields": {
                         "bootstrapStatus": "CERTIFICATE_SIGNED"
                     }
-                },
-                {
-                    "icon": "nsGatewayRed",
-                    "fields": {
-                        "majorAlarmsCount": 0
-                    }
                 }
             ]
         },
