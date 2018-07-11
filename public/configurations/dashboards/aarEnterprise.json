@@ -23,6 +23,10 @@
         {
             "label": "Detail View",
             "url": "/dashboards/aarEnterpriseDetail"
+        },
+        {
+            "label": "Map View",
+            "url": "/dashboards/aarEnterpriseMapView"
         }
     ]
 }

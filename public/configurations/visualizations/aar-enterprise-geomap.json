@@ -2,24 +2,34 @@
     "id": "aar-enterprise-geomap",
     "graph": "GeoMap",
     "title": "All NSGs in Enterprise {{enterpriseName}}",
-    "description": "Map Graph Visualization",
+    "description": "Map View",
     "author": "Bharat Mukheja",
     "creationDate": "03/13/2018",
     "data": {
         "latitudeColumn": "latitude",
         "longitudeColumn": "longitude",
-        "nameColumn": "associatedEntityName",
+        "nameColumn": "gatewayName",
         "localityColumn": "address",
-        "idColumn": "associatedEntityID",
+        "idColumn": "gatewayID",
         "filters": [
             {
-                "columnText": "name",
-                "columField": "associatedEntityName",
+                "columnText": "Name",
+                "columField": "gatewayName",
                 "type": "text"
             },
             {
-                "columnText": "region",
+                "columnText": "Region",
                 "columField": "locality",
+                "type": "text"
+            },
+            {
+                "columnText": "Bootstrap-Status",
+                "columField": "bootstrapStatus​",
+                "type": "selection"
+            },
+            {
+                "columnText": "Nsg-Version",
+                "columField": "nsgVersion​",
                 "type": "text"
             }
         ],
@@ -36,7 +46,7 @@
     "listeners": [{
       "redirect": "/dashboards/aarNSG",
       "params": {
-          "snsg": "associatedEntityName"
+          "snsg": "gatewayName"
       }
     }]
 }
