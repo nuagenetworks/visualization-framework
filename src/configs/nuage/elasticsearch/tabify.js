@@ -12,7 +12,6 @@ export default function tabify(response) {
     if (response.aggregations) {
         const tree = collectBucket(response.aggregations);
         table = flatten(tree);
-
     } else if (response.hits) {
         table = response.hits.hits.map((d) => d._source);
 
@@ -39,6 +38,7 @@ export default function tabify(response) {
 }
 
 function flatArray(data) {
+
   let finalData = [];
   data.forEach(item => {
       let result = cartesianProduct(item);
@@ -61,7 +61,8 @@ function cartesianProduct(data) {
             });
             arrayExists = true;
             break;
-        } else if (typeof data[keys[i]] === 'object') {
+        } else if (data[keys[i]] && typeof data[keys[i]] === 'object') {
+
             let products = cartesianProduct(data[keys[i]]);
             if(products.length > 1) {
                 products.forEach(item => {
