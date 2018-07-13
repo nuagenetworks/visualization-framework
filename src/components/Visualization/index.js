@@ -1,7 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
-import evalExpression from "eval-expression"
+import evalExpression from "eval-expression";
+
+import objectPath from "object-path";
 
 import $ from "jquery";
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -39,6 +41,7 @@ import {
 
 import { resizeVisualization } from "../../utils/resize"
 import { contextualize } from "../../utils/configurations"
+import columnAccessor from "../../lib/vis-graphs/utils/columnAccessor"
 
 import { GraphManager } from "../../lib/vis-graphs/index"
 import { ServiceManager } from "../../services/servicemanager/index";
@@ -421,15 +424,15 @@ class VisualizationView extends React.Component {
 
     renderFiltersToolBar() {
         const {
-            configuration,
+            filterOptions,
             id
-        } = this.props;
+        } = this.props
 
-        if (!configuration || !configuration.filterOptions)
-            return;
+        if (!filterOptions)
+            return
 
         return (
-            <FiltersToolBar filterOptions={configuration.filterOptions} visualizationId={id} />
+            <FiltersToolBar filterOptions={filterOptions} visualizationId={id} />
         )
     }
 
@@ -558,29 +561,125 @@ class VisualizationView extends React.Component {
     }
 }
 
-const updateFilterOptions = (state, configurations, context) => {
-  if(configurations && configurations.filterOptions) {
-    for(let key in configurations.filterOptions) {
-        if(configurations.filterOptions[key].type) {
-          if(context && context.enterpriseID) {
-             let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${configurations.filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
+const updateFilterOptions = (state, configurations, context, results = []) => {
 
-             if(nsgs && nsgs.length) {
-               configurations.filterOptions[key].options = [];
-               configurations.filterOptions[key].default = nsgs[0].name;
+    if(configurations && configurations.filterOptions) {
+      let filterOptions = Object.assign({}, configurations.filterOptions)
 
-               nsgs.forEach((nsg) => {
-                 configurations.filterOptions[key].options.push({
-                   label: nsg.name,
-                   value: nsg.name
-                 });
-               });
-             }
+      for(let key in filterOptions) {
+
+          if (!filterOptions[key].options) {
+              filterOptions[key].options = []
           }
+          // append filters fetching from query
+          if (filterOptions[key].dynamicOptions) {
+            const {queryKey = null, label = null, value = null, forceOptions = null} = filterOptions[key].dynamicOptions
+            if (queryKey && value) {
+
+                // format value and label
+                const formattedValue = columnAccessor({ column: value})
+                const formattedLabel = label ? columnAccessor({ column: label}) : formattedValue
+                let forceOptionsConfig = {}
+
+                if (forceOptions) {
+                    for (let key in forceOptions) {
+                        if (forceOptions.hasOwnProperty(key)) {
+                            forceOptionsConfig[key] = columnAccessor({ column: forceOptions[key]})
+                        }
+                    }
+                }
+
+                if(results[queryKey]) {
+                    results[queryKey].forEach(d => {
+                        let dataValue = formattedValue(d, true)
+                        let dataLabel = label ? formattedLabel(d, true) : dataValue
+
+                        if(dataValue && !filterOptions[key].options.find( datum =>
+                            datum.value === dataValue.toString() || datum.label === dataLabel)) {
+
+                            let forceOptionsData = {}
+                            // if forceOptions present then calculate forceOptions values and append it in options
+                            if (forceOptionsConfig) {
+                                for (let key in forceOptionsConfig) {
+                                    if (forceOptionsConfig.hasOwnProperty(key)) {
+                                        forceOptionsData[key] = forceOptionsConfig[key](d, true) || ''
+                                    }
+                                }
+                            }
+                            // Add filters in existing filter options
+                            filterOptions[key].options.push({
+                                label: dataLabel,
+                                value: dataValue.toString(),
+                                forceOptions: forceOptionsData
+                            })
+                        }
+                    })
+                }
+            }
         }
-    };
-  }
-  return configurations;
+
+        // TODO -
+        if(filterOptions[key].type) {
+            if(context && context.enterpriseID) {
+                let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
+
+                if(nsgs && nsgs.length) {
+                    filterOptions[key].options = [];
+                    filterOptions[key].default = nsgs[0].name;
+
+                    nsgs.forEach((nsg) => {
+                    filterOptions[key].options.push({
+                        label: nsg.name,
+                        value: nsg.name
+                    });
+                    });
+                }
+            }
+        }
+      }
+      return filterOptions || []
+    }
+}
+
+const replaceQuery = (replace, query, context) => {
+    let key = 'replace';
+    let config = findPropertyPath(query, key);
+
+    while (config) {
+        let replaceIndex = config.lastIndexOf('.', config.length - (key.length + 1));
+        let replaceStr = config.substr(0, replaceIndex);
+
+        let insertPosition = config.lastIndexOf('.', config.length - (key.length + 2));
+        let insertString = config.substr(0, insertPosition);
+        let repKey = objectPath.get(query, config);
+
+        objectPath.del(query, replaceStr);
+
+        let replaceData = replace[repKey]
+        if (replaceData && context[replaceData.context]) {
+
+            for (let key in replaceData.query) {
+                objectPath.push(query, insertString, {
+                    [key]: replaceData.query[key]
+                });
+            }
+        }
+
+        config = findPropertyPath(query, "replace")
+    }
+}
+
+function findPropertyPath(obj, name) {
+    for (var prop in obj) {
+        if (prop == name) {
+            return name;
+        } else if (typeof obj[prop] == "object") {
+            var result = findPropertyPath(obj[prop], name);
+            if (result) { return prop + '.' + result; }
+        }
+    }
+
+    return null;
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -606,6 +705,8 @@ const mapStateToProps = (state, ownProps) => {
       }
     }
 
+    const realConfiguation = configuration && configuration.toJS();
+
     const props = {
         id: configurationID,
         context: context,
@@ -621,9 +722,6 @@ const mapStateToProps = (state, ownProps) => {
             ConfigurationsActionKeyStore.ERROR
         ])
     };
-
-    let vizConfig =  configuration ? contextualize(configuration.toJS(), context) : null;
-    props.configuration = updateFilterOptions(state, vizConfig, context);
 
     props.queryConfigurations = {}
     props.response = {}
@@ -682,6 +780,10 @@ const mapStateToProps = (state, ownProps) => {
                     props.queryConfigurations[query] = queryConfiguration ? queryConfiguration.toJS() : null;
                 }
 
+                if(realConfiguation  && props.queryConfigurations[query]) {
+                    replaceQuery(realConfiguation.replace, props.queryConfigurations[query], props.context);
+                }
+
                 const scriptName = configuration.get("script");
 
                 // Expose received response if it is available
@@ -701,6 +803,7 @@ const mapStateToProps = (state, ownProps) => {
                         if(!response && queryConfig.required !== false) {
                             props.error = 'Not able to load data'
                         }
+
                         if (response && !response.get(ServiceActionKeyStore.IS_FETCHING)) {
                             let responseJS = response.toJS();
 
@@ -718,11 +821,12 @@ const mapStateToProps = (state, ownProps) => {
 
         if(successResultCount === Object.keys(queries).length ) {
             props.isFetching = false
+            let vizConfig =  configuration ? contextualize(configuration.toJS(), context) : null;
+            props.filterOptions = updateFilterOptions(state, vizConfig, context, props.response);
         }
-
     }
 
-    return props;
+    return props
 };
 
 const actionCreators = (dispatch) => ({
