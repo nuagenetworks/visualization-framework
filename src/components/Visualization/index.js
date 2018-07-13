@@ -46,6 +46,8 @@ import columnAccessor from "../../lib/vis-graphs/utils/columnAccessor"
 import { GraphManager } from "../../lib/vis-graphs/index"
 import { ServiceManager } from "../../services/servicemanager/index";
 
+import { ActionKeyStore  as VSDKeyStore } from "../../configs/nuage/vsd/redux/actions";
+
 import style from "./styles"
 
 import FontAwesome from "react-fontawesome";
@@ -287,7 +289,8 @@ class VisualizationView extends React.Component {
         const {
             configuration,
             response,
-            id
+            id,
+            googleMapURL
         } = this.props;
 
         const graphName      = configuration.graph,
@@ -310,6 +313,7 @@ class VisualizationView extends React.Component {
               height={graphHeight}
               goTo={this.props.goTo}
               {...this.state.listeners}
+              googleMapURL={googleMapURL}
             />
         )
     }
@@ -704,6 +708,8 @@ const mapStateToProps = (state, ownProps) => {
             context[filteredKey] = orgContext[key];
       }
     }
+    const userContext = state.VSD.get(VSDKeyStore.USER_CONTEXT);
+    const googleMapsAPIKey = (userContext && userContext.googleMapsAPIKey) || process.env.REACT_APP_GOOGLE_MAP_API;
 
     const realConfiguation = configuration && configuration.toJS();
 
@@ -720,7 +726,8 @@ const mapStateToProps = (state, ownProps) => {
             ConfigurationsActionKeyStore.VISUALIZATIONS,
             configurationID,
             ConfigurationsActionKeyStore.ERROR
-        ])
+        ]),
+        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${googleMapsAPIKey}&v=3.exp&libraries=${process.env.REACT_APP_GOOGLE_MAP_LIBRARIES}`
     };
 
     props.queryConfigurations = {}
