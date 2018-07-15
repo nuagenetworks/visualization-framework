@@ -25,6 +25,10 @@
         {
             "label": "IKE",
             "url": "/dashboards/aarNSGIKE"
+        },
+        {
+            "label": "Alarms",
+            "url": "/dashboards/aarNSGAlarms"
         }
     ],
     "filterOptions": {

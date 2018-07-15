@@ -1,0 +1,10 @@
+{
+    "id":"aar-nsg-alarm-details",
+    "title":"Alarms",
+    "service":"VSD",
+    "query":{
+        "parentResource":"nsgateways",
+        "parentID":"{{gatewayID}}",
+        "resource":"alarms"
+    }
+}
