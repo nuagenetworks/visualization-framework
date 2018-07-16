@@ -14,7 +14,7 @@
     "listeners": [{
       "redirect": "/dashboards/aarNSGAlarms",
       "params": {
-          "gatewayID": "gatewayID"
+          "nsgId": "gatewayID"
       }
     }]
 }

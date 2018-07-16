@@ -76,7 +76,7 @@
       "redirect": "/dashboards/aarNSG",
       "params": {
           "snsg": "gatewayName",
-          "gatewayID": "gatewayID"
+          "nsgId": "gatewayID"
       }
     }]
 }
