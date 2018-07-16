@@ -1,0 +1,19 @@
+{
+    "id": "aar-nsg-alarm-count-minor",
+    "title": "Minor",
+    "query": "aar-nsg-alarm-summary",
+    "graph": "SimpleTextGraph",
+    "showTitleBar":false,
+    "data": {
+        "targetedColumn":"minorAlarmsCount",
+        "colors":[
+            "green"
+        ]
+    },
+    "listeners": [{
+      "redirect": "/dashboards/aarNSGAlarms",
+      "params": {
+          "gatewayID": "gatewayID"
+      }
+    }]
+}

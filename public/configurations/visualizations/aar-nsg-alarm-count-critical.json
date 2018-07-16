@@ -1,0 +1,20 @@
+{
+    "id": "aar-nsg-alarm-count-critical",
+    "title": "Critical",
+    "query": "aar-nsg-alarm-summary",
+    "graph": "SimpleTextGraph",
+    "showTitleBar":false,
+    "data": {
+        "targetedColumn":"criticalAlarmsCount",
+        "circleColor":"#f76159",
+        "colors":[
+            "red"
+        ]
+    },
+    "listeners": [{
+      "redirect": "/dashboards/aarNSGAlarms",
+      "params": {
+          "gatewayID": "gatewayID"
+      }
+    }]
+}

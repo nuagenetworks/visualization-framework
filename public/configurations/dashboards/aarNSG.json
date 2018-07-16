@@ -7,7 +7,11 @@
         { "id": "aar-nsg-top10-app",             "x": 0, "y": 0,  "w": 6, "h": 15, "minW": 5, "minH": 10, "static": true},
         { "id": "aar-nsg-top5-talkers-upload",   "x": 0, "y": 15, "w": 6, "h": 12, "minW": 5, "minH": 10, "static": true},
         { "id": "aar-nsg-top5-talkers-download", "x": 6, "y": 15, "w": 6, "h": 12, "minW": 5, "minH": 10, "static": true},
-        { "id": "aar-nsg-app-linechart",         "x": 6, "y": 0,  "w": 6, "h": 15, "minW": 5, "minH": 10, "static": true}
+        { "id": "aar-nsg-app-linechart",         "x": 6, "y": 0,  "w": 6, "h": 15, "minW": 5, "minH": 10, "static": true},
+        { "id": "aar-nsg-alarm-count-critical",  "x": 0, "y": 30,  "w": 2, "h": 10, "minW": 2, "minH": 10, "static": true},
+        { "id": "aar-nsg-alarm-count-major",     "x": 2, "y": 30,  "w": 2, "h": 10, "minW": 2, "minH": 10, "static": true},
+        { "id": "aar-nsg-alarm-count-minor",     "x": 4, "y": 30,  "w": 2, "h": 10, "minW": 2, "minH": 10, "static": true},
+        { "id": "aar-nsg-alarm-title-bar",     "x": 0, "y": 27,  "w": 6, "h": 3, "minW": 2, "minH": 10, "static": true}
     ],
     "links": [
         {
