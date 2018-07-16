@@ -166,7 +166,7 @@ class MainMenuView extends React.Component {
             <div>
                 {nsgs.map((nsg) => {
 
-                    let queryParams = Object.assign({}, context, {snsg: nsg.name, dnsg: nsg.name});
+                    let queryParams = Object.assign({}, context, {snsg: nsg.name, dnsg: nsg.name, nsgId: nsg.ID});
 
                     return (
                         <ListItem
