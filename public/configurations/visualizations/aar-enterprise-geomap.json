@@ -54,7 +54,7 @@
             {
                 "columnText": "Bootstrap-Status",
                 "columField": "bootstrapStatus",
-                "type": "text"
+                "type": "selection"
             },
             {
                 "columnText": "Nsg-Version",
