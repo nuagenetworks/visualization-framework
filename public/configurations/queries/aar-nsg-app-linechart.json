@@ -21,11 +21,6 @@
                         },
                         {
                             "term":{
-                                "EnterpriseName":"{{enterpriseName:test_organization}}"
-                            }
-                        },
-                        {
-                            "term":{
                                 "SourceNSG": "{{snsg:default}}"
                             }
                         }

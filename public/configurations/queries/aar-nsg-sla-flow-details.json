@@ -32,11 +32,6 @@
                             "must":[
                                 {
                                     "term":{
-                                        "EnterpriseName":"{{enterpriseName:ent-1}}"
-                                    }
-                                },
-                                {
-                                    "term":{
                                         "Application":"{{appName}}"
                                     }
                                 },
