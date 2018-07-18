@@ -1,0 +1,19 @@
+{
+    "id": "aar-nsg-alarm-count-major",
+    "title": "Major",
+    "query": "aar-nsg-alarm-summary",
+    "graph": "SimpleTextGraph",
+    "showTitleBar":false,
+    "data": {
+        "targetedColumn":"majorAlarmsCount",
+        "colors":[
+            "#ffd92f"
+        ]
+    },
+    "listeners": [{
+      "redirect": "/dashboards/aarNSGAlarms",
+      "params": {
+          "nsgId": "gatewayID"
+      }
+    }]
+}

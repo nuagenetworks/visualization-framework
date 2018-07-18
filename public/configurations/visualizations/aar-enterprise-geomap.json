@@ -75,7 +75,8 @@
     "listeners": [{
       "redirect": "/dashboards/aarNSG",
       "params": {
-          "snsg": "gatewayName"
+          "snsg": "gatewayName",
+          "nsgId": "gatewayID"
       }
     }]
 }

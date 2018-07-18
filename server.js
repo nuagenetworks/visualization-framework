@@ -8,7 +8,6 @@ process.env['REACT_APP_VSD_API_ENDPOINT'] = 'https://vsd.com:8443/nuage/api/';
 process.env['REACT_APP_GOOGLE_MAP_LAT'] = 37.09024;
 process.env['REACT_APP_GOOGLE_MAP_LNG'] = 95.712891;
 process.env['REACT_APP_GOOGLE_MAP_ZOOM'] = 4;
-process.env['REACT_APP_GOOGLE_MAP_API'] = 'AIzaSyD6gAsFkFAfe0nTGYPUvZuMsmuIxPXnHNI';
 process.env['REACT_APP_GOOGLE_MAP_LIBRARIES'] = 'geometry,drawing,places'
 //
 
