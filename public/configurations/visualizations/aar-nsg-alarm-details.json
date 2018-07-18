@@ -12,6 +12,7 @@
         "columns": [
             { "column": "creationDate", "label": "Alarm Created Time", "timeFormat": "%b %d, %y %X"},
             { "column": "lastUpdatedDate", "label": "Last Updated Time", "timeFormat": "%b %d, %y %X" },
+            { "column": "severity", "label": " ","colors":{"CRITICAL":"red","MAJOR":"yellow","MINOR":"green","INFO":"green"}},
             { "column": "severity", "label": "Severity"},
             { "column": "description", "label": "Description" },
             { "column": "numberOfOccurances", "label": "Count" },
