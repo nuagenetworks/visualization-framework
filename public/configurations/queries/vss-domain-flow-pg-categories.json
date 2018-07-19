@@ -1,11 +1,11 @@
 {
-    "id":"aar-nsg-top10-app",
-    "title":"Top 10 App per NSG",
+    "id":"vss-domain-flow-pg-categories",
+    "title":"PG-Category per domain",
     "service":"elasticsearch",
     "query":{
-        "index":"{{index:nuage_dpi_flowstats}}",
+        "index":"{{index:nuage_flow}}",
         "type":"{{type:nuage_doc_type}}",
-        "body":{
+        "body":{    
             "size": 0,
             "query":{
                 "bool":{
@@ -20,28 +20,22 @@
                             }
                         },
                         {
-                            "term":{
-                                "SourceNSG":"{{snsg:ovs-114}}"
+                            "term": {
+                                "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "{{domainType:nuage_metadata.domainName}}":"{{domainName:chord_domain}}"
                             }
                         }
                     ]
                 }
             },
-            "aggs":{
-                "Application":{
-                    "terms":{
-                        "field":"Application",
-                        "size":10,
-                        "order":{
-                            "Sum of MB":"desc"
-                        }
-                    },
-                    "aggs":{
-                        "Sum of MB":{
-                            "sum":{
-                                "field":"TotalMB"
-                            }
-                        }
+            "aggs": {
+                "category": {
+                    "terms": {
+                        "field": "nuage_metadata.src-pgmem.category"
                     }
                 }
             }

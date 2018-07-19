@@ -16,39 +16,87 @@ import style from "./styles";
 
 export class FiltersToolBarView extends React.Component {
 
-    getFilteredVisualizationId() {
-      const {
-          visualizationId
-      } = this.props;
+    constructor(props) {
+        super(props);
+        this.state = {
+            filterOptions: []
+        }
 
-      return visualizationId ? visualizationId.replace(/-/g, '') : '';
+        this.onTouchTap = this.onTouchTap.bind(this)
     }
 
-    updateForceOptionContext(forceOptions, append) {
-      const {
-          context
-      } = this.props;
+    componentWillMount() {
+        this.setFilterOptions(this.props)
+    }
 
-      let forceContext = {};
-      let filteredID = append ? this.getFilteredVisualizationId() : '';
+    componentWillReceiveProps(nextProps) {
+        this.setFilterOptions(nextProps)
+    }
 
-      for(let key in forceOptions) {
-        if(forceOptions.hasOwnProperty(key) && (!context[key] || context[key] !== forceOptions[key])) {
-            forceContext[`${filteredID}${key}`] = forceOptions[key];
-        }
-      }
+    setFilterOptions(props) {
+        let { context, filterOptions } = props;
 
-      return forceContext;
+        let updatedFilterOptions = {};
+        let childs = [];
+        let selectedChilds = [];
+
+        Object.keys(filterOptions).forEach((name, i) => {
+            let filter = {...filterOptions[name], options: [], display: true, child: false, forceOptions: []};
+
+            filterOptions[name].options.forEach((option) => {
+                const { onChange, forceOptions } = option
+                if (onChange) {
+                    // add all available onChange options in the root of the object as an array
+                    childs.push(onChange);
+                    // check whether any child filter is selected or not
+                    if (context[filterOptions[name].parameter] == option.value) {
+                        selectedChilds.push(onChange);
+                    }
+                }
+                // add all available forceOptions properties in the root of the object as an array
+                if(forceOptions) {
+                    for (let key in forceOptions) {
+                        if(forceOptions.hasOwnProperty(key) && !filter.forceOptions.includes(key))
+                            filter.forceOptions.push(key)
+                    }
+                }
+
+                filter.options.push({...option})
+            })
+
+            updatedFilterOptions[name] = filter;
+        })
+
+        // if any child filter is not pre-selected then make it hidden
+        childs.forEach(child => {
+            if(!selectedChilds.includes(child)) {
+                updatedFilterOptions[child].display = false;
+            }
+        });
+
+        // Cheching whether to display childs or not.
+        this.setState({
+            filterOptions: updatedFilterOptions
+        })
+    }
+    componentDidUpdate() {
+        this.updateContext();
     }
 
     componentDidMount() {
+        this.updateContext();
+    }
+
+    updateContext() {
         const {
             context,
-            filterOptions,
             filterContext,
             visualizationId,
             saveFilterContext
         } = this.props;
+
+        const { filterOptions } = this.state
+
 
         let configContexts = {};
         let filteredID = this.getFilteredVisualizationId();
@@ -60,8 +108,7 @@ export class FiltersToolBarView extends React.Component {
                     currentValue  = context[paramName],
                     defaultOption = []
 
-
-                if (configOptions.options) {
+                if (configOptions.options && configOptions.display) {
                     let value = currentValue ? currentValue : configOptions.default;
                     // check value present in config. If not, then set value from default option
                     for(let i = 0; i < configOptions.options.length; i++) {
@@ -87,12 +134,23 @@ export class FiltersToolBarView extends React.Component {
                             configContexts = Object.assign({}, configContexts, this.updateForceOptionContext(defaultOption[0].forceOptions, configOptions.append));
                         }
                     }
+                } else if (context[filterOptions[name].parameter]) {
+                    // reset all params from context if they are not selected
+                    configContexts[filterOptions[name].parameter] = '';
+                    filterOptions[name].forceOptions.forEach( d => {
+                        configContexts[d] = ''
+                    })
                 }
             }
         };
 
-        if(Object.keys(configContexts).length !== 0) {
+        // remove similar properties from new context (configContexts)
+        for (let name in configContexts) {
+            if(configContexts[name] === context[name])
+                delete configContexts[name];
+        };
 
+        if(Object.keys(configContexts).length !== 0) {
             if(!Object.keys(filterContext).length) {
                 saveFilterContext(configContexts)
             }
@@ -100,70 +158,115 @@ export class FiltersToolBarView extends React.Component {
         }
     }
 
-
-
-    render() {
+    getFilteredVisualizationId() {
         const {
-            filterOptions,
+            visualizationId
+        } = this.props;
+
+        return visualizationId ? visualizationId.replace(/-/g, '') : '';
+      }
+
+      updateForceOptionContext(forceOptions, append) {
+        const {
+            context
+        } = this.props;
+
+        let forceContext = {};
+        let filteredID = append ? this.getFilteredVisualizationId() : '';
+
+        for(let key in forceOptions) {
+          if(forceOptions.hasOwnProperty(key) && (!context[key] || context[key] !== forceOptions[key])) {
+              forceContext[`${filteredID}${key}`] = forceOptions[key];
+          }
+        }
+
+        return forceContext;
+    }
+
+    onTouchTap(queryParams) {
+        const {
+            saveFilterContext,
+            context,
+            goTo
+        } = this.props;
+
+        saveFilterContext(queryParams);
+        goTo(window.location.pathname, Object.assign({}, context, queryParams));
+    }
+
+    renderDropdownContent() {
+        const {
             context,
             visualizationId
         } = this.props
 
-        let filteredID = this.getFilteredVisualizationId();
+        const { filterOptions } = this.state
+
+        let filteredID = this.getFilteredVisualizationId(),
+            content = []
 
         if (!filterOptions || Object.keys(filterOptions).lengh === 0)
-            return (
-                <div></div>
-            );
+            return (<div></div>);
+
+
+        Object.keys(filterOptions).forEach((name, i) => {
+
+            let configOptions = filterOptions[name],
+                paramName = visualizationId && configOptions.append ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
+                currentValue = context[paramName] || configOptions.default;
+
+            // Hide all dependent child filters or show them if they are present in context
+            if (configOptions.display) {
+                content.push(
+                    <li
+                        key={i}
+                        style={style.listItem}>
+                        <label style={style.label} htmlFor={name}>
+                            {name}
+                        </label>
+                        <DropDownMenu
+                            name={name}
+                            value={currentValue}
+                            style={style.dropdownMenu}
+                            disabled={configOptions.disabled}
+                        >
+
+                            {configOptions.options.map((option, index) => {
+                                let queryParams  = { [paramName]: option.value },
+                                    forceOptions = option.forceOptions,
+                                    onChange     = option.onChange || null
+
+                                if (forceOptions)
+                                    queryParams = Object.assign({}, queryParams, this.updateForceOptionContext(forceOptions, configOptions.append));
+
+                                queryParams = Object.assign({}, queryParams);
+
+                                return (
+                                    <MenuItem
+                                        key={index}
+                                        value={option.value}
+                                        primaryText={option.label}
+                                        style={style.menuItem}
+                                        disabled={option.disabled}
+                                        onTouchTap={() => this.onTouchTap(queryParams)}
+                                    />
+                                )
+                            })}
+                        </DropDownMenu>
+
+                    </li>
+                )
+            }
+        })
+
+        return content;
+    }
+
+    render() {
         return (
             <div className="text-right">
                 <ul className="list-inline" style={style.list}>
-                {
-
-                    Object.keys(filterOptions).map((name, i) => {
-
-                        let configOptions = filterOptions[name],
-                            paramName = visualizationId && configOptions.append  ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
-                            currentValue  = context[paramName] || configOptions.default;
-                        return (
-                            <li
-                                key={i}
-                                style={style.listItem}>
-                                <label style={style.label} htmlFor={name}>
-                                    {name}
-                                </label>
-                                <DropDownMenu
-                                    name={name}
-                                    value={currentValue}
-                                    style={style.dropdownMenu}
-                                    disabled={configOptions.disabled}
-                                    >
-
-                                    {configOptions.options.map((option, index) => {
-
-                                        let queryParams = {[paramName]: option.value};
-
-                                        let forceOptions = option.forceOptions;
-
-                                        if (forceOptions)
-                                            queryParams = Object.assign({}, queryParams, this.updateForceOptionContext(forceOptions, configOptions.append));
-
-                                        return (
-                                            <MenuItem
-                                                key={index}
-                                                value={option.value}
-                                                primaryText={option.label}
-                                                style={style.menuItem}
-                                                disabled={option.disabled}
-                                                onTouchTap={() => { this.props.saveFilterContext(queryParams); this.props.goTo(window.location.pathname, Object.assign({}, context, queryParams));}}
-                                                />
-                                        )
-                                    })}
-                                </DropDownMenu>
-
-                            </li>
-                        )
-                    })}
+                    { this.renderDropdownContent() }
                 </ul>
             </div>
         )

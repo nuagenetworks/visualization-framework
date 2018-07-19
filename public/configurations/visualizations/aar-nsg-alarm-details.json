@@ -1,0 +1,22 @@
+{
+    "id": "aar-nsg-alarm-details",
+    "graph": "Table",
+    "title": "Alarms on NSG {{snsg}}",
+    "description": "Shows all alarms as present on VSD for NSG {{snsg}}",
+    "author": "Bharat Mukheja",
+    "creationDate": "07/13/2018",
+    "query": "aar-nsg-alarm-details",
+    "data": {
+        "hidePagination":true,
+        "limit":25,
+        "columns": [
+            { "column": "creationDate", "label": "Alarm Created Time", "timeFormat": "%b %d, %y %X"},
+            { "column": "lastUpdatedDate", "label": "Last Updated Time", "timeFormat": "%b %d, %y %X" },
+            { "column": "severity", "label": " ","colors":{"CRITICAL":"red","MAJOR":"yellow","MINOR":"green","INFO":"green"}},
+            { "column": "severity", "label": "Severity"},
+            { "column": "description", "label": "Description" },
+            { "column": "numberOfOccurances", "label": "Count" },
+            { "column": "errorCondition", "label": "Error Condition" }
+        ]
+    }
+}

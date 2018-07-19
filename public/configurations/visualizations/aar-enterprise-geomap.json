@@ -54,7 +54,7 @@
             {
                 "columnText": "Bootstrap-Status",
                 "columField": "bootstrapStatus",
-                "type": "text"
+                "type": "selection"
             },
             {
                 "columnText": "Nsg-Version",
@@ -75,7 +75,8 @@
     "listeners": [{
       "redirect": "/dashboards/aarNSG",
       "params": {
-          "snsg": "gatewayName"
+          "snsg": "gatewayName",
+          "nsgId": "gatewayID"
       }
     }]
 }
