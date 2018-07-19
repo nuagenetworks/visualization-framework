@@ -1,0 +1,81 @@
+{
+    "id": "aar-enterprise-geomap",
+    "graph": "GeoMap",
+    "title": "All NSGs in Enterprise {{enterpriseName}}",
+    "description": "Map View",
+    "author": "Bharat Mukheja",
+    "creationDate": "03/13/2018",
+    "data": {
+        "latitudeColumn": "latitude",
+        "longitudeColumn": "longitude",
+        "nameColumn": "gatewayName",
+        "localityColumn": "address",
+        "idColumn": "gatewayID",
+        "markerIcon": {
+            "default": "nsGatewayBlue",
+            "criteria": [
+                {
+                    "icon": "nsGatewayYellow",
+                    "fields": {
+                        "bootstrapStatus": "INACTIVE"
+                    }
+                },
+                {
+                    "icon": "nsGatewayYellow",
+                    "fields": {
+                        "bootstrapStatus": "NOTIFICATION_APP_REQ_SENT"
+                    }
+                },
+                {
+                    "icon": "nsGatewayYellow",
+                    "fields": {
+                        "bootstrapStatus": "NOTIFICATION_APP_REQ_ACK"
+                    }
+                },
+                {
+                    "icon": "nsGatewayYellow",
+                    "fields": {
+                        "bootstrapStatus": "CERTIFICATE_SIGNED"
+                    }
+                }
+            ]
+        },
+        "filters": [
+            {
+                "columnText": "Name",
+                "columField": "gatewayName",
+                "type": "text"
+            },
+            {
+                "columnText": "Region",
+                "columField": "locality",
+                "type": "text"
+            },
+            {
+                "columnText": "Bootstrap-Status",
+                "columField": "bootstrapStatus",
+                "type": "text"
+            },
+            {
+                "columnText": "Nsg-Version",
+                "columField": "NSGVersion",
+                "type": "text"
+            }
+        ],
+        "links": {
+            "source": "data1",
+            "sourceColumn": "source",
+            "destinationColumn": "destination"
+        }
+    },
+    "query": {
+        "data": "aar-enterprise-geomap",
+        "data1": {"name":"aar-enterprise-all-flows","required":false}
+    },
+    "listeners": [{
+      "redirect": "/dashboards/aarNSG",
+      "params": {
+          "snsg": "gatewayName"
+      }
+    }]
+}

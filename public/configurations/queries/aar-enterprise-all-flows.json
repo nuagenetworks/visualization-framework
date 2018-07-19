@@ -1,0 +1,42 @@
+{
+    "id":"aar-enterprise-all-flows",
+    "title":"All Flows for Geomap",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_dpi_flowstats}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs":{
+                "source":{
+                    "terms":{
+                        "field":"SourceNSG"
+                    },
+                    "aggs":{
+                        "destination":{
+                            "terms":{
+                                "field":"DestinationNSG"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
