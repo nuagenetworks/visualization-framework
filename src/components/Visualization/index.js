@@ -1,7 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
-import evalExpression from "eval-expression"
+import evalExpression from "eval-expression";
+import objectPath from "object-path";
+
 import $ from "jquery";
 import CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -43,6 +45,9 @@ import columnAccessor from "../../lib/vis-graphs/utils/columnAccessor"
 
 import { GraphManager } from "../../lib/vis-graphs/index"
 import { ServiceManager } from "../../services/servicemanager/index";
+
+import { ActionKeyStore  as VSDKeyStore } from "../../configs/nuage/vsd/redux/actions";
+
 import dataConfig from "../../config";
 import style from "./styles";
 
@@ -760,7 +765,8 @@ const mapStateToProps = (state, ownProps) => {
             configurationID,
             ConfigurationsActionKeyStore.ERROR
         ]),
-        loader: false
+        loader: false,
+        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${googleMapsAPIKey}&v=3.exp&libraries=${process.env.REACT_APP_GOOGLE_MAP_LIBRARIES}`
     };
 
     props.queryConfigurations = {}
