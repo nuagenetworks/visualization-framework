@@ -52,14 +52,12 @@
                 "type": "text"
             },
             {
-                "columnText": "Bootstrap-Status",
                 "columField": "bootstrapStatus",
                 "type": "selection"
             },
             {
-                "columnText": "Nsg-Version",
                 "columField": "NSGVersion",
-                "type": "text"
+                "type": "selection"
             }
         ],
         "links": {
