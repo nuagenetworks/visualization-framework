@@ -55,5 +55,5 @@
         { "text": "Add Source VPorts to PGs", "rootpath": "vfs/new", "params": { "operation": "associate", "associator": "vports", "to": "pgs", "direction": "ingress"} },
         { "text": "Add Destination VPorts to PGs", "rootpath": "vfs/new", "params": { "operation": "associate", "associator": "vports", "to": "pgs", "direction": "egress"} }
     ],
-    "query": "vss-domain-flow-explorer"
+    "query": { "data": { "name": "vss-domain-flow-explorer", "scroll": true} }
 }
