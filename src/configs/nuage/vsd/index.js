@@ -87,7 +87,7 @@ const makeRequest = (url, headers) => {
             headers: headers
         })
         .done((response) => {
-            return resolve(response)
+            return resolve(typeof response === 'undefined' ? [] : response)
         })
         .fail((error) => {
             return reject(error)
