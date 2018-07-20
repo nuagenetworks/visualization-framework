@@ -46,8 +46,12 @@ export const updateContextMiddleware = store => next => action => {
                 });
 
                 store.dispatch({
-                        type: "RESET_CONFIGURATION",
-                });
+                    type: "RESET_CONFIGURATION",
+                })
+
+                store.dispatch({
+                    type: "PENDING_DASHBOARD_CONTEXT"
+                })
             }
         }
 

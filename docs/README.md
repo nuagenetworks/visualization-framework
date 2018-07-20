@@ -63,6 +63,8 @@ Here is the list of all the parameters
  - **links** allows you to specify a list of links to navigate to another page
    - **labeL** label of the link
    - **url** url of the link
+ - **defaultContexts** allow you to specify default context keys as an array used to reset dashboard context when switching to another dashboard. If not present - context reset will be skipped
+
  - **filterOptions** allows you to specify a list of filters. Filters will be displayed as a dropdown list. Each time the user clicks on a link, it updates the `context` based on the information provided.
    - **name** name of the filter. In the example below, name is "Time interval"
      - **parameter** name of the parameter in the `context`

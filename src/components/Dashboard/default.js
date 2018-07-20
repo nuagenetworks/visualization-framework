@@ -1,3 +1,18 @@
+
+export const defaultGlobalContexts = [
+    'startTime',
+    'endTime',
+    'prevStartTime',
+    'duration',
+    'interval',
+    'unit',
+    'refreshInterval',
+    'eshost',
+    'token',
+    'org',
+    'api'
+]
+
 export const defaultFilterOptions = {
     "Time interval": {
         "parameter": "startTime",

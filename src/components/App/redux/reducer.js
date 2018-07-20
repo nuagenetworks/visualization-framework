@@ -29,6 +29,16 @@ function updateContext(state, aContext) {
     return state.set(ActionKeyStore.CONTEXT,  Object.assign({}, currentContext, aContext));
 }
 
+function resetContext(state, aContext) {
+    return state
+        .set(ActionKeyStore.PENDING_DASHBOARD_CONTEXT, false)
+        .set(ActionKeyStore.CONTEXT,  Object.assign({}, aContext));
+}
+
+function pendindDashboardContext(state) {
+    return state.set(ActionKeyStore.PENDING_DASHBOARD_CONTEXT, true)
+}
+
 function filterContext(state, aContext) {
     let currentContext = state.get(ActionKeyStore.FILTER_CONTEXT);
     return state.set(ActionKeyStore.FILTER_CONTEXT, Object.assign({}, currentContext, aContext));
@@ -64,6 +74,12 @@ function interfaceReducer(state = initialState, action) {
 
         case ActionTypes.ACTION_UPDATE_CONTEXT:
             return updateContext(state, action.context);
+
+        case ActionTypes.ACTION_RESET_CONTEXT:
+            return resetContext(state, action.context);
+
+        case ActionTypes.PENDING_DASHBOARD_CONTEXT:
+            return pendindDashboardContext(state)
 
         case ActionTypes.ACTION_FILTER_CONTEXT:
             return filterContext(state, action.context);

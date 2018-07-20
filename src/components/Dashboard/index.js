@@ -2,6 +2,7 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { Link } from "react-router";
+import { push } from "redux-router";
 
 import CircularProgress from "material-ui/CircularProgress";
 import { Responsive, WidthProvider } from "react-grid-layout";
@@ -22,8 +23,9 @@ import {
 } from "../App/redux/actions";
 
 import { contextualize } from "../../utils/configurations"
+import { pick } from "../../utils/helpers"
 
-import { defaultFilterOptions } from "./default.js"
+import { defaultFilterOptions, defaultGlobalContexts } from "./default.js"
 
 import style from "./styles";
 import "./style.css";
@@ -48,6 +50,7 @@ export class DashboardView extends React.Component {
         this.updateTitleIfNecessary(prevProps);
         this.updateTitleIconIfNecessary(prevProps);
         this.updateConfiguration();
+        this.resetContext();
     }
 
     currentTitle() {
@@ -94,6 +97,23 @@ export class DashboardView extends React.Component {
             return;
 
         fetchConfigurationIfNeeded(params.id);
+    }
+
+    resetContext() {
+        const { configuration, context, dashboardPendingStatus } = this.props;
+
+        if(configuration && dashboardPendingStatus) {
+            let dashboard = configuration.toJS(),
+                mergedContext = Object.assign({}, context)
+
+            if(dashboard.defaultContexts) {
+                let keys = [...dashboard.defaultContexts, ...defaultGlobalContexts]
+                mergedContext = pick(context, ...keys)
+            }
+
+            this.props.resetContext(mergedContext)
+            this.props.goTo(window.location.pathname, mergedContext)
+        }
     }
 
     onResize() {
@@ -235,11 +255,15 @@ const mapStateToProps = (state, ownProps) => ({
         ConfigurationsActionKeyStore.DATA
     ]),
 
-    fetching: state.configurations.getIn([
-        ConfigurationsActionKeyStore.DASHBOARDS,
-        ownProps.params.id,
-        ConfigurationsActionKeyStore.IS_FETCHING
-    ]),
+    dashboardPendingStatus : state.interface.get(InterfaceActionKeyStore.PENDING_DASHBOARD_CONTEXT),
+
+    fetching:  state.interface.get(InterfaceActionKeyStore.PENDING_DASHBOARD_CONTEXT) || 
+        state.configurations.getIn([
+            ConfigurationsActionKeyStore.DASHBOARDS,
+            ownProps.params.id,
+            ConfigurationsActionKeyStore.IS_FETCHING
+        ]
+    ),
 
     error: state.configurations.getIn([
         ConfigurationsActionKeyStore.DASHBOARDS,
@@ -249,6 +273,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const actionCreators = (dispatch) => ({
+
     setPageTitle: (aTitle) => {
         dispatch(AppActions.updateTitle(aTitle));
     },
@@ -261,6 +286,16 @@ const actionCreators = (dispatch) => ({
         return dispatch(ConfigurationsActions.fetchIfNeeded(
             id,
             ConfigurationsActionKeyStore.DASHBOARDS
+        ));
+    },
+
+    goTo: function(link, context) {
+        dispatch(push({pathname:link, query:context}));
+    },
+
+    resetContext: (context) => {
+        return dispatch(AppActions.resetContext(
+            context
         ));
     }
 });
