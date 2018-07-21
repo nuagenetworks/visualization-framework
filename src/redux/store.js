@@ -15,6 +15,7 @@ import messageBoxReducer from "../components/MessageBox/redux/reducer";
 import serviceReducer from "../services/servicemanager/redux/reducer";
 import VSDReducer from "../configs/nuage/vsd/redux/reducer";
 import VFSReducer from "../features/redux/reducer";
+import modalDialog from "../components/Modal/redux/reducer";
 
 import { Actions as VSDActions, ActionKeyStore as VSDActionKeyStore} from "../configs/nuage/vsd/redux/actions"
 import { Actions as ESActions, ActionKeyStore as ESActionKeyStore} from "../configs/nuage/elasticsearch/redux/actions"
@@ -31,7 +32,8 @@ const appReducer = combineReducers({
     services: serviceReducer,
     VSD: VSDReducer,
     VFS: VFSReducer,
-    form: formReducer
+    form: formReducer,
+    modalDialog
 });
 
 const rootReducer = (state, action) => {
