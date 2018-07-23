@@ -1,9 +1,14 @@
-import React from "react";
+import React, { PropTypes } from "react";
 import Modal from 'react-modal';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import style from './styles';
 
-Modal.setAppElement('#modalPopup')
+const propTypes = {
+  onInfoBoxClose: PropTypes.func,
+};
+
+Modal.setAppElement('#modalPopup');
 
 export default class InfoBox extends React.Component {
 
@@ -17,18 +22,31 @@ export default class InfoBox extends React.Component {
   }
 
   render() {
-    //let Script = this.getScript(this.props.script);
 
-    let { onInfoBoxClose, children } = this.props;
-    let { modalIsOpen } = this.state;
+    const { onInfoBoxClose, children } = this.props;
+    const { modalIsOpen } = this.state;
     return (
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={onInfoBoxClose}
-          style={style}
+          style={style.modal}
         >
-          { children }
+          <div>
+            <div style={style.container}>
+              { children }
+            </div>
+            <div style={style.footer}>
+              <RaisedButton 
+                label="Close"
+                backgroundColor={style.button.background}
+                labelColor={style.button.label}
+                onClick={onInfoBoxClose} 
+              />
+            </div>
+          </div>
         </Modal>
     );
   }
 }
+
+InfoBox.propTypes = propTypes;
