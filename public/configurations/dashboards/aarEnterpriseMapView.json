@@ -19,5 +19,8 @@
             "label": "Map View",
             "url": "/dashboards/aarEnterpriseMapView"
         }
-    ]
+    ],
+    "defaultFilterOptionsOverride": {
+
+    }
 }
