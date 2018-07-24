@@ -11,6 +11,13 @@
         "nameColumn": "gatewayName",
         "localityColumn": "address",
         "idColumn": "gatewayID",
+        "criticalAlarmColumn": "criticalAlarmsCount",
+        "majorAlarmColumn": "majorAlarmsCount",
+        "minorAlarmColumn": "minorAlarmsCount",
+        "infoAlarmColumn": "infoAlarmsCount",
+        "bootstrapStatusColumn" : "bootstrapStatus",
+        "NSGVersionColumn" : "NSGVersion",
+
         "markerIcon": {
             "default": "nsGatewayBlue",
             "criteria": [
