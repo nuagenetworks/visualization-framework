@@ -49,7 +49,7 @@ function executeScript(scriptName, context) {
     * context: the context if the query should be parameterized
     * forceCache: a boolean to force storing the value for a long period
 */
-function fetch(query, context, forceCache, scroll) {
+function fetch(query, context, forceCache, scroll = false) {
     let service = ServiceManager.getService(query.service);
 
     return (dispatch, getState) => {
@@ -66,7 +66,7 @@ function fetch(query, context, forceCache, scroll) {
 
         dispatch(didStartRequest(requestID));
 
-        return service.fetch(query, getState())
+        return service.fetch(Object.assign({}, query, {scroll}), getState())
             .then(
                 async (results) => {
 

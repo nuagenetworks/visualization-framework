@@ -41,9 +41,7 @@ const fetch = function (queryConfiguration, state) {
     if (!client)
         return Promise.reject();
 
-
     return new Promise((resolve, reject) => {
-
         let esRequest,
             results = {
                 response: [],
@@ -54,7 +52,8 @@ const fetch = function (queryConfiguration, state) {
         if(queryConfiguration.query && queryConfiguration.query.scroll_id) {
             esRequest  = client.scroll(queryConfiguration.query)
         } else {
-            esRequest  = client.search(Object.assign({}, queryConfiguration.query, {scroll: '1m'}))
+            const newQuery = queryConfiguration.scroll ? Object.assign({}, queryConfiguration.query, {scroll: '1m'}) : queryConfiguration.query
+            esRequest  = client.search(newQuery)
         }
 
         esRequest.then(function (response) {
