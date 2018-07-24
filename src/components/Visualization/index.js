@@ -713,12 +713,14 @@ const mapStateToProps = (state, ownProps) => {
 
     const realConfiguation = configuration && configuration.toJS();
 
+    const contextualizeConfiguration = configuration ? contextualize(configuration.toJS(), context) : null
+
     const props = {
         id: configurationID,
         context: context,
         orgContext: orgContext,
         location: state.router.location,
-        configuration: configuration ? contextualize(configuration.toJS(), context) : null,
+        configuration: contextualizeConfiguration,
         headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
         isFetching: true,
         hideGraph: false,
@@ -745,6 +747,8 @@ const mapStateToProps = (state, ownProps) => {
             }
         */
         const queries =  typeof props.configuration.query === 'string' ? {'data' : {'name': props.configuration.query}} : props.configuration.query
+
+        props.filterOptions = updateFilterOptions(state, contextualizeConfiguration, context, props.response);
 
         props.configuration.query = {}
 
@@ -827,9 +831,7 @@ const mapStateToProps = (state, ownProps) => {
         }
 
         if(successResultCount === Object.keys(queries).length ) {
-            props.isFetching = false
-            let vizConfig =  configuration ? contextualize(configuration.toJS(), context) : null;
-            props.filterOptions = updateFilterOptions(state, vizConfig, context, props.response);
+            props.isFetching = false;
         }
     }
 
