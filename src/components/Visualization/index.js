@@ -290,7 +290,8 @@ class VisualizationView extends React.Component {
             configuration,
             response,
             id,
-            googleMapURL
+            googleMapURL,
+            googleMapsAPIKey
         } = this.props;
 
         const graphName      = configuration.graph,
@@ -314,6 +315,7 @@ class VisualizationView extends React.Component {
               goTo={this.props.goTo}
               {...this.state.listeners}
               googleMapURL={googleMapURL}
+              googleMapsAPIKey={googleMapsAPIKey}
             />
         )
     }
@@ -729,6 +731,7 @@ const mapStateToProps = (state, ownProps) => {
             configurationID,
             ConfigurationsActionKeyStore.ERROR
         ]),
+        googleMapsAPIKey,
         googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${googleMapsAPIKey}&v=3.exp&libraries=${process.env.REACT_APP_GOOGLE_MAP_LIBRARIES}`
     };
 
