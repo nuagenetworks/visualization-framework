@@ -6,6 +6,7 @@
     "description":"Quick View of the Minor alarms for this NSG in the VSD dashboard",
     "showTitleBar":true,
     "data": {
+        "borderRadius": "0",
         "targetedColumn":"minorAlarmsCount",
         "colors":[
             "green"
