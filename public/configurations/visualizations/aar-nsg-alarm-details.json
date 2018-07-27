@@ -17,6 +17,17 @@
             { "column": "description", "label": "Description" },
             { "column": "numberOfOccurances", "label": "Count" },
             { "column": "errorCondition", "label": "Error Condition" }
+        ],
+        "searchBar" : false,
+        "filters": [
+            {
+                "columField": "severity",
+                "type": "selection"
+            },
+            {
+                "columField": "errorCondition",
+                "type": "selection"
+            }
         ]
     }
 }
