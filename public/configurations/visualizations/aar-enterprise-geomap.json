@@ -6,6 +6,7 @@
     "author": "Bharat Mukheja",
     "creationDate": "03/13/2018",
     "data": {
+        "minZoom":2,
         "latitudeColumn": "latitude",
         "longitudeColumn": "longitude",
         "nameColumn": "gatewayName",
