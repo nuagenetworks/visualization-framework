@@ -4,13 +4,13 @@
     "creationDate": "10/26/2016",
     "title": "AAR NSG ({{snsg}})",
     "visualizations": [
-        { "id": "aar-nsg-top10-app",             "x": 0, "y": 0,  "w": 6, "h": 15, "minW": 5, "minH": 10, "static": true},
-        { "id": "aar-nsg-top5-talkers-upload",   "x": 0, "y": 15, "w": 6, "h": 12, "minW": 5, "minH": 10, "static": true},
-        { "id": "aar-nsg-top5-talkers-download", "x": 6, "y": 15, "w": 6, "h": 12, "minW": 5, "minH": 10, "static": true},
-        { "id": "aar-nsg-app-linechart",         "x": 6, "y": 0,  "w": 6, "h": 15, "minW": 5, "minH": 10, "static": true},
-        { "id": "aar-nsg-alarm-count-critical",  "x": 0, "y": 27,  "w": 2, "h": 10, "minW": 2, "minH": 10, "static": true},
-        { "id": "aar-nsg-alarm-count-major",     "x": 2, "y": 27,  "w": 2, "h": 10, "minW": 2, "minH": 10, "static": true},
-        { "id": "aar-nsg-alarm-count-minor",     "x": 4, "y": 27,  "w": 2, "h": 10, "minW": 2, "minH": 10, "static": true}
+        { "id": "aar-nsg-top10-app",             "x": 0, "y": 10,  "w": 6, "h": 15, "minW": 5, "minH": 10, "static": true},
+        { "id": "aar-nsg-top5-talkers-upload",   "x": 0, "y": 25, "w": 6, "h": 12, "minW": 5, "minH": 10, "static": true},
+        { "id": "aar-nsg-top5-talkers-download", "x": 6, "y": 25, "w": 6, "h": 12, "minW": 5, "minH": 10, "static": true},
+        { "id": "aar-nsg-app-linechart",         "x": 6, "y": 10,  "w": 6, "h": 15, "minW": 5, "minH": 10, "static": true},
+        { "id": "aar-nsg-alarm-count-critical",  "x": 3, "y": 0,  "w": 2, "h": 9, "minW": 1, "minH": 5, "static": true},
+        { "id": "aar-nsg-alarm-count-major",     "x": 5, "y": 0,  "w": 2, "h": 9, "minW": 1, "minH": 5, "static": true},
+        { "id": "aar-nsg-alarm-count-minor",     "x": 7, "y": 0,  "w": 2, "h": 9, "minW": 1, "minH": 5, "static": true}
     ],
     "links": [
         {
