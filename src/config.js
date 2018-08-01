@@ -5,5 +5,5 @@ export default Object.freeze({
         CACHING_QUERY_TIME: process.env.REACT_APP_CACHING_QUERY_TIME || 30000,
         REFRESH_INTERVAL: process.env.REACT_APP_REFRESH_INTERVAL || 30000,
         DATA_LIMIT: process.env.DATA_LIMIT || 200000,
-        DATA_PER_PAGE_LIMIT: process.env.DATA_PER_PAGE_LIMIT || 50000
+        DATA_PER_PAGE_LIMIT: process.env.DATA_PER_PAGE_LIMIT || 5000
 })
