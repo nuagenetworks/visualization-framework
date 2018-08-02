@@ -10,17 +10,19 @@ let initialState = Map() // eslint-disable-line
 
 function didStartRequest(state, requestID) {
     return state.setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], true)
-                .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.ERROR], null);
+                .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.LOADER], false)
+                .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.ERROR], false);
 }
 
-function didReceiveResponse(state, requestID, results, forceCache) {
+function didReceiveResponse(state, requestID, results, forceCache, loader) {
 
-    const timingCache    = forceCache ? 86400000 : ServiceManager.config.timingCache, // forceCache equals to 24h
+    const timingCache    = forceCache ? 86400000 : ServiceManager.config.timingCache * (loader ? 3 : 1), // forceCache equals to 24h
           currentDate    = Date.now(),
           expirationDate = currentDate + timingCache;
 
     return state
       .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], false)
+      .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.LOADER], loader)
       .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS], results)
       .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.EXPIRATION_DATE], expirationDate);
 }
@@ -28,6 +30,7 @@ function didReceiveResponse(state, requestID, results, forceCache) {
 function didReceiveError(state, requestID, error) {
     return state
         .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], false)
+        .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.LOADER], false)
         .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.ERROR], error)
         .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS], []);
 }
@@ -43,7 +46,7 @@ function servicesReducer(state = initialState, action) {
             return didStartRequest(state, action.requestID);
 
         case ActionTypes.SERVICE_MANAGER_DID_RECEIVE_RESPONSE:
-            return didReceiveResponse(state, action.requestID, action.results, action.forceCache);
+            return didReceiveResponse(state, action.requestID, action.results, action.forceCache, action.loader);
 
         case ActionTypes.SERVICE_MANAGER_DID_RECEIVE_ERROR:
             return didReceiveError(state, action.requestID, action.error);

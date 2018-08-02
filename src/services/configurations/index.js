@@ -1,10 +1,11 @@
 import "whatwg-fetch";
 import { checkStatus, parseJSON } from "../common";
+import configData from '../../config'
 
 
 const config = {
     path: process.env.PUBLIC_URL + "/configurations/",
-    cachingTime: 900000, // (ms) -> default 30s
+    cachingTime: configData.CACHING_CONFIG_TIME, // (ms) -> default 30s
 }
 
 const fetchConfiguration = function (id, configType) {
