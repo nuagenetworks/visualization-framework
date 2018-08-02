@@ -28,7 +28,7 @@
     },
     "listeners": [{
       "params": {
-          "nsg": "NSG",
+          "snsg": "NSG",
           "app":"L7Classification"
       }
     }],

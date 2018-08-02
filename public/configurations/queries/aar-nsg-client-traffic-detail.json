@@ -26,7 +26,7 @@
                         },
                         {
                             "term": {
-                                "{{NsgType:SourceNSG}}": "{{nsg}}"
+                                "{{NsgType:SourceNSG}}": "{{snsg}}"
                             }
                         }
                     ]

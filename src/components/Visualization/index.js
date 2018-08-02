@@ -313,7 +313,8 @@ class VisualizationView extends React.Component {
             configuration,
             response,
             id,
-            googleMapURL
+            googleMapURL,
+            googleMapsAPIKey
         } = this.props;
 
         const graphName      = configuration.graph,
@@ -337,6 +338,7 @@ class VisualizationView extends React.Component {
               goTo={this.props.goTo}
               {...this.state.listeners}
               googleMapURL={googleMapURL}
+              googleMapsAPIKey={googleMapsAPIKey}
             />
         )
     }
@@ -751,12 +753,14 @@ const mapStateToProps = (state, ownProps) => {
 
     const realConfiguation = configuration && configuration.toJS();
 
+    const contextualizeConfiguration = configuration ? contextualize(configuration.toJS(), context) : null
+
     const props = {
         id: configurationID,
         context: context,
         orgContext: orgContext,
         location: state.router.location,
-        configuration: configuration ? contextualize(configuration.toJS(), context) : null,
+        configuration: contextualizeConfiguration,
         headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
         isFetching: true,
         hideGraph: false,
@@ -766,7 +770,8 @@ const mapStateToProps = (state, ownProps) => {
             ConfigurationsActionKeyStore.ERROR
         ]),
         loader: false,
-        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${googleMapsAPIKey}&v=3.exp&libraries=${process.env.REACT_APP_GOOGLE_MAP_LIBRARIES}`
+        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${googleMapsAPIKey}&v=3.exp&libraries=${process.env.REACT_APP_GOOGLE_MAP_LIBRARIES}`,
+        googleMapsAPIKey,
     };
 
     props.queryConfigurations = {}
@@ -784,6 +789,8 @@ const mapStateToProps = (state, ownProps) => {
             }
         */
         const queries =  typeof props.configuration.query === 'string' ? {'data' : {'name': props.configuration.query}} : props.configuration.query
+
+        props.filterOptions = updateFilterOptions(state, contextualizeConfiguration, context, props.response);
 
         props.configuration.query = {}
 
@@ -869,10 +876,8 @@ const mapStateToProps = (state, ownProps) => {
             }
         }
 
-        if (successResultCount === Object.keys(queries).length ) {
-            props.isFetching = false
-            let vizConfig =  configuration ? contextualize(configuration.toJS(), context) : null;
-            props.filterOptions = updateFilterOptions(state, vizConfig, context, props.response);
+        if(successResultCount === Object.keys(queries).length ) {
+            props.isFetching = false;
         }
     }
 
