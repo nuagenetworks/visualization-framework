@@ -1,8 +1,12 @@
 import $ from "jquery";
+import _ from 'lodash';
+import objectPath from "object-path";
 
 import { ActionKeyStore } from "./redux/actions";
 import { parameterizedConfiguration } from "../../../utils/configurations";
 import configData from '../../../config';
+
+import { VSDSearchConvertor } from '../../../lib/vis-graphs/utils/helpers'
 
 const config = {
     api_version: "5.0",
@@ -40,8 +44,8 @@ const getHeaders = (params = {}) => {
     if (params.page || params.page === 0)
         headers["X-Nuage-Page"] = params.page
 
-    if (params.pageSize)
-        headers["x-nuage-pagesize"] = params.pageSize
+    if (params.size)
+        headers["x-nuage-PageSize"] = params.size
 
     if (params.proxyUser)
         headers["X-Nuage-ProxyUser"] = params.proxyUser
@@ -98,9 +102,9 @@ const makeRequest = (url, headers) => {
         })
         .done((response, status, content) => {
             let page = content.getResponseHeader('x-nuage-page') || headers["X-Nuage-Page"]
-            let count = content.getResponseHeader('x-nuage-count')
-
-            return resolve({response, header: { page, count, hits: response.length || 0 }})
+            let count = parseInt(content.getResponseHeader('x-nuage-count'))
+            
+            return resolve({response, header: { scroll_id: page, count, hits: response && response.length || 0 }})
         })
         .fail((error) => {
             return reject(error)
@@ -115,11 +119,13 @@ const makeRequest = (url, headers) => {
  */
 const getNextRequest = (header, query, totalCaptured) => {
     let nextQuery   = null,
-        page        = 0;
+      scroll_id        = 0;
 
     if((totalCaptured + header.hits) < header.count) {
-        page = parseInt(header.page) + 1
-        nextQuery = Object.assign({}, query, {page})
+        scroll_id = parseInt(header.scroll_id) + 1
+        nextQuery = {...query, "length":  header.count};
+
+        nextQuery.query.scroll_id = scroll_id;
     }
 
     return nextQuery
@@ -288,9 +294,15 @@ const fetch = (configuration, state, totalCaptured = 0) => {
 
     if (!api || !token)
         return Promise.reject(ERROR_MESSAGE);
-
-    const url     = VSDServiceTest.getURL(configuration, api),
-          headers = getHeaders({token, organization, filter: configuration.query.filter, pageSize: configuration.query.pageSize, page: configuration.page || 0 });
+    const url     = "https://124.252.253.84:8443/nuage/api/v5_0/nsgateways",//VSDServiceTest.getURL(configuration, api),
+          headers = getHeaders({
+              token,
+              organization,
+              filter: configuration.query.filter || null,
+              size: configuration.query.size,
+              page: configuration.query && configuration.query.scroll_id || 0,
+              orderBy: configuration.query.sort || null,
+             });
 
     return new Promise((resolve, reject) => {
 
@@ -319,6 +331,7 @@ const post = (configuration, body, state) => {
 
     const url     = VSDServiceTest.getURL(configuration, api),
           headers = getHeaders({token, organization, filter: configuration.query.filter});
+    console.error('URL', url);
 
     return VSDServiceTest.makePOSTRequest(url, headers, body);
 }
@@ -359,6 +372,40 @@ const add = (configuration, body, state) => {
     return patch(configuration, body, state);
 }
 
+const getSizePath = function() {
+    return 'query.size';
+}
+
+const updateSize = function(query, size) {
+    let q = {...query};
+    objectPath.set(q, this.getSizePath(), size);
+    return q;
+}
+
+const getScrollQuery = function (query, scroll_id) {
+    let q = {...query};
+    q.query.scroll_id = scroll_id;
+    return q;
+}
+
+const addSorting = function (queryConfiguration, sort) {
+    let tmpQueryConfiguration = {...queryConfiguration};
+    tmpQueryConfiguration.query.sort = `${sort.column} ${sort.order}`
+    return tmpQueryConfiguration; 
+}
+
+const addSearching = function (queryConfiguration, search) {
+    let tmpQueryConfiguration = _.cloneDeep(queryConfiguration);
+    
+    if (search.length) {
+        let filter = objectPath.get(tmpQueryConfiguration, 'query.filter');
+
+        objectPath.push(tmpQueryConfiguration, 'query.filter', (filter ? `(${filter}) AND ` : '') + VSDSearchConvertor(search));
+    }
+
+    return tmpQueryConfiguration;
+}
+
 export const VSDService = {
     id: "VSD",
     config,
@@ -369,4 +416,9 @@ export const VSDService = {
     update,
     add,
     remove,
+    getSizePath,
+    updateSize,
+    getScrollQuery,
+    addSorting,
+    addSearching
 };

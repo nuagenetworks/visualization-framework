@@ -5,24 +5,23 @@ import { ServiceManager } from "../index"
 
 let initialState = Map() // eslint-disable-line
                     // .set(,) // Usefull if we need to set some configuration information
-                    .set(ActionKeyStore.REQUESTS, Map()); // eslint-disable-line
+                    .set(ActionKeyStore.REQUESTS, Map())
+                    .set(ActionKeyStore.SCROLL_DATA, Map()); // eslint-disable-line
 
 
 function didStartRequest(state, requestID) {
     return state.setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], true)
-                .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.LOADER], false)
                 .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.ERROR], false);
 }
 
 function didReceiveResponse(state, requestID, results, forceCache, loader) {
 
-    const timingCache    = forceCache ? 86400000 : ServiceManager.config.timingCache * (loader ? 3 : 1), // forceCache equals to 24h
+    const timingCache    = forceCache ? 86400000 : ServiceManager.config.timingCache, // forceCache equals to 24h
           currentDate    = Date.now(),
           expirationDate = currentDate + timingCache;
 
     return state
       .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], false)
-      .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.LOADER], loader)
       .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS], results)
       .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.EXPIRATION_DATE], expirationDate);
 }
@@ -30,13 +29,22 @@ function didReceiveResponse(state, requestID, results, forceCache, loader) {
 function didReceiveError(state, requestID, error) {
     return state
         .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], false)
-        .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.LOADER], false)
         .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.ERROR], error)
         .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS], []);
 }
 
 function deleteRequest(state, requestID) {
     return state.deleteIn([ActionKeyStore.REQUESTS, requestID]);
+}
+
+function saveScrollData(state, id, data) {
+    let scrollData = state.getIn([ActionKeyStore.SCROLL_DATA, id])
+    if(!scrollData) {
+        scrollData = {}
+    }
+
+    return state
+        .setIn([ActionKeyStore.SCROLL_DATA, id], Object.assign({}, scrollData, data))
 }
 
 function servicesReducer(state = initialState, action) {
@@ -53,6 +61,9 @@ function servicesReducer(state = initialState, action) {
 
         case ActionTypes.SERVICE_MANAGER_DELETE_REQUEST:
             return deleteRequest(state, action.requestID);
+
+        case ActionTypes.SERVICE_MANAGER_SCROLL_DATA:
+            return saveScrollData(state, action.id, action.data)
         default:
             return state;
     }

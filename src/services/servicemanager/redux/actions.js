@@ -1,13 +1,17 @@
+import _ from "lodash";
+import objectPath from "object-path"
 import { ServiceManager } from "../index"
 import { parameterizedConfiguration } from "../../../utils/configurations";
 
-import config from '../../../config'
+import config from '../../../config';
+import { events } from '../../../lib/vis-graphs/utils/types';
 
 export const ActionTypes = {
     SERVICE_MANAGER_DID_START_REQUEST: "SERVICE_MANAGER_DID_START_REQUEST",
     SERVICE_MANAGER_DID_RECEIVE_RESPONSE: "SERVICE_MANAGER_DID_RECEIVE_RESPONSE",
     SERVICE_MANAGER_DID_RECEIVE_ERROR: "SERVICE_MANAGER_DID_RECEIVE_ERROR",
     SERVICE_MANAGER_DELETE_REQUEST: "SERVICE_MANAGER_DELETE_REQUEST",
+    SERVICE_MANAGER_SCROLL_DATA: "SERVICE_MANAGER_SCROLL_DATA"
 };
 
 export const ActionKeyStore = {
@@ -16,7 +20,7 @@ export const ActionKeyStore = {
     RESULTS: "results",
     REQUESTS: "requests",
     EXPIRATION_DATE: "expirationDate",
-    LOADER: 'loader'
+    SCROLL_DATA: 'scrollData'
 };
 
 // TODO: Temporary - Replace this part in the middleware
@@ -51,7 +55,6 @@ function executeScript(scriptName, context) {
 */
 function fetch(query, context, forceCache, scroll = false) {
     let service = ServiceManager.getService(query.service);
-
     return (dispatch, getState) => {
         let requestID = service.getRequestID(query, context);
 
@@ -64,39 +67,92 @@ function fetch(query, context, forceCache, scroll = false) {
                 return Promise.reject("Provided context does not allow to parameterized query " + query.id);
         }
 
+        let data = [],
+         currentPage = 1,
+         startPage = 1,
+         updatedQuery = Object.assign({}, query, {scroll}),
+         scrollId = null;
+
+        const size = objectPath.get(updatedQuery, service.getSizePath());
+        if(scroll) {
+            if (!size) {
+                updatedQuery = service.updateSize(updatedQuery, config.DATA_PER_PAGE_LIMIT);
+            }
+
+            data = getState().services.getIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS]);
+            data = data || [];
+
+            const scrollData = getState().services.getIn([ActionKeyStore.SCROLL_DATA, updatedQuery.vizID]) || {};
+
+            // Update the requested page
+            if(objectPath.has(scrollData, 'page')) {
+                currentPage = scrollData.page;
+            }
+
+            // Check whether Data is not expired
+            if((objectPath.has(scrollData, 'event') && scrollData.event === events.PAGING)
+                && (objectPath.has(scrollData, 'expiration') && Date.now() < scrollData.expiration)) {
+
+                // Checking if data already existed for current page in redux store.
+                if(data.length >= ((currentPage - 1) * size + 1)) {
+
+                    // Also dispathcing event to say respective event has been handled.
+                    dispatch(updateScroll(query.vizID, {
+                        event: null,
+                        page: currentPage
+                    }));
+
+                    return Promise.resolve();
+                }
+
+                scrollId = scrollData.scroll_id
+                startPage = currentPage;
+            } else {
+                // Data expired reset it to blank
+                data = [];
+            }
+        }
+
+        // Building query on the basis of page number
+        if( startPage !== 1 && scrollId) {
+            updatedQuery = service.getScrollQuery(updatedQuery, scrollId);
+        }
+
         dispatch(didStartRequest(requestID));
 
-        return service.fetch(Object.assign({}, query, {scroll}), getState())
+        return service.fetch(updatedQuery, getState())
             .then(
                 async (results) => {
-
-                    let data = ServiceManager.tabify(query, results.response);
+                    data = [...data, ...ServiceManager.tabify(query, results.response)];
                     let nextQuery = scroll ? results.nextQuery : null
+                    startPage++;
 
-                    dispatch(didReceiveResponse(requestID, data, false, nextQuery))
-
-                    /**
-                     * Fetching data via scrolling if `scroll: true` in query config
-                     * and it will fetch data (`size: xxx` in ES and `pagesize` in VSD) in each request
-                     * untill it will reached the `DATA_LIMIT` defined in config
-                     */
-                    if (nextQuery) {
-
-                        while(nextQuery) {
+                    if(nextQuery && nextQuery.query && nextQuery.query.scroll_id) {
+                        while(startPage <= currentPage && nextQuery) {
                             let result =   await service.fetch(nextQuery, getState(), data.length)
                             let response = ServiceManager.tabify(query, result.response)
 
                             if (response && response.length)
                                 data = [...data, ...response];
 
-                            if(data.length >= config.DATA_LIMIT)
-                               break;
-
                             nextQuery = result.nextQuery;
-                        }
-
-                        dispatch(didReceiveResponse(requestID, data));
+                            startPage++;
+                        }   
                     }
+
+                    if(scroll) {
+                        dispatch(updateScroll(query.vizID, {
+                            scroll_id: objectPath.get(nextQuery, 'query.scroll_id'),
+                            expiration: Date.now() + config.SCROLL_CACHING_QUERY_TIME,
+                            page: startPage - 1,
+                            event: null,
+                            size: objectPath.get(nextQuery, 'length'),
+                            pageSize: size,
+                        }))
+                    }
+
+                    dispatch(didReceiveResponse(requestID, data, false))
+
                     return Promise.resolve(data);
             },
             (error) => {
@@ -105,7 +161,7 @@ function fetch(query, context, forceCache, scroll = false) {
                         const response = service.getMockResponse(query);
                         dispatch(didReceiveResponse(requestID, response, forceCache));
                     } catch(e) {
-                        dispatch(didReceiveError(requestID, e, forceCache));
+                        dispatch(didReceiveError(requestID, e));
                     }
 
                     return Promise.resolve();
@@ -150,9 +206,16 @@ function fetchIfNeeded(query, context, forceCache, scroll) {
         const state = getState(),
               request = state.services.getIn([ActionKeyStore.REQUESTS, requestID]);
 
-        if (shouldFetch(request)) {
+        let mustFetch = false;
+
+        if(scroll) {
+            const scrollData = state.services.getIn([ActionKeyStore.SCROLL_DATA, query.vizID]);
+            mustFetch = scrollData && scrollData.event || false;
+        }
+
+        if (shouldFetch(request) || mustFetch) {
             if (isScript)
-                return dispatch(executeScript(query, context, forceCache));
+                return dispatch(executeScript(query, context));
             else
                 return dispatch(fetch(query, context, forceCache, scroll));
 
@@ -318,13 +381,12 @@ function didStartRequest(requestID) {
     };
 }
 
-function didReceiveResponse(requestID, results, forceCache = false, loader = false) {
+function didReceiveResponse(requestID, results, forceCache = false) {
     return {
         type: ActionTypes.SERVICE_MANAGER_DID_RECEIVE_RESPONSE,
         requestID,
         results,
-        forceCache,
-        loader: loader ? true : false
+        forceCache
     };
 }
 
@@ -343,6 +405,14 @@ function deleteRequest(requestID) {
     };
 }
 
+function updateScroll(id, data) {
+    return {
+        type: ActionTypes.SERVICE_MANAGER_SCROLL_DATA,
+        id,
+        data,
+    };
+}
+
 export const Actions = {
     fetch: fetch,
     fetchIfNeeded: fetchIfNeeded,
@@ -352,5 +422,6 @@ export const Actions = {
     postIfNeeded: postIfNeeded,
     deleteRequest: deleteRequest,
     updateIfNeeded: updateIfNeeded,
-    addIfNeeded: addIfNeeded
+    addIfNeeded: addIfNeeded,
+    updateScroll: updateScroll,
 };

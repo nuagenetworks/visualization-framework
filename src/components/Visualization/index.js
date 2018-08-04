@@ -130,8 +130,6 @@ class VisualizationView extends React.Component {
         this.props.fetchConfigurationIfNeeded(id).then((c) => {
             const {
                 configuration,
-                showInDashboard,
-                setPageTitle,
                 context
             } = this.props;
 
@@ -158,19 +156,6 @@ class VisualizationView extends React.Component {
 
                             if(!queryConfiguration) {
                                 return
-                            }
-
-                            /**
-                             * if scroll is enable then fetch only listed columns and increase per page size to 10000
-                             * from ES to make query execution faster
-                             */
-                            if(queries[key].scroll &&
-                                configuration.data &&
-                                configuration.data.columns &&
-                                queryConfiguration.query
-                            ) {
-                                queryConfiguration.query.body['_source'] = this.getColumns(configuration)
-                                queryConfiguration.query.body['size']    = dataConfig.DATA_PER_PAGE_LIMIT
                             }
 
                             executeQueryIfNeeded(queryConfiguration, context, queries[key].scroll || false).then(
@@ -308,12 +293,23 @@ class VisualizationView extends React.Component {
         selectRow(id, rows, matchingRows, location.query, location.pathname)
     }
 
+    updateScrollData(data) {
+        const {
+            id,
+            updateScroll
+        } = this.props;
+
+        updateScroll(id, data)
+    }
+
     renderVisualization() {
         const {
             configuration,
             response,
             id,
-            googleMapURL
+            googleMapURL,
+            scroll,
+            scrollData
         } = this.props;
 
         const graphName      = configuration.graph,
@@ -322,6 +318,21 @@ class VisualizationView extends React.Component {
         if (!response.data) {
             console.log('Main source "data" key is not defined')
             return this.renderCardWithInfo("No data to visualize", "bar-chart");
+        }
+
+        let tableConfig = {};
+
+        if(graphName === 'Table') {
+            // Total, per page, current page must be set and only applicable for Table component only.
+            const limit = objectPath.get(configuration, 'data.limit') || 100;
+            tableConfig = {
+                scroll,
+                searchText: objectPath.has(scrollData, 'searchText') ? objectPath.get(scrollData, 'searchText') : null,
+                sort: objectPath.has(scrollData, 'sort') ? objectPath.get(scrollData, 'sort') : null,
+                size: objectPath.has(scrollData, 'size') ? objectPath.get(scrollData, 'size') : response.data.length, // response length for normal table otherwise total hits for scroll based table.
+                pageSize: objectPath.has(scrollData, 'pageSize') ? objectPath.get(scrollData, 'pageSize') : limit, // Calculate this from the config or (query in case of scroll)
+                page: objectPath.has(scrollData, 'page') ? objectPath.get(scrollData, 'page') : 1 // Pass page as 1 for Normal Table and will be handled internally only. 
+            }
         }
 
         let graphHeight = d3.select(`#filter_${id}`).node() ? this.state.height - d3.select(`#filter_${id}`).node().getBoundingClientRect().height : this.state.height;
@@ -337,6 +348,8 @@ class VisualizationView extends React.Component {
               goTo={this.props.goTo}
               {...this.state.listeners}
               googleMapURL={googleMapURL}
+              {...tableConfig} //Specific for table component
+              updateScroll={this.updateScrollData.bind(this)}
             />
         )
     }
@@ -760,13 +773,15 @@ const mapStateToProps = (state, ownProps) => {
         headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
         isFetching: true,
         hideGraph: false,
+        scroll: false,
         error: state.configurations.getIn([
             ConfigurationsActionKeyStore.VISUALIZATIONS,
             configurationID,
             ConfigurationsActionKeyStore.ERROR
         ]),
         loader: false,
-        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${googleMapsAPIKey}&v=3.exp&libraries=${process.env.REACT_APP_GOOGLE_MAP_LIBRARIES}`
+        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${googleMapsAPIKey}&v=3.exp&libraries=${process.env.REACT_APP_GOOGLE_MAP_LIBRARIES}`,
+        scrollData: state.services.getIn([ServiceActionKeyStore.SCROLL_DATA, configurationID])
     };
 
     props.queryConfigurations = {}
@@ -800,11 +815,15 @@ const mapStateToProps = (state, ownProps) => {
                 */
                 let queryConfig = Object.assign({}, typeof queries[query] === 'string' ? { 'name': queries[query]} : queries[query])
 
-                props.configuration.query[query] = queryConfig
-
                 if(query === 'data') {
                     queryConfig.required = true
+
+                    // check scroll is enabled or not on primary data
+                    if(queryConfig.scroll)
+                        props.scroll = true;
                 }
+
+                props.configuration.query[query] = queryConfig
 
                 let queryConfiguration = state.configurations.getIn([
                     ConfigurationsActionKeyStore.QUERIES,
@@ -824,6 +843,8 @@ const mapStateToProps = (state, ownProps) => {
                         ConfigurationsActionKeyStore.DATA
                     );
                     props.queryConfigurations[query] = queryConfiguration ? queryConfiguration.toJS() : null;
+                    props.queryConfigurations[query].vizID = configurationID
+
                 }
 
                 if(realConfiguation  && props.queryConfigurations[query]) {
@@ -834,8 +855,15 @@ const mapStateToProps = (state, ownProps) => {
 
                 // Expose received response if it is available
                 if (props.queryConfigurations[query] || scriptName) {
+                    // Updating the QUERY with Sorting
+
 
                     const requestID = ServiceManager.getRequestID(props.queryConfigurations[query] || scriptName, context);
+
+                    if(queryConfig.scroll) {
+                        props.queryConfigurations[query] = ServiceManager.addSearching(props.queryConfigurations[query], objectPath.get(props.scrollData, 'search'));
+                        props.queryConfigurations[query] = ServiceManager.addSorting(props.queryConfigurations[query], objectPath.get(props.scrollData, 'sort'));
+                    }
 
                     if (typeof requestID === 'undefined') {
                         props.hideGraph = true
@@ -860,6 +888,7 @@ const mapStateToProps = (state, ownProps) => {
                             if (responseJS.error && queryConfig.required !== false) {
                                 props.error = responseJS.error;
                             } else if (responseJS.results) {
+
                                 successResultCount++;
                                 props.response[query] = responseJS.results
                             }
@@ -913,6 +942,10 @@ const actionCreators = (dispatch) => ({
 
     selectRow: function(vssID, row, matchingRows, currentQueryParams, currentPath) {
         return dispatch(VFSActions.selectRow(vssID, row, matchingRows, currentQueryParams, currentPath))
+    },
+
+    updateScroll: function(id, params) {
+        return dispatch(ServiceActions.updateScroll(id, params));
     }
 
  });

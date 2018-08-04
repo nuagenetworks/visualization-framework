@@ -1,9 +1,15 @@
 import elasticsearch from "elasticsearch";
+import objectPath from 'object-path';
+
+import _ from 'lodash';
 
 import tabify from "./tabify";
 import { ActionKeyStore } from "./redux/actions";
 import { parameterizedConfiguration, getUsedParameters } from "../../../utils/configurations";
 import configData from '../../../config'
+
+import { ESSearchConvertor } from '../../../lib/vis-graphs/utils/helpers'
+
 
 const ERROR_MESSAGE = "unable to fetch data."
 
@@ -52,7 +58,7 @@ const fetch = function (queryConfiguration, state) {
         if(queryConfiguration.query && queryConfiguration.query.scroll_id) {
             esRequest  = client.scroll(queryConfiguration.query)
         } else {
-            const newQuery = queryConfiguration.scroll ? Object.assign({}, queryConfiguration.query, {scroll: '1m'}) : queryConfiguration.query
+            const newQuery = queryConfiguration.scroll ? Object.assign({}, queryConfiguration.query, {scroll: configData.ES_SCROLL_TIME}) : queryConfiguration.query
             esRequest  = client.search(newQuery)
         }
 
@@ -63,9 +69,10 @@ const fetch = function (queryConfiguration, state) {
             if (response.hits.hits.length && response._scroll_id) {
                 results.nextQuery = {
                     query: {
-                        scroll: "1m",
-                        scroll_id: response._scroll_id
-                    }
+                        scroll: configData.ES_SCROLL_TIME,
+                        scroll_id: response._scroll_id,
+                    },
+                    length: response.hits.total
                 }
             }
 
@@ -119,10 +126,53 @@ const getRequestID = function (queryConfiguration, context) {
     return queryConfiguration.id + "[" + JSON.stringify(parameters) + "]";
 }
 
+const addSorting = function (queryConfiguration, sort) {
+    let tmpQueryConfiguration = {...queryConfiguration};
+    tmpQueryConfiguration.query.body.sort = {
+        [sort.column]: {
+            order: sort.order
+        }
+    };
+
+    return tmpQueryConfiguration; 
+}
+
+const addSearching = function (queryConfiguration, search) {
+    let tmpQueryConfiguration = _.cloneDeep(queryConfiguration);
+    if (search.length) {
+        objectPath.push(tmpQueryConfiguration, 'query.body.query.bool.must', ESSearchConvertor(search));
+    }
+
+    return tmpQueryConfiguration; 
+}
+
+const getSizePath = function() {
+    return 'query.body.size';
+}
+
+const updateSize = function(query, size) {
+    let q = {...query};
+    objectPath.set(q, this.getSizePath(), size);
+    return q;
+}
+
+const getScrollQuery = function (query, scroll_id) {
+    return Object.assign({}, { query: {
+        scroll: configData.ES_SCROLL_TIME,
+        scroll_id: scroll_id
+    }})
+}
+
 export const ElasticSearchService = {
     id: "elasticsearch",
     fetch: fetch,
     ping: ping,
     getRequestID: getRequestID,
-    tabify: tabify
+    addSorting: addSorting,
+    addSearching: addSearching,
+    tabify: tabify,
+    ESClient,
+    getSizePath,
+    updateSize,
+    getScrollQuery    
 }
