@@ -130,7 +130,8 @@ class VisualizationView extends React.Component {
         this.props.fetchConfigurationIfNeeded(id).then((c) => {
             const {
                 configuration,
-                context
+                context,
+                dashboard
             } = this.props;
 
             if (!configuration)
@@ -141,7 +142,7 @@ class VisualizationView extends React.Component {
 
             if (scriptName) {
                 const { executeScriptIfNeeded } = this.props;
-                executeScriptIfNeeded(scriptName, context);
+                executeScriptIfNeeded(scriptName, context, false, dashboard);
             }
 
             if (queries) {
@@ -158,7 +159,7 @@ class VisualizationView extends React.Component {
                                 return
                             }
 
-                            executeQueryIfNeeded(queryConfiguration, context, queries[key].scroll || false).then(
+                            executeQueryIfNeeded(queryConfiguration, context, queries[key].scroll || false, dashboard).then(
                                 () => {
                                 },
                                 (error) => {
@@ -864,18 +865,16 @@ const mapStateToProps = (state, ownProps) => {
                 if (props.queryConfigurations[query] || scriptName) {
                     // Updating the QUERY with Sorting
 
-
-                    const requestID = ServiceManager.getRequestID(props.queryConfigurations[query] || scriptName, context);
-
                     if(queryConfig.scroll) {
                         props.queryConfigurations[query] = ServiceManager.addSearching(props.queryConfigurations[query], objectPath.get(props.scrollData, 'search'));
                         props.queryConfigurations[query] = ServiceManager.addSorting(props.queryConfigurations[query], objectPath.get(props.scrollData, 'sort'));
                     }
 
+                    const requestID = ServiceManager.getRequestID(props.queryConfigurations[query] || scriptName, context);
+
                     if (typeof requestID === 'undefined') {
                         props.hideGraph = true
                     } else {
-
                         let response = state.services.getIn([
                             ServiceActionKeyStore.REQUESTS,
                             requestID
@@ -937,12 +936,12 @@ const actionCreators = (dispatch) => ({
         ));
     },
 
-    executeQueryIfNeeded: function(queryConfiguration, context, scroll) {
-        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context, false, scroll));
+    executeQueryIfNeeded: function(queryConfiguration, context, scroll, dashboard = null) {
+        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context, false, scroll, dashboard));
     },
 
-    executeScriptIfNeeded: function(scriptName, context) {
-        return dispatch(ServiceActions.fetchIfNeeded(scriptName, context));
+    executeScriptIfNeeded: function(scriptName, context, scroll, dashboard = null) {
+        return dispatch(ServiceActions.fetchIfNeeded(scriptName, context, false, scroll, dashboard));
     },
 
     selectRow: function(vssID, row, matchingRows, currentQueryParams, currentPath) {

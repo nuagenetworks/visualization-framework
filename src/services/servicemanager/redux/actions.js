@@ -11,7 +11,8 @@ export const ActionTypes = {
     SERVICE_MANAGER_DID_RECEIVE_RESPONSE: "SERVICE_MANAGER_DID_RECEIVE_RESPONSE",
     SERVICE_MANAGER_DID_RECEIVE_ERROR: "SERVICE_MANAGER_DID_RECEIVE_ERROR",
     SERVICE_MANAGER_DELETE_REQUEST: "SERVICE_MANAGER_DELETE_REQUEST",
-    SERVICE_MANAGER_SCROLL_DATA: "SERVICE_MANAGER_SCROLL_DATA"
+    SERVICE_MANAGER_SCROLL_DATA: "SERVICE_MANAGER_SCROLL_DATA",
+    SERVICE_MANAGER_RESET_SERVICES: "SERVICE_MANAGER_RESET_SERVICES"
 };
 
 export const ActionKeyStore = {
@@ -20,16 +21,17 @@ export const ActionKeyStore = {
     RESULTS: "results",
     REQUESTS: "requests",
     EXPIRATION_DATE: "expirationDate",
-    SCROLL_DATA: 'scrollData'
+    SCROLL_DATA: 'scrollData',
+    DASHBOARD: 'dashboard'
 };
 
 // TODO: Temporary - Replace this part in the middleware
-function executeScript(scriptName, context) {
+function executeScript(scriptName, context, dashboard = null) {
 
     const requestID = ServiceManager.getRequestID(scriptName, context);
 
-    return (dispatch) => {
-        dispatch(didStartRequest(requestID));
+    return (dispatch, getState) => {
+        dispatch(didStartRequest(requestID, dashboard));
 
         return ServiceManager.executeScript(scriptName, context)
             .then(
@@ -53,8 +55,9 @@ function executeScript(scriptName, context) {
     * context: the context if the query should be parameterized
     * forceCache: a boolean to force storing the value for a long period
 */
-function fetch(query, context, forceCache, scroll = false) {
+function fetch(query, context, forceCache, scroll = false, dashboard = null) {
     let service = ServiceManager.getService(query.service);
+
     return (dispatch, getState) => {
         let requestID = service.getRequestID(query, context);
 
@@ -118,7 +121,7 @@ function fetch(query, context, forceCache, scroll = false) {
             updatedQuery = service.getScrollQuery(updatedQuery, scrollId);
         }
 
-        dispatch(didStartRequest(requestID));
+        dispatch(didStartRequest(requestID, dashboard));
 
         return service.fetch(updatedQuery, getState())
             .then(
@@ -186,7 +189,7 @@ function shouldFetch(request) {
     return !request.get(ActionKeyStore.IS_FETCHING) && currentDate > expireDate;
 }
 
-function fetchIfNeeded(query, context, forceCache, scroll) {
+function fetchIfNeeded(query, context, forceCache, scroll, dashboard = null) {
 
     // TODO: Temporary - Replace this part in the middleware
     const isScript = typeof(query) === "string";
@@ -215,9 +218,9 @@ function fetchIfNeeded(query, context, forceCache, scroll) {
 
         if (shouldFetch(request) || mustFetch) {
             if (isScript)
-                return dispatch(executeScript(query, context));
+                return dispatch(executeScript(query, context, dashboard));
             else
-                return dispatch(fetch(query, context, forceCache, scroll));
+                return dispatch(fetch(query, context, forceCache, scroll, dashboard));
 
         } else {
             return Promise.resolve();
@@ -374,10 +377,11 @@ function addIfNeeded(query, body, context, forceCache) {
     }
 }
 
-function didStartRequest(requestID) {
+function didStartRequest(requestID, dashboard = null) {
     return {
         type: ActionTypes.SERVICE_MANAGER_DID_START_REQUEST,
         requestID: requestID,
+        dashboard
     };
 }
 

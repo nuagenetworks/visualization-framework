@@ -143,9 +143,11 @@ export class DashboardView extends React.Component {
     }
 
     render() {
-        const { configuration,
-                error,
-                fetching
+        const {
+            configuration,
+            error,
+            fetching,
+            params
         } = this.props;
 
         if (fetching) {
@@ -209,6 +211,7 @@ export class DashboardView extends React.Component {
                                             id={visualization.id}
                                             registerResize={this.registerResize.bind(this)}
                                             showInDashboard={true}
+                                            dashboard={params.id}
                                         />
                                     </div>
                                 )

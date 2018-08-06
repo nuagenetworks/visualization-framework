@@ -1,4 +1,5 @@
-import { ActionKeyStore } from "../components/App/redux/actions"
+import { ActionKeyStore } from "../components/App/redux/actions";
+import { ActionTypes } from "../services/servicemanager/redux/actions";
 
 // TODO: We need to find a way to plug middlewares like this one.
 // as it is very specific to Nuage features (VSS or AAR)
@@ -40,6 +41,7 @@ export const updateContextMiddleware = store => next => action => {
 
 
             if(!previousPage || previousPage !== id ) {
+
                 store.dispatch({
                         type: "ACTION_UPDATE_PAGE",
                         id: id
@@ -47,6 +49,11 @@ export const updateContextMiddleware = store => next => action => {
 
                 store.dispatch({
                         type: "RESET_CONFIGURATION",
+                });
+
+                store.dispatch({
+                    type: ActionTypes.SERVICE_MANAGER_RESET_SERVICES,
+                    dashboard: previousPage
                 });
             }
         }
