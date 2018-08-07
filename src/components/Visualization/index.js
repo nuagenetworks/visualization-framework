@@ -863,8 +863,8 @@ const mapStateToProps = (state, ownProps) => {
 
                 // Expose received response if it is available
                 if (props.queryConfigurations[query] || scriptName) {
-                    // Updating the QUERY with Sorting
 
+                    // Updating the QUERY with Sorting and searching if scroll is enable
                     if(queryConfig.scroll) {
                         props.queryConfigurations[query] = ServiceManager.addSearching(props.queryConfigurations[query], objectPath.get(props.scrollData, 'search'));
                         props.queryConfigurations[query] = ServiceManager.addSorting(props.queryConfigurations[query], objectPath.get(props.scrollData, 'sort'));

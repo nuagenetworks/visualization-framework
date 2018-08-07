@@ -294,7 +294,8 @@ const fetch = (configuration, state, totalCaptured = 0) => {
 
     if (!api || !token)
         return Promise.reject(ERROR_MESSAGE);
-    const url     = "https://124.252.253.84:8443/nuage/api/v5_0/nsgateways",//VSDServiceTest.getURL(configuration, api),
+
+    const url     = VSDServiceTest.getURL(configuration, api),
           headers = getHeaders({
               token,
               organization,
@@ -331,7 +332,6 @@ const post = (configuration, body, state) => {
 
     const url     = VSDServiceTest.getURL(configuration, api),
           headers = getHeaders({token, organization, filter: configuration.query.filter});
-    console.error('URL', url);
 
     return VSDServiceTest.makePOSTRequest(url, headers, body);
 }

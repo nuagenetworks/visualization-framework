@@ -46,6 +46,61 @@ function executeScript(scriptName, context, dashboard = null) {
     }
 }
 
+function isPagingEvent(scrollData) {
+    return objectPath.has(scrollData, 'event') && scrollData.event === events.PAGING;
+}
+
+function isScrollValid(scrollData) {
+    return objectPath.has(scrollData, 'expiration') && Date.now() < scrollData.expiration;
+}
+
+function getScrollStatus({
+    scrollData,
+    total,
+    pageSize
+}) {
+    // Check whether Data is not expired
+    const isValidData = isPagingEvent(scrollData) && isScrollValid(scrollData);
+    const currentPage = objectPath.get(scrollData, 'page') || 1;
+    if(!isValidData)
+        return 'INVALID';
+
+    if(total >= ((currentPage - 1) * pageSize + 1)) {
+        return 'EXISTS';
+    }
+
+    return 'NOT_EXISTS'
+}
+
+async function getDataFromStartToCurrentPage({
+    data,
+    query,
+    results,
+    startPage,
+    currentPage,
+    state
+}) {
+    let service = ServiceManager.getService(query.service);
+    let records = [...data];
+
+    let nextQuery = results.nextQuery;
+
+    while(nextQuery && startPage <= currentPage) {
+        let result =   await service.fetch(nextQuery, state, records.length)
+        let response = ServiceManager.tabify(query, result.response)
+
+        if (response && response.length)
+            records = [...records, ...response];
+
+        nextQuery = result.nextQuery;
+        startPage++;
+    }
+
+    return {
+        data,
+        nextQuery
+    }
+}
 
 /*
     Make a query on the service based on the service name.
@@ -70,88 +125,87 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
                 return Promise.reject("Provided context does not allow to parameterized query " + query.id);
         }
 
-        let data = [],
-         currentPage = 1,
-         startPage = 1,
-         updatedQuery = Object.assign({}, query, {scroll}),
-         scrollId = null;
+        const scrollData = getState().services.getIn([ActionKeyStore.SCROLL_DATA, query.vizID]) || {};
 
-        const size = objectPath.get(updatedQuery, service.getSizePath());
+        let data = [],
+            currentPage = objectPath.get(scrollData, 'page') || 1,
+            startPage = currentPage,
+            updatedQuery = { ...query, scroll },
+            scrollId = null,
+            pageSize = objectPath.get(updatedQuery, service.getSizePath());
+
         if(scroll) {
-            if (!size) {
+            if (!pageSize) {
+                // Set the size for VSD / ES query for pagination purpose.
                 updatedQuery = service.updateSize(updatedQuery, config.DATA_PER_PAGE_LIMIT);
             }
 
-            data = getState().services.getIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS]);
-            data = data || [];
+            data = getState().services.getIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS]) || [];
 
-            const scrollData = getState().services.getIn([ActionKeyStore.SCROLL_DATA, updatedQuery.vizID]) || {};
+            const status = getScrollStatus({
+                scrollData,
+                total: data.length,
+                pageSize
+            });
 
-            // Update the requested page
-            if(objectPath.has(scrollData, 'page')) {
-                currentPage = scrollData.page;
-            }
+            switch (status) {
+                case 'INVALID':
+                    // Reset data and start from first page
+                    data = [];
+                    startPage = 1;
+                    break;
 
-            // Check whether Data is not expired
-            if((objectPath.has(scrollData, 'event') && scrollData.event === events.PAGING)
-                && (objectPath.has(scrollData, 'expiration') && Date.now() < scrollData.expiration)) {
+                case 'NOT_EXISTS':
+                    // Fetch next page
+                    scrollId = scrollData.scroll_id
+                    break;
 
-                // Checking if data already existed for current page in redux store.
-                if(data.length >= ((currentPage - 1) * size + 1)) {
-
-                    // Also dispathcing event to say respective event has been handled.
+                case 'EXISTS':
+                    // Data already Preset no need to do request
                     dispatch(updateScroll(query.vizID, {
                         event: null,
                         page: currentPage
                     }));
 
                     return Promise.resolve();
-                }
-
-                scrollId = scrollData.scroll_id
-                startPage = currentPage;
-            } else {
-                // Data expired reset it to blank
-                data = [];
             }
         }
 
-        // Building query on the basis of page number
-        if( startPage !== 1 && scrollId) {
-            updatedQuery = service.getScrollQuery(updatedQuery, scrollId);
-        }
-
+        // If Page number is not equal to 1 then we must use Scroll Base Query else use normal Query
+        updatedQuery = startPage !== 1 ? service.getScrollQuery(updatedQuery, scrollId) : updatedQuery;
         dispatch(didStartRequest(requestID, dashboard));
 
         return service.fetch(updatedQuery, getState())
             .then(
                 async (results) => {
+                    // merging "data" here for the case of paging, otherwise will be []
                     data = [...data, ...ServiceManager.tabify(query, results.response)];
-                    let nextQuery = scroll ? results.nextQuery : null
-                    startPage++;
-
-                    if(nextQuery && nextQuery.query && nextQuery.query.scroll_id) {
-                        while(startPage <= currentPage && nextQuery) {
-                            let result =   await service.fetch(nextQuery, getState(), data.length)
-                            let response = ServiceManager.tabify(query, result.response)
-
-                            if (response && response.length)
-                                data = [...data, ...response];
-
-                            nextQuery = result.nextQuery;
-                            startPage++;
-                        }   
-                    }
 
                     if(scroll) {
-                        dispatch(updateScroll(query.vizID, {
-                            scroll_id: objectPath.get(nextQuery, 'query.scroll_id'),
-                            expiration: Date.now() + config.SCROLL_CACHING_QUERY_TIME,
-                            page: startPage - 1,
-                            event: null,
-                            size: objectPath.get(nextQuery, 'length'),
-                            pageSize: size,
-                        }))
+                        startPage++;
+
+                        // Will be valid in case of scroll get expired
+                        const response = await getDataFromStartToCurrentPage({
+                            data,
+                            query,
+                            results,
+                            startPage,
+                            currentPage,
+                            state: getState()
+                        })
+
+                        data = response.data;
+
+                        dispatch(updateScroll(
+                            query.vizID,
+                            {
+                                scroll_id: objectPath.get(response.nextQuery, 'query.scroll_id'),
+                                expiration: Date.now() + config.SCROLL_CACHING_QUERY_TIME,
+                                event: null,
+                                size: objectPath.get(response.nextQuery, 'length'),
+                                pageSize,
+                            }
+                        ))
                     }
 
                     dispatch(didReceiveResponse(requestID, data, false))
