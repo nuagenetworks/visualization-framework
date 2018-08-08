@@ -8,58 +8,25 @@
         "body":{
             "size":0,
             "query":{
-                "bool":{
-                    "should": [
+                "bool": {
+                    "must":[
                         {
-                            "bool": {
-                                "must":[
-                                    {
-                                        "range":{
-                                            "timestamp":{
-                                                "gte":"{{startTime:now-24h}}",
-                                                "lte":"{{endTime:now}}",
-                                                "format":"epoch_millis"
-                                            }
-                                        }
-                                    },
-                                    {
-                                        "term": {
-                                            "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
-                                        }
-                                    },
-                                    {
-                                        "term": {
-                                            "{{domainType:nuage_metadata.domainName}}":"{{domainName:chord_domain}}"
-                                        }
-                                    },
-                                    { "replace": "optional-src-pg-categories" }
-                                ]
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
                             }
                         },
                         {
-                            "bool": {
-                                "must":[
-                                    {
-                                        "range":{
-                                            "timestamp":{
-                                                "gte":"{{startTime:now-24h}}",
-                                                "lte":"{{endTime:now}}",
-                                                "format":"epoch_millis"
-                                            }
-                                        }
-                                    },
-                                    {
-                                        "term": {
-                                            "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
-                                        }
-                                    },
-                                    {
-                                        "term": {
-                                            "{{domainType:nuage_metadata.domainName}}":"{{domainName:chord_domain}}"
-                                        }
-                                    },
-                                    { "replace": "optional-dst-pg-categories"}
-                                ]
+                            "term": {
+                                "nuage_metadata.enterpriseName":"{{enterpriseName:chord_enterprise}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "{{domainType:nuage_metadata.domainName}}":"{{domainName:chord_domain}}"
                             }
                         }
                     ]
@@ -82,7 +49,7 @@
                         },
                         "source": {
                             "terms": {
-                                "field": "{{source_field:nuage_metadata.src-pgmem.name}}",
+                                "field": "{{source_field:nuage_metadata.src-pgmem}}",
                                 "size": 10,
                                 "order": {
                                     "SumOf": "desc"
@@ -98,7 +65,7 @@
                         },
                         "destination": {
                             "terms": {
-                                "field": "{{destination_field:nuage_metadata.dst-pgmem.name}}",
+                                "field": "{{destination_field:nuage_metadata.dst-pgmem}}",
                                 "size": 10,
                                 "order": {
                                     "SumOf": "desc"

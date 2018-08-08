@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
 import evalExpression from "eval-expression";
-
 import objectPath from "object-path";
 
 import $ from "jquery";
@@ -11,6 +10,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { connect } from "react-redux";
 import { Link } from "react-router";
 import { push } from "redux-router";
+import { BarLoader } from 'react-spinners';
 
 import FiltersToolBar from "../FiltersToolBar";
 import NextPrevFilter from "../NextPrevFilter";
@@ -48,7 +48,8 @@ import { ServiceManager } from "../../services/servicemanager/index";
 
 import { ActionKeyStore  as VSDKeyStore } from "../../configs/nuage/vsd/redux/actions";
 
-import style from "./styles"
+import dataConfig from "../../config";
+import style from "./styles";
 
 import FontAwesome from "react-fontawesome";
 
@@ -130,7 +131,8 @@ class VisualizationView extends React.Component {
             const {
                 configuration,
                 showInDashboard,
-                setPageTitle
+                setPageTitle,
+                context
             } = this.props;
 
             if (!configuration)
@@ -140,22 +142,38 @@ class VisualizationView extends React.Component {
                   scriptName = configuration.script;
 
             if (scriptName) {
-                const { executeScriptIfNeeded, context } = this.props;
+                const { executeScriptIfNeeded } = this.props;
                 executeScriptIfNeeded(scriptName, context);
             }
 
             if (queries) {
-                for(let query in queries) {
-                    if (queries.hasOwnProperty(query)) {
+                for(let key in queries) {
+                    if (queries.hasOwnProperty(key)) {
 
-                        this.props.fetchQueryIfNeeded(queries[query].name).then(() => {
+                        this.props.fetchQueryIfNeeded(queries[key].name).then(() => {
 
-                            const { queryConfigurations, executeQueryIfNeeded, context } = this.props;
-                            if(!queryConfigurations[query]) {
+                            const { queryConfigurations, executeQueryIfNeeded } = this.props;
+
+                            let queryConfiguration = queryConfigurations[key]
+
+                            if(!queryConfiguration) {
                                 return
                             }
 
-                            executeQueryIfNeeded(queryConfigurations[query], context).then(
+                            /**
+                             * if scroll is enable then fetch only listed columns and increase per page size to 10000
+                             * from ES to make query execution faster
+                             */
+                            if(queries[key].scroll &&
+                                configuration.data &&
+                                configuration.data.columns &&
+                                queryConfiguration.query
+                            ) {
+                                queryConfiguration.query.body['_source'] = this.getColumns(configuration)
+                                queryConfiguration.query.body['size']    = dataConfig.DATA_PER_PAGE_LIMIT
+                            }
+
+                            executeQueryIfNeeded(queryConfiguration, context, queries[key].scroll || false).then(
                                 () => {
                                 },
                                 (error) => {
@@ -253,6 +271,11 @@ class VisualizationView extends React.Component {
         });
     }
 
+    // return the column array from configuration
+    getColumns(configuration) {
+        return configuration.data.columns.map( d => d.column)
+    }
+
 
     renderCardWithInfo(message, iconName, spin = false) {
 
@@ -290,7 +313,8 @@ class VisualizationView extends React.Component {
             configuration,
             response,
             id,
-            googleMapURL
+            googleMapURL,
+            googleMapsAPIKey
         } = this.props;
 
         const graphName      = configuration.graph,
@@ -314,6 +338,7 @@ class VisualizationView extends React.Component {
               goTo={this.props.goTo}
               {...this.state.listeners}
               googleMapURL={googleMapURL}
+              googleMapsAPIKey={googleMapsAPIKey}
             />
         )
     }
@@ -412,6 +437,7 @@ class VisualizationView extends React.Component {
         let color = Object.assign({}, style.cardTitle, headerColor ? headerColor : {});
 
         return (
+            <div>
             <div style={color}>
                 <div className="pull-right">
                     {this.renderDescriptionIcon()}
@@ -423,6 +449,20 @@ class VisualizationView extends React.Component {
                 </div>
 
             </div>
+            { this.displayLoader() }
+            </div>
+        )
+    }
+
+    // show loader at header if data process through pagination
+    displayLoader() {
+        return (
+          <BarLoader
+            color={style.loader.color}
+            loading={this.props.loader}
+            width={this.state.width}
+            height={3}
+          />
         )
     }
 
@@ -713,12 +753,14 @@ const mapStateToProps = (state, ownProps) => {
 
     const realConfiguation = configuration && configuration.toJS();
 
+    const contextualizeConfiguration = configuration ? contextualize(configuration.toJS(), context) : null
+
     const props = {
         id: configurationID,
         context: context,
         orgContext: orgContext,
         location: state.router.location,
-        configuration: configuration ? contextualize(configuration.toJS(), context) : null,
+        configuration: contextualizeConfiguration,
         headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
         isFetching: true,
         hideGraph: false,
@@ -727,7 +769,9 @@ const mapStateToProps = (state, ownProps) => {
             configurationID,
             ConfigurationsActionKeyStore.ERROR
         ]),
-        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${googleMapsAPIKey}&v=3.exp&libraries=${process.env.REACT_APP_GOOGLE_MAP_LIBRARIES}`
+        loader: false,
+        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${googleMapsAPIKey}&v=3.exp&libraries=${process.env.REACT_APP_GOOGLE_MAP_LIBRARIES}`,
+        googleMapsAPIKey,
     };
 
     props.queryConfigurations = {}
@@ -745,6 +789,8 @@ const mapStateToProps = (state, ownProps) => {
             }
         */
         const queries =  typeof props.configuration.query === 'string' ? {'data' : {'name': props.configuration.query}} : props.configuration.query
+
+        props.filterOptions = updateFilterOptions(state, contextualizeConfiguration, context, props.response);
 
         props.configuration.query = {}
 
@@ -798,7 +844,7 @@ const mapStateToProps = (state, ownProps) => {
 
                     const requestID = ServiceManager.getRequestID(props.queryConfigurations[query] || scriptName, context);
 
-                    if(typeof requestID === 'undefined') {
+                    if (typeof requestID === 'undefined') {
                         props.hideGraph = true
                     } else {
 
@@ -807,16 +853,20 @@ const mapStateToProps = (state, ownProps) => {
                             requestID
                         ]);
 
-                        if(!response && queryConfig.required !== false) {
+                        if (!response && queryConfig.required !== false) {
                             props.error = 'Not able to load data'
                         }
 
                         if (response && !response.get(ServiceActionKeyStore.IS_FETCHING)) {
                             let responseJS = response.toJS();
 
-                            if(responseJS.error && queryConfig.required !== false) {
+                            if (response.get(ServiceActionKeyStore.LOADER)) {
+                                props.loader = true
+                            }
+
+                            if (responseJS.error && queryConfig.required !== false) {
                                 props.error = responseJS.error;
-                            } else if(responseJS.results) {
+                            } else if (responseJS.results) {
                                 successResultCount++;
                                 props.response[query] = responseJS.results
                             }
@@ -827,9 +877,7 @@ const mapStateToProps = (state, ownProps) => {
         }
 
         if(successResultCount === Object.keys(queries).length ) {
-            props.isFetching = false
-            let vizConfig =  configuration ? contextualize(configuration.toJS(), context) : null;
-            props.filterOptions = updateFilterOptions(state, vizConfig, context, props.response);
+            props.isFetching = false;
         }
     }
 
@@ -860,8 +908,8 @@ const actionCreators = (dispatch) => ({
         ));
     },
 
-    executeQueryIfNeeded: function(queryConfiguration, context) {
-        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context));
+    executeQueryIfNeeded: function(queryConfiguration, context, scroll) {
+        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context, false, scroll));
     },
 
     executeScriptIfNeeded: function(scriptName, context) {

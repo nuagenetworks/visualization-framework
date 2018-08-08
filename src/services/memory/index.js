@@ -41,10 +41,10 @@ const fetch = (parameters, state) => {
         if (parameters.limit)
             query = query.limit(parameters.limit);
 
-        const results = query.get();
+        const response = query.get();
 
         // console.error(JSON.stringify(results.slice(0, 3), null, 2));
-        return Promise.resolve(results);
+        return Promise.resolve({response});
     });
 }
 

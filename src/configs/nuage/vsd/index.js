@@ -2,44 +2,54 @@ import $ from "jquery";
 
 import { ActionKeyStore } from "./redux/actions";
 import { parameterizedConfiguration } from "../../../utils/configurations";
+import configData from '../../../config';
 
 const config = {
     api_version: "5.0",
     end_point_prefix: "/nuage/api/"
 }
 
-const getHeaders = (token, organization, filter, page, orderBy, proxyUser, patchType) => {
+const ERROR_MESSAGE = `No VSD API endpoint specified. To configure the VSD API endpoint,
+           provide the endpoint URL via the environment variable REACT_APP_VSD_API_ENDPOINT at compile time.
+           For a development environment, you can set an invalid value,
+           which will cause the system to provide mock data for testing.
+           For example, you can add the following line to your .bashrc or .profile startup script:
+           'export REACT_APP_VSD_API_ENDPOINT=http://something.invalid'`
+
+const getHeaders = (params = {}) => {
 
     // Default headers
     let headers = {
         "Accept": "*/*",
         "Content-Type": "application/json",
-        "X-Nuage-Organization":"csp",
+        "X-Nuage-Organization":"csp"
     }
 
-    if (token)
-        headers["Authorization"] = "XREST " + token
+    if (params.token)
+        headers["Authorization"] = "XREST " + params.token
 
-    if (organization)
-        headers["X-Nuage-Organization"] = organization
+    if (params.organization)
+        headers["X-Nuage-Organization"] = params.organization
 
-    if (filter)
-        headers["X-Nuage-Filter"] = filter
+    if (params.filter)
+        headers["X-Nuage-Filter"] = params.filter
 
-    if (orderBy)
-        headers["X-Nuage-OrderBy"] = orderBy
+    if (params.orderBy)
+        headers["X-Nuage-OrderBy"] = params.orderBy
 
-    if (page)
-        headers["X-Nuage-Page"] = page
+    if (params.page || params.page === 0)
+        headers["X-Nuage-Page"] = params.page
 
-    if (proxyUser)
-        headers["X-Nuage-ProxyUser"] = proxyUser
+    if (params.pageSize)
+        headers["x-nuage-pagesize"] = params.pageSize
 
-    if (patchType) {
-        headers["X-Nuage-PatchType"] = patchType;
+    if (params.proxyUser)
+        headers["X-Nuage-ProxyUser"] = params.proxyUser
+
+    if (params.patchType) {
+        headers["X-Nuage-PatchType"] = params.patchType;
     }
 
-    // console.error(headers);
     return headers
 }
 
@@ -86,13 +96,33 @@ const makeRequest = (url, headers) => {
             url: url,
             headers: headers
         })
-        .done((response) => {
-            return resolve(typeof response === 'undefined' ? [] : response)
+        .done((response, status, content) => {
+            let page = content.getResponseHeader('x-nuage-page') || headers["X-Nuage-Page"]
+            let count = content.getResponseHeader('x-nuage-count')
+
+            return resolve({response, header: { page, count, hits: response.length || 0 }})
         })
         .fail((error) => {
             return reject(error)
         });
     });
+}
+
+/**
+ *  check and update query for next request if sum of totolCaptured (already fetched data count)
+ *  and current data count (header.hits) is less than total count
+ *  and increased page by 1 for next request.
+ */
+const getNextRequest = (header, query, totalCaptured) => {
+    let nextQuery   = null,
+        page        = 0;
+
+    if((totalCaptured + header.hits) < header.count) {
+        page = parseInt(header.page) + 1
+        nextQuery = Object.assign({}, query, {page})
+    }
+
+    return nextQuery
 }
 
 const makePOSTRequest = (url, headers, body) => {
@@ -244,65 +274,79 @@ const getMockResponse = (configuration) => {
 }
 
 export const VSDServiceTest = {
-    makeRequest: makeRequest,
-    getURL: getURL,
-    makePOSTRequest: makePOSTRequest,
-    makePUTRequest: makePUTRequest,
-    makePATCHRequest: makePATCHRequest,
+    makeRequest,
+    getURL,
+    makePOSTRequest,
+    makePUTRequest,
+    makePATCHRequest
 }
 
-const fetch = (configuration, state) => {
+const fetch = (configuration, state, totalCaptured = 0) => {
     let token          = state.VSD.get(ActionKeyStore.TOKEN),
-          api          = state.VSD.get(ActionKeyStore.API) || process.env.REACT_APP_VSD_API_ENDPOINT,
+          api          = state.VSD.get(ActionKeyStore.API) || configData.VSD_API_ENDPOINT,
           organization = state.VSD.get(ActionKeyStore.ORGANIZATION);
 
     if (!api || !token)
-        return Promise.reject("No VSD API endpoint specified. To configure the VSD API endpoint, provide the endpoint URL via the environment variable REACT_APP_VSD_API_ENDPOINT at compile time. For a development environment, you can set an invalid value, which will cause the system to provide mock data for testing. For example, you can add the following line to your .bashrc or .profile startup script: 'export REACT_APP_VSD_API_ENDPOINT=http://something.invalid'");
+        return Promise.reject(ERROR_MESSAGE);
 
     const url     = VSDServiceTest.getURL(configuration, api),
-          headers = getHeaders(token, organization, configuration.query.filter);
+          headers = getHeaders({token, organization, filter: configuration.query.filter, pageSize: configuration.query.pageSize, page: configuration.page || 0 });
 
-    return VSDServiceTest.makeRequest(url, headers);
+    return new Promise((resolve, reject) => {
+
+        VSDServiceTest.makeRequest(url, headers)
+        .then( (results) => {
+            if (results.response) {
+                return resolve({
+                    response: results.response,
+                    nextQuery: getNextRequest(results.header, configuration, totalCaptured)
+                })
+            }
+            return resolve(results)
+        }, (error) => {
+            return reject(error)
+        })
+    })
 }
 
 const post = (configuration, body, state) => {
     let token          = state.VSD.get(ActionKeyStore.TOKEN),
-          api          = state.VSD.get(ActionKeyStore.API) || process.env.REACT_APP_VSD_API_ENDPOINT,
+          api          = state.VSD.get(ActionKeyStore.API) || configData.VSD_API_ENDPOINT,
           organization = state.VSD.get(ActionKeyStore.ORGANIZATION);
 
     if (!api || !token)
-        return Promise.reject("No VSD API endpoint specified. To configure the VSD API endpoint, provide the endpoint URL via the environment variable REACT_APP_VSD_API_ENDPOINT at compile time. For a development environment, you can set an invalid value, which will cause the system to provide mock data for testing. For example, you can add the following line to your .bashrc or .profile startup script: 'export REACT_APP_VSD_API_ENDPOINT=http://something.invalid'");
+        return Promise.reject(ERROR_MESSAGE);
 
     const url     = VSDServiceTest.getURL(configuration, api),
-          headers = getHeaders(token, organization, configuration.query.filter);
+          headers = getHeaders({token, organization, filter: configuration.query.filter});
 
     return VSDServiceTest.makePOSTRequest(url, headers, body);
 }
 
 const update = (configuration, body, state) => {
     let token          = state.VSD.get(ActionKeyStore.TOKEN),
-          api          = state.VSD.get(ActionKeyStore.API) || process.env.REACT_APP_VSD_API_ENDPOINT,
+          api          = state.VSD.get(ActionKeyStore.API) || configData.VSD_API_ENDPOINT,
           organization = state.VSD.get(ActionKeyStore.ORGANIZATION);
 
     if (!api || !token)
-        return Promise.reject("No VSD API endpoint specified. To configure the VSD API endpoint, provide the endpoint URL via the environment variable REACT_APP_VSD_API_ENDPOINT at compile time. For a development environment, you can set an invalid value, which will cause the system to provide mock data for testing. For example, you can add the following line to your .bashrc or .profile startup script: 'export REACT_APP_VSD_API_ENDPOINT=http://something.invalid'");
+        return Promise.reject(ERROR_MESSAGE);
 
     const url     = VSDServiceTest.getURL(configuration, api),
-          headers = getHeaders(token, organization, configuration.query.filter);
+          headers = getHeaders({token, organization, filter: configuration.query.filter});
 
     return VSDServiceTest.makePUTRequest(url, headers, body);
 }
 
 const patch = (configuration, body, state, patchHeader = 'ADD') => {
     let token          = state.VSD.get(ActionKeyStore.TOKEN),
-        api          = state.VSD.get(ActionKeyStore.API) || process.env.REACT_APP_VSD_API_ENDPOINT,
+        api          = state.VSD.get(ActionKeyStore.API) || configData.VSD_API_ENDPOINT,
         organization = state.VSD.get(ActionKeyStore.ORGANIZATION);
 
     if (!api || !token)
-        return Promise.reject("No VSD API endpoint specified. To configure the VSD API endpoint, provide the endpoint URL via the environment variable REACT_APP_VSD_API_ENDPOINT at compile time. For a development environment, you can set an invalid value, which will cause the system to provide mock data for testing. For example, you can add the following line to your .bashrc or .profile startup script: 'export REACT_APP_VSD_API_ENDPOINT=http://something.invalid'");
+        return Promise.reject(ERROR_MESSAGE);
 
     const url     = VSDServiceTest.getURL(configuration, api),
-        headers = getHeaders(token, organization, configuration.query.filter, undefined, undefined, undefined, patchHeader);
+        headers = getHeaders({token, organization, filter: configuration.query.filter, page: undefined, orderBy: undefined, proxyUser: undefined, patchHeader});
 
     return VSDServiceTest.makePATCHRequest(url, headers, body);
 }
@@ -317,12 +361,12 @@ const add = (configuration, body, state) => {
 
 export const VSDService = {
     id: "VSD",
-    config: config,
-    getRequestID: getRequestID,
-    getMockResponse: getMockResponse,
-    fetch: fetch,
-    post: post,
-    update: update,
-    add: add,
-    remove: remove,
-}
+    config,
+    getRequestID,
+    getMockResponse,
+    fetch,
+    post,
+    update,
+    add,
+    remove,
+};

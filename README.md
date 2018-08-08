@@ -47,6 +47,9 @@ Here is a list of environment variable that can be set to configure the visualiz
 
     * `REACT_APP_ELASTICSEARCH_HOST` (**required**) allows you to specify the Elastic Search server (ex: http://localhost:9200)
     * `REACT_APP_VSD_API_ENDPOINT` allows to specify the VSD API endpoint (ex:https://vsd.com:8443/nuage/api/)
+    * `REACT_APP_CACHING_CONFIG_TIME` allow to override caching of json configuration in milliseconds (ex:900000)
+    * `REACT_APP_CACHING_QUERY_TIME` allow to override caching of services data( elasticsearch, VSD etc.) in milliseconds (ex:5000)
+    * `REACT_APP_REFRESH_INTERVAL` allow to override refresh interval in milliseconds (ex:30000)
 
 
 ## kitchenSink

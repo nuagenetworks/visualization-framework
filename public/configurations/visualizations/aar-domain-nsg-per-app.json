@@ -25,7 +25,7 @@
     },
     "listeners": [{
       "params": {
-          "nsg": "NSG"
+          "snsg": "NSG"
       }
     }],
     "query": "aar-domain-nsg-per-app"
