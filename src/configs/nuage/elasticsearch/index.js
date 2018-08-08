@@ -123,7 +123,7 @@ const getRequestID = function (queryConfiguration, context) {
     if (Object.keys(parameters).length === 0)
         return queryConfiguration.id;
 
-    return queryConfiguration.id + "[" + JSON.stringify(parameters) + "]";
+    return `${queryConfiguration.vizID}-${queryConfiguration.id}[${JSON.stringify(parameters)}]`;
 }
 
 const addSorting = function (queryConfiguration, sort) {

@@ -72,12 +72,12 @@ export const getURLEndpoint = (configuration) => {
 
 export const getRequestID = (configuration, context) => {
     const tmpConfiguration = parameterizedConfiguration(configuration, context);
-
     if (!tmpConfiguration)
         return;
 
     let URL = getURLEndpoint(tmpConfiguration);
 
+    URL = configuration.id ? `${configuration.vizID}-${configuration.id}-${URL}` : URL;
     if (!tmpConfiguration.query.filter)
         return URL;
 
