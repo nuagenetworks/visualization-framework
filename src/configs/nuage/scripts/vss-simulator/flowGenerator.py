@@ -96,7 +96,7 @@ def generateFlowStats(domain_id, type="l3"):
         writeToES(es_data)
 
 def writeToES(es_data):
-    es = Elasticsearch("192.168.100.200")
+    es = Elasticsearch()
     write_data = []
     # Create counters on the fly everytime
     # Write data for a day every minute
