@@ -140,10 +140,12 @@ Here is the list of options:
     ```
     query: {
         data: "query1",
-        data2: { "name": "query2", "required": false }
+        data2: { "name": "query2", "required": false, "scroll": true }
     }
     ```
     By default all the queries are mandatory, to make any query (except data query) non-mandatory then set  `"required": false`  in object like above.
+
+    If `scroll` set to true then data will come into chunks and upto the limit defined in .env file as `DATA_LIMIT=5000`. So scrolling will be executed till data limit reached upto 5000.
 
     Note: data key is required in case of objec{ "name": "query2", "required": false }t.
 

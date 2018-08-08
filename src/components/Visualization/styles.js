@@ -108,7 +108,6 @@ const style = {
     fullWidth: {
         width: "100%",
     },
-
     smallBox: {
         borderRadius: "2px",
         position: "relative",
@@ -116,7 +115,6 @@ const style = {
         marginBottom: "20px",
         boxShadow: "0 1px 1px rgba(0,0,0,0.1)"
     },
-
     innerCardTitleIcon: {
         padding: 0,
         margin: "0 0 0 1px",
@@ -127,6 +125,9 @@ const style = {
         cursor: "pointer",
         color: "#fff",
     },
+    loader: {
+        color: theme.palette.greyDarkColor
+    }
 
 };
 

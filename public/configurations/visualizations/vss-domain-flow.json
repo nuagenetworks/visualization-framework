@@ -2,7 +2,7 @@
     "id": "vss-domain-flow",
     "graph": "ChordGraph",
     "title": "Flows per Domain",
-    "description": "This chord diagram represents flow information between source and destination. Every chord represents total packets sent and received between source an destination. Chord's thickness is directly proportional to no of packets exchanged. The color of the chord represents the color of destination to which the first flow was registered. When clicked on a particular chord, the table showing detail (in a reverse chronological order) about flows between that source and destination will appear next to the chord diagram. One can group source and destination by PG, PG-Category, Subnet and Zones.",
+    "description": "This chord diagram represents flow information between source and destination. Every chord represents total packets sent and received between source an destination. Chord's thickness is directly proportional to no of packets exchanged. The color of the chord represents the color of destination to which the first flow was registered. When clicked on a particular chord, the table showing detail (in a reverse chronological order) about flows between that source and destination will appear next to the chord diagram. One can group source and destination by PG, Subnet and Zones.",
     "author": "Ronak Shah and Curran Kelleher",
     "creationDate": "10/25/2016",
     "data": {
@@ -27,10 +27,9 @@
             "options": [
                 {
                     "label": "PG",
-                    "value": "nuage_metadata.src-pgmem.name",
-                    "onChange": "Categories",
+                    "value": "nuage_metadata.src-pgmem",
                     "forceOptions": {
-                        "destination_field": "nuage_metadata.dst-pgmem.name"
+                        "destination_field": "nuage_metadata.dst-pgmem"
                     }
                 },
                 {
@@ -48,37 +47,7 @@
                     }
                 }
             ]
-        },
-        "Categories": {
-            "parameter": "category_field",
-            "dynamicOptions": {
-                "queryKey": "context",
-                "label": "category",
-                "value": "category"
-            },
-            "inner-query": "vss-domain-flow-category" 
         }
     },
-    "query": {
-        "data": "vss-domain-flow",
-        "context": "vss-domain-flow-pg-categories"
-    },
-    "replace": {
-        "optional-src-pg-categories" : {
-            "context": "category_field",
-            "query": {
-                "term": {
-                    "nuage_metadata.src-pgmem.category":"{{category_field}}"
-                }
-            }
-        },
-        "optional-dst-pg-categories" : {
-            "context": "category_field",
-            "query": {
-                "term": {
-                    "nuage_metadata.dst-pgmem.category":"{{category_field}}"
-                }
-            }
-        }
-    }
+    "query": "vss-domain-flow"
 }

@@ -1,6 +1,8 @@
 import { ServiceManager } from "../index"
 import { parameterizedConfiguration } from "../../../utils/configurations";
 
+import config from '../../../config'
+
 export const ActionTypes = {
     SERVICE_MANAGER_DID_START_REQUEST: "SERVICE_MANAGER_DID_START_REQUEST",
     SERVICE_MANAGER_DID_RECEIVE_RESPONSE: "SERVICE_MANAGER_DID_RECEIVE_RESPONSE",
@@ -14,6 +16,7 @@ export const ActionKeyStore = {
     RESULTS: "results",
     REQUESTS: "requests",
     EXPIRATION_DATE: "expirationDate",
+    LOADER: 'loader'
 };
 
 // TODO: Temporary - Replace this part in the middleware
@@ -46,7 +49,7 @@ function executeScript(scriptName, context) {
     * context: the context if the query should be parameterized
     * forceCache: a boolean to force storing the value for a long period
 */
-function fetch(query, context, forceCache) {
+function fetch(query, context, forceCache, scroll = false) {
     let service = ServiceManager.getService(query.service);
 
     return (dispatch, getState) => {
@@ -63,12 +66,38 @@ function fetch(query, context, forceCache) {
 
         dispatch(didStartRequest(requestID));
 
-        return service.fetch(query, getState())
+        return service.fetch(Object.assign({}, query, {scroll}), getState())
             .then(
-            (results) => {
-                const data = ServiceManager.tabify(query, results);
-                dispatch(didReceiveResponse(requestID, data));
-                return Promise.resolve(data);
+                async (results) => {
+
+                    let data = ServiceManager.tabify(query, results.response);
+                    let nextQuery = scroll ? results.nextQuery : null
+
+                    dispatch(didReceiveResponse(requestID, data, false, nextQuery))
+
+                    /**
+                     * Fetching data via scrolling if `scroll: true` in query config
+                     * and it will fetch data (`size: xxx` in ES and `pagesize` in VSD) in each request
+                     * untill it will reached the `DATA_LIMIT` defined in config
+                     */
+                    if (nextQuery) {
+
+                        while(nextQuery) {
+                            let result =   await service.fetch(nextQuery, getState(), data.length)
+                            let response = ServiceManager.tabify(query, result.response)
+
+                            if (response && response.length)
+                                data = [...data, ...response];
+
+                            if(data.length >= config.DATA_LIMIT)
+                               break;
+
+                            nextQuery = result.nextQuery;
+                        }
+
+                        dispatch(didReceiveResponse(requestID, data));
+                    }
+                    return Promise.resolve(data);
             },
             (error) => {
                 if (process.env.NODE_ENV === "development" && service.hasOwnProperty("getMockResponse")) {
@@ -101,7 +130,7 @@ function shouldFetch(request) {
     return !request.get(ActionKeyStore.IS_FETCHING) && currentDate > expireDate;
 }
 
-function fetchIfNeeded(query, context, forceCache) {
+function fetchIfNeeded(query, context, forceCache, scroll) {
 
     // TODO: Temporary - Replace this part in the middleware
     const isScript = typeof(query) === "string";
@@ -125,7 +154,7 @@ function fetchIfNeeded(query, context, forceCache) {
             if (isScript)
                 return dispatch(executeScript(query, context, forceCache));
             else
-                return dispatch(fetch(query, context, forceCache));
+                return dispatch(fetch(query, context, forceCache, scroll));
 
         } else {
             return Promise.resolve();
@@ -289,12 +318,13 @@ function didStartRequest(requestID) {
     };
 }
 
-function didReceiveResponse(requestID, results, forceCache) {
+function didReceiveResponse(requestID, results, forceCache = false, loader = false) {
     return {
         type: ActionTypes.SERVICE_MANAGER_DID_RECEIVE_RESPONSE,
-        requestID: requestID,
-        results: results,
-        forceCache: forceCache
+        requestID,
+        results,
+        forceCache,
+        loader: loader ? true : false
     };
 }
 
