@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
-import evalExpression from "eval-expression"
+import evalExpression from "eval-expression";
+import objectPath from "object-path";
 
 import $ from "jquery";
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -9,6 +10,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { connect } from "react-redux";
 import { Link } from "react-router";
 import { push } from "redux-router";
+import { BarLoader } from 'react-spinners';
 
 import FiltersToolBar from "../FiltersToolBar";
 import NextPrevFilter from "../NextPrevFilter";
@@ -39,11 +41,15 @@ import {
 
 import { resizeVisualization } from "../../utils/resize"
 import { contextualize } from "../../utils/configurations"
+import columnAccessor from "../../lib/vis-graphs/utils/columnAccessor"
 
 import { GraphManager } from "../../lib/vis-graphs/index"
 import { ServiceManager } from "../../services/servicemanager/index";
 
-import style from "./styles"
+import { ActionKeyStore  as VSDKeyStore } from "../../configs/nuage/vsd/redux/actions";
+
+import dataConfig from "../../config";
+import style from "./styles";
 
 import FontAwesome from "react-fontawesome";
 
@@ -125,7 +131,8 @@ class VisualizationView extends React.Component {
             const {
                 configuration,
                 showInDashboard,
-                setPageTitle
+                setPageTitle,
+                context
             } = this.props;
 
             if (!configuration)
@@ -135,22 +142,38 @@ class VisualizationView extends React.Component {
                   scriptName = configuration.script;
 
             if (scriptName) {
-                const { executeScriptIfNeeded, context } = this.props;
+                const { executeScriptIfNeeded } = this.props;
                 executeScriptIfNeeded(scriptName, context);
             }
 
             if (queries) {
-                for(let query in queries) {
-                    if (queries.hasOwnProperty(query)) {
+                for(let key in queries) {
+                    if (queries.hasOwnProperty(key)) {
 
-                        this.props.fetchQueryIfNeeded(queries[query].name).then(() => {
+                        this.props.fetchQueryIfNeeded(queries[key].name).then(() => {
 
-                            const { queryConfigurations, executeQueryIfNeeded, context } = this.props;
-                            if(!queryConfigurations[query]) {
+                            const { queryConfigurations, executeQueryIfNeeded } = this.props;
+
+                            let queryConfiguration = queryConfigurations[key]
+
+                            if(!queryConfiguration) {
                                 return
                             }
 
-                            executeQueryIfNeeded(queryConfigurations[query], context).then(
+                            /**
+                             * if scroll is enable then fetch only listed columns and increase per page size to 10000
+                             * from ES to make query execution faster
+                             */
+                            if(queries[key].scroll &&
+                                configuration.data &&
+                                configuration.data.columns &&
+                                queryConfiguration.query
+                            ) {
+                                queryConfiguration.query.body['_source'] = this.getColumns(configuration)
+                                queryConfiguration.query.body['size']    = dataConfig.DATA_PER_PAGE_LIMIT
+                            }
+
+                            executeQueryIfNeeded(queryConfiguration, context, queries[key].scroll || false).then(
                                 () => {
                                 },
                                 (error) => {
@@ -248,6 +271,11 @@ class VisualizationView extends React.Component {
         });
     }
 
+    // return the column array from configuration
+    getColumns(configuration) {
+        return configuration.data.columns.map( d => d.column)
+    }
+
 
     renderCardWithInfo(message, iconName, spin = false) {
 
@@ -284,7 +312,9 @@ class VisualizationView extends React.Component {
         const {
             configuration,
             response,
-            id
+            id,
+            googleMapURL,
+            googleMapsAPIKey
         } = this.props;
 
         const graphName      = configuration.graph,
@@ -307,6 +337,8 @@ class VisualizationView extends React.Component {
               height={graphHeight}
               goTo={this.props.goTo}
               {...this.state.listeners}
+              googleMapURL={googleMapURL}
+              googleMapsAPIKey={googleMapsAPIKey}
             />
         )
     }
@@ -405,6 +437,7 @@ class VisualizationView extends React.Component {
         let color = Object.assign({}, style.cardTitle, headerColor ? headerColor : {});
 
         return (
+            <div>
             <div style={color}>
                 <div className="pull-right">
                     {this.renderDescriptionIcon()}
@@ -416,20 +449,34 @@ class VisualizationView extends React.Component {
                 </div>
 
             </div>
+            { this.displayLoader() }
+            </div>
+        )
+    }
+
+    // show loader at header if data process through pagination
+    displayLoader() {
+        return (
+          <BarLoader
+            color={style.loader.color}
+            loading={this.props.loader}
+            width={this.state.width}
+            height={3}
+          />
         )
     }
 
     renderFiltersToolBar() {
         const {
-            configuration,
+            filterOptions,
             id
-        } = this.props;
+        } = this.props
 
-        if (!configuration || !configuration.filterOptions)
-            return;
+        if (!filterOptions)
+            return
 
         return (
-            <FiltersToolBar filterOptions={configuration.filterOptions} visualizationId={id} />
+            <FiltersToolBar filterOptions={filterOptions} visualizationId={id} />
         )
     }
 
@@ -558,29 +605,125 @@ class VisualizationView extends React.Component {
     }
 }
 
-const updateFilterOptions = (state, configurations, context) => {
-  if(configurations && configurations.filterOptions) {
-    for(let key in configurations.filterOptions) {
-        if(configurations.filterOptions[key].type) {
-          if(context && context.enterpriseID) {
-             let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${configurations.filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
+const updateFilterOptions = (state, configurations, context, results = []) => {
 
-             if(nsgs && nsgs.length) {
-               configurations.filterOptions[key].options = [];
-               configurations.filterOptions[key].default = nsgs[0].name;
+    if(configurations && configurations.filterOptions) {
+      let filterOptions = Object.assign({}, configurations.filterOptions)
 
-               nsgs.forEach((nsg) => {
-                 configurations.filterOptions[key].options.push({
-                   label: nsg.name,
-                   value: nsg.name
-                 });
-               });
-             }
+      for(let key in filterOptions) {
+
+          if (!filterOptions[key].options) {
+              filterOptions[key].options = []
           }
+          // append filters fetching from query
+          if (filterOptions[key].dynamicOptions) {
+            const {queryKey = null, label = null, value = null, forceOptions = null} = filterOptions[key].dynamicOptions
+            if (queryKey && value) {
+
+                // format value and label
+                const formattedValue = columnAccessor({ column: value})
+                const formattedLabel = label ? columnAccessor({ column: label}) : formattedValue
+                let forceOptionsConfig = {}
+
+                if (forceOptions) {
+                    for (let key in forceOptions) {
+                        if (forceOptions.hasOwnProperty(key)) {
+                            forceOptionsConfig[key] = columnAccessor({ column: forceOptions[key]})
+                        }
+                    }
+                }
+
+                if(results[queryKey]) {
+                    results[queryKey].forEach(d => {
+                        let dataValue = formattedValue(d, true)
+                        let dataLabel = label ? formattedLabel(d, true) : dataValue
+
+                        if(dataValue && !filterOptions[key].options.find( datum =>
+                            datum.value === dataValue.toString() || datum.label === dataLabel)) {
+
+                            let forceOptionsData = {}
+                            // if forceOptions present then calculate forceOptions values and append it in options
+                            if (forceOptionsConfig) {
+                                for (let key in forceOptionsConfig) {
+                                    if (forceOptionsConfig.hasOwnProperty(key)) {
+                                        forceOptionsData[key] = forceOptionsConfig[key](d, true) || ''
+                                    }
+                                }
+                            }
+                            // Add filters in existing filter options
+                            filterOptions[key].options.push({
+                                label: dataLabel,
+                                value: dataValue.toString(),
+                                forceOptions: forceOptionsData
+                            })
+                        }
+                    })
+                }
+            }
         }
-    };
-  }
-  return configurations;
+
+        // TODO -
+        if(filterOptions[key].type) {
+            if(context && context.enterpriseID) {
+                let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
+
+                if(nsgs && nsgs.length) {
+                    filterOptions[key].options = [];
+                    filterOptions[key].default = nsgs[0].name;
+
+                    nsgs.forEach((nsg) => {
+                    filterOptions[key].options.push({
+                        label: nsg.name,
+                        value: nsg.name
+                    });
+                    });
+                }
+            }
+        }
+      }
+      return filterOptions || []
+    }
+}
+
+const replaceQuery = (replace, query, context) => {
+    let key = 'replace';
+    let config = findPropertyPath(query, key);
+
+    while (config) {
+        let replaceIndex = config.lastIndexOf('.', config.length - (key.length + 1));
+        let replaceStr = config.substr(0, replaceIndex);
+
+        let insertPosition = config.lastIndexOf('.', config.length - (key.length + 2));
+        let insertString = config.substr(0, insertPosition);
+        let repKey = objectPath.get(query, config);
+
+        objectPath.del(query, replaceStr);
+
+        let replaceData = replace[repKey]
+        if (replaceData && context[replaceData.context]) {
+
+            for (let key in replaceData.query) {
+                objectPath.push(query, insertString, {
+                    [key]: replaceData.query[key]
+                });
+            }
+        }
+
+        config = findPropertyPath(query, "replace")
+    }
+}
+
+function findPropertyPath(obj, name) {
+    for (var prop in obj) {
+        if (prop == name) {
+            return name;
+        } else if (typeof obj[prop] == "object") {
+            var result = findPropertyPath(obj[prop], name);
+            if (result) { return prop + '.' + result; }
+        }
+    }
+
+    return null;
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -605,13 +748,19 @@ const mapStateToProps = (state, ownProps) => {
             context[filteredKey] = orgContext[key];
       }
     }
+    const userContext = state.VSD.get(VSDKeyStore.USER_CONTEXT);
+    const googleMapsAPIKey = (userContext && userContext.googleMapsAPIKey) || process.env.REACT_APP_GOOGLE_MAP_API;
+
+    const realConfiguation = configuration && configuration.toJS();
+
+    const contextualizeConfiguration = configuration ? contextualize(configuration.toJS(), context) : null
 
     const props = {
         id: configurationID,
         context: context,
         orgContext: orgContext,
         location: state.router.location,
-        configuration: configuration ? contextualize(configuration.toJS(), context) : null,
+        configuration: contextualizeConfiguration,
         headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
         isFetching: true,
         hideGraph: false,
@@ -619,11 +768,11 @@ const mapStateToProps = (state, ownProps) => {
             ConfigurationsActionKeyStore.VISUALIZATIONS,
             configurationID,
             ConfigurationsActionKeyStore.ERROR
-        ])
+        ]),
+        loader: false,
+        googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${googleMapsAPIKey}&v=3.exp&libraries=${process.env.REACT_APP_GOOGLE_MAP_LIBRARIES}`,
+        googleMapsAPIKey,
     };
-
-    let vizConfig =  configuration ? contextualize(configuration.toJS(), context) : null;
-    props.configuration = updateFilterOptions(state, vizConfig, context);
 
     props.queryConfigurations = {}
     props.response = {}
@@ -640,6 +789,8 @@ const mapStateToProps = (state, ownProps) => {
             }
         */
         const queries =  typeof props.configuration.query === 'string' ? {'data' : {'name': props.configuration.query}} : props.configuration.query
+
+        props.filterOptions = updateFilterOptions(state, contextualizeConfiguration, context, props.response);
 
         props.configuration.query = {}
 
@@ -682,6 +833,10 @@ const mapStateToProps = (state, ownProps) => {
                     props.queryConfigurations[query] = queryConfiguration ? queryConfiguration.toJS() : null;
                 }
 
+                if(realConfiguation  && props.queryConfigurations[query]) {
+                    replaceQuery(realConfiguation.replace, props.queryConfigurations[query], props.context);
+                }
+
                 const scriptName = configuration.get("script");
 
                 // Expose received response if it is available
@@ -689,7 +844,7 @@ const mapStateToProps = (state, ownProps) => {
 
                     const requestID = ServiceManager.getRequestID(props.queryConfigurations[query] || scriptName, context);
 
-                    if(typeof requestID === 'undefined') {
+                    if (typeof requestID === 'undefined') {
                         props.hideGraph = true
                     } else {
 
@@ -698,15 +853,20 @@ const mapStateToProps = (state, ownProps) => {
                             requestID
                         ]);
 
-                        if(!response && queryConfig.required !== false) {
+                        if (!response && queryConfig.required !== false) {
                             props.error = 'Not able to load data'
                         }
+
                         if (response && !response.get(ServiceActionKeyStore.IS_FETCHING)) {
                             let responseJS = response.toJS();
 
-                            if(responseJS.error && queryConfig.required !== false) {
+                            if (response.get(ServiceActionKeyStore.LOADER)) {
+                                props.loader = true
+                            }
+
+                            if (responseJS.error && queryConfig.required !== false) {
                                 props.error = responseJS.error;
-                            } else if(responseJS.results) {
+                            } else if (responseJS.results) {
                                 successResultCount++;
                                 props.response[query] = responseJS.results
                             }
@@ -717,12 +877,11 @@ const mapStateToProps = (state, ownProps) => {
         }
 
         if(successResultCount === Object.keys(queries).length ) {
-            props.isFetching = false
+            props.isFetching = false;
         }
-
     }
 
-    return props;
+    return props
 };
 
 const actionCreators = (dispatch) => ({
@@ -749,8 +908,8 @@ const actionCreators = (dispatch) => ({
         ));
     },
 
-    executeQueryIfNeeded: function(queryConfiguration, context) {
-        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context));
+    executeQueryIfNeeded: function(queryConfiguration, context, scroll) {
+        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context, false, scroll));
     },
 
     executeScriptIfNeeded: function(scriptName, context) {

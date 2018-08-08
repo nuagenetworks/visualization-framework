@@ -1,0 +1,22 @@
+{
+    "id": "aar-nsg-alarm-count-critical",
+    "title": "Critical Alarms",
+    "query": "aar-nsg-alarm-summary",
+    "graph": "SimpleTextGraph",
+    "description":"Quick View of the Critical alarms for this NSG in the VSD dashboard",
+    "showTitleBar":false,
+    "data": {
+        "borderRadius": "0",
+        "targetedColumn":"criticalAlarmsCount",
+        "circleColor":"#f76159",
+        "colors":[
+            "red"
+        ]
+    },
+    "listeners": [{
+      "redirect": "/dashboards/aarNSGAlarms",
+      "params": {
+          "nsgId": "gatewayID"
+      }
+    }]
+}

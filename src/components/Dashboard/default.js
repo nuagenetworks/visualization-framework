@@ -1,3 +1,16 @@
+
+import config from '../../config'
+
+const timeLabel = function() {
+
+    let refreshInterval = config.REFRESH_INTERVAL;
+    let seconds = Math.floor(refreshInterval / 1000);
+
+    seconds +=  (seconds > 1) ? " seconds" : " second";
+
+    return seconds;
+}
+
 export const defaultFilterOptions = {
     "Time interval": {
         "parameter": "startTime",
@@ -45,8 +58,8 @@ export const defaultFilterOptions = {
                 "value": "-1",
             },
             {
-                "label": "30 seconds",
-                "value": "30000",
+                "label": timeLabel(),
+                "value": config.REFRESH_INTERVAL,
             }
         ]
     }

@@ -140,10 +140,12 @@ Here is the list of options:
     ```
     query: {
         data: "query1",
-        data2: { "name": "query2", "required": false }
+        data2: { "name": "query2", "required": false, "scroll": true }
     }
     ```
     By default all the queries are mandatory, to make any query (except data query) non-mandatory then set  `"required": false`  in object like above.
+
+    If `scroll` set to true then data will come into chunks and upto the limit defined in .env file as `DATA_LIMIT=5000`. So scrolling will be executed till data limit reached upto 5000.
 
     Note: data key is required in case of objec{ "name": "query2", "required": false }t.
 
@@ -188,7 +190,59 @@ Here is the list of options:
 - **listeners** list of listener to register to interact with the visualization
   - **redirect** url to another dashboard
   - **params** parameters to pass into the context of the next dashboard
-- **filterOptions** allows to set filters on the visualization. See dashboard configuration for more information as it is working the same way!
+- **filterOptions** allows to set filters on the visualization. See dashboard configuration for more information as it is working the same way!. Also, there is an options to add/append filters to make it dynamic via the query data. For example - 
+
+```javascript
+    "filterOptions": {
+        "Flag-Type": {
+            "parameter": "flagtype",
+            "default": "SYN",
+            "dynamicOptions": { // Dynamic filter option
+                "queryKey": "{{context}}", // query
+                "label": "{{vnf}}", // label of the filter
+                "value": "{{timestamp}}", // value of the filter
+                "forceOptions": { // optional
+                    "param": "{{KEY}}" // KEY is the column name (from data) used to set `param` property which is static
+                }
+            },
+            "options": [
+                {
+                    "label": "SYN",
+                    "value": "SYN",
+                    "default": true
+                },
+                {
+                    "label": "SYN-ACK",
+                    "value": "SYN-ACK"
+                },
+                {
+                    "label": "SYN-ACK",
+                    "onChange": "Categories" // in onChange event it will show another filter "Categories" and "parameter" property must be same for both filters i.e Categories & Flag-Type
+                }
+            ]
+        },
+        "Categories": {
+            "parameter": "flagtype",
+            "default": "SYN",
+            "options": [
+                {
+                    "label": "SYN",
+                    "value": "SYN",
+                    "default": true
+                },
+                {
+                    "label": "SYN-ACK",
+                    "value": "SYN-ACK"
+                }
+            ]
+        }
+    },
+    "query": {
+        "data": "vss-domain-traffic-tcp-syn",
+        "context": "vnf-status" // queryKey - key of the query
+    }
+```
+
 
 
 #### Example

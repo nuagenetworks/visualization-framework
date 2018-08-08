@@ -1,0 +1,26 @@
+{
+    "id": "aarEnterpriseMapView",
+    "author": "Bharat Mukheja",
+    "creationDate": "07/03/2018",
+    "title": "AAR Enterprise ({{enterpriseName}}) Map View",
+    "visualizations": [
+        { "id": "aar-enterprise-geomap",                 "x": 0,  "y": 0, "w": 12,  "h": 30, "minW": 9, "minH": 15, "static": true}
+    ],
+    "links": [
+        {
+            "label": "Dashboard View",
+            "url": "/dashboards/aarEnterprise"
+        },
+        {
+            "label": "Detail View",
+            "url": "/dashboards/aarEnterpriseDetail"
+        },
+        {
+            "label": "Map View",
+            "url": "/dashboards/aarEnterpriseMapView"
+        }
+    ],
+    "defaultFilterOptionsOverride": {
+
+    }
+}

@@ -23,7 +23,7 @@
     "filterOptions": {
         "Group By": {
             "parameter": "source_field",
-            "default": "nuage_metadata.src-pgmem",
+            "default": "nuage_metadata.src-subnetmem",
             "options": [
                 {
                     "label": "PG",
