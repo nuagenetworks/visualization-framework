@@ -54,6 +54,10 @@ function isScrollValid(scrollData) {
     return objectPath.has(scrollData, 'expiration') && Date.now() < scrollData.expiration;
 }
 
+function isRefreshEvent(scrollData) {
+    return objectPath.has(scrollData, 'event') && scrollData.event === events.REFRESH;
+}
+
 function getScrollStatus({
     scrollData,
     total,
@@ -62,7 +66,8 @@ function getScrollStatus({
     // Check whether Data is not expired
     const isValidData = isPagingEvent(scrollData) && isScrollValid(scrollData);
     const currentPage = objectPath.get(scrollData, 'page') || 1;
-    if(!isValidData)
+
+    if(!isValidData || isRefreshEvent())
         return 'INVALID';
 
     if(total >= ((currentPage - 1) * pageSize + 1)) {
