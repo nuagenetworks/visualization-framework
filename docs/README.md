@@ -453,15 +453,21 @@ In Columns array set `display: false` to hide any column (default is true, i.e. 
         { "column": "type", "label": " ", "colors" : {
             "OTHER": "green",
             "DENY": "red"
-            }
+            },
+            "infoBox": "DemoScript" // see detailed docs in below infoBox section
         },
         { "column": "sourceip", "label": "SIP" },
         { "column": "subnetName", "label": "Subnet", "totalCharacters":    16, "tooltip" : {"column": "nuage_metadata.subnetName"} }
     ]```
 
+
 In above example, if a value of the column show via colors then add colors property in object and mentioned all values as a key and color as a value in order to replace color from value. Note: Add label property with space to declare empty column in the table. E.g -
 
 ![table-status-with-color](https://user-images.githubusercontent.com/26645756/37336742-4d9023fc-26d8-11e8-80c9-1c14100bf85b.png)
+
+
+infoBox* - (string) Pass the name of the script need to display on popup dialogue and write your script on  "/src/components/Script/Components" and register it in index.js of mentioned folder.
+For your reference we have create a demo script named as "DemoScript".
 
 
 ##### ChordGraph
