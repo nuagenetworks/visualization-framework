@@ -102,7 +102,7 @@ async function getDataFromStartToCurrentPage({
     }
 
     return {
-        data,
+        data: records,
         nextQuery
     }
 }
