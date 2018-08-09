@@ -64,11 +64,12 @@ function getScrollStatus({
     pageSize
 }) {
     // Check whether Data is not expired
-    const isValidData = isPagingEvent(scrollData) && isScrollValid(scrollData);
+    const isInvalidData = (isPagingEvent(scrollData) && !isScrollValid(scrollData)) || isRefreshEvent(scrollData);
     const currentPage = objectPath.get(scrollData, 'page') || 1;
 
-    if(!isValidData || isRefreshEvent())
+    if(isInvalidData) {
         return 'INVALID';
+    }
 
     if(total >= ((currentPage - 1) * pageSize + 1)) {
         return 'EXISTS';
