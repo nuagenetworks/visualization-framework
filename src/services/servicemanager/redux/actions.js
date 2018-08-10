@@ -58,54 +58,32 @@ function isRefreshEvent(scrollData) {
     return objectPath.has(scrollData, 'event') && scrollData.event === events.REFRESH;
 }
 
+function isElasticService(service) {
+    return service === 'elasticsearch';
+}
+
 function getScrollStatus({
     scrollData,
     total,
-    pageSize
+    pageSize,
+    service,
 }) {
-    // Check whether Data is not expired
-    const isInvalidData = (isPagingEvent(scrollData) && !isScrollValid(scrollData)) || isRefreshEvent(scrollData);
-    const currentPage = objectPath.get(scrollData, 'page') || 1;
-
-    if(isInvalidData) {
+    if(isRefreshEvent(scrollData)) {
         return 'INVALID';
     }
 
-    if(total >= ((currentPage - 1) * pageSize + 1)) {
+    const currentPage = objectPath.get(scrollData, 'page') || 1;
+    if(isPagingEvent(scrollData) && total >= ((currentPage - 1) * pageSize + 1)) {
         return 'EXISTS';
     }
 
+    // Check whether Data is not expired
+    const isValidData = isElasticService(service) && isPagingEvent(scrollData) && isScrollValid(scrollData);
+    if(!isValidData) {
+        return 'INVALID';
+    }
+
     return 'NOT_EXISTS'
-}
-
-async function getDataFromStartToCurrentPage({
-    data,
-    query,
-    results,
-    startPage,
-    currentPage,
-    state
-}) {
-    let service = ServiceManager.getService(query.service);
-    let records = [...data];
-
-    let nextQuery = results.nextQuery;
-
-    while(nextQuery && startPage <= currentPage) {
-        let result =   await service.fetch(nextQuery, state, records.length)
-        let response = ServiceManager.tabify(query, result.response)
-
-        if (response && response.length)
-            records = [...records, ...response];
-
-        nextQuery = result.nextQuery;
-        startPage++;
-    }
-
-    return {
-        data: records,
-        nextQuery
-    }
 }
 
 /*
@@ -135,7 +113,6 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
 
         let data = [],
             currentPage = objectPath.get(scrollData, 'page') || 1,
-            startPage = currentPage,
             updatedQuery = { ...query, scroll },
             scrollId = null,
             pageSize = objectPath.get(updatedQuery, service.getSizePath());
@@ -151,14 +128,15 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
             const status = getScrollStatus({
                 scrollData,
                 total: data.length,
-                pageSize
+                pageSize,
+                service: query.service
             });
 
             switch (status) {
                 case 'INVALID':
                     // Reset data and start from first page
                     data = [];
-                    startPage = 1;
+                    currentPage = 1;
                     break;
 
                 case 'NOT_EXISTS':
@@ -172,13 +150,14 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
                         event: null,
                         page: currentPage
                     }));
+                    dispatch(didReceiveResponse(requestID, data, false))
 
                     return Promise.resolve();
             }
         }
 
         // If Page number is not equal to 1 then we must use Scroll Base Query else use normal Query
-        updatedQuery = startPage !== 1 ? service.getScrollQuery(updatedQuery, scrollId) : updatedQuery;
+        updatedQuery = currentPage !== 1 ? service.getScrollQuery(updatedQuery, scrollId) : updatedQuery;
         dispatch(didStartRequest(requestID, dashboard));
 
         return service.fetch(updatedQuery, getState())
@@ -188,28 +167,15 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
                     data = [...data, ...ServiceManager.tabify(query, results.response)];
 
                     if(scroll) {
-                        startPage++;
-
-                        // Will be valid in case of scroll get expired
-                        const response = await getDataFromStartToCurrentPage({
-                            data,
-                            query,
-                            results,
-                            startPage,
-                            currentPage,
-                            state: getState()
-                        })
-
-                        data = response.data;
-
                         dispatch(updateScroll(
                             query.vizID,
                             {
-                                scroll_id: objectPath.get(response.nextQuery, 'query.scroll_id'),
-                                expiration: Date.now() + config.SCROLL_CACHING_QUERY_TIME,
+                                scroll_id: objectPath.get(results.nextQuery, 'query.scroll_id'),
+                                expiration: isElasticService(query.service) ? Date.now() + config.SCROLL_CACHING_QUERY_TIME : null,
                                 event: null,
-                                size: objectPath.get(response.nextQuery, 'length'),
+                                size: objectPath.get(results.nextQuery, 'length'),
                                 pageSize,
+                                page: currentPage,
                             }
                         ))
                     }

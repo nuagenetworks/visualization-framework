@@ -333,7 +333,8 @@ class VisualizationView extends React.Component {
                 sort: objectPath.has(scrollData, 'sort') ? objectPath.get(scrollData, 'sort') : null,
                 size: objectPath.has(scrollData, 'size') ? objectPath.get(scrollData, 'size') : response.data.length, // response length for normal table otherwise total hits for scroll based table.
                 pageSize: objectPath.has(scrollData, 'pageSize') ? objectPath.get(scrollData, 'pageSize') : limit, // Calculate this from the config or (query in case of scroll)
-                page: objectPath.has(scrollData, 'page') ? objectPath.get(scrollData, 'page') : 1 // Pass page as 1 for Normal Table and will be handled internally only. 
+                page: objectPath.has(scrollData, 'page') ? objectPath.get(scrollData, 'page') : 1, // Pass page as 1 for Normal Table and will be handled internally only.
+                expiration: objectPath.has(scrollData, 'expiration') ? objectPath.get(scrollData, 'expiration') : false,
             }
         }
 
