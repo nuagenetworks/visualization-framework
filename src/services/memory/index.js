@@ -48,15 +48,15 @@ const fetch = (parameters, state) => {
     });
 }
 
-const getSizePath = function() {
+const getPageSizePath = function() {
     return null;
 }
 
-const updateSize = function(query, size = null) {
+const updatePageSize = function(query, size = null) {
     return query;
 }
 
-const getScrollQuery = function (query, scroll_id = null) {
+const getNextPageQuery = function (query, scroll_id = null) {
     return query;
 }
 
@@ -73,9 +73,9 @@ export const MemoryService = {
     config: config,
     getRequestID: getRequestID,
     fetch: fetch,
-    getSizePath,
-    updateSize,
-    getScrollQuery,
+    getPageSizePath,
+    updatePageSize,
+    getNextPageQuery,
     addSorting,
     addSearching
 }
