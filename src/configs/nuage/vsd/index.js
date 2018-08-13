@@ -44,8 +44,8 @@ const getHeaders = (params = {}) => {
     if (params.page || params.page === 0)
         headers["X-Nuage-Page"] = params.page
 
-    if (params.size)
-        headers["x-nuage-PageSize"] = params.size
+    if (params.pageSize)
+        headers["x-nuage-PageSize"] = params.pageSize
 
     if (params.proxyUser)
         headers["X-Nuage-ProxyUser"] = params.proxyUser
@@ -102,9 +102,9 @@ const makeRequest = (url, headers) => {
         })
         .done((response, status, content) => {
             let page = content.getResponseHeader('x-nuage-page') || headers["X-Nuage-Page"]
-            let count = parseInt(content.getResponseHeader('x-nuage-count'))
+            let count = parseInt(content.getResponseHeader('x-nuage-count'), 10) || 0;
             
-            return resolve({response, header: { scroll_id: page, count, hits: response && response.length || 0 }})
+            return resolve({response, header: { page, count, hits: (response && response.length) || 0 }})
         })
         .fail((error) => {
             return reject(error)
@@ -118,15 +118,17 @@ const makeRequest = (url, headers) => {
  *  and increased page by 1 for next request.
  */
 const getNextRequest = (header, query, totalCaptured) => {
-    let nextQuery   = null,
-      scroll_id        = 0;
+    let nextQuery   = {},
+      nextPage = 0;
 
     if((totalCaptured + header.hits) < header.count) {
-        scroll_id = parseInt(header.scroll_id) + 1
-        nextQuery = {...query, "length":  header.count};
+        nextPage = parseInt(header.page) + 1
+        nextQuery = {...query};
 
-        nextQuery.query.scroll_id = scroll_id;
+        nextQuery.query.nextPage = nextPage;
     }
+
+    nextQuery = {...nextQuery, "length":  header.count}
 
     return nextQuery
 }
@@ -300,8 +302,8 @@ const fetch = (configuration, state, totalCaptured = 0) => {
               token,
               organization,
               filter: configuration.query.filter || null,
-              size: configuration.query.size,
-              page: configuration.query && configuration.query.scroll_id || 0,
+              pageSize: configuration.query.pageSize,
+              page: (configuration.query && configuration.query.nextPage) || 0,
               orderBy: configuration.query.sort || null,
              });
 
@@ -372,38 +374,35 @@ const add = (configuration, body, state) => {
     return patch(configuration, body, state);
 }
 
-const getSizePath = function() {
-    return 'query.size';
+const getPageSizePath = function() {
+    return 'query.pageSize';
 }
 
-const updateSize = function(query, size) {
-    let q = {...query};
-    objectPath.set(q, this.getSizePath(), size);
-    return q;
+const updatePageSize = function(queryConfiguration, pageSize) {
+    objectPath.set(queryConfiguration, this.getSizePath(), pageSize);
+    return queryConfiguration;
 }
 
-const getScrollQuery = function (query, scroll_id) {
-    let q = {...query};
-    q.query.scroll_id = scroll_id;
-    return q;
+const getNextPageQuery = function (queryConfiguration, nextPage) {
+    queryConfiguration.query.nextPage = nextPage;
+    return queryConfiguration;
 }
 
+// Add custom sorting into VSD query
 const addSorting = function (queryConfiguration, sort) {
-    let tmpQueryConfiguration = {...queryConfiguration};
-    tmpQueryConfiguration.query.sort = `${sort.column} ${sort.order}`
-    return tmpQueryConfiguration; 
+    queryConfiguration.query.sort = `${sort.column} ${sort.order}`
+    return queryConfiguration;
 }
 
+// Add custom searching from searchbox into VSD query
 const addSearching = function (queryConfiguration, search) {
-    let tmpQueryConfiguration = _.cloneDeep(queryConfiguration);
-    
     if (search.length) {
-        let filter = objectPath.get(tmpQueryConfiguration, 'query.filter');
+        let filter = objectPath.get(queryConfiguration, 'query.filter');
 
-        objectPath.push(tmpQueryConfiguration, 'query.filter', (filter ? `(${filter}) AND ` : '') + VSDSearchConvertor(search));
+        objectPath.push(queryConfiguration, 'query.filter', (filter ? `(${filter}) AND ` : '') + VSDSearchConvertor(search));
     }
 
-    return tmpQueryConfiguration;
+    return queryConfiguration;
 }
 
 export const VSDService = {
@@ -416,9 +415,9 @@ export const VSDService = {
     update,
     add,
     remove,
-    getSizePath,
-    updateSize,
-    getScrollQuery,
+    getPageSizePath,
+    updatePageSize,
+    getNextPageQuery,
     addSorting,
     addSearching
 };

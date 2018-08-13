@@ -55,8 +55,11 @@ const fetch = function (queryConfiguration, state) {
             };
 
         //if data comes from scroll (if `scroll: true` in query config)
-        if(queryConfiguration.query && queryConfiguration.query.scroll_id) {
-            esRequest  = client.scroll(queryConfiguration.query)
+        if(queryConfiguration.query && queryConfiguration.query.nextPage) {
+            esRequest  = client.scroll({
+                scroll: configData.ES_SCROLL_TIME,
+                scroll_id: queryConfiguration.query.nextPage,
+            })
         } else {
             const newQuery = queryConfiguration.scroll ? Object.assign({}, queryConfiguration.query, {scroll: configData.ES_SCROLL_TIME}) : queryConfiguration.query
             esRequest  = client.search(newQuery)
@@ -70,7 +73,7 @@ const fetch = function (queryConfiguration, state) {
                 results.nextQuery = {
                     query: {
                         scroll: configData.ES_SCROLL_TIME,
-                        scroll_id: response._scroll_id,
+                        nextPage: response._scroll_id,
                     },
                     length: response.hits.total
                 }
@@ -126,40 +129,39 @@ const getRequestID = function (queryConfiguration, context) {
     return `${queryConfiguration.vizID}-${queryConfiguration.id}[${JSON.stringify(parameters)}]`;
 }
 
+// Add custom sorting into ES query
 const addSorting = function (queryConfiguration, sort) {
-    let tmpQueryConfiguration = {...queryConfiguration};
-    tmpQueryConfiguration.query.body.sort = {
+    queryConfiguration.query.body.sort = {
         [sort.column]: {
             order: sort.order
         }
     };
 
-    return tmpQueryConfiguration; 
+    return queryConfiguration;
 }
 
+// Add custom searching from searchbox into ES query
 const addSearching = function (queryConfiguration, search) {
-    let tmpQueryConfiguration = _.cloneDeep(queryConfiguration);
     if (search.length) {
-        objectPath.push(tmpQueryConfiguration, 'query.body.query.bool.must', ESSearchConvertor(search));
+        objectPath.push(queryConfiguration, 'query.body.query.bool.must', ESSearchConvertor(search));
     }
 
-    return tmpQueryConfiguration; 
+    return queryConfiguration;
 }
 
-const getSizePath = function() {
+const getPageSizePath = function() {
     return 'query.body.size';
 }
 
-const updateSize = function(query, size) {
-    let q = {...query};
-    objectPath.set(q, this.getSizePath(), size);
-    return q;
+const updatePageSize = function(queryConfiguration, pageSize) {
+    objectPath.set(queryConfiguration, this.getSizePath(), pageSize);
+    return queryConfiguration;
 }
 
-const getScrollQuery = function (query, scroll_id) {
-    return Object.assign({}, { query: {
+const getNextPageQuery = function (queryConfiguration, nextPage) {
+    return Object.assign(queryConfiguration, { query: {
         scroll: configData.ES_SCROLL_TIME,
-        scroll_id: scroll_id
+        nextPage: nextPage
     }})
 }
 
@@ -172,7 +174,7 @@ export const ElasticSearchService = {
     addSearching: addSearching,
     tabify: tabify,
     ESClient,
-    getSizePath,
-    updateSize,
-    getScrollQuery    
+    getPageSizePath,
+    updatePageSize,
+    getNextPageQuery
 }

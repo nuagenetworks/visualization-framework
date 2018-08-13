@@ -62,27 +62,31 @@ function isElasticService(service) {
     return service === 'elasticsearch';
 }
 
+function isEvent(scrollData) {
+    return objectPath.has(scrollData, 'event') && scrollData.event !== null
+}
+
 function getScrollStatus({
     scrollData,
     total,
     pageSize,
     service,
 }) {
-    if(isRefreshEvent(scrollData)) {
+
+    if(isEvent(scrollData) && !isPagingEvent(scrollData)) {
         return 'INVALID';
     }
 
-    const currentPage = objectPath.get(scrollData, 'page') || 1;
+    const currentPage = objectPath.get(scrollData, 'currentPage') || 1;
     if(isPagingEvent(scrollData) && total >= ((currentPage - 1) * pageSize + 1)) {
         return 'EXISTS';
     }
 
     // Check whether Data is not expired
-    const isValidData = isElasticService(service) && isPagingEvent(scrollData) && isScrollValid(scrollData);
-    if(!isValidData) {
+    const isValidData = isPagingEvent(scrollData) && isScrollValid(scrollData);
+    if(isElasticService(service) && !isValidData) {
         return 'INVALID';
     }
-
     return 'NOT_EXISTS'
 }
 
@@ -112,15 +116,15 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
         const scrollData = getState().services.getIn([ActionKeyStore.SCROLL_DATA, query.vizID]) || {};
 
         let data = [],
-            currentPage = objectPath.get(scrollData, 'page') || 1,
+            currentPage = objectPath.get(scrollData, 'currentPage') || 1,
             updatedQuery = { ...query, scroll },
-            scrollId = null,
-            pageSize = objectPath.get(updatedQuery, service.getSizePath());
+            nextPage = null,
+            pageSize = objectPath.get(updatedQuery, service.getPageSizePath());
 
         if(scroll) {
             if (!pageSize) {
                 // Set the size for VSD / ES query for pagination purpose.
-                updatedQuery = service.updateSize(updatedQuery, config.DATA_PER_PAGE_LIMIT);
+                updatedQuery = service.updatePageSize(updatedQuery, config.DATA_PER_PAGE_LIMIT);
             }
 
             data = getState().services.getIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS]) || [];
@@ -141,14 +145,14 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
 
                 case 'NOT_EXISTS':
                     // Fetch next page
-                    scrollId = scrollData.scroll_id
+                    nextPage = scrollData.nextPage
                     break;
 
                 case 'EXISTS':
                     // Data already Preset no need to do request
                     dispatch(updateScroll(query.vizID, {
                         event: null,
-                        page: currentPage
+                        currentPage
                     }));
                     dispatch(didReceiveResponse(requestID, data, false))
 
@@ -157,7 +161,7 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
         }
 
         // If Page number is not equal to 1 then we must use Scroll Base Query else use normal Query
-        updatedQuery = currentPage !== 1 ? service.getScrollQuery(updatedQuery, scrollId) : updatedQuery;
+        updatedQuery = currentPage !== 1 ? service.getNextPageQuery(updatedQuery, nextPage) : updatedQuery;
         dispatch(didStartRequest(requestID, dashboard));
 
         return service.fetch(updatedQuery, getState())
@@ -170,12 +174,12 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
                         dispatch(updateScroll(
                             query.vizID,
                             {
-                                scroll_id: objectPath.get(results.nextQuery, 'query.scroll_id'),
+                                nextPage: objectPath.get(results.nextQuery, 'query.nextPage'),
                                 expiration: isElasticService(query.service) ? Date.now() + config.SCROLL_CACHING_QUERY_TIME : null,
                                 event: null,
                                 size: objectPath.get(results.nextQuery, 'length'),
                                 pageSize,
-                                page: currentPage,
+                                currentPage,
                             }
                         ))
                     }

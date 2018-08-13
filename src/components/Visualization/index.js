@@ -322,22 +322,6 @@ class VisualizationView extends React.Component {
             return this.renderCardWithInfo("No data to visualize", "bar-chart");
         }
 
-        let tableConfig = {};
-
-        if(graphName === 'Table') {
-            // Total, per page, current page must be set and only applicable for Table component only.
-            const limit = objectPath.get(configuration, 'data.limit') || 100;
-            tableConfig = {
-                scroll,
-                searchText: objectPath.has(scrollData, 'searchText') ? objectPath.get(scrollData, 'searchText') : null,
-                sort: objectPath.has(scrollData, 'sort') ? objectPath.get(scrollData, 'sort') : null,
-                size: objectPath.has(scrollData, 'size') ? objectPath.get(scrollData, 'size') : response.data.length, // response length for normal table otherwise total hits for scroll based table.
-                pageSize: objectPath.has(scrollData, 'pageSize') ? objectPath.get(scrollData, 'pageSize') : limit, // Calculate this from the config or (query in case of scroll)
-                page: objectPath.has(scrollData, 'page') ? objectPath.get(scrollData, 'page') : 1, // Pass page as 1 for Normal Table and will be handled internally only.
-                expiration: objectPath.has(scrollData, 'expiration') ? objectPath.get(scrollData, 'expiration') : false,
-            }
-        }
-
         let graphHeight = d3.select(`#filter_${id}`).node() ? this.state.height - d3.select(`#filter_${id}`).node().getBoundingClientRect().height : this.state.height;
 
         return (
@@ -351,7 +335,8 @@ class VisualizationView extends React.Component {
               goTo={this.props.goTo}
               {...this.state.listeners}
               googleMapURL={googleMapURL}
-              {...tableConfig} //Specific for table component
+              scroll={scroll}
+              scrollData={scrollData} //Specific for table component
               updateScroll={this.updateScrollData.bind(this)}
               googleMapsAPIKey={googleMapsAPIKey}
             />
