@@ -54,10 +54,6 @@ function isScrollValid(scrollData) {
     return objectPath.has(scrollData, 'expiration') && Date.now() < scrollData.expiration;
 }
 
-function isRefreshEvent(scrollData) {
-    return objectPath.has(scrollData, 'event') && scrollData.event === events.REFRESH;
-}
-
 function isElasticService(service) {
     return service === 'elasticsearch';
 }
@@ -243,7 +239,7 @@ function fetchIfNeeded(query, context, forceCache, scroll, dashboard = null) {
 
         if(scroll) {
             const scrollData = state.services.getIn([ActionKeyStore.SCROLL_DATA, query.vizID]);
-            mustFetch = scrollData && scrollData.event || false;
+            mustFetch = (scrollData && scrollData.event) || false;
         }
 
         if (shouldFetch(request) || mustFetch) {

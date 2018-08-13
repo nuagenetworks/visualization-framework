@@ -48,7 +48,6 @@ import { ServiceManager } from "../../services/servicemanager/index";
 
 import { ActionKeyStore  as VSDKeyStore } from "../../configs/nuage/vsd/redux/actions";
 
-import dataConfig from "../../config";
 import style from "./styles";
 
 import FontAwesome from "react-fontawesome";
@@ -703,9 +702,11 @@ const replaceQuery = (replace, query, context) => {
         if (replaceData && context[replaceData.context]) {
 
             for (let key in replaceData.query) {
-                objectPath.push(query, insertString, {
-                    [key]: replaceData.query[key]
-                });
+                if(replaceData.query.hasOwnProperty(key)) {
+                    objectPath.push(query, insertString, {
+                        [key]: replaceData.query[key]
+                    });
+                }
             }
         }
 
@@ -715,9 +716,9 @@ const replaceQuery = (replace, query, context) => {
 
 function findPropertyPath(obj, name) {
     for (var prop in obj) {
-        if (prop == name) {
+        if (prop === name) {
             return name;
-        } else if (typeof obj[prop] == "object") {
+        } else if (typeof obj[prop] === "object") {
             var result = findPropertyPath(obj[prop], name);
             if (result) { return prop + '.' + result; }
         }

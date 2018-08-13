@@ -122,7 +122,7 @@ const getNextRequest = (header, query, totalCaptured) => {
       nextPage = 0;
 
     if((totalCaptured + header.hits) < header.count) {
-        nextPage = parseInt(header.page) + 1
+        nextPage = parseInt(header.page, 10) + 1
         nextQuery = {...query};
 
         nextQuery.query.nextPage = nextPage;
