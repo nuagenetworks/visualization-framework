@@ -5,11 +5,15 @@ import { connect } from "react-redux";
 
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-
+import { events } from '../../lib/vis-graphs/utils/types'
 import {
     Actions as InterfaceActions,
     ActionKeyStore as InterfaceActionKeyStore
 } from "../App/redux/actions";
+
+import {
+    Actions as ServiceActions
+} from "../../services/servicemanager/redux/actions"
 
 import style from "./styles";
 
@@ -152,7 +156,7 @@ export class FiltersToolBarView extends React.Component {
 
         if(Object.keys(configContexts).length !== 0) {
             if(!Object.keys(filterContext).length) {
-                saveFilterContext(configContexts)
+                saveFilterContext(configContexts, visualizationId)
             }
             this.props.goTo(window.location.pathname, Object.assign({}, context, configContexts))
         }
@@ -186,11 +190,12 @@ export class FiltersToolBarView extends React.Component {
     onTouchTap(queryParams) {
         const {
             saveFilterContext,
+            visualizationId,
             context,
             goTo
         } = this.props;
 
-        saveFilterContext(queryParams);
+        saveFilterContext(queryParams, visualizationId);
         goTo(window.location.pathname, Object.assign({}, context, queryParams));
     }
 
@@ -287,7 +292,8 @@ const actionCreators = (dispatch) => ({
     goTo: function(link, context) {
         dispatch(push({pathname:link, query:context}));
     },
-    saveFilterContext: function(context) {
+    saveFilterContext: function(context, visualizationId = null) {
+        dispatch(ServiceActions.updateScroll(visualizationId, {page: 1, event: events.FILTER}))
         dispatch(InterfaceActions.filterContext(context));
     }
 

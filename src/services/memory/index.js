@@ -28,7 +28,7 @@ export const getRequestID = (configuration, context) => {
     if (Object.keys(parameters).length === 0)
         return configuration.id;
 
-    return configuration.id + '[' + JSON.stringify(parameters) + ']';
+    return `${configuration.vizID}-${configuration.id}[${JSON.stringify(parameters)}]`;
 }
 
 const fetch = (parameters, state) => {
@@ -48,9 +48,34 @@ const fetch = (parameters, state) => {
     });
 }
 
+const getPageSizePath = function() {
+    return null;
+}
+
+const updatePageSize = function(query, size = null) {
+    return query;
+}
+
+const getNextPageQuery = function (query, scroll_id = null) {
+    return query;
+}
+
+const addSorting = function (queryConfiguration, sort = null) {
+    return queryConfiguration;
+}
+
+const addSearching = function (queryConfiguration, search = null) {
+    return queryConfiguration;
+}
+
 export const MemoryService = {
     id: 'memory',
     config: config,
     getRequestID: getRequestID,
-    fetch: fetch
+    fetch: fetch,
+    getPageSizePath,
+    updatePageSize,
+    getNextPageQuery,
+    addSorting,
+    addSearching
 }

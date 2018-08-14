@@ -1,8 +1,12 @@
 import $ from "jquery";
+import _ from 'lodash';
+import objectPath from "object-path";
 
 import { ActionKeyStore } from "./redux/actions";
 import { parameterizedConfiguration } from "../../../utils/configurations";
 import configData from '../../../config';
+
+import { VSDSearchConvertor } from '../../../lib/vis-graphs/utils/helpers'
 
 const config = {
     api_version: "5.0",
@@ -41,7 +45,7 @@ const getHeaders = (params = {}) => {
         headers["X-Nuage-Page"] = params.page
 
     if (params.pageSize)
-        headers["x-nuage-pagesize"] = params.pageSize
+        headers["x-nuage-PageSize"] = params.pageSize
 
     if (params.proxyUser)
         headers["X-Nuage-ProxyUser"] = params.proxyUser
@@ -68,12 +72,12 @@ export const getURLEndpoint = (configuration) => {
 
 export const getRequestID = (configuration, context) => {
     const tmpConfiguration = parameterizedConfiguration(configuration, context);
-
     if (!tmpConfiguration)
         return;
 
     let URL = getURLEndpoint(tmpConfiguration);
 
+    URL = configuration.id ? `${configuration.vizID}-${configuration.id}-${URL}` : URL;
     if (!tmpConfiguration.query.filter)
         return URL;
 
@@ -98,9 +102,9 @@ const makeRequest = (url, headers) => {
         })
         .done((response, status, content) => {
             let page = content.getResponseHeader('x-nuage-page') || headers["X-Nuage-Page"]
-            let count = content.getResponseHeader('x-nuage-count')
-
-            return resolve({response, header: { page, count, hits: response.length || 0 }})
+            let count = parseInt(content.getResponseHeader('x-nuage-count'), 10) || 0;
+            
+            return resolve({response, header: { page, count, hits: (response && response.length) || 0 }})
         })
         .fail((error) => {
             return reject(error)
@@ -114,13 +118,17 @@ const makeRequest = (url, headers) => {
  *  and increased page by 1 for next request.
  */
 const getNextRequest = (header, query, totalCaptured) => {
-    let nextQuery   = null,
-        page        = 0;
+    let nextQuery   = {},
+      nextPage = 0;
 
     if((totalCaptured + header.hits) < header.count) {
-        page = parseInt(header.page) + 1
-        nextQuery = Object.assign({}, query, {page})
+        nextPage = parseInt(header.page, 10) + 1
+        nextQuery = {...query};
+
+        nextQuery.query.nextPage = nextPage;
     }
+
+    nextQuery = {...nextQuery, "length":  header.count}
 
     return nextQuery
 }
@@ -290,7 +298,14 @@ const fetch = (configuration, state, totalCaptured = 0) => {
         return Promise.reject(ERROR_MESSAGE);
 
     const url     = VSDServiceTest.getURL(configuration, api),
-          headers = getHeaders({token, organization, filter: configuration.query.filter, pageSize: configuration.query.pageSize, page: configuration.page || 0 });
+          headers = getHeaders({
+              token,
+              organization,
+              filter: configuration.query.filter || null,
+              pageSize: configuration.query.pageSize,
+              page: (configuration.query && configuration.query.nextPage) || 0,
+              orderBy: configuration.query.sort || null,
+             });
 
     return new Promise((resolve, reject) => {
 
@@ -359,6 +374,37 @@ const add = (configuration, body, state) => {
     return patch(configuration, body, state);
 }
 
+const getPageSizePath = function() {
+    return 'query.pageSize';
+}
+
+const updatePageSize = function(queryConfiguration, pageSize) {
+    objectPath.set(queryConfiguration, this.getSizePath(), pageSize);
+    return queryConfiguration;
+}
+
+const getNextPageQuery = function (queryConfiguration, nextPage) {
+    queryConfiguration.query.nextPage = nextPage;
+    return queryConfiguration;
+}
+
+// Add custom sorting into VSD query
+const addSorting = function (queryConfiguration, sort) {
+    queryConfiguration.query.sort = `${sort.column} ${sort.order}`
+    return queryConfiguration;
+}
+
+// Add custom searching from searchbox into VSD query
+const addSearching = function (queryConfiguration, search) {
+    if (search.length) {
+        let filter = objectPath.get(queryConfiguration, 'query.filter');
+
+        objectPath.push(queryConfiguration, 'query.filter', (filter ? `(${filter}) AND ` : '') + VSDSearchConvertor(search));
+    }
+
+    return queryConfiguration;
+}
+
 export const VSDService = {
     id: "VSD",
     config,
@@ -369,4 +415,9 @@ export const VSDService = {
     update,
     add,
     remove,
+    getPageSizePath,
+    updatePageSize,
+    getNextPageQuery,
+    addSorting,
+    addSearching
 };

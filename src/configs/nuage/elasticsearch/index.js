@@ -1,9 +1,15 @@
 import elasticsearch from "elasticsearch";
+import objectPath from 'object-path';
+
+import _ from 'lodash';
 
 import tabify from "./tabify";
 import { ActionKeyStore } from "./redux/actions";
 import { parameterizedConfiguration, getUsedParameters } from "../../../utils/configurations";
 import configData from '../../../config'
+
+import { ESSearchConvertor } from '../../../lib/vis-graphs/utils/helpers'
+
 
 const ERROR_MESSAGE = "unable to fetch data."
 
@@ -49,10 +55,13 @@ const fetch = function (queryConfiguration, state) {
             };
 
         //if data comes from scroll (if `scroll: true` in query config)
-        if(queryConfiguration.query && queryConfiguration.query.scroll_id) {
-            esRequest  = client.scroll(queryConfiguration.query)
+        if(queryConfiguration.query && queryConfiguration.query.nextPage) {
+            esRequest  = client.scroll({
+                scroll: configData.ES_SCROLL_TIME,
+                scroll_id: queryConfiguration.query.nextPage,
+            })
         } else {
-            const newQuery = queryConfiguration.scroll ? Object.assign({}, queryConfiguration.query, {scroll: '1m'}) : queryConfiguration.query
+            const newQuery = queryConfiguration.scroll ? Object.assign({}, queryConfiguration.query, {scroll: configData.ES_SCROLL_TIME}) : queryConfiguration.query
             esRequest  = client.search(newQuery)
         }
 
@@ -63,9 +72,10 @@ const fetch = function (queryConfiguration, state) {
             if (response.hits.hits.length && response._scroll_id) {
                 results.nextQuery = {
                     query: {
-                        scroll: "1m",
-                        scroll_id: response._scroll_id
-                    }
+                        scroll: configData.ES_SCROLL_TIME,
+                        nextPage: response._scroll_id,
+                    },
+                    length: response.hits.total
                 }
             }
 
@@ -116,7 +126,43 @@ const getRequestID = function (queryConfiguration, context) {
     if (Object.keys(parameters).length === 0)
         return queryConfiguration.id;
 
-    return queryConfiguration.id + "[" + JSON.stringify(parameters) + "]";
+    return `${queryConfiguration.vizID}-${queryConfiguration.id}[${JSON.stringify(parameters)}]`;
+}
+
+// Add custom sorting into ES query
+const addSorting = function (queryConfiguration, sort) {
+    queryConfiguration.query.body.sort = {
+        [sort.column]: {
+            order: sort.order
+        }
+    };
+
+    return queryConfiguration;
+}
+
+// Add custom searching from searchbox into ES query
+const addSearching = function (queryConfiguration, search) {
+    if (search.length) {
+        objectPath.push(queryConfiguration, 'query.body.query.bool.must', ESSearchConvertor(search));
+    }
+
+    return queryConfiguration;
+}
+
+const getPageSizePath = function() {
+    return 'query.body.size';
+}
+
+const updatePageSize = function(queryConfiguration, pageSize) {
+    objectPath.set(queryConfiguration, this.getSizePath(), pageSize);
+    return queryConfiguration;
+}
+
+const getNextPageQuery = function (queryConfiguration, nextPage) {
+    return Object.assign(queryConfiguration, { query: {
+        scroll: configData.ES_SCROLL_TIME,
+        nextPage: nextPage
+    }})
 }
 
 export const ElasticSearchService = {
@@ -124,5 +170,11 @@ export const ElasticSearchService = {
     fetch: fetch,
     ping: ping,
     getRequestID: getRequestID,
-    tabify: tabify
+    addSorting: addSorting,
+    addSearching: addSearching,
+    tabify: tabify,
+    ESClient,
+    getPageSizePath,
+    updatePageSize,
+    getNextPageQuery
 }

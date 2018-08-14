@@ -48,7 +48,6 @@ import { ServiceManager } from "../../services/servicemanager/index";
 
 import { ActionKeyStore  as VSDKeyStore } from "../../configs/nuage/vsd/redux/actions";
 
-import dataConfig from "../../config";
 import style from "./styles";
 
 import FontAwesome from "react-fontawesome";
@@ -130,9 +129,8 @@ class VisualizationView extends React.Component {
         this.props.fetchConfigurationIfNeeded(id).then((c) => {
             const {
                 configuration,
-                showInDashboard,
-                setPageTitle,
-                context
+                context,
+                dashboard
             } = this.props;
 
             if (!configuration)
@@ -143,7 +141,7 @@ class VisualizationView extends React.Component {
 
             if (scriptName) {
                 const { executeScriptIfNeeded } = this.props;
-                executeScriptIfNeeded(scriptName, context);
+                executeScriptIfNeeded(scriptName, context, false, dashboard);
             }
 
             if (queries) {
@@ -160,20 +158,7 @@ class VisualizationView extends React.Component {
                                 return
                             }
 
-                            /**
-                             * if scroll is enable then fetch only listed columns and increase per page size to 10000
-                             * from ES to make query execution faster
-                             */
-                            if(queries[key].scroll &&
-                                configuration.data &&
-                                configuration.data.columns &&
-                                queryConfiguration.query
-                            ) {
-                                queryConfiguration.query.body['_source'] = this.getColumns(configuration)
-                                queryConfiguration.query.body['size']    = dataConfig.DATA_PER_PAGE_LIMIT
-                            }
-
-                            executeQueryIfNeeded(queryConfiguration, context, queries[key].scroll || false).then(
+                            executeQueryIfNeeded(queryConfiguration, context, queries[key].scroll || false, dashboard).then(
                                 () => {
                                 },
                                 (error) => {
@@ -308,12 +293,23 @@ class VisualizationView extends React.Component {
         selectRow(id, rows, matchingRows, location.query, location.pathname)
     }
 
+    updateScrollData(data) {
+        const {
+            id,
+            updateScroll
+        } = this.props;
+
+        updateScroll(id, data)
+    }
+
     renderVisualization() {
         const {
             configuration,
             response,
             id,
             googleMapURL,
+            scroll,
+            scrollData,
             googleMapsAPIKey
         } = this.props;
 
@@ -338,6 +334,9 @@ class VisualizationView extends React.Component {
               goTo={this.props.goTo}
               {...this.state.listeners}
               googleMapURL={googleMapURL}
+              scroll={scroll}
+              scrollData={scrollData} //Specific for table component
+              updateScroll={this.updateScrollData.bind(this)}
               googleMapsAPIKey={googleMapsAPIKey}
             />
         )
@@ -703,9 +702,11 @@ const replaceQuery = (replace, query, context) => {
         if (replaceData && context[replaceData.context]) {
 
             for (let key in replaceData.query) {
-                objectPath.push(query, insertString, {
-                    [key]: replaceData.query[key]
-                });
+                if(replaceData.query.hasOwnProperty(key)) {
+                    objectPath.push(query, insertString, {
+                        [key]: replaceData.query[key]
+                    });
+                }
             }
         }
 
@@ -715,9 +716,9 @@ const replaceQuery = (replace, query, context) => {
 
 function findPropertyPath(obj, name) {
     for (var prop in obj) {
-        if (prop == name) {
+        if (prop === name) {
             return name;
-        } else if (typeof obj[prop] == "object") {
+        } else if (typeof obj[prop] === "object") {
             var result = findPropertyPath(obj[prop], name);
             if (result) { return prop + '.' + result; }
         }
@@ -764,6 +765,7 @@ const mapStateToProps = (state, ownProps) => {
         headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
         isFetching: true,
         hideGraph: false,
+        scroll: false,
         error: state.configurations.getIn([
             ConfigurationsActionKeyStore.VISUALIZATIONS,
             configurationID,
@@ -771,6 +773,7 @@ const mapStateToProps = (state, ownProps) => {
         ]),
         loader: false,
         googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${googleMapsAPIKey}&v=3.exp&libraries=${process.env.REACT_APP_GOOGLE_MAP_LIBRARIES}`,
+        scrollData: state.services.getIn([ServiceActionKeyStore.SCROLL_DATA, configurationID]),
         googleMapsAPIKey,
     };
 
@@ -807,11 +810,15 @@ const mapStateToProps = (state, ownProps) => {
                 */
                 let queryConfig = Object.assign({}, typeof queries[query] === 'string' ? { 'name': queries[query]} : queries[query])
 
-                props.configuration.query[query] = queryConfig
-
                 if(query === 'data') {
                     queryConfig.required = true
+
+                    // check scroll is enabled or not on primary data
+                    if(queryConfig.scroll)
+                        props.scroll = true;
                 }
+
+                props.configuration.query[query] = queryConfig
 
                 let queryConfiguration = state.configurations.getIn([
                     ConfigurationsActionKeyStore.QUERIES,
@@ -831,6 +838,8 @@ const mapStateToProps = (state, ownProps) => {
                         ConfigurationsActionKeyStore.DATA
                     );
                     props.queryConfigurations[query] = queryConfiguration ? queryConfiguration.toJS() : null;
+                    props.queryConfigurations[query].vizID = configurationID
+
                 }
 
                 if(realConfiguation  && props.queryConfigurations[query]) {
@@ -842,12 +851,17 @@ const mapStateToProps = (state, ownProps) => {
                 // Expose received response if it is available
                 if (props.queryConfigurations[query] || scriptName) {
 
+                    // Updating the QUERY with Sorting and searching if scroll is enable
+                    if(queryConfig.scroll) {
+                        props.queryConfigurations[query] = ServiceManager.addSearching(props.queryConfigurations[query], objectPath.get(props.scrollData, 'search'));
+                        props.queryConfigurations[query] = ServiceManager.addSorting(props.queryConfigurations[query], objectPath.get(props.scrollData, 'sort'));
+                    }
+
                     const requestID = ServiceManager.getRequestID(props.queryConfigurations[query] || scriptName, context);
 
                     if (typeof requestID === 'undefined') {
                         props.hideGraph = true
                     } else {
-
                         let response = state.services.getIn([
                             ServiceActionKeyStore.REQUESTS,
                             requestID
@@ -867,6 +881,7 @@ const mapStateToProps = (state, ownProps) => {
                             if (responseJS.error && queryConfig.required !== false) {
                                 props.error = responseJS.error;
                             } else if (responseJS.results) {
+
                                 successResultCount++;
                                 props.response[query] = responseJS.results
                             }
@@ -908,16 +923,20 @@ const actionCreators = (dispatch) => ({
         ));
     },
 
-    executeQueryIfNeeded: function(queryConfiguration, context, scroll) {
-        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context, false, scroll));
+    executeQueryIfNeeded: function(queryConfiguration, context, scroll, dashboard = null) {
+        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context, false, scroll, dashboard));
     },
 
-    executeScriptIfNeeded: function(scriptName, context) {
-        return dispatch(ServiceActions.fetchIfNeeded(scriptName, context));
+    executeScriptIfNeeded: function(scriptName, context, scroll, dashboard = null) {
+        return dispatch(ServiceActions.fetchIfNeeded(scriptName, context, false, scroll, dashboard));
     },
 
     selectRow: function(vssID, row, matchingRows, currentQueryParams, currentPath) {
         return dispatch(VFSActions.selectRow(vssID, row, matchingRows, currentQueryParams, currentPath))
+    },
+
+    updateScroll: function(id, params) {
+        return dispatch(ServiceActions.updateScroll(id, params));
     }
 
  });

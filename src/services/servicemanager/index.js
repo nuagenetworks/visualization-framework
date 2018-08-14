@@ -64,6 +64,46 @@ const getRequestID = function (queryConfiguration, context) {
     }
 }
 
+
+const addSorting = function (queryConfiguration, sort) {
+    // TODO: Temporary - Replace this part in the middleware
+    // Note: It should actually be its own service !
+
+    if(!queryConfiguration)
+        return null
+
+    if(!sort || sort.order === '')
+        return {...queryConfiguration};
+
+    try {
+        const service = getService(queryConfiguration.service)
+        return service.addSorting(queryConfiguration, sort)
+    } catch (error) {
+        return {...queryConfiguration};
+    }
+}
+
+
+const addSearching = function (queryConfiguration, search) {
+
+    // TODO: Temporary - Replace this part in the middleware
+    // Note: It should actually be its own service !
+    if(!queryConfiguration)
+        return null;
+
+    if(!search)
+        return {...queryConfiguration};
+
+    try {
+        const service = getService(queryConfiguration.service)
+        return service.addSearching(queryConfiguration, search)
+    } catch (error) {
+        return {...queryConfiguration};
+    }
+}
+
+
+
 /*
     Tabify the results according to the service that has been used
 
@@ -104,6 +144,8 @@ export const ServiceManager = {
     register: register,
     getService: getService,
     getRequestID: getRequestID,
+    addSorting: addSorting,
+    addSearching: addSearching,
     executeScript: executeScript,
     tabify: tabify,
 }
