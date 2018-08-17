@@ -40,11 +40,27 @@
                         "interval": "{{interval:1h}}"
                     },
                     "aggs": {
-                        "SumOf": {
+                        "PacketsIn": {
                             "sum": {
-                                "field": "{{field:metric_info.packets_in}}"
+                                "field": "metric_info.packets_in"
+                            }
+                        },
+                        "PacketsOut": {
+                            "sum": {
+                                "field": "metric_info.packets_out"
+                            }
+                        },
+                        "BytesIn": {
+                            "sum": {
+                                "field": "metric_info.bytes_in"
+                            }
+                        },
+                        "BytesOut": {
+                            "sum": {
+                                "field": "metric_info.bytes_out"
                             }
                         }
+
                     }
                 }
             }
