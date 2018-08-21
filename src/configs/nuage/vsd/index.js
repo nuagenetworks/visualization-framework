@@ -361,7 +361,7 @@ const patch = (configuration, body, state, patchHeader = 'ADD') => {
         return Promise.reject(ERROR_MESSAGE);
 
     const url     = VSDServiceTest.getURL(configuration, api),
-        headers = getHeaders({token, organization, filter: configuration.query.filter, page: undefined, orderBy: undefined, proxyUser: undefined, patchHeader});
+        headers = getHeaders({token, organization, filter: configuration.query.filter, page: undefined, orderBy: undefined, proxyUser: undefined, patchType: patchHeader});
 
     return VSDServiceTest.makePATCHRequest(url, headers, body);
 }
