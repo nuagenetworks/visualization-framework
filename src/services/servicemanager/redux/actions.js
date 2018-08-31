@@ -115,10 +115,11 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
             currentPage = objectPath.get(scrollData, 'currentPage') || 1,
             updatedQuery = { ...query, scroll },
             nextPage = null,
-            pageSize = objectPath.get(updatedQuery, service.getPageSizePath());
+            pageSize = objectPath.get(scrollData, 'pageSize') || config.DATA_PER_PAGE_LIMIT;
 
         if(scroll) {
-            if (!pageSize) {
+            const queryPageSize = objectPath.get(updatedQuery, service.getPageSizePath())
+            if (!queryPageSize) {
                 // Set the size for VSD / ES query for pagination purpose.
                 updatedQuery = service.updatePageSize(updatedQuery, config.DATA_PER_PAGE_LIMIT);
             }
@@ -174,7 +175,6 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
                                 expiration: isElasticService(query.service) ? Date.now() + config.SCROLL_CACHING_QUERY_TIME : null,
                                 event: null,
                                 size: objectPath.get(results.nextQuery, 'length'),
-                                pageSize,
                                 currentPage,
                             }
                         ))

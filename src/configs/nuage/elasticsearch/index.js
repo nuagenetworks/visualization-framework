@@ -154,7 +154,7 @@ const getPageSizePath = function() {
 }
 
 const updatePageSize = function(queryConfiguration, pageSize) {
-    objectPath.set(queryConfiguration, this.getSizePath(), pageSize);
+    objectPath.set(queryConfiguration, this.getPageSizePath(), pageSize);
     return queryConfiguration;
 }
 
