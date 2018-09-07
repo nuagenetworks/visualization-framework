@@ -606,81 +606,96 @@ class VisualizationView extends React.Component {
 
 const updateFilterOptions = (state, configurations, context, results = []) => {
 
-    if(configurations && configurations.filterOptions) {
-      let filterOptions = Object.assign({}, configurations.filterOptions)
+    if (configurations && configurations.filterOptions) {
+        let filterOptions = Object.assign({}, configurations.filterOptions)
+        let mainQuery = null;
 
-      for(let key in filterOptions) {
+        for (let key in filterOptions) {
 
-          if (!filterOptions[key].options) {
-              filterOptions[key].options = []
-          }
-          // append filters fetching from query
-          if (filterOptions[key].dynamicOptions) {
-            const {queryKey = null, label = null, value = null, forceOptions = null} = filterOptions[key].dynamicOptions
-            if (queryKey && value) {
+            if (!filterOptions[key].options) {
+                filterOptions[key].options = []
+            }
 
-                // format value and label
-                const formattedValue = columnAccessor({ column: value})
-                const formattedLabel = label ? columnAccessor({ column: label}) : formattedValue
-                let forceOptionsConfig = {}
+            // check in selected option that it contain any query source,
+            // if yes then use this query to fetch primary data for graph.
+            filterOptions[key].options.forEach((option) => {
+                const { query_source, value } = option
+                if (query_source && context[filterOptions[key].parameter] === value) {
+                    mainQuery = query_source;
+                }
+            })
 
-                if (forceOptions) {
-                    for (let key in forceOptions) {
-                        if (forceOptions.hasOwnProperty(key)) {
-                            forceOptionsConfig[key] = columnAccessor({ column: forceOptions[key]})
+            // append filters fetching from query
+            if (filterOptions[key].dynamicOptions) {
+                const {queryKey = null, label = null, value = null, forceOptions = null} = filterOptions[key].dynamicOptions
+                if (queryKey && value) {
+
+                    // format value and label
+                    const formattedValue = columnAccessor({ column: value})
+                    const formattedLabel = label ? columnAccessor({ column: label}) : formattedValue
+                    let forceOptionsConfig = {}
+
+                    if (forceOptions) {
+                        for (let key in forceOptions) {
+                            if (forceOptions.hasOwnProperty(key)) {
+                                forceOptionsConfig[key] = columnAccessor({ column: forceOptions[key]})
+                            }
                         }
                     }
-                }
 
-                if(results[queryKey]) {
-                    results[queryKey].forEach(d => {
-                        let dataValue = formattedValue(d, true)
-                        let dataLabel = label ? formattedLabel(d, true) : dataValue
+                    if(results[queryKey]) {
+                        results[queryKey].forEach(d => {
+                            let dataValue = formattedValue(d, true)
+                            let dataLabel = label ? formattedLabel(d, true) : dataValue
 
-                        if(dataValue && !filterOptions[key].options.find( datum =>
-                            datum.value === dataValue.toString() || datum.label === dataLabel)) {
+                            if(dataValue && !filterOptions[key].options.find( datum =>
+                                datum.value === dataValue.toString() || datum.label === dataLabel)) {
 
-                            let forceOptionsData = {}
-                            // if forceOptions present then calculate forceOptions values and append it in options
-                            if (forceOptionsConfig) {
-                                for (let key in forceOptionsConfig) {
-                                    if (forceOptionsConfig.hasOwnProperty(key)) {
-                                        forceOptionsData[key] = forceOptionsConfig[key](d, true) || ''
+                                let forceOptionsData = {}
+                                // if forceOptions present then calculate forceOptions values and append it in options
+                                if (forceOptionsConfig) {
+                                    for (let key in forceOptionsConfig) {
+                                        if (forceOptionsConfig.hasOwnProperty(key)) {
+                                            forceOptionsData[key] = forceOptionsConfig[key](d, true) || ''
+                                        }
                                     }
                                 }
+                                // Add filters in existing filter options
+                                filterOptions[key].options.push({
+                                    label: dataLabel,
+                                    value: dataValue.toString(),
+                                    forceOptions: forceOptionsData
+                                })
                             }
-                            // Add filters in existing filter options
-                            filterOptions[key].options.push({
-                                label: dataLabel,
-                                value: dataValue.toString(),
-                                forceOptions: forceOptionsData
-                            })
-                        }
-                    })
+                        })
+                    }
+                }
+            }
+
+            // TODO -
+            if(filterOptions[key].type) {
+                if(context && context.enterpriseID) {
+                    let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
+
+                    if(nsgs && nsgs.length) {
+                        filterOptions[key].options = [];
+                        filterOptions[key].default = nsgs[0].name;
+
+                        nsgs.forEach((nsg) => {
+                        filterOptions[key].options.push({
+                            label: nsg.name,
+                            value: nsg.name
+                        });
+                        });
+                    }
                 }
             }
         }
 
-        // TODO -
-        if(filterOptions[key].type) {
-            if(context && context.enterpriseID) {
-                let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
-
-                if(nsgs && nsgs.length) {
-                    filterOptions[key].options = [];
-                    filterOptions[key].default = nsgs[0].name;
-
-                    nsgs.forEach((nsg) => {
-                    filterOptions[key].options.push({
-                        label: nsg.name,
-                        value: nsg.name
-                    });
-                    });
-                }
-            }
+        return {
+            filterOptions: filterOptions || [],
+            mainQuery
         }
-      }
-      return filterOptions || []
     }
 }
 
@@ -793,7 +808,8 @@ const mapStateToProps = (state, ownProps) => {
         */
         const queries =  typeof props.configuration.query === 'string' ? {'data' : {'name': props.configuration.query}} : props.configuration.query
 
-        props.filterOptions = updateFilterOptions(state, contextualizeConfiguration, context, props.response);
+        const { filterOptions, mainQuery } = updateFilterOptions(state, contextualizeConfiguration, context, props.response);
+        props.filterOptions = filterOptions;
 
         props.configuration.query = {}
 
@@ -812,6 +828,11 @@ const mapStateToProps = (state, ownProps) => {
 
                 if(query === 'data') {
                     queryConfig.required = true
+
+                    // override main query from filter query
+                    if(mainQuery) {
+                        queryConfig.name = mainQuery;
+                    }
 
                     // check scroll is enabled or not on primary data
                     if(queryConfig.scroll)
