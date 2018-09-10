@@ -8,7 +8,7 @@ const propTypes = {
   onInfoBoxClose: PropTypes.func,
 };
 
-Modal.setAppElement('#modalPopup');
+//Modal.setAppElement('#modalPopup');
 
 export default class InfoBox extends React.Component {
 
