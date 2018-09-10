@@ -607,7 +607,7 @@ class VisualizationView extends React.Component {
 const updateFilterOptions = (state, configurations, context, results = []) => {
 
     if (configurations && configurations.filterOptions) {
-        let filterOptions = Object.assign({}, configurations.filterOptions)
+        let filterOptions = { ...configurations.filterOptions }
         let mainQuery = null;
 
         for (let key in filterOptions) {
@@ -693,7 +693,7 @@ const updateFilterOptions = (state, configurations, context, results = []) => {
         }
 
         return {
-            filterOptions: filterOptions || [],
+            filterOptions,
             mainQuery
         }
     }
@@ -808,9 +808,8 @@ const mapStateToProps = (state, ownProps) => {
         */
         const queries =  typeof props.configuration.query === 'string' ? {'data' : {'name': props.configuration.query}} : props.configuration.query
 
-        const { filterOptions, mainQuery } = updateFilterOptions(state, contextualizeConfiguration, context, props.response);
+        const { filterOptions, mainQuery } = {...updateFilterOptions(state, contextualizeConfiguration, context, props.response)};
         props.filterOptions = filterOptions;
-
         props.configuration.query = {}
 
         //Checking whether all the queries configurations has been fetched
