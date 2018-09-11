@@ -55,7 +55,7 @@
             },
             "source": {
               "terms": {
-                "field": "{{source_field:nuage_metadata.src-pgmem-info}}",
+                "field": "{{source_field:nuage_metadata.subnet-mem}}",
                 "size": 10,
                 "order": {
                   "SumOf": "desc"
@@ -71,7 +71,7 @@
             },
             "destination": {
               "terms": {
-                "field": "{{destination_field:nuage_metadata.dst-pgmem-info}}",
+                "field": "{{destination_field:nuage_metadata.subnet-mem}}",
                 "size": 10,
                 "order": {
                   "SumOf": "desc"
