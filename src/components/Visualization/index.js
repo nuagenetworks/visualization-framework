@@ -608,7 +608,6 @@ const updateFilterOptions = (state, configurations, context, results = []) => {
 
     if (configurations && configurations.filterOptions) {
         let filterOptions = { ...configurations.filterOptions }
-        let mainQuery = null;
 
         for (let key in filterOptions) {
 
@@ -616,39 +615,39 @@ const updateFilterOptions = (state, configurations, context, results = []) => {
                 filterOptions[key].options = []
             }
 
-            // check in selected option that it contain any query source,
-            // if yes then use this query to fetch primary data for graph.
-            filterOptions[key].options.forEach((option) => {
-                const { query_source, value } = option
-                if (query_source && context[filterOptions[key].parameter] === value) {
-                    mainQuery = query_source;
-                }
-            })
-
             // append filters fetching from query
             if (filterOptions[key].dynamicOptions) {
-                const {queryKey = null, label = null, value = null, forceOptions = null} = filterOptions[key].dynamicOptions
-                if (queryKey && value) {
+                const {
+                    queryKey = null,
+                    label = null,
+                    value = null,
+                    forceOptions = null
+                } = filterOptions[key].dynamicOptions;
 
+                const querySource = filterOptions[key].query_source || null;
+
+
+                if (queryKey && value) {
                     // format value and label
-                    const formattedValue = columnAccessor({ column: value})
-                    const formattedLabel = label ? columnAccessor({ column: label}) : formattedValue
+                    const formattedValue = columnAccessor({ column: value })
+                    const formattedLabel = label ? columnAccessor({ column: label }) : formattedValue
                     let forceOptionsConfig = {}
 
                     if (forceOptions) {
                         for (let key in forceOptions) {
                             if (forceOptions.hasOwnProperty(key)) {
-                                forceOptionsConfig[key] = columnAccessor({ column: forceOptions[key]})
+                                forceOptionsConfig[key] = columnAccessor({ column: forceOptions[key] })
                             }
                         }
                     }
 
-                    if(results[queryKey]) {
+                    if (results[queryKey]) {
+
                         results[queryKey].forEach(d => {
                             let dataValue = formattedValue(d, true)
                             let dataLabel = label ? formattedLabel(d, true) : dataValue
 
-                            if(dataValue && !filterOptions[key].options.find( datum =>
+                            if (dataValue && !filterOptions[key].options.find(datum =>
                                 datum.value === dataValue.toString() || datum.label === dataLabel)) {
 
                                 let forceOptionsData = {}
@@ -660,12 +659,21 @@ const updateFilterOptions = (state, configurations, context, results = []) => {
                                         }
                                     }
                                 }
-                                // Add filters in existing filter options
-                                filterOptions[key].options.push({
+
+                                const dynamicOption = {
                                     label: dataLabel,
                                     value: dataValue.toString(),
-                                    forceOptions: forceOptionsData
-                                })
+                                    forceOptions: forceOptionsData,
+
+                                }
+
+                                if(querySource) {
+                                    dynamicOption.query_source = querySource;
+                                }
+                                // Add filters in existing filter options
+                                filterOptions[key].options.push(dynamicOption);
+
+
                             }
                         })
                     }
@@ -692,10 +700,7 @@ const updateFilterOptions = (state, configurations, context, results = []) => {
             }
         }
 
-        return {
-            filterOptions,
-            mainQuery
-        }
+        return filterOptions
     }
 }
 
@@ -755,7 +760,6 @@ const mapStateToProps = (state, ownProps) => {
 
     let context = {};
     let filteredID = configurationID.replace(/-/g, '');
-
     for (let key in orgContext) {
       if(orgContext.hasOwnProperty(key)) {
 
@@ -808,8 +812,6 @@ const mapStateToProps = (state, ownProps) => {
         */
         const queries =  typeof props.configuration.query === 'string' ? {'data' : {'name': props.configuration.query}} : props.configuration.query
 
-        const { filterOptions, mainQuery } = {...updateFilterOptions(state, contextualizeConfiguration, context, props.response)};
-        props.filterOptions = filterOptions;
         props.configuration.query = {}
 
         //Checking whether all the queries configurations has been fetched
@@ -829,8 +831,8 @@ const mapStateToProps = (state, ownProps) => {
                     queryConfig.required = true
 
                     // override main query from filter query
-                    if(mainQuery) {
-                        queryConfig.name = mainQuery;
+                    if(context.query_source) {
+                        queryConfig.name = context.query_source;
                     }
 
                     // check scroll is enabled or not on primary data
@@ -858,7 +860,9 @@ const mapStateToProps = (state, ownProps) => {
                         ConfigurationsActionKeyStore.DATA
                     );
                     props.queryConfigurations[query] = queryConfiguration ? queryConfiguration.toJS() : null;
-                    props.queryConfigurations[query].vizID = configurationID
+                    if(props.queryConfigurations[query]) {
+                        props.queryConfigurations[query].vizID = configurationID;
+                    }
 
                 }
 
@@ -910,6 +914,8 @@ const mapStateToProps = (state, ownProps) => {
                 }
             }
         }
+
+        props.filterOptions = updateFilterOptions(state, contextualizeConfiguration, context, props.response);
 
         if(successResultCount === Object.keys(queries).length ) {
             props.isFetching = false;
