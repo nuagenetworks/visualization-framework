@@ -1,0 +1,118 @@
+{
+    "id":"inf-regress-result-testsuites",
+    "title":"TBD",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_regress}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query": {
+                "bool": {
+                    "must_not": [
+                        {
+                            "bool": {
+                                "minimum_should_match": 1,
+                                "should": [
+                                    {
+                                        "match_phrase": {
+                                            "testsuite": "Sanity"
+                                        }
+                                    },
+                                    {
+                                        "match_phrase": {
+                                            "testsuite": "initial"
+                                        }
+                                    },
+                                    {
+                                        "match_phrase": {
+                                            "testsuite": "final"
+                                        }
+                                    },
+                                    {
+                                        "match_phrase": {
+                                            "testsuite": "finished"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "must": [
+                        {
+                            "range":{
+                                "time_regression_submitted":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "testsuit": {
+                    "terms": {
+                        "field": "testsuite",
+                        "size": 10000,
+                        "order": {
+                            "_count": "desc"
+                        }
+                    },
+                    "aggs": {
+                        "pass": {
+                            "sum_bucket": {
+                                "buckets_path": "pass-bucket>_count"
+                            }
+                        },
+                        "fail": {
+                            "sum_bucket": {
+                                "buckets_path": "fail-bucket>_count"
+                            }
+                        },
+                        "notrun": {
+                            "sum_bucket": {
+                                "buckets_path": "notrun-bucket>_count"
+                            }
+                        },
+                        "pass-bucket": {
+                            "filters": {
+                                "filters": {
+                                    "pass-filter": {
+                                        "match": {
+                                            "result": 2
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "fail-bucket": {
+                            "filters": {
+                                "filters": {
+                                    "fail-filter": {
+                                        "match": {
+                                            "result": 1
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "notrun-bucket": {
+                            "filters": {
+                                "filters": {
+                                    "notrun-filter": {
+                                        "match": {
+                                            "result": 0
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

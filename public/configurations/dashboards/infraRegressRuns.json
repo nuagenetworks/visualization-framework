@@ -1,0 +1,23 @@
+{
+    "id": "infraRegressRuns",
+    "author": "Ronak Shah",
+    "creationDate": "8/30/2018",
+    "title": "Runs",
+    "visualizations": [
+        { "id": "vss-domain-flow-flow-metric", "x": 1, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true}
+    ],
+    "links": [
+        {
+            "label": "Utilization Analytics",
+            "url": "/dashboards/infraRegressUtilization"
+        },
+        {
+            "label": "Results Analytics",
+            "url": "/dashboards/infraRegressResults"
+        },
+        {
+            "label": "Run Analytics",
+            "url": "/dashboards/infraRegressRuns"
+        }
+    ]
+}

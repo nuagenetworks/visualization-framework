@@ -1,0 +1,24 @@
+{
+    "id": "infraRegressResults",
+    "author": "Ronak Shah",
+    "creationDate": "8/30/2018",
+    "title": "Results",
+    "visualizations": [
+        { "id": "inf-regress-result-testsuites", "x": 0, "y": 0, "w": 6, "h": 20, "minW": 6, "minH": 15, "static": true},
+        { "id": "inf-regress-result-testcases", "x": 6, "y": 0, "w": 6, "h": 20, "minW": 6, "minH": 15, "static": true}
+    ],
+    "links": [
+        {
+            "label": "Utilization Analytics",
+            "url": "/dashboards/infraRegressUtilization"
+        },
+        {
+            "label": "Results Analytics",
+            "url": "/dashboards/infraRegressResults"
+        },
+        {
+            "label": "Run Analytics",
+            "url": "/dashboards/infraRegressRuns"
+        }
+    ]
+}
