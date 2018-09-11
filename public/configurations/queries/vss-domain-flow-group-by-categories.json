@@ -1,6 +1,6 @@
 {
-  "id": "vss-domain-flow-category",
-  "title": "Flows per Domain per category",
+  "id": "vss-domain-flow-group-by-categories",
+  "title": "Flows per Domain per PG on selected Category",
   "service": "elasticsearch",
   "query": {
     "index": "{{index:nuage_flow}}",
@@ -42,7 +42,9 @@
                 "query": {
                   "bool": {
                     "must": [
-                      { "replace": "optional-src-pg-categories" }
+                      {
+                        "replace": "optional-src-pg-categories"
+                      }
                     ]
                   }
                 }
@@ -55,7 +57,9 @@
                 "query": {
                   "bool": {
                     "must": [
-                      { "replace": "optional-dst-pg-categories"}
+                      {
+                        "replace": "optional-dst-pg-categories"
+                      }
                     ]
                   }
                 }
@@ -79,29 +83,34 @@
                 "field": "packets"
               }
             },
-            "a": {
+            "source": {
               "nested": {
                 "path": "{{source_field:nuage_metadata.src-pgmem-info}}"
               },
               "aggs": {
-                "a2": {
+                "a": {
                   "terms": {
-                    "field": "{{source_field:nuage_metadata.src-pgmem-info}}.category",
-                    "include":"{{category_field:*}}"
+                    "field": "nuage_metadata.src-pgmem-info.category",
+                    "include": "{{category_field}}"
                   },
                   "aggs": {
-                    "source": {
+                    "a2": {
                       "terms": {
                         "field": "{{source_field:nuage_metadata.src-pgmem-info}}.name",
                         "size": 10,
                         "order": {
-                          "SumOf": "desc"
+                          "rev_nest": "desc"
                         }
                       },
                       "aggs": {
-                        "SumOf": {
-                          "sum": {
-                            "field": "packets"
+                        "rev_nest": {
+                          "reverse_nested": {},
+                          "aggs": {
+                            "SumOf": {
+                              "sum": {
+                                "field": "packets"
+                              }
+                            }
                           }
                         }
                       }
@@ -110,29 +119,34 @@
                 }
               }
             },
-            "b": {
+            "destination": {
               "nested": {
                 "path": "{{destination_field:nuage_metadata.dst-pgmem-info}}"
               },
               "aggs": {
-                "b2": {
+                "b": {
                   "terms": {
-                    "field": "{{destination_field:nuage_metadata.dst-pgmem-info}}.category",
-                    "include":"{{category_field:*}}"
+                    "field": "nuage_metadata.dst-pgmem-info.category",
+                    "include": "{{category_field}}"
                   },
                   "aggs": {
-                    "destination": {
+                    "b2": {
                       "terms": {
                         "field": "{{destination_field:nuage_metadata.dst-pgmem-info}}.name",
                         "size": 10,
                         "order": {
-                          "SumOf": "desc"
+                          "rev_nest": "desc"
                         }
                       },
                       "aggs": {
-                        "SumOf": {
-                          "sum": {
-                            "field": "packets"
+                        "rev_nest": {
+                          "reverse_nested": {},
+                          "aggs": {
+                            "SumOf": {
+                              "sum": {
+                                "field": "packets"
+                              }
+                            }
                           }
                         }
                       }

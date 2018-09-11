@@ -1,9 +1,9 @@
 {
-  "id": "vss-domain-flow-pg-categories",
+  "id": "vss-domain-flow-pg-categories-list",
   "title": "PG-Category per domain",
   "service": "elasticsearch",
   "query": {
-    "index": "{{index:nuage_flow_7154}}",
+    "index": "{{index:nuage_flow}}",
     "type": "{{type:nuage_doc_type}}",
     "body": {
       "size": 0,

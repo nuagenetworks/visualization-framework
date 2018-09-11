@@ -34,14 +34,14 @@
         {
           "label": "PG",
           "value": "nuage_metadata.src-pgmem-info",
-          "onChange": "Categories",
           "forceOptions": {
             "destination_field": "nuage_metadata.dst-pgmem-info"
           },
-          "query_source": "vss-domain-flow-category"
+          "query_source": "vss-domain-flow-group-by-pgs"
         },
         {
           "label": "Subnet",
+          "default":true,
           "value": "nuage_metadata.src-subnetmem",
           "forceOptions": {
             "destination_field": "nuage_metadata.dst-subnetmem"
@@ -55,19 +55,11 @@
           }
         }
       ]
-    },
-    "Categories": {
-      "parameter": "category_field",
-      "dynamicOptions": {
-        "queryKey": "context",
-        "label": "category",
-        "value": "category"
-      }
     }
   },
   "query": {
     "data": "vss-domain-flow",
-    "context": "vss-domain-flow-pg-categories"
+    "context": "vss-domain-flow-pg-categories-list"
   },
   "replace": {
     "optional-src-pg-categories": {
