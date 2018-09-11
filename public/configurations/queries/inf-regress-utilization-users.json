@@ -1,0 +1,68 @@
+{
+    "id": "inf-regress-utilization-users",
+    "title": "Utilization by users",
+    "service": "elasticsearch",
+    "query": {
+        "index": "{{index:nuage_regress}}",
+        "type": "{{type:nuage_doc_type}}",
+        "body": {
+            "size": 0,
+            "query": {
+                "bool": {
+                    "must_not": [
+                        {
+                            "match_phrase": {
+                                "regression_req_by": {
+                                    "query": "test-nuage@list.nokia.com"
+                                }
+                            }
+                        },
+                        {
+                            "match_phrase": {
+                                "regression_req_by": {
+                                    "query": "infra-nuage@list.nokia.com"
+                                }
+                            }
+                        },
+                        {
+                            "match_phrase": {
+                                "regression_req_by": {
+                                    "query": "nuage-express@list.nokia.com"
+                                }
+                            }
+                        }
+                    ],
+                    "must": [
+                        {
+                            "range":{
+                                "time_regression_submitted":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "users": {
+                    "terms": {
+                        "field": "regression_req_by",
+                        "size": 200,
+                        "order": {
+                            "testbed": "desc"
+                        }
+                    },
+                    "aggs": {
+                        "testbed": {
+                          "cardinality": {
+                              "field": "testbed"
+                          }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

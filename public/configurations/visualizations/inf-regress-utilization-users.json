@@ -1,0 +1,33 @@
+{
+    "id": "inf-regress-utilization-users",
+    "graph": "BarGraph",
+    "title": "Bed Utilization per users",
+    "description": "Top users utilizing the beds",
+    "author": "Ronak Shah",
+    "creationDate": "08/30/2018",
+    "data": {
+        "brush": 10,
+        "colors": [
+            "#7da3f7",
+            "#fec26a",
+            "#e78ac3",
+            "#f79e99",
+            "#b3d645"
+        ],
+        "tooltip": [
+            { "column": "users", "label": "User" },
+            { "column": "testbed", "label": "# of Beds occupied"}
+        ],
+        "xLabel": "Users",
+        "yLabel": "# of testbed occupied",
+        "yTickFormat": ".0f",
+        "xColumn": "users",
+        "yColumn": "testbed"
+    },
+    "listeners": [{
+      "params": {
+          "users": "users"
+      }
+    }],
+    "query": "inf-regress-utilization-users"
+}

@@ -1,0 +1,17 @@
+{
+    "id": "inf-regress-result-testcases",
+    "graph": "Table",
+    "title": "Testcases Results",
+    "description": "!",
+    "author": "Ronak Shah",
+    "creationDate": "09/06/2018",
+    "data": {
+        "columns": [
+            { "column": "testcase", "label": "Testcase"},
+            { "column": "pass", "label": "pass"},
+            { "column": "fail", "label": "fail"},
+            { "column": "notrun", "label": "not run"}
+        ]
+    },
+    "query": "inf-regress-result-testcases"
+}

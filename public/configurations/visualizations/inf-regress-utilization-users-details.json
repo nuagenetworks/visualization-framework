@@ -1,0 +1,15 @@
+{
+    "id": "inf-regress-utilization-users-details",
+    "graph": "Table",
+    "title": "Testbed(s) utilized by {{users}}",
+    "description": "Top users utilizing the beds",
+    "author": "Ronak Shah",
+    "creationDate": "09/06/2018",
+    "data": {
+        "searchBar": false,
+        "columns": [
+            { "column": "testbed", "label": "testbeds"}
+        ]
+    },
+    "query": "inf-regress-utilization-users-details"
+}
