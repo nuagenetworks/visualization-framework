@@ -9,7 +9,7 @@
       "size": 0,
       "query": {
         "bool": {
-          "should": [
+          "must": [
             {
               "bool": {
                 "must": [
