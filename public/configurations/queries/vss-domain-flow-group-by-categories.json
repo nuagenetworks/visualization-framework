@@ -94,7 +94,7 @@
                     "include": "{{category_field}}"
                   },
                   "aggs": {
-                    "a2": {
+                    "source": {
                       "terms": {
                         "field": "{{source_field:nuage_metadata.src-pgmem-info}}.name",
                         "size": 10,
@@ -124,13 +124,13 @@
                 "path": "{{destination_field:nuage_metadata.dst-pgmem-info}}"
               },
               "aggs": {
-                "b": {
+                "d": {
                   "terms": {
                     "field": "nuage_metadata.dst-pgmem-info.category",
                     "include": "{{category_field}}"
                   },
                   "aggs": {
-                    "b2": {
+                    "destination": {
                       "terms": {
                         "field": "{{destination_field:nuage_metadata.dst-pgmem-info}}.name",
                         "size": 10,

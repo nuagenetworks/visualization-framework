@@ -79,7 +79,7 @@
                 "field": "packets"
               }
             },
-            "a": {
+            "source": {
               "nested": {
                 "path": "{{source_field:nuage_metadata.src-pgmem-info}}"
               },
@@ -107,7 +107,7 @@
                 }
               }
             },
-            "b": {
+            "destination": {
               "nested": {
                 "path": "{{destination_field:nuage_metadata.dst-pgmem-info}}"
               },
