@@ -70,7 +70,7 @@
                   "must": [
                     {"term": {"nuage_metadata.enterpriseName": "{{enterpriseName:chord_enterprise}}"} },
                     {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
-                                        {
+                    {
                       "nested": {
                         "path": "{{destination_field:nuage_metadata.dst-pgmem-info}}",
                         "score_mode": "none",
