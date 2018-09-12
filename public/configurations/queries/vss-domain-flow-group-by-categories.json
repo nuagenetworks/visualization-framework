@@ -43,7 +43,9 @@
                   "bool": {
                     "must": [
                       {
-                        "replace": "optional-src-pg-categories"
+                        "match": {
+                          "{{source_field:nuage_metadata.src-pgmem-info}}.category": "{{category_field}}"
+                        }
                       }
                     ]
                   }
@@ -58,7 +60,9 @@
                   "bool": {
                     "must": [
                       {
-                        "replace": "optional-dst-pg-categories"
+                        "match": {
+                          "{{destination_field:nuage_metadata.dst-pgmem-info}}.category": "{{category_field}}"
+                        }
                       }
                     ]
                   }
