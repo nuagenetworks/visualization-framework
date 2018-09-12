@@ -193,7 +193,7 @@ function flatten(tree, parentNode={}){
 
                         if(value.length) {
                             return value.map(item => {
-                                if (item.key) {
+                                if (item[key]) {
                                     return item;
                                 }
 
