@@ -57,7 +57,7 @@ function cartesianProduct(data) {
     for(let i = 0; i < keys.length; i++) {
         if(Array.isArray(data[keys[i]])) {
             if (data[keys[i]].length === 0) {
-                data[keys[i]].push(null);
+                data[keys[i]].push({});
             }
 
             data[keys[i]].forEach(item => {
