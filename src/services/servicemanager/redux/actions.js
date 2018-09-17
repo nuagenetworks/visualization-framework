@@ -151,7 +151,7 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
                         event: null,
                         currentPage
                     }));
-                    dispatch(didReceiveResponse(requestID, data, false))
+                    dispatch(didReceiveResponse(requestID, data, forceCache))
 
                     return Promise.resolve();
             }
@@ -180,7 +180,7 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
                         ))
                     }
 
-                    dispatch(didReceiveResponse(requestID, data, false))
+                    dispatch(didReceiveResponse(requestID, data, forceCache))
 
                     return Promise.resolve(data);
             },
@@ -233,7 +233,7 @@ function fetchIfNeeded(query, context, forceCache, scroll, dashboard = null) {
             return Promise.reject();
 
         const state = getState(),
-              request = state.services.getIn([ActionKeyStore.REQUESTS, requestID]);
+                request = state.services.getIn([ActionKeyStore.REQUESTS, requestID]);
 
         let mustFetch = false;
 
