@@ -209,7 +209,8 @@ Here is the list of options:
                 {
                     "label": "SYN",
                     "value": "SYN",
-                    "default": true
+                    "default": true,
+                    "query_source": "query-to-execute" // on select this option then query mentioned here will be act as primary query to fetch data for graph. It will replace actual query e.g query.data as mentioned below.
                 },
                 {
                     "label": "SYN-ACK",
