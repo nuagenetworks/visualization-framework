@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
-import evalExpression from "eval-expression";
 import objectPath from "object-path";
 
 import $ from "jquery";
@@ -198,15 +197,17 @@ class VisualizationView extends React.Component {
                         // which corresponds to a row of data visualized.
                         listeners[event] = (d) => {
 
-                            let graphQueryParams = {};
-                            let resetFilters = false;
+                            const GraphComponent = GraphManager.getGraphComponent(configuration.graph)
 
-                            if(configuration.graph === 'HeatmapGraph') {
-                                let vizID = `${id.replace(/-/g, '')}vkey`;
-                                let vKey = d => d[configuration.data.xColumn] + d[configuration.data.yColumn]
-                                if(this.props.orgContext[vizID] === vKey(d))
+                            let graphQueryParams = {},
+                                resetFilters = false,
+                                vizID = `${id.replace(/-/g, '')}vkey`,
+                                vKey = GraphComponent.getGraphKey(configuration);
+
+                            if(vKey) {
+                                if(this.props.orgContext[vizID] === vKey(d)) {
                                     resetFilters = true;
-
+                                }
                                 graphQueryParams[vizID] = vKey(d);
                             }
 
@@ -231,9 +232,9 @@ class VisualizationView extends React.Component {
 
                             if(resetFilters) {
                                 for (let key in mergedQueryParams) {
-                                  if (mergedQueryParams.hasOwnProperty(key)) {
-                                    queryParams[key] = '';
-                                  }
+                                    if (mergedQueryParams.hasOwnProperty(key)) {
+                                        queryParams[key] = '';
+                                    }
                                 }
                             }
 
@@ -313,8 +314,7 @@ class VisualizationView extends React.Component {
             googleMapsAPIKey
         } = this.props;
 
-        const graphName      = configuration.graph,
-              GraphComponent = GraphManager.getGraphComponent(graphName)
+        const GraphComponent = GraphManager.getGraphComponent(configuration.graph);
 
         if (!response.data) {
             console.log('Main source "data" key is not defined')
