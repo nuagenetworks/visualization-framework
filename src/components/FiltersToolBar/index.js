@@ -181,7 +181,7 @@ export class FiltersToolBarView extends React.Component {
         };
 
         const sourceQueryId = `${filteredID}query_source`;
-        if ((context[sourceQueryId] && context[sourceQueryId] != sourceQuery) || (!context[sourceQueryId] && sourceQuery)) {
+        if ((context[sourceQueryId] && context[sourceQueryId] !== sourceQuery) || (!context[sourceQueryId] && sourceQuery)) {
             configContexts[sourceQueryId] = sourceQuery
         }
 
