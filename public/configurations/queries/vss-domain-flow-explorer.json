@@ -6,7 +6,7 @@
         "index":"{{index:nuage_flow}}",
         "type":"{{type:nuage_doc_type}}",
         "body":{
-          "size": 5000,
+          "size": 1000,
           "sort": [
             { "timestamp": { "order": "desc" } }
           ],
