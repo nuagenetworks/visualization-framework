@@ -14,6 +14,7 @@
                     }
                 }
             ],
+            "_source":"Tier1URLInfo.*",
             "query": {
                 "bool": {
                     "filter": {

@@ -351,6 +351,7 @@ class SimulateFlowStats(object):
         sla_flows = []
 
         flow_cnt = 0
+        sla_status = 0
         sla_prob_new = 0.6
         write_data = []
         chunk_size = es_chunk_size
