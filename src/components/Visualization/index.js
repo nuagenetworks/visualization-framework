@@ -172,6 +172,8 @@ class VisualizationView extends React.Component {
             if(configuration.listeners) {
                 // Use this.state.listeners to store the listeners that will be
                 // passed into the visualization components.
+                const GraphComponent = GraphManager.getGraphComponent(configuration.graph)
+
                 this.setState({
 
                     // This will be an object whose keys are event names,
@@ -197,18 +199,17 @@ class VisualizationView extends React.Component {
                         // which corresponds to a row of data visualized.
                         listeners[event] = (d) => {
 
-                            const GraphComponent = GraphManager.getGraphComponent(configuration.graph)
-
                             let graphQueryParams = {},
                                 resetFilters = false,
                                 vizID = `${id.replace(/-/g, '')}vkey`,
                                 vKey = GraphComponent.getGraphKey(configuration);
 
                             if(vKey) {
-                                if(this.props.orgContext[vizID] === vKey(d)) {
+                                const graphKey = vKey(d);
+                                if(this.props.orgContext[vizID] === graphKey) {
                                     resetFilters = true;
                                 }
-                                graphQueryParams[vizID] = vKey(d);
+                                graphQueryParams[vizID] = graphKey;
                             }
 
 
