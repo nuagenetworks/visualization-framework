@@ -1,3 +1,6 @@
 [submodule "src/lib/vis-graphs"]
 	path = src/lib/vis-graphs
 	url = https://github.com/nuagenetworks/vis-graphs.git
+[submodule "public/configurations"]
+	path = public/configurations
+	url = https://github.com/nuagenetworks/vis-config.git
