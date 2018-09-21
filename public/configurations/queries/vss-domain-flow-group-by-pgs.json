@@ -34,8 +34,8 @@
                   }
                 ]
               }
-            },
-            {
+            }],
+            "should":[{
               "nested": {
                 "path": "{{source_field:nuage_metadata.src-pgmem-info}}",
                 "score_mode": "none",
@@ -61,7 +61,8 @@
                 }
               }
             }
-          ]
+          ],
+            "minimum_should_match":1
         }
       },
       "aggs": {
