@@ -36,7 +36,7 @@
         "pg": {
           "terms": {
             "field": "nuage_metadata.{{pgname_field:spgName}}",
-            "size": "{{topX:5}}",
+            "size": "50",
             "order": {
               "SumOf": "desc"
             }

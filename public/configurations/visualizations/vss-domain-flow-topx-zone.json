@@ -2,7 +2,7 @@
     "id": "vss-domain-flow-topx-zone",
     "graph": "BarGraph",
     "title": "Top {{direction:Source}} Zone by # packets",
-    "description": "This horizontal barchart represents top {{topX:5}} {{direction:Source}} Zone per no of packets {{sent_received:sent}} in this domain. By default its aggregated on deny hits count. One can select other ACL actions i.e from the drop down menu on this visualization.",
+    "description": "This horizontal barchart represents top 50 {{direction:Source}} Zone per no of packets {{sent_received:sent}} in this domain. By default its aggregated on deny hits count. One can select other ACL actions i.e from the drop down menu on this visualization.",
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {

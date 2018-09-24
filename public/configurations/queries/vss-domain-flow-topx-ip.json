@@ -41,7 +41,7 @@
         "ip": {
           "terms": {
             "field": "{{ip_type:sourceip}}",
-            "size": "{{topX:5}}",
+            "size": "50",
             "order": {
               "SumOf": "desc"
             }

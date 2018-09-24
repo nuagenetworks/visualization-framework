@@ -2,7 +2,7 @@
     "id": "vss-domain-flow-topx-pg",
     "graph": "BarGraph",
     "title": "Top {{direction:Source}} Policy Groups by Count",
-    "description": "This horizontal barchart represents top {{topX:5}} {{direction:Source}} policy groups by total no of packets registered in a given time.",
+    "description": "This horizontal barchart represents top 50 {{direction:Source}} policy groups by total no of packets registered in a given time.",
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {

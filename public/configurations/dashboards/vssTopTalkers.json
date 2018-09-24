@@ -118,25 +118,6 @@
           }
         }
       ]
-    },
-    "Top X": {
-      "parameter": "topX",
-      "default": "5",
-      "options": [
-        {
-          "label": "5",
-          "value": "5",
-          "default":true
-        },
-        {
-          "label": "10",
-          "value": "10"
-        },
-        {
-          "label": "20",
-          "value": "20"
-        }
-      ]
     }
   }
 }

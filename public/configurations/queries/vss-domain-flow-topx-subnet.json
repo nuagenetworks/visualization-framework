@@ -36,7 +36,7 @@
         "subnet": {
           "terms": {
             "field": "nuage_metadata.{{src_dst:src}}-subnetmem",
-            "size": "{{topX:5}}",
+            "size": "50",
             "order": {
               "SumOf": "desc"
             }
