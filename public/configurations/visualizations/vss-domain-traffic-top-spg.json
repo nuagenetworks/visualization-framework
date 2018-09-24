@@ -1,8 +1,8 @@
 {
-    "id": "vss-domain-traffic-top-spg",
+    "id": "vss-domain-flow-topx-pg",
     "graph": "BarGraph",
-    "title": "Top Source Policy Groups by Count",
-    "description": "This horizontal barchart represents top 5 source policy groups by total no of packets registered in a given time.",
+    "title": "Top {{direction:Source}} Policy Groups by Count",
+    "description": "This horizontal barchart represents top 5 {{direction:Source}} policy groups by total no of packets registered in a given time.",
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {
@@ -11,14 +11,14 @@
         "colorColumn": "spg",
         "orientation": "horizontal",
         "tooltip": [
-            { "column": "spg", "label": "PG" },
+            { "column": "pg", "label": "PG" },
             { "column": "SumOf", "label": "Packets", "format": ",.1f"}
         ],
         "xTickGrid": true,
         "yTickGrid": false,
         "xTickFormat": ".2s",
         "xLabel": "Total # of Packets",
-        "yLabel": "Source Policy Groups"
+        "yLabel": "{{direction:Source}} Policy Groups"
     },
-    "query": "vss-domain-traffic-top-spg"
+    "query": "vss-domain-flow-topx-pg"
 }
