@@ -1,169 +1,154 @@
 {
-  "id": "vss-domain-flow-group-by-categories",
-  "title": "Flows per Domain per PG on selected Category",
-  "service": "elasticsearch",
-  "query": {
-    "index": "{{index:nuage_flow}}",
-    "type": "{{type:nuage_doc_type}}",
-    "body": {
-      "size": 0,
-      "query": {
-        "bool": {
-          "must": [
-            {
-              "bool": {
-                "must": [
-                  {
-                    "range": {
-                      "timestamp": {
-                        "gte": "{{startTime:now-24h}}",
-                        "lte": "{{endTime:now}}",
-                        "format": "epoch_millis"
-                      }
-                    }
-                  },
-                  {
-                    "term": {
-                      "nuage_metadata.enterpriseName": "{{enterpriseName:chord_enterprise}}"
-                    }
-                  },
-                  {
-                    "term": {
-                      "{{domainType:nuage_metadata.domainName}}": "{{domainName:chord_domain}}"
-                    }
-                  }
-                ]
-              }
-            }],
-          "should":[
-            {
-              "nested": {
-                "path": "{{source_field:nuage_metadata.src-pgmem-info}}",
-                "score_mode": "none",
-                "query": {
-                  "bool": {
-                    "must": [
-                      {
-                        "match": {
-                          "{{source_field:nuage_metadata.src-pgmem-info}}.category": "{{category_field}}"
-                        }
-                      }
-                    ]
-                  }
-                }
-              }
-            },
-            {
-              "nested": {
-                "path": "{{destination_field:nuage_metadata.dst-pgmem-info}}",
-                "score_mode": "none",
-                "query": {
-                  "bool": {
-                    "must": [
-                      {
-                        "match": {
-                          "{{destination_field:nuage_metadata.dst-pgmem-info}}.category": "{{category_field}}"
-                        }
-                      }
-                    ]
-                  }
-                }
-              }
-            }
-          ],
-          "minimum_should_match":1
-        }
-      },
-      "aggs": {
-        "hash": {
-          "terms": {
-            "field": "nuage_metadata.flowid",
-            "size": 10,
-            "order": {
-              "SumOf": "desc"
-            }
-          },
-          "aggs": {
-            "SumOf": {
-              "sum": {
-                "field": "packets"
-              }
-            },
-            "source": {
-              "nested": {
-                "path": "{{source_field:nuage_metadata.src-pgmem-info}}"
-              },
-              "aggs": {
-                "a": {
-                  "terms": {
-                    "field": "nuage_metadata.src-pgmem-info.category",
-                    "include": "{{category_field}}"
-                  },
-                  "aggs": {
-                    "source": {
-                      "terms": {
-                        "field": "{{source_field:nuage_metadata.src-pgmem-info}}.name",
-                        "size": 10,
-                        "order": {
-                          "rev_nest": "desc"
-                        }
-                      },
-                      "aggs": {
-                        "rev_nest": {
-                          "reverse_nested": {},
-                          "aggs": {
-                            "SumOf": {
-                              "sum": {
+    "id": "vss-domain-flow-group-by-categories",
+    "query": {
+        "body": {
+            "aggs": {
+                "hash": {
+                    "aggs": {
+                        "SumOf": {
+                            "sum": {
                                 "field": "packets"
-                              }
                             }
-                          }
+                        },
+                        "destination": {
+                            "aggs": {
+                                "destination": {
+                                    "aggs": {
+                                        "rev_nest": {
+                                            "aggs": {
+                                                "SumOf": {
+                                                    "sum": {
+                                                        "field": "packets"
+                                                    }
+                                                }
+                                            },
+                                            "reverse_nested": {}
+                                        }
+                                    },
+                                    "terms": {
+                                        "field": "{{destination_field:nuage_metadata.dst-pgmem-info}}.name",
+                                        "order": {
+                                            "rev_nest": "desc"
+                                        },
+                                        "size": 10
+                                    }
+                                }
+                            },
+                            "nested": {
+                                "path": "{{destination_field:nuage_metadata.dst-pgmem-info}}"
+                            }
+                        },
+                        "source": {
+                            "aggs": {
+                                "source": {
+                                    "aggs": {
+                                        "rev_nest": {
+                                            "aggs": {
+                                                "SumOf": {
+                                                    "sum": {
+                                                        "field": "packets"
+                                                    }
+                                                }
+                                            },
+                                            "reverse_nested": {}
+                                        }
+                                    },
+                                    "terms": {
+                                        "field": "{{source_field:nuage_metadata.src-pgmem-info}}.name",
+                                        "order": {
+                                            "rev_nest": "desc"
+                                        },
+                                        "size": 10
+                                    }
+                                }
+                            },
+                            "nested": {
+                                "path": "{{source_field:nuage_metadata.src-pgmem-info}}"
+                            }
                         }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "destination": {
-              "nested": {
-                "path": "{{destination_field:nuage_metadata.dst-pgmem-info}}"
-              },
-              "aggs": {
-                "d": {
-                  "terms": {
-                    "field": "nuage_metadata.dst-pgmem-info.category",
-                    "include": "{{category_field}}"
-                  },
-                  "aggs": {
-                    "destination": {
-                      "terms": {
-                        "field": "{{destination_field:nuage_metadata.dst-pgmem-info}}.name",
-                        "size": 10,
+                    },
+                    "terms": {
+                        "field": "nuage_metadata.flowid",
                         "order": {
-                          "rev_nest": "desc"
-                        }
-                      },
-                      "aggs": {
-                        "rev_nest": {
-                          "reverse_nested": {},
-                          "aggs": {
-                            "SumOf": {
-                              "sum": {
-                                "field": "packets"
-                              }
-                            }
-                          }
-                        }
-                      }
+                            "SumOf": "desc"
+                        },
+                        "size": 10
                     }
-                  }
                 }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+            },
+            "query": {
+                "bool": {
+                    "minimum_should_match": 1,
+                    "must": [
+                        {
+                            "bool": {
+                                "must": [
+                                    {
+                                        "range": {
+                                            "timestamp": {
+                                                "format": "epoch_millis",
+                                                "gte": "{{startTime:now-24h}}",
+                                                "lte": "{{endTime:now}}"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "term": {
+                                            "nuage_metadata.enterpriseName": "{{enterpriseName:chord_enterprise}}"
+                                        }
+                                    },
+                                    {
+                                        "term": {
+                                            "{{domainType:nuage_metadata.domainName}}": "{{domainName:chord_domain}}"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "should": [
+                        {
+                            "nested": {
+                                "path": "{{source_field:nuage_metadata.src-pgmem-info}}",
+                                "query": {
+                                    "bool": {
+                                        "must": [
+                                            {
+                                                "match": {
+                                                    "{{source_field:nuage_metadata.src-pgmem-info}}.category": "{{category_field}}"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "score_mode": "none"
+                            }
+                        },
+                        {
+                            "nested": {
+                                "path": "{{destination_field:nuage_metadata.dst-pgmem-info}}",
+                                "query": {
+                                    "bool": {
+                                        "must": [
+                                            {
+                                                "match": {
+                                                    "{{destination_field:nuage_metadata.dst-pgmem-info}}.category": "{{category_field}}"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "score_mode": "none"
+                            }
+                        }
+                    ]
+                }
+            },
+            "size": 0
+        },
+        "index": "{{index:nuage_flow}}",
+        "type": "{{type:nuage_doc_type}}"
+    },
+    "service": "elasticsearch",
+    "title": "Flows per Domain per PG on selected Category"
 }
