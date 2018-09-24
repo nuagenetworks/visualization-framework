@@ -6,18 +6,18 @@
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {
-        "xColumn": "SumOf",
-        "yColumn": "sip",
-        "orientation": "horizontal",
+        "brush": 5,
+        "yColumn": "SumOf",
+        "xColumn": "sip",
         "tooltip": [
             { "column": "sip", "label": "Source IP" },
             { "column": "SumOf", "label": "# Packets", "format": ",.1f"}
         ],
-        "xTickGrid": true,
-        "yTickGrid": false,
-        "xTickFormat": ".2s",
-        "xLabel": "Total # of Packets",
-        "yLabel": "Source IP"
+        "yTickGrid": true,
+        "xTickGrid": false,
+        "yTickFormat": ".2s",
+        "yLabel": "Total # of Packets",
+        "xLabel": "Source IP"
     },
     "filterOptions": {
         "ACL Action": {

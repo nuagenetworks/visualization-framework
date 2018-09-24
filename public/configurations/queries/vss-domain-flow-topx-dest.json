@@ -41,7 +41,7 @@
                 "dip": {
                     "terms": {
                         "field": "destinationip",
-                        "size": 5,
+                        "size": 50,
                         "order": {
                             "SumOf": "desc"
                         }
