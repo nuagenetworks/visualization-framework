@@ -9,12 +9,16 @@
     ],
     "links": [
         {
-            "label": "Traffic Analytics",
-            "url": "/dashboards/vssDomainTraffic"
+            "label": "Top Talkers",
+            "url": "/dashboards/vssTopTalkers"
         },
         {
-            "label": "Flow Analytics",
+            "label": "Flow Visualization",
             "url": "/dashboards/vssDomainFlow"
+        },
+        {
+            "label": "Flow Explorer",
+            "url": "/dashboards/vssDomainFlowExplorer"
         },
         {
             "label": "Event Analytics",
@@ -33,8 +37,8 @@
             "url": "/dashboards/vssDomainApplication"
         },
         {
-            "label": "Flow Explorer",
-            "url": "/dashboards/vssDomainFlowExplorer"
+            "label": "Traffic Analytics",
+            "url": "/dashboards/vssDomainTraffic"
         }
     ],
     "defaultFilterOptionsOverride":{

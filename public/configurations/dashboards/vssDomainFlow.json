@@ -10,19 +10,21 @@
         { "id": "vss-domain-flow-explicit-deny-metric", "x": 5, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},
         { "id": "vss-domain-flow-default-allow-metric", "x": 7, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},
         { "id": "vss-domain-flow-default-deny-metric", "x": 9, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},
-        { "id": "vss-domain-flow-topx-source", "x": 1, "y": 2, "w": 5, "h": 25, "minW": 2, "minH": 12},
-        { "id": "vss-domain-flow-topx-dest", "x": 6, "y": 2, "w": 5, "h": 25, "minW": 2, "minH": 12},
         { "id": "vss-domain-flow", "x": 1, "y": 27, "w": 5, "h": 25, "minW": 2, "minH": 12},
         { "id": "vss-domain-flow-table", "x": 6, "y": 27, "w": 5, "h": 25, "minW": 2 , "minH": 12}
     ],
     "links": [
         {
-            "label": "Traffic Analytics",
-            "url": "/dashboards/vssDomainTraffic"
+            "label": "Top Talkers",
+            "url": "/dashboards/vssTopTalkers"
         },
         {
-            "label": "Flow Analytics",
+            "label": "Flow Visualization",
             "url": "/dashboards/vssDomainFlow"
+        },
+        {
+            "label": "Flow Explorer",
+            "url": "/dashboards/vssDomainFlowExplorer"
         },
         {
             "label": "Event Analytics",
@@ -41,8 +43,8 @@
             "url": "/dashboards/vssDomainApplication"
         },
         {
-            "label": "Flow Explorer",
-            "url": "/dashboards/vssDomainFlowExplorer"
+            "label": "Traffic Analytics",
+            "url": "/dashboards/vssDomainTraffic"
         }
     ]
 }

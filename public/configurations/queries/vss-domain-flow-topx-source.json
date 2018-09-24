@@ -41,7 +41,7 @@
                 "sip": {
                     "terms": {
                         "field": "sourceip",
-                        "size": 5,
+                        "size": 50,
                         "order": {
                             "SumOf": "desc"
                         }
