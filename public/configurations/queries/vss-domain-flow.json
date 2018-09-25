@@ -3,7 +3,7 @@
     "title":"Flows per Domain",
     "service":"elasticsearch",
     "query":{
-        "index":"{{index:nuage_flow-2018-09-19}}",
+        "index":"{{index:nuage_flow}}",
         "type":"{{type:nuage_doc_type}}",
         "body":{
             "size":0,

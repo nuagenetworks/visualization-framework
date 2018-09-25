@@ -28,6 +28,11 @@
               "term": {
                 "{{domainType:nuage_metadata.domainName}}": "{{domainName:chord_domain}}"
               }
+            },
+            {
+              "term": {
+                "type": "{{actionType:DENY}}"
+              }
             }
           ]
         }
