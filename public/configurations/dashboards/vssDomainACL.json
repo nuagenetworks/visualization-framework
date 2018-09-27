@@ -1,62 +1,115 @@
 {
-    "id": "vssDomainACL",
-    "author": "Ronak Shah",
-    "creationDate": "10/18/2016",
-    "title": "{{domainName:VSS Domain}}",
-    "titleIcon": "domain",
-    "visualizations": [
-        { "id": "vss-domain-acl-time", "x": 0, "y": 0, "w": 6, "h": 15, "minW": 2, "minH": 12},
-        { "id": "vss-domain-acl-top5", "x": 6, "y": 0, "w": 6, "h": 15, "minW": 2, "minH": 12}
-    ],
-    "links": [
+  "id": "vssDomainACL",
+  "author": "Ronak Shah",
+  "creationDate": "10/18/2016",
+  "title": "{{domainName:VSS Domain}}",
+  "titleIcon": "domain",
+  "visualizations": [
+    {
+      "id": "vss-domain-acl-time",
+      "x": 0,
+      "y": 0,
+      "w": 6,
+      "h": 15,
+      "minW": 2,
+      "minH": 12,
+      "static": true
+    },
+    {
+      "id": "vss-domain-acl-top",
+      "x": 6,
+      "y": 0,
+      "w": 6,
+      "h": 15,
+      "minW": 2,
+      "minH": 12,
+      "static": true
+    }
+  ],
+  "links": [
+    {
+      "label": "Top Talkers",
+      "url": "/dashboards/vssTopTalkers"
+    },
+    {
+      "label": "Flow Visualization",
+      "url": "/dashboards/vssDomainFlow"
+    },
+    {
+      "label": "Flow Explorer",
+      "url": "/dashboards/vssDomainFlowExplorer"
+    },
+    {
+      "label": "Event Analytics",
+      "url": "/dashboards/vssDomainEvent"
+    },
+    {
+      "label": "ACL Analytics",
+      "url": "/dashboards/vssDomainACL"
+    },
+    {
+      "label": "Service Analytics",
+      "url": "/dashboards/vssDomainService"
+    },
+    {
+      "label": "Application Analytics",
+      "url": "/dashboards/vssDomainApplication"
+    },
+    {
+      "label": "Traffic Analytics",
+      "url": "/dashboards/vssDomainTraffic"
+    }
+  ],
+  "filterOptions": {
+    "ACL Action": {
+      "parameter": "actionType",
+      "default": "DENY",
+      "options": [
         {
-            "label": "Top Talkers",
-            "url": "/dashboards/vssTopTalkers"
+          "label": "Deny",
+          "value": "DENY",
+          "default": true
         },
         {
-            "label": "Flow Visualization",
-            "url": "/dashboards/vssDomainFlow"
-        },
-        {
-            "label": "Flow Explorer",
-            "url": "/dashboards/vssDomainFlowExplorer"
-        },
-        {
-            "label": "Event Analytics",
-            "url": "/dashboards/vssDomainEvent"
-        },
-        {
-            "label": "ACL Analytics",
-            "url": "/dashboards/vssDomainACL"
-        },
-        {
-            "label": "Service Analytics",
-            "url": "/dashboards/vssDomainService"
-        },
-        {
-            "label": "Application Analytics",
-            "url": "/dashboards/vssDomainApplication"
-        },
-        {
-            "label": "Traffic Analytics",
-            "url": "/dashboards/vssDomainTraffic"
+          "label": "Allow",
+          "value": "ALLOW"
         }
-    ],
-    "filterOptions": {
-        "ACL Action": {
-            "parameter": "actionType",
-            "default": "DENY",
-            "options": [
-                {
-                    "label": "Deny",
-                    "value": "DENY",
-                    "default": true
-                },
-                {
-                    "label": "Allow",
-                    "value": "ALLOW"
+      ]
+    },
+    "Filter Traffic": {
+      "parameter": "acl_traffic_filter",
+      "default": "",
+      "options": [
+        {
+          "label": "Virtual Firewall Rules only",
+          "value": "demo",
+          "query_source": ""
+        },
+        {
+          "label": "Egress/Ingress",
+          "default": true,
+          "value": "",
+          "forceOptions": {}
+        },
+        {
+          "label": "Ingress Only",
+          "value": "ingressaclentrytemplates"
+        },
+        {
+          "label": "Egress Only",
+          "value": "egressaclentrytemplates"
+        }
+      ]
+    }
+  },
+  "replace": {
+        "optional-egress-ingress-filter" : {
+            "context": "acl_traffic_filter",
+            "query": {
+                "term": {
+                    "nuage_metadata.aclResourceName":"{{acl_traffic_filter}}"
                 }
-            ]
+            }
         }
     }
 }
