@@ -1,6 +1,6 @@
 {
-    "id":"vss-domain-acl-dpg",
-    "title":"ACL hits by Destination PG",
+    "id":"vss-domain-acl-pg",
+    "title":"ACL hits by {{direction:Source}} PG",
     "service":"elasticsearch",
     "query":{
         "index":"{{index:nuage_flow}}",
@@ -38,10 +38,10 @@
                 }
             },
             "aggs": {
-                "dpg": {
+                "pg": {
                     "terms": {
-                        "field": "nuage_metadata.dpgName",
-                        "size": 5,
+                        "field": "nuage_metadata.{{pgname_field:spgName}}",
+                        "size": 50,
                         "order": {
                             "SumOf": "desc"
                         }

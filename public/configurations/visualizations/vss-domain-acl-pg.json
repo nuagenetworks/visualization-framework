@@ -1,0 +1,23 @@
+{
+    "id": "vss-domain-acl-pg",
+    "graph": "BarGraph",
+    "title": "ACL Hits by {{direction:Source}} Policy Group - {{actionType:DENY}}",
+    "description": "This horizontal barchart represents top 50 {{direction:Source}} policygroups per ACL hits for a given period of time. By default its aggregated on deny hits count. One can select other ACL actions i.e from the drop down menu on this dashboard.",
+    "author": "Ronak Shah",
+    "creationDate": "10/18/2016",
+    "data": {
+        "xColumn": "SumOf",
+        "yColumn": "pg",
+        "orientation": "horizontal",
+        "tooltip": [
+            { "column": "pg", "label": "PG" },
+            { "column": "SumOf", "label": "ACL Hits", "format": ",.1f"}
+        ],
+        "xTickGrid": true,
+        "yTickGrid": false,
+        "xTickFormat": ".2s",
+        "xLabel": "Total # of ACL Hits",
+        "yLabel": "{{direction:Source}} Policy Groups"
+    },
+    "query": "vss-domain-acl-pg"
+}
