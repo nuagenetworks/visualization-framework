@@ -1,0 +1,39 @@
+{
+  "sort": [
+    { "time_regression_started" : {"order" : "desc"}}
+  ],
+  "size": 0,
+  "query": {
+    "match_all": {}
+  },
+  "_source": {
+    "excludes": []
+  },
+  "aggs": {
+    "2": {
+      "terms": {
+        "field": "testcase",
+        "size": 50,
+        "order": {
+          "_count": "desc"
+        }
+      },
+      "aggs": {
+        "3": {
+          "terms": {
+            "field": "result",
+            "size": 2,
+            "order": {
+                "latest" : "desc"
+            }
+          },
+          "aggs": {
+            "latest": {
+                "max": {"field": "time_regression_started"}
+            }
+          }
+        }
+      }
+    }
+  }
+}

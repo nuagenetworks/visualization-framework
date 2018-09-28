@@ -1,0 +1,15 @@
+{
+    "id": "inf-regress-result-major-suites",
+    "graph": "Table",
+    "title": "Latest results for major testsuites.",
+    "description": "Green is Pass, Red is Fail, Orange is Skipped.",
+    "author": "Ronak Shah",
+    "creationDate": "09/27/2018",
+    "data": {
+        "columns": [
+            { "column": "testsuite", "label": "Name"},
+            { "column": "result", "label":"Result", "colors":{"2":"green","1":"red","0": "orange"}}
+        ]
+    },
+    "query": "inf-regress-result-major-suites"
+}

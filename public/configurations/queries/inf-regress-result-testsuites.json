@@ -52,58 +52,69 @@
                 }
             },
             "aggs": {
-                "testsuit": {
+                "buildnumber": {
                     "terms": {
-                        "field": "testsuite",
+                        "field": "build_number",
                         "size": 10000,
                         "order": {
                             "_count": "desc"
                         }
                     },
                     "aggs": {
-                        "pass": {
-                            "sum_bucket": {
-                                "buckets_path": "pass-bucket>_count"
-                            }
-                        },
-                        "fail": {
-                            "sum_bucket": {
-                                "buckets_path": "fail-bucket>_count"
-                            }
-                        },
-                        "notrun": {
-                            "sum_bucket": {
-                                "buckets_path": "notrun-bucket>_count"
-                            }
-                        },
-                        "pass-bucket": {
-                            "filters": {
-                                "filters": {
-                                    "pass-filter": {
-                                        "match": {
-                                            "result": 2
+                        "testsuite": {
+                            "terms": {
+                                "field": "testsuite",
+                                "size": 10000,
+                                "order": {
+                                    "_count": "desc"
+                                }
+                            },
+                            "aggs": {
+                                "pass": {
+                                    "sum_bucket": {
+                                        "buckets_path": "pass-bucket>_count"
+                                    }
+                                },
+                                "fail": {
+                                    "sum_bucket": {
+                                        "buckets_path": "fail-bucket>_count"
+                                    }
+                                },
+                                "notrun": {
+                                    "sum_bucket": {
+                                        "buckets_path": "notrun-bucket>_count"
+                                    }
+                                },
+                                "pass-bucket": {
+                                    "filters": {
+                                        "filters": {
+                                            "pass-filter": {
+                                                "match": {
+                                                    "result": 2
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                            }
-                        },
-                        "fail-bucket": {
-                            "filters": {
-                                "filters": {
-                                    "fail-filter": {
-                                        "match": {
-                                            "result": 1
+                                },
+                                "fail-bucket": {
+                                    "filters": {
+                                        "filters": {
+                                            "fail-filter": {
+                                                "match": {
+                                                    "result": 1
+                                                }
+                                            }
                                         }
                                     }
-                                }
-                            }
-                        },
-                        "notrun-bucket": {
-                            "filters": {
-                                "filters": {
-                                    "notrun-filter": {
-                                        "match": {
-                                            "result": 0
+                                },
+                                "notrun-bucket": {
+                                    "filters": {
+                                        "filters": {
+                                            "notrun-filter": {
+                                                "match": {
+                                                    "result": 0
+                                                }
+                                            }
                                         }
                                     }
                                 }
