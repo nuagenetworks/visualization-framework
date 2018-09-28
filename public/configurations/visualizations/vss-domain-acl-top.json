@@ -54,5 +54,15 @@
       }
     ]
   },
+  "replace": {
+        "optional-egress-ingress-filter" : {
+            "context": "acl_traffic_filter",
+            "query": {
+                "term": {
+                    "nuage_metadata.aclResourceName":"{{acl_traffic_filter}}"
+                }
+            }
+        }
+    },
   "query": "vss-domain-acl-top"
 }

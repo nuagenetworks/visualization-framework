@@ -83,7 +83,7 @@
         {
           "label": "Virtual Firewall Rules only",
           "value": "demo",
-          "query_source": ""
+          "query_source": "vss-domain-acl-top-virt-firewall"
         },
         {
           "label": "Egress/Ingress",
@@ -101,15 +101,5 @@
         }
       ]
     }
-  },
-  "replace": {
-        "optional-egress-ingress-filter" : {
-            "context": "acl_traffic_filter",
-            "query": {
-                "term": {
-                    "nuage_metadata.aclResourceName":"{{acl_traffic_filter}}"
-                }
-            }
-        }
-    }
+  }
 }
