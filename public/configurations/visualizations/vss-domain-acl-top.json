@@ -56,10 +56,10 @@
   },
   "replace": {
         "optional-egress-ingress-filter" : {
-            "context": "acl_traffic_filter",
+            "context": "acl_traffic_filter_value",
             "query": {
-                "term": {
-                    "nuage_metadata.aclResourceName":"{{acl_traffic_filter}}"
+                "{{replace_query_type:term}}": {
+                    "{{replace_query_key:nuage_metadata.aclResourceName}}":"{{acl_traffic_filter_value}}"
                 }
             }
         }

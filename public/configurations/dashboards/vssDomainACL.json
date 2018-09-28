@@ -77,27 +77,37 @@
       ]
     },
     "Filter Traffic": {
-      "parameter": "acl_traffic_filter",
+      "parameter": "acl_traffic_filter_value",
       "default": "",
       "options": [
         {
           "label": "Virtual Firewall Rules only",
-          "value": "demo",
-          "query_source": "vss-domain-acl-top-virt-firewall"
+          "value": "nuage_metadata.vfrID",
+          "forceOptions": {
+            "replace_query_key":"field",
+            "replace_query_type":"exists"
+          }
         },
         {
           "label": "Egress/Ingress",
           "default": true,
-          "value": "",
-          "forceOptions": {}
+          "value": ""
         },
         {
           "label": "Ingress Only",
-          "value": "ingressaclentrytemplates"
+          "value": "ingressaclentrytemplates",
+          "forceOptions": {
+            "replace_query_key":"nuage_metadata.aclResourceName",
+            "replace_query_type":"term"
+          }
         },
         {
           "label": "Egress Only",
-          "value": "egressaclentrytemplates"
+          "value": "egressaclentrytemplates",
+          "forceOptions": {
+            "replace_query_key":"nuage_metadata.aclResourceName",
+            "replace_query_type":"term"
+          }
         }
       ]
     }
