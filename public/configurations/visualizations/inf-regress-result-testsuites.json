@@ -7,7 +7,8 @@
     "creationDate": "09/06/2018",
     "data": {
         "columns": [
-            { "column": "testsuit", "label": "Testsuit"},
+            { "column": "buildnumber", "label": "Build"},
+            { "column": "testsuite", "label": "Testsuit", "totalCharacters": 16, "tooltip" : {"column": "testsuite"}},
             { "column": "pass", "label": "Test cases - pass"},
             { "column": "fail", "label": "Test cases - fail"},
             { "column": "notrun", "label": "Test cases - not run"}

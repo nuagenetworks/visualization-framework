@@ -1,0 +1,20 @@
+{
+    "id": "inf-regress-suites-skipped-perbuild",
+    "graph": "Table",
+    "title": "Testsuites/testcases skipped/not run per build",
+    "description": "!",
+    "author": "Ronak Shah",
+    "creationDate": "9/27/2018",
+    "data": {
+        "columns": [
+            { "column": "testsuite", "label": "Testsuite", "totalCharacters": 16, "tooltip" : {"column": "testsuite"}},
+            { "column": "testcase", "label": "Testcase", "totalCharacters": 16, "tooltip" : {"column": "testcase"}},
+            { "column": "version.vrs", "label": "VRS version"},
+            { "column": "version.vsc", "label": "VSC version"},
+            { "column": "version.vsd", "label": "vsd version"},
+            { "column": "build_number", "label": "Build number"},
+            { "column": "time_regression_started", "label": "Start time", "timeFormat": "%b %d, %y %X"}
+        ]
+    },
+    "query": "inf-regress-run-skipped-perbuild"
+}

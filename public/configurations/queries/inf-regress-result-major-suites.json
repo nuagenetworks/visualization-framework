@@ -1,0 +1,80 @@
+{
+    "id":"inf-regress-result-major-suites",
+    "title":"TBD",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_regress}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "sort": [{ "time_regression_started" : {"order" : "desc"}}],
+            "size":0,
+            "query": {
+                "bool": {
+                    "must_not": [
+                        {
+                            "bool": {
+                                "minimum_should_match": 1,
+                                "should": [
+                                    {
+                                        "match_phrase": {
+                                            "testsuite": "Sanity"
+                                        }
+                                    },
+                                    {
+                                        "match_phrase": {
+                                            "testsuite": "initial"
+                                        }
+                                    },
+                                    {
+                                        "match_phrase": {
+                                            "testsuite": "final"
+                                        }
+                                    },
+                                    {
+                                        "match_phrase": {
+                                            "testsuite": "finished"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "must": [
+                        {
+                            "range":{
+                                "time_regression_submitted":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "testsuite": {
+                    "terms": {
+                        "field": "testsuite",
+                        "include": [
+                        	"nsg_apm",
+                        	"NsgExpress"
+                        ],
+                        "order": {
+                            "_count": "desc"
+                        }
+                    },
+                    "aggs": {
+                    	"result": {
+                    		"terms": {
+                    			"field": "result",
+                    			"size": 1
+                    		}
+                    	}
+                    }
+                }
+            }
+        }
+    }
+}
+

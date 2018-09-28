@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-utilization-users-over-time",
     "graph": "LineGraph",
-    "title": "#testbed utilized by {{users}} over last 24h",
+    "title": "#testbed utilized by {{users}} over time",
     "author": "Ronak Shah",
     "creationDate": "09/06/2018",
     "data": {
@@ -14,7 +14,7 @@
         "yLabel": "# testbeds",
         "stroke": {
           "color": "#f76159",
-          "width": "2px"
+          "width": "2px"    
         },
         "colors": [
             "#6b94ec",
