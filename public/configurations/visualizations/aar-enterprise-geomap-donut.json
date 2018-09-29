@@ -1,25 +1,17 @@
 {
     "id": "aar-enterprise-geomap-donut",
-    "graph": "GeoMap Donut",
-    "title": "High Level View in Enterprise {{enterpriseName}}",
-    "description": "",
+    "graph": "GeoMap",
+    "title": "NSGs Statuses",
+    "description": "Shows all NSGs in the enterprise with their current state and information.\nThe information covers Bootstrap Status, Alarm Status and NSG Software Version.\n\nColor depiction -\n\nBlue: NSG is in Good Condition\nYellow: Bootstrap Status is not ACTIVE\n\n\n\nTo Exit this information, click anywhere inside this box or on the 'i' button again.",
     "author": "Bharat Mukheja",
     "creationDate": "03/13/2018",
     "data": {
-        "minZoom":2,
-        "latitudeColumn": "latitude",
-        "longitudeColumn": "longitude",
-        "nameColumn": "gatewayName",
-        "localityColumn": "address",
-        "idColumn": "gatewayID",
-        "criticalAlarmColumn": "criticalAlarmsCount",
-        "majorAlarmColumn": "majorAlarmsCount",
-        "minorAlarmColumn": "minorAlarmsCount",
-        "infoAlarmColumn": "infoAlarmsCount",
-        "bootstrapStatusColumn" : "bootstrapStatus",
-        "NSGVersionColumn" : "NSGVersion"
+        "sliceColumn": "alarmedNSGCount",
+        "labelColumn": "alarmedNSGCount",
+        "otherOptions": {
+            "limit": 85
+        },
+        "pieInnerRadius": 0.5,
     },
-    "query": {
-        "data": "aar-enterprise-geomap-donut"
-    }
+    "query": "aar-enterprise-geomap-donut"
 }
