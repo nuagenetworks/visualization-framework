@@ -1,0 +1,28 @@
+{
+    "id": "inf-regress-results-latest-table",
+    "graph": "Table",
+    "title": "Latest Test Results for {{vrsVersion}}",
+    "description": "TBD",
+    "author": "Ryan Fredette",
+    "data": {
+        "columns": [
+            { "column": "testcase", "label": "Test Case"},
+            { "column": "secondResult", "label": "",
+              "colors": {
+                "0": "gray",
+                "1": "red",
+                "2": "green"
+              }
+            },
+            { "column": "result", "label": "",
+              "colors": {
+                "0": "gray",
+                "1": "red",
+                "2": "green"
+              }
+            }
+        ]
+    },
+    "listeners": [],
+    "query": "inf-regress-results-latest"
+}
