@@ -349,7 +349,7 @@ class SimulateFlowStats(object):
                                          domains=self.domains, nsgs=self.nsgs,
                                          simData=self.simData)
         sla_flows = []
-
+        sla_status=0
         flow_cnt = 0
         sla_status = 0
         sla_prob_new = 0.6
@@ -695,114 +695,289 @@ class SimulateNATTStats(object):
         self.es_index_prefix = flowData["es_index_prefix"]
         self.srcUplinks = flowData["srcuplinks"]
         self.destUplinks = flowData["destuplinks"]
-        self.natt_summaries = ["Green","Orange","Red"]
+        self.reachability_status = ["Healthy","Degraded","Down","No longer a valid neighbor"]
+        self.path_status = ["green","yellow","red","grey"]
 
-    def generate_natt_stats(self, startTime, endTime,es_chunk_size):
+    def get_random_event_flag(self):
+        binary = randint(0,256)
+        decimal = 0
+        for digit in str(binary):
+            decimal = decimal * 2 + int(digit)
+        return decimal
+
+    def get_natt_ips(self,vxlanIp,ipsecIp,natt_prob):
+        probe_ipsec = ipsecIp if get_random_with_prob(natt_prob) else "0.0.0.0"
+        probe_vxlan = vxlanIp if get_random_with_prob(natt_prob) else "0.0.0.0"
+        vsc_ipsec = ipsecIp if get_random_with_prob(natt_prob) else "0.0.0.0"
+        vsc_vxlan = vxlanIp if get_random_with_prob(natt_prob) else "0.0.0.0"
+        return [probe_ipsec,probe_vxlan,vsc_ipsec,vsc_vxlan]
+
+    def resolve_to_status(self,ips,flag):
+        assert type(flag)==int
+        probe_ipsec = ips[0]
+        probe_vxlan = ips[1]
+        vsc_ipsec = ips[2]
+        vsc_vxlan = ips[3]
+        if probe_ipsec != '0.0.0.0':
+            flag = flag | 0x040
+        if probe_vxlan!='0.0.0.0':
+            flag = flag | 0x010
+        if vsc_ipsec != '0.0.0.0':
+            flag = flag | 0x004
+        if vsc_vxlan != '0.0.0.0':
+            flag = flag | 0x001
+        return flag
+
+    def resolve_to_reason(self,ips,flag):
+        reason = []
+        #Process IPs
+
+        validVscLearntVxLanIP = not(ips[3] == '0.0.0.0')
+        validVscLearntIPSecIP = not(ips[2] == '0.0.0.0')
+        validProbeLearntVxLanIP = not(ips[1] == '0.0.0.0')
+        validProbeLearntIPSecIP = not(ips[0] == '0.0.0.0')
+
+        #Process Event flags
+        deleteNeighbor = True if (flag>>8)&1 else False
+        vscLearntVxLanGood = True if (flag>>0)&1 else False
+        vscLearntVxLanBad = True if (flag>>1)&1 else False
+        vscLearntIPSecGood = True if (flag>>2)&1 else False
+        vscLearntIPSecBad = True if (flag>>3)&1 else False
+        probeLearntVxLanGood = True if (flag>>4)&1 else False
+        probeLearntVxLanBad = True if (flag>>5)&1 else False
+        probeLearntIPSecGood = True if (flag>>6)&1 else False
+        probeLearntIPSecBad = True if (flag>>7)&1 else False
+
+        if (deleteNeighbor):
+            reason.append("The path is no longer valid.")
+        else:
+            if ((not validVscLearntVxLanIP and vscLearntVxLanGood) and (not validVscLearntIPSecIP and vscLearntIPSecGood)):
+                reason.append("The two NSGs are no more neighbors. ")
+
+            elif ((not validVscLearntVxLanIP and not vscLearntVxLanGood and not vscLearntVxLanBad) and (not validVscLearntIPSecIP and not vscLearntIPSecGood and not vscLearntIPSecBad)):
+                reason.append("NSGs has not yet established connection. ")
+
+            elif ((not validVscLearntVxLanIP and vscLearntVxLanBad) and (not validVscLearntIPSecIP and vscLearntIPSecBad)):
+                reason.append("NSG-VSC connection is down. ")
+
+            else:
+                if (validVscLearntVxLanIP and vscLearntVxLanBad and validVscLearntIPSecIP and vscLearntIPSecBad):
+                    reason.append("VSC learnt IPs flapped. ")
+                else:
+                    if (validVscLearntVxLanIP and vscLearntVxLanBad):
+                        reason.append("VSC learnt VxLan IP flapped. ")
+                    elif (validVscLearntIPSecIP and vscLearntIPSecBad):
+                        reason.append("VSC learnt IPSec IP flapped. ")
+
+            if (not validProbeLearntVxLanIP and not validProbeLearntIPSecIP and not probeLearntVxLanBad and not probeLearntIPSecBad):
+                reason.append("Probes are not configured on the uplink. ")
+
+            elif (validProbeLearntVxLanIP and probeLearntVxLanBad and validProbeLearntIPSecIP and probeLearntIPSecBad):
+                reason.append("Probe Learnt IPs flapped. ")
+
+            elif (not validProbeLearntVxLanIP and not probeLearntVxLanGood and probeLearntVxLanBad and not validProbeLearntIPSecIP and not probeLearntIPSecGood and probeLearntIPSecBad):
+                reason.append("Probes timed out. ")
+            else:
+                if (not validProbeLearntVxLanIP and not probeLearntVxLanBad):
+                    reason.append("VxLan Probes' are not configured. ")
+
+                elif (validProbeLearntVxLanIP and probeLearntVxLanBad):
+                    reason.append("Probe Learnt VxLan IP flapped. ")
+
+                elif (not validProbeLearntVxLanIP and probeLearntVxLanGood and not probeLearntVxLanBad):
+                    reason.append("Probes detached from VxLan NPM. ")
+
+                elif (not validProbeLearntVxLanIP and probeLearntVxLanBad):
+                    reason.append("VxLan probe timed out. ")
+
+
+                if (not validProbeLearntIPSecIP and not probeLearntIPSecBad):
+                    reason.append("IPSec Probes' are not configured. ")
+
+                elif (validProbeLearntIPSecIP and probeLearntIPSecBad):
+                    reason.append("Probe Learnt IPSec IP flapped. ")
+
+                elif (not validProbeLearntIPSecIP and probeLearntIPSecGood):
+                    reason.append("IPSec Probes are disabled. ")
+
+                elif (not validProbeLearntIPSecIP and probeLearntIPSecBad):
+                    reason.append("IPSec probe timed out. ")
+
+
+            if (not validVscLearntIPSecIP and vscLearntIPSecGood and not validProbeLearntIPSecIP and probeLearntIPSecGood
+                and validVscLearntVxLanIP):
+                reason.append("Enterprise level encryption disabled. ")
+
+
+        return ''.join(reason)
+
+    def generate_natt_stats(self, startTime, endTime, es_chunk_size,natt_prob):
         nsgs = self.nsgs
         srcuplinks = self.srcUplinks
         destuplinks = self.destUplinks
         natt_stat_cnt = 0
+        natt_summary_cnt = 0
         write_data = []
         chunk_size = es_chunk_size
         with open('log/nattstats_new.log', 'w') as nattstats:
-            timestamp = startTime
-            t_increment = 0
-            while timestamp != endTime:
-                timestamp = startTime + t_increment * 1000
-                for s_nsg_ind, src_nsg in enumerate(nsgs):
+            for s_nsg_ind, src_nsg in enumerate(nsgs):
+                d_nsg_ind = s_nsg_ind + 1
+                while d_nsg_ind < len(nsgs):
+                    timestamp = startTime
+                    t_increment = 0
+                    prev_flag = 0
+                    natt_events = []
+                    dest_nsg = nsgs[d_nsg_ind]
+                    vxlanIp = '.'.join(src_nsg["nsg_natt_ip"].split('.')[:-1] + [str(s_nsg_ind+1)])
+                    ipsecIp = '.'.join(src_nsg["nsg_natt_ip"].split('.')[:-1] + [str(s_nsg_ind+1)])
+                    while timestamp != endTime:
+                        # Get event flags here, and if the conditions create an event, populate that event in a list
+                        natt_flag = self.get_random_event_flag()
+                        timestamp = startTime + t_increment * 1000
+                        if natt_flag!=prev_flag:
+                            natt_ips = self.get_natt_ips(vxlanIp,ipsecIp,natt_prob)
+                            flag = self.resolve_to_status(natt_ips,natt_flag)
+                            if flag & 256 == 256:
+                                path_status = self.path_status[3]
+                            elif flag & 85 == 85:
+                                path_status = self.path_status[0]
+                            elif flag | 170 == 0:
+                                path_status = self.path_status[2]
+                            else:
+                                path_status = self.path_status[1]
+                            nattstat_record = {}
+                            srcUp = randint(0, 1)
+                            destUp = randint(0, 1)
+                            nattstat_record["timestamp"] = long(timestamp)
+                            nattstat_record["SrcNSG"] = src_nsg["nsg_id"]
+                            nattstat_record["SourceNSG"] = src_nsg["nsg_name"]
+                            nattstat_record["DstNSG"] = dest_nsg["nsg_id"]
+                            nattstat_record["DestinationNSG"] = dest_nsg["nsg_name"]
+                            nattstat_record["SrcUplink"] = srcuplinks[srcUp]
+                            nattstat_record["DstUplink"] = destuplinks[destUp]
+                            nattstat_record["SrcUplinkIndex"] = srcuplinks[srcUp]
+                            nattstat_record["DstUplinkIndex"] = destuplinks[destUp]
+                            nattstat_record["SrcUplinkRole"] = str(srcUp+1)
+                            nattstat_record["DstUplinkRole"] = str(destUp+1)
+                            nattstat_record["EnterpriseName"] = self.def_ent_name
 
-                    d_nsg_ind = s_nsg_ind + 1
-                    while d_nsg_ind < len(nsgs):
-                        nattstat_record = {}
-                        dest_nsg = nsgs[d_nsg_ind]
-                        srcUp = randint(0, 1)
-                        destUp = randint(0, 1)
-                        nattstat_record["timestamp"] = long(timestamp)
-                        nattstat_record["SrcNSG"] = src_nsg["nsg_id"]
-                        nattstat_record["SourceNSG"] = src_nsg["nsg_name"]
-                        nattstat_record["DstNSG"] = dest_nsg["nsg_id"]
-                        nattstat_record["DestinationNSG"] = dest_nsg["nsg_name"]
-                        nattstat_record["SrcUplink"] = srcuplinks[srcUp]
-                        nattstat_record["DstUplink"] = destuplinks[destUp]
-                        nattstat_record["SrcUplinkIndex"] = srcuplinks[srcUp]
-                        nattstat_record["DstUplinkIndex"] = destuplinks[destUp]
-                        nattstat_record["SrcUplinkRole"] = srcuplinks[srcUp]
-                        nattstat_record["DstUplinkRole"] = destuplinks[destUp]
-                        nattstat_record["EnterpriseName"] = self.def_ent_name
+                            nattstat_record["VscVxLanIP"] = natt_ips[3]
+                            nattstat_record["VscVxLanPort"] = src_nsg["nsg_natt_port"]
+                            nattstat_record["VscIPSecIP"] = natt_ips[2]
+                            nattstat_record["VscIPSecPort"] = src_nsg["nsg_natt_port"]
+                            nattstat_record["ProbeVxLanIP"] = natt_ips[1]
+                            nattstat_record["ProbeVxLanPort"] = src_nsg["nsg_natt_port"]
+                            nattstat_record["ProbeIPSecIP"] = natt_ips[0]
+                            nattstat_record["ProbeIPSecPort"] = src_nsg["nsg_natt_port"]
+                            nattstat_record["Reason"] = self.resolve_to_reason(natt_ips,flag)
 
-                        nattstat_record["VscVxLanIP"] = src_nsg["nsg_natt_ip"]
-                        nattstat_record["VscVxLanPort"] = src_nsg["nsg_natt_port"]
-                        nattstat_record["VscIPSecIP"] = src_nsg["nsg_natt_ip"]
-                        nattstat_record["VscIPSecPort"] = src_nsg["nsg_natt_port"]
-                        nattstat_record["ProbeVxLanIP"] = src_nsg["nsg_natt_ip"]
-                        nattstat_record["ProbeVxLanPort"] = src_nsg["nsg_natt_port"]
-                        nattstat_record["ProbeIPSecIP"] = src_nsg["nsg_natt_ip"]
-                        nattstat_record["ProbeIPSecPort"] = src_nsg["nsg_natt_port"]
-
-                        nattstat_record["Reason"] = "Reason"
-
-
-                        json.dump(nattstat_record, nattstats,
-                                  default=json_serial)
-                        nattstats.write("\n")
-                        index_name = "nuage_nat-t" + '_' + self.es_index_prefix
-                        nattstat_record['_index']=index_name
-                        nattstat_record['_type'] = 'nuage_doc_type'
-                        write_data.append(nattstat_record.copy())
-                        if len(write_data)>=chunk_size:
-                            helpers.bulk(self.es,iter(write_data),request_timeout=50)
-                            write_data = []
-                        natt_stat_cnt += 1
-                        d_nsg_ind += 1
+                            json.dump(nattstat_record, nattstats,
+                                      default=json_serial)
+                            nattstats.write("\n")
+                            natt_events.append([nattstat_record,path_status])
+                            index_name = "nuage_natt" + '_' + self.es_index_prefix
+                            nattstat_record['_index']=index_name
+                            nattstat_record['_type'] = 'nuage_doc_type'
+                            write_data.append(nattstat_record.copy())
+                            if len(write_data)>=chunk_size:
+                                helpers.bulk(self.es,iter(write_data),request_timeout=50)
+                                write_data = []
+                            natt_stat_cnt += 1
+                        t_increment += 30
+                    natt_summary_cnt += self.generate_natt_summary(startTime,endTime,es_chunk_size,natt_events,s_nsg_ind,d_nsg_ind)
+                    d_nsg_ind += 1
                 if len(write_data):
                     helpers.bulk(self.es,iter(write_data),request_timeout=50)
                     write_data = []
-                t_increment += 30
+
 
         print "natt_stat_cnt = " + str(natt_stat_cnt)
+        print "natt_summary_cnt = " + str(natt_summary_cnt)
 
-    def generate_natt_summary(self, startTime, endTime,es_chunk_size):
+    def generate_natt_summary(self, startTime, endTime,es_chunk_size,natt_events,s_nsg_ind,d_nsg_ind):
         nsgs = self.nsgs
         natt_summary_cnt = 0
         write_data = []
         chunk_size = es_chunk_size
+        src_nsg = nsgs[s_nsg_ind]
+
+        GREEN_PATH_STATUS = self.path_status[0]
+        RED_PATH_STATUS = self.path_status[2]
+        YELLOW_PATH_STATUS = self.path_status[1]
+        GREY_PATH_STATUS = self.path_status[3]
+
+        PRIMARY_SRC_UPLINK = self.srcUplinks[0]
+        PRIMARY_DEST_UPLINK = self.destUplinks[0]
+        SECONDARY_SRC_UPLINK = self.srcUplinks[1]
+        SECONDARY_DEST_UPLINK = self.destUplinks[1]
+
+        curPathStatus = {
+            PRIMARY_SRC_UPLINK:{
+                PRIMARY_DEST_UPLINK : GREEN_PATH_STATUS,
+                SECONDARY_DEST_UPLINK : GREEN_PATH_STATUS
+            },
+            SECONDARY_SRC_UPLINK : {
+                PRIMARY_DEST_UPLINK : GREEN_PATH_STATUS,
+                SECONDARY_DEST_UPLINK : GREEN_PATH_STATUS
+            }
+        }
+        is_path_status_changed = False
+        cur_event,event_path_status = natt_events.pop(0)
+        curReachabilityStatus = self.reachability_status[0]
         with open('log/natt_summary_new.log', 'w') as natt_summary:
             timestamp = startTime
             t_increment = 0
             while timestamp != endTime:
                 timestamp = startTime + t_increment * 1000
-                for s_nsg_ind, src_nsg in enumerate(nsgs):
-                    d_nsg_ind = s_nsg_ind + 1
-                    while d_nsg_ind < len(nsgs):
-                        natt_summary_record = {}
-                        dest_nsg = nsgs[d_nsg_ind]
-                        natt_summary_record["timestamp"] = long(timestamp)
-                        natt_summary_record["EnterpriseName"] = self.def_ent_name
-                        natt_summary_record["SrcNSG"] = src_nsg["nsg_id"]
-                        natt_summary_record["SourceNSG"] = src_nsg["nsg_name"]
-                        natt_summary_record["DstNSG"] = dest_nsg["nsg_id"]
-                        natt_summary_record["DestinationNSG"] = dest_nsg["nsg_name"]
-                        natt_status = random.choice([0,1,2])
-                        natt_summary_record["ReachabilityStatus"] = self.natt_summaries[natt_status]
+                while natt_events and natt_events[0][0]['timestamp']<=timestamp:
+                    cur_event, event_path_status = natt_events.pop(0)
+                if timestamp == cur_event['timestamp']:
+                    event_src_uplink = cur_event["SrcUplink"]
+                    event_dest_uplink = cur_event["DstUplink"]
 
-                        json.dump(natt_summary_record, natt_summary,
-                                  default=json_serial)
-                        natt_summary.write("\n")
-                        index_name = "nuage_nat-t" + '_' + self.es_index_prefix
-                        natt_summary_record['_index']=index_name
-                        natt_summary_record['_type'] = 'nuage_doc_type'
-                        write_data.append(natt_summary_record.copy())
-                        if len(write_data)>=chunk_size:
-                            helpers.bulk(self.es,iter(write_data),request_timeout=50)
-                            write_data = []
-                        natt_summary_cnt += 1
-                        d_nsg_ind += 1
-                if len(write_data):
+                    if event_path_status != curPathStatus[event_src_uplink][event_dest_uplink]:
+                        is_path_status_changed = True
+                        curPathStatus[event_src_uplink][event_dest_uplink] = event_path_status
+
+
+                if is_path_status_changed:
+                    if curPathStatus[PRIMARY_SRC_UPLINK][PRIMARY_DEST_UPLINK] == GREEN_PATH_STATUS and curPathStatus[PRIMARY_SRC_UPLINK][SECONDARY_DEST_UPLINK] == GREEN_PATH_STATUS and curPathStatus[SECONDARY_SRC_UPLINK][PRIMARY_DEST_UPLINK] == GREEN_PATH_STATUS and curPathStatus[SECONDARY_SRC_UPLINK][SECONDARY_DEST_UPLINK] == GREEN_PATH_STATUS:
+                        curReachabilityStatus = self.reachability_status[0] #GREEN
+
+                    elif curPathStatus[PRIMARY_SRC_UPLINK][PRIMARY_DEST_UPLINK] == RED_PATH_STATUS and curPathStatus[PRIMARY_SRC_UPLINK][SECONDARY_DEST_UPLINK] == RED_PATH_STATUS and curPathStatus[SECONDARY_SRC_UPLINK][PRIMARY_DEST_UPLINK] == RED_PATH_STATUS and curPathStatus[SECONDARY_SRC_UPLINK][SECONDARY_DEST_UPLINK] == RED_PATH_STATUS:
+                        curReachabilityStatus = self.reachability_status[2] #RED
+
+                    else:
+                        curReachabilityStatus = self.reachability_status[1] #Yellow
+
+
+                natt_summary_record = {}
+                dest_nsg = nsgs[d_nsg_ind]
+                natt_summary_record["timestamp"] = long(timestamp)
+                natt_summary_record["EnterpriseName"] = self.def_ent_name
+                natt_summary_record["SrcNSG"] = src_nsg["nsg_id"]
+                natt_summary_record["SourceNSG"] = src_nsg["nsg_name"]
+                natt_summary_record["DstNSG"] = dest_nsg["nsg_id"]
+                natt_summary_record["DestinationNSG"] = dest_nsg["nsg_name"]
+                natt_summary_record["ReachabilityStatus"] = curReachabilityStatus
+
+                json.dump(natt_summary_record, natt_summary,
+                          default=json_serial)
+                natt_summary.write("\n")
+                index_name = "nuage_natt" + '_' + self.es_index_prefix
+                natt_summary_record['_index']=index_name
+                natt_summary_record['_type'] = 'nuage_doc_type'
+                write_data.append(natt_summary_record.copy())
+                if len(write_data)>=chunk_size:
                     helpers.bulk(self.es,iter(write_data),request_timeout=50)
                     write_data = []
-                t_increment += 30
+                natt_summary_cnt += 1
+                t_increment += 120
 
-        print "natt_summary_cnt = " + str(natt_summary_cnt)
+        if len(write_data):
+            helpers.bulk(self.es,iter(write_data),request_timeout=50)
+            write_data = []
+        return natt_summary_cnt
 
 def main():
     #  Load the configuration file
@@ -818,6 +993,7 @@ def main():
     defData["dest_ip_prefix"] = config.get('default', 'dest_ip_prefix')
     defData["natt_ip_prefix"] = config.get('default', 'natt_ip_prefix')
     defData["natt_port"] = config.get('default', 'natt_port')
+    natt_prob = 1 - config.getfloat('default', 'natt_conn_failure_probability')
     defData["domain_count"] = config.getint('default', 'domain_count')
     defData["npm_count"] = config.getint('default', 'npm_count')
     defData["perf_mon_count"] = config.getint('default', 'perf_mon_count')
@@ -825,12 +1001,18 @@ def main():
     defData["duc_count"] = config.getint('default', 'duc_count')
     #print defData["duc_count"]
     defData['out_sla_app_count'] = config.getint('default','out_sla_apps')
-
+    duration = config.get('default','duration')
+    if duration[-1] not in ('h','m'):
+        print("Please specify correct duration - Xm for X minutes, Xh for X hours")
+        exit(1)
+    else:
+        multiplier = 1 if duration[-1]=='m' else 60
+        minutes = int(duration[:-1])* multiplier
     def_ent_name = config.get('default', 'def_ent_name')
     es_server = config.get('default', 'es_server')
     es_chunk_size = config.getint('default','es_chunk_size')
 
-    startTime = float(int(time.time())) * 1000 - (24 * 60 * 60 * 1000)
+    startTime = float(int(time.time())) * 1000 - (minutes * 60 * 1000)
     endTime = float(int(time.time()))*1000
     es_index_prefix = (datetime.datetime.fromtimestamp(startTime/1000)).strftime('%Y_%m_%d')
 
@@ -880,8 +1062,7 @@ def main():
     sla_stats.generate_sla_stats(sla_flows,es_chunk_size)
 
     natt_stats = SimulateNATTStats(flowData)
-    natt_stats.generate_natt_stats(startTime, endTime,es_chunk_size)
-    natt_stats.generate_natt_summary(startTime, endTime,es_chunk_size)
+    natt_stats.generate_natt_stats(startTime, endTime,es_chunk_size,natt_prob)
 
 
 if __name__ == '__main__':

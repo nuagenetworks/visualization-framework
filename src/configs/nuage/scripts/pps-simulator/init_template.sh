@@ -60,14 +60,14 @@ curl -XPUT 'http://localhost:9200/_template/nuage_dpi_slastats_alias_template' -
     }
 }
 '
-curl -XPUT 'http://localhost:9200/_template/nuage_nat-t_alias_template' -d '
+curl -XPUT 'http://localhost:9200/_template/nuage_natt_alias_template' -d '
 {
     "order" : 0,
-    "template" : "nuage_nat-t*",
+    "template" : "nuage_natt*",
     "settings" : { },
     "mappings" : { },
     "aliases" : {
-      "nuage_nat-t" : { }
+      "nuage_natt" : { }
     }
 }
 '
