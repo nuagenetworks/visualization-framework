@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { TextInput } from './TextInput';
+import TextInput from './TextInput';
 
 const FormField = props => (
     <div className="field">

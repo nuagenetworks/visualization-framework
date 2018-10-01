@@ -32,6 +32,14 @@ class MainMenuView extends React.Component {
         this.initialize();
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        const { context: nextContext, ...nextRest } = nextProps;
+        const { context, ...rest } = this.props;
+
+        return (!_.isEqual(nextRest, rest))
+            || (context.enterpriseID !== nextContext.enterpriseID);
+    }
+
     componentWillReceiveProps(nextProps) {
         this.initialize();
     }
@@ -98,7 +106,7 @@ class MainMenuView extends React.Component {
                 {domains.map((domain) => {
 
 
-                    let queryParams = Object.assign({}, context, {domainName: domain.name, domainType: domainType, domainID: domain.ID});
+                    let queryParams = Object.assign({}, context, { domainName: domain.name, domainType: domainType, domainID: domain.ID });
 
                     return (
                         <ListItem
@@ -106,7 +114,7 @@ class MainMenuView extends React.Component {
                             primaryText={domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, queryParams)}}
+                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, queryParams) }}
                             leftIcon={
                                 <img style={style.iconMenu} src={`${process.env.PUBLIC_URL}/icons/icon-domain.png`} alt="D" />
                             }
@@ -134,7 +142,7 @@ class MainMenuView extends React.Component {
             <div>
                 {l2Domains.map((l2Domain) => {
 
-                    let queryParams = Object.assign({}, context, {domainName: l2Domain.name, domainType: domainType, domainID: l2Domain.ID});
+                    let queryParams = Object.assign({}, context, { domainName: l2Domain.name, domainType: domainType, domainID: l2Domain.ID });
 
                     return (
                         <ListItem
@@ -142,7 +150,7 @@ class MainMenuView extends React.Component {
                             primaryText={l2Domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, queryParams)}}
+                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, queryParams) }}
                             leftIcon={
                                 <img style={style.iconMenu} src={`${process.env.PUBLIC_URL}/icons/icon-l2domain.png`} alt="L2D" />
                             }
@@ -166,7 +174,7 @@ class MainMenuView extends React.Component {
             <div>
                 {nsgs.map((nsg) => {
 
-                    let queryParams = Object.assign({}, context, {snsg: nsg.name, dnsg: nsg.name, nsgId: nsg.ID});
+                    let queryParams = Object.assign({}, context, { snsg: nsg.name, dnsg: nsg.name, nsgId: nsg.ID });
 
                     return (
                         <ListItem
@@ -176,7 +184,7 @@ class MainMenuView extends React.Component {
                             innerDivStyle={style.innerNestedItem}
                             initiallyOpen={true}
                             open={true}
-                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/aarNSG`, queryParams)}}
+                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/aarNSG`, queryParams) }}
                             leftIcon={
                                 <img style={style.iconMenu} src={`${process.env.PUBLIC_URL}/icons/icon-nsgateway.png`} alt="N" />
                             }
@@ -207,7 +215,7 @@ class MainMenuView extends React.Component {
                             key={enterprise.ID}
                             primaryText={enterprise.name}
                             style={style.listItem}
-                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, context)}}
+                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, context) }}
                             nestedItems={[
                                 <div key={"sub-enterprise" + enterprise.ID} style={style.nestedItems}>
                                     {this.renderDomainsMenu()}
@@ -233,14 +241,14 @@ class MainMenuView extends React.Component {
         return (
             <Drawer open={this.props.open} docked={false} onRequestChange={this.props.onRequestChange} width={300}>
                 <div style={style.menuLogo}>
-                    <img src={ Logo } alt="Nuage Networks Visualization" />
+                    <img src={Logo} alt="Nuage Networks Visualization" />
                     <p>{visualizationType} Analytics</p>
                 </div>
 
                 <Subheader style={style.subHeader}>
                     ENTERPRISES
                     <span className="pull-right">
-                      <img style={style.iconSubMenu} src={`${process.env.PUBLIC_URL}/icons/icon-enterprise.png`} alt="" />
+                        <img style={style.iconSubMenu} src={`${process.env.PUBLIC_URL}/icons/icon-enterprise.png`} alt="" />
                     </span>
                 </Subheader>
 
@@ -254,8 +262,8 @@ class MainMenuView extends React.Component {
 
 
 MainMenuView.propTypes = {
-  open: React.PropTypes.bool,
-  onRequestChange: React.PropTypes.func
+    open: React.PropTypes.bool,
+    onRequestChange: React.PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -290,22 +298,22 @@ const mapStateToProps = (state) => {
 
 const actionCreators = (dispatch) => ({
     onRequestChange: () => {
-      dispatch(InterfaceActions.toggleMainMenu());
+        dispatch(InterfaceActions.toggleMainMenu());
     },
 
-    goTo: function(link, context) {
-        dispatch(push({pathname:link, query:context}));
+    goTo: function (link, context) {
+        dispatch(push({ pathname: link, query: context }));
     },
 
     fetchEnterpriseIfNeeded: (enterpriseID) => {
-      let configuration = {
-          service: "VSD",
-          query: {
-              parentResource: "enterprises",
-              parentID: enterpriseID
-          }
-      }
-      return dispatch(ServiceActions.fetchIfNeeded(configuration));
+        let configuration = {
+            service: "VSD",
+            query: {
+                parentResource: "enterprises",
+                parentID: enterpriseID
+            }
+        }
+        return dispatch(ServiceActions.fetchIfNeeded(configuration));
     },
 
     fetchDomainsIfNeeded: (enterpriseID) => {
@@ -314,10 +322,10 @@ const actionCreators = (dispatch) => ({
             query: {
                 parentResource: "enterprises",
                 parentID: enterpriseID,
-            resource: "domains"
+                resource: "domains"
             }
         }
-        return dispatch(ServiceActions.fetchIfNeeded(configuration));
+        return dispatch(ServiceActions.fetchIfNeeded(configuration, {}, true));
     },
 
     fetchL2DomainsIfNeeded: (enterpriseID) => {
@@ -326,10 +334,10 @@ const actionCreators = (dispatch) => ({
             query: {
                 parentResource: "enterprises",
                 parentID: enterpriseID,
-            resource: "l2domains"
+                resource: "l2domains"
             }
         }
-        return dispatch(ServiceActions.fetchIfNeeded(configuration));
+        return dispatch(ServiceActions.fetchIfNeeded(configuration, {}, true));
     },
 
     fetchNSGsIfNeeded: (enterpriseID) => {
@@ -338,10 +346,10 @@ const actionCreators = (dispatch) => ({
             query: {
                 parentResource: "enterprises",
                 parentID: enterpriseID,
-            resource: "nsgateways"
+                resource: "nsgateways"
             }
         }
-        return dispatch(ServiceActions.fetchIfNeeded(configuration));
+        return dispatch(ServiceActions.fetchIfNeeded(configuration, {}, true));
     },
 
     fetchUserContextIfNeeded: () => {
@@ -351,7 +359,7 @@ const actionCreators = (dispatch) => ({
                 parentResource: "usercontexts",
             }
         }
-        return dispatch(ServiceActions.fetchIfNeeded(configuration));
+        return dispatch(ServiceActions.fetchIfNeeded(configuration, {}, true));
     },
 
     updateUserContext: (userContext) => {

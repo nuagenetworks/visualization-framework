@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
-import evalExpression from "eval-expression";
 import objectPath from "object-path";
 
 import $ from "jquery";
@@ -173,6 +172,8 @@ class VisualizationView extends React.Component {
             if(configuration.listeners) {
                 // Use this.state.listeners to store the listeners that will be
                 // passed into the visualization components.
+                const GraphComponent = GraphManager.getGraphComponent(configuration.graph)
+
                 this.setState({
 
                     // This will be an object whose keys are event names,
@@ -198,16 +199,17 @@ class VisualizationView extends React.Component {
                         // which corresponds to a row of data visualized.
                         listeners[event] = (d) => {
 
-                            let graphQueryParams = {};
-                            let resetFilters = false;
+                            let graphQueryParams = {},
+                                resetFilters = false,
+                                vizID = `${id.replace(/-/g, '')}vkey`,
+                                vKey = GraphComponent.getGraphKey(configuration);
 
-                            if(configuration.key) {
-                                let vizID = `${id.replace(/-/g, '')}vkey`;
-                                let vKey = evalExpression("(" + configuration.key + ")")(d);
-                                if(this.props.orgContext[vizID] === vKey)
+                            if(vKey) {
+                                const graphKey = vKey(d);
+                                if(this.props.orgContext[vizID] === graphKey) {
                                     resetFilters = true;
-
-                                graphQueryParams[vizID] = vKey;
+                                }
+                                graphQueryParams[vizID] = graphKey;
                             }
 
 
@@ -231,9 +233,9 @@ class VisualizationView extends React.Component {
 
                             if(resetFilters) {
                                 for (let key in mergedQueryParams) {
-                                  if (mergedQueryParams.hasOwnProperty(key)) {
-                                    queryParams[key] = '';
-                                  }
+                                    if (mergedQueryParams.hasOwnProperty(key)) {
+                                        queryParams[key] = '';
+                                    }
                                 }
                             }
 
@@ -313,8 +315,7 @@ class VisualizationView extends React.Component {
             googleMapsAPIKey
         } = this.props;
 
-        const graphName      = configuration.graph,
-              GraphComponent = GraphManager.getGraphComponent(graphName)
+        const GraphComponent = GraphManager.getGraphComponent(configuration.graph);
 
         if (!response.data) {
             console.log('Main source "data" key is not defined')
@@ -606,81 +607,101 @@ class VisualizationView extends React.Component {
 
 const updateFilterOptions = (state, configurations, context, results = []) => {
 
-    if(configurations && configurations.filterOptions) {
-      let filterOptions = Object.assign({}, configurations.filterOptions)
+    if (configurations && configurations.filterOptions) {
+        let filterOptions = { ...configurations.filterOptions }
 
-      for(let key in filterOptions) {
+        for (let key in filterOptions) {
 
-          if (!filterOptions[key].options) {
-              filterOptions[key].options = []
-          }
-          // append filters fetching from query
-          if (filterOptions[key].dynamicOptions) {
-            const {queryKey = null, label = null, value = null, forceOptions = null} = filterOptions[key].dynamicOptions
-            if (queryKey && value) {
+            if (!filterOptions[key].options) {
+                filterOptions[key].options = []
+            }
 
-                // format value and label
-                const formattedValue = columnAccessor({ column: value})
-                const formattedLabel = label ? columnAccessor({ column: label}) : formattedValue
-                let forceOptionsConfig = {}
+            // append filters fetching from query
+            if (filterOptions[key].dynamicOptions) {
+                const {
+                    queryKey = null,
+                    label = null,
+                    value = null,
+                    forceOptions = null
+                } = filterOptions[key].dynamicOptions;
 
-                if (forceOptions) {
-                    for (let key in forceOptions) {
-                        if (forceOptions.hasOwnProperty(key)) {
-                            forceOptionsConfig[key] = columnAccessor({ column: forceOptions[key]})
+                const querySource = filterOptions[key].query_source || null;
+
+
+                if (queryKey && value) {
+                    // format value and label
+                    const formattedValue = columnAccessor({ column: value })
+                    const formattedLabel = label ? columnAccessor({ column: label }) : formattedValue
+                    let forceOptionsConfig = {}
+
+                    if (forceOptions) {
+                        for (let key in forceOptions) {
+                            if (forceOptions.hasOwnProperty(key)) {
+                                forceOptionsConfig[key] = columnAccessor({ column: forceOptions[key] })
+                            }
                         }
                     }
-                }
 
-                if(results[queryKey]) {
-                    results[queryKey].forEach(d => {
-                        let dataValue = formattedValue(d, true)
-                        let dataLabel = label ? formattedLabel(d, true) : dataValue
+                    if (results[queryKey]) {
 
-                        if(dataValue && !filterOptions[key].options.find( datum =>
-                            datum.value === dataValue.toString() || datum.label === dataLabel)) {
+                        results[queryKey].forEach(d => {
+                            let dataValue = formattedValue(d, true)
+                            let dataLabel = label ? formattedLabel(d, true) : dataValue
 
-                            let forceOptionsData = {}
-                            // if forceOptions present then calculate forceOptions values and append it in options
-                            if (forceOptionsConfig) {
-                                for (let key in forceOptionsConfig) {
-                                    if (forceOptionsConfig.hasOwnProperty(key)) {
-                                        forceOptionsData[key] = forceOptionsConfig[key](d, true) || ''
+                            if (dataValue && !filterOptions[key].options.find(datum =>
+                                datum.value === dataValue.toString() || datum.label === dataLabel)) {
+
+                                let forceOptionsData = {}
+                                // if forceOptions present then calculate forceOptions values and append it in options
+                                if (forceOptionsConfig) {
+                                    for (let key in forceOptionsConfig) {
+                                        if (forceOptionsConfig.hasOwnProperty(key)) {
+                                            forceOptionsData[key] = forceOptionsConfig[key](d, true) || ''
+                                        }
                                     }
                                 }
+
+                                const dynamicOption = {
+                                    label: dataLabel,
+                                    value: dataValue.toString(),
+                                    forceOptions: forceOptionsData,
+
+                                }
+
+                                if(querySource) {
+                                    dynamicOption.query_source = querySource;
+                                }
+                                // Add filters in existing filter options
+                                filterOptions[key].options.push(dynamicOption);
+
+
                             }
-                            // Add filters in existing filter options
-                            filterOptions[key].options.push({
-                                label: dataLabel,
-                                value: dataValue.toString(),
-                                forceOptions: forceOptionsData
-                            })
-                        }
-                    })
+                        })
+                    }
+                }
+            }
+
+            // TODO -
+            if(filterOptions[key].type) {
+                if(context && context.enterpriseID) {
+                    let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
+
+                    if(nsgs && nsgs.length) {
+                        filterOptions[key].options = [];
+                        filterOptions[key].default = nsgs[0].name;
+
+                        nsgs.forEach((nsg) => {
+                        filterOptions[key].options.push({
+                            label: nsg.name,
+                            value: nsg.name
+                        });
+                        });
+                    }
                 }
             }
         }
 
-        // TODO -
-        if(filterOptions[key].type) {
-            if(context && context.enterpriseID) {
-                let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
-
-                if(nsgs && nsgs.length) {
-                    filterOptions[key].options = [];
-                    filterOptions[key].default = nsgs[0].name;
-
-                    nsgs.forEach((nsg) => {
-                    filterOptions[key].options.push({
-                        label: nsg.name,
-                        value: nsg.name
-                    });
-                    });
-                }
-            }
-        }
-      }
-      return filterOptions || []
+        return filterOptions
     }
 }
 
@@ -740,7 +761,6 @@ const mapStateToProps = (state, ownProps) => {
 
     let context = {};
     let filteredID = configurationID.replace(/-/g, '');
-
     for (let key in orgContext) {
       if(orgContext.hasOwnProperty(key)) {
 
@@ -793,8 +813,6 @@ const mapStateToProps = (state, ownProps) => {
         */
         const queries =  typeof props.configuration.query === 'string' ? {'data' : {'name': props.configuration.query}} : props.configuration.query
 
-        props.filterOptions = updateFilterOptions(state, contextualizeConfiguration, context, props.response);
-
         props.configuration.query = {}
 
         //Checking whether all the queries configurations has been fetched
@@ -812,6 +830,11 @@ const mapStateToProps = (state, ownProps) => {
 
                 if(query === 'data') {
                     queryConfig.required = true
+
+                    // override main query from filter query
+                    if(context.query_source) {
+                        queryConfig.name = context.query_source;
+                    }
 
                     // check scroll is enabled or not on primary data
                     if(queryConfig.scroll)
@@ -838,7 +861,9 @@ const mapStateToProps = (state, ownProps) => {
                         ConfigurationsActionKeyStore.DATA
                     );
                     props.queryConfigurations[query] = queryConfiguration ? queryConfiguration.toJS() : null;
-                    props.queryConfigurations[query].vizID = configurationID
+                    if(props.queryConfigurations[query]) {
+                        props.queryConfigurations[query].vizID = configurationID;
+                    }
 
                 }
 
@@ -890,6 +915,8 @@ const mapStateToProps = (state, ownProps) => {
                 }
             }
         }
+
+        props.filterOptions = updateFilterOptions(state, contextualizeConfiguration, context, props.response);
 
         if(successResultCount === Object.keys(queries).length ) {
             props.isFetching = false;

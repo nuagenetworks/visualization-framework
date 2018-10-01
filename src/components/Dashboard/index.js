@@ -5,7 +5,6 @@ import { Link } from "react-router";
 
 import CircularProgress from "material-ui/CircularProgress";
 import { Responsive, WidthProvider } from "react-grid-layout";
-const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 import Visualization from "../Visualization";
 import FiltersToolBar from "../FiltersToolBar";
@@ -28,6 +27,7 @@ import { defaultFilterOptions } from "./default.js"
 import style from "./styles";
 import "./style.css";
 
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
 export class DashboardView extends React.Component {
 
     constructor(props) {
