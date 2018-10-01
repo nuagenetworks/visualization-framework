@@ -1,29 +1,54 @@
 {
-  "id": "vssDomainACL",
-  "author": "Ronak Shah",
-  "creationDate": "10/18/2016",
+  "id": "vssTopTalkers",
+  "author": "Natalia Balus",
+  "creationDate": "18/09/2018",
   "title": "{{domainName:VSS Domain}}",
   "titleIcon": "domain",
   "visualizations": [
     {
-      "id": "vss-domain-acl-time",
-      "x": 0,
-      "y": 0,
-      "w": 6,
-      "h": 15,
+      "id": "vss-domain-flow-topx-ip",
+      "x": 1,
+      "y": 2,
+      "w": 5,
+      "h": 25,
       "minW": 2,
-      "minH": 12,
-      "static": true
+      "minH": 12
     },
     {
-      "id": "vss-domain-acl-top",
+      "id": "vss-domain-flow-topx-pg",
       "x": 6,
-      "y": 0,
-      "w": 6,
-      "h": 15,
+      "y": 2,
+      "w": 5,
+      "h": 25,
       "minW": 2,
-      "minH": 12,
-      "static": true
+      "minH": 12
+    },
+    {
+      "id": "vss-domain-flow-topx-subnet",
+      "x": 1,
+      "y": 27,
+      "w": 5,
+      "h": 25,
+      "minW": 2,
+      "minH": 12
+    },
+    {
+      "id": "vss-domain-flow-topx-zone",
+      "x": 6,
+      "y": 27,
+      "w": 5,
+      "h": 25,
+      "minW": 2,
+      "minH": 12
+    },
+    {
+      "id": "vss-domain-acl-pg",
+      "x": 1,
+      "y": 52,
+      "w": 5,
+      "h": 25,
+      "minW": 2,
+      "minH": 12
     }
   ],
   "links": [
@@ -76,37 +101,29 @@
         }
       ]
     },
-    "Filter Traffic": {
-      "parameter": "acl_traffic_filter_value",
-      "default": "",
+    "Direction": {
+      "parameter": "direction",
+      "default": "Source",
       "options": [
         {
-          "label": "Virtual Firewall Rules only",
-          "value": "nuage_metadata.vfrID",
-          "forceOptions": {
-            "replace_query_key":"field",
-            "replace_query_type":"exists"
-          }
-        },
-        {
-          "label": "Egress/Ingress",
+          "label": "Source",
+          "value": "Source",
           "default": true,
-          "value": ""
-        },
-        {
-          "label": "Ingress Only",
-          "value": "ingressaclentrytemplates",
           "forceOptions": {
-            "replace_query_key":"nuage_metadata.aclResourceName",
-            "replace_query_type":"term"
+            "ip_type": "sourceip",
+            "sent_received": "sent",
+            "pgname_field": "spgName",
+            "src_dst": "src"
           }
         },
         {
-          "label": "Egress Only",
-          "value": "egressaclentrytemplates",
+          "label": "Destination",
+          "value": "Destination",
           "forceOptions": {
-            "replace_query_key":"nuage_metadata.aclResourceName",
-            "replace_query_type":"term"
+            "ip_type": "destinationip",
+            "sent_received": "received",
+            "pgname_field": "dpgName",
+            "src_dst": "dst"
           }
         }
       ]

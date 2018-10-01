@@ -23,7 +23,7 @@
             { "column": "nuage_metadata.subnetName", "label": "Subnet", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.subnetName"} },
             { "column": "nuage_metadata.zoneName", "label": "Zone", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.zoneName"}  },
             { "column": "nuage_metadata.aclId", "label": "ACL-ID", "totalCharacters": 13, "tooltip" : {"column": "nuage_metadata.aclId"} },
-            { "column": "nuage_metadata.vfrPolicyID", "label": "VFW-Rule-ID", "totalCharacters": 13, "tooltip" : {"column": "nuage_metadata.vfrPolicyID"} },
+            { "column": "nuage_metadata.vfrID", "label": "VFW-Rule-ID", "totalCharacters": 13, "tooltip" : {"column": "nuage_metadata.vfrID"} },
             { "column": "nuage_metadata.acl_source_type", "label": "ACL-Source-Type", "display": false },
             { "column": "nuage_metadata.acl_source_name", "label": "ACL-Source-Name", "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.acl_source_name"} },
             { "column": "nuage_metadata.acl_destination_type", "label": "ACL-Dest-Type", "display": false },

@@ -1,0 +1,23 @@
+{
+    "id": "vss-domain-flow-topx-pg",
+    "graph": "BarGraph",
+    "title": "Top {{direction:Source}} Policy Groups by Count",
+    "description": "This horizontal barchart represents top 50 {{direction:Source}} policy groups by total no of packets registered in a given time.",
+    "author": "Ronak Shah",
+    "creationDate": "10/18/2016",
+    "data": {
+        "brush":5,
+        "yColumn": "SumOf",
+        "xColumn": "pg",
+        "tooltip": [
+            { "column": "pg", "label": "PG" },
+            { "column": "SumOf", "label": "Packets", "format": ",.1f"}
+        ],
+        "yTickGrid": true,
+        "xTickGrid": false,
+        "yTickFormat": ".2s",
+        "yLabel": "Total # of Packets",
+        "xLabel": "{{direction:Source}} Policy Groups"
+    },
+    "query": "vss-domain-flow-topx-pg"
+}

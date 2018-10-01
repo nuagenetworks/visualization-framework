@@ -1,0 +1,25 @@
+{
+    "id": "aar-enterprise-geomap-donut",
+    "graph": "GeoMap Donut",
+    "title": "High Level View in Enterprise {{enterpriseName}}",
+    "description": "",
+    "author": "Bharat Mukheja",
+    "creationDate": "03/13/2018",
+    "data": {
+        "minZoom":2,
+        "latitudeColumn": "latitude",
+        "longitudeColumn": "longitude",
+        "nameColumn": "gatewayName",
+        "localityColumn": "address",
+        "idColumn": "gatewayID",
+        "criticalAlarmColumn": "criticalAlarmsCount",
+        "majorAlarmColumn": "majorAlarmsCount",
+        "minorAlarmColumn": "minorAlarmsCount",
+        "infoAlarmColumn": "infoAlarmsCount",
+        "bootstrapStatusColumn" : "bootstrapStatus",
+        "NSGVersionColumn" : "NSGVersion"
+    },
+    "query": {
+        "data": "aar-enterprise-geomap-donut"
+    }
+}

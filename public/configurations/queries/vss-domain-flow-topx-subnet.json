@@ -1,6 +1,6 @@
 {
-  "id": "vss-domain-acl-time",
-  "title": "ACL vs Time",
+  "id": "vss-domain-traffic-topx-subnet",
+  "title": "Top {{direction:Source}} Subnets by Count",
   "service": "elasticsearch",
   "query": {
     "index": "{{index:nuage_flow}}",
@@ -33,18 +33,18 @@
               "term": {
                 "type": "{{actionType:DENY}}"
               }
-            },
-            {
-              "replace": "optional-egress-ingress-filter"
             }
           ]
         }
       },
       "aggs": {
-        "timestamp": {
-          "date_histogram": {
-            "field": "timestamp",
-            "interval": "{{interval:1h}}"
+        "subnet": {
+          "terms": {
+            "field": "nuage_metadata.{{src_dst:src}}-subnetmem",
+            "size": "50",
+            "order": {
+              "SumOf": "desc"
+            }
           },
           "aggs": {
             "SumOf": {
