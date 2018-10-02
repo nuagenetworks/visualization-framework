@@ -1,7 +1,7 @@
 import React from 'react';
 import { change, submit } from 'redux-form';
 import { getPOSTRequestID } from './utils';
-import { errorField, errorSpan } from '../../ui-components/style';
+import style from '../../ui-components/style';
 import {
     ActionKeyStore as VFSActionKeyStore,
 } from '../../features/redux/actions';
@@ -53,10 +53,10 @@ export const formSubmit = (values, configuration) => (dispatch, getState) => {
 export const submitFailure = (configuration, errors) => (dispatch, getState) => {
     if (errors && errors.length > 0) {
         const errorInfo = () => {
-            const errorDesc = Array.isArray(errors) ? errors.map(item => <span style={errorSpan}>{item.description}</span>)
-                : <span style={errorSpan}>{errors}</span>;
+            const errorDesc = Array.isArray(errors) ? errors.map(item => <span style={style.errorSpan}>{item.description}</span>)
+                : <span style={style.errorSpan}>{errors}</span>;
             return (
-                <div style={errorField}>
+                <div style={style.errorField}>
                     {errorDesc}
                 </div>
             );
