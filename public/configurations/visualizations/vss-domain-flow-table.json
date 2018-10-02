@@ -20,13 +20,15 @@
             { "column": "nuage_metadata.service", "label": "Service" },
             { "column": "nuage_metadata.serviceGroup", "label": "Service Group", "display": false },
             { "column": "nuage_metadata.l7ApplicationName", "label": "L7 Application", "display": false},
-            { "column": "nuage_metadata.src-pgmem", "label": "Source PG", "display": false, "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.src-pgmem"}},
-            { "column": "nuage_metadata.dst-pgmem", "label": "Destination PG", "display": false, "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.dst-pgmem"}},
+            { "column": "nuage_metadata.src-pgmem-info.name", "label": "Source PG Name", "display": false, "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.src-pgmem-info.name"}},
+            { "column": "nuage_metadata.dst-pgmem-info.name", "label": "Destination PG Name", "display": false, "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.dst-pgmem-info.name"}},
+            { "column": "nuage_metadata.src-pgmem-info.category", "label": "Source PG Category", "display": false, "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.src-pgmem-info.category"}},
+            { "column": "nuage_metadata.dst-pgmem-info.category", "label": "Destination PG Category", "display": false, "totalCharacters": 16, "tooltip" : {"column": "nuage_metadata.dst-pgmem-info.category"}},
             { "column": "nuage_metadata.src-subnetmem", "label": "Source Subnet", "display": false},
             { "column": "nuage_metadata.dst-subnetmem", "label": "Destination Subnet", "display": false},
             { "column": "nuage_metadata.src-zonemem", "label": "Source Zone", "display": false},
             { "column": "nuage_metadata.dst-zonemem", "label": "Destination Zone", "display": false}
         ]
     },
-    "query": "vss-domain-flow-table"
+    "query": "{{flow_table_query}}"
 }
