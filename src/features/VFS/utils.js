@@ -1,8 +1,13 @@
 export const getMetaDataAttribute = (data, attrName) => data && data.hasOwnProperty("nuage_metadata") ? data.nuage_metadata[attrName] : null;
 
-export const buildOptions = (options) => {
+export const buildOptions = (options, optionRenderer) => {
     if (options && options.data && options.data.length > 0) {
-        return options.data.map(item => ({ text: item.name, value: item.ID }));
+        return options.data.map(item => {
+            if (optionRenderer) {
+                return optionRenderer(item);
+            }
+            return { text: item.name, value: item.ID };
+        });
     }
     if (options && options.isFetching) {
         return "Fetching...";
