@@ -4,7 +4,7 @@ import { FlatButton } from 'material-ui';
 import { formSubmit, clickSubmit } from './actions';
 import style from './style';
 import { Modal } from '../../ui-components';
-import { buttonFlat } from '../../ui-components/style';
+import componentStyle  from '../../ui-components/style';
 import Editor from '.';
 
 export const ModalEditor = props => {
@@ -20,6 +20,7 @@ export const ModalEditor = props => {
         errored,
         onDone,
     } = props;
+    const buttonFlat = componentStyle.buttonFlat;
     let buttons = [
         <FlatButton
             primary={true}
