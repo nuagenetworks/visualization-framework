@@ -21,30 +21,35 @@
 
         "markerIcon": {
             "default": "nsGatewayBlue",
+            "defaultUrgency":"BLUE",
             "criteria": [
                 {
                     "icon": "nsGatewayYellow",
                     "fields": {
                         "bootstrapStatus": "INACTIVE"
-                    }
+                    },
+                    "urgency":"YELLOW"
                 },
                 {
                     "icon": "nsGatewayYellow",
                     "fields": {
                         "bootstrapStatus": "NOTIFICATION_APP_REQ_SENT"
-                    }
+                    },
+                    "urgency":"YELLOW"
                 },
                 {
                     "icon": "nsGatewayYellow",
                     "fields": {
                         "bootstrapStatus": "NOTIFICATION_APP_REQ_ACK"
-                    }
+                    },
+                    "urgency":"YELLOW"
                 },
                 {
                     "icon": "nsGatewayYellow",
                     "fields": {
                         "bootstrapStatus": "CERTIFICATE_SIGNED"
-                    }
+                    },
+                    "urgency":"YELLOW"
                 }
             ]
         },

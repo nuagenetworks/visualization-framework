@@ -6,7 +6,8 @@ import { ActionKeyStore } from "./redux/actions";
 import { parameterizedConfiguration } from "../../../utils/configurations";
 import configData from '../../../config';
 
-import { VSDSearchConvertor } from '../../../lib/vis-graphs/utils/helpers'
+import { VSDSearchConvertor } from '../../../lib/vis-graphs/utils/helpers';
+import * as tabification from './tabify';
 
 const config = {
     api_version: "5.0",
@@ -405,6 +406,17 @@ const addSearching = function (queryConfiguration, search) {
     return queryConfiguration;
 }
 
+const tabify = (response, queryConfiguration) => {
+    if (queryConfiguration) {
+        const customTabify = objectPath.get(queryConfiguration, 'tabify');
+        if (customTabify) {
+            const tabificationFunction = tabification[customTabify];
+            return tabificationFunction(response)
+        }
+    }
+    return response;
+}
+
 export const VSDService = {
     id: "VSD",
     config,
@@ -419,5 +431,6 @@ export const VSDService = {
     updatePageSize,
     getNextPageQuery,
     addSorting,
-    addSearching
+    addSearching,
+    tabify
 };

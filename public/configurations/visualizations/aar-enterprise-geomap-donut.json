@@ -6,12 +6,26 @@
     "author": "Bharat Mukheja",
     "creationDate": "03/13/2018",
     "data": {
-        "sliceColumn": "alarmedNSGCount",
-        "labelColumn": "alarmedNSGCount",
+        "sliceColumn": "count",
+        "labelColumn": "alarmType",
+	"colorColumn": "alarmType",
+        "pieLabelRadius":0.75,
+        "pieOuterRadius":0.95,
+        "pieInnerRadius":0.55,
+	"percentages":true,
         "otherOptions": {
-            "limit": 85
         },
-        "pieInnerRadius": 0.5
+	"tooltip":[
+		{"column":"alarmType","label":"Alarm Status"},
+		{"column":"count","label":"NSG Count"}
+	],
+        "legend":{
+            "show":true,
+            "orientation":"vertical",
+	    "legendColumn": "count",
+            "circleSize":5,
+            "labelOffset":2
+        }
     },
     "query": "aar-enterprise-geomap-donut"
 }

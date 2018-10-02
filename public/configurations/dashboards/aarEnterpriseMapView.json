@@ -4,8 +4,10 @@
     "creationDate": "07/03/2018",
     "title": "AAR Enterprise ({{enterpriseName}}) Map View",
     "visualizations": [
-        { "id": "aar-enterprise-geomap",                    "x": 0,  "y": 0, "w": 12,  "h": 30, "minW": 9, "minH": 15, "static": true},
-        { "id": "aar-enterprise-geomap-table",              "x": 0,  "y": 30, "w": 12,  "h": 15, "minW": 9, "minH": 15, "static": true}
+        { "id": "aar-enterprise-geomap",                    "x": 2,  "y": 0, "w": 10,  "h": 30, "minW": 9, "minH": 15, "static": true},
+        { "id": "aar-enterprise-geomap-table",              "x": 0,  "y": 30, "w": 12,  "h": 15, "minW": 9, "minH": 15, "static": true},
+        { "id": "aar-enterprise-geomap-donut",              "x": 0,  "y": 0, "w": 2,  "h": 22, "minW": 1, "minH": 22, "static": true},
+	{ "id": "aar-enterprise-geomap-text-notactivated",   "x": 0,  "y": 22, "w":2,   "h": 8,  "minW": 2, "minH": 7,  "static": true}
     ],
     "links": [
         {
