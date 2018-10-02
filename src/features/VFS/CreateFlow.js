@@ -195,7 +195,9 @@ class CreateFlow extends React.Component {
         const mirrors = this.buildMirrorDestinations(mirrordestinations);
         const overlaymirrordestinationsField = this.buildOverlayMirrors(mirrordestinations, overlaymirrordestinations);
 
-        const policyOptions = buildOptions(vfsPolicies);
+        const policyOptions = buildOptions(vfsPolicies, item => ({
+            text: `${item.name} - ${item.policyState}`, value: item.ID
+        }));
         if (!policyOptions || !Array.isArray(policyOptions) || protocolValue === '1') {
 
             if (vfsPolicies && vfsPolicies.isFetching) {
