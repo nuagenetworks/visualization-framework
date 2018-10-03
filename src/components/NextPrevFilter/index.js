@@ -47,8 +47,7 @@ export class NextPrevFilter extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         let filteredID = this.removeHyphens(nextProps.visualizationId);
-
-        if(this.props.context.interval !== nextProps.context.interval) {
+        if(this.props.context.duration !== nextProps.context.duration) {
             this.setState({page: 1});
             let finalContext = Object.assign({}, nextProps.context, {
                 [`${filteredID}${this.state.filterOptions.startTime}`] : nextProps.context.startTime,
@@ -68,8 +67,10 @@ export class NextPrevFilter extends React.Component {
         } = props;
 
         if(context.duration) {
-            this.setState({duration: parseInt(context.duration)});
-            this.setState({unit: context.unit});
+            this.setState({
+                duration: parseInt(context.duration, 10),
+                unit: context.unit
+            });
         }
 
     }
@@ -128,7 +129,6 @@ export class NextPrevFilter extends React.Component {
                 [`${filteredID}${this.state.filterOptions.prevStartTime}`]: prevStartTime + (this.state.unit),
                 [`${filteredID}${this.state.filterOptions.page}`] : this.state.page - 1,
             });
-
         this.props.goTo(window.location.pathname, queryParams);
     }
 
