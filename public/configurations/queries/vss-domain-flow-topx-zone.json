@@ -1,6 +1,6 @@
 {
-  "id": "vss-domain-acl-time",
-  "title": "ACL vs Time",
+  "id": "vss-domain-traffic-topx-zone",
+  "title": "Top {{direction:Source}} Zone by Count",
   "service": "elasticsearch",
   "query": {
     "index": "{{index:nuage_flow}}",
@@ -33,18 +33,18 @@
               "term": {
                 "type": "{{actionType:DENY}}"
               }
-            },
-            {
-              "replace": "optional-egress-ingress-filter"
             }
           ]
         }
       },
       "aggs": {
-        "timestamp": {
-          "date_histogram": {
-            "field": "timestamp",
-            "interval": "{{interval:1h}}"
+        "zone": {
+          "terms": {
+            "field": "nuage_metadata.{{src_dst:src}}-zonemem",
+            "size": "50",
+            "order": {
+              "SumOf": "desc"
+            }
           },
           "aggs": {
             "SumOf": {

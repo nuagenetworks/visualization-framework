@@ -20,6 +20,7 @@ export const ModalEditor = props => {
         errored,
         onDone,
     } = props;
+
     let buttons = [
         <FlatButton
             primary={true}

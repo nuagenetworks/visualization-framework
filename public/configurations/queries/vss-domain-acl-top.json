@@ -1,6 +1,6 @@
 {
-  "id": "vss-domain-acl-time",
-  "title": "ACL vs Time",
+  "id": "vss-domain-acl-top",
+  "title": "top 5 acls",
   "service": "elasticsearch",
   "query": {
     "index": "{{index:nuage_flow}}",
@@ -30,26 +30,40 @@
               }
             },
             {
-              "term": {
-                "type": "{{actionType:DENY}}"
-              }
-            },
-            {
               "replace": "optional-egress-ingress-filter"
             }
           ]
         }
       },
       "aggs": {
-        "timestamp": {
-          "date_histogram": {
-            "field": "timestamp",
-            "interval": "{{interval:1h}}"
+        "top-acls": {
+          "terms": {
+            "field": "nuage_metadata.aclId"
           },
           "aggs": {
-            "SumOf": {
-              "sum": {
-                "field": "packets"
+            "top-acl-hits": {
+              "top_hits": {
+                "sort": [
+                  {
+                    "packets": {
+                      "order": "desc",
+                      "mode": "sum"
+                    }
+                  }
+                ],
+                "_source": {
+                  "include": [
+                    "nuage_metadata.spgName",
+                    "nuage_metadata.dpgName",
+                    "nuage_metadata.service",
+                    "nuage_metadata.serviceGroup",
+                    "sourceport",
+                    "destinationport",
+                    "protocol",
+                    "type"
+                  ]
+                },
+                "size": 1
               }
             }
           }
