@@ -16,7 +16,7 @@
     "redux-mock-store": "1.2.0"
   },
   "dependencies": {
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^4.1.2",
     "cheerio": "^1.0.0-rc.2",
     "crossfilter2": "^1.4.1",
     "d3": "4.10.0",
