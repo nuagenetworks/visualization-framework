@@ -12,12 +12,52 @@
       "size": 0,
       "query": {
         "bool": {
+          "must": [
+            {
+              "range":{
+                "time_regression_submitted":{
+                  "gte":"{{startTime:now-24h}}",
+                  "lte":"{{endTime:now}}",
+                  "format":"epoch_millis"
+                }
+              }
+            }
+          ],
           "filter": {
-            "wildcard": { "version.vrs": "{{vrsVersion}}" }
+            "wildcard": { "version.vrs": "{{vrsVersion}}" },
+            "wildcard": { "version.vsc": "{{vscVersion}}" },
+            "wildcard": { "version.vsd": "{{vsdVersion}}" }
           },
-          "must_not": {
-            "term": { "result": 0 }
-          }
+          "must_not": [
+            {
+              "match_phrase": {
+                "testsuite": "Sanity"
+              }
+            },
+            {
+              "match_phrase": {
+                "testsuite": "initial"
+              }
+            },
+            {
+              "match_phrase": {
+                "testsuite": "final"
+              }
+            },
+            {
+              "match_phrase": {
+                "testsuite": "finished"
+              }
+            },
+            {
+              "match_phrase": {
+                "testcase": "no_name"
+              }
+            },
+            {
+              "term": { "result": 0 }
+            }
+          ]
         }
       },
       "_source": {
@@ -33,6 +73,15 @@
             }
           },
           "aggs": {
+            "testsuite": {
+              "terms": {
+                "field": "testsuite",
+                "size": 5,
+                "order": {
+                  "_count": "desc"
+                }
+              }
+            },
             "result": {
               "terms": {
                 "field": "result",
