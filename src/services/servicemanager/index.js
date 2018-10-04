@@ -122,7 +122,7 @@ const tabify = function (queryConfiguration, response) {
     if (!service || !service.hasOwnProperty("tabify"))
         return response;
 
-    return service.tabify(response);
+    return service.tabify(response, queryConfiguration);
 }
 
 
