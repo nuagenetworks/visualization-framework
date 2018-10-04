@@ -10,7 +10,13 @@ describe('Elastic Search service', () => {
             "fetch",
             "ping",
             "getRequestID",
-            "tabify"
+            "addSorting", 
+            "addSearching", 
+            "tabify", 
+            "ESClient", 
+            "getPageSizePath", 
+            "updatePageSize", 
+            "getNextPageQuery",
         ];
         expect(Object.keys(ElasticSearchService)).toEqual(expectedProperties)
         expect(ElasticSearchService.id).toEqual("elasticsearch")
@@ -39,38 +45,15 @@ describe('Elastic Search getRequestID', () => {
             context = {
                 enterpriseName: "Nuage Networks"
             };
-        expect(ElasticSearchService.getRequestID(query, context)).toEqual("ABC[{\"enterpriseName\":\"Nuage Networks\"}]");
+        expect(ElasticSearchService.getRequestID(query, context)).toEqual("undefined-ABC[{\"enterpriseName\":\"Nuage Networks\"}]");
     });
 
 });
 
 
 describe('Elastic Search config', () => {
-    it('should have no default host', () => {
-
-        const fakeState = {
-            ES: new Map()
-        };
-
-        delete process.env.REACT_APP_ELASTICSEARCH_HOST;
-        let config = getCurrentConfig(fakeState);
-        expect(config.host).toEqual(undefined);
-    });
-
-    it('should fetch information from the environment variable host', () => {
-        process.env.REACT_APP_ELASTICSEARCH_HOST = "https://www.google.com";
-
-        const fakeState = {
-            ES: new Map()
-        };
-
-        let config = getCurrentConfig(fakeState);
-        expect(config.host).toEqual("https://www.google.com");
-    });
 
     it('should fetch information from the specified context', () => {
-        process.env.REACT_APP_ELASTICSEARCH_HOST = "https://www.google.com";
-
         const fakeState = {
             ES: Map({
                 [ActionKeyStore.ES_HOST]: "http://eshost:9200"
@@ -79,5 +62,16 @@ describe('Elastic Search config', () => {
 
         let config = getCurrentConfig(fakeState);
         expect(config.host).toEqual("http://eshost:9200");
+    });
+
+    it('should have no default host', () => {
+
+        const fakeState = {
+            ES: new Map()
+        };
+
+        delete process.env.REACT_APP_ELASTICSEARCH_HOST;
+        let config = getCurrentConfig(fakeState);
+        expect(config.host).toEqual('http://localhost:9200');
     });
 });
