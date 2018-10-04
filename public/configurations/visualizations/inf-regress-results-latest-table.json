@@ -6,15 +6,16 @@
     "author": "Ryan Fredette",
     "data": {
         "columns": [
+            { "column": "testsuite", "label": "Test Suite"},
             { "column": "testcase", "label": "Test Case"},
-            { "column": "secondResult", "label": "",
+            { "column": "secondResult", "label": "Results",
               "colors": {
                 "0": "gray",
                 "1": "red",
                 "2": "green"
               }
             },
-            { "column": "result", "label": "",
+            { "column": "result", "label": " ",
               "colors": {
                 "0": "gray",
                 "1": "red",

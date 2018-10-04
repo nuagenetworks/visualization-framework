@@ -61,6 +61,75 @@
                     }
                 }
             ]
+        },
+        "VRS Version": {
+            "parameter": "vrsVersion",
+            "default": "*",
+            "options": [
+                {
+                    "label": "All",
+                    "value": "*",
+                    "default": true
+                },
+                {
+                    "label": "0.0",
+                    "value": "0.0/*"
+                },
+                {
+                    "label": "5.3",
+                    "value": "5.3/*"
+                },
+                {
+                    "label": "5.2",
+                    "value": "5.2/*"
+                }
+            ]
+        },
+        "VSC Version": {
+            "parameter": "vscVersion",
+            "default": "*",
+            "options": [
+                {
+                    "label": "All",
+                    "value": "*",
+                    "default": true
+                },
+                {
+                    "label": "0.0",
+                    "value": "0.0/*"
+                },
+                {
+                    "label": "5.3",
+                    "value": "5.3/*"
+                },
+                {
+                    "label": "5.2",
+                    "value": "5.2/*"
+                }
+            ]
+        },
+        "VSD Version": {
+            "parameter": "vsdVersion",
+            "default": "*",
+            "options": [
+                {
+                    "label": "All",
+                    "value": "*",
+                    "default": true
+                },
+                {
+                    "label": "0.0",
+                    "value": "0.0/*"
+                },
+                {
+                    "label": "5.3",
+                    "value": "5.3/*"
+                },
+                {
+                    "label": "5.2",
+                    "value": "5.2/*"
+                }
+            ]
         }
     }
 }
