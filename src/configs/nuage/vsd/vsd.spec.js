@@ -89,7 +89,7 @@ describe('VSDService getRequestID', () => {
 
 describe('VSDService fetch', () => {
     it('should fetch information from the default host', function (done) {
-        process.env.REACT_APP_VSD_API_ENDPOINT = "http://localhost:8001/";
+        process.env.REACT_APP_VSD_API_ENDPOINT = "https://vsd.com:8443";
 
         let configuration = {
             query: {
@@ -125,16 +125,15 @@ describe('VSDService fetch', () => {
 
         VSDService.fetch(configuration, fakeState).then(
             (results) => {
-                console.log("OKKKKKKK")
                 expect(VSDServiceTest.makeRequest).toHaveBeenCalled();
-                expect(VSDServiceTest.makeRequest).toHaveBeenCalledWith("http://localhost:8001/nuage/api/v5_0/enterprises/1234/domains", headers);
+                expect(VSDServiceTest.makeRequest).toHaveBeenCalledWith("https://vsd.com:8443/nuage/api/nuage/api/v5_0/enterprises/1234/domains", headers);
                 done();
             }
         );
     });
 
     it('should update the organization if provided', function (done) {
-        process.env.REACT_APP_VSD_API_ENDPOINT = "http://localhost:8001/";
+        process.env.REACT_APP_VSD_API_ENDPOINT = "https://vsd.com:8443";
 
         let configuration = {
             query: {
@@ -168,9 +167,8 @@ describe('VSDService fetch', () => {
 
         return VSDService.fetch(configuration, fakeState).then(
             (results) => {
-                console.log(results);
                 expect(VSDServiceTest.makeRequest).toHaveBeenCalled();
-                expect(VSDServiceTest.makeRequest).toHaveBeenCalledWith("http://localhost:8001/nuage/api/v5_0/enterprises/1234/domains", headers);
+                expect(VSDServiceTest.makeRequest).toHaveBeenCalledWith("https://vsd.com:8443/nuage/api/nuage/api/v5_0/enterprises/1234/domains", headers);
                 done()
             }
         );

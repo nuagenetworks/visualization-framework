@@ -8,8 +8,6 @@ const propTypes = {
   onInfoBoxClose: PropTypes.func,
 };
 
-Modal.setAppElement('#modalPopup');
-
 export default class InfoBox extends React.Component {
 
   constructor(props) {
@@ -19,6 +17,7 @@ export default class InfoBox extends React.Component {
       modalIsOpen: true
     };
 
+    Modal.setAppElement('#modalPopup');
   }
 
   render() {
