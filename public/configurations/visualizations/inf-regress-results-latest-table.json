@@ -8,14 +8,14 @@
         "columns": [
             { "column": "testsuite", "label": "Test Suite"},
             { "column": "testcase", "label": "Test Case"},
-            { "column": "secondResult", "label": "Results",
+            { "column": "secondResult", "label": "Previous Result",
               "colors": {
                 "0": "gray",
                 "1": "red",
                 "2": "green"
               }
             },
-            { "column": "result", "label": " ",
+            { "column": "result", "label": "Current Result",
               "colors": {
                 "0": "gray",
                 "1": "red",
