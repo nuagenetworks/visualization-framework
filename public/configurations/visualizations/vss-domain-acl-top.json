@@ -37,11 +37,11 @@
         "label": "Dest Port"
       },
       {
-        "column": "top-acl-hits.nuage_metadata.spgName",
+        "column": "top-acl-hits.nuage_metadata.src-pgmem-info.name",
         "label": "Source PG"
       },
       {
-        "column": "top-acl-hits.nuage_metadata.dpgName",
+        "column": "top-acl-hits.nuage_metadata.dst-pgmem-info.name",
         "label": "Dest PG"
       },
       {
