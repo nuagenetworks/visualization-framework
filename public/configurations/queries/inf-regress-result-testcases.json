@@ -9,11 +9,11 @@
             "size":0,
             "query": {
                 "bool": {
-                    "filter": {
-                        "wildcard": { "version.vrs": "{{vrsVersion}}" },
-                        "wildcard": { "version.vsc": "{{vscVersion}}" },
-                        "wildcard": { "version.vsd": "{{vsdVersion}}" }
-                    },
+                    "filter": [
+                        {"wildcard": { "version.vrs": "{{vrsVersion}}" }},
+                        {"wildcard": { "version.vsc": "{{vscVersion}}" }},
+                        {"wildcard": { "version.vsd": "{{vsdVersion}}" }}
+                    ],
                     "must_not": [
                         {
                             "bool": {
