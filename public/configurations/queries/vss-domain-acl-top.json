@@ -30,6 +30,11 @@
               }
             },
             {
+              "term": {
+                "type": "{{actionType:DENY}}"
+              }
+            },
+            {
               "replace": "optional-egress-ingress-filter"
             }
           ]
@@ -60,7 +65,9 @@
                     "sourceport",
                     "destinationport",
                     "protocol",
-                    "type"
+                    "type",
+                    "ICMPType",
+                    "ICMPCode"
                   ]
                 },
                 "size": 1

@@ -51,6 +51,14 @@
       {
         "column": "top-acl-hits.nuage_metadata.serviceGroup",
         "label": "ServiceGroup"
+      },
+      {
+        "column": "top-acl-hits.ICMPCode",
+        "label": "ICMP Code"
+      },
+      {
+        "column": "top-acl-hits.ICMPType",
+        "label": "ICMP Type"
       }
     ]
   },
