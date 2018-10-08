@@ -38,18 +38,30 @@
         }
       },
       "aggs": {
-        "pg": {
-          "terms": {
-            "field": "nuage_metadata.{{pgname_field:spgName}}",
-            "size": "50",
-            "order": {
-              "SumOf": "desc"
-            }
+        "source": {
+          "nested": {
+            "path": "nuage_metadata.{{pgname_field:src-pgmem-info}}"
           },
           "aggs": {
-            "SumOf": {
-              "sum": {
-                "field": "packets"
+            "pg": {
+              "terms": {
+                "field": "nuage_metadata.{{pgname_field:src-pgmem-info}}.name",
+                "size": "50",
+                "order": {
+                  "rev_nest": "desc"
+                }
+              },
+              "aggs": {
+                "rev_nest": {
+                  "reverse_nested": {},
+                  "aggs": {
+                    "SumOf": {
+                      "sum": {
+                        "field": "packets"
+                      }
+                    }
+                  }
+                }
               }
             }
           }

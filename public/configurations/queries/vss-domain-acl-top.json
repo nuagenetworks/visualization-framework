@@ -53,8 +53,8 @@
                 ],
                 "_source": {
                   "include": [
-                    "nuage_metadata.spgName",
-                    "nuage_metadata.dpgName",
+                    "nuage_metadata.src-pgmem-info.name",
+                    "nuage_metadata.dst-pgmem-info.name",
                     "nuage_metadata.service",
                     "nuage_metadata.serviceGroup",
                     "sourceport",
