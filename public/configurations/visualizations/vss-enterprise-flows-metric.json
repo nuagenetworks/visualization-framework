@@ -1,6 +1,6 @@
 {
     "id": "vss-enterprise-flows-metric",
-    "title": "# Packets (24h)",
+    "title": "# Packets",
     "query": "vss-enterprise-flows-metric",
     "graph": "VariationTextGraph",
     "data": {

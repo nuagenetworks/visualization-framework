@@ -1,6 +1,6 @@
 {
     "id": "vss-enterprise-pg-metric",
-    "title": "# PGs (24h)",
+    "title": "# PGs",
     "query": "vss-enterprise-pg-metric",
     "graph": "VariationTextGraph",
     "data": {

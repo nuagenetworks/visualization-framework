@@ -1,6 +1,6 @@
 {
     "id": "vss-enterprise-events-metric",
-    "title": "# Security Events (24h)",
+    "title": "# Security Events",
     "query": "vss-enterprise-events-metric",
     "graph": "VariationTextGraph",
     "data": {
