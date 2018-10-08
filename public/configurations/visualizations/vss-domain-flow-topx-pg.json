@@ -7,7 +7,7 @@
     "creationDate": "10/18/2016",
     "data": {
         "brush":5,
-        "yColumn": "SumOf",
+        "yColumn": "SumOf.value",
         "xColumn": "pg",
         "tooltip": [
             { "column": "pg", "label": "PG" },

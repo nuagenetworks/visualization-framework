@@ -48,14 +48,14 @@
                                 "field": "nuage_metadata.{{pgname_field:src-pgmem-info}}.name",
                                 "size": "50",
                                 "order": {
-                                    "rev_nest": "desc"
+                                    "SumOf": "desc"
                                 }
                             },
                             "aggs": {
-                                "rev_nest": {
+                                "SumOf": {
                                     "reverse_nested": {},
                                     "aggs": {
-                                        "SumOf": {
+                                        "rev_nest": {
                                             "sum": {
                                                 "field": "packets"
                                             }

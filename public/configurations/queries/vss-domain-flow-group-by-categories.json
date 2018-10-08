@@ -9,7 +9,7 @@
       "size": 0,
       "query": {
         "bool": {
-          "must": [
+          "filter": [
             {
               "bool": {
                 "must": [
@@ -34,41 +34,45 @@
                   }
                 ]
               }
-            }
-          ],
-          "must": [
-            {
-              "nested": {
-                "path": "{{source_field:nuage_metadata.src-pgmem-info}}",
-                "score_mode": "none",
-                "query": {
-                  "bool": {
-                    "must": [
-                      {
-                        "match": {
-                          "{{source_field:nuage_metadata.src-pgmem-info}}.category": "{{category_field}}"
-                        }
-                      }
-                    ]
-                  }
-                }
-              }
             },
             {
-              "nested": {
-                "path": "{{destination_field:nuage_metadata.dst-pgmem-info}}",
-                "score_mode": "none",
-                "query": {
-                  "bool": {
-                    "must": [
-                      {
-                        "match": {
-                          "{{destination_field:nuage_metadata.dst-pgmem-info}}.category": "{{category_field}}"
+              "bool": {
+                "should": [
+                  {
+                    "nested": {
+                      "path": "{{source_field:nuage_metadata.src-pgmem-info}}",
+                      "score_mode": "none",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "match": {
+                                "{{source_field:nuage_metadata.src-pgmem-info}}.category": "{{category_field}}"
+                              }
+                            }
+                          ]
                         }
                       }
-                    ]
+                    }
+                  },
+                  {
+                    "nested": {
+                      "path": "{{destination_field:nuage_metadata.dst-pgmem-info}}",
+                      "score_mode": "none",
+                      "query": {
+                        "bool": {
+                          "must": [
+                            {
+                              "match": {
+                                "{{destination_field:nuage_metadata.dst-pgmem-info}}.category": "{{category_field}}"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
                   }
-                }
+                ]
               }
             }
           ]
