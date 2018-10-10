@@ -18,6 +18,7 @@
             { "column": "numberOfOccurances", "label": "Count" },
             { "column": "errorCondition", "label": "Error Condition" }
         ],
+        "selectable":false,
         "searchBar" : false,
         "filters": [
             {
