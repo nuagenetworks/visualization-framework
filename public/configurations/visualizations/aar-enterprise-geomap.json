@@ -55,22 +55,44 @@
         },
         "filters": [
             {
-                "columnText": "Name",
+                "columnText": "NSG Name",
                 "columField": "gatewayName",
                 "type": "text"
             },
             {
-                "columnText": "Region",
+                "columnText": "NSG Region",
                 "columField": "locality",
                 "type": "text"
             },
             {
                 "columField": "bootstrapStatus",
+                "columnText":"Bootstrap Status",
                 "type": "selection"
             },
             {
                 "columField": "NSGVersion",
+                "columnText": "NSG Version",
                 "type": "selection"
+            },
+            {
+                "columField": "majorAlarmsCount",
+                "columnText": "Major Alarms Count",
+                "type": "text"
+            },
+            {
+                "columField": "criticalAlarmsCount",
+                "columnText": "Critical Alarms Count",
+                "type": "text"
+            },
+            {
+                "columField": "minorAlarmsCount",
+                "columnText": "Minor Alarms Count",
+                "type": "text"
+            },
+            {
+                "columField": "infoAlarmsCount",
+                "columnText": "Info Alarms Count",
+                "type": "text"
             }
         ],
         "links": {

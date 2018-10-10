@@ -17,5 +17,12 @@
             { "column": "infoAlarmsCount", "label": "Info Alarms"}
         ]
     },
-    "query": "aar-enterprise-geomap"
+    "query": "aar-enterprise-geomap",
+    "listeners": [{
+      "redirect": "/dashboards/aarNSG",
+      "params": {
+          "snsg": "gatewayName",
+          "nsgId": "gatewayID"
+      }
+    }]
 }

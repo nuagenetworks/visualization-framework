@@ -8,23 +8,34 @@
     "data": {
         "sliceColumn": "count",
         "labelColumn": "alarmType",
-	"colorColumn": "alarmType",
-        "pieLabelRadius":0.75,
-        "pieOuterRadius":0.95,
-        "pieInnerRadius":0.55,
-	"percentages":true,
-        "otherOptions": {
-        },
-	"tooltip":[
-		{"column":"alarmType","label":"Alarm Status"},
-		{"column":"count","label":"NSG Count"}
-	],
-        "legend":{
-            "show":true,
-            "orientation":"vertical",
-	    "legendColumn": "count",
-            "circleSize":5,
-            "labelOffset":2
+        "colorColumn": "alarmType",
+        "pieLabelRadius": 0.75,
+        "pieOuterRadius": 0.95,
+        "pieInnerRadius": 0.55,
+        "percentages": true,
+        "otherOptions": {},
+        "tooltip": [
+            {
+                "column": "alarmType",
+                "label": "Alarm Status"
+            },
+            {
+                "column": "count",
+                "label": "NSG Count"
+            }
+        ],
+        "colors":[
+            "#fec26a",
+            "#f79e99",
+            "#b3d645",            
+            "#7da3f7"
+        ],
+        "legend": {
+            "show": true,
+            "orientation": "vertical",
+            "legendColumn": "count",
+            "circleSize": 5,
+            "labelOffset": 2
         }
     },
     "query": "aar-enterprise-geomap-donut"
