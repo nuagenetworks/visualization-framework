@@ -37,11 +37,11 @@
         "label": "Dest Port"
       },
       {
-        "column": "top-acl-hits.nuage_metadata.spgName",
+        "column": "top-acl-hits.nuage_metadata.src-pgmem-info.name",
         "label": "Source PG"
       },
       {
-        "column": "top-acl-hits.nuage_metadata.dpgName",
+        "column": "top-acl-hits.nuage_metadata.dst-pgmem-info.name",
         "label": "Dest PG"
       },
       {
@@ -51,6 +51,14 @@
       {
         "column": "top-acl-hits.nuage_metadata.serviceGroup",
         "label": "ServiceGroup"
+      },
+      {
+        "column": "top-acl-hits.ICMPCode",
+        "label": "ICMP Code"
+      },
+      {
+        "column": "top-acl-hits.ICMPType",
+        "label": "ICMP Type"
       }
     ]
   },

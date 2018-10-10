@@ -112,7 +112,7 @@
           "forceOptions": {
             "ip_type": "sourceip",
             "sent_received": "sent",
-            "pgname_field": "spgName",
+            "pgname_field": "src-pgmem-info",
             "src_dst": "src"
           }
         },
@@ -122,7 +122,7 @@
           "forceOptions": {
             "ip_type": "destinationip",
             "sent_received": "received",
-            "pgname_field": "dpgName",
+            "pgname_field": "dst-pgmem-info",
             "src_dst": "dst"
           }
         }
