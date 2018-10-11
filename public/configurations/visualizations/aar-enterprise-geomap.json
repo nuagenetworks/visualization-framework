@@ -15,7 +15,6 @@
         "criticalAlarmColumn": "criticalAlarmsCount",
         "majorAlarmColumn": "majorAlarmsCount",
         "minorAlarmColumn": "minorAlarmsCount",
-        "infoAlarmColumn": "infoAlarmsCount",
         "bootstrapStatusColumn" : "bootstrapStatus",
         "NSGVersionColumn" : "NSGVersion",
 
@@ -87,11 +86,6 @@
             {
                 "columField": "minorAlarmsCount",
                 "columnText": "Minor Alarms Count",
-                "type": "text"
-            },
-            {
-                "columField": "infoAlarmsCount",
-                "columnText": "Info Alarms Count",
                 "type": "text"
             }
         ],
