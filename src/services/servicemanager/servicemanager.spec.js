@@ -16,6 +16,8 @@ describe('ServiceManager', () => {
             "register",
             "getService",
             "getRequestID",
+            "addSorting",
+            "addSearching",
             "executeScript",
             "tabify"
         ];
@@ -41,11 +43,15 @@ describe('ServiceManager Actions: fetch', () => {
                 return query.id
             },
             fetch: (query, state) => {
-                return Promise.resolve(self.expectedResults)
+                return Promise.resolve({
+                    response: self.expectedResults
+                })
             },
         };
 
-        self.store = mockStore();
+        self.store = mockStore({
+            services: Map(),
+        });
         self.configuration = {
             id: "example",
             service: self.serviceName,
@@ -75,6 +81,7 @@ describe('ServiceManager Actions: fetch', () => {
 
                  expect(actions.length).toEqual(2)
                  expect(actions[0]).toEqual({
+                     dashboard: null,
                      type: ActionTypes.SERVICE_MANAGER_DID_START_REQUEST,
                      requestID: self.configuration.id,
                  })
@@ -82,7 +89,7 @@ describe('ServiceManager Actions: fetch', () => {
                      type: ActionTypes.SERVICE_MANAGER_DID_RECEIVE_RESPONSE,
                      requestID: self.configuration.id,
                      results: self.expectedResults,
-                     forceCache: undefined,
+                     forceCache: false,
                  })
              })
     });
@@ -103,6 +110,7 @@ describe('ServiceManager Actions: fetch', () => {
 
                  expect(actions.length).toEqual(2)
                  expect(actions[0]).toEqual({
+                     dashboard: null,
                      type: ActionTypes.SERVICE_MANAGER_DID_START_REQUEST,
                      requestID: self.configuration.id,
                  })
@@ -134,7 +142,9 @@ describe('ServiceManager Actions: fetchIfNeeded', () => {
                 return query.id
             },
             fetch: (query, state) => {
-                return Promise.resolve(self.expectedResults)
+                return Promise.resolve({
+                    response: self.expectedResults
+                })
             },
         };
 
@@ -250,9 +260,11 @@ describe('ServiceManager Reducers', () => {
             requests: Map({
                 example: Map({
                     isFetching: true,
-                    error: null,
-                })
+                    dashboard: null,
+                    error: false,
+                }),
             }),
+            scrollData: Map({}),
         })
 
         expect(servicesReducer(undefined, action)).toEqual(expectedState)
@@ -276,6 +288,7 @@ describe('ServiceManager Reducers', () => {
                     results: self.expectedResults,
                 })
             }),
+            scrollData: Map({}),
         })
 
         const fullState = servicesReducer(undefined, action);
@@ -305,7 +318,8 @@ describe('ServiceManager Reducers', () => {
                     error: action.error, // WARN: ConfigurationManager uses fromJS
                     results: [], // WARN: ConfigurationManager uses fromJS
                 })
-            })
+            }),
+            scrollData: Map({}),
         })
 
         expect(servicesReducer(undefined, action)).toEqual(expectedState)
