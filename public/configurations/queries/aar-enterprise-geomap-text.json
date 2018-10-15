@@ -1,0 +1,10 @@
+{
+    "id":"aar-enterprise-geomap-text",
+    "title":"Map",
+    "service":"VSD",
+    "query":{
+        "parentResource":"enterprises",
+        "parentID":"{{enterpriseID}}",
+        "resource":"nsgatewayscounts"
+    }
+}

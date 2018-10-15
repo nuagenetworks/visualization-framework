@@ -18,7 +18,13 @@
     "yTickFormat": ".2s",
     "xLabel": "Time",
     "yLabel": "Total # ACL Hits",
-    "brushEnabled": false
+    "brushEnabled": false,
+    "legend" :{
+      "show":false
+    },
+    "tooltip":[
+      {"column":"SumOf","label":"Total ACL Hits"}
+    ]
   },
   "replace": {
     "optional-egress-ingress-filter": {

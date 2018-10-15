@@ -1,0 +1,15 @@
+{
+    "id": "aar-enterprise-geomap-text-notactivated",
+    "title": "Inactive NSGs",
+    "query": "aar-enterprise-geomap-text",
+    "graph": "SimpleTextGraph",
+    "description":"Quick View of the Critical alarms for this NSG in the VSD dashboard",
+    "showTitleBar":false,
+    "data": {
+        "borderRadius": "0",
+        "targetedColumn":"inactiveNSGCount",
+        "colors":[
+            "#808080"
+        ]
+    }
+}
