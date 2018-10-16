@@ -12,7 +12,9 @@ class SimulateAARData(object):
         self.nsg_id_prefix = defData["nsg_prefix"]
         self.nsg_count = defData["nsg_count"]
         self.app_count = defData["app_count"]
+        self.app_name_prefix = defData["app_name_prefix"]
         self.app_group_count = defData["app_group_count"]
+        self.app_group_prefix = defData["app_group_prefix"]
         # self.src_vport_count = defData["src_vport_count"]
         self.vport_count = defData["vport_count"]
         # self.dest_vport_count = defData["dest_vport_count"]
@@ -32,17 +34,30 @@ class SimulateAARData(object):
         blockThree = random.randrange(1, 255, 1)
         return str(blockOne) + "." + str(blockTwo) + "." + str(blockThree) + "."
 
-    def getNSGIds(self, nsg_name):
+    def getNSGIds(self, nsg_name, nsgNameList):
         i = 0
         nsgids = []
-        while i < self.nsg_count:
-            #nsg_subnet_cidr = self.getRandomCidrPrefix()
-            nsg_subnet_cidr = self.nsg_id_prefix
-            nsg_natt_cidr = self.natt_ip_prefix
-            nsg_natt_port = self.natt_port
-            #nsg_last_octet = str(randint(2, 254))
-            nsg_last_octet = str(i + 1)
-            nsg_ip = nsg_subnet_cidr + nsg_last_octet
+        if nsgNameList:
+          nsgCount = len(nsgNameList)
+        else:
+          nsgCount = self.nsg_count
+        while i < nsgCount:
+          #nsg_subnet_cidr = self.getRandomCidrPrefix()
+          nsg_subnet_cidr = self.nsg_id_prefix
+          nsg_natt_cidr = self.natt_ip_prefix
+          nsg_natt_port = self.natt_port
+          #nsg_last_octet = str(randint(2, 254))
+          nsg_last_octet = str(i + 1)
+          nsg_ip = nsg_subnet_cidr + nsg_last_octet
+          if nsgNameList:
+            nsg = {
+                "nsg_subnet": nsg_subnet_cidr,
+                "nsg_id": nsg_ip,
+                "nsg_name": nsgNameList[i],
+                "nsg_natt_ip":nsg_natt_cidr + nsg_last_octet,
+                "nsg_natt_port":nsg_natt_port
+            }
+          else:
             nsg = {
                 "nsg_subnet": nsg_subnet_cidr,
                 "nsg_id": nsg_ip,
@@ -50,73 +65,92 @@ class SimulateAARData(object):
                 "nsg_natt_ip":nsg_natt_cidr + nsg_last_octet,
                 "nsg_natt_port":nsg_natt_port
             }
-            nsgids.append(nsg)
-            i += 1
+          nsgids.append(nsg)
+          i += 1
         return nsgids
 
     def getL4class(self):
         l4class = ["TCP", "UDP"]
         return l4class
 
-    def getAppIds_old(self):
+    def getAppIds(self, slaApps):
         i = 0
         appids = []
-        while i < self.app_count:
-            app_id = str(uuid.uuid4())
-            appids.append(app_id)
-            i += 1
-        return appids
-
-    def getAppIds(self):
-        app_prefix = "myApp-"
-        i = 0
-        appids = []
+        if slaApps:
+          app_number = len(slaApps)
+        else:
+          app_number = self.app_count
         app_id = str(uuid.uuid4())
         app = {
             "app_id": app_id,
             "app_name": "Default Application"
         }
         appids.append(app.copy())
-        while i < self.app_count:
+        while i < app_number:
             app_id = str(uuid.uuid4())
-            app = {
-                "app_id": app_id,
-                "app_name": app_prefix + str(i)
-            }
+            if slaApps:
+              app = {
+                  "app_id": app_id,
+                  "app_name": slaApps[i]
+              }
+            else:
+              app = {
+                  "app_id": app_id,
+                  "app_name": self.app_name_prefix + str(i)
+              }
+            #print app
             appids.append(app.copy())
             i += 1
 
-
         return appids
 
-    def getOutSlaApps(self):
-        apps = random.sample(range(0,self.app_count),self.out_sla_app_count)
-        outslas = ['myApp-%d'%(app) for app in apps]
+    def getOutSlaApps(self, slaApps):
+        if slaApps:
+          outslas = []
+          apps = random.sample(range(0,len(slaApps)),self.out_sla_app_count)
+          for app in apps:
+            outsla_app = slaApps[app]
+            outslas.append(outsla_app)
+        else:
+          apps = random.sample(range(0,self.app_count),self.out_sla_app_count)
+          outslas = ['myApp-%d'%(app) for app in apps]
         return outslas
 
     # To simplify each appgroup will contain one application
-    def getAppGroupIds(self, appids):
+    def getAppGroupIds(self, appids, slaAppGrps):
         i = 0
+        if slaAppGrps:
+          app_grp_number = len(slaAppGrps)
+        else:
+          app_grp_number = self.app_group_count
         appGrps = []
-        appGrp_prefix = "myAG-"
-        while i < self.app_group_count:
+        # trying with all apps in every group
+        applist = []
+        applist.extend(appids[i+1:])
+        while i < app_grp_number:
             app_group_id = str(uuid.uuid4())
             #app_count = randint(1, self.app_count - 1)
-            cnt = 0
-            applist = []
-            applist.append(appids[i])
-            if i==self.app_group_count-1:
-                applist.extend(appids[i+1:])
+            #cnt = 0
+            #applist = []
+            #applist.append(appids[i])
+            #if i==app_grp_number-1:
+            #    applist.extend(appids[i+1:])
             #while cnt < app_count:
             #   app_index = random.randrange(0, len(appids) - 1, 1)
             #   applist.append(appids[app_index])
             #   cnt += 1
-
-            app_grp = {
-                "appgrp_id": app_group_id,
-                "app_list": applist,
-                "appgrp_name": appGrp_prefix + str(i)
-            }
+            if slaAppGrps:
+              app_grp = {
+                  "appgrp_id": app_group_id,
+                  "app_list": applist,
+                  "appgrp_name": slaAppGrps[i]
+              }            
+            else:
+              app_grp = {
+                  "appgrp_id": app_group_id,
+                  "app_list": applist,
+                  "appgrp_name": self.app_group_prefix + str(i)
+              }
             appGrps.append(app_grp.copy())
             i += 1
         return appGrps
@@ -151,7 +185,8 @@ class SimulateAARData(object):
         return npmGrps
 
     def getPerfMons(self):
-        servClasses = ["A", "B", "C", "D", "E", "F", "G", "H"]
+        # servClasses = ["A", "B", "C", "D", "E", "F", "G", "H"]
+        servClasses = ["H"]
         probe_intervals = [1.0, 10.0]
         probe_pkts = [1.0, 10.0]
         i = 0
@@ -202,14 +237,21 @@ class SimulateAARData(object):
 
         return nsg_vport_hash
 
-    def getDomainNames(self, domPrefix):
-        i = 1
+    def getDomainNames(self, domPrefix, domainNameList):
+        i = 0
         domainNames = []
+        if domainNameList:
+          domain_number = len(domainNameList)
+        else:
+          domain_number = self.domain_count
         #domPrefix = "Domain"
-        while i <= self.domain_count:
+        while i < domain_number:
+          if domainNameList:
+            domName = domainNameList[i]
+          else:
             domName = domPrefix + str(i)
-            domainNames.append(domName)
-            i += 1
+          domainNames.append(domName)
+          i += 1
         return domainNames
 
     def getDomData(self, domName, nsgs):
@@ -221,13 +263,13 @@ class SimulateAARData(object):
         return domData
 
     def getSrcUplink(self):
-        # srcUplink = ["primary1", "primary2", "secondary1", "secondary2"]
-        srcUplink = ["primary1", "secondary2"]
+        # srcUplink = ["primary1", "secondary2"]
+        srcUplink = ["port1","port2"]
         return srcUplink
 
     def getDestuplink(self):
-        # destUplink = ["primary1", "primary2", "secondary1", "secondary2"]
-        destUplink = ["primary1", "secondary2"]
+        # destUplink = ["primary1", "secondary2"]
+        destUplink = ["port1","port2"]
         return destUplink
 
 def json_serial(obj):
@@ -281,6 +323,7 @@ class SimulateFlowStats(object):
         self.perf_mons = flowData["perf_mons"]
         self.simData = simData
         self.hasswitchedpath = ["false", "true"]
+        self.underlayName = flowData["underlayName"]
 
     def create_pre_defined_flows(self, **kwargs):
         appgrpids = kwargs["appgrpids"]
@@ -290,21 +333,26 @@ class SimulateFlowStats(object):
         nsgs = kwargs["nsgs"]
         simData = kwargs["simData"]
         flows = []
+        num_nsgs = len(nsgs)
         for dom in domains:
             domData = simData.getDomData(dom, nsgs)
             vporthash = domData.get("vport_hash")
             for nsg_ind, nsgData in enumerate(nsgs):
                 src_nsgid = nsgData["nsg_id"]
                 svports = vporthash.get(src_nsgid)
-                # dnsg = random.randrange(0, len(nsgs) - 1, 1)
-                # dest_nsgData = nsgs[dnsg]
-                # dest_nsgid = dest_nsgData["nsg_id"]
-                # dvports = vporthash.get(dest_nsgid)
+                dnsg = random.randrange(0, num_nsgs)
+                dest_nsgData = nsgs[dnsg]
+                while dest_nsgData["nsg_id"] == src_nsgid:
+                  dnsg = random.randrange(0, num_nsgs)
+                  dest_nsgData = nsgs[dnsg]
+                dest_nsgid = dest_nsgData["nsg_id"]
+                dvports = vporthash.get(dest_nsgid)
 
                 for index, svport in enumerate(svports):
                     dindex = index + 1
                     while dindex < len(svports):
-                        dvport = svports[dindex]
+                        # dvport = svports[dindex]
+                        dvport = dvports[dindex]
                         app_grp_cnt = 0
                         while app_grp_cnt < len(appgrpids):
                             #app_index = random.randrange(0, len(appgrpids) - 1, 1)
@@ -337,7 +385,7 @@ class SimulateFlowStats(object):
         return flows
 
 
-    def generate_flow_stats(self, startTime, endTime,es_chunk_size):
+    def generate_flow_stats(self, startTime, endTime, avgSlaMinMax, es_chunk_size):
         pre_flows = self.create_pre_defined_flows(appgrpids=self.appgrps, l7s=self.l7s,
                                          protos=self.protos,
                                          domains=self.domains, nsgs=self.nsgs,
@@ -348,6 +396,9 @@ class SimulateFlowStats(object):
         sla_prob_new = 0.6
         write_data = []
         chunk_size = es_chunk_size
+        bytesMin = float(avgSlaMinMax["min_traffic_bytes"])
+        bytesMax = float(avgSlaMinMax["max_traffic_bytes"])
+        underlayName = self.underlayName
         with open('log/flowstats_new.log', 'w') as flowstats:
             timestamp = startTime
             t_increment = 0
@@ -362,12 +413,15 @@ class SimulateFlowStats(object):
                     dom = s_vport["domain"]
                     src_nsgid = s_vport["nsg_id"]
                     src_nsgname = s_vport["nsg_name"]
+                    # print i,src_nsgname
                     src_vportId = s_vport["vport_id"]
                     src_vportName = s_vport["vport_name"]
                     src_ip = s_vport["vport_ip"]
                     src_port = s_vport["port"]
                     dest_ip = d_vport["vport_ip"]
                     dest_port = d_vport["port"]
+                    dest_nsgid = d_vport["nsg_id"]
+                    dest_nsgname = d_vport["nsg_name"]
                     proto = flow_entry["Proto"]
                     srcUp = randint(0, 1)
                     destUp = randint(0, 1)
@@ -376,17 +430,17 @@ class SimulateFlowStats(object):
                     appname = flow_entry["app_name"]
                     appgrpid = flow_entry["app_grp"]
                     appgrpname = flow_entry["app_grp_name"]
-                    # appgrpid = flow_entry["app_grp"]
                     if self.l7s[l7] in l7_to_in_bytes.keys():
                         inbytes = l7_to_in_bytes.get(self.l7s[l7])
                     else:
-                        inbytes = randint(100, 4048)
+                        inbytes = randint(bytesMin, bytesMax)
                     if self.l7s[l7] in l7_to_in_pkts.keys():
                         inpkts = l7_to_in_pkts.get(self.l7s[l7])
                     else:
-                        inpkts = randint(0, 10)
+                        inpkts = randint(1, 1000)
                     ingressMB = float(inbytes) / 1048576
-                    underlayId = random.randrange(0, 10)
+                    underlayId = 1
+                    # underlayId = random.randrange(0, 10)
                     if self.slastatus[sla_status_ts] == "OutSla":
                         if appname in self.outslaApps:
                             flow_entry["timestamp"] = timestamp
@@ -431,7 +485,7 @@ class SimulateFlowStats(object):
 
                     if not ingress_prob:
                         flow_record["EgressBytes"] = inbytes
-                        flow_record["EgressMB"] = float(inbytes) / 1048576  # TODO: What is this number ?
+                        flow_record["EgressMB"] = ingressMB
                         flow_record["EgressPackets"] = inpkts
                     else:
                         flow_record["EgressBytes"] = 0
@@ -442,13 +496,15 @@ class SimulateFlowStats(object):
                     flow_record["TotalMB"] = float(flow_record["TotalBytesCount"]) / 1048576
 
                     flow_record["TotalPacketsCount"] = inpkts + inpkts
-                    flow_record["DstNSG"] = src_nsgid
-                    flow_record["DestinationNSG"] = src_nsgname
+                    flow_record["DstNSG"] = dest_nsgid
+                    flow_record["DestinationNSG"] = dest_nsgname
                     flow_record["SlaStatus"] = self.slastatus[sla_status]
                     flow_record["HasSwitchedPaths"] = self.hasswitchedpath[sla_status]
                     flow_record["L7ClassEnhanced"] = self.l7s[l7]
                     flow_record["UnderlayID"] = underlayId
-                    flow_record["UnderlayName"] = "Underlay"+str(underlayId)
+                    #flow_record["UnderlayName"] = "Underlay"+str(underlayId)
+                    if underlayName:
+                      flow_record["UnderlayName"] = underlayName
                     json.dump(flow_record, flowstats, default=json_serial)
                     flowstats.write("\n")
                     index_name = "nuage_dpi_flowstats" + '_' + self.es_index_prefix
@@ -481,14 +537,22 @@ class SimulateProbeStats(object):
         self.npm_grps = flowData["npm_grps"]
         self.contro_states = ["Null", "Connecting", "Up", "Down", "Started"]
         self.duc_grps = flowData["duc_grps"]
+        self.underlayName = flowData["underlayName"]
 
-    def generate_probe_stats(self, startTime, endTime,es_chunk_size):
+    def generate_probe_stats(self, startTime, endTime,avgSlaMinMax,es_chunk_size):
         nsgs = self.nsgs
-        # app_grps = self.appgrps
+        apm_grps = self.appgrps
         srcuplinks = self.srcUplinks
         destuplinks = self.destUplinks
         domains = self.domains
         npm_grps = self.npm_grps
+        avgLatMin = float(avgSlaMinMax["avg_latency_min"])
+        avgLatMax = float(avgSlaMinMax["avg_latency_max"])
+        avgJitMin = float(avgSlaMinMax["avg_jitter_min"])
+        avgJitMax = float(avgSlaMinMax["avg_jitter_max"])
+        avgPktlssMin = float(avgSlaMinMax["avg_pktloss_min"])
+        avgPktlssMax = float(avgSlaMinMax["avg_pktloss_max"])
+        underlayName = self.underlayName
         probe_cnt = 0
         firstTS = True
         control_down_prob = 0.005
@@ -513,11 +577,12 @@ class SimulateProbeStats(object):
                         destUp = randint(0, 1)
                         domain = randint(0, len(domains) - 1)
                         npm_grp = random.choice(npm_grps)
+                        apm_grp = random.choice(apm_grps)
                         duc_grp = random.choice(self.duc_grps)
                         perf_mon = npm_grp["perf_monitor"]
-                        avg_latency = random.uniform(0.01, 1000)
-                        avg_jitter = random.uniform(0.01, 100)
-                        avg_pktloss = random.uniform(0.00, 100)
+                        avg_latency = random.uniform(avgLatMin, avgLatMax)
+                        avg_jitter = random.uniform(avgJitMin, avgJitMax)
+                        avg_pktloss = random.uniform(avgPktlssMin, avgPktlssMax)
                         probe_record["timestamp"] = long(timestamp)
                         probe_record["SrcNSG"] = src_nsg["nsg_id"]
                         probe_record["SourceNSG"] = src_nsg["nsg_name"]
@@ -531,6 +596,8 @@ class SimulateProbeStats(object):
                         probe_record["MonitorPayload"] = perf_mon["monitor_payload"]
                         probe_record["MonitorProbeInterval"] = perf_mon["probe_interval"]
                         probe_record["MonitorProbeNoOfPackets"] = perf_mon["probe_num_pkts"]
+                        probe_record["APMGroup"] = apm_grp["appgrp_name"]
+                        probe_record["Application"] = "VNS_1537815108748_super app"
                         probe_record["AvgDelay"] = float(avg_latency)
                         probe_record["AvgJitter"] = float(avg_jitter)
                         probe_record["AvgPktLoss"] = float(avg_pktloss)
@@ -540,10 +607,12 @@ class SimulateProbeStats(object):
                         probe_record["Domain"] = domains[domain]
                         probe_record["EnterpriseName"] = self.def_ent_name
                         probe_record["ControlSessionState"] = self.contro_states[0]
-                        underlayId = random.randrange(0, 10)
+                        underlayId = 1
+                        # underlayId = random.randrange(0, 10)
                         probe_record["UnderlayID"] = underlayId
-                        probe_record["UnderlayName"] = "Underlay"+str(
-                            underlayId)
+                        # probe_record["UnderlayName"] = "Underlay"+str(underlayId)
+                        if underlayName:
+                          probe_record["UnderlayName"] = underlayName
                         probe_record["DUCGroupID"] = duc_grp["duc_id"]
                         probe_record["DUCGroup"] = duc_grp["duc_name"]
 
@@ -798,14 +867,19 @@ class SimulateNATTStats(object):
 
 def main():
     #  Load the configuration file
-    config = ConfigParser.ConfigParser()
+    config = ConfigParser.SafeConfigParser()
     config.read("config.ini")
     defData = {}
     defData["nsg_count"] = config.getint('default', 'nsg_count')
     defData["nsg_prefix"] = config.get('default', 'nsg_prefix')
     defData["nsg_name"] = config.get('default', 'nsg_name_prefix')
+    try:
+      nsgNameList = json.loads(config.get('network_names', 'nsg_name_list'))
+    except: nsgNameList = 0
     defData["app_count"] = config.getint('default', 'app_count')
+    defData["app_name_prefix"] = config.get('default', 'app_name_prefix')
     defData["app_group_count"] = config.getint('default', 'app_group_count')
+    defData["app_group_prefix"] = config.get('default', 'app_group_prefix')
     defData["vport_count"] = config.getint('default', 'vport_count')
     defData["src_ip_prefix"] = config.get('default', 'src_ip_prefix')
     defData["dest_ip_prefix"] = config.get('default', 'dest_ip_prefix')
@@ -813,39 +887,47 @@ def main():
     defData["natt_port"] = config.get('default', 'natt_port')
     defData["domain_count"] = config.getint('default', 'domain_count')
     defData["domain_name"] = config.get('default', 'domain_name_prefix')
+    try:
+      domainNameList = json.loads(config.get('network_names', 'domain_name_list'))
+    except: domainNameList = 0
     defData["npm_count"] = config.getint('default', 'npm_count')
     defData["perf_mon_count"] = config.getint('default', 'perf_mon_count')
-    #print config.getint('default', 'duc_count')
     defData["duc_count"] = config.getint('default', 'duc_count')
-    #print defData["duc_count"]
     defData["out_sla_app_count"] = config.getint('default', 'out_sla_apps')
-
+    underlayName = config.get('default', 'underlay_name')
     def_ent_name = config.get('default', 'def_ent_name')
     es_server = config.get('default', 'es_server')
     es_chunk_size = config.getint('default','es_chunk_size')
 
-    startTime = float(int(time.time())) * 1000 - (24 * 60 * 60 * 1000)
+    start_time_hours_past = config.getint('default', 'start_time_hours_past')
+    startTime = float(int(time.time())) * 1000 - (start_time_hours_past * 60 * 60 * 1000)
     endTime = float(int(time.time()))*1000
     es_index_prefix = (datetime.datetime.fromtimestamp(startTime/1000)).strftime('%Y_%m_%d')
+    
+    avgSlaMinMax = dict(config.items('avg_sla_min_max'))
 
     simData = SimulateAARData(defData)
     es = Elasticsearch(es_server)
 
-
-    domains = simData.getDomainNames(defData["domain_name"])
+    domains = simData.getDomainNames(defData["domain_name"], domainNameList)
     protos = simData.getProto()
     srcuplinks = simData.getSrcUplink()
     destuplinks = simData.getDestuplink()
-    l7s = json.loads(config.get('app_list', 'l7class_list'))
-    appids = simData.getAppIds()
-    appgrpids = simData.getAppGroupIds(appids)
-    nsgs = simData.getNSGIds(defData["nsg_name"])
+    l7s = json.loads(config.get('app_lists', 'l7class_list'))
+    try:
+      slaApps = json.loads(config.get('app_lists', 'sla_apps'))
+    except: slaApps = 0
+    try:
+      slaAppGrps = json.loads(config.get('app_lists', 'sla_app_grps'))
+    except: slaAppGrps = 0
+    appids = simData.getAppIds(slaApps)
+    appgrpids = simData.getAppGroupIds(appids, slaAppGrps)
+    nsgs = simData.getNSGIds(defData["nsg_name"], nsgNameList)
     perf_mons = simData.getPerfMons()
     npm_grps = simData.getNPMGrps(perf_mons)
 
     ducgrpids = simData.getDucGrpIds()
-    outslaApps = simData.getOutSlaApps()
-
+    outslaApps = simData.getOutSlaApps(slaApps)
 
     flowData = {
         "nsgs": nsgs,
@@ -861,14 +943,14 @@ def main():
         "protos": protos,
         "l7s": l7s,
         "outslaApps": outslaApps,
-        "perf_mons": perf_mons
+        "perf_mons": perf_mons,
+        "underlayName": underlayName
     }
-
     flow_stats = SimulateFlowStats(flowData, simData)
-    sla_flows = flow_stats.generate_flow_stats(startTime, endTime,es_chunk_size)
+    sla_flows = flow_stats.generate_flow_stats(startTime, endTime, avgSlaMinMax ,es_chunk_size)
 
     probe_stats = SimulateProbeStats(flowData)
-    probe_stats.generate_probe_stats(startTime, endTime,es_chunk_size)
+    probe_stats.generate_probe_stats(startTime, endTime, avgSlaMinMax, es_chunk_size)
 
     sla_stats = SimulateSLAStats(flowData)
     sla_stats.generate_sla_stats(sla_flows,es_chunk_size)
