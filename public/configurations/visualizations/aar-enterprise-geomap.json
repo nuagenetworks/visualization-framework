@@ -10,7 +10,7 @@
         "latitudeColumn": "latitude",
         "longitudeColumn": "longitude",
         "nameColumn": "gatewayName",
-        "localityColumn": "address",
+        "localityColumn": "locality",
         "idColumn": "gatewayID",
         "criticalAlarmColumn": "criticalAlarmsCount",
         "majorAlarmColumn": "majorAlarmsCount",
@@ -23,32 +23,55 @@
             "defaultUrgency":"BLUE",
             "criteria": [
                 {
-                    "icon": "nsGatewayYellow",
+                    "icon": "nsGatewayGrey",
                     "fields": {
                         "bootstrapStatus": "INACTIVE"
                     },
-                    "urgency":"YELLOW"
+                    "urgency":"GREY"
                 },
                 {
-                    "icon": "nsGatewayYellow",
+                    "icon": "nsGatewayGrey",
                     "fields": {
                         "bootstrapStatus": "NOTIFICATION_APP_REQ_SENT"
                     },
-                    "urgency":"YELLOW"
+                    "urgency":"GREY"
                 },
                 {
-                    "icon": "nsGatewayYellow",
+                    "icon": "nsGatewayGrey",
                     "fields": {
                         "bootstrapStatus": "NOTIFICATION_APP_REQ_ACK"
                     },
-                    "urgency":"YELLOW"
+                    "urgency":"GREY"
+                },
+                {
+                    "icon": "nsGatewayGrey",
+                    "fields": {
+                        "bootstrapStatus": "CERTIFICATE_SIGNED"
+                    },
+                    "urgency":"GREY"
+                },
+                {
+                    "icon": "nsGatewayBlue",
+                    "fields": {
+                        "bootstrapStatus": "ACTIVE",
+                        "criticalAlarmsCount":0,
+                        "majorAlarmsCount":0
+                    }
                 },
                 {
                     "icon": "nsGatewayYellow",
                     "fields": {
-                        "bootstrapStatus": "CERTIFICATE_SIGNED"
+                        "bootstrapStatus": "ACTIVE",
+                        "criticalAlarmsCount":0
                     },
                     "urgency":"YELLOW"
+                },
+                {
+                    "icon": "nsGatewayRed",
+                    "fields": {
+                        "bootstrapStatus": "ACTIVE"                        
+                    },
+                    "urgency":"RED"
                 }
             ]
         },
