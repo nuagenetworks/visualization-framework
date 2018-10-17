@@ -15,6 +15,7 @@ import FiltersToolBar from "../FiltersToolBar";
 import NextPrevFilter from "../NextPrevFilter";
 import { CardOverlay } from "../CardOverlay";
 import { Card, CardText } from 'material-ui/Card';
+import Script from "../../components/Script"
 
 import {CSVLink} from 'react-csv';
 import * as d3 from "d3";
@@ -339,6 +340,7 @@ class VisualizationView extends React.Component {
               scrollData={scrollData} //Specific for table component
               updateScroll={this.updateScrollData.bind(this)}
               googleMapsAPIKey={googleMapsAPIKey}
+              Script={Script}
             />
         )
     }
