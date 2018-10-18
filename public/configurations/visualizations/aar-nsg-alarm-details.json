@@ -5,7 +5,7 @@
     "description": "Shows all alarms as present on VSD for NSG {{snsg}}",
     "author": "Bharat Mukheja",
     "creationDate": "07/13/2018",
-    "query": "aar-nsg-alarm-details",
+    "query": { "data": { "name": "aar-nsg-alarm-details", "scroll": true} },
     "data": {
         "hidePagination":true,
         "limit":25,
