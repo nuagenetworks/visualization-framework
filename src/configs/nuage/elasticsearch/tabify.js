@@ -162,6 +162,14 @@ function extractTree(buckets, stack) {
                 key = stack[stack.length - 2]
             }
 
+            if (typeof value === 'object') {
+                if("value" in value){
+                    value = value.value;
+                } else {
+                    value = collectBucket(value, [...stack, key]);
+                }
+            }
+
             tree[key] = value;
 
             return tree;

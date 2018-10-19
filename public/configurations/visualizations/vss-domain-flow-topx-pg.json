@@ -7,11 +7,11 @@
     "creationDate": "10/18/2016",
     "data": {
         "brush":5,
-        "yColumn": "SumOf",
+        "yColumn": "rev_nest",
         "xColumn": "pg",
         "tooltip": [
             { "column": "pg", "label": "PG" },
-            { "column": "SumOf", "label": "Packets", "format": ",.1f"}
+            { "column": "rev_nest", "label": "Packets", "format": ",.1f"}
         ],
         "yTickGrid": true,
         "xTickGrid": false,
