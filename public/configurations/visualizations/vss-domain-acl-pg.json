@@ -6,12 +6,12 @@
     "author": "Ronak Shah",
     "creationDate": "10/18/2016",
     "data": {
-        "xColumn": "SumOf",
+        "xColumn": "rev_nest",
         "yColumn": "pg",
         "orientation": "horizontal",
         "tooltip": [
             { "column": "pg", "label": "PG" },
-            { "column": "SumOf", "label": "ACL Hits", "format": ",.1f"}
+            { "column": "rev_nest", "label": "ACL Hits", "format": ",.1f"}
         ],
         "xTickGrid": true,
         "yTickGrid": false,
