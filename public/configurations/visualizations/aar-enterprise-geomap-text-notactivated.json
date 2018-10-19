@@ -1,15 +1,30 @@
 {
     "id": "aar-enterprise-geomap-text-notactivated",
-    "title": "Inactive NSGs",
+    "title": "NSGs Health",
     "query": "aar-enterprise-geomap-text",
-    "graph": "SimpleTextGraph",
+    "graph": "MultiColumnStatusTextGraph",
     "description":"Quick View of the Critical alarms for this NSG in the VSD dashboard",
     "showTitleBar":false,
     "data": {
-        "borderRadius": "0",
-        "targetedColumn":"inactiveNSGCount",
+        "targetedColumns": ["alarmedNSGCount.critical", "alarmedNSGCount.major", "alarmedNSGCount.healthy", "inactiveNSGCount"],
         "colors":[
-            "#808080"
-        ]
+            "#D9070A",
+            "#FFBF02",
+            "#62AC00",
+            "#B5B5B5"
+        ],
+        "texts": [
+            "NSGs with Critical Alarms",
+            "NSGs with Major Alarms",
+            "Healthy NSGs",
+            "Inactive NSGs"
+        ],
+        "margin": {
+            "top": "15px",
+            "bottom": "0",
+            "left": "10px",
+            "right": "10px"
+        },
+        "disableTitle": true
     }
 }
