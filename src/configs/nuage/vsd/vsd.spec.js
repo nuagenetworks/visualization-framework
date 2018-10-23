@@ -27,7 +27,8 @@ describe('VSD service', () => {
             "updatePageSize", 
             "getNextPageQuery", 
             "addSorting", 
-            "addSearching"
+            "addSearching",
+            "tabify",
         ];
         expect(Object.keys(VSDService)).toEqual(expectedProperties)
         expect(VSDService.id).toEqual("VSD")

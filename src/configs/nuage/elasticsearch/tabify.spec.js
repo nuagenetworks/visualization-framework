@@ -88,7 +88,7 @@ describe('ElasticSearch', () => {
 
 
     it('should tabify list of single object', () => {
-        const response =   {
+        const response = {
             "took": 6,
             "timed_out": false,
             "_shards": {
@@ -144,7 +144,7 @@ describe('ElasticSearch', () => {
     });
 
     it('should tabify a weird thing', () => {
-        const response =   {
+        const response = {
             "took": 12,
             "timed_out": false,
             "_shards": {
@@ -199,7 +199,7 @@ describe('ElasticSearch', () => {
         }
 
         const expectedResults = [
-            {"value": 2158541661}
+            { "value": 2158541661 }
         ]
 
         expect(tabify(response)).toEqual(expectedResults);
@@ -241,7 +241,7 @@ describe('ElasticSearch', () => {
     });
 
     it('should tabify an object', () => {
-        const response =   {
+        const response = {
             "took": 4,
             "timed_out": false,
             "_shards": {
@@ -299,175 +299,157 @@ describe('ElasticSearch', () => {
 
     it('should tabify hits within aggregation', () => {
         const response = {
-          "took": 13628,
-          "timed_out": false,
-          "_shards": {
-            "total": 5,
-            "successful": 5,
-            "failed": 0
-          },
-          "hits": {
-            "total": 10080000,
-            "max_score": 0,
-            "hits": []
-          },
-          "aggregations": {
-            "2": {
-              "buckets": {
-                "Enterprise": {
-                  "3": {
+            "took": 13628,
+            "timed_out": false,
+            "_shards": {
+                "total": 5,
+                "successful": 5,
+                "failed": 0
+            },
+            "hits": {
+                "total": 10080000,
+                "max_score": 0,
+                "hits": []
+            },
+            "aggregations": {
+                "2": {
                     "buckets": {
-                      "Domain": {
-                        "doc_count": 2880000,
-                        "top-acls": {
-                          "doc_count_error_upper_bound": 4557,
-                          "sum_other_doc_count": 1404000,
-                          "buckets": [
-                            {
-                              "key": "55cd911d-aa9b-4647-b4dc-68a63122aa7c",
-                              "doc_count": 10080,
-                              "top-acl-hits": {
-                                "hits": {
-                                  "total": 10080,
-                                  "max_score": null,
-                                  "hits": [
-                                    {
-                                      "_index": "nuage_flow",
-                                      "_type": "nuage_doc_type",
-                                      "_id": "AVeZZov_c3SvEs9LIN_2",
-                                      "_score": null,
-                                      "_source": {
-                                        "destinationport": 3,
-                                        "sourceport": 5,
-                                        "protocol": "TCP",
-                                        "nuage_metadata": {
-                                          "dpgName": "PG15",
-                                          "spgName": "PG9"
+                        "Enterprise": {
+                            "3": {
+                                "buckets": {
+                                    "Domain": {
+                                        "doc_count": 2880000,
+                                        "top-acls": {
+                                            "doc_count_error_upper_bound": 4557,
+                                            "sum_other_doc_count": 1404000,
+                                            "buckets": [
+                                                {
+                                                    "key": "55cd911d-aa9b-4647-b4dc-68a63122aa7c",
+                                                    "doc_count": 10080,
+                                                    "top-acl-hits": {
+                                                        "hits": {
+                                                            "total": 10080,
+                                                            "max_score": null,
+                                                            "hits": [
+                                                                {
+                                                                    "_index": "nuage_flow",
+                                                                    "_type": "nuage_doc_type",
+                                                                    "_id": "AVeZZov_c3SvEs9LIN_2",
+                                                                    "_score": null,
+                                                                    "_source": {
+                                                                        "destinationport": 3,
+                                                                        "sourceport": 5,
+                                                                        "protocol": "TCP",
+                                                                        "nuage_metadata": {
+                                                                            "dpgName": "PG15",
+                                                                            "spgName": "PG9"
+                                                                        }
+                                                                    },
+                                                                    "sort": [
+                                                                        1000
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "key": "ba6ee261-3aa1-439f-be90-102136300472",
+                                                    "doc_count": 7200,
+                                                    "top-acl-hits": {
+                                                        "hits": {
+                                                            "total": 7200,
+                                                            "max_score": null,
+                                                            "hits": [
+                                                                {
+                                                                    "_index": "nuage_flow",
+                                                                    "_type": "nuage_doc_type",
+                                                                    "_id": "AVeZZfnvc3SvEs9LIA9v",
+                                                                    "_score": null,
+                                                                    "_source": {
+                                                                        "destinationport": 1,
+                                                                        "sourceport": 4,
+                                                                        "protocol": "UDP",
+                                                                        "nuage_metadata": {
+                                                                            "dpgName": "PG15",
+                                                                            "spgName": "PG18"
+                                                                        }
+                                                                    },
+                                                                    "sort": [
+                                                                        1000
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "key": "fd4ba772-608c-4ea2-84cc-701214385856",
+                                                    "doc_count": 7200,
+                                                    "top-acl-hits": {
+                                                        "hits": {
+                                                            "total": 7200,
+                                                            "max_score": null,
+                                                            "hits": [
+                                                                {
+                                                                    "_index": "nuage_flow",
+                                                                    "_type": "nuage_doc_type",
+                                                                    "_id": "AVeZXy8tc3SvEs9LFwT9",
+                                                                    "_score": null,
+                                                                    "_source": {
+                                                                        "destinationport": 3,
+                                                                        "sourceport": 3,
+                                                                        "protocol": "TCP",
+                                                                        "nuage_metadata": {
+                                                                            "dpgName": "PG8",
+                                                                            "spgName": "PG9"
+                                                                        }
+                                                                    },
+                                                                    "sort": [
+                                                                        1000
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            ]
                                         }
-                                      },
-                                      "sort": [
-                                        1000
-                                      ]
                                     }
-                                  ]
                                 }
-                              }
                             },
-                            {
-                              "key": "ba6ee261-3aa1-439f-be90-102136300472",
-                              "doc_count": 7200,
-                              "top-acl-hits": {
-                                "hits": {
-                                  "total": 7200,
-                                  "max_score": null,
-                                  "hits": [
-                                    {
-                                      "_index": "nuage_flow",
-                                      "_type": "nuage_doc_type",
-                                      "_id": "AVeZZfnvc3SvEs9LIA9v",
-                                      "_score": null,
-                                      "_source": {
-                                        "destinationport": 1,
-                                        "sourceport": 4,
-                                        "protocol": "UDP",
-                                        "nuage_metadata": {
-                                          "dpgName": "PG15",
-                                          "spgName": "PG18"
-                                        }
-                                      },
-                                      "sort": [
-                                        1000
-                                      ]
-                                    }
-                                  ]
-                                }
-                              }
-                            },
-                            {
-                              "key": "fd4ba772-608c-4ea2-84cc-701214385856",
-                              "doc_count": 7200,
-                              "top-acl-hits": {
-                                "hits": {
-                                  "total": 7200,
-                                  "max_score": null,
-                                  "hits": [
-                                    {
-                                      "_index": "nuage_flow",
-                                      "_type": "nuage_doc_type",
-                                      "_id": "AVeZXy8tc3SvEs9LFwT9",
-                                      "_score": null,
-                                      "_source": {
-                                        "destinationport": 3,
-                                        "sourceport": 3,
-                                        "protocol": "TCP",
-                                        "nuage_metadata": {
-                                          "dpgName": "PG8",
-                                          "spgName": "PG9"
-                                        }
-                                      },
-                                      "sort": [
-                                        1000
-                                      ]
-                                    }
-                                  ]
-                                }
-                              }
-                            }
-                          ]
+                            "doc_count": 10080000
                         }
-                      }
                     }
-                  },
-                  "doc_count": 10080000
                 }
-              }
             }
-          }
         };
 
         const expectedResults = [
-          {
-            "top-acls": "55cd911d-aa9b-4647-b4dc-68a63122aa7c",
-            "doc_count": 10080,
-            "top-acl-hits": {
-              "destinationport": 3,
-              "sourceport": 5,
-              "protocol": "TCP",
-              "sort": 1000,
-              "nuage_metadata": {
-                "dpgName": "PG15",
-                "spgName": "PG9"
-              }
+            {
+                "top-acls": "55cd911d-aa9b-4647-b4dc-68a63122aa7c",
+                "doc_count": 10080,
+                "top-acl-hits": {
+                    "dpgName": "PG15",
+                    "spgName": "PG9"
+                }
+            },
+            {
+                "top-acls": "ba6ee261-3aa1-439f-be90-102136300472",
+                "doc_count": 7200,
+                "top-acl-hits": {
+                    "dpgName": "PG15",
+                    "spgName": "PG18"
+                }
+            },
+            {
+                "top-acls": "fd4ba772-608c-4ea2-84cc-701214385856",
+                "doc_count": 7200,
+                "top-acl-hits": {
+                    "dpgName": "PG8",
+                    "spgName": "PG9"
+                }
             }
-          },
-          {
-            "top-acls": "ba6ee261-3aa1-439f-be90-102136300472",
-            "doc_count": 7200,
-            "top-acl-hits": {
-              "destinationport": 1,
-              "sourceport": 4,
-              "protocol": "UDP",
-              "sort": 1000,
-              "nuage_metadata": {
-                "dpgName": "PG15",
-                "spgName": "PG18"
-              }
-            }
-          },
-          {
-            "top-acls": "fd4ba772-608c-4ea2-84cc-701214385856",
-            "doc_count": 7200,
-            "top-acl-hits": {
-              "destinationport": 3,
-              "sourceport": 3,
-              "protocol": "TCP",
-              "sort": 1000,
-              "nuage_metadata": {
-                "dpgName": "PG8",
-                "spgName": "PG9"
-              }
-            }
-          }
         ];
 
         expect(tabify(response)).toEqual(expectedResults);
