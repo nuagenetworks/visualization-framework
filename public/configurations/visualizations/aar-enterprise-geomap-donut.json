@@ -1,31 +1,52 @@
 {
     "id": "aar-enterprise-geomap-donut",
     "graph": "PieGraph",
-    "title": "NSGs Statuses",
+    "title": "NSGs Health",
     "description": "Shows all NSGs in the enterprise with their current state and information.\nThe information covers Bootstrap Status, Alarm Status and NSG Software Version.\n\nColor depiction -\n\nBlue: NSG is in Good Condition\nYellow: Bootstrap Status is not ACTIVE\n\n\n\nTo Exit this information, click anywhere inside this box or on the 'i' button again.",
     "author": "Bharat Mukheja",
     "creationDate": "03/13/2018",
     "data": {
         "sliceColumn": "count",
         "labelColumn": "alarmType",
-	"colorColumn": "alarmType",
-        "pieLabelRadius":0.75,
-        "pieOuterRadius":0.95,
-        "pieInnerRadius":0.55,
-	"percentages":true,
-        "otherOptions": {
+        "colorColumn": "alarmType",
+        "pieLabelRadius": 0.65,
+        "pieOuterRadius": 0.95,
+        "pieInnerRadius": 0.40,
+        "percentages": true,
+        "otherOptions": {},
+        "showZero": false,
+        "tooltip": [
+            {
+                "column": "alarmType",
+                "label": "Alarm Status"
+            },
+            {
+                "column": "count",
+                "label": "NSG Count"
+            }
+        ],
+        "colors":[
+            "#D9070A",
+            "#FFBF02",
+            "#62AC00",
+            "#b3d645",
+            "#fec26a",
+            "#f79e99",         
+            "#7da3f7"
+        ],
+        "mappedColors": {
+            "Critical": "#D9070A",
+            "Major": "#FFBF02",
+            "Healthy": "#62AC00"
         },
-	"tooltip":[
-		{"column":"alarmType","label":"Alarm Status"},
-		{"column":"count","label":"NSG Count"}
-	],
-        "legend":{
-            "show":true,
-            "orientation":"vertical",
-	    "legendColumn": "count",
-            "circleSize":5,
-            "labelOffset":2
-        }
+        "legend": {
+            "show": true,
+            "orientation": "vertical",
+            "legendColumn": "count",
+            "circleSize": 5,
+            "labelOffset": 2
+        },
+        "fontColor": "#000000"
     },
     "query": "aar-enterprise-geomap-donut"
 }

@@ -13,9 +13,15 @@
             { "column": "NSGVersion", "label": "NSG Version" },
             { "column": "criticalAlarmsCount", "label": "Critical Alarms" },
             { "column": "majorAlarmsCount", "label": "Major Alarms" },
-            { "column": "minorAlarmsCount", "label": "Minor Alarms" },
-            { "column": "infoAlarmsCount", "label": "Info Alarms"}
+            { "column": "minorAlarmsCount", "label": "Minor Alarms" }
         ]
     },
-    "query": "aar-enterprise-geomap"
+    "query": "aar-enterprise-geomap",
+    "listeners": [{
+      "redirect": "/dashboards/aarNSG",
+      "params": {
+          "snsg": "gatewayName",
+          "nsgId": "gatewayID"
+      }
+    }]
 }
