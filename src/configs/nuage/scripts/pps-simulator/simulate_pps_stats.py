@@ -578,6 +578,7 @@ class SimulateProbeStats(object):
                         domain = randint(0, len(domains) - 1)
                         npm_grp = random.choice(npm_grps)
                         apm_grp = random.choice(apm_grps)
+                        apm_app = random.choice(apm_grp["app_list"])
                         duc_grp = random.choice(self.duc_grps)
                         perf_mon = npm_grp["perf_monitor"]
                         avg_latency = random.uniform(avgLatMin, avgLatMax)
@@ -597,7 +598,7 @@ class SimulateProbeStats(object):
                         probe_record["MonitorProbeInterval"] = perf_mon["probe_interval"]
                         probe_record["MonitorProbeNoOfPackets"] = perf_mon["probe_num_pkts"]
                         probe_record["APMGroup"] = apm_grp["appgrp_name"]
-                        probe_record["Application"] = "VNS_1537815108748_super app"
+                        probe_record["Application"] = apm_app["app_name"]
                         probe_record["AvgDelay"] = float(avg_latency)
                         probe_record["AvgJitter"] = float(avg_jitter)
                         probe_record["AvgPktLoss"] = float(avg_pktloss)
