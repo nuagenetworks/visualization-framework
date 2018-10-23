@@ -165,8 +165,6 @@ function extractTree(buckets, stack) {
             if (typeof value === 'object') {
                 if("value" in value){
                     value = value.value;
-                } else {
-                    value = collectBucket(value, [...stack, key]);
                 }
             }
 
