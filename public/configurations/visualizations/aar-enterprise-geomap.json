@@ -10,7 +10,7 @@
         "latitudeColumn": "latitude",
         "longitudeColumn": "longitude",
         "nameColumn": "gatewayName",
-        "localityColumn": "locality",
+        "localityColumn": "address",
         "idColumn": "gatewayID",
         "criticalAlarmColumn": "criticalAlarmsCount",
         "majorAlarmColumn": "majorAlarmsCount",
@@ -19,9 +19,33 @@
         "NSGVersionColumn" : "NSGVersion",
 
         "markerIcon": {
-            "default": "nsGatewayBlue",
-            "defaultUrgency":"BLUE",
+            "default": "nsGatewayGreen",
+            "defaultUrgency":"GREEN",
             "criteria": [
+                {
+                    "icon": "nsGatewayGreen",
+                    "fields": {
+                        "bootstrapStatus": "ACTIVE",
+                        "criticalAlarmsCount":0,
+                        "majorAlarmsCount":0
+                    },
+                    "urgency":"GREEN"
+                },
+                {
+                    "icon": "nsGatewayYellow",
+                    "fields": {
+                        "bootstrapStatus": "ACTIVE",
+                        "criticalAlarmsCount":0
+                    },
+                    "urgency":"YELLOW"
+                },
+                {
+                    "icon": "nsGatewayRed",
+                    "fields": {
+                        "bootstrapStatus": "ACTIVE"                        
+                    },
+                    "urgency":"RED"
+                },
                 {
                     "icon": "nsGatewayGrey",
                     "fields": {
@@ -49,29 +73,6 @@
                         "bootstrapStatus": "CERTIFICATE_SIGNED"
                     },
                     "urgency":"GREY"
-                },
-                {
-                    "icon": "nsGatewayBlue",
-                    "fields": {
-                        "bootstrapStatus": "ACTIVE",
-                        "criticalAlarmsCount":0,
-                        "majorAlarmsCount":0
-                    }
-                },
-                {
-                    "icon": "nsGatewayYellow",
-                    "fields": {
-                        "bootstrapStatus": "ACTIVE",
-                        "criticalAlarmsCount":0
-                    },
-                    "urgency":"YELLOW"
-                },
-                {
-                    "icon": "nsGatewayRed",
-                    "fields": {
-                        "bootstrapStatus": "ACTIVE"                        
-                    },
-                    "urgency":"RED"
                 }
             ]
         },
