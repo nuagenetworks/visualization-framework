@@ -1,7 +1,7 @@
 {
     "id": "aar-enterprise-geomap",
     "graph": "GeoMap",
-    "title": "All NSGs in Enterprise {{enterpriseName}}",
+    "title": "All NSGs in enterprise {{enterpriseName}}",
     "description": "Shows all NSGs in the enterprise with their current state and information.\nThe information covers Bootstrap Status, Alarm Status and NSG Software Version.\n\nColor depiction -\n\nBlue: NSG is in Good Condition\nYellow: Bootstrap Status is not ACTIVE\n\n\n\nTo Exit this information, click anywhere inside this box or on the 'i' button again.",
     "author": "Bharat Mukheja",
     "creationDate": "03/13/2018",
@@ -10,62 +10,106 @@
         "latitudeColumn": "latitude",
         "longitudeColumn": "longitude",
         "nameColumn": "gatewayName",
-        "localityColumn": "address",
+        "localityColumn": "locality",
         "idColumn": "gatewayID",
         "criticalAlarmColumn": "criticalAlarmsCount",
         "majorAlarmColumn": "majorAlarmsCount",
         "minorAlarmColumn": "minorAlarmsCount",
-        "infoAlarmColumn": "infoAlarmsCount",
         "bootstrapStatusColumn" : "bootstrapStatus",
         "NSGVersionColumn" : "NSGVersion",
 
         "markerIcon": {
             "default": "nsGatewayBlue",
+            "defaultUrgency":"BLUE",
             "criteria": [
                 {
-                    "icon": "nsGatewayYellow",
+                    "icon": "nsGatewayGrey",
                     "fields": {
                         "bootstrapStatus": "INACTIVE"
-                    }
+                    },
+                    "urgency":"GREY"
                 },
                 {
-                    "icon": "nsGatewayYellow",
+                    "icon": "nsGatewayGrey",
                     "fields": {
                         "bootstrapStatus": "NOTIFICATION_APP_REQ_SENT"
-                    }
+                    },
+                    "urgency":"GREY"
                 },
                 {
-                    "icon": "nsGatewayYellow",
+                    "icon": "nsGatewayGrey",
                     "fields": {
                         "bootstrapStatus": "NOTIFICATION_APP_REQ_ACK"
+                    },
+                    "urgency":"GREY"
+                },
+                {
+                    "icon": "nsGatewayGrey",
+                    "fields": {
+                        "bootstrapStatus": "CERTIFICATE_SIGNED"
+                    },
+                    "urgency":"GREY"
+                },
+                {
+                    "icon": "nsGatewayBlue",
+                    "fields": {
+                        "bootstrapStatus": "ACTIVE",
+                        "criticalAlarmsCount":0,
+                        "majorAlarmsCount":0
                     }
                 },
                 {
                     "icon": "nsGatewayYellow",
                     "fields": {
-                        "bootstrapStatus": "CERTIFICATE_SIGNED"
-                    }
+                        "bootstrapStatus": "ACTIVE",
+                        "criticalAlarmsCount":0
+                    },
+                    "urgency":"YELLOW"
+                },
+                {
+                    "icon": "nsGatewayRed",
+                    "fields": {
+                        "bootstrapStatus": "ACTIVE"                        
+                    },
+                    "urgency":"RED"
                 }
             ]
         },
         "filters": [
             {
-                "columnText": "Name",
+                "columnText": "NSG Name",
                 "columField": "gatewayName",
                 "type": "text"
             },
             {
-                "columnText": "Region",
+                "columnText": "NSG Region",
                 "columField": "locality",
                 "type": "text"
             },
             {
                 "columField": "bootstrapStatus",
+                "columnText":"Bootstrap Status",
                 "type": "selection"
             },
             {
                 "columField": "NSGVersion",
+                "columnText": "NSG Version",
                 "type": "selection"
+            },
+            {
+                "columField": "majorAlarmsCount",
+                "columnText": "Major Alarms Count",
+                "type": "text"
+            },
+            {
+                "columField": "criticalAlarmsCount",
+                "columnText": "Critical Alarms Count",
+                "type": "text"
+            },
+            {
+                "columField": "minorAlarmsCount",
+                "columnText": "Minor Alarms Count",
+                "type": "text"
             }
         ],
         "links": {

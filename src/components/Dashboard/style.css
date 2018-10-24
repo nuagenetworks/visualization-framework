@@ -10,3 +10,7 @@
 .list-inline li, .list-inline > li > div {
     vertical-align: top
 }
+
+.react-filter-box {
+    height: 38px !important;
+}

@@ -11,15 +11,23 @@ import { ActionKeyStore } from "./redux/actions";
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-
-xdescribe('VSD service', () => {
+describe('VSD service', () => {
     it('should expose certain methods and have an id', () => {
         let expectedProperties = [
-            "id",
-            "config",
-            "getRequestID",
-            "getMockResponse",
-            "fetch"
+            "id", 
+            "config", 
+            "getRequestID", 
+            "getMockResponse", 
+            "fetch", 
+            "post", 
+            "update", 
+            "add", 
+            "remove", 
+            "getPageSizePath", 
+            "updatePageSize", 
+            "getNextPageQuery", 
+            "addSorting", 
+            "addSearching"
         ];
         expect(Object.keys(VSDService)).toEqual(expectedProperties)
         expect(VSDService.id).toEqual("VSD")
@@ -29,13 +37,16 @@ xdescribe('VSD service', () => {
         let expectedProperties = [
             "makeRequest",
             "getURL",
+            "makePOSTRequest",
+            "makePUTRequest",
+            "makePATCHRequest",
         ];
         expect(Object.keys(VSDServiceTest)).toEqual(expectedProperties)
     });
 });
 
 
-xdescribe('VSDService getRequestID', () => {
+describe('VSDService getRequestID', () => {
     it('should return the URL', () => {
         let configuration = {
             query: {
@@ -77,8 +88,8 @@ xdescribe('VSDService getRequestID', () => {
 
 
 describe('VSDService fetch', () => {
-    it('should fetch information from the default host', () => {
-        process.env.REACT_APP_VSD_API_ENDPOINT = "http://localhost:8001/";
+    it('should fetch information from the default host', function (done) {
+        process.env.REACT_APP_VSD_API_ENDPOINT = "https://vsd.com:8443";
 
         let configuration = {
             query: {
@@ -92,7 +103,8 @@ describe('VSDService fetch', () => {
             "Accept": "*/*",
             "Authorization": "XREST 1234",
             "Content-Type": "application/json",
-            "X-Nuage-Organization": "csp"
+            "X-Nuage-Organization": "csp",
+            "X-Nuage-Page": 0
         }
 
         const fakeState = {
@@ -102,25 +114,26 @@ describe('VSDService fetch', () => {
         };
 
         VSDServiceTest.makeRequest = jasmine.createSpy("makeRequest").and.callFake(() => {
-            return Promise.resolve();
+            return new Promise((resolve, reject) => {
+                return resolve('Done');
+            })
         });
 
         // VSDServiceTest.getURL = jasmine.createSpy("getURL").and.callFake(() => {
         //     return Promise.resolve();
         // });
 
-        return VSDService.fetch(configuration, fakeState).then(
+        VSDService.fetch(configuration, fakeState).then(
             (results) => {
-                // expect(VSDServiceTest.getURL).toHaveBeenCalledWith(null);
                 expect(VSDServiceTest.makeRequest).toHaveBeenCalled();
-                expect(VSDServiceTest.makeRequest).toHaveBeenCalledWith("http://localhost:8001/nuage/api/v4_0/enterprises/1234/domains", headers);
+                expect(VSDServiceTest.makeRequest).toHaveBeenCalledWith("https://vsd.com:8443/nuage/api/nuage/api/v5_0/enterprises/1234/domains", headers);
+                done();
             }
         );
     });
 
-
-    xit('should update the organization if provided', () => {
-        process.env.REACT_APP_VSD_API_ENDPOINT = "http://localhost:8001/";
+    it('should update the organization if provided', function (done) {
+        process.env.REACT_APP_VSD_API_ENDPOINT = "https://vsd.com:8443";
 
         let configuration = {
             query: {
@@ -134,7 +147,8 @@ describe('VSDService fetch', () => {
             "Accept": "*/*",
             "Authorization": "XREST 1234",
             "Content-Type": "application/json",
-            "X-Nuage-Organization": "enterprise"
+            "X-Nuage-Organization": "enterprise",
+            "X-Nuage-Page": 0
         }
 
         const fakeState = {
@@ -145,13 +159,17 @@ describe('VSDService fetch', () => {
         };
 
         VSDServiceTest.makeRequest = jasmine.createSpy("makeRequest").and.callFake(() => {
-            return Promise.resolve();
+            return new Promise((resolve, reject) => {
+                return resolve('Done');
+            })
         });
+
 
         return VSDService.fetch(configuration, fakeState).then(
             (results) => {
                 expect(VSDServiceTest.makeRequest).toHaveBeenCalled();
-                expect(VSDServiceTest.makeRequest).toHaveBeenCalledWith("http://localhost:8001/nuage/api/v4_0/enterprises/1234/domains", headers);
+                expect(VSDServiceTest.makeRequest).toHaveBeenCalledWith("https://vsd.com:8443/nuage/api/nuage/api/v5_0/enterprises/1234/domains", headers);
+                done()
             }
         );
     });

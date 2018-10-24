@@ -243,7 +243,8 @@ describe('Configuration Reducers: fetchIfNeeded', () => {
             dashboards: Map({
                 example: Map({
                     isFetching: false,
-                    data: fromJS(self.expectedConfiguration)
+                    data: fromJS(self.expectedConfiguration),
+                    error: false,
                 })
             }),
             visualizations: Map(),
@@ -271,7 +272,7 @@ describe('Configuration Reducers: fetchIfNeeded', () => {
             dashboards: Map({
                 example: Map({
                     isFetching: false,
-                    data: fromJS([]),
+                    data: null,
                     error: fromJS(action.error),
                 })
             }),

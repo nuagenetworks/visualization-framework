@@ -1,0 +1,125 @@
+{
+    "id":"vss-domain-flow-table-pg",
+    "title":"Flow Information",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_flow}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+          "size": 100,
+          "sort": [
+            { "timestamp": { "order": "desc" } }
+          ],
+          "query": {
+            "bool": {
+              "should": [
+        	    {
+           	    "bool": {
+             	    "must": [
+                    {"term": {"nuage_metadata.enterpriseName": "{{enterpriseName:chord_enterprise}}"} },
+                    {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
+                    {
+                      "nested": {
+                        "path": "{{source_field:nuage_metadata.src-pgmem-info}}",
+                        "score_mode": "none",
+                        "query": {
+                          "bool": {
+                            "must": [
+                              {
+                                "match": {
+                                  "{{source_field:nuage_metadata.src-pgmem-info}}.name": "{{source}}"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {"range": { "timestamp": { "gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "must": [
+                    {"term": {"nuage_metadata.enterpriseName": "{{enterpriseName:chord_enterprise}}"} },
+                    {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
+                    {
+                      "nested": {
+                        "path": "{{destination_field:nuage_metadata.dst-pgmem-info}}",
+                        "score_mode": "none",
+                        "query": {
+                          "bool": {
+                            "must": [
+                              {
+                                "match": {
+                                  "{{destination_field:nuage_metadata.dst-pgmem-info}}.name": "{{destination}}"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {"range": { "timestamp": {"gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "must": [
+                    {"term": {"nuage_metadata.enterpriseName": "{{enterpriseName:chord_enterprise}}"} },
+                    {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
+                    {
+                      "nested": {
+                        "path": "{{destination_field:nuage_metadata.dst-pgmem-info}}",
+                        "score_mode": "none",
+                        "query": {
+                          "bool": {
+                            "must": [
+                              {
+                                "match": {
+                                  "{{destination_field:nuage_metadata.dst-pgmem-info}}.name": "{{source}}"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {"range": { "timestamp": {"gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "must": [
+                    {"term": {"nuage_metadata.enterpriseName": "{{enterpriseName:chord_enterprise}}"} },
+                    {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
+                    {
+                      "nested": {
+                        "path": "{{destination_field:nuage_metadata.dst-pgmem-info}}",
+                        "score_mode": "none",
+                        "query": {
+                          "bool": {
+                            "must": [
+                              {
+                                "match": {
+                                  "{{source_field:nuage_metadata.dst-pgmem-info}}.name": "{{destination}}"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    {"range": { "timestamp": {"gte": "{{startTime:now-24h}}", "lte": "{{endTime:now}}", "format":"epoch_millis"} }}
+                  ]
+                }
+              }
+              ]
+            }
+          }
+        }
+    }
+}

@@ -1,0 +1,76 @@
+{
+  "id": "vss-domain-acl-top",
+  "graph": "Table",
+  "title": "Top ACLs by # hits",
+  "description": "Top ACLs by # of hits in this domain",
+  "author": "Ronak Shah",
+  "creationDate": "11/29/2016",
+  "data": {
+    "highlight": [
+      "top-acl-hits.sort",
+      "top-acls"
+    ],
+    "columns": [
+      {
+        "column": "top-acls",
+        "totalCharacters": 13,
+        "label": "ACL ID"
+      },
+      {
+        "column": "top-acl-hits.sort",
+        "label": "# Hits"
+      },
+      {
+        "column": "top-acl-hits.type",
+        "label": "Type"
+      },
+      {
+        "column": "top-acl-hits.protocol",
+        "label": "Protocol"
+      },
+      {
+        "column": "top-acl-hits.sourceport",
+        "label": "Source Port"
+      },
+      {
+        "column": "top-acl-hits.destinationport",
+        "label": "Dest Port"
+      },
+      {
+        "column": "top-acl-hits.nuage_metadata.src-pgmem-info.name",
+        "label": "Source PG"
+      },
+      {
+        "column": "top-acl-hits.nuage_metadata.dst-pgmem-info.name",
+        "label": "Dest PG"
+      },
+      {
+        "column": "top-acl-hits.nuage_metadata.service",
+        "label": "Service"
+      },
+      {
+        "column": "top-acl-hits.nuage_metadata.serviceGroup",
+        "label": "ServiceGroup"
+      },
+      {
+        "column": "top-acl-hits.ICMPCode",
+        "label": "ICMP Code"
+      },
+      {
+        "column": "top-acl-hits.ICMPType",
+        "label": "ICMP Type"
+      }
+    ]
+  },
+  "replace": {
+        "optional-egress-ingress-filter" : {
+            "context": "acl_traffic_filter_value",
+            "query": {
+                "{{replace_query_type:term}}": {
+                    "{{replace_query_key:nuage_metadata.aclResourceName}}":"{{acl_traffic_filter_value}}"
+                }
+            }
+        }
+    },
+  "query": "vss-domain-acl-top"
+}

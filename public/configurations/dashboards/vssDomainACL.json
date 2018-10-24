@@ -1,60 +1,115 @@
 {
-    "id": "vssDomainACL",
-    "author": "Ronak Shah",
-    "creationDate": "10/18/2016",
-    "title": "{{domainName:VSS Domain}}",
-    "titleIcon": "domain",
-    "visualizations": [
-        { "id": "vss-domain-acl-time", "x": 0, "y": 0, "w": 6, "h": 15, "minW": 2, "minH": 12},
-        { "id": "vss-domain-acl-spg", "x": 6, "y": 0, "w": 6, "h": 15, "minW": 2, "minH": 12},
-        { "id": "vss-domain-acl-dpg", "x": 0, "y": 15, "w": 6, "h": 15, "minW": 2, "minH": 12},
-        { "id": "vss-domain-acl-top5", "x": 6, "y": 15, "w": 6, "h": 15, "minW": 2, "minH": 12}
-    ],
-    "links": [
-        {
-            "label": "Traffic Analytics",
-            "url": "/dashboards/vssDomainTraffic"
-        },
-        {
-            "label": "Flow Analytics",
-            "url": "/dashboards/vssDomainFlow"
-        },
-        {
-            "label": "Event Analytics",
-            "url": "/dashboards/vssDomainEvent"
-        },
-        {
-            "label": "ACL Analytics",
-            "url": "/dashboards/vssDomainACL"
-        },
-        {
-            "label": "Service Analytics",
-            "url": "/dashboards/vssDomainService"
-        },
-        {
-            "label": "Application Analytics",
-            "url": "/dashboards/vssDomainApplication"
-        },
-        {
-            "label": "Flow Explorer",
-            "url": "/dashboards/vssDomainFlowExplorer"
-        }
-    ],
-    "filterOptions": {
-        "ACL Action": {
-            "parameter": "actionType",
-            "default": "DENY",
-            "options": [
-                {
-                    "label": "Deny",
-                    "value": "DENY",
-                    "default": true
-                },
-                {
-                    "label": "Allow",
-                    "value": "ALLOW"
-                }
-            ]
-        }
+  "id": "vssDomainACL",
+  "author": "Ronak Shah",
+  "creationDate": "10/18/2016",
+  "title": "{{domainName:VSS Domain}}",
+  "titleIcon": "domain",
+  "visualizations": [
+    {
+      "id": "vss-domain-acl-time",
+      "x": 0,
+      "y": 0,
+      "w": 6,
+      "h": 15,
+      "minW": 2,
+      "minH": 12,
+      "static": true
+    },
+    {
+      "id": "vss-domain-acl-top",
+      "x": 6,
+      "y": 0,
+      "w": 6,
+      "h": 15,
+      "minW": 2,
+      "minH": 12,
+      "static": true
     }
+  ],
+  "links": [
+    {
+      "label": "Top Talkers",
+      "url": "/dashboards/vssTopTalkers"
+    },
+    {
+      "label": "Flow Visualization",
+      "url": "/dashboards/vssDomainFlow"
+    },
+    {
+      "label": "Flow Explorer",
+      "url": "/dashboards/vssDomainFlowExplorer"
+    },
+    {
+      "label": "Event Analytics",
+      "url": "/dashboards/vssDomainEvent"
+    },
+    {
+      "label": "ACL Analytics",
+      "url": "/dashboards/vssDomainACL"
+    },
+    {
+      "label": "Service Analytics",
+      "url": "/dashboards/vssDomainService"
+    },
+    {
+      "label": "Application Analytics",
+      "url": "/dashboards/vssDomainApplication"
+    },
+    {
+      "label": "Traffic Analytics",
+      "url": "/dashboards/vssDomainTraffic"
+    }
+  ],
+  "filterOptions": {
+    "ACL Action": {
+      "parameter": "actionType",
+      "default": "DENY",
+      "options": [
+        {
+          "label": "Deny",
+          "value": "DENY",
+          "default": true
+        },
+        {
+          "label": "Allow",
+          "value": "ALLOW"
+        }
+      ]
+    },
+    "Filter Traffic": {
+      "parameter": "acl_traffic_filter_value",
+      "default": "",
+      "options": [
+        {
+          "label": "Virtual Firewall Rules only",
+          "value": "nuage_metadata.vfrID",
+          "forceOptions": {
+            "replace_query_key":"field",
+            "replace_query_type":"exists"
+          }
+        },
+        {
+          "label": "Egress/Ingress",
+          "default": true,
+          "value": ""
+        },
+        {
+          "label": "Ingress Only",
+          "value": "ingressaclentrytemplates",
+          "forceOptions": {
+            "replace_query_key":"nuage_metadata.aclResourceName",
+            "replace_query_type":"term"
+          }
+        },
+        {
+          "label": "Egress Only",
+          "value": "egressaclentrytemplates",
+          "forceOptions": {
+            "replace_query_key":"nuage_metadata.aclResourceName",
+            "replace_query_type":"term"
+          }
+        }
+      ]
+    }
+  }
 }

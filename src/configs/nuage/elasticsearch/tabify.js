@@ -56,6 +56,10 @@ function cartesianProduct(data) {
     let keys = Object.keys(data);
     for(let i = 0; i < keys.length; i++) {
         if(Array.isArray(data[keys[i]])) {
+            if (data[keys[i]].length === 0) {
+                data[keys[i]].push({});
+            }
+
             data[keys[i]].forEach(item => {
                 final.push({...data, [keys[i]]: item})
             });
@@ -158,6 +162,12 @@ function extractTree(buckets, stack) {
                 key = stack[stack.length - 2]
             }
 
+            if (typeof value === 'object') {
+                if("value" in value){
+                    value = value.value;
+                }
+            }
+
             tree[key] = value;
 
             return tree;
@@ -188,7 +198,13 @@ function flatten(tree, parentNode={}){
                     if (Array.isArray(value)) {
 
                         if(value.length) {
-                            return value;
+                            return value.map(item => {
+                                if (item[key]) {
+                                    return item;
+                                }
+
+                                return {[key]: item};
+                            });
                         }
 
                         node[key] = null;

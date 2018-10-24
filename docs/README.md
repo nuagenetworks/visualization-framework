@@ -209,7 +209,8 @@ Here is the list of options:
                 {
                     "label": "SYN",
                     "value": "SYN",
-                    "default": true
+                    "default": true,
+                    "query_source": "query-to-execute" // on select this option then query mentioned here will be act as primary query to fetch data for graph. It will replace actual query e.g query.data as mentioned below.
                 },
                 {
                     "label": "SYN-ACK",
@@ -519,10 +520,6 @@ It is a graphical representation of data where the individual values contained i
 
 - **legendColumn** used to display matrix
 - **xAlign** (boolean) if true then align x-axis label to the left position , default align is middle
-- **key** (function) used to make unique combination using x and y columns to identify each matrix for event listener. E.g -
-```javascript
-    "key": "function(d) { return d['application'] + d['date_histo'];}"
-```
 - **nextPrevFilter** (boolean) show filter to see data of past timestamps. Default is false.
         When we click on previous button to see past timestamp data, following variables in a context get updated by prepending visualization ID - 
 ```javascript

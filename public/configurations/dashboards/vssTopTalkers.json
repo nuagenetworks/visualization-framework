@@ -1,0 +1,132 @@
+{
+  "id": "vssTopTalkers",
+  "author": "Natalia Balus",
+  "creationDate": "18/09/2018",
+  "title": "{{domainName:VSS Domain}}",
+  "titleIcon": "domain",
+  "visualizations": [
+    {
+      "id": "vss-domain-flow-topx-ip",
+      "x": 1,
+      "y": 2,
+      "w": 5,
+      "h": 25,
+      "minW": 2,
+      "minH": 12
+    },
+    {
+      "id": "vss-domain-flow-topx-pg",
+      "x": 6,
+      "y": 2,
+      "w": 5,
+      "h": 25,
+      "minW": 2,
+      "minH": 12
+    },
+    {
+      "id": "vss-domain-flow-topx-subnet",
+      "x": 1,
+      "y": 27,
+      "w": 5,
+      "h": 25,
+      "minW": 2,
+      "minH": 12
+    },
+    {
+      "id": "vss-domain-flow-topx-zone",
+      "x": 6,
+      "y": 27,
+      "w": 5,
+      "h": 25,
+      "minW": 2,
+      "minH": 12
+    },
+    {
+      "id": "vss-domain-acl-pg",
+      "x": 1,
+      "y": 52,
+      "w": 5,
+      "h": 25,
+      "minW": 2,
+      "minH": 12
+    }
+  ],
+  "links": [
+    {
+      "label": "Top Talkers",
+      "url": "/dashboards/vssTopTalkers"
+    },
+    {
+      "label": "Flow Visualization",
+      "url": "/dashboards/vssDomainFlow"
+    },
+    {
+      "label": "Flow Explorer",
+      "url": "/dashboards/vssDomainFlowExplorer"
+    },
+    {
+      "label": "Event Analytics",
+      "url": "/dashboards/vssDomainEvent"
+    },
+    {
+      "label": "ACL Analytics",
+      "url": "/dashboards/vssDomainACL"
+    },
+    {
+      "label": "Service Analytics",
+      "url": "/dashboards/vssDomainService"
+    },
+    {
+      "label": "Application Analytics",
+      "url": "/dashboards/vssDomainApplication"
+    },
+    {
+      "label": "Traffic Analytics",
+      "url": "/dashboards/vssDomainTraffic"
+    }
+  ],
+  "filterOptions": {
+    "ACL Action": {
+      "parameter": "actionType",
+      "default": "DENY",
+      "options": [
+        {
+          "label": "Deny",
+          "value": "DENY",
+          "default": true
+        },
+        {
+          "label": "Allow",
+          "value": "ALLOW"
+        }
+      ]
+    },
+    "Direction": {
+      "parameter": "direction",
+      "default": "Source",
+      "options": [
+        {
+          "label": "Source",
+          "value": "Source",
+          "default": true,
+          "forceOptions": {
+            "ip_type": "sourceip",
+            "sent_received": "sent",
+            "pgname_field": "src-pgmem-info",
+            "src_dst": "src"
+          }
+        },
+        {
+          "label": "Destination",
+          "value": "Destination",
+          "forceOptions": {
+            "ip_type": "destinationip",
+            "sent_received": "received",
+            "pgname_field": "dst-pgmem-info",
+            "src_dst": "dst"
+          }
+        }
+      ]
+    }
+  }
+}

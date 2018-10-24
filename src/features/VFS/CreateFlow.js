@@ -194,8 +194,25 @@ class CreateFlow extends React.Component {
         const { getFieldError, protocolValue, data } = this.props;
         const mirrors = this.buildMirrorDestinations(mirrordestinations);
         const overlaymirrordestinationsField = this.buildOverlayMirrors(mirrordestinations, overlaymirrordestinations);
-
-        const policyOptions = buildOptions(vfsPolicies);
+        const policyOptions = buildOptions(vfsPolicies, item => {
+            const imgTitle = item.active ? 'Policy is enabled' : 'Policy is not enabled';
+            const text = item.policyState === 'DRAFT' ? `${item.name} - In Draft Mode` : item.name;
+            const iconStyle = {
+                width: '8px',
+                height: '8px',
+                verticalAlign: 'center',
+                marginRight: '3px'
+            }
+            const textNode = (primaryText) => (
+                <div>
+                    <img style={iconStyle} src={`${process.env.PUBLIC_URL}/icons/pil-${item.active ? 'green' : 'red'}.png`} alt="D" title={imgTitle}/>
+                    <span>{primaryText}</span>
+                </div>
+            )
+            return {
+                text: item.policyState === 'DRAFT' ? text: textNode(text), value: item.ID
+            };
+        });
         if (!policyOptions || !Array.isArray(policyOptions) || protocolValue === '1') {
 
             if (vfsPolicies && vfsPolicies.isFetching) {

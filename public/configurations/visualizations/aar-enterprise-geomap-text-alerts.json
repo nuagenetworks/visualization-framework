@@ -1,0 +1,17 @@
+{
+    "id": "aar-enterprise-geomap-text-up",
+    "title": "Major",
+    "query": "aar-enterprise-geomap-donut",
+    "graph": "SimpleTextGraph",
+    "description":"Quick View of the Critical alarms for this NSG in the VSD dashboard",
+    "showTitleBar":false,
+    "data": {
+        "borderRadius": "0",
+        "height":1,
+        "width":1,
+        "targetedColumn":"alarmedNSGCount.major",
+        "colors":[
+            
+        ]
+    }
+}

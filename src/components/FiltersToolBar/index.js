@@ -5,11 +5,15 @@ import { connect } from "react-redux";
 
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-
+import { events } from '../../lib/vis-graphs/utils/types'
 import {
     Actions as InterfaceActions,
     ActionKeyStore as InterfaceActionKeyStore
 } from "../App/redux/actions";
+
+import {
+    Actions as ServiceActions
+} from "../../services/servicemanager/redux/actions"
 
 import style from "./styles";
 
@@ -39,20 +43,34 @@ export class FiltersToolBarView extends React.Component {
         let updatedFilterOptions = {};
         let childs = [];
         let selectedChilds = [];
+        let sourceQueries = {};
 
         Object.keys(filterOptions).forEach((name, i) => {
             let filter = {...filterOptions[name], options: [], display: true, child: false, forceOptions: []};
 
             filterOptions[name].options.forEach((option) => {
-                const { onChange, forceOptions } = option
+
+                const { onChange, forceOptions, query_source } = option
                 if (onChange) {
                     // add all available onChange options in the root of the object as an array
                     childs.push(onChange);
                     // check whether any child filter is selected or not
-                    if (context[filterOptions[name].parameter] == option.value) {
+                    if (context[filterOptions[name].parameter] === option.value) {
                         selectedChilds.push(onChange);
                     }
                 }
+
+                // Updating Source Query
+                if (context[filterOptions[name].parameter] === option.value && query_source) {
+                    sourceQueries[name] = {
+                        query: query_source
+                    }
+
+                    if(onChange) {
+                        sourceQueries[name].onchange = onChange;
+                    }
+                }
+
                 // add all available forceOptions properties in the root of the object as an array
                 if(forceOptions) {
                     for (let key in forceOptions) {
@@ -75,10 +93,22 @@ export class FiltersToolBarView extends React.Component {
         });
 
         // Cheching whether to display childs or not.
+        let sourceQueryKeys = Object.keys(sourceQueries);
+        const sourceQuery = sourceQueryKeys.length ? this.getSourceQuery(sourceQueries, sourceQueryKeys[0]) : null;
         this.setState({
+            sourceQuery,
             filterOptions: updatedFilterOptions
         })
     }
+
+    getSourceQuery(sourceQueries, key) {
+        if (sourceQueries[key].onchange && sourceQueries[sourceQueries[key].onchange]) {
+            return this.getSourceQuery(sourceQueries, sourceQueries[key].onchange);
+        }
+
+        return sourceQueries[key].query;
+    }
+
     componentDidUpdate() {
         this.updateContext();
     }
@@ -95,7 +125,7 @@ export class FiltersToolBarView extends React.Component {
             saveFilterContext
         } = this.props;
 
-        const { filterOptions } = this.state
+        const { filterOptions, sourceQuery } = this.state
 
 
         let configContexts = {};
@@ -150,9 +180,14 @@ export class FiltersToolBarView extends React.Component {
                 delete configContexts[name];
         };
 
+        const sourceQueryId = `${filteredID}query_source`;
+        if ((context[sourceQueryId] && context[sourceQueryId] !== sourceQuery) || (!context[sourceQueryId] && sourceQuery)) {
+            configContexts[sourceQueryId] = sourceQuery
+        }
+
         if(Object.keys(configContexts).length !== 0) {
             if(!Object.keys(filterContext).length) {
-                saveFilterContext(configContexts)
+                saveFilterContext(configContexts, visualizationId)
             }
             this.props.goTo(window.location.pathname, Object.assign({}, context, configContexts))
         }
@@ -186,11 +221,12 @@ export class FiltersToolBarView extends React.Component {
     onTouchTap(queryParams) {
         const {
             saveFilterContext,
+            visualizationId,
             context,
             goTo
         } = this.props;
 
-        saveFilterContext(queryParams);
+        saveFilterContext(queryParams, visualizationId);
         goTo(window.location.pathname, Object.assign({}, context, queryParams));
     }
 
@@ -287,7 +323,8 @@ const actionCreators = (dispatch) => ({
     goTo: function(link, context) {
         dispatch(push({pathname:link, query:context}));
     },
-    saveFilterContext: function(context) {
+    saveFilterContext: function(context, visualizationId = null) {
+        dispatch(ServiceActions.updateScroll(visualizationId, {page: 1, event: events.FILTER}))
         dispatch(InterfaceActions.filterContext(context));
     }
 

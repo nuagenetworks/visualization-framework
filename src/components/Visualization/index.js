@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactInterval from 'react-interval';
-import evalExpression from "eval-expression";
 import objectPath from "object-path";
 
 import $ from "jquery";
@@ -16,6 +15,7 @@ import FiltersToolBar from "../FiltersToolBar";
 import NextPrevFilter from "../NextPrevFilter";
 import { CardOverlay } from "../CardOverlay";
 import { Card, CardText } from 'material-ui/Card';
+import Script from "../../components/Script"
 
 import {CSVLink} from 'react-csv';
 import * as d3 from "d3";
@@ -48,7 +48,6 @@ import { ServiceManager } from "../../services/servicemanager/index";
 
 import { ActionKeyStore  as VSDKeyStore } from "../../configs/nuage/vsd/redux/actions";
 
-import dataConfig from "../../config";
 import style from "./styles";
 
 import FontAwesome from "react-fontawesome";
@@ -130,9 +129,8 @@ class VisualizationView extends React.Component {
         this.props.fetchConfigurationIfNeeded(id).then((c) => {
             const {
                 configuration,
-                showInDashboard,
-                setPageTitle,
-                context
+                context,
+                dashboard
             } = this.props;
 
             if (!configuration)
@@ -143,7 +141,7 @@ class VisualizationView extends React.Component {
 
             if (scriptName) {
                 const { executeScriptIfNeeded } = this.props;
-                executeScriptIfNeeded(scriptName, context);
+                executeScriptIfNeeded(scriptName, context, false, dashboard);
             }
 
             if (queries) {
@@ -160,20 +158,7 @@ class VisualizationView extends React.Component {
                                 return
                             }
 
-                            /**
-                             * if scroll is enable then fetch only listed columns and increase per page size to 10000
-                             * from ES to make query execution faster
-                             */
-                            if(queries[key].scroll &&
-                                configuration.data &&
-                                configuration.data.columns &&
-                                queryConfiguration.query
-                            ) {
-                                queryConfiguration.query.body['_source'] = this.getColumns(configuration)
-                                queryConfiguration.query.body['size']    = dataConfig.DATA_PER_PAGE_LIMIT
-                            }
-
-                            executeQueryIfNeeded(queryConfiguration, context, queries[key].scroll || false).then(
+                            executeQueryIfNeeded(queryConfiguration, context, queries[key].scroll || false, dashboard).then(
                                 () => {
                                 },
                                 (error) => {
@@ -188,6 +173,8 @@ class VisualizationView extends React.Component {
             if(configuration.listeners) {
                 // Use this.state.listeners to store the listeners that will be
                 // passed into the visualization components.
+                const GraphComponent = GraphManager.getGraphComponent(configuration.graph)
+
                 this.setState({
 
                     // This will be an object whose keys are event names,
@@ -213,16 +200,17 @@ class VisualizationView extends React.Component {
                         // which corresponds to a row of data visualized.
                         listeners[event] = (d) => {
 
-                            let graphQueryParams = {};
-                            let resetFilters = false;
+                            let graphQueryParams = {},
+                                resetFilters = false,
+                                vizID = `${id.replace(/-/g, '')}vkey`,
+                                vKey = GraphComponent.getGraphKey(configuration);
 
-                            if(configuration.key) {
-                                let vizID = `${id.replace(/-/g, '')}vkey`;
-                                let vKey = evalExpression("(" + configuration.key + ")")(d);
-                                if(this.props.orgContext[vizID] === vKey)
+                            if(vKey) {
+                                const graphKey = vKey(d);
+                                if(this.props.orgContext[vizID] === graphKey) {
                                     resetFilters = true;
-
-                                graphQueryParams[vizID] = vKey;
+                                }
+                                graphQueryParams[vizID] = graphKey;
                             }
 
 
@@ -246,9 +234,9 @@ class VisualizationView extends React.Component {
 
                             if(resetFilters) {
                                 for (let key in mergedQueryParams) {
-                                  if (mergedQueryParams.hasOwnProperty(key)) {
-                                    queryParams[key] = '';
-                                  }
+                                    if (mergedQueryParams.hasOwnProperty(key)) {
+                                        queryParams[key] = '';
+                                    }
                                 }
                             }
 
@@ -308,17 +296,27 @@ class VisualizationView extends React.Component {
         selectRow(id, rows, matchingRows, location.query, location.pathname)
     }
 
+    updateScrollData(data) {
+        const {
+            id,
+            updateScroll
+        } = this.props;
+
+        updateScroll(id, data)
+    }
+
     renderVisualization() {
         const {
             configuration,
             response,
             id,
             googleMapURL,
+            scroll,
+            scrollData,
             googleMapsAPIKey
         } = this.props;
 
-        const graphName      = configuration.graph,
-              GraphComponent = GraphManager.getGraphComponent(graphName)
+        const GraphComponent = GraphManager.getGraphComponent(configuration.graph);
 
         if (!response.data) {
             console.log('Main source "data" key is not defined')
@@ -338,7 +336,11 @@ class VisualizationView extends React.Component {
               goTo={this.props.goTo}
               {...this.state.listeners}
               googleMapURL={googleMapURL}
+              scroll={scroll}
+              scrollData={scrollData} //Specific for table component
+              updateScroll={this.updateScrollData.bind(this)}
               googleMapsAPIKey={googleMapsAPIKey}
+              Script={Script}
             />
         )
     }
@@ -607,81 +609,101 @@ class VisualizationView extends React.Component {
 
 const updateFilterOptions = (state, configurations, context, results = []) => {
 
-    if(configurations && configurations.filterOptions) {
-      let filterOptions = Object.assign({}, configurations.filterOptions)
+    if (configurations && configurations.filterOptions) {
+        let filterOptions = { ...configurations.filterOptions }
 
-      for(let key in filterOptions) {
+        for (let key in filterOptions) {
 
-          if (!filterOptions[key].options) {
-              filterOptions[key].options = []
-          }
-          // append filters fetching from query
-          if (filterOptions[key].dynamicOptions) {
-            const {queryKey = null, label = null, value = null, forceOptions = null} = filterOptions[key].dynamicOptions
-            if (queryKey && value) {
+            if (!filterOptions[key].options) {
+                filterOptions[key].options = []
+            }
 
-                // format value and label
-                const formattedValue = columnAccessor({ column: value})
-                const formattedLabel = label ? columnAccessor({ column: label}) : formattedValue
-                let forceOptionsConfig = {}
+            // append filters fetching from query
+            if (filterOptions[key].dynamicOptions) {
+                const {
+                    queryKey = null,
+                    label = null,
+                    value = null,
+                    forceOptions = null
+                } = filterOptions[key].dynamicOptions;
 
-                if (forceOptions) {
-                    for (let key in forceOptions) {
-                        if (forceOptions.hasOwnProperty(key)) {
-                            forceOptionsConfig[key] = columnAccessor({ column: forceOptions[key]})
+                const querySource = filterOptions[key].query_source || null;
+
+
+                if (queryKey && value) {
+                    // format value and label
+                    const formattedValue = columnAccessor({ column: value })
+                    const formattedLabel = label ? columnAccessor({ column: label }) : formattedValue
+                    let forceOptionsConfig = {}
+
+                    if (forceOptions) {
+                        for (let key in forceOptions) {
+                            if (forceOptions.hasOwnProperty(key)) {
+                                forceOptionsConfig[key] = columnAccessor({ column: forceOptions[key] })
+                            }
                         }
                     }
-                }
 
-                if(results[queryKey]) {
-                    results[queryKey].forEach(d => {
-                        let dataValue = formattedValue(d, true)
-                        let dataLabel = label ? formattedLabel(d, true) : dataValue
+                    if (results[queryKey]) {
 
-                        if(dataValue && !filterOptions[key].options.find( datum =>
-                            datum.value === dataValue.toString() || datum.label === dataLabel)) {
+                        results[queryKey].forEach(d => {
+                            let dataValue = formattedValue(d, true)
+                            let dataLabel = label ? formattedLabel(d, true) : dataValue
 
-                            let forceOptionsData = {}
-                            // if forceOptions present then calculate forceOptions values and append it in options
-                            if (forceOptionsConfig) {
-                                for (let key in forceOptionsConfig) {
-                                    if (forceOptionsConfig.hasOwnProperty(key)) {
-                                        forceOptionsData[key] = forceOptionsConfig[key](d, true) || ''
+                            if (dataValue && !filterOptions[key].options.find(datum =>
+                                datum.value === dataValue.toString() || datum.label === dataLabel)) {
+
+                                let forceOptionsData = {}
+                                // if forceOptions present then calculate forceOptions values and append it in options
+                                if (forceOptionsConfig) {
+                                    for (let key in forceOptionsConfig) {
+                                        if (forceOptionsConfig.hasOwnProperty(key)) {
+                                            forceOptionsData[key] = forceOptionsConfig[key](d, true) || ''
+                                        }
                                     }
                                 }
+
+                                const dynamicOption = {
+                                    label: dataLabel,
+                                    value: dataValue.toString(),
+                                    forceOptions: forceOptionsData,
+
+                                }
+
+                                if(querySource) {
+                                    dynamicOption.query_source = querySource;
+                                }
+                                // Add filters in existing filter options
+                                filterOptions[key].options.push(dynamicOption);
+
+
                             }
-                            // Add filters in existing filter options
-                            filterOptions[key].options.push({
-                                label: dataLabel,
-                                value: dataValue.toString(),
-                                forceOptions: forceOptionsData
-                            })
-                        }
-                    })
+                        })
+                    }
+                }
+            }
+
+            // TODO -
+            if(filterOptions[key].type) {
+                if(context && context.enterpriseID) {
+                    let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
+
+                    if(nsgs && nsgs.length) {
+                        filterOptions[key].options = [];
+                        filterOptions[key].default = nsgs[0].name;
+
+                        nsgs.forEach((nsg) => {
+                        filterOptions[key].options.push({
+                            label: nsg.name,
+                            value: nsg.name
+                        });
+                        });
+                    }
                 }
             }
         }
 
-        // TODO -
-        if(filterOptions[key].type) {
-            if(context && context.enterpriseID) {
-                let nsgs = state.services.getIn([ServiceActionKeyStore.REQUESTS, `enterprises/${context.enterpriseID}/${filterOptions[key].name}`, ServiceActionKeyStore.RESULTS]);
-
-                if(nsgs && nsgs.length) {
-                    filterOptions[key].options = [];
-                    filterOptions[key].default = nsgs[0].name;
-
-                    nsgs.forEach((nsg) => {
-                    filterOptions[key].options.push({
-                        label: nsg.name,
-                        value: nsg.name
-                    });
-                    });
-                }
-            }
-        }
-      }
-      return filterOptions || []
+        return filterOptions
     }
 }
 
@@ -703,9 +725,11 @@ const replaceQuery = (replace, query, context) => {
         if (replaceData && context[replaceData.context]) {
 
             for (let key in replaceData.query) {
-                objectPath.push(query, insertString, {
-                    [key]: replaceData.query[key]
-                });
+                if(replaceData.query.hasOwnProperty(key)) {
+                    objectPath.push(query, insertString, {
+                        [key]: replaceData.query[key]
+                    });
+                }
             }
         }
 
@@ -715,9 +739,9 @@ const replaceQuery = (replace, query, context) => {
 
 function findPropertyPath(obj, name) {
     for (var prop in obj) {
-        if (prop == name) {
+        if (prop === name) {
             return name;
-        } else if (typeof obj[prop] == "object") {
+        } else if (typeof obj[prop] === "object") {
             var result = findPropertyPath(obj[prop], name);
             if (result) { return prop + '.' + result; }
         }
@@ -739,7 +763,6 @@ const mapStateToProps = (state, ownProps) => {
 
     let context = {};
     let filteredID = configurationID.replace(/-/g, '');
-
     for (let key in orgContext) {
       if(orgContext.hasOwnProperty(key)) {
 
@@ -764,6 +787,7 @@ const mapStateToProps = (state, ownProps) => {
         headerColor: state.interface.getIn([InterfaceActionKeyStore.HEADERCOLOR, configurationID]),
         isFetching: true,
         hideGraph: false,
+        scroll: false,
         error: state.configurations.getIn([
             ConfigurationsActionKeyStore.VISUALIZATIONS,
             configurationID,
@@ -771,6 +795,7 @@ const mapStateToProps = (state, ownProps) => {
         ]),
         loader: false,
         googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${googleMapsAPIKey}&v=3.exp&libraries=${process.env.REACT_APP_GOOGLE_MAP_LIBRARIES}`,
+        scrollData: state.services.getIn([ServiceActionKeyStore.SCROLL_DATA, configurationID]),
         googleMapsAPIKey,
     };
 
@@ -790,8 +815,6 @@ const mapStateToProps = (state, ownProps) => {
         */
         const queries =  typeof props.configuration.query === 'string' ? {'data' : {'name': props.configuration.query}} : props.configuration.query
 
-        props.filterOptions = updateFilterOptions(state, contextualizeConfiguration, context, props.response);
-
         props.configuration.query = {}
 
         //Checking whether all the queries configurations has been fetched
@@ -807,11 +830,20 @@ const mapStateToProps = (state, ownProps) => {
                 */
                 let queryConfig = Object.assign({}, typeof queries[query] === 'string' ? { 'name': queries[query]} : queries[query])
 
-                props.configuration.query[query] = queryConfig
-
                 if(query === 'data') {
                     queryConfig.required = true
+
+                    // override main query from filter query
+                    if(context.query_source) {
+                        queryConfig.name = context.query_source;
+                    }
+
+                    // check scroll is enabled or not on primary data
+                    if(queryConfig.scroll)
+                        props.scroll = true;
                 }
+
+                props.configuration.query[query] = queryConfig
 
                 let queryConfiguration = state.configurations.getIn([
                     ConfigurationsActionKeyStore.QUERIES,
@@ -831,6 +863,10 @@ const mapStateToProps = (state, ownProps) => {
                         ConfigurationsActionKeyStore.DATA
                     );
                     props.queryConfigurations[query] = queryConfiguration ? queryConfiguration.toJS() : null;
+                    if(props.queryConfigurations[query]) {
+                        props.queryConfigurations[query].vizID = configurationID;
+                    }
+
                 }
 
                 if(realConfiguation  && props.queryConfigurations[query]) {
@@ -842,12 +878,17 @@ const mapStateToProps = (state, ownProps) => {
                 // Expose received response if it is available
                 if (props.queryConfigurations[query] || scriptName) {
 
+                    // Updating the QUERY with Sorting and searching if scroll is enable
+                    if(queryConfig.scroll) {
+                        props.queryConfigurations[query] = ServiceManager.addSearching(props.queryConfigurations[query], objectPath.get(props.scrollData, 'search'));
+                        props.queryConfigurations[query] = ServiceManager.addSorting(props.queryConfigurations[query], objectPath.get(props.scrollData, 'sort'));
+                    }
+
                     const requestID = ServiceManager.getRequestID(props.queryConfigurations[query] || scriptName, context);
 
                     if (typeof requestID === 'undefined') {
                         props.hideGraph = true
                     } else {
-
                         let response = state.services.getIn([
                             ServiceActionKeyStore.REQUESTS,
                             requestID
@@ -867,6 +908,7 @@ const mapStateToProps = (state, ownProps) => {
                             if (responseJS.error && queryConfig.required !== false) {
                                 props.error = responseJS.error;
                             } else if (responseJS.results) {
+
                                 successResultCount++;
                                 props.response[query] = responseJS.results
                             }
@@ -875,6 +917,8 @@ const mapStateToProps = (state, ownProps) => {
                 }
             }
         }
+
+        props.filterOptions = updateFilterOptions(state, contextualizeConfiguration, context, props.response);
 
         if(successResultCount === Object.keys(queries).length ) {
             props.isFetching = false;
@@ -908,16 +952,20 @@ const actionCreators = (dispatch) => ({
         ));
     },
 
-    executeQueryIfNeeded: function(queryConfiguration, context, scroll) {
-        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context, false, scroll));
+    executeQueryIfNeeded: function(queryConfiguration, context, scroll, dashboard = null) {
+        return dispatch(ServiceActions.fetchIfNeeded(queryConfiguration, context, false, scroll, dashboard));
     },
 
-    executeScriptIfNeeded: function(scriptName, context) {
-        return dispatch(ServiceActions.fetchIfNeeded(scriptName, context));
+    executeScriptIfNeeded: function(scriptName, context, scroll, dashboard = null) {
+        return dispatch(ServiceActions.fetchIfNeeded(scriptName, context, false, scroll, dashboard));
     },
 
     selectRow: function(vssID, row, matchingRows, currentQueryParams, currentPath) {
         return dispatch(VFSActions.selectRow(vssID, row, matchingRows, currentQueryParams, currentPath))
+    },
+
+    updateScroll: function(id, params) {
+        return dispatch(ServiceActions.updateScroll(id, params));
     }
 
  });
