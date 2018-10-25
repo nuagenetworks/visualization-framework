@@ -36,7 +36,7 @@
               }
             }
           ],
-          "must": [
+          "should": [
             {
               "nested": {
                 "path": "{{source_field:nuage_metadata.src-pgmem-info}}",
@@ -71,7 +71,8 @@
                 }
               }
             }
-          ]
+          ],
+          "minimum_should_match":1
         }
       },
       "aggs": {
