@@ -12,11 +12,11 @@
         "columns": [
             { "column": "creationDate", "label": "Alarm Created Time", "timeFormat": "%b %d, %y %X"},
             { "column": "lastUpdatedDate", "label": "Last Updated Time", "timeFormat": "%b %d, %y %X" },
-            { "column": "severity", "label": " ","colors":{"CRITICAL":"red","MAJOR":"yellow","MINOR":"green","INFO":"green"}},
+            { "column": "severity", "label": " ","colors":{"CRITICAL":"red","MAJOR":"yellow","MINOR":"green","INFO":"green"},"sort":false},
             { "column": "severity", "label": "Severity"},
-            { "column": "description", "label": "Description" },
-            { "column": "numberOfOccurances", "label": "Count" },
-            { "column": "errorCondition", "label": "Error Condition" }
+            { "column": "description", "label": "Description","sort":false },
+            { "column": "numberOfOccurances", "label": "Count","sort":false },
+            { "column": "errorCondition", "label": "Error Condition","sort":false }
         ],
         "selectable":false,
         "searchBar" : false,
