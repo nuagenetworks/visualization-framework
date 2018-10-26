@@ -574,8 +574,8 @@ class VisualizationView extends React.Component {
 
         const configStyle = configuration.styles || {};
 
-        let refreshInterval = context.refreshInterval,
-            timeout         = parseInt(configuration.refreshInterval || refreshInterval, 10),
+        let refreshInterval = parseInt(context.refreshInterval, 10),
+            timeout         = parseInt(configuration.refreshInterval, 10) || refreshInterval,
             enabled         = refreshInterval > 0;
 
         return (

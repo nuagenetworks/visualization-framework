@@ -59,7 +59,7 @@ export const defaultFilterOptions = {
             },
             {
                 "label": timeLabel(),
-                "value": config.REFRESH_INTERVAL,
+                "value": config.REFRESH_INTERVAL.toString(),
             }
         ]
     }
