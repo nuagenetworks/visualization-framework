@@ -44,7 +44,10 @@ const buildVFRuleOptions = (options, srcEntity, destEntity) => {
             const priority = item.priority;
             const templateName = item.ACLTemplateName ? `Policy: ${item.ACLTemplateName}: ` : "";
             const destPort = item.destinationPort ? `D-Port: ${item.destinationPort}` : '';
-            const text = `${templateName}${desc}${destPort}: From ${from} To: ${to} Action: ${action} Priority: ${priority}`;
+            let text = `${templateName}${desc}${destPort}: From ${from} To: ${to} Action: ${action} Priority: ${priority}`;
+            if (item.policyState === 'DRAFT') {
+                text = `In Draft Mode - ${text}`;
+            }
             return ({ text, value: item.ID });
         });
     }
