@@ -16,7 +16,7 @@
             { "column": "minorAlarmsCount", "label": "Minor Alarms" }
         ]
     },
-    "query": "aar-enterprise-geomap",
+    "query": {"data":{"name":"aar-enterprise-geomap","scroll":true}},
     "listeners": [{
       "redirect": "/dashboards/aarNSG",
       "params": {
