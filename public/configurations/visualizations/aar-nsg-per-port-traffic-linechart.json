@@ -11,7 +11,7 @@
         "yColumn": ["Traffic"],
         "yTickFormat": ".2s",
         "xLabel": "Time",
-        "yLabel": "Traffic",
+        "yLabel": "Traffic(MB/{{interval}})",
         "linesColumn": ["Traffic"],
         "showNull": false,
         "stroke": {
