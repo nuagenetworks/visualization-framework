@@ -1,8 +1,8 @@
 {
     "id": "aar-enterprise-geomap-donut",
     "graph": "PieGraph",
-    "title": "NSGs Health",
-    "description": "Shows all NSGs in the enterprise with their current state and information.\nThe information covers Bootstrap Status, Alarm Status and NSG Software Version.\n\nColor depiction -\n\nBlue: NSG is in Good Condition\nYellow: Bootstrap Status is not ACTIVE\n\n\n\nTo Exit this information, click anywhere inside this box or on the 'i' button again.",
+    "title": "Health Summary",
+    "description": "The Health Summary section summarizes the health of all NSGs in an enterprise.\n\nThe pie chart represents the NSGs with Critical alarms, Major Alarms and no or minor alarms (healthy) as a percentage.\n\nThe list below the pie chart calls out the actual number of NSGs with Critical alarms, Major Alarms, Info/minor alarms (Healthy) and Inactive NSGs",
     "author": "Bharat Mukheja",
     "creationDate": "03/13/2018",
     "data": {
