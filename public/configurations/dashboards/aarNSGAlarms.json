@@ -28,20 +28,5 @@
             "url": "/dashboards/aarNSGAlarms"
         }
     ],
-    "defaultFilterOptionsOverride" : {
-        "Refresh interval": {
-            "parameter": "refreshInterval",
-            "default": "-1",
-            "options": [
-                {
-                    "label": "Inactive",
-                    "value": "-1"
-                },
-                {
-                    "label": "30 seconds",
-                    "value": "30000"
-                }
-            ]
-        }
-    }
+    "defaultFilterOptionsOverride" : {}
 }

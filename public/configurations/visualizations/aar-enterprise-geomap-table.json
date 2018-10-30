@@ -8,7 +8,7 @@
     "data": {
         "columns": [
             { "column": "gatewayName", "label": "NSG" },
-            { "column": "address","totalCharacters":50, "label": "Locality" },
+            { "column": "address","totalCharacters":50, "label": "Address" },
             { "column": "bootstrapStatus", "label": "Bootstrap Status" },
             { "column": "NSGVersion", "label": "NSG Version" },
             { "column": "criticalAlarmsCount", "label": "Critical Alarms" },
