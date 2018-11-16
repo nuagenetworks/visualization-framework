@@ -14,7 +14,7 @@
       {
         "column": "value",
         "format": ",",
-        "label": "MB"
+        "label": "Packets"
       }
     ]
   },
