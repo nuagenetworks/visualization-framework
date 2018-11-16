@@ -40,12 +40,12 @@
             "default": "TotalBytesCount",
             "options": [
                 {
-                    "label": "TotalBytes",
+                    "label": "Total Bytes",
                     "value": "TotalBytesCount",
                     "default": true
                 },
                 {
-                    "label": "TotalPackets",
+                    "label": "Total Packets",
                     "value": "TotalPacketsCount"
                 }
             ]
