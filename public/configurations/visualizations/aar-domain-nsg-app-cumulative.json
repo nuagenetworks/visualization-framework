@@ -6,13 +6,6 @@
     "author": "Bharat Mukheja",
     "creationDate": "10/15/2017",
     "data": {
-        "colors": [
-            "#7da3f7",
-            "#fec26a",
-            "#e78ac3",
-            "#f79e99",
-            "#b3d645"
-        ],
         "otherOptions": {
             "label": "Others",
             "limit": 85
