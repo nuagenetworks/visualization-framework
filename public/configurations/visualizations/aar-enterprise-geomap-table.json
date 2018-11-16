@@ -9,8 +9,8 @@
         "columns": [
             { "column": "gatewayName", "label": "NSG" },
             { "column": "address","totalCharacters":50, "label": "Address" },
-            { "column": "bootstrapStatus", "label": "Bootstrap Status" },
-            { "column": "NSGVersion", "label": "NSG Version" },
+            { "column": "bootstrapStatus", "label": "Bootstrap Status","selection":true },
+            { "column": "NSGVersion", "label": "NSG Version","selection":true },
             { "column": "criticalAlarmsCount", "label": "Critical Alarms" },
             { "column": "majorAlarmsCount", "label": "Major Alarms" },
             { "column": "minorAlarmsCount", "label": "Minor Alarms" }
