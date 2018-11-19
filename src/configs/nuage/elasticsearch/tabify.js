@@ -24,7 +24,7 @@ export default function tabify(response, query = {}) {
     }
 
     // tabify data on the basis of the pre-defined properties in configuration
-    if (query.tabifyOptions) {
+    if (query.tabifyOptions && query.tabifyOptions.join) {
         table = processTabifyOptions(table, query.tabifyOptions);
     }
 
@@ -43,7 +43,7 @@ export default function tabify(response, query = {}) {
     return table;
 }
 
-function processTabifyOptions(table, tabifyOptions = {}) {
+function processTabifyOptions(table, tabifyOptions) {
     const joinFields = tabifyOptions.join;
     return table.map( d => {
         joinFields.forEach(joinField => {
