@@ -1,3 +1,4 @@
+import objectPath from 'object-path';
 /*
   This utility will convert the nested data structure
   returned from an ElasticSearch query into a tabular
@@ -6,7 +7,7 @@
   Inspired by Kibana's implementation, found at
   https://github.com/elastic/kibana/blob/master/src/ui/public/agg_response/tabify/tabify.js
 */
-export default function tabify(response) {
+export default function tabify(response, query = {}) {
     let table;
 
     if (response.aggregations) {
@@ -22,6 +23,11 @@ export default function tabify(response) {
         throw new Error("Tabify() invoked with invalid result set. Result set must have either 'aggregations' or 'hits' defined.");
     }
 
+    // tabify data on the basis of the pre-defined properties in configuration
+    if (query.tabifyOptions) {
+        table = processTabifyOptions(table, query.tabifyOptions);
+    }
+
     table = flatArray(table)
 
     if (process.env.NODE_ENV === "development") {
@@ -35,6 +41,37 @@ export default function tabify(response) {
     }
 
     return table;
+}
+
+function processTabifyOptions(table, tabifyOptions = {}) {
+    const joinFields = tabifyOptions.join;
+    return table.map( d => {
+        joinFields.forEach(joinField => {
+            const dataSet = objectPath.get(d, joinField.path);
+            let value;
+            if(Array.isArray(dataSet)) {
+                value = dataSet.map( name => name[joinField.field]).join(', ');
+            } else {
+                value = dataSet;
+            }
+
+            objectPath.set(d, joinField.path, value);
+        });
+        return d;
+    })
+}
+
+function findPropertyPath(obj, name) {
+    for (var prop in obj) {
+        if (prop === name) {
+            return name;
+        } else if (typeof obj[prop] === "object") {
+            var result = findPropertyPath(obj[prop], name);
+            if (result) { return prop + '.' + result; }
+        }
+    }
+
+    return null;
 }
 
 function flatArray(data) {
