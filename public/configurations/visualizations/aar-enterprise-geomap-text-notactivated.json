@@ -3,7 +3,6 @@
     "title": "NSGs Health",
     "query": "aar-enterprise-geomap-text",
     "graph": "MultiColumnStatusTextGraph",
-    "description":"Quick View of the Critical alarms for this NSG in the VSD dashboard",
     "showTitleBar":false,
     "data": {
         "targetedColumns": ["alarmedNSGCount.critical", "alarmedNSGCount.major", "alarmedNSGCount.healthy", "inactiveNSGCount"],
