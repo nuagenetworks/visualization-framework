@@ -1,0 +1,30 @@
+{
+    "id": "aar-nsg-resource-linechart",
+    "graph": "MultiLineGraph",
+    "title": "Resource Utilisation",
+    "description": "Memory and CPU utilization over a period of time selected in interval",
+    "author": "Bharat Mukheja",
+    "creationDate": "11/19/2018",
+    "data": {
+        "dateHistogram": true,
+        "xColumn": "ts",
+        "xLabel": "Time",
+        "yColumn": ["CPU", "MEMORY"],
+        "yTickFormat": ",.1f",
+        "yLabel": "",
+        "yTicks": 5,
+        "linesColumn": ["CPU", "MEMORY"],
+        "legend": {
+            "orientation": "vertical",
+            "show": true,
+            "circleSize": 5,
+            "labelOffset": 5
+        },
+        "tooltip": [
+            { "column": "columnType", "label": "Type"},
+            { "column": "yColumn", "label": "Value (%)", "format": "0.2f"},
+            { "column": "ts", "label": "Timestamp", "timeFormat": "%b %d, %y %X"}
+        ]
+    },
+    "query": "aar-nsg-resource-linechart"
+}

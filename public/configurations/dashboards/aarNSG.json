@@ -4,7 +4,8 @@
     "creationDate": "10/26/2016",
     "title": "AAR NSG ({{snsg}})",
     "visualizations": [
-        { "id": "aar-nsg-alarm-text",  "x": 1, "y": 0,  "w": 2, "h": 8, "minW": 1, "minH": 5, "static": true}
+        { "id": "aar-nsg-alarm-text",  "x": 1, "y": 0,  "w": 2, "h": 8, "minW": 1, "minH": 5, "static": true},
+        { "id": "aar-nsg-resource-linechart",  "x": 0, "y": 8,  "w": 10, "h": 15, "minW": 1, "minH": 5, "static": true}
     ],
     "links": [
         {
@@ -31,22 +32,5 @@
             "label": "Alarms",
             "url": "/dashboards/aarNSGAlarms"
         }
-    ],
-    "filterOptions": {
-        "Metric": {
-            "parameter": "metric",
-            "default": "TotalBytesCount",
-            "options": [
-                {
-                    "label": "Total Bytes",
-                    "value": "TotalBytesCount",
-                    "default": true
-                },
-                {
-                    "label": "Total Packets",
-                    "value": "TotalPacketsCount"
-                }
-            ]
-        }
-    }
+    ]
 }
