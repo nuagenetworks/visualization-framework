@@ -1,4 +1,5 @@
 import objectPath from 'object-path';
+import evalExpression from 'eval-expression';
 /*
   This utility will convert the nested data structure
   returned from an ElasticSearch query into a tabular
@@ -24,7 +25,7 @@ export default function tabify(response, query = {}) {
     }
 
     // tabify data on the basis of the pre-defined properties in configuration
-    if (query.tabifyOptions && query.tabifyOptions.join) {
+    if (query.tabifyOptions && query.tabifyOptions.concatenationFields) {
         table = processTabifyOptions(table, query.tabifyOptions);
     }
 
@@ -44,18 +45,23 @@ export default function tabify(response, query = {}) {
 }
 
 function processTabifyOptions(table, tabifyOptions) {
-    const joinFields = tabifyOptions.join;
+    const concatenationFields = tabifyOptions.concatenationFields;
+
     return table.map( d => {
-        joinFields.forEach(joinField => {
-            const dataSet = objectPath.get(d, joinField.path);
+        concatenationFields.forEach(joinField => {
+            const dataSet = objectPath.get(d, joinField.path),
+                method = joinField.method ? evalExpression(joinField.method): null; 
             let value;
             if(Array.isArray(dataSet)) {
-                value = dataSet.map( name => name[joinField.field]).join(', ');
+                value = dataSet.map( data => method ? method(data) : data[joinField.field])
+                    .filter( value => value)
+                    .join(', ');
+
             } else {
                 value = dataSet;
             }
 
-            objectPath.set(d, joinField.path, value);
+            objectPath.set(d, joinField.path, { [joinField.field]: value });
         });
         return d;
     })
