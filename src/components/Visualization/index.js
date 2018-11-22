@@ -433,7 +433,8 @@ class VisualizationView extends React.Component {
             return;
 
         const {
-            headerColor
+            headerColor,
+            configuration
         } = this.props;
 
         let color = Object.assign({}, style.cardTitle, headerColor ? headerColor : {});
@@ -441,15 +442,14 @@ class VisualizationView extends React.Component {
         return (
             <div>
             <div style={color}>
-                <div className="pull-right">
+                <div title={configuration.title} style={{ flex: 'auto', overflow: 'hidden', paddingTop: '2px' }}>
+                    {configuration.title}
+                </div>
+                <div style={{ flex: 'none', paddingTop: '2px' }}>
                     {this.renderDescriptionIcon()}
                     {this.renderShareIcon()}
                     {this.renderDownloadIcon()}
                 </div>
-                <div>
-                  {this.props.configuration.title}
-                </div>
-
             </div>
             { this.displayLoader() }
             </div>

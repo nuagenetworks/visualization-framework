@@ -12,11 +12,12 @@ const style = {
     cardTitle: {
         background: theme.palette.greyLightColor,
         color: theme.palette.blackColor,
-        padding: "10px",
-        fontSize: "1em",
+        padding: "8px",
+        fontSize: "14px",
         fontWeight: "200",
         overflow: "hidden",
-        whiteSpace: "nowrap"
+        whiteSpace: "nowrap",
+        display: "flex",
     },
     copyContainer: {
         marginTop: "1px"
@@ -46,7 +47,8 @@ const style = {
         padding: "0px",
         fontSize: "0.85em",
         color: theme.palette.blackColor,
-        position: "relative"
+        position: "relative",
+        overflow: 'auto',
     },
     cardContainer: {
         height: "100%",
