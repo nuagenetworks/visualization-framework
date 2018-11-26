@@ -10,19 +10,19 @@
         "tooltip": [
             { "column": "name", "label": "Disk" },
             { "column": "field", "label": "Type" },
-            { "column": "value", "label": "Value", "format": ",.2s"}
+            { "column": "value", "label": "Value (%)", "format": ",.2s"}
         ],
         "colors":[
             "#b3d645",
             "#f76159"
-            
         ],
-        "xLabel": "Disk",
-        "yLabel": "Usage",
-        "yTickFormat": ".2s",
-        "xColumn": "name",
+        "yLabel": "Disk",
+        "xLabel": "Usage",
+        "xTickFormat": ".2s",
+        "yColumn": "name",
         "stackColumn":"field",
-        "yColumn": "value"
+        "xColumn": "value",
+        "orientation":"horizontal"
     },
     "query": "aar-nsg-disk-barchart"
 }

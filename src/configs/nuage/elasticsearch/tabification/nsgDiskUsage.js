@@ -19,16 +19,17 @@ export default function nsgDiskUsage(response) {
 
     let finalData = [];
     table.forEach(item => {
+        //Select only these two disks, and populate their percentages. Little workaround to avoid lots of configuration in configuration file
         if (item.name === "/home" || item.name === "/nuagetmpfs"){
         finalData.push({
           name:item.name,
           field:"used",
-          value:item.used  
+          value:(item.used*100/(item.used+item.available))  
         });
         finalData.push({
             name:item.name,
             field:"available",
-            value:item.available  
+            value:(item.available*100/(item.used+item.available))  
         });
     }
     })
