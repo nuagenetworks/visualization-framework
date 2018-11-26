@@ -1,0 +1,27 @@
+{
+    "id":"aar-nsg-disk-barchart",
+    "title":"TBD",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_sysmon}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":1,
+            "sort":[
+                {"timestamp":{"order":"desc"}}
+            ],
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "term": {
+                                "system_id": "{{nsgSystemId}}"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "tabify":"nsgDiskUsage"
+}

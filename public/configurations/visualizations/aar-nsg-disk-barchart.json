@@ -1,0 +1,28 @@
+{
+    "id": "aar-nsg-disk-barchart",
+    "graph": "DynamicBarGraph",
+    "title": "Disk Utilisation on NSG",
+    "description": "Bar graph displays disk usage for two disks - /nuagetmpfs and /home",
+    "author": "Bharat Mukheja",
+    "creationDate": "11/26/2018",
+    "data": {
+        "brush": 7,
+        "tooltip": [
+            { "column": "name", "label": "Disk" },
+            { "column": "field", "label": "Type" },
+            { "column": "value", "label": "Value", "format": ",.2s"}
+        ],
+        "colors":[
+            "#b3d645",
+            "#f76159"
+            
+        ],
+        "xLabel": "Disk",
+        "yLabel": "Usage",
+        "yTickFormat": ".2s",
+        "xColumn": "name",
+        "stackColumn":"field",
+        "yColumn": "value"
+    },
+    "query": "aar-nsg-disk-barchart"
+}
