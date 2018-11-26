@@ -1,15 +1,14 @@
 import elasticsearch from "elasticsearch";
 import objectPath from 'object-path';
 
-import _ from 'lodash';
-
-import tabify from "./tabify";
+import estabify from "./tabify";
 import { ActionKeyStore } from "./redux/actions";
 import { parameterizedConfiguration, getUsedParameters } from "../../../utils/configurations";
 import configData from '../../../config'
 
 import { ESSearchConvertor } from '../../../lib/vis-graphs/utils/helpers'
 
+import * as tabification from './tabification';
 
 const ERROR_MESSAGE = "unable to fetch data."
 
@@ -163,6 +162,17 @@ const getNextPageQuery = function (queryConfiguration, nextPage) {
         scroll: configData.ES_SCROLL_TIME,
         nextPage: nextPage
     }})
+}
+
+const tabify = (response, queryConfiguration) => {
+    if (queryConfiguration) {
+        const customTabify = objectPath.get(queryConfiguration, 'tabify');
+        if (customTabify) {
+            const tabificationFunction = tabification[customTabify];
+            return tabificationFunction(response)
+        }
+    }
+    return estabify(response);
 }
 
 export const ElasticSearchService = {
