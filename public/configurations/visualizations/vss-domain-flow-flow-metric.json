@@ -10,7 +10,7 @@
             "column": "timezones",
             "value": "Last 24",
             "field": "value",
-            "format": ",.4s"
+            "format": "s"
         }
     }
 }
