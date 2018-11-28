@@ -158,12 +158,17 @@ class VisualizationView extends React.Component {
                                 return
                             }
 
-                            executeQueryIfNeeded(queryConfiguration, context, queries[key].scroll || false, dashboard).then(
-                                () => {
-                                },
-                                (error) => {
-                                }
-                            );
+                            executeQueryIfNeeded(
+                                {...queryConfiguration, tabifyOptions: configuration.data.tabifyOptions || {} },
+                                context,
+                                queries[key].scroll || false,
+                                dashboard)
+                                .then(
+                                    () => {
+                                    },
+                                    (error) => {
+                                    }
+                                );
                         });
                     }
                 }
