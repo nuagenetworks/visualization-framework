@@ -10,7 +10,7 @@
         "tooltip": [
             { "column": "name", "label": "Disk" },
             { "column": "field", "label": "Type" },
-            { "column": "value", "label": "Value (%)", "format": ",.2s"}
+            { "column": "value", "label": "Value (%)", "format": ",.2f"}
         ],
         "colors":[
             "#b3d645",
