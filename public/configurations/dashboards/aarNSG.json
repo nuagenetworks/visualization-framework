@@ -14,8 +14,8 @@
             "url": "/dashboards/aarNSG"
         },
         {
-            "label": "Top Talkers",
-            "url": "/dashboards/aarNSGTopTalkers"
+            "label": "Top Apps",
+            "url": "/dashboards/aarNSGTopApps"
         },
         {
             "label": "Detail View",

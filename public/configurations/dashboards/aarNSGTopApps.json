@@ -1,8 +1,8 @@
 {
-    "id": "aarNSG",
+    "id": "aarNSGTopApps",
     "author": "Ronak Shah",
     "creationDate": "10/26/2016",
-    "title": "NSG ({{snsg}}) Top Talkers ",
+    "title": "NSG ({{snsg}}) Top Apps ",
     "visualizations": [
         { "id": "aar-nsg-top10-app",             "x": 0, "y": 0,  "w": 6, "h": 15, "minW": 5, "minH": 10, "static": true},
         { "id": "aar-nsg-top5-talkers-upload",   "x": 0, "y": 15, "w": 6, "h": 12, "minW": 5, "minH": 10, "static": true},
@@ -15,8 +15,8 @@
             "url": "/dashboards/aarNSG"
         },
         {
-            "label": "Top Talkers",
-            "url": "/dashboards/aarNSGTopTalkers"
+            "label": "Top Apps",
+            "url": "/dashboards/aarNSGTopApps"
         },
         {
             "label": "Detail View",
