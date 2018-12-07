@@ -8,6 +8,12 @@ let initialState = Map() // eslint-disable-line
                     .set(ActionKeyStore.REQUESTS, Map())
                     .set(ActionKeyStore.SCROLL_DATA, Map()); // eslint-disable-line
 
+const getExpirationTime = (forceCache = null) => {
+    const timingCache    = forceCache ? 86400000 : ServiceManager.config.timingCache, // forceCache equals to 24h
+        currentDate    = Date.now();
+
+    return  currentDate + timingCache;
+}
 
 function didStartRequest(state, requestID, dashboard = null) {
     return state.setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], true)
@@ -16,21 +22,18 @@ function didStartRequest(state, requestID, dashboard = null) {
 }
 
 function didReceiveResponse(state, requestID, results, forceCache) {
-    const timingCache    = forceCache ? 86400000 : ServiceManager.config.timingCache, // forceCache equals to 24h
-          currentDate    = Date.now(),
-          expirationDate = currentDate + timingCache;
-
     return state
       .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], false)
       .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS], results)
-      .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.EXPIRATION_DATE], expirationDate);
+      .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.EXPIRATION_DATE], getExpirationTime(forceCache));
 }
 
 function didReceiveError(state, requestID, error) {
     return state
         .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.IS_FETCHING], false)
         .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.ERROR], error)
-        .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS], []);
+        .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.RESULTS], [])
+        .setIn([ActionKeyStore.REQUESTS, requestID, ActionKeyStore.EXPIRATION_DATE], getExpirationTime());
 }
 
 function deleteRequest(state, requestID) {

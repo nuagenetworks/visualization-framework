@@ -16,7 +16,23 @@ export default function tabify(response, query = {}) {
         const tree = collectBucket(response.aggregations);
         table = flatten(tree);
     } else if (response.hits) {
-        table = response.hits.hits.map((d) => d._source);
+        table = response.hits.hits.map((d) => {
+            if (d.inner_hits) {
+                const paths = {}
+                Object.keys(d.inner_hits).forEach(path => {
+                    d.inner_hits[path].hits.hits.forEach(data => {
+                        if (!Array.isArray(paths[data._nested.field])) {
+                            paths[data._nested.field] = [];
+                        }
+                        paths[data._nested.field].push(data._source);
+                    });
+                })
+                Object.keys(paths).forEach(path => {
+                    objectPath.set(d._source, path, paths[path]);
+                });
+            }
+            return d._source
+        });
 
     } else if (Array.isArray(response)) {
         table = response;
@@ -27,7 +43,7 @@ export default function tabify(response, query = {}) {
 
     // tabify data on the basis of the pre-defined properties in configuration
     if (query.tabifyOptions && query.tabifyOptions.concatenationFields) {
-        table = processTabifyOptions(table, query.tabifyOptions);
+       // table = processTabifyOptions(table, query.tabifyOptions);
     }
 
     table = flatArray(table)
@@ -47,7 +63,6 @@ export default function tabify(response, query = {}) {
 
 function processTabifyOptions(table, tabifyOptions) {
     const concatenationFields = tabifyOptions.concatenationFields;
-
     return table.map( d => {
         const cachedDataSets = {};
         concatenationFields.forEach(joinField => {

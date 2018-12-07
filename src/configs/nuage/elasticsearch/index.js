@@ -63,7 +63,6 @@ const fetch = function (queryConfiguration, state) {
             const newQuery = queryConfiguration.scroll ? Object.assign({}, queryConfiguration.query, {scroll: configData.ES_SCROLL_TIME}) : queryConfiguration.query
             esRequest  = client.search(newQuery)
         }
-
         esRequest.then(function (response) {
             results.response = response
 
@@ -169,10 +168,10 @@ const tabify = (response, queryConfiguration) => {
         const customTabify = objectPath.get(queryConfiguration, 'tabify');
         if (customTabify) {
             const tabificationFunction = tabification[customTabify];
-            return tabificationFunction(response)
+            return tabificationFunction(response, queryConfiguration)
         }
     }
-    return estabify(response);
+    return estabify(response, queryConfiguration);
 }
 
 export const ElasticSearchService = {

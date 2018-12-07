@@ -160,6 +160,7 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
         // If Page number is not equal to 1 then we must use Scroll Base Query else use normal Query
         updatedQuery = currentPage !== 1 ? service.getNextPageQuery(updatedQuery, nextPage) : updatedQuery;
         dispatch(didStartRequest(requestID, dashboard));
+        dispatch(updateScroll( query.vizID, { event: null }))
 
         return service.fetch(updatedQuery, getState())
             .then(
@@ -173,7 +174,6 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
                             {
                                 nextPage: objectPath.get(results.nextQuery, 'query.nextPage'),
                                 expiration: isElasticService(query.service) ? Date.now() + config.SCROLL_CACHING_QUERY_TIME : null,
-                                event: null,
                                 size: objectPath.get(results.nextQuery, 'length'),
                                 currentPage,
                             }
