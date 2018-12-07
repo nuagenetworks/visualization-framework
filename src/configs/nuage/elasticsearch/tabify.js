@@ -43,7 +43,7 @@ export default function tabify(response, query = {}) {
 
     // tabify data on the basis of the pre-defined properties in configuration
     if (query.tabifyOptions && query.tabifyOptions.concatenationFields) {
-       // table = processTabifyOptions(table, query.tabifyOptions);
+        table = processTabifyOptions(table, query.tabifyOptions);
     }
 
     table = flatArray(table)
