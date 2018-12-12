@@ -9,7 +9,6 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { connect } from "react-redux";
 import { Link } from "react-router";
 import { push } from "redux-router";
-import { BarLoader } from 'react-spinners';
 
 import FiltersToolBar from "../FiltersToolBar";
 import NextPrevFilter from "../NextPrevFilter";
@@ -446,30 +445,17 @@ class VisualizationView extends React.Component {
 
         return (
             <div>
-            <div style={color}>
-                <div title={configuration.title} style={{ flex: 'auto', overflow: 'hidden', paddingTop: '2px' }}>
-                    {configuration.title}
-                </div>
-                <div style={{ flex: 'none', paddingTop: '2px' }}>
-                    {this.renderDescriptionIcon()}
-                    {this.renderShareIcon()}
-                    {this.renderDownloadIcon()}
+                <div style={color}>
+                    <div title={configuration.title} style={{ flex: 'auto', overflow: 'hidden', paddingTop: '2px' }}>
+                        {configuration.title}
+                    </div>
+                    <div style={{ flex: 'none', paddingTop: '2px' }}>
+                        {this.renderDescriptionIcon()}
+                        {this.renderShareIcon()}
+                        {this.renderDownloadIcon()}
+                    </div>
                 </div>
             </div>
-            { this.displayLoader() }
-            </div>
-        )
-    }
-
-    // show loader at header if data process through pagination
-    displayLoader() {
-        return (
-          <BarLoader
-            color={style.loader.color}
-            loading={this.props.loader}
-            width={this.state.width}
-            height={3}
-          />
         )
     }
 
@@ -798,7 +784,6 @@ const mapStateToProps = (state, ownProps) => {
             configurationID,
             ConfigurationsActionKeyStore.ERROR
         ]),
-        loader: false,
         googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${googleMapsAPIKey}&v=3.exp&libraries=${process.env.REACT_APP_GOOGLE_MAP_LIBRARIES}`,
         scrollData: state.services.getIn([ServiceActionKeyStore.SCROLL_DATA, configurationID]),
         googleMapsAPIKey,
@@ -906,14 +891,9 @@ const mapStateToProps = (state, ownProps) => {
                         if (response && !response.get(ServiceActionKeyStore.IS_FETCHING)) {
                             let responseJS = response.toJS();
 
-                            if (response.get(ServiceActionKeyStore.LOADER)) {
-                                props.loader = true
-                            }
-
                             if (responseJS.error && queryConfig.required !== false) {
                                 props.error = responseJS.error;
                             } else if (responseJS.results) {
-
                                 successResultCount++;
                                 props.response[query] = responseJS.results
                             }

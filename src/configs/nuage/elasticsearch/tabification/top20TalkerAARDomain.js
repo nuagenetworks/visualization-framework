@@ -1,3 +1,7 @@
+import objectPath from 'object-path';
+import evalExpression from 'eval-expression';
+import _ from 'lodash';
+
 /*
   This utility will convert the nested data structure
   returned from an ElasticSearch query into a tabular
@@ -6,7 +10,7 @@
   Inspired by Kibana's implementation, found at
   https://github.com/elastic/kibana/blob/master/src/ui/public/agg_response/tabify/tabify.js
 */
-export default function top20TalkerAARDomain(response) {
+export default function top20TalkerAARDomain(response, query = {}) {
     let table;
 
     if (response.aggregations) {
@@ -22,6 +26,11 @@ export default function top20TalkerAARDomain(response) {
         throw new Error("Tabify() invoked with invalid result set. Result set must have either 'aggregations' or 'hits' defined.");
     }
 
+    // tabify data on the basis of the pre-defined properties in configuration
+    if (query.tabifyOptions && query.tabifyOptions.concatenationFields) {
+        table = processTabifyOptions(table, query.tabifyOptions);
+    }
+
     table = flatArray(table)
 
     if (process.env.NODE_ENV === "development") {
@@ -35,6 +44,36 @@ export default function top20TalkerAARDomain(response) {
     }
 
     return table;
+}
+
+function processTabifyOptions(table, tabifyOptions) {
+    const concatenationFields = tabifyOptions.concatenationFields;
+    return table.map( d => {
+        const cachedDataSets = {};
+        concatenationFields.forEach(joinField => {
+            const dataSet = cachedDataSets[joinField.path] || objectPath.get(d, joinField.path),
+                method = joinField.method ? evalExpression(joinField.method): null;
+
+            if (!cachedDataSets[joinField.path]) {
+                cachedDataSets[joinField.path] = dataSet;
+                objectPath.set(d, joinField.path, {});
+            }
+
+            let value;
+            if(Array.isArray(dataSet)) {
+                value = dataSet.map( data => method ? method(data) : data[joinField.field])
+                    .filter( value => value);
+
+                value = _.uniq(value).join(', ');
+            } else {
+                value = dataSet && typeof dataSet === 'object' ? dataSet[joinField.field] : dataSet;
+            }
+
+            objectPath.set(d, `${joinField.path}.${joinField.field}`, value);
+        });
+
+        return d;
+    })
 }
 
 function flatArray(data) {
