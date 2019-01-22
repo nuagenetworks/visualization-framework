@@ -17,7 +17,7 @@ let config = function () {
     return {
         host: null,
         log: 'trace',
-        apiVersion: '2.2'   
+        apiVersion: 'master'   
     }
 }
 
