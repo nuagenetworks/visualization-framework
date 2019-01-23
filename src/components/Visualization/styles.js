@@ -48,7 +48,6 @@ const style = {
         fontSize: "0.85em",
         color: theme.palette.blackColor,
         position: "relative",
-        overflow: 'auto',
     },
     cardContainer: {
         height: "100%",
