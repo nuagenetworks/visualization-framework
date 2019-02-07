@@ -1,0 +1,32 @@
+{
+    "id": "inf-nsgdev-regress-result-piechart",
+    "graph": "PieGraph",
+    "title": "Regression Performance on {{nsgdevBed}}",
+    "description":"",
+    "author": "Bharat Mukheja",
+    "creationDate": "09/21/2017",
+    "data": {
+        "sliceColumn": "doc_count",
+        "labelColumn": "result",
+        "tooltip": [
+            { "column": "result", "label": "Result" },
+            { "column": "doc_count", "label": "Count"}
+        ],
+        "mappedColors": {
+            "2": "#D9070A",
+            "1": "#FFBF02",
+            "0": "#62AC00"
+        },
+        "percentages": true,
+        "percentagesFormat": ",.1%",
+        "pieLabelRadius": 0.55,
+        "pieOuterRadius": 0.95,
+        "legend": {
+            "show": true,
+            "orientation": "vertical",
+            "circleSize": 4,
+            "labelOffset": 2
+        }
+    },
+    "query": "inf-nsgdev-regress-result-counts"
+}
