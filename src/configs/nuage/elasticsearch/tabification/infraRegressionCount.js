@@ -1,0 +1,297 @@
+import objectPath from 'object-path';
+import evalExpression from 'eval-expression';
+import _ from 'lodash';
+
+/*
+  This utility will convert the nested data structure
+  returned from an ElasticSearch query into a tabular
+  data structure represented as an array of row objects.
+
+  Inspired by Kibana's implementation, found at
+  https://github.com/elastic/kibana/blob/master/src/ui/public/agg_response/tabify/tabify.js
+*/
+
+const nsgDevBeds = ["mvnsgdev01","mvnsgdev02","mvnsgdev03","mvnsgdev04","mvnsgdev05","mvnsgdev06","mvnsgdev07","mvnsgdev08","mvnsgdev09","mvnsgdev10","mvnsgdev11","mvnsgdev12","mvnsgdev13","mvnsgdev14","mvnsgdev15","mvnsgdev16","mvnsgdev17","mvnsgdev18","mvnsgdev19","mvnsgdev20","mvnsgdev21","mvnsgdev301","mvnsgdev302","mvnsgdev303","mvnsgdev304","mvnsgdev305","mvnsgdev306","mvnsgdev307","mvnsgdev308","mvnsgdev309","mvnsgdev310"];
+
+const dcDevBeds = ["mvdcdev01","mvdcdev02","mvdcdev03","mvdcdev04","mvdcdev05","mvdcdev06","mvdcdev07","mvdcdev08","mvdcdev09","mvdcdev10","mvdcdev11","mvdcdev12","mvdcdev13","mvdcdev14","mvdcdev15","mvdcdev22","mvdcdev23","mvdcdev24","mvdcdev25","mvdcdev26","mvdcdev27","mvdcdev28","mvdcdev30","mvdcdev31","mvdcdev32","mvdcdev34","mvdcdev35","mvdcdev36","mvdcdev37","mvdcdev38","mvdcdev39","mvdcdev40","mvdcdev41","mvdcdev42","mvdcdev43","mvdcdev44"]
+
+const bedLists = {
+    nsgDev:nsgDevBeds,
+    dcDev:dcDevBeds
+}
+
+export default function infraRegressionCount(response, query = {}) {
+    let table;
+
+    if (response.aggregations) {
+        const tree = collectBucket(response.aggregations);
+        table = flatten(tree);
+    } else if (response.hits) {
+        table = response.hits.hits.map((d) => d._source);
+
+    } else if (Array.isArray(response)) {
+        table = response;
+
+    } else {
+        throw new Error("Tabify() invoked with invalid result set. Result set must have either 'aggregations' or 'hits' defined.");
+    }
+
+    // tabify data on the basis of the pre-defined properties in configuration
+    if (query.tabifyOptions && query.tabifyOptions.concatenationFields) {
+        table = processTabifyOptions(table, query.tabifyOptions);
+    }
+
+    let bedType;
+    if (query.tabifyOptions && query.tabifyOptions.bedType){
+        bedType = query.tabifyOptions.bedType;
+    }
+
+    table = flatArray(table);
+    table = fillMissingBeds(table,bedType)
+
+    if (process.env.NODE_ENV === "development") {
+        console.log("Results from tabify (first 3 rows only):");
+
+        // This one shows where there are "undefined" values.
+        console.log(table)
+
+        // This one shows the full structure pretty-printed.
+        console.log(JSON.stringify(table.slice(0, 3), null, 2))
+    }
+
+    return table;
+}
+
+function fillMissingBeds(table, bedType){
+    let existingBeds = Array();
+    table.forEach(item => {
+        existingBeds.push(item.testbed);
+    })
+    bedLists[bedType].forEach(bed =>{
+        if(!existingBeds.includes(bed)){
+            table.push({
+                testbed:bed,
+                doc_count:0,
+                total_jobs:0
+            })
+        }
+    })
+    return table;
+}
+
+function processTabifyOptions(table, tabifyOptions) {
+    const concatenationFields = tabifyOptions.concatenationFields;
+    return table.map( d => {
+        const cachedDataSets = {};
+        concatenationFields.forEach(joinField => {
+            const dataSet = cachedDataSets[joinField.path] || objectPath.get(d, joinField.path),
+                method = joinField.method ? evalExpression(joinField.method): null;
+
+            if (!cachedDataSets[joinField.path]) {
+                cachedDataSets[joinField.path] = dataSet;
+                objectPath.set(d, joinField.path, {});
+            }
+
+            let value;
+            if(Array.isArray(dataSet)) {
+                value = dataSet.map( data => method ? method(data) : data[joinField.field])
+                    .filter( value => value);
+
+                value = _.uniq(value).join(', ');
+            } else {
+                value = dataSet && typeof dataSet === 'object' ? dataSet[joinField.field] : dataSet;
+            }
+
+            objectPath.set(d, `${joinField.path}.${joinField.field}`, value);
+        });
+
+        return d;
+    })
+}
+
+function flatArray(data) {
+
+    let finalData = [];
+    data.forEach(item => {
+        let result = cartesianProduct(item);
+        finalData = [...finalData, ...result];
+    })
+
+    return finalData;
+}
+
+
+function cartesianProduct(data) {
+    let final = [];
+    let arrayExists = false;
+
+    let keys = Object.keys(data);
+    for(let i = 0; i < keys.length; i++) {
+        if(Array.isArray(data[keys[i]])) {
+            data[keys[i]].forEach(item => {
+                final.push({...data, [keys[i]]: item})
+            });
+            arrayExists = true;
+            break;
+        } else if (data[keys[i]] && typeof data[keys[i]] === 'object') {
+
+            let products = cartesianProduct(data[keys[i]]);
+            if(products.length > 1) {
+                products.forEach(item => {
+                    final.push({...data, [keys[i]]: item})
+                });
+                arrayExists = true;
+                break;
+            } else if (products.length === 1) {
+                data[keys[i]] = products[0];
+            }
+        }
+    };
+
+    if(arrayExists) {
+        final = flatArray(final);
+    } else {
+        final.push(data);
+    }
+
+    return final;
+}
+
+function collectBucket(node, stack=[]) {
+    if (!node)
+        return;
+
+    const keys = Object.keys(node);
+
+    // Use old school `for` so we can break control flow by returning.
+    for(let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const value = node[key];
+
+        if (typeof value === 'object') {
+
+            if ("hits" in value && Array.isArray(value.hits) && value.hits.length === 1) {
+                if ("sort" in value.hits[0]) {
+                    value.hits[0]._source['sort'] = value.hits[0].sort[0];
+                }
+                return value.hits[0]._source;
+            }
+
+            if (Array.isArray(value)) {
+                return extractTree(value, [...stack, key]);
+            }
+
+            // Here we are sure to have an object
+            if (key === "buckets" && Object.keys(value).length > 1)
+            {
+                return extractBuckets(value, [...stack, key]);
+            }
+            return collectBucket(value, [...stack, key]);
+        }
+    }
+
+    return node;
+}
+
+function extractBuckets(buckets, stack) {
+    const keys = Object.keys(buckets);
+    let results = [];
+
+    for(let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const value = buckets[key];
+
+        let currentObject = collectBucket({[key]: value});
+
+        if (!currentObject)
+            continue;
+
+        currentObject[stack[stack.length - 2]] = key;
+        results.push(currentObject)
+    }
+
+    return results;
+}
+
+function extractTree(buckets, stack) {
+    return buckets.map((bucket) => {
+        return Object.keys(bucket).reduce(function (tree, key) {
+            let value = bucket[key];
+
+            if (typeof value === "object") {
+                if("value" in value){
+                    value = value.value;
+                } else {
+                    value = collectBucket(value, [...stack, key]);
+                }
+            }
+
+            if(key === "key"){
+                key = stack[stack.length - 2]
+            }
+
+            if (typeof value === 'object') {
+                if("value" in value){
+                    value = value.value;
+                }
+            }
+
+            tree[key] = value;
+
+            return tree;
+        }, {});
+    });
+}
+
+function flatten(tree, parentNode={}){
+
+    if (!tree)
+        return [];
+
+    if (!Array.isArray(tree))
+        tree = [tree];
+
+    return tree
+
+    // Have the child node inherit values from the parent.
+        .map((childNode) => Object.assign({}, parentNode, childNode))
+
+        // Each node object here has values inherited from its parent.
+        .map((node) => {
+
+            // Detect properties whose values are arrays.
+            const childTrees = Object.keys(node)
+                .map((key) => {
+                    const value = node[key];
+                    if (Array.isArray(value)) {
+
+                        if(value.length) {
+                            return value;
+                        }
+
+                        node[key] = null;
+                    }
+                    return false;
+                })
+                .filter((d) => d);
+            switch (childTrees.length) {
+
+                // Leaf node case, return the node.
+                case 0:
+                    return node;
+
+                // Non-leaf node case, recurse on the child nodes.
+                default:
+                    const childTree = childTrees[0];
+                    if(childTree.length === 0){
+                        return node;
+                    }
+                    return flatten(childTree, node);
+                // default:
+                //     throw new Error("This case should never happen");
+            }
+        })
+
+        // Flatten the nested arrays.
+        .reduce((a, b) => a.concat(b), []);
+}

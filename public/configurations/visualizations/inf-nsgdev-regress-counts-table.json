@@ -1,14 +1,17 @@
 {
     "id": "inf-nsgdev-regress-counts-table",
     "graph": "Table",
-    "title": "Total and Avg. number of regressions per day for all beds",
+    "title": "Total number of regressions per day for {{bedType}} beds",
     "description": "TBD",
     "author": "Ryan Fredette",
     "data": {
         "columns": [
             { "column": "testbed", "label": "Test Bed"},
             { "column": "total_jobs", "label": "Jobs Run"}
-        ]
+        ],
+        "tabifyOptions":{
+            "bedType":"{{bedType}}"
+        }
     },
     "listeners":[{
       "params":{

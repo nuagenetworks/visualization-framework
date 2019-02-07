@@ -2,6 +2,7 @@
   "id": "inf-nsgdev-regress-counts",
   "author": "Ryan Fredette",
   "service": "elasticsearch",
+  "tabify":"infraRegressionCount",
   "query": {
     "index": "nuage_regress",
     "type": "nuage_doc_type",

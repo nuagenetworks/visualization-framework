@@ -1,7 +1,7 @@
 {
     "id": "inf-nsgdev-testsuite-counts",
     "graph": "BarGraph",
-    "title": "TestSuite Performance on all beds",
+    "title": "TestSuites Run on all beds",
     "description":"",
     "author": "Bharat Mukheja",
     "creationDate": "09/21/2017",
