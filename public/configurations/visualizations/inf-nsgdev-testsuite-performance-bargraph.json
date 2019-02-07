@@ -1,0 +1,29 @@
+{
+    "id": "inf-nsgdev-testsuite-performance-bargraph",
+    "graph": "BarGraph",
+    "title": "TestSuite Performance on all beds",
+    "description":"",
+    "author": "Bharat Mukheja",
+    "creationDate": "09/21/2017",
+    "data": {
+        "yColumn": "doc_count",
+        "xColumn": "testsuite",
+        "stackColumn":"result",
+        "legendColumn":"result",
+        "brush":9,
+        "xLabel": "Times Run",
+        "yLabel":"Test Suite",
+        "tooltip": [
+            { "column": "testsuite", "label": "TestSuite" },
+            { "column": "doc_count", "label": "Count"},
+            { "column": "result", "label": "Result"}
+        ],
+        "legend": {
+            "show": true,
+            "orientation": "vertical",
+            "circleSize": 4,
+            "labelOffset": 2
+        }
+    },
+    "query": "inf-nsgdev-testsuite-performance-counts"
+}
