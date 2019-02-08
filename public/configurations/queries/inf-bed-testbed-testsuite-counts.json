@@ -28,37 +28,7 @@
             {"wildcard": { "version.vsc": "{{vscVersion}}" }},
             {"wildcard": { "version.vsd": "{{vsdVersion}}" }},
             {"term": { "testbed": "{{bedName}}"}}
-          ],
-          
-          "must_not": [
-            {
-                "bool": {
-                    "minimum_should_match": 1,
-                    "should": [
-                        {
-                            "match_phrase": {
-                                "testsuite": "Sanity"
-                            }
-                        },
-                        {
-                            "match_phrase": {
-                                "testsuite": "initial"
-                            }
-                        },
-                        {
-                            "match_phrase": {
-                                "testsuite": "final"
-                            }
-                        },
-                        {
-                            "match_phrase": {
-                                "testsuite": "finished"
-                            }
-                        }
-                    ]
-                }
-            }
-        ]
+          ]
         }
       },
       "_source": {

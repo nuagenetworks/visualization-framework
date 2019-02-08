@@ -1,7 +1,7 @@
 {
     "id": "inf-bed-testsuite-counts",
     "graph": "BarGraph",
-    "title": "TestSuites Run on all beds",
+    "title": "TestSuites Run on all {{bedType}} beds",
     "description":"",
     "author": "Bharat Mukheja",
     "creationDate": "09/21/2017",
@@ -9,8 +9,8 @@
         "yColumn": "doc_count",
         "xColumn": "testsuite",
         "brush":9,
-        "xLabel": "Times Run",
-        "yLabel":"Test Suite",
+        "yLabel": "Times Run",
+        "xLabel":"Test Suite",
         "tooltip": [
             { "column": "testsuite", "label": "TestSuite" },
             { "column": "doc_count", "label": "Count"}

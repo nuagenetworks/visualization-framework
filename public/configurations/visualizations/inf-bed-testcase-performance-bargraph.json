@@ -1,7 +1,7 @@
 {
     "id": "inf-bed-testcase-performance-bargraph",
     "graph": "DynamicBarGraph",
-    "title": "TestCase Performance on all beds",
+    "title": "TestCase Performance on all {{bedType}} beds",
     "description":"",
     "author": "Bharat Mukheja",
     "creationDate": "09/21/2017",

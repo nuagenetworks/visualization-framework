@@ -1,7 +1,7 @@
 {
     "id": "inf-bed-testsuite-performance-bargraph",
     "graph": "BarGraph",
-    "title": "TestSuite Performance on all beds",
+    "title": "TestSuite Performance on all {{bedType}} beds",
     "description":"",
     "author": "Bharat Mukheja",
     "creationDate": "09/21/2017",
@@ -11,8 +11,8 @@
         "stackColumn":"result",
         "legendColumn":"result",
         "brush":9,
-        "xLabel": "Times Run",
-        "yLabel":"Test Suite",
+        "yLabel": "Times Run",
+        "xLabel":"Test Suite",
         "tooltip": [
             { "column": "testsuite", "label": "TestSuite" },
             { "column": "doc_count", "label": "Count"},

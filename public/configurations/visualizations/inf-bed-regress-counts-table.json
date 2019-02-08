@@ -5,6 +5,7 @@
     "description": "TBD",
     "author": "Ryan Fredette",
     "data": {
+        "searchBar":false,
         "columns": [
             { "column": "testbed", "label": "Test Bed"},
             { "column": "total_jobs", "label": "Jobs Run"}
