@@ -18,6 +18,10 @@
         {
             "label": "Run Analytics",
             "url": "/dashboards/infraRegressRuns"
+        },
+        {
+            "label": "Bed Analytics",
+            "url": "/dashboards/infraRegressBeds"
         }
     ]
 }

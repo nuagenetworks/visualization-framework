@@ -41,7 +41,7 @@
             "field": "testbed",
             "size": 50,
             "order": {
-              "total_jobs   ": "desc"
+              "total_jobs   ": "asc"
             }
           },
           "aggs": {

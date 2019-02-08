@@ -62,7 +62,7 @@ function fillMissingBeds(table, bedType, bedLists){
     })
     bedLists[bedType].forEach(bed =>{
         if(!existingBeds.includes(bed)){
-            table.push({
+            table.unshift({
                 testbed:bed,
                 doc_count:0,
                 total_jobs:0
