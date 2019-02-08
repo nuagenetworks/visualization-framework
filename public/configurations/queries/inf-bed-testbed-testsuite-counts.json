@@ -27,7 +27,7 @@
             {"wildcard": { "version.vrs": "{{vrsVersion}}" }},
             {"wildcard": { "version.vsc": "{{vscVersion}}" }},
             {"wildcard": { "version.vsd": "{{vsdVersion}}" }},
-            {"term": { "testbed": "{{nsgdevBed}}"}}
+            {"term": { "testbed": "{{bedName}}"}}
           ],
           
           "must_not": [

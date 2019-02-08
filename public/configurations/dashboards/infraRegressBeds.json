@@ -1,14 +1,14 @@
 {
-    "id": "infraNsgDevBeds",
+    "id": "infraRegressBeds",
     "author": "Ronak Shah",
     "creationDate": "8/30/2018",
     "title": "Results",
     "visualizations": [
-        { "id": "inf-nsgdev-testsuite-counts", "x": 0, "y": 0, "w": 9, "h": 15, "minW": 3, "minH": 15, "static": true},
-        { "id": "inf-nsgdev-regress-counts-table", "x": 0, "y":  15, "w": 3, "h": 15, "minW": 6, "minH": 15, "static": true},
-        { "id": "inf-nsgdev-regress-result-piechart", "x": 3, "y": 15, "w": 3, "h": 15, "minW": 6, "minH": 15, "static": true},
-        { "id": "inf-nsgdev-bed-testsuite-performance-piechart", "x": 6, "y": 15, "w": 3, "h": 15, "minW": 6, "minH": 15, "static": true},
-        { "id": "inf-nsgdev-testsuite-performance-bargraph", "x": 0, "y": 30, "w": 6, "h": 15, "minW": 6, "minH": 15, "static": true}
+        { "id": "inf-bed-testsuite-counts", "x": 0, "y": 0, "w": 9, "h": 15, "minW": 3, "minH": 15, "static": true},
+        { "id": "inf-bed-regress-counts-table", "x": 0, "y":  15, "w": 3, "h": 15, "minW": 6, "minH": 15, "static": true},
+        { "id": "inf-bed-regress-result-piechart", "x": 3, "y": 15, "w": 3, "h": 15, "minW": 6, "minH": 15, "static": true},
+        { "id": "inf-bed-testbed-testsuite-performance-piechart", "x": 6, "y": 15, "w": 3, "h": 15, "minW": 6, "minH": 15, "static": true},
+        { "id": "inf-bed-testsuite-performance-bargraph", "x": 0, "y": 30, "w": 6, "h": 15, "minW": 6, "minH": 15, "static": true}
     ],
     "links": [
         {
