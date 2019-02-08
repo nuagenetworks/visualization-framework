@@ -1,5 +1,5 @@
 {
-    "id": "inf-nsgdev-testcase-performance-bargraph",
+    "id": "inf-bed-testcase-performance-bargraph",
     "graph": "DynamicBarGraph",
     "title": "TestCase Performance on all beds",
     "description":"",
@@ -25,5 +25,5 @@
             "labelOffset": 2
         }
     },
-    "query": "inf-nsgdev-testcase-result-counts"
+    "query": "inf-bed-testcase-result-counts"
 }

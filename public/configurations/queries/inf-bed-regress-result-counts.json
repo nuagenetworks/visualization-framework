@@ -1,8 +1,8 @@
 {
-  "id": "inf-nsgdev-regress-counts",
+  "id": "inf-bed-regress-result-counts",
   "author": "Ryan Fredette",
   "service": "elasticsearch",
-  "tabify":"infraRegressionCount",
+  "tabify":"testSuitePerformanceCounts",
   "query": {
     "index": "nuage_regress",
     "type": "nuage_doc_type",
@@ -28,7 +28,7 @@
             {"wildcard": { "version.vrs": "{{vrsVersion}}" }},
             {"wildcard": { "version.vsc": "{{vscVersion}}" }},
             {"wildcard": { "version.vsd": "{{vsdVersion}}" }},
-            {"wildcard": { "testbed": "*vtb*"}}
+            {"term": { "testbed": "{{nsgdevBed}}"}}
           ]
         }
       },
@@ -36,20 +36,9 @@
         "excludes": []
       },
       "aggs": {
-        "testbed": {
+        "result": {
           "terms": {
-            "field": "testbed",
-            "size": 50,
-            "order": {
-              "total_jobs   ": "asc"
-            }
-          },
-          "aggs": {
-            "total_jobs": {
-              "cardinality": {
-                "field": "job_id"
-              }
-            }
+            "field": "result"
           }
         }
       }

@@ -1,7 +1,7 @@
 {
-    "id": "inf-nsgdev-bed-testsuite-performance-piechart",
+    "id": "inf-bed-testbed-testsuite-performance-piechart",
     "graph": "PieGraph",
-    "title": "TestSuite Performance on {{nsgdevBed}}",
+    "title": "TestSuite Performance on {{bedName}}",
     "description":"",
     "author": "Bharat Mukheja",
     "creationDate": "09/21/2017",
@@ -27,5 +27,5 @@
             "labelOffset": 2
         }
     },
-    "query": "inf-nsgdev-bed-testsuite-counts"
+    "query": "inf-bed-testbed-testsuite-counts"
 }

@@ -1,5 +1,5 @@
 {
-  "id": "inf-nsgdev-testcase-result-counts",
+  "id": "inf-bed-testcase-result-counts",
   "author": "Ryan Fredette",
   "service": "elasticsearch",
   "query": {
@@ -45,7 +45,7 @@
             },
             {
               "wildcard": {
-                "testbed": "*nsgdev*"
+                "testbed": "*{{bedType}}*"
               }
             }
           ],

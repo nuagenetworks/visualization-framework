@@ -1,7 +1,8 @@
 {
-  "id": "inf-nsgdev-testsuite-counts",
+  "id": "inf-bed-testsuite-performance-counts",
   "author": "Ryan Fredette",
   "service": "elasticsearch",
+  "tabify":"testSuitePerformanceCounts",
   "query": {
     "index": "nuage_regress",
     "type": "nuage_doc_type",
@@ -27,7 +28,7 @@
             {"wildcard": { "version.vrs": "{{vrsVersion}}" }},
             {"wildcard": { "version.vsc": "{{vscVersion}}" }},
             {"wildcard": { "version.vsd": "{{vsdVersion}}" }},
-            {"wildcard": { "testbed": "*nsgdev*"}}
+            {"wildcard": { "testbed": "*{{bedType}}*"}}
           ],
           
           "must_not": [
@@ -68,6 +69,13 @@
         "testsuite": {
           "terms": {
             "field": "testsuite"
+          },
+          "aggs": {
+            "result": {
+              "terms": {
+                "field": "result"
+              }
+            }
           }
         }
       }

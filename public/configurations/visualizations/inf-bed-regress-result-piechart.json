@@ -1,7 +1,7 @@
 {
-    "id": "inf-nsgdev-regress-result-piechart",
+    "id": "inf-bed-regress-result-piechart",
     "graph": "PieGraph",
-    "title": "Regression Performance on {{nsgdevBed}}",
+    "title": "Regression Performance on {{bedName}}",
     "description":"",
     "author": "Bharat Mukheja",
     "creationDate": "09/21/2017",
@@ -35,5 +35,5 @@
             }
         }
     },
-    "query": "inf-nsgdev-regress-result-counts"
+    "query": "inf-bed-regress-result-counts"
 }

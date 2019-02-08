@@ -1,5 +1,5 @@
 {
-    "id": "inf-nsgdev-testsuite-counts",
+    "id": "inf-bed-testsuite-counts",
     "graph": "BarGraph",
     "title": "TestSuites Run on all beds",
     "description":"",
@@ -22,5 +22,5 @@
             "labelOffset": 2
         }
     },
-    "query": "inf-nsgdev-testsuite-counts"
+    "query": "inf-bed-testsuite-counts"
 }

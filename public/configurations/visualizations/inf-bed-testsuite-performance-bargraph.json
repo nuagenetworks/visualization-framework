@@ -1,5 +1,5 @@
 {
-    "id": "inf-nsgdev-testsuite-performance-bargraph",
+    "id": "inf-bed-testsuite-performance-bargraph",
     "graph": "BarGraph",
     "title": "TestSuite Performance on all beds",
     "description":"",
@@ -26,5 +26,5 @@
             }
         }
     },
-    "query": "inf-nsgdev-testsuite-performance-counts"
+    "query": "inf-bed-testsuite-performance-counts"
 }

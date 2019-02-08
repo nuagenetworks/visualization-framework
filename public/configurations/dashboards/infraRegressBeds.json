@@ -141,12 +141,12 @@
             "options": [
                 {
                     "label": "NSG Dev",
-                    "value": "nsgDev",
+                    "value": "nsgdev",
                     "default": true
                 },
                 {
                     "label": "DC Dev",
-                    "value": "dcDev"
+                    "value": "dcdev"
                 }
             ]
         }
