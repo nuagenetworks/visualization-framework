@@ -11,7 +11,7 @@ import _ from 'lodash';
   https://github.com/elastic/kibana/blob/master/src/ui/public/agg_response/tabify/tabify.js
 */
 
-export default function infraRegressionCount(response, query = {}) {
+export default function testSuitePerformanceCounts(response, query = {}) {
     let table;
 
     if (response.aggregations) {
@@ -31,17 +31,13 @@ export default function infraRegressionCount(response, query = {}) {
     if (query.tabifyOptions && query.tabifyOptions.concatenationFields) {
         table = processTabifyOptions(table, query.tabifyOptions);
     }
-
-    let bedLists;
-    let bedType;
-    if (query.tabifyOptions && query.tabifyOptions.bedType){
-        bedType = query.tabifyOptions.bedType;
-        bedLists = query.tabifyOptions.bedLists;
+    let resultCodes;
+    if (query.tabifyOptions && query.tabifyOptions.resultCodes) {
+        resultCodes = query.tabifyOptions.resultCodes;
     }
-
     table = flatArray(table);
-    table = fillMissingBeds(table,bedType, bedLists)
-
+    table = processResultCodes(table,resultCodes)
+    
     if (process.env.NODE_ENV === "development") {
         console.log("Results from tabify (first 3 rows only):");
 
@@ -55,22 +51,13 @@ export default function infraRegressionCount(response, query = {}) {
     return table;
 }
 
-function fillMissingBeds(table, bedType, bedLists){
-    let existingBeds = Array();
+function processResultCodes(table,resultCodes){
     table.forEach(item => {
-        existingBeds.push(item.testbed);
-    })
-    bedLists[bedType].forEach(bed =>{
-        if(!existingBeds.includes(bed)){
-            table.push({
-                testbed:bed,
-                doc_count:0,
-                total_jobs:0
-            })
-        }
+        item.result = resultCodes[item.result];
     })
     return table;
 }
+
 
 function processTabifyOptions(table, tabifyOptions) {
     const concatenationFields = tabifyOptions.concatenationFields;

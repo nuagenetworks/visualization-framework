@@ -2,6 +2,7 @@
   "id": "inf-nsgdev-testsuite-performance-counts",
   "author": "Ryan Fredette",
   "service": "elasticsearch",
+  "tabify":"testSuitePerformanceCounts",
   "query": {
     "index": "nuage_regress",
     "type": "nuage_doc_type",
