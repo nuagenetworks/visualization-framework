@@ -13,9 +13,9 @@
             { "column": "doc_count", "label": "Count"}
         ],
         "mappedColors": {
-            "2": "#D9070A",
-            "1": "#FFBF02",
-            "0": "#62AC00"
+            "Fail": "#D9070A",
+            "Skip": "#FFBF02",
+            "Pass": "#62AC00"
         },
         "percentages": true,
         "percentagesFormat": ",.1%",

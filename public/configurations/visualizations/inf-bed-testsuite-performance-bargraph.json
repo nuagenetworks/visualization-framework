@@ -18,6 +18,11 @@
             { "column": "doc_count", "label": "Count"},
             { "column": "result", "label": "Result"}
         ],
+        "mappedColors": {
+            "Fail": "#D9070A",
+            "Skip": "#FFBF02",
+            "Pass": "#62AC00"
+        },
         "tabifyOptions":{
             "resultCodes":{
                 "0":"Skip",
