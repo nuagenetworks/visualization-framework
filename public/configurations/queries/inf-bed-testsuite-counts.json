@@ -68,6 +68,13 @@
         "testsuite": {
           "terms": {
             "field": "testsuite"
+          },
+          "aggs":{
+            "jobs_run":{
+              "cardinality":{
+                "field":"job_id"
+              }
+            }
           }
         }
       }

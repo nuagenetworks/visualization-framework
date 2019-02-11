@@ -6,14 +6,14 @@
     "author": "Bharat Mukheja",
     "creationDate": "09/21/2017",
     "data": {
-        "yColumn": "doc_count",
+        "yColumn": "jobs_run",
         "xColumn": "testsuite",
         "brush":9,
         "yLabel": "Times Run",
         "xLabel":"Test Suite",
         "tooltip": [
             { "column": "testsuite", "label": "TestSuite" },
-            { "column": "doc_count", "label": "Count"}
+            { "column": "jobs_run", "label": "Count"}
         ],
         "legend": {
             "show": true,
