@@ -1,0 +1,24 @@
+{
+    "id": "inf-regress-qos-overview",
+    "graph": "VariationTextGraph",
+    "title": " QoS not run over all suites ",
+    "description": "",
+    "author": "Ronak Shah",
+    "creationDate": "08/30/2018",
+    "data": {
+        "titlePosition": "top",
+        "target":{
+            "column": "timezones",
+            "value": "NotRun",
+            "field": "doc_count",
+            "format": ",.0f"
+        }
+    },
+    "listeners": [{
+      "redirect": "/dashboards/infraRegressAreaDetails",
+      "params": {
+          "testsuiteArea": "qos"
+      }
+    }],
+    "query": "inf-regress-qos-overview"
+}

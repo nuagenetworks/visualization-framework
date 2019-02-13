@@ -1,0 +1,34 @@
+{
+    "id": "infraRegressAreaDetails",
+    "author": "Ronak Shah",
+    "creationDate": "8/30/2018",
+    "title": "Testsuite Area Quality Overview",
+    "visualizations": [
+        { "id": "inf-regress-area-testsuite-heatmap", "x": 0, "y": 0, "w": 12, "h": 20, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-area-testsuite-performance-bargraph", "x": 0, "y": 20, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true}
+    ],
+    "links": [
+        {
+            "label": "Utilization Analytics",
+            "url": "/dashboards/infraRegressUtilization"
+        },
+        {
+            "label": "Results Analytics",
+            "url": "/dashboards/infraRegressResults"
+        },
+        {
+            "label": "Run Analytics",
+            "url": "/dashboards/infraRegressRuns"
+        },
+        {
+            "label": "Area Analytics",
+            "url": "/dashboards/infraRegressArea"
+        },
+        {
+            "label": "Area Details",
+            "url": "/dashboards/infraRegressAreaDetails"
+        }
+    ],
+    "defaultFilterOptionsOverride":{
+    }
+}

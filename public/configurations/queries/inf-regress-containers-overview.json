@@ -1,0 +1,57 @@
+{
+    "id":"inf-regress-containers-overview",
+    "title":"",
+    "service":"elasticsearch",
+    "query":{
+        "index":"nuage_regress_areas",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{    
+            "size": 0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "term": {
+                                "Area":"containers"
+                            }
+                        },
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-1d}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "area": {
+                    "terms": {
+                        "field": "Area"
+                    },
+                    "aggs": {
+                        "timezones": {
+                            "filters": {
+                                "filters": {
+                                    "NotRun": {
+                                        "term": {
+                                            "TimesRun": 0
+                                        }
+                                    },
+                                    "Run": {
+                                        "exists": {
+                                            "field": "TimesRun"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

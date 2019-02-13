@@ -1,0 +1,70 @@
+{
+    "id": "inf-regress-area-testsuite-heatmap",
+    "service": "elasticsearch",
+    "query": {
+        "index": "nuage_regress_areas",
+        "type": "{{type:nuage_doc_type}}",
+        "body": {
+            "size": 0,
+            "sort": [
+                {
+                    "timestamp": {
+                        "order": "desc"
+                    }
+                }
+            ],
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "range": {
+                                "timestamp": {
+                                    "gte": "now-7d",
+                                    "lte": "now",
+                                    "format": "epoch_millis"
+                                }
+                            }
+                        }
+                    ],
+                    "filter": {
+                        "bool": {
+                            "must": [
+                                {
+                                    "term": {
+                                        "Area": "{{testsuiteArea}}"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "aggs": {
+                "date_histo": {
+                    "date_histogram": {
+                        "field": "timestamp",
+                        "interval": "1d",
+                        "format" : "yyyy-MM-dd"
+                    },
+                    "aggs": {
+                        "testsuite": {
+                            "terms": {
+                                "field": "TestSuiteName"
+                            },
+                            "aggs": {
+                                "Runs": {
+                                    "terms": {
+                                        "script": {
+                                            "lang":"painless",
+                                            "inline":"doc['TimesRun'].value > 0"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
