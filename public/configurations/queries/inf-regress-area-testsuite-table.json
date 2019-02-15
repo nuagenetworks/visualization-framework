@@ -1,0 +1,73 @@
+{
+  "id": "inf-regress-area-testsuite-table",
+  "author": "Ryan Fredette",
+  "service": "elasticsearch",
+  "query": {
+    "index": "nuage_regress",
+    "type": "nuage_doc_type",
+    "body": {
+      "sort": [
+        {
+          "time_regression_started": {
+            "order": "desc"
+          }
+        }
+      ],
+      "size": 0,
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "range": {
+                "time_regression_submitted": {
+                  "gte": "{{testsuiteTime:now}}||-1d",
+                  "lte": "{{testsuiteTime:now}}",
+                  "format": "epoch_millis"
+                }
+              }
+            }
+          ],
+          "filter": [
+            {
+              "term": {
+                "testsuite": "{{testSuite}}"
+              }
+            }
+          ]
+        }
+      },
+      "_source": {
+        "excludes": []
+      },
+      "aggs": {
+        "job_id": {
+          "terms": {
+            "field": "job_id",
+            "size": 500,
+            "order": {
+              "_count": "desc"
+            }
+          },
+          "aggs": {
+            "testsuite_result": {
+              "terms": {
+                "field": "testsuite_result",
+                "size": 5,
+                "order": {
+                  "_count": "desc"
+                }
+              }
+            },
+            "aggs": {
+              "runLevel": {
+                "terms": {
+                  "field": "runLevel"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

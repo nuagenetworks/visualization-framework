@@ -1,0 +1,30 @@
+{
+  "id": "inf-regress-area-testsuite-table",
+  "graph": "Table",
+  "title": "Latest Test Results for {{vrsVersion}}",
+  "description": "TBD",
+  "author": "Ryan Fredette",
+  "data": {
+    "columns": [
+      {
+        "column": "job_id",
+        "label": "Job Id"
+      },
+      {
+        "column": "testsuite_result",
+        "label": "Suite Result",
+        "colors": {
+          "0": "gray",
+          "1": "red",
+          "2": "green"
+        }
+      },
+      {
+        "column": "runLevel",
+        "label": "Run Level"
+      }
+    ]
+  },
+  "listeners": [],
+  "query": "inf-regress-area-testsuite-table"
+}
