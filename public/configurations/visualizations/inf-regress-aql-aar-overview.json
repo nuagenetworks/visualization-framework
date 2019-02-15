@@ -1,0 +1,24 @@
+{
+    "id": "inf-regress-aql-aar-overview",
+    "graph": "SimpleTextGraph",
+    "title": "AAR not run over all suites",
+    "description": "",
+    "author": "Ronak Shah",
+    "creationDate": "08/30/2018",
+    "showTitleBar": false,
+    "data": {
+        "borderRadius": "0",
+        "targetedColumn":"ratio",
+        "fontColor":"black",
+        "colors":[
+            "white"
+        ]
+    },
+    "listeners": [{
+        "redirect": "/dashboards/infraRegressAreaDetails",
+      "params": {
+          "testsuiteArea": "area"
+      }
+    }],
+    "query": "inf-regress-aql-aar-overview"
+}

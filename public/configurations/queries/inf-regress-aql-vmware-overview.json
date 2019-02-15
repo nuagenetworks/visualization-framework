@@ -1,9 +1,10 @@
 {
-    "id":"inf-regress-qos-overview",
+    "id":"inf-regress-aql-vmware-overview",
     "title":"",
     "service":"elasticsearch",
+    "tabify":"aqlSimpleText",
     "query":{
-        "index":"nuage_regress_areas",
+        "index":"nuage_aql",
         "type":"{{type:nuage_doc_type}}",
         "body":{    
             "size": 0,
@@ -12,7 +13,7 @@
                     "must":[
                         {
                             "term": {
-                                "Area":"qos"
+                                "Area":"vmware"
                             }
                         },
                         {
@@ -41,7 +42,7 @@
                                             "TimesRun": 0
                                         }
                                     },
-                                    "Run": {
+                                    "Total": {
                                         "exists": {
                                             "field": "TimesRun"
                                         }

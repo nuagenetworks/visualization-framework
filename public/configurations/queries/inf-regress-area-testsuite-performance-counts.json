@@ -17,8 +17,8 @@
               {
                 "range":{
                   "time_regression_submitted":{
-                    "gte":"{{testsuiteTime}}",
-                    "lte":"{{testsuiteTime}}||+1d",
+                    "gte":"{{testsuiteTime}}||-5m",
+                    "lte":"{{testsuiteTime}}||+1435m",
                     "format":"epoch_millis"
                   }
                 }

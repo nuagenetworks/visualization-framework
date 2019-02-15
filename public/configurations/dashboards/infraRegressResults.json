@@ -44,7 +44,8 @@
                         "interval": "1h",
                         "prevStartTime": "now-8h",
                         "unit": "h",
-                        "duration": "4"
+                        "duration": "4",
+                        "endTime": "now"
                     }
                 },
                 {
@@ -55,7 +56,8 @@
                         "interval": "1h",
                         "prevStartTime": "now-48h",
                         "unit": "h",
-                        "duration": "24"
+                        "duration": "24",
+                        "endTime": "now"
                     }
                 },
                 {
@@ -65,7 +67,8 @@
                         "interval": "12h",
                         "prevStartTime": "now-14d",
                         "unit": "d",
-                        "duration": "7"
+                        "duration": "7",
+                        "endTime": "now"
                     }
                 }
             ]

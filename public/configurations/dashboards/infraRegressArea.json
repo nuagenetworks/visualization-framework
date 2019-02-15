@@ -4,12 +4,26 @@
     "creationDate": "8/30/2018",
     "title": "Testsuite Area Quality Overview",
     "visualizations": [
-        { "id": "inf-regress-aar-overview", "x": 1, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-qos-overview", "x": 5, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-ipv6-overview", "x": 9, "y": 0, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aqlunderlay-overview", "x": 1, "y": 7, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-vmware-overview", "x": 5, "y": 7, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-containers-overview", "x": 9, "y": 7, "w": 2, "h": 5, "minW": 2, "minH": 5, "static": true}
+        { "id": "inf-regress-aql-aar-overview",             "x": 1, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-qos-overview",             "x": 5, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-ipv6-overview",            "x": 9, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-aqlunderlay-overview",     "x": 1, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-vmware-overview",          "x": 5, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-containers-overview",      "x": 9, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},        
+        { "id": "inf-regress-aql-nsg_performance-overview", "x": 1, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-ipsec-overview",           "x": 5, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-wbx_vsg-overview",         "x": 9, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-routing-overview",         "x": 1, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_upgrade-overview",      "x": 5, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_acl-overview",          "x": 9, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_qos-overview",          "x": 1, "y": 28, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_vlan_trunking-overview","x": 5, "y": 28, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_stats-overview",        "x": 9, "y": 28, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_underlay-overview",     "x": 1, "y": 35, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_multi_vip-overview",    "x": 5, "y": 35, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_vrs-overview",          "x": 9, "y": 35, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_mirroring-overview",    "x": 1, "y": 42, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true}
+        
     ],
     "links": [
         {
@@ -39,7 +53,7 @@
             "default": "now-24h",
             "options": [
                 {
-                    "label": "6 days ago",
+                    "label": "7 days ago",
                     "value": "now-7d",
                     "forceOptions": {
                         "interval": "1d",
@@ -50,7 +64,7 @@
                     }
                 },
                 {
-                    "label": "5 days ago",
+                    "label": "6 days ago",
                     "value": "now-6d",
                     "forceOptions": {
                         "interval": "1d",
@@ -61,7 +75,7 @@
                     }
                 },
                 {
-                    "label": "4 days ago",
+                    "label": "5 days ago",
                     "value": "now-5d",
                     "forceOptions": {
                         "interval": "1d",
@@ -72,7 +86,7 @@
                     }
                 },
                 {
-                    "label": "3 days ago",
+                    "label": "4 days ago",
                     "value": "now-4d",
                     "forceOptions": {
                         "interval": "1d",
@@ -83,7 +97,7 @@
                     }
                 },
                 {
-                    "label": "2 days ago",
+                    "label": "3 days ago",
                     "value": "now-3d",
                     "forceOptions": {
                         "interval": "1d",
@@ -94,7 +108,7 @@
                     }
                 },
                 {
-                    "label": "1 day ago",
+                    "label": "2 days ago",
                     "value": "now-2d",
                     "forceOptions": {
                         "interval": "1d",

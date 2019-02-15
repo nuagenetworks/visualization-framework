@@ -1,0 +1,58 @@
+{
+    "id":"inf-regress-aql-dc_vrs-overview",
+    "title":"",
+    "service":"elasticsearch",
+    "tabify": "aqlSimpleText",
+    "query":{
+        "index":"nuage_aql",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{    
+            "size": 0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "term": {
+                                "Area":"dc_vrs"
+                            }
+                        },
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-1d}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "area": {
+                    "terms": {
+                        "field": "Area"
+                    },
+                    "aggs": {
+                        "timezones": {
+                            "filters": {
+                                "filters": {
+                                    "NotRun": {
+                                        "term": {
+                                            "TimesRun": 0
+                                        }
+                                    },
+                                    "Total": {
+                                        "exists": {
+                                            "field": "TimesRun"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -2,7 +2,7 @@
     "id": "inf-regress-area-testsuite-heatmap",
     "service": "elasticsearch",
     "query": {
-        "index": "nuage_regress_areas",
+        "index": "nuage_aql",
         "type": "{{type:nuage_doc_type}}",
         "body": {
             "size": 0,
@@ -19,9 +19,10 @@
                         {
                             "range": {
                                 "timestamp": {
-                                    "gte": "now-7d",
+                                    "gte": "now-14d",
                                     "lte": "now",
-                                    "format": "epoch_millis"
+                                    "format": "epoch_millis",
+                                    "time_zone": "-08:00"
                                 }
                             }
                         }

@@ -1,18 +1,19 @@
 {
-    "id": "inf-regress-ipv6-overview",
-    "title": "",
-    "service": "elasticsearch",
-    "query": {
-        "index": "nuage_regress_areas",
-        "type": "{{type:nuage_doc_type}}",
-        "body": {
+    "id":"inf-regress-aql-dc_mirroring-overview",
+    "title":"",
+    "service":"elasticsearch",
+    "tabify": "aqlSimpleText",
+    "query":{
+        "index":"nuage_aql",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{    
             "size": 0,
-            "query": {
-                "bool": {
-                    "must": [
+            "query":{
+                "bool":{
+                    "must":[
                         {
                             "term": {
-                                "Area": "ipv6"
+                                "Area":"dc_mirroring"
                             }
                         },
                         {
@@ -41,7 +42,7 @@
                                             "TimesRun": 0
                                         }
                                     },
-                                    "Run": {
+                                    "Total": {
                                         "exists": {
                                             "field": "TimesRun"
                                         }
