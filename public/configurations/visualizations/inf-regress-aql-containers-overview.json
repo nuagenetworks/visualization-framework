@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-aql-containers-overview",
     "graph": "SimpleTextGraph",
-    "title": "Containers not run over all suites",
+    "title": "Containers",
     "description": "",
     "author": "Ronak Shah",
     "creationDate": "08/30/2018",

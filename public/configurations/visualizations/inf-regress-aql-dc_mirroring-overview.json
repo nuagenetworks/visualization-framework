@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-aql-dc_mirroring-overview",
     "graph": "SimpleTextGraph",
-    "title": "DC Mirroring not run over all suites",
+    "title": "DC Mirroring",
     "description": "",
     "author": "Ronak Shah",
     "creationDate": "08/30/2018",
@@ -17,7 +17,7 @@
     "listeners": [{
         "redirect": "/dashboards/infraRegressAreaDetails",
       "params": {
-          "testsuiteArea": "dc_mirroring"
+          "testsuiteArea": "area"
       }
     }],
     "query": "inf-regress-aql-dc_mirroring-overview"

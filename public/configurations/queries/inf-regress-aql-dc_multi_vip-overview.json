@@ -34,17 +34,25 @@
                         "field": "Area"
                     },
                     "aggs": {
-                        "timezones": {
-                            "filters": {
-                                "filters": {
-                                    "NotRun": {
-                                        "term": {
-                                            "TimesRun": 0
-                                        }
-                                    },
-                                    "Total": {
-                                        "exists": {
-                                            "field": "TimesRun"
+                        "suites": {
+                            "terms": {
+                                "field": "TestSuiteName",
+                                "size": 100
+                            },
+                            "aggs": {
+                                "run_count": {
+                                    "filters": {
+                                        "filters": {
+                                            "NotRun": {
+                                                "term": {
+                                                    "TimesRun": 0
+                                                }
+                                            },
+                                            "Total": {
+                                                "exists": {
+                                                    "field": "TimesRun"
+                                                }
+                                            }
                                         }
                                     }
                                 }

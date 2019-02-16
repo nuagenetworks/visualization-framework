@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-aql-qos-overview",
     "graph": "SimpleTextGraph",
-    "title": " QoS not run over all suites ",
+    "title": " NSG QoS  ",
     "description": "",
     "author": "Ronak Shah",
     "creationDate": "08/30/2018",

@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-aql-dc_underlay-overview",
     "graph": "SimpleTextGraph",
-    "title": "DC Underlay not run over all suites",
+    "title": "DC Underlay",
     "description": "",
     "author": "Ronak Shah",
     "creationDate": "08/30/2018",
@@ -18,7 +18,7 @@
         {
             "redirect": "/dashboards/infraRegressAreaDetails",
             "params": {
-                "testsuiteArea": "dc_underlay"
+                "testsuiteArea": "area"
             }
         }
     ],

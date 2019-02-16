@@ -19,7 +19,7 @@
                         {
                             "range": {
                                 "timestamp": {
-                                    "gte": "now-14d",
+                                    "gte": "now-15d",
                                     "lte": "now",
                                     "format": "epoch_millis",
                                     "time_zone": "-08:00"
@@ -50,7 +50,8 @@
                     "aggs": {
                         "testsuite": {
                             "terms": {
-                                "field": "TestSuiteName"
+                                "field": "TestSuiteName",
+                                "size": 100
                             },
                             "aggs": {
                                 "Runs": {

@@ -44,21 +44,33 @@ export default function aqlSimpleText(response, query = {}) {
 }
 
 function processSimpleText(data){
-    let notrun;
+    console.log(data);
+    let notrun = 0;
     let total;
+    let suitesResult = {};
     let result = {};
-    let item = data[0];
-    if (item.timezones == "Total")
-    {
-        total = item.doc_count;
-        notrun = data[1].doc_count
-    }
-    else
-    {    
-        notrun = item.doc_count;
-        total = data[1].doc_count
+    let item;
+    for (let i=0; i<data.length; i++) {
+        item = data[i];
+        if (!suitesResult[item.suites]) {
+            suitesResult[item.suites] = {};
+        }
+        if (item.run_count == "Total")
+        {
+           suitesResult[item.suites]["total"] = item.doc_count;
+        }
+        else
+        {    
+           suitesResult[item.suites]["notrun"] = item.doc_count;
+        }
     }
     result.area = item.area;
+    total = Object.keys(suitesResult).length;
+    for (var key in suitesResult) {
+        if (suitesResult[key]["total"] == suitesResult[key]["notrun"]) {
+            notrun = notrun + 1;
+        }
+    } 
     result.ratio = `${notrun}/${total}`;
     const output = [result];
     return output

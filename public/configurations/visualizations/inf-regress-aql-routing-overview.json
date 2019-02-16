@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-aql-routing-overview",
     "graph": "SimpleTextGraph",
-    "title": "Routing not run over all suites",
+    "title": "Routing",
     "description": "",
     "author": "Ronak Shah",
     "creationDate": "08/30/2018",
@@ -17,7 +17,7 @@
     "listeners": [{
         "redirect": "/dashboards/infraRegressAreaDetails",
       "params": {
-          "testsuiteArea": "routing"
+          "testsuiteArea": "area"
       }
     }],
     "query": "inf-regress-aql-routing-overview"

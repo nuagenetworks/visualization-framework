@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-aql-ipv6-overview",
     "graph": "SimpleTextGraph",
-    "title": " IPv6 not run over all suites",
+    "title": " IPv6",
     "description": "",
     "author": "Ronak Shah",
     "creationDate": "08/30/2018",

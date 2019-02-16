@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-aql-wbx_vsg-overview",
     "graph": "SimpleTextGraph",
-    "title": "WBX/VSG not run over all suites",
+    "title": "WBX/VSG",
     "description": "",
     "author": "Ronak Shah",
     "creationDate": "08/30/2018",
@@ -17,7 +17,7 @@
     "listeners": [{
         "redirect": "/dashboards/infraRegressAreaDetails",
       "params": {
-          "testsuiteArea": "wbx/vsg"
+          "testsuiteArea": "area"
       }
     }],
     "query": "inf-regress-aql-wbx_vsg-overview"

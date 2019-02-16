@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-aql-dc_vlan_trunking-overview",
     "graph": "SimpleTextGraph",
-    "title": "DC Vlan Trunking not run over all suites",
+    "title": "DC Vlan Trunking",
     "description": "",
     "author": "Ronak Shah",
     "creationDate": "08/30/2018",
@@ -17,7 +17,7 @@
     "listeners": [{
         "redirect": "/dashboards/infraRegressAreaDetails",
       "params": {
-          "testsuiteArea": "dc_vlan_trunking"
+          "testsuiteArea": "area"
       }
     }],
     "query": "inf-regress-aql-dc_vlan_trunking-overview"

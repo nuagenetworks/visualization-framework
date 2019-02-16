@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-aql-nsg_performance-overview",
     "graph": "SimpleTextGraph",
-    "title": "NSG Performance not run over all suites",
+    "title": "NSG Performance",
     "description": "",
     "author": "Ronak Shah",
     "creationDate": "08/30/2018",
@@ -17,7 +17,7 @@
     "listeners": [{
         "redirect": "/dashboards/infraRegressAreaDetails",
       "params": {
-          "testsuiteArea": "nsg_performance"
+          "testsuiteArea": "area"
       }
     }],
     "query": "inf-regress-aql-nsg_performance-overview"

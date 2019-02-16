@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-aql-aar-overview",
     "graph": "SimpleTextGraph",
-    "title": "AAR not run over all suites",
+    "title": "AAR",
     "description": "",
     "author": "Ronak Shah",
     "creationDate": "08/30/2018",
