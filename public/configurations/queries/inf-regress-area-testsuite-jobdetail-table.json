@@ -1,8 +1,7 @@
 {
-    "id": "inf-regress-area-testsuite-table",
+    "id": "inf-regress-area-testsuite-jobdetail-table",
     "author": "Ronak Shah",
     "service": "elasticsearch",
-    "tabify": "regressExtractRunLevel",
     "query": {
       "index": "nuage_regress",
       "type": "nuage_doc_type",
@@ -25,7 +24,8 @@
               }
             ],
             "filter": [
-              {"term": { "testsuite": "{{testSuite}}"}}
+              {"term": { "testsuite": "{{testSuite}}"}},
+              {"term": { "job_id": "{{areaDetailJobId}}"}}
             ],
             
             "must_not": [

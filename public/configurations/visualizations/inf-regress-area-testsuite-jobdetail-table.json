@@ -1,0 +1,26 @@
+{
+  "id": "inf-regress-area-testsuite-jobdetail-table",
+  "graph": "Table",
+  "title": "{{areaDetailJobId}} run details",
+  "description": "TBD",
+  "author": "Ronak Shah",
+  "data": {
+    "columns": [
+      {
+        "column": "testcase",
+        "label": "TestCase"
+      },
+      {
+        "column": "result",
+        "label": "Result",
+        "colors": {
+          "0": "gray",
+          "1": "red",
+          "2": "green"
+        }
+      }
+    ]
+  },
+  "listeners": [],
+  "query": "inf-regress-area-testsuite-jobdetail-table"
+}

@@ -6,7 +6,9 @@
     "visualizations": [
         { "id": "inf-regress-area-testsuite-heatmap", "x": 0, "y": 0, "w": 12, "h": 20, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-area-testsuite-table", "x": 0, "y": 20, "w": 6, "h": 20, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-area-testsuite-lastpass", "x": 6, "y": 20, "w": 4, "h": 7, "minW": 2, "minH": 5, "static": true}
+        { "id": "inf-regress-area-testsuite-lastpass", "x": 6, "y": 20, "w": 4, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-area-testsuite-performance-table", "x": 6, "y": 27, "w": 4, "h": 13, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-area-testsuite-jobdetail-table", "x": 0, "y": 40, "w": 6, "h": 20, "minW": 2, "minH": 5, "static": true}
     ],
     "links": [
         {
@@ -29,5 +31,6 @@
             "label": "Area Details",
             "url": "/dashboards/infraRegressAreaDetails"
         }
-    ]
+    ],
+    "defaultFilterOptionsOverride":{}
 }

@@ -55,6 +55,7 @@
                 {
                     "label": "In Last 14 days",
                     "value": "now-15d",
+                    "default":true,
                     "forceOptions": {
                         "endTime": "now"
                     }
