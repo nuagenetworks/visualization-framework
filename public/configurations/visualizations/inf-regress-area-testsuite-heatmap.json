@@ -27,7 +27,7 @@
             "labelOffset": 2
         },
         "tooltip": [
-            { "column": "date_histo", "label": "Timestamp", "timeFormat": "%b %d, %y %X"},
+            { "column": "date_histo", "label": "Timestamp", "timeFormat": "%b %d"},
             { "column": "testsuite", "label": "Test Suite" },
             { "column": "Runs", "label": "Was Run?" }
         ]

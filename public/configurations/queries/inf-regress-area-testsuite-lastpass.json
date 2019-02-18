@@ -1,5 +1,5 @@
 {
-    "id": "inf-regress-area-testsuite-table",
+    "id": "inf-regress-area-testsuite-lastpass",
     "author": "Ronak Shah",
     "service": "elasticsearch",
     "query": {
@@ -9,24 +9,12 @@
         "sort": [
           { "time_regression_started" : {"order" : "desc"}}
         ],
-        "size": 100,
+        "size": 1,
         "query": {
           "bool": {
-            "must": [
-              {
-                "range":{
-                  "time_regression_submitted":{
-                    "gte":"{{testsuiteTime}}||-5m",
-                    "lte":"{{testsuiteTime}}||+1435m",
-                    "format":"epoch_millis"
-                  }
-                }
-              }
-            ],
             "filter": [
               {"term": { "testsuite": "{{testSuite}}"}}
             ],
-            
             "must_not": [
               {
                   "bool": {
@@ -54,8 +42,18 @@
                           }
                       ]
                   }
+              },
+              {
+                  "term": {
+                      "result": 0
+                  }
+              },
+              {
+                  "term": {
+                      "result": 1
+                  }
               }
-          ]
+            ]
           }
         }
       }

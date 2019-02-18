@@ -1,9 +1,9 @@
 {
   "id": "inf-regress-area-testsuite-table",
   "graph": "Table",
-  "title": "Latest Test Results for {{vrsVersion}}",
+  "title": "{{testSuite}} run for date: {{testsuiteTime}}",
   "description": "TBD",
-  "author": "Ryan Fredette",
+  "author": "Ronak Shah",
   "data": {
     "columns": [
       {
@@ -11,17 +11,17 @@
         "label": "Job Id"
       },
       {
-        "column": "testsuite_result",
-        "label": "Suite Result",
+        "column": "platform",
+        "label": "Platform"
+      },
+      {
+        "column": "result",
+        "label": "Result",
         "colors": {
           "0": "gray",
           "1": "red",
           "2": "green"
         }
-      },
-      {
-        "column": "runLevel",
-        "label": "Run Level"
       }
     ]
   },

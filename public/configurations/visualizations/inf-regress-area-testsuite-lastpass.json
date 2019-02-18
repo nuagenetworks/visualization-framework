@@ -1,0 +1,17 @@
+{
+    "id": "inf-regress-area-testsuite-lastpass",
+    "graph": "SimpleTextGraph",
+    "title": "Last passing regression",
+    "description": "",
+    "author": "Ronak Shah",
+    "showTitleBar": false,
+    "data": {
+        "borderRadius": "0",
+        "targetedColumn":"regression_link",
+        "fontColor":"black",
+        "colors":[
+            "white"
+        ]
+    },
+    "query": "inf-regress-area-testsuite-lastpass"
+}
