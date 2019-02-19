@@ -1,0 +1,30 @@
+{
+  "id": "inf-regress-area-testcase-table",
+  "graph": "Table",
+  "title": "{{testCase}} last 5 results before: {{testsuiteTime:call('epoch_to_date')}}",
+  "description": "TBD",
+  "author": "Bharat Mukheja",
+  "data": {
+    "columns": [
+      {
+        "column": "job_id",
+        "label": "Job Id"
+      },
+      {
+        "column": "runLevel",
+        "label": "Run Level"
+      },
+      {
+        "column": "result",
+        "label": "Result",
+        "colors": {
+          "0": "gray",
+          "1": "red",
+          "2": "green"
+        }
+      }
+    ]
+  },
+  "listeners": [],
+  "query": "inf-regress-area-testcase-table"
+}

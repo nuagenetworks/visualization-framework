@@ -30,6 +30,12 @@
       }
     ]
   },
-  "listeners": [],
+  "listeners": [
+    {
+      "params":{
+        "testCase":"testcase"
+      }
+    }
+  ],
   "query": "inf-regress-area-testsuite-table"
 }
