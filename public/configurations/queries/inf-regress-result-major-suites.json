@@ -2,6 +2,7 @@
     "id":"inf-regress-result-major-suites",
     "title":"TBD",
     "service":"elasticsearch",
+    "tabify":"regressExtractRunLevel",
     "query":{
         "index":"{{index:nuage_regress}}",
         "type":"{{type:nuage_doc_type}}",

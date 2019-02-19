@@ -1,0 +1,59 @@
+{
+  "id": "inf-bed-regress-counts",
+  "author": "Ryan Fredette",
+  "service": "elasticsearch",
+  "tabify":"infraRegressionCount",
+  "query": {
+    "index": "nuage_regress",
+    "type": "nuage_doc_type",
+    "body": {
+      "sort": [
+        { "time_regression_started" : {"order" : "desc"}}
+      ],
+      "size": 0,
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "range":{
+                "time_regression_submitted":{
+                  "gte":"{{startTime:now-24h}}",
+                  "lte":"{{endTime:now}}",
+                  "format":"epoch_millis"
+                }
+              }
+            }
+          ],
+          "filter": [
+            {"wildcard": { "version.vrs": "{{vrsVersion}}" }},
+            {"wildcard": { "version.vsc": "{{vscVersion}}" }},
+            {"wildcard": { "version.vsd": "{{vsdVersion}}" }},
+            {"wildcard": { "testbed": "*{{bedType}}*"}}
+          ]
+        }
+      },
+      "_source": {
+        "excludes": []
+      },
+      "aggs": {
+        "testbed": {
+          "terms": {
+            "field": "testbed",
+            "size": 50,
+            "order": {
+              "total_jobs   ": "asc"
+            }
+          },
+          "aggs": {
+            "total_jobs": {
+              "cardinality": {
+                "field": "job_id"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,26 @@
+{
+    "id": "inf-bed-testsuite-counts",
+    "graph": "BarGraph",
+    "title": "TestSuites Run on all {{bedType}} beds",
+    "description":"",
+    "author": "Bharat Mukheja",
+    "creationDate": "09/21/2017",
+    "data": {
+        "yColumn": "jobs_run",
+        "xColumn": "testsuite",
+        "brush":9,
+        "yLabel": "Times Run",
+        "xLabel":"Test Suite",
+        "tooltip": [
+            { "column": "testsuite", "label": "TestSuite" },
+            { "column": "jobs_run", "label": "Count"}
+        ],
+        "legend": {
+            "show": true,
+            "orientation": "vertical",
+            "circleSize": 4,
+            "labelOffset": 2
+        }
+    },
+    "query": "inf-bed-testsuite-counts"
+}

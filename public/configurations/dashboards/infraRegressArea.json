@@ -1,0 +1,66 @@
+{
+    "id": "infraRegressArea",
+    "author": "Ronak Shah",
+    "creationDate": "8/30/2018",
+    "title": "Area Quality Overview (Testsuites not run / Total)",
+    "visualizations": [
+        { "id": "inf-regress-aql-aar-overview",             "x": 1, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-qos-overview",             "x": 3, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-ipv6-overview",            "x": 5, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-aqlunderlay-overview",     "x": 7, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-vmware-overview",          "x": 9, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-containers-overview",      "x": 1, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true}, 
+        { "id": "inf-regress-aql-nsg_performance-overview", "x": 3, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-ipsec-overview",           "x": 5, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-wbx_vsg-overview",         "x": 7, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-routing-overview",         "x": 9, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_upgrade-overview",      "x": 1, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_acl-overview",          "x": 3, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_qos-overview",          "x": 5, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_vlan_trunking-overview","x": 7, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_stats-overview",        "x": 9, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_underlay-overview",     "x": 1, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_multi_vip-overview",    "x": 3, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_vrs-overview",          "x": 5, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_mirroring-overview",    "x": 7, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true}
+        
+    ],
+    "links": [
+        {
+            "label": "Utilization Analytics",
+            "url": "/dashboards/infraRegressUtilization"
+        },
+        {
+            "label": "Results Analytics",
+            "url": "/dashboards/infraRegressResults"
+        },
+        {
+            "label": "Run Analytics",
+            "url": "/dashboards/infraRegressRuns"
+        },
+        {
+            "label": "Area Analytics",
+            "url": "/dashboards/infraRegressArea"
+        },
+        {
+            "label": "Area Details",
+            "url": "/dashboards/infraRegressAreaDetails"
+        }
+    ],
+    "defaultFilterOptionsOverride":{
+        "Time interval": {
+            "parameter": "startTime",
+            "default": "now-15d",
+            "options": [
+                {
+                    "label": "In Last 14 days",
+                    "value": "now-15d",
+                    "default":true,
+                    "forceOptions": {
+                        "endTime": "now"
+                    }
+                }
+            ]
+        }
+    }
+}

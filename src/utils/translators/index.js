@@ -5,11 +5,13 @@
 import demo from './demo'
 import time_convert from './time'
 import status from './status'
+import epoch_to_date from './epoch_to_date'
 
 const translatorList = {
   demo,
   time_convert,
-  status
+  status,
+  epoch_to_date
 }
 
 export default (method, value) => {

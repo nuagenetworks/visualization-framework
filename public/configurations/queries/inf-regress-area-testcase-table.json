@@ -1,0 +1,33 @@
+{
+    "id": "inf-regress-area-testcase-table",
+    "author": "Bharat Mukheja",
+    "service": "elasticsearch",
+    "tabify": "regressExtractRunLevel",
+    "query": {
+      "index": "nuage_regress",
+      "type": "nuage_doc_type",
+      "body": {
+        "sort": [
+          { "time_regression_started" : {"order" : "desc"}}
+        ],
+        "size": 5,
+        "query": {
+          "bool": {
+            "must": [
+              {
+                "range":{
+                  "time_regression_submitted":{
+                    "lte":"{{testsuiteTime}}||+1435m",
+                    "format":"epoch_millis"
+                  }
+                }
+              }
+            ],
+            "filter": [
+              {"term": { "testcase": "{{testCase}}"}}
+            ]
+          }
+        }
+      }
+    }
+  }

@@ -21,6 +21,14 @@
         {
             "label": "Run Analytics",
             "url": "/dashboards/infraRegressRuns"
+        },
+        {
+            "label": "Area Analytics",
+            "url": "/dashboards/infraRegressArea"
+        },
+        {
+            "label": "Area Details",
+            "url": "/dashboards/infraRegressAreaDetails"
         }
     ],
     "defaultFilterOptionsOverride":{

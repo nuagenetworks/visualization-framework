@@ -1,0 +1,64 @@
+{
+    "id": "inf-regress-area-testsuite-table",
+    "author": "Ronak Shah",
+    "service": "elasticsearch",
+    "tabify": "regressExtractRunLevel",
+    "query": {
+      "index": "nuage_regress",
+      "type": "nuage_doc_type",
+      "body": {
+        "sort": [
+          { "time_regression_started" : {"order" : "desc"}}
+        ],
+        "size": 100,
+        "query": {
+          "bool": {
+            "must": [
+              {
+                "range":{
+                  "time_regression_submitted":{
+                    "gte":"{{testsuiteTime}}||-5m",
+                    "lte":"{{testsuiteTime}}||+1435m",
+                    "format":"epoch_millis"
+                  }
+                }
+              }
+            ],
+            "filter": [
+              {"term": { "testsuite": "{{testSuite}}"}}
+            ],
+            
+            "must_not": [
+              {
+                  "bool": {
+                      "minimum_should_match": 1,
+                      "should": [
+                          {
+                              "match_phrase": {
+                                  "testsuite": "Sanity"
+                              }
+                          },
+                          {
+                              "match_phrase": {
+                                  "testsuite": "initial"
+                              }
+                          },
+                          {
+                              "match_phrase": {
+                                  "testsuite": "final"
+                              }
+                          },
+                          {
+                              "match_phrase": {
+                                  "testsuite": "finished"
+                              }
+                          }
+                      ]
+                  }
+              }
+          ]
+          }
+        }
+      }
+    }
+  }

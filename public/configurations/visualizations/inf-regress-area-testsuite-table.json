@@ -1,0 +1,41 @@
+{
+  "id": "inf-regress-area-testsuite-table",
+  "graph": "Table",
+  "title": "{{testSuite}} run for date: {{testsuiteTime:call('epoch_to_date')}}",
+  "description": "TBD",
+  "author": "Ronak Shah",
+  "data": {
+    "columns": [
+      {
+        "column": "job_id",
+        "label": "Job Id",
+        "tooltip":{"column":"regression_link"}
+      },
+      {
+        "column": "platform",
+        "label": "Platform"
+      },
+      {
+        "column": "runLevel",
+        "label": "Run Level"
+      },
+      {
+        "column": "result",
+        "label": "Result",
+        "colors": {
+          "0": "gray",
+          "1": "red",
+          "2": "green"
+        }
+      }
+    ]
+  },
+  "listeners": [
+    {
+      "params":{
+        "testCase":"testcase"
+      }
+    }
+  ],
+  "query": "inf-regress-area-testsuite-table"
+}

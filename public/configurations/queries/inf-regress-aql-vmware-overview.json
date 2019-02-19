@@ -1,0 +1,66 @@
+{
+    "id":"inf-regress-aql-vmware-overview",
+    "title":"",
+    "service":"elasticsearch",
+    "tabify":"aqlSimpleText",
+    "query":{
+        "index":"nuage_aql",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{    
+            "size": 0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "term": {
+                                "Area":"vmware"
+                            }
+                        },
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-1d}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "area": {
+                    "terms": {
+                        "field": "Area"
+                    },
+                    "aggs": {
+                        "suites": {
+                            "terms": {
+                                "field": "TestSuiteName",
+                                "size": 100
+                            },
+                            "aggs": {
+                                "run_count": {
+                                    "filters": {
+                                        "filters": {
+                                            "NotRun": {
+                                                "term": {
+                                                    "TimesRun": 0
+                                                }
+                                            },
+                                            "Total": {
+                                                "exists": {
+                                                    "field": "TimesRun"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

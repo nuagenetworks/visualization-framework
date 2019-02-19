@@ -1,0 +1,61 @@
+{
+    "id": "inf-regress-area-testsuite-lastpass",
+    "author": "Ronak Shah",
+    "service": "elasticsearch",
+    "query": {
+      "index": "nuage_regress",
+      "type": "nuage_doc_type",
+      "body": {
+        "sort": [
+          { "time_regression_started" : {"order" : "desc"}}
+        ],
+        "size": 1,
+        "query": {
+          "bool": {
+            "filter": [
+              {"term": { "testsuite": "{{testSuite}}"}}
+            ],
+            "must_not": [
+              {
+                  "bool": {
+                      "minimum_should_match": 1,
+                      "should": [
+                          {
+                              "match_phrase": {
+                                  "testsuite": "Sanity"
+                              }
+                          },
+                          {
+                              "match_phrase": {
+                                  "testsuite": "initial"
+                              }
+                          },
+                          {
+                              "match_phrase": {
+                                  "testsuite": "final"
+                              }
+                          },
+                          {
+                              "match_phrase": {
+                                  "testsuite": "finished"
+                              }
+                          }
+                      ]
+                  }
+              },
+              {
+                  "term": {
+                      "result": 0
+                  }
+              },
+              {
+                  "term": {
+                      "result": 1
+                  }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }

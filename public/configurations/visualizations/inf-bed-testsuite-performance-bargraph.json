@@ -1,0 +1,35 @@
+{
+    "id": "inf-bed-testsuite-performance-bargraph",
+    "graph": "BarGraph",
+    "title": "TestSuite Performance on all {{bedType}} beds",
+    "description":"",
+    "author": "Bharat Mukheja",
+    "creationDate": "09/21/2017",
+    "data": {
+        "yColumn": "doc_count",
+        "xColumn": "testsuite",
+        "stackColumn":"result",
+        "legendColumn":"result",
+        "brush":9,
+        "yLabel": "Times Run",
+        "xLabel":"Test Suite",
+        "tooltip": [
+            { "column": "testsuite", "label": "TestSuite" },
+            { "column": "doc_count", "label": "Count"},
+            { "column": "result", "label": "Result"}
+        ],
+        "mappedColors": {
+            "Fail": "#D9070A",
+            "Skip": "#FFBF02",
+            "Pass": "#62AC00"
+        },
+        "tabifyOptions":{
+            "resultCodes":{
+                "0":"Skip",
+                "1":"Fail",
+                "2":"Pass"
+            }
+        }
+    },
+    "query": "inf-bed-testsuite-performance-counts"
+}

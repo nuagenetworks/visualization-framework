@@ -1,0 +1,29 @@
+{
+    "id": "inf-bed-testcase-performance-bargraph",
+    "graph": "DynamicBarGraph",
+    "title": "TestCase Performance on all {{bedType}} beds",
+    "description":"",
+    "author": "Bharat Mukheja",
+    "creationDate": "09/21/2017",
+    "data": {
+        "yColumn": "doc_count",
+        "xColumn": "testcase",
+        "stackColumn":"result",
+        "legendColumn":"result",
+        "brush":9,
+        "xLabel": "Times Run",
+        "yLabel":"Test Case",
+        "tooltip": [
+            { "column": "testcase", "label": "TestCase" },
+            { "column": "doc_count", "label": "Count"},
+            { "column": "result", "label": "Result"}
+        ],
+        "legend": {
+            "show": true,
+            "orientation": "vertical",
+            "circleSize": 4,
+            "labelOffset": 2
+        }
+    },
+    "query": "inf-bed-testcase-result-counts"
+}

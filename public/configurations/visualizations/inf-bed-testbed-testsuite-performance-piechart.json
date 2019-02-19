@@ -1,0 +1,31 @@
+{
+    "id": "inf-bed-testbed-testsuite-performance-piechart",
+    "graph": "PieGraph",
+    "title": "TestSuite Performance on {{bedName}}",
+    "description":"",
+    "author": "Bharat Mukheja",
+    "creationDate": "09/21/2017",
+    "data": {
+        "sliceColumn": "doc_count",
+        "labelColumn": "testsuite",
+        "otherOptions": {
+            "label": "Others",
+            "limit": 85
+        },
+        "tooltip": [
+            { "column": "testsuite", "label": "Test Suite" },
+            { "column": "doc_count", "label": "Count"}
+        ],
+        "percentages": true,
+        "percentagesFormat": ",.1%",
+        "pieLabelRadius": 0.55,
+        "pieOuterRadius": 0.95,
+        "legend": {
+            "show": true,
+            "orientation": "vertical",
+            "circleSize": 4,
+            "labelOffset": 2
+        }
+    },
+    "query": "inf-bed-testbed-testsuite-counts"
+}

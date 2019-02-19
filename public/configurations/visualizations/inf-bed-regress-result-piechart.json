@@ -1,0 +1,39 @@
+{
+    "id": "inf-bed-regress-result-piechart",
+    "graph": "PieGraph",
+    "title": "Regression Performance on {{bedName}}",
+    "description":"",
+    "author": "Bharat Mukheja",
+    "creationDate": "09/21/2017",
+    "data": {
+        "sliceColumn": "doc_count",
+        "labelColumn": "result",
+        "tooltip": [
+            { "column": "result", "label": "Result" },
+            { "column": "doc_count", "label": "Count"}
+        ],
+        "mappedColors": {
+            "Fail": "#D9070A",
+            "Skip": "#FFBF02",
+            "Pass": "#62AC00"
+        },
+        "percentages": true,
+        "percentagesFormat": ",.1%",
+        "pieLabelRadius": 0.55,
+        "pieOuterRadius": 0.95,
+        "legend": {
+            "show": true,
+            "orientation": "vertical",
+            "circleSize": 4,
+            "labelOffset": 2
+        },
+        "tabifyOptions":{
+            "resultCodes":{
+                "0":"Skip",
+                "1":"Fail",
+                "2":"Pass"
+            }
+        }
+    },
+    "query": "inf-bed-regress-result-counts"
+}
