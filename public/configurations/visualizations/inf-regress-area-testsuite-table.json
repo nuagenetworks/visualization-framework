@@ -8,7 +8,8 @@
     "columns": [
       {
         "column": "job_id",
-        "label": "Job Id"
+        "label": "Job Id",
+        "tooltip":{"column":"regression_link"}
       },
       {
         "column": "platform",
@@ -29,12 +30,6 @@
       }
     ]
   },
-  "listeners": [
-       {
-           "params": {
-               "areaDetailJobId": "job_id"
-           }
-       }
-   ],
+  "listeners": [],
   "query": "inf-regress-area-testsuite-table"
 }

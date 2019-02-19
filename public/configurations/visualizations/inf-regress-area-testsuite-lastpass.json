@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-area-testsuite-lastpass",
     "graph": "SimpleTextGraph",
-    "title": "Last passing regression",
+    "title": "Last passing regression for date: {{testsuiteTime:call('epoch_to_date')}}",
     "description": "",
     "author": "Ronak Shah",
     "showTitleBar": false,

@@ -45,7 +45,8 @@
                     "date_histogram": {
                         "field": "timestamp",
                         "interval": "1d",
-                        "format" : "yyyy-MM-dd"
+                        "format" : "yyyy-MM-dd",
+                        "time_zone": "-08:00"
                     },
                     "aggs": {
                         "testsuite": {
