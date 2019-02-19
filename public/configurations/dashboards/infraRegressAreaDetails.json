@@ -8,7 +8,7 @@
         { "id": "inf-regress-area-testsuite-table", "x": 0, "y": 20, "w": 6, "h": 20, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-area-testsuite-lastpass", "x": 6, "y": 20, "w": 4, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-area-testsuite-performance-table", "x": 6, "y": 27, "w": 4, "h": 9, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-area-testcase-table", "x": 0, "y": 40, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true}
+        { "id": "inf-regress-area-testcase-table", "x": 0, "y": 40, "w": 6, "h": 12, "minW": 2, "minH": 5, "static": true}
     ],
     "links": [
         {
