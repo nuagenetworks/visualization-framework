@@ -59,7 +59,7 @@
                                     "terms": {
                                         "script": {
                                             "lang":"painless",
-                                            "inline":"doc['TimesRun'].value > 0"
+                                            "inline":"doc['TimesRun'].value > 0 ? 'Ran': 'Not Run'"
                                         }
                                     }
                                 }

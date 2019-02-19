@@ -1,16 +1,17 @@
 {
     "id": "inf-regress-area-testsuite-lastpass",
-    "graph": "SimpleTextGraph",
-    "title": "Last passing regression for date: {{testsuiteTime:call('epoch_to_date')}}",
-    "description": "",
+    "graph": "Table",
+    "title": "Last passed on: {{testsuiteTime:call('epoch_to_date')}}",
+    "description": "Shows the last passing regression for the selected testsuite till selected date.",
     "author": "Ronak Shah",
-    "showTitleBar": false,
     "data": {
-        "borderRadius": "0",
-        "targetedColumn":"regression_link",
-        "fontColor":"black",
-        "colors":[
-            "white"
+        "searchBar":false,
+        "columns":[
+            {
+                "column":"regression_link",
+                "label": "Regression Link",
+                "tooltip":{"column":"regression_link"}
+            }
         ]
     },
     "query": "inf-regress-area-testsuite-lastpass"

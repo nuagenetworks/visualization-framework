@@ -17,8 +17,8 @@
         "legendColumn": "Runs",
         "colorColumn": "Runs",
         "heatmapColor": {
-            "false": "white",
-            "true": "lightBlue"
+            "Not Run": "white",
+            "Ran": "lightBlue"
         },
         "legend": {
             "show": true,

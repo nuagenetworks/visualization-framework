@@ -2,7 +2,7 @@
   "id": "inf-regress-area-testsuite-table",
   "graph": "Table",
   "title": "{{testSuite}} run for date: {{testsuiteTime:call('epoch_to_date')}}",
-  "description": "TBD",
+  "description": "Colors of the result depict these outcomes.\n\nGray -> Skip\nRed -> Fail\nGreen -> Passed",
   "author": "Ronak Shah",
   "data": {
     "columns": [
@@ -12,16 +12,23 @@
         "tooltip":{"column":"regression_link"}
       },
       {
+        "column": "testcase",
+        "label": "Test Case"
+      },
+      {
         "column": "platform",
-        "label": "Platform"
+        "label": "Platform",
+        "selection":true
       },
       {
         "column": "runLevel",
-        "label": "Run Level"
+        "label": "Run Level",
+        "selection":true
       },
       {
         "column": "result",
         "label": "Result",
+        "selection":true,
         "colors": {
           "0": "gray",
           "1": "red",
