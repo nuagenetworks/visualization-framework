@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-area-testsuite-lastpass",
     "graph": "Table",
-    "title": "Last passed on: {{testsuiteTime:call('epoch_to_date')}}",
+    "title": "Link to the last passed regression",
     "description": "Shows the last passing regression for the selected testsuite till selected date.",
     "author": "Ronak Shah",
     "data": {
