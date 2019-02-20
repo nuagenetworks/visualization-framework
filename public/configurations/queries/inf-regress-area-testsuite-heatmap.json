@@ -19,10 +19,9 @@
                         {
                             "range": {
                                 "timestamp": {
-                                    "gte": "now-15d",
-                                    "lte": "now",
-                                    "format": "epoch_millis",
-                                    "time_zone": "-08:00"
+                                    "gte": "now-15d/d",
+                                    "lte": "now/d",
+                                    "time_zone":"-08:00"
                                 }
                             }
                         }
@@ -46,7 +45,7 @@
                         "field": "timestamp",
                         "interval": "1d",
                         "format" : "yyyy-MM-dd",
-                        "time_zone": "-08:00"
+                        "time_zone":"-08:00"
                     },
                     "aggs": {
                         "testsuite": {
