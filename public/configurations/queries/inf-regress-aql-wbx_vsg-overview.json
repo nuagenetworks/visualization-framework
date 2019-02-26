@@ -17,6 +17,11 @@
                             }
                         },
                         {
+                            "term": {
+                                "branch": "{{branch}}"
+                            }
+                        },
+                        {
                             "range":{
                                 "timestamp":{
                                     "gte":"{{startTime:now-1d}}",

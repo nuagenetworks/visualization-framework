@@ -25,38 +25,9 @@
               }
             ],
             "filter": [
-              {"term": { "testsuite": "{{testSuite}}"}}
-            ],
-            
-            "must_not": [
-              {
-                  "bool": {
-                      "minimum_should_match": 1,
-                      "should": [
-                          {
-                              "match_phrase": {
-                                  "testsuite": "Sanity"
-                              }
-                          },
-                          {
-                              "match_phrase": {
-                                  "testsuite": "initial"
-                              }
-                          },
-                          {
-                              "match_phrase": {
-                                  "testsuite": "final"
-                              }
-                          },
-                          {
-                              "match_phrase": {
-                                  "testsuite": "finished"
-                              }
-                          }
-                      ]
-                  }
-              }
-          ]
+              {"term": { "testsuite": "{{testSuite}}"}},
+              {"term": {"project": "{{branch}}"}}
+            ]
           }
         }
       }

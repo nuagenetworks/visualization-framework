@@ -61,6 +61,28 @@
                     }
                 }
             ]
+        },
+        "Branch": {
+            "parameter": "branch",
+            "default": "0.0",
+            "options": [
+                {
+                    "label": "0.0",
+                    "value": "0.0"
+                },
+                {
+                    "label": "5.4",
+                    "value": "5.4"
+                },
+                {
+                    "label": "5.3",
+                    "value": "5.3"
+                },
+                {
+                    "label": "5.2",
+                    "value": "5.2"
+                }
+            ]
         }
     }
 }
