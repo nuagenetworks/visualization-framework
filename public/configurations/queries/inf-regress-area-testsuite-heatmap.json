@@ -33,6 +33,11 @@
                                     "term": {
                                         "Area": "{{testsuiteArea}}"
                                     }
+                                },
+                                {
+                                    "term": {
+                                        "branch": "{{branch}}"
+                                    }
                                 }
                             ]
                         }

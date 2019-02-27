@@ -24,7 +24,8 @@
               }
             ],
             "filter": [
-              {"term": { "testcase": "{{testCase}}"}}
+              {"term": { "testcase": "{{testCase}}"}},
+              {"term": {"project": "{{branch}}"}}
             ]
           }
         }
