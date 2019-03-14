@@ -1,0 +1,47 @@
+{
+    "id": "inf-build-count-project-bargraph",
+    "title": "Builds per day",
+    "service": "elasticsearch",
+    "query": {
+        "index": "{{index:nuage_build}}",
+        "type": "{{type:nuage_doc_type}}",
+        "body": {
+            "size": 0,
+            "query": {
+                "bool": {
+                    "must_not": [
+                    ],
+                    "must": [
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "project": {
+                    "terms": {
+                        "field": "project",
+                        "size":"50",
+                        "order":{
+                            "count":"desc"
+                        }
+                    },
+                    "aggs": {
+                        "count": {
+                          "cardinality": {
+                              "field": "url"
+                          }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,49 @@
+{
+    "id": "inf-build-avg-duration",
+    "title": "Avg. Duration per day",
+    "service": "elasticsearch",
+    "query": {
+        "index": "{{index:nuage_build}}",
+        "type": "{{type:nuage_doc_type}}",
+        "body": {
+            "size": 0,
+            "query": {
+                "bool": {
+                    "must_not": [
+                    ],
+                    "must": [
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-24h}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        },
+                        {
+                            "term":{
+                                "project":  "{{project:all}}"
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "ts": {
+                    "date_histogram": {
+                        "field": "timestamp",
+                        "interval": "1d"
+                    },
+                    "aggs": {
+                        "duration": {
+                          "avg": {
+                              "field": "duration"
+                          }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

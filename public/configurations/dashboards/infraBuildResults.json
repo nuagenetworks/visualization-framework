@@ -1,0 +1,175 @@
+{
+    "id": "infraBuildResults",
+    "author": "Bharat Mukheja",
+    "creationDate": "3/12/2019",
+    "title": "Build results",
+    "visualizations": [
+        { "id": "inf-build-count-stack",        "x": 0, "y": 0, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-build-count-project-bargraph",    "x": 0, "y": 15, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-build-avg-duration",           "x": 0, "y": 30, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true}
+    ],
+    "links": [
+        {
+            "label": "Utilization Analytics",
+            "url": "/dashboards/infraRegressUtilization"
+        },
+        {
+            "label": "Results Analytics",
+            "url": "/dashboards/infraRegressResults"
+        },
+        {
+            "label": "Run Analytics",
+            "url": "/dashboards/infraRegressRuns"
+        },
+        {
+            "label": "Area Analytics",
+            "url": "/dashboards/infraRegressArea"
+        },
+        {
+            "label": "Area Details",
+            "url": "/dashboards/infraRegressAreaDetails"
+        },
+        {
+            "label": "Build Results",
+            "url": "/dashboards/infraBuildResults"
+        }
+    ],
+    "defaultFilterOptionsOverride":{ 
+        "Project": {
+            "parameter": "project",
+            "default":"all",
+            "options": [
+                {
+                  "label": "All",
+                  "value": "all",
+                  "default":true
+                },
+                {
+                  "label": "Cloudstack",
+                  "value": "Cloudstack"
+                },
+                {
+                  "label": "Documentation",
+                  "value": "Documentation"
+                },
+                {
+                  "label": "NSG",
+                  "value": "NSG"
+                },
+                {
+                  "label": "Nuage",
+                  "value": "Nuage"
+                },
+                {
+                  "label": "OVS",
+                  "value": "OVS"
+                },
+                {
+                  "label": "OpenShift",
+                  "value": "OpenShift"
+                },
+                {
+                  "label": "OpenStack",
+                  "value": "OpenStack"
+                },
+                {
+                  "label": "Openstack-legacy",
+                  "value": "Openstack-legacy"
+                },
+                {
+                  "label": "PyGash",
+                  "value": "PyGash"
+                },
+                {
+                  "label": "QA",
+                  "value": "QA"
+                },
+                {
+                  "label": "Release",
+                  "value": "Release"
+                },
+                {
+                  "label": "TiMOS",
+                  "value": "TiMOS"
+                },
+                {
+                  "label": "VSD",
+                  "value": "VSD"
+                },
+                {
+                  "label": "baseimage",
+                  "value": "baseimage"
+                },
+                {
+                  "label": "code-analysis",
+                  "value": "code-analysis"
+                },
+                {
+                  "label": "git",
+                  "value": "git"
+                },
+                {
+                  "label": "migrated-concourse-ci",
+                  "value": "migrated-concourse-ci"
+                },
+                {
+                  "label": "misc",
+                  "value": "misc"
+                },
+                {
+                  "label": "mv-nuage-vsp-deployment",
+                  "value": "mv-nuage-vsp-deployment"
+                },
+                {
+                  "label": "nuage-openstack-cloud",
+                  "value": "nuage-openstack-cloud"
+                },
+                {
+                  "label": "regress",
+                  "value": "regress"
+                },
+                {
+                  "label": "rsync-jobs",
+                  "value": "rsync-jobs"
+                },
+                {
+                  "label": "Testing",
+                  "value": "Testing"
+                },
+                {
+                  "label": "raleigh-rsync",
+                  "value": "raleigh-rsync"
+                }
+              ]
+        },
+        "Time interval": {
+            "parameter": "startTime",
+            "default": "now-24h",
+            "options": [
+                {
+                    "label": "Last 24h",
+                    "value": "now-24h",
+                    "default": true,
+                    "forceOptions": {
+                        "interval": "1h",
+                        "prevStartTime": "now-48h",
+                        "unit": "h",
+                        "duration": "24",
+                        "endTime": "now"
+                    }
+                },
+                {
+                    "label": "Last 7 days",
+                    "value": "now-7d",
+                    "forceOptions": {
+                        "interval": "12h",
+                        "prevStartTime": "now-14d",
+                        "unit": "d",
+                        "duration": "7",
+                        "endTime": "now"
+                    }
+                }
+            ]
+        }
+    }
+}

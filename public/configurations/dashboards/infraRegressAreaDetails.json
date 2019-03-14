@@ -30,6 +30,10 @@
         {
             "label": "Area Details",
             "url": "/dashboards/infraRegressAreaDetails"
+        },
+        {
+            "label": "Build Results",
+            "url": "/dashboards/infraBuildResults"
         }
     ],
     "defaultFilterOptionsOverride":{
