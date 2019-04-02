@@ -1,7 +1,7 @@
 {
     "id": "inf-build-runtime-allagents",
     "graph": "BarGraph",
-    "title": "Total Runtime per agent during the last week",
+    "title": "Total Runtime per agent during the selected period",
     "description": "",
     "author": "Bharat Mukheja",
     "creationDate": "04/01/2019",

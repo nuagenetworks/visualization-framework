@@ -1,7 +1,7 @@
 {
     "id": "inf-build-count-stack",
     "graph": "DynamicBarGraph",
-    "title": "No. of builds per job during the last week",
+    "title": "No. of builds per job during the selected period",
     "description": "",
     "author": "Bharat Mukheja",
     "creationDate": "03/12/2019",

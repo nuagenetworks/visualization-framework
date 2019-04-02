@@ -1,7 +1,7 @@
 {
     "id": "inf-build-history-job-areagraph",
     "graph": "AreaGraph",
-    "title": "Build history for last week for Job {{job}}",
+    "title": "Build history for the selected period for Job {{job}}",
     "description": "",
     "author": "Bharat Mukheja",
     "creationDate": "04/01/2019",

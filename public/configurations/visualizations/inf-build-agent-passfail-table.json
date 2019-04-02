@@ -1,7 +1,7 @@
 {
     "id": "inf-build-agent-passfail-table",
     "graph": "Table",
-    "title": "Pass/Fail Results for all agents during the last week",
+    "title": "Pass/Fail Results for all agents during the selected period",
     "description": "TBD",
     "author": "Bharat Mukheja",
     "data": {

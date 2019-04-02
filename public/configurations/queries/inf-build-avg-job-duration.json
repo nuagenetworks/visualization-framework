@@ -41,7 +41,7 @@
                         "duration": {
                           "avg": {
                               "field": "duration",
-                              "missing":10
+                              "missing":0
                           }
                         }
                     }

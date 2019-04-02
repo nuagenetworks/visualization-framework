@@ -12,8 +12,8 @@
           "must": [{
             "range": {
               "timestamp": {
-                "gte": "now-7d",
-                "lte": "now",
+                "gte":"{{startTime:now-7d}}",
+                "lte":"{{endTime:now}}",
                 "format": "epoch_millis"
               }
             }
