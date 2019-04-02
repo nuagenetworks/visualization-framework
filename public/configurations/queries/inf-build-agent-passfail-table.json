@@ -12,8 +12,8 @@
           "must": [{
             "range": {
               "timestamp": {
-                "gte":"{{startTime:now-7d}}",
-                "lte":"{{endTime:now}}",
+                "gte": "{{startTime:now-7d}}",
+                "lte": "{{endTime:now}}",
                 "format": "epoch_millis"
               }
             }
@@ -27,92 +27,81 @@
             "size": 500
           },
           "aggs": {
-            "result": {
-              "terms": {
-                "field": "result",
-                "size": 10000,
-                "order":{
-                  "_count":"desc"
+            "success": {
+              "sum_bucket": {
+                "buckets_path": "success_bucket>_count"
+              }
+            },
+            "failure": {
+              "sum_bucket": {
+                "buckets_path": "failure_bucket>_count"
+              }
+            },
+            "aborted": {
+              "sum_bucket": {
+                "buckets_path": "aborted_bucket>_count"
+              }
+            },
+            "not_built": {
+              "sum_bucket": {
+                "buckets_path": "not_built_bucket>_count"
+              }
+            },
+            "unstable": {
+              "sum_bucket": {
+                "buckets_path": "unstable_bucket>_count"
+              }
+            },
+            "success_bucket": {
+              "filters": {
+                "filters": {
+                  "success-filter": {
+                    "match": {
+                      "result": "SUCCESS"
+                    }
+                  }
                 }
-              },
-              "aggs":{
-                "success":{
-                  "sum_bucket":{
-                    "buckets_path":"success_bucket>_count"
-                  }
-                },
-                "failure":{
-                  "sum_bucket":{
-                    "buckets_path":"failure_bucket>_count"
-                  }
-                },
-                "aborted":{
-                  "sum_bucket":{
-                    "buckets_path":"aborted_bucket>_count"
-                  }
-                },
-                "not_built":{
-                  "sum_bucket":{
-                    "buckets_path":"not_built_bucket>_count"
-                  }
-                },
-                "unstable":{
-                  "sum_bucket":{
-                    "buckets_path":"unstable_bucket>_count"
-                  }
-                },
-                "success_bucket":{
-                  "filters":{
-                    "filters":{
-                      "success-filter":{
-                        "match":{
-                          "result":"SUCCESS"
-                        }
-                      }
+              }
+            },
+            "failure_bucket": {
+              "filters": {
+                "filters": {
+                  "failure-filter": {
+                    "match": {
+                      "result": "FAILURE"
                     }
                   }
-                },
-                "failure_bucket":{
-                  "filters":{
-                    "filters":{
-                      "failure-filter":{
-                        "match":{
-                          "result":"FAILURE"
-                        }
-                      }
+                }
+              }
+            },
+            "aborted_bucket": {
+              "filters": {
+                "filters": {
+                  "aborted-filter": {
+                    "match": {
+                      "result": "ABORTED"
                     }
                   }
-                },
-                "aborted_bucket":{
-                  "filters":{
-                    "filters":{
-                      "aborted-filter":{
-                        "match":{
-                          "result":"ABORTED"
-                        }
-                      }
+                }
+              }
+            },
+            "not_built_bucket": {
+              "filters": {
+                "filters": {
+                  "not-built-filter": {
+                    "match": {
+                      "result": "NOT_BUILT"
                     }
                   }
-                },
-                "not_built_bucket":{
-                  "filters":{
-                    "filters":{
-                      "not-built-filter":{
-                        "match":{
-                          "result":"NOT_BUILT"
-                        }
-                      }
-                    }
-                  }
-                },
-                "unstable_bucket":{
-                  "filters":{
-                    "filters":{
-                      "unstable-filter":{
-                        "match":{
-                          "result":"UNSTABLE"
-                        }
-                      }
+                }
+              }
+            },
+            "unstable_bucket": {
+              "filters": {
+                "filters": {
+                  "unstable-filter": {
+                    "match": {
+                      "result": "UNSTABLE"
                     }
                   }
                 }

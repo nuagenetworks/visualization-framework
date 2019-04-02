@@ -32,6 +32,7 @@
                     "date_histogram": {
                         "field": "timestamp",
                         "interval": "1d",
+                        "missing":0,
                         "extended_bounds":{
                             "min":"{{startTime:now-7d}}",
                             "max":"{{endTime:now}}"
@@ -43,6 +44,14 @@
                               "field": "duration",
                               "missing":0
                           }
+                        },
+                        "avg_bucket_filter":{
+                            "bucket_selector":{
+                                "buckets_path":{
+                                    "duration":"duration"
+                                },
+                                "script":"params.duration != null"
+                            }
                         }
                     }
                 }
