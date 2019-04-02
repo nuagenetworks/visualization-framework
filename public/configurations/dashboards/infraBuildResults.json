@@ -4,9 +4,15 @@
     "creationDate": "3/12/2019",
     "title": "Build results",
     "visualizations": [
-        { "id": "inf-build-count-stack",        "x": 0, "y": 0, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-build-count-project-bargraph",    "x": 0, "y": 15, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-build-avg-duration",           "x": 0, "y": 30, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true}
+        { "id": "inf-build-count-stack",            "x": 0, "y": 0, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-build-history-job-areagraph",  "x": 0, "y": 15, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-build-avg-job-duration",       "x": 0, "y": 30, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-build-job-timeline",           "x": 0, "y": 45, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-build-agent-passfail-table",   "x": 0, "y": 60, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-build-runtime-allagents",      "x": 6, "y": 60, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-build-agent-runtime-linegraph", "x": 0, "y": 75, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-build-agent-build-linegraph", "x": 6, "y": 75, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true}
+        
     ],
     "links": [
         {
@@ -35,113 +41,6 @@
         }
     ],
     "defaultFilterOptionsOverride":{ 
-        "Project": {
-            "parameter": "project",
-            "default":"all",
-            "options": [
-                {
-                  "label": "All",
-                  "value": "all",
-                  "default":true
-                },
-                {
-                  "label": "Cloudstack",
-                  "value": "Cloudstack"
-                },
-                {
-                  "label": "Documentation",
-                  "value": "Documentation"
-                },
-                {
-                  "label": "NSG",
-                  "value": "NSG"
-                },
-                {
-                  "label": "Nuage",
-                  "value": "Nuage"
-                },
-                {
-                  "label": "OVS",
-                  "value": "OVS"
-                },
-                {
-                  "label": "OpenShift",
-                  "value": "OpenShift"
-                },
-                {
-                  "label": "OpenStack",
-                  "value": "OpenStack"
-                },
-                {
-                  "label": "Openstack-legacy",
-                  "value": "Openstack-legacy"
-                },
-                {
-                  "label": "PyGash",
-                  "value": "PyGash"
-                },
-                {
-                  "label": "QA",
-                  "value": "QA"
-                },
-                {
-                  "label": "Release",
-                  "value": "Release"
-                },
-                {
-                  "label": "TiMOS",
-                  "value": "TiMOS"
-                },
-                {
-                  "label": "VSD",
-                  "value": "VSD"
-                },
-                {
-                  "label": "baseimage",
-                  "value": "baseimage"
-                },
-                {
-                  "label": "code-analysis",
-                  "value": "code-analysis"
-                },
-                {
-                  "label": "git",
-                  "value": "git"
-                },
-                {
-                  "label": "migrated-concourse-ci",
-                  "value": "migrated-concourse-ci"
-                },
-                {
-                  "label": "misc",
-                  "value": "misc"
-                },
-                {
-                  "label": "mv-nuage-vsp-deployment",
-                  "value": "mv-nuage-vsp-deployment"
-                },
-                {
-                  "label": "nuage-openstack-cloud",
-                  "value": "nuage-openstack-cloud"
-                },
-                {
-                  "label": "regress",
-                  "value": "regress"
-                },
-                {
-                  "label": "rsync-jobs",
-                  "value": "rsync-jobs"
-                },
-                {
-                  "label": "Testing",
-                  "value": "Testing"
-                },
-                {
-                  "label": "raleigh-rsync",
-                  "value": "raleigh-rsync"
-                }
-              ]
-        },
         "Time interval": {
             "parameter": "startTime",
             "default": "now-24h",

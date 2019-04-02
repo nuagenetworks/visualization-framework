@@ -1,7 +1,7 @@
 {
     "id": "inf-build-count-stack",
     "graph": "DynamicBarGraph",
-    "title": "No. of builds per day for {{project}} project",
+    "title": "No. of builds per job during the last week",
     "description": "",
     "author": "Bharat Mukheja",
     "creationDate": "03/12/2019",
@@ -15,15 +15,15 @@
             "#b3d645"
         ],
         "tooltip": [
-            { "column": "ts", "label": "Time","timeFormat": "%b %d" },
+            { "column": "job", "label": "Job" },
             { "column": "count", "label": "Result"},
             { "column": "doc_count", "label":"# of builds"}
         ],
-        "xTicks":7,
-        "xLabel": "Day",
+        "yTicks": 5,
+        "xLabel": "Job",
         "stackColumn":"count",
         "yLabel": "# of builds",
-        "xColumn": "ts",
+        "xColumn": "job",
         "yColumn": "doc_count",
         "legendColumn":"count",
         
@@ -34,5 +34,10 @@
             "labelOffset": 2
         }
     },
+    "listeners": [{
+      "params": {
+          "job": "job"
+      }
+    }],
     "query": "inf-build-count-stack"
 }

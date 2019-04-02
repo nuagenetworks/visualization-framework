@@ -1,0 +1,22 @@
+{
+    "id": "inf-build-job-timeline",
+    "graph": "LineGraph",
+    "title": "Time of Job {{job}}",
+    "description": "",
+    "author": "Bharat Mukheja",
+    "creationDate": "04/01/2019",
+    "data": {
+        "dateHistogram": true,
+        "tooltip": [
+            { "column": "timestamp", "label": "Time","timeFormat": "%b %d" },
+            { "column": "buildName", "label": "Build Name"},
+            { "column": "duration", "label": "Duration","timeFormat": "%H h : %M min : %S sec" }
+        ],
+        "xTicks":7,
+        "xLabel": "Day",
+        "yLabel": "Duration",
+        "xColumn": "timestamp",
+        "yColumn": "duration"
+    },
+    "query": "inf-build-job-timeline"
+}

@@ -1,6 +1,6 @@
 {
-    "id": "inf-build-count-stack",
-    "title": "Builds per day",
+    "id": "inf-build-runtime-allagents",
+    "title": "Total build during the week for per agent",
     "service": "elasticsearch",
     "query": {
         "index": "{{index:nuage_build}}",
@@ -9,8 +9,6 @@
             "size": 0,
             "query": {
                 "bool": {
-                    "must_not": [
-                    ],
                     "must": [
                         {
                             "range":{
@@ -25,16 +23,16 @@
                 }
             },
             "aggs": {
-                "job": {
+                "agent": {
                     "terms": {
-                        "field": "job",
-                        "size": 1000
+                        "field": "agent",
+                        "size": 50
                     },
-                    "aggs": {
-                        "count": {
-                          "terms": {
-                              "field": "result"
-                          }
+                    "aggs":{
+                        "runtime":{
+                            "sum":{
+                                "field": "duration"
+                            }
                         }
                     }
                 }

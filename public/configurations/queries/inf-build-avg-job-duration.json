@@ -1,6 +1,6 @@
 {
-    "id": "inf-build-count-project-bargraph",
-    "title": "Builds per day",
+    "id": "inf-build-avg-job-duration",
+    "title": "Avg. Duration of a job per day",
     "service": "elasticsearch",
     "query": {
         "index": "{{index:nuage_build}}",
@@ -9,34 +9,39 @@
             "size": 0,
             "query": {
                 "bool": {
-                    "must_not": [
-                    ],
                     "must": [
                         {
                             "range":{
                                 "timestamp":{
-                                    "gte":"{{startTime:now-24h}}",
+                                    "gte":"{{startTime:now-7d}}",
                                     "lte":"{{endTime:now}}",
                                     "format":"epoch_millis"
                                 }
+                            }
+                        },
+                        {
+                            "term":{
+                                "job":  "{{job}}"
                             }
                         }
                     ]
                 }
             },
             "aggs": {
-                "project": {
-                    "terms": {
-                        "field": "project",
-                        "size":"50",
-                        "order":{
-                            "count":"desc"
+                "ts": {
+                    "date_histogram": {
+                        "field": "timestamp",
+                        "interval": "1d",
+                        "extended_bounds":{
+                            "min":"{{startTime:now-7d}}",
+                            "max":"{{endTime:now}}"
                         }
                     },
                     "aggs": {
-                        "count": {
-                          "cardinality": {
-                              "field": "url"
+                        "duration": {
+                          "avg": {
+                              "field": "duration",
+                              "missing":10
                           }
                         }
                     }

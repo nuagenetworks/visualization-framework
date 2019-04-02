@@ -1,6 +1,6 @@
 {
-    "id": "inf-build-avg-duration",
-    "title": "Avg. Duration per day",
+    "id": "inf-build-history-job-areagraph",
+    "title": "Builds per day",
     "service": "elasticsearch",
     "query": {
         "index": "{{index:nuage_build}}",
@@ -9,13 +9,11 @@
             "size": 0,
             "query": {
                 "bool": {
-                    "must_not": [
-                    ],
                     "must": [
                         {
                             "range":{
                                 "timestamp":{
-                                    "gte":"{{startTime:now-24h}}",
+                                    "gte":"{{startTime:now-7d}}",
                                     "lte":"{{endTime:now}}",
                                     "format":"epoch_millis"
                                 }
@@ -23,7 +21,7 @@
                         },
                         {
                             "term":{
-                                "project":  "{{project:all}}"
+                                "job":  "{{job}}"
                             }
                         }
                     ]
@@ -33,12 +31,16 @@
                 "ts": {
                     "date_histogram": {
                         "field": "timestamp",
-                        "interval": "1d"
+                        "interval":"1d",
+                        "extended_bounds":{
+                            "min":"{{startTime:now-7d}}",
+                            "max":"{{endTime:now}}"
+                        }
                     },
                     "aggs": {
-                        "duration": {
-                          "avg": {
-                              "field": "duration"
+                        "count": {
+                          "terms": {
+                              "field": "result"
                           }
                         }
                     }

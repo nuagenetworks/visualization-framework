@@ -1,7 +1,7 @@
 {
-    "id": "inf-build-avg-duration",
+    "id": "inf-build-avg-job-duration",
     "graph": "LineGraph",
-    "title": "Avg. Duration per day for {{project}} project",
+    "title": "Avg. Duration per day for Job {{job}}",
     "description": "",
     "author": "Bharat Mukheja",
     "creationDate": "03/13/2019",
@@ -25,5 +25,5 @@
         "xColumn": "ts",
         "yColumn": "duration"
     },
-    "query": "inf-build-avg-duration"
+    "query": "inf-build-avg-job-duration"
 }

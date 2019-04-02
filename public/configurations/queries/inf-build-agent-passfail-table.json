@@ -1,0 +1,126 @@
+{
+  "id": "inf-build-agent-passfail-table",
+  "author": "Bharat Mukheja",
+  "service": "elasticsearch",
+  "query": {
+    "index": "nuage_build",
+    "type": "nuage_doc_type",
+    "body": {
+      "size": 0,
+      "query": {
+        "bool": {
+          "must": [{
+            "range": {
+              "timestamp": {
+                "gte": "now-7d",
+                "lte": "now",
+                "format": "epoch_millis"
+              }
+            }
+          }]
+        }
+      },
+      "aggs": {
+        "agent": {
+          "terms": {
+            "field": "agent",
+            "size": 500
+          },
+          "aggs": {
+            "result": {
+              "terms": {
+                "field": "result",
+                "size": 10000,
+                "order":{
+                  "_count":"desc"
+                }
+              },
+              "aggs":{
+                "success":{
+                  "sum_bucket":{
+                    "buckets_path":"success_bucket>_count"
+                  }
+                },
+                "failure":{
+                  "sum_bucket":{
+                    "buckets_path":"failure_bucket>_count"
+                  }
+                },
+                "aborted":{
+                  "sum_bucket":{
+                    "buckets_path":"aborted_bucket>_count"
+                  }
+                },
+                "not_built":{
+                  "sum_bucket":{
+                    "buckets_path":"not_built_bucket>_count"
+                  }
+                },
+                "unstable":{
+                  "sum_bucket":{
+                    "buckets_path":"unstable_bucket>_count"
+                  }
+                },
+                "success_bucket":{
+                  "filters":{
+                    "filters":{
+                      "success-filter":{
+                        "match":{
+                          "result":"SUCCESS"
+                        }
+                      }
+                    }
+                  }
+                },
+                "failure_bucket":{
+                  "filters":{
+                    "filters":{
+                      "failure-filter":{
+                        "match":{
+                          "result":"FAILURE"
+                        }
+                      }
+                    }
+                  }
+                },
+                "aborted_bucket":{
+                  "filters":{
+                    "filters":{
+                      "aborted-filter":{
+                        "match":{
+                          "result":"ABORTED"
+                        }
+                      }
+                    }
+                  }
+                },
+                "not_built_bucket":{
+                  "filters":{
+                    "filters":{
+                      "not-built-filter":{
+                        "match":{
+                          "result":"NOT_BUILT"
+                        }
+                      }
+                    }
+                  }
+                },
+                "unstable_bucket":{
+                  "filters":{
+                    "filters":{
+                      "unstable-filter":{
+                        "match":{
+                          "result":"UNSTABLE"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
