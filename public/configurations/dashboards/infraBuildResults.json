@@ -6,12 +6,11 @@
     "visualizations": [
         { "id": "inf-build-count-stack",            "x": 0, "y": 0, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-build-history-job-areagraph",  "x": 0, "y": 15, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-build-avg-job-duration",       "x": 0, "y": 30, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-build-job-timeline",           "x": 0, "y": 45, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-build-agent-passfail-table",   "x": 0, "y": 60, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-build-runtime-allagents",      "x": 6, "y": 60, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-build-agent-runtime-linegraph", "x": 0, "y": 75, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-build-agent-build-linegraph", "x": 6, "y": 75, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true}
+        { "id": "inf-build-job-timeline",           "x": 0, "y": 30, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-build-agent-passfail-table",   "x": 0, "y": 45, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-build-runtime-allagents",      "x": 6, "y": 45, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-build-agent-runtime-linegraph", "x": 0, "y": 60, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-build-agent-build-linegraph", "x": 6, "y": 60, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true}
         
     ],
     "links": [

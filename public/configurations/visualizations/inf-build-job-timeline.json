@@ -16,7 +16,17 @@
         "xLabel": "Day",
         "yLabel": "Duration",
         "xColumn": "timestamp",
-        "yColumn": "duration"
+        "yColumn": "duration",
+        "defaultY": {
+            "source": "avg-duration",
+            "column": "value",
+            "tooltip":[{
+                "column":"value","label":"Avg. Job Duration","timeFormat": "%H h : %M min : %S sec"
+            }]
+        }
     },
-    "query": "inf-build-job-timeline"
+    "query": {
+        "data":"inf-build-job-timeline",
+        "avg-duration":"inf-build-avg-job-duration"
+    }
 }
