@@ -1,0 +1,22 @@
+{
+    "id": "inf-build-agent-build-table",
+    "graph": "Table",
+    "title": "All Builds per day for Agent {{agent}} for {{agentBuildTime:call('epoch_to_date')}}",
+    "description": "",
+    "author": "Bharat Mukheja",
+    "creationDate": "04/01/2019",
+    "data": {
+        "tooltip": [
+            { "column": "ts", "label": "Time","timeFormat": "%b %d" },
+            { "column": "doc_count", "label": "Count" }
+        ],
+        "columns": [
+            { "column": "timestamp", "label": "Time Started", "timeFormat": "%b %d, %y %X"},
+            { "column": "job", "label":"Job" },
+            { "column": "number", "label":"Build Number"},
+            { "column": "duration", "label":"Duration"},
+            { "column": "result", "label": "Result"}
+        ]
+    },
+    "query": "inf-build-agent-build-table"
+}

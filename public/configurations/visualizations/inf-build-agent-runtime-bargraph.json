@@ -1,13 +1,11 @@
 {
-    "id": "inf-build-agent-runtime-linegraph",
-    "graph": "LineGraph",
+    "id": "inf-build-agent-runtime-bargraph",
+    "graph": "BarGraph",
     "title": "Total Runtime per day for Agent {{agent}}",
     "description": "",
     "author": "Bharat Mukheja",
     "creationDate": "04/01/2019",
     "data": {
-        "showZero": true,
-        "dateHistogram":true,
         "colors": [
             "#7da3f7",
             "#fec26a",
@@ -25,5 +23,10 @@
         "xColumn": "ts",
         "yColumn": "duration"
     },
-    "query": "inf-build-agent-runtime-linegraph"
+    "listeners": [{
+        "params": {
+            "agentBuildTime":"ts"
+        }
+    }],
+    "query": "inf-build-agent-runtime-bargraph"
 }

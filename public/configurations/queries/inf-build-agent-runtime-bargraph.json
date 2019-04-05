@@ -1,5 +1,5 @@
 {
-    "id": "inf-build-agent-runtime-linegraph",
+    "id": "inf-build-agent-runtime-bargraph",
     "title": "Total Runtime of an agent per day during the last week",
     "service": "elasticsearch",
     "query": {

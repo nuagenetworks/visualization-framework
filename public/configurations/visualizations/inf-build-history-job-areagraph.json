@@ -6,6 +6,7 @@
     "author": "Bharat Mukheja",
     "creationDate": "04/01/2019",
     "data": {
+        "stacked":true,
         "showNull": true,
         "dateHistogram": true,
         "brush": 10,

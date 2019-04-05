@@ -9,9 +9,8 @@
         { "id": "inf-build-job-timeline",           "x": 0, "y": 30, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-build-agent-passfail-table",   "x": 0, "y": 45, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-build-runtime-allagents",      "x": 6, "y": 45, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-build-agent-runtime-linegraph", "x": 0, "y": 60, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-build-agent-build-linegraph", "x": 6, "y": 60, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true}
-        
+        { "id": "inf-build-agent-runtime-bargraph", "x": 0, "y": 60, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-build-agent-build-table", "x": 6, "y": 60, "w": 6, "h": 15, "minW": 2, "minH": 5, "static": true}
     ],
     "links": [
         {

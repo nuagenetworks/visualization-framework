@@ -1,0 +1,31 @@
+{
+    "id": "inf-build-agent-build-table",
+    "title": "All builds of an agent for the selected day",
+    "service": "elasticsearch",
+    "query": {
+        "index": "nuage_build",
+        "type": "nuage_doc_type",
+        "body": {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{agentBuildTime}}",
+                                    "lte":"{{agentBuildTime}}||+1d",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        },
+                        {
+                            "term":{
+                                "agent":  "{{agent}}"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
