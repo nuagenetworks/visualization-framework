@@ -22,7 +22,8 @@
         { "id": "inf-regress-aql-dc_underlay-overview",     "x": 1, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_multi_vip-overview",    "x": 3, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_vrs-overview",          "x": 5, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-dc_mirroring-overview",    "x": 7, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true}
+        { "id": "inf-regress-aql-dc_mirroring-overview",    "x": 7, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-ui-overview",              "x": 9, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true}
         
     ],
     "links": [
