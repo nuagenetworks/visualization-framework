@@ -2,7 +2,7 @@
     "id": "infraBuildResults",
     "author": "Bharat Mukheja",
     "creationDate": "3/12/2019",
-    "title": "Build results",
+    "title": "Build results (WIP)",
     "visualizations": [
         { "id": "inf-build-count-stack",            "x": 0, "y": 0, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-build-history-job-areagraph",  "x": 0, "y": 15, "w": 12, "h": 15, "minW": 2, "minH": 5, "static": true},
