@@ -28,7 +28,7 @@
         "legendColumn":"count",
         
         "legend": {
-            "show": true,
+            "show": false,
             "orientation": "horizontal",
             "circleSize": 4,
             "labelOffset": 2

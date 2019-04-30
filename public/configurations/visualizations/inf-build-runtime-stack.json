@@ -1,0 +1,35 @@
+{
+    "id": "inf-build-runtime-stack",
+    "graph": "BarGraph",
+    "title": "Total Time per job during the selected period",
+    "description": "",
+    "author": "Bharat Mukheja",
+    "creationDate": "03/12/2019",
+    "data": {
+
+        "searchBar":true,
+        "brush": 10,
+        "colors": [
+            "#7da3f7",
+            "#fec26a",
+            "#e78ac3",
+            "#f79e99",
+            "#b3d645"
+        ],
+        "tooltip": [
+            { "column": "job", "label": "Job" },
+            { "column": "runtime", "label": "Runtime"}
+        ],
+        "yTicks": 5,
+        "xLabel": "Job",
+        "yLabel": "Runtime of builds",
+        "xColumn": "job",
+        "yColumn": "runtime"
+    },
+    "listeners": [{
+      "params": {
+          "job": "job"
+      }
+    }],
+    "query": "inf-build-runtime-stack"
+}
