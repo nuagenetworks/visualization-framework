@@ -1,59 +1,105 @@
 {
-  "id": "inf-bed-regress-counts",
-  "author": "Ryan Fredette",
-  "service": "elasticsearch",
-  "tabify":"infraRegressionCount",
-  "query": {
-    "index": "nuage_regress",
-    "type": "nuage_doc_type",
-    "body": {
-      "sort": [
-        { "time_regression_started" : {"order" : "desc"}}
-      ],
-      "size": 0,
-      "query": {
-        "bool": {
-          "must": [
-            {
-              "range":{
-                "time_regression_submitted":{
-                  "gte":"{{startTime:now-24h}}",
-                  "lte":"{{endTime:now}}",
-                  "format":"epoch_millis"
+    "author": "Ryan Fredette",
+    "id": "inf-bed-regress-counts",
+    "query": {
+        "body": {
+            "_source": {
+                "excludes": []
+            },
+            "aggs": {
+                "testbed": {
+                    "aggs": {
+                        "total_jobs": {
+                            "cardinality": {
+                                "field": "job_id"
+                            }
+                        }
+                    },
+                    "terms": {
+                        "field": "testbed",
+                        "order": {
+                            "total_jobs   ": "asc"
+                        },
+                        "size": 50
+                    }
                 }
-              }
-            }
-          ],
-          "filter": [
-            {"wildcard": { "version.vrs": "{{vrsVersion}}" }},
-            {"wildcard": { "version.vsc": "{{vscVersion}}" }},
-            {"wildcard": { "version.vsd": "{{vsdVersion}}" }},
-            {"wildcard": { "testbed": "*{{bedType}}*"}}
-          ]
-        }
-      },
-      "_source": {
-        "excludes": []
-      },
-      "aggs": {
-        "testbed": {
-          "terms": {
-            "field": "testbed",
-            "size": 50,
-            "order": {
-              "total_jobs   ": "asc"
-            }
-          },
-          "aggs": {
-            "total_jobs": {
-              "cardinality": {
-                "field": "job_id"
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+            },
+            "query": {
+                "bool": {
+                    "filter": [
+                        {
+                            "wildcard": {
+                                "version.vrs": "{{vrsVersion}}"
+                            }
+                        },
+                        {
+                            "wildcard": {
+                                "version.vsc": "{{vscVersion}}"
+                            }
+                        },
+                        {
+                            "wildcard": {
+                                "version.vsd": "{{vsdVersion}}"
+                            }
+                        },
+                        {
+                            "wildcard": {
+                                "testbed": "*{{bedType}}*"
+                            }
+                        }
+                    ],
+                    "must": [
+                        {
+                            "range": {
+                                "time_regression_submitted": {
+                                    "format": "epoch_millis",
+                                    "gte": "{{startTime:now-24h}}",
+                                    "lte": "{{endTime:now}}"
+                                }
+                            }
+                        }
+                    ],
+                    "must_not": [
+                        {
+                            "match_phrase": {
+                                "testsuite": "Sanity"
+                            }
+                        },
+                        {
+                            "match_phrase": {
+                                "testsuite": "sanity"
+                            }
+                        },
+                        {
+                            "match_phrase": {
+                                "testsuite": "initial"
+                            }
+                        },
+                        {
+                            "match_phrase": {
+                                "testsuite": "final"
+                            }
+                        },
+                        {
+                            "match_phrase": {
+                                "testsuite": "finished"
+                            }
+                        }
+                    ]
+                }
+            },
+            "size": 0,
+            "sort": [
+                {
+                    "time_regression_started": {
+                        "order": "desc"
+                    }
+                }
+            ]
+        },
+        "index": "nuage_regress",
+        "type": "nuage_doc_type"
+    },
+    "service": "elasticsearch",
+    "tabify": "infraRegressionCount"
 }
-

@@ -40,6 +40,11 @@
                                 "testsuite": "Sanity"
                             }
                         },
+			{
+				"match_phrase": {
+					"testsuite":"sanity"
+				}
+			},
                         {
                             "match_phrase": {
                                 "testsuite": "initial"

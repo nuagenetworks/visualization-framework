@@ -1,48 +1,94 @@
 {
-  "id": "inf-bed-regress-result-counts",
-  "author": "Ryan Fredette",
-  "service": "elasticsearch",
-  "tabify":"testSuitePerformanceCounts",
-  "query": {
-    "index": "nuage_regress",
-    "type": "nuage_doc_type",
-    "body": {
-      "sort": [
-        { "time_regression_started" : {"order" : "desc"}}
-      ],
-      "size": 0,
-      "query": {
-        "bool": {
-          "must": [
-            {
-              "range":{
-                "time_regression_submitted":{
-                  "gte":"{{startTime:now-24h}}",
-                  "lte":"{{endTime:now}}",
-                  "format":"epoch_millis"
+    "author": "Ryan Fredette",
+    "id": "inf-bed-regress-result-counts",
+    "query": {
+        "body": {
+            "_source": {
+                "excludes": []
+            },
+            "aggs": {
+                "result": {
+                    "terms": {
+                        "field": "result"
+                    }
                 }
-              }
-            }
-          ],
-          "filter": [
-            {"wildcard": { "version.vrs": "{{vrsVersion}}" }},
-            {"wildcard": { "version.vsc": "{{vscVersion}}" }},
-            {"wildcard": { "version.vsd": "{{vsdVersion}}" }},
-            {"term": { "testbed": "{{bedName}}"}}
-          ]
-        }
-      },
-      "_source": {
-        "excludes": []
-      },
-      "aggs": {
-        "result": {
-          "terms": {
-            "field": "result"
-          }
-        }
-      }
-    }
-  }
+            },
+            "query": {
+                "bool": {
+                    "filter": [
+                        {
+                            "wildcard": {
+                                "version.vrs": "{{vrsVersion}}"
+                            }
+                        },
+                        {
+                            "wildcard": {
+                                "version.vsc": "{{vscVersion}}"
+                            }
+                        },
+                        {
+                            "wildcard": {
+                                "version.vsd": "{{vsdVersion}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "testbed": "{{bedName}}"
+                            }
+                        }
+                    ],
+                    "must": [
+                        {
+                            "range": {
+                                "time_regression_submitted": {
+                                    "format": "epoch_millis",
+                                    "gte": "{{startTime:now-24h}}",
+                                    "lte": "{{endTime:now}}"
+                                }
+                            }
+                        }
+                    ],
+                    "must_not": [
+                        {
+                            "match_phrase": {
+                                "testsuite": "Sanity"
+                            }
+                        },
+                        {
+                            "match_phrase": {
+                                "testsuite": "sanity"
+                            }
+                        },
+                        {
+                            "match_phrase": {
+                                "testsuite": "initial"
+                            }
+                        },
+                        {
+                            "match_phrase": {
+                                "testsuite": "final"
+                            }
+                        },
+                        {
+                            "match_phrase": {
+                                "testsuite": "finished"
+                            }
+                        }
+                    ]
+                }
+            },
+            "size": 0,
+            "sort": [
+                {
+                    "time_regression_started": {
+                        "order": "desc"
+                    }
+                }
+            ]
+        },
+        "index": "nuage_regress",
+        "type": "nuage_doc_type"
+    },
+    "service": "elasticsearch",
+    "tabify": "testSuitePerformanceCounts"
 }
-
