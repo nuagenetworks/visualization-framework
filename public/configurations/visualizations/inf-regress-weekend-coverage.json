@@ -1,0 +1,23 @@
+{
+    "id": "inf-regress-weekend-coverage",
+    "graph": "SimpleTextGraph",
+    "title": "Coverage",
+    "description": "",
+    "author": "",
+    "creationDate": "",
+    "showTitleBar": false,
+    "data": {
+        "borderRadius": "0",
+        "targetedColumn":"ratio",
+        "fontColor":"black",
+        "colors":[
+            "white"
+        ],
+        "tabifyOptions":{
+            "suiteList":{
+                "names":["ospf", "express", "Sanity", "ikev1", "initial", "mesh", "sanity", "express_Nfix", "vnf"]
+            }
+        }
+    },
+    "query": "inf-regress-weekend-coverage"
+}

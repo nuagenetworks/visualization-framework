@@ -1,0 +1,35 @@
+{
+    "id":"inf-regress-weekend-coverage",
+    "title":"",
+    "service":"elasticsearch",
+    "tabify": "weekendCoverage",
+    "query":{
+        "index":"nuage_regress",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{    
+            "size": 0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "time_regression_submitted":{
+                                    "gte": "now-7d/d/w+5d",
+                                    "lte": "now-7d/d/w",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "testsuites": {
+                    "terms": {
+                        "field": "testsuite"
+                    }
+                }
+            }
+        }
+    }
+}
