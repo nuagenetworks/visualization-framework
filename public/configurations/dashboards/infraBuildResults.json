@@ -33,6 +33,10 @@
             "url": "/dashboards/infraRegressAreaDetails"
         },
         {
+            "label": "Weekend Regressions",
+            "url": "/dashboards/infraRegressWeekend"
+        },
+        {
             "label": "Build Results",
             "url": "/dashboards/infraBuildResults"
         }
