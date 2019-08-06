@@ -1,10 +1,10 @@
 {
-    "id": "inf-regress-weekend-coverage",
+    "id": "inf-regress-weekend-coverage-0_0",
     "graph": "SimpleTextGraph",
     "title": "Coverage",
     "description": "",
-    "author": "",
-    "creationDate": "",
+    "author": "Bharat Mukheja",
+    "creationDate": "08/06/2019",
     "showTitleBar": false,
     "data": {
         "borderRadius": "0",
@@ -19,5 +19,5 @@
             }
         }
     },
-    "query": "inf-regress-weekend-coverage"
+    "query": "inf-regress-weekend-coverage-0_0"
 }
