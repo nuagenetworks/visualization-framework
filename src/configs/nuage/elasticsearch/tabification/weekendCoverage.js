@@ -30,6 +30,9 @@ export default function weekendCoverage(response, query = {}) {
     if (query.tabifyOptions && query.tabifyOptions.suiteList) {
         if (query.tabifyOptions.suiteList.names) {
             all_testsuites = query.tabifyOptions.suiteList.names;
+        } 
+        else if (query.tabifyOptions.suiteList.file) {
+            //parse the file here to get suite names
         }
     }
     table = flatArray(table);
