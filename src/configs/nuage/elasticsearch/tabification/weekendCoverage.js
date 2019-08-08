@@ -1,6 +1,7 @@
 import objectPath from 'object-path';
 import evalExpression from 'eval-expression';
 import _ from 'lodash';
+import parseRegressionFiles from './parseRegressionFiles';
 
 /*
   This utility will convert the nested data structure
@@ -25,19 +26,34 @@ export default function weekendCoverage(response, query = {}) {
     } else {
         throw new Error("Tabify() invoked with invalid result set. Result set must have either 'aggregations' or 'hits' defined.");
     }
-    let all_testsuites;
+    table = flatArray(table);
+
     // tabify data on the basis of the pre-defined properties in configuration
     if (query.tabifyOptions && query.tabifyOptions.suiteList) {
+        console.log(table);
+        let all_testsuites;
+
         if (query.tabifyOptions.suiteList.names) {
             all_testsuites = query.tabifyOptions.suiteList.names;
+            //console.log(all_testsuites);
         } 
         else if (query.tabifyOptions.suiteList.file) {
             //parse the file here to get suite names
+            var build = query.tabifyOptions.suiteList.build;
+            all_testsuites = parseRegressionFiles(query.tabifyOptions.suiteList.file)[build];
+            console.log(all_testsuites);
+        }
+        if (query.tabifyOptions.outputType == "coverage") {
+            table = processCoverage(table, all_testsuites);
+        }
+        else if (query.tabifyOptions.outputType == "pass/fail"){
+            table = processPassFail(table, all_testsuites);
         }
     }
-    table = flatArray(table);
-    table = processSimpleText(table, all_testsuites)
-
+    else {
+        console.log("Please specify testsuite source for evaluating counts")
+    }
+    
     if (process.env.NODE_ENV === "development") {
         console.log("Results from tabify (first 3 rows only):");
 
@@ -51,20 +67,31 @@ export default function weekendCoverage(response, query = {}) {
     return table;
 }
 
-function processSimpleText(data, all_suites){
-    //console.log(data);
-    let suitesRun = [];
-    
-    data.map((item) => {suitesRun.push(item.testsuites)});
-    
-    let intersect = suitesRun.filter(value => all_suites.includes(value));
+function processCoverage(data, all_suites){
+    let suitesRun = new Set();
+    let allSuites = new Set(Array.from(all_suites));
+    data.forEach((item) => {suitesRun.add(item.testsuites);});
+
+    let intersect = new Set();
+    suitesRun.forEach((value) => {if (allSuites.has(value)){ intersect.add(value);}});
     let result = {};
-    result.ratio = `${intersect.length}/${all_suites.length}`;
+    result.ratio = `${intersect.size}/${allSuites.size}`;
     const output = [result];
-    console.log(output);
-    return output
+    return output;
 }
 
+function processPassFail(data, all_suites){
+    let suitesRun = new Set();
+    let allSuites = new Set(Array.from(all_suites));
+    data.forEach((item) => {suitesRun.add(item.testsuites);});
+
+    let intersect = new Set();
+    suitesRun.forEach((value) => {if (allSuites.has(value)){ intersect.add(value);}});
+    let result = {};
+    result.ratio = `${intersect.size}/${allSuites.size}`;
+    const output = [result];
+    return output;
+}
 
 function flatArray(data) {
 

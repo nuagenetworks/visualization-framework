@@ -15,8 +15,10 @@
         ],
         "tabifyOptions":{
             "suiteList":{
-                "names":["ospf", "express", "Sanity", "ikev1", "initial", "mesh", "sanity", "express_Nfix", "vnf"]
-            }
+                "file":"/tmp/buildqualification.data",
+                "build": "0.0"
+            },
+            "outputType":"coverage"
         }
     },
     "query": "inf-regress-weekend-coverage-0_0"

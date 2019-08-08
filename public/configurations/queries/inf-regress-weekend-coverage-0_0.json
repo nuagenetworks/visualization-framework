@@ -32,10 +32,17 @@
                 "testsuites": {
                     "terms": {
                         "field": "testsuite",
-                        "size": "500"
+                        "size": "1000"
+                    },
+                    "aggs": {
+                      "results": {
+                        "terms": {
+                          "field": "result"
+                        }
+                      }
                     }
+                  }
                 }
+              }
             }
         }
-    }
-}
