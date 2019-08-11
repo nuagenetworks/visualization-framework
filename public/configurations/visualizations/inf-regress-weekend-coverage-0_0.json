@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-weekend-coverage-0_0",
     "graph": "SimpleTextGraph",
-    "title": "Coverage",
+    "title": "0.0 Testsuite Coverage",
     "description": "",
     "author": "Bharat Mukheja",
     "creationDate": "08/06/2019",
@@ -15,7 +15,7 @@
         ],
         "tabifyOptions":{
             "suiteList":{
-                "file":"/tmp/buildqualification.data",
+                "names":["ospf", "express", "Sanity", "ikev1", "initial", "mesh", "sanity", "express_Nfix", "vnf"],
                 "build": "0.0"
             },
             "outputType":"coverage"
