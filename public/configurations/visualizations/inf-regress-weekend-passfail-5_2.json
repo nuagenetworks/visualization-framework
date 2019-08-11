@@ -1,0 +1,25 @@
+{
+    "id": "inf-regress-weekend-passfail-5_2",
+    "graph": "SimpleTextGraph",
+    "title": "5.2 Pass/Fail/Skip",
+    "description": "",
+    "author": "Bharat Mukheja",
+    "creationDate": "08/06/2019",
+    "showTitleBar": false,
+    "data": {
+        "borderRadius": "0",
+        "targetedColumn":"ratio",
+        "fontColor":"black",
+        "colors":[
+            "white"
+        ],
+        "tabifyOptions":{
+            "suiteList":{
+                "names":["ospf", "express", "Sanity", "ikev1", "initial", "mesh", "sanity", "express_Nfix", "vnf"],
+                "build": "5.2"
+            },
+            "outputType":"pass/fail"
+        }
+    },
+    "query": "inf-regress-weekend-coverage-5_2"
+}
