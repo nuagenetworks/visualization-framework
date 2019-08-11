@@ -41,7 +41,7 @@ export default function weekendCoverage(response, query = {}) {
             //parse the file here to get suite names
             var build = query.tabifyOptions.suiteList.build;
             all_testsuites = parseRegressionFiles(query.tabifyOptions.suiteList.file)[build];
-            console.log(all_testsuites);
+            //console.log(all_testsuites);
         }
         if (query.tabifyOptions.outputType == "coverage") {
             table = processCoverage(table, all_testsuites);
@@ -81,14 +81,39 @@ function processCoverage(data, all_suites){
 }
 
 function processPassFail(data, all_suites){
-    let suitesRun = new Set();
+    var result_codes = {"FAIL":0,"SKIP":1,"PASS":2};
+    let suitesRun = {};
     let allSuites = new Set(Array.from(all_suites));
-    data.forEach((item) => {suitesRun.add(item.testsuites);});
 
-    let intersect = new Set();
-    suitesRun.forEach((value) => {if (allSuites.has(value)){ intersect.add(value);}});
+    data.forEach((item) => {
+        if (allSuites.has(item.testsuites)){
+            if (!suitesRun[item.testsuites]){
+                suitesRun[item.testsuites] = [];
+            }
+            suitesRun[item.testsuites].push(item.results);
+        }
+    });
+    function hasSuitePassed(element, index, array){
+        return element == result_codes.PASS;
+    }
+    function hasSuiteFailed(element,index,array){
+        return element == result_codes.FAIL;
+    }
+
+    let pass =0,fail=0,skip=0;
+    for (var item in suitesRun) {
+        if (suitesRun[item].some(hasSuitePassed)){
+            pass+=1;
+        }
+        else if (suitesRun[item].some(hasSuiteFailed)){
+            fail+=1;
+        }
+        else {
+            skip +=1;
+        }
+    }
     let result = {};
-    result.ratio = `${intersect.size}/${allSuites.size}`;
+    result.ratio = `${pass}/${fail}/${skip}`;
     const output = [result];
     return output;
 }
