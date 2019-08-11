@@ -1,0 +1,25 @@
+{
+    "id": "inf-regress-weekend-coverage-5_3",
+    "graph": "SimpleTextGraph",
+    "title": "5.3 Testsuite Coverage",
+    "description": "",
+    "author": "Bharat Mukheja",
+    "creationDate": "08/06/2019",
+    "showTitleBar": false,
+    "data": {
+        "borderRadius": "0",
+        "targetedColumn":"ratio",
+        "fontColor":"black",
+        "colors":[
+            "white"
+        ],
+        "tabifyOptions":{
+            "suiteList":{
+                "names":["ospf", "express", "Sanity", "ikev1", "initial", "mesh", "sanity", "express_Nfix", "vnf"],
+                "build": "5.3"
+            },
+            "outputType":"coverage"
+        }
+    },
+    "query": "inf-regress-weekend-coverage-5_3"
+}
