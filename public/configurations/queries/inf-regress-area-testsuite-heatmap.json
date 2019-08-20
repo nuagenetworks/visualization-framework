@@ -50,7 +50,8 @@
                         "field": "timestamp",
                         "interval": "1d",
                         "format" : "yyyy-MM-dd",
-                        "time_zone":"-08:00"
+                        "time_zone":"-08:00",
+                        "offset":"-1h"
                     },
                     "aggs": {
                         "testsuite": {
