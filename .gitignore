@@ -14,3 +14,5 @@ npm-debug.log
 *.zip
 reports/*
 .history
+.jsonhintrc
+package-lock.json 
