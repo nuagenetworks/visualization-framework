@@ -2,7 +2,7 @@
     "id": "infraRegressArea",
     "author": "Ronak Shah",
     "creationDate": "8/30/2018",
-    "title": "Area Quality Overview (Testsuites not run / Total)",
+    "title": "Area Quality Overview (Testsuites run / Total)",
     "visualizations": [
         { "id": "inf-regress-aql-aar-overview",             "x": 1, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-qos-overview",             "x": 3, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
@@ -23,8 +23,8 @@
         { "id": "inf-regress-aql-dc_multi_vip-overview",    "x": 3, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_vrs-overview",          "x": 5, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_mirroring-overview",    "x": 7, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-ui-overview",              "x": 9, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true}
-        
+        { "id": "inf-regress-aql-ui-overview",              "x": 9, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-rg-overview",              "x": 1, "y": 28, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true}
     ],
     "links": [
         {
@@ -68,6 +68,14 @@
                     "forceOptions": {
                         "endTime": "now"
                     }
+                },
+                {
+                    "label": "From Last Saturday",
+                    "value": "now-7d/d/w+5d",
+                    "default":true,
+                    "forceOptions": {
+                        "endTime": "now"
+                    }
                 }
             ]
         },
@@ -78,6 +86,10 @@
                 {
                     "label": "0.0",
                     "value": "0.0"
+                },
+                {
+                    "label": "6.0",
+                    "value": "6.0"
                 },
                 {
                     "label": "5.4",
