@@ -71,7 +71,8 @@ function processSimpleText(data){
             notrun = notrun + 1;
         }
     } 
-    result.ratio = `${notrun}/${total}`;
+    let run = total - notrun;
+    result.ratio = `${run}/${total}`;
     const output = [result];
     return output
 }
