@@ -30,19 +30,22 @@ export default function weekendCoverage(response, query = {}) {
 
     // tabify data on the basis of the pre-defined properties in configuration
     if (query.tabifyOptions && query.tabifyOptions.suiteList) {
-        console.log(table);
+        
         let all_testsuites;
-
+        var build = query.tabifyOptions.suiteList.build;
+        var file = query.tabifyOptions.suiteList.file;
+        
         if (query.tabifyOptions.suiteList.names) {
             all_testsuites = query.tabifyOptions.suiteList.names;
-            //console.log(all_testsuites);
         } 
-        else if (query.tabifyOptions.suiteList.file) {
+        else if (query.tabifyOptions.suiteList.configFile) {
             //parse the file here to get suite names
-            var build = query.tabifyOptions.suiteList.build;
-            all_testsuites = parseRegressionFiles(query.tabifyOptions.suiteList.file)[build];
-            //console.log(all_testsuites);
+            
+            //TODO - fix the below function to parse a json config file.
+            //all_testsuites = parseRegressionFiles(query.tabifyOptions.suiteList.file)[build];
         }
+        all_testsuites = all_testsuites[file][build]["testsuites"];
+        
         if (query.tabifyOptions.outputType == "coverage") {
             table = processCoverage(table, all_testsuites);
         }
@@ -81,7 +84,7 @@ function processCoverage(data, all_suites){
 }
 
 function processPassFail(data, all_suites){
-    var result_codes = {"FAIL":0,"SKIP":1,"PASS":2};
+    var result_codes = {"FAIL":1,"SKIP":0,"PASS":2};
     let suitesRun = {};
     let allSuites = new Set(Array.from(all_suites));
 
