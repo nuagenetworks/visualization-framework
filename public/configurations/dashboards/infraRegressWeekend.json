@@ -45,5 +45,17 @@
             "url": "/dashboards/infraBuildResults"
         }
     ],
-    "defaultFilterOptionsOverride":{}
+    "defaultFilterOptionsOverride":{
+        "Regression File": {
+            "parameter": "wkRegFile",
+            "default": "buildqualification",
+            "options": [
+                {
+                    "label": "Build Qualification",
+                    "value": "buildqualification",
+                    "default": true
+                }
+            ]
+        }
+    }
 }
