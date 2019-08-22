@@ -1,7 +1,6 @@
 import objectPath from 'object-path';
 import evalExpression from 'eval-expression';
 import _ from 'lodash';
-import { all } from 'q';
 
 /*
   This utility will convert the nested data structure
