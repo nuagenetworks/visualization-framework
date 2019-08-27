@@ -56,6 +56,37 @@
                     "default": true
                 }
             ]
+        },
+        "AQL Area":{
+            "parameter":"weekendAqlArea",
+            "options":[
+                {
+                    "label":"All Areas",
+                    "value": "*",
+                    "default":true
+                },
+                {"value": "UI", "label": "UI"},
+                {"value": "aar", "label": "aar"},
+                {"value": "aql_underlay", "label": "aql_underlay"},
+                {"value": "containers", "label": "containers"},
+                {"value": "dc_acl", "label": "dc_acl"},
+                {"value": "dc_mirroring", "label": "dc_mirroring"},
+                {"value": "dc_multi_vip", "label": "dc_multi_vip"},
+                {"value": "dc_qos", "label": "dc_qos"},
+                {"value": "dc_stats", "label": "dc_stats"},
+                {"value": "dc_underlay", "label": "dc_underlay"},
+                {"value": "dc_upgrade", "label": "dc_upgrade"},
+                {"value": "dc_vlan_trunking", "label": "dc_vlan_trunking"},
+                {"value": "dc_vrs", "label": "dc_vrs"},
+                {"value": "ipsec", "label": "ipsec"},
+                {"value": "ipv6", "label": "ipv6"},
+                {"value": "nsg_performance", "label": "nsg_performance"},
+                {"value": "qos", "label": "qos"},
+                {"value": "rg", "label": "rg"},
+                {"value": "routing", "label": "routing"},
+                {"value": "vmware", "label": "vmware"},
+                {"value": "wbx/vsg", "label": "wbx/vsg"}
+            ]
         }
     }
 }

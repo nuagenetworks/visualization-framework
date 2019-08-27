@@ -8,7 +8,7 @@
       "type": "nuage_doc_type",
       "body": {
         "sort": [
-          { "time_regression_started" : {"order" : "desc"}}
+          { "time_ran_at" : {"order" : "desc"}}
         ],
         "size": 100,
         "query": {
@@ -16,9 +16,9 @@
             "must": [
               {
                 "range":{
-                  "time_regression_submitted":{
-                    "gte":"{{testsuiteTime}}||-5m",
-                    "lte":"{{testsuiteTime}}||+1435m",
+                  "time_ran_at":{
+                    "gte":"{{testsuiteTime}}||",
+                    "lte":"{{testsuiteTime}}||+1d",
                     "format":"epoch_millis"
                   }
                 }

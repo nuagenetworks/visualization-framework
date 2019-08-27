@@ -70,11 +70,11 @@
                     }
                 },
                 {
-                    "label": "From Last Saturday",
+                    "label": "Last Weekend",
                     "value": "now-7d/d/w+5d",
                     "default":true,
                     "forceOptions": {
-                        "endTime": "now"
+                        "endTime": "now-7d/d/w"
                     }
                 }
             ]
