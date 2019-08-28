@@ -14,11 +14,13 @@
         "brush":8,
         "brushArea":3,
         "yLabel": "TestSuite",
-        "legendColumn": "Runs",
-        "colorColumn": "Runs",
+        "legendColumn": "result",
+        "colorColumn": "result",
         "heatmapColor": {
-            "Not Run": "white",
-            "Ran": "lightBlue"
+            "SKIP": "gray",
+            "FAIL": "red",
+            "PASS": "green",
+            "": "white"
         },
         "legend": {
             "show": true,
@@ -29,7 +31,8 @@
         "tooltip": [
             { "column": "date_histo", "label": "Timestamp", "timeFormat": "%b %d"},
             { "column": "testsuite", "label": "Test Suite" },
-            { "column": "Runs", "label": "Was Run?" }
+            { "column": "build_number", "label": "Build Number" },
+            { "column": "result", "label": "Result"}
         ]
    },
    "listeners": [

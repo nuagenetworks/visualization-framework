@@ -33,7 +33,16 @@ export default function weekendCoverage(response, query = {}) {
         let all_testsuites;
         var build = query.tabifyOptions.suiteList.build;
         var file = query.tabifyOptions.suiteList.file;
-        
+        var suite_areas = query.tabifyOptions.suiteList.suite_areas;
+        var aql_area = query.tabifyOptions.suiteList.aql_area;
+        let area_filtered_suites;
+        let bool_all_areas = false;
+        if (aql_area && aql_area != "*"){
+            area_filtered_suites = suite_areas[aql_area];
+        }
+        else{
+            bool_all_areas = true;
+        }
         if (query.tabifyOptions.suiteList.names) {
             all_testsuites = query.tabifyOptions.suiteList.names;
         } 
@@ -44,6 +53,11 @@ export default function weekendCoverage(response, query = {}) {
             //all_testsuites = parseRegressionFiles(query.tabifyOptions.suiteList.file)[build];
         }
         all_testsuites = all_testsuites[file][build]["testsuites"];
+        if (!bool_all_areas){
+            let set_area_filtered_suites = new Set(Array.from(area_filtered_suites));
+            let filtered_all_testsuites = [...all_testsuites].filter(x => set_area_filtered_suites.has(x))
+            all_testsuites = filtered_all_testsuites;
+        }
         
         if (query.tabifyOptions.outputType == "coverage") {
             table = processCoverage(table, all_testsuites);

@@ -16,6 +16,23 @@
               {"term": { "testsuite": "{{testSuite}}"}},
               {"term": {"project": "{{branch}}"}}
             ],
+            "must":[
+          {
+          	"regexp":{
+          		"version.vrs":"[0-9].[0-9]/[0-9.]+"
+          	}
+          },
+          {
+          	"regexp":{
+          		"version.vsd":"[0-9].[0-9]/[0-9.]+"
+          	}
+          },
+          {
+          	"regexp":{
+          		"version.vsc":"[0-9].[0-9]/[0-9ISBN.]+"
+          	}
+          }
+            ],
             "must_not": [
               {
                   "term": {

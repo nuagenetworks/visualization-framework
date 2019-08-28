@@ -5,3 +5,4 @@ export { default as aqlSimpleText } from './aqlSimpleText';
 export { default as weekendCoverage } from './weekendCoverage';
 export { default as regressExtractRunLevel } from './regressExtractRunLevel';
 export { default as defaultTabify } from './defaultTabify';
+export { default as areaHeatmap } from './areaHeatmap';

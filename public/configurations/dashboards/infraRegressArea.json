@@ -4,27 +4,27 @@
     "creationDate": "8/30/2018",
     "title": "Area Quality Overview (Testsuites run / Total)",
     "visualizations": [
-        { "id": "inf-regress-aql-aar-overview",             "x": 1, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-qos-overview",             "x": 3, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-ipv6-overview",            "x": 5, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-aqlunderlay-overview",     "x": 7, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-vmware-overview",          "x": 9, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-containers-overview",      "x": 1, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true}, 
-        { "id": "inf-regress-aql-nsg_performance-overview", "x": 3, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-ipsec-overview",           "x": 5, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-wbx_vsg-overview",         "x": 7, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-routing-overview",         "x": 9, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-dc_upgrade-overview",      "x": 1, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-dc_acl-overview",          "x": 3, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-dc_qos-overview",          "x": 5, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-dc_vlan_trunking-overview","x": 7, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-dc_stats-overview",        "x": 9, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-dc_underlay-overview",     "x": 1, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-dc_multi_vip-overview",    "x": 3, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-dc_vrs-overview",          "x": 5, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-dc_mirroring-overview",    "x": 7, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-ui-overview",              "x": 9, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-rg-overview",              "x": 1, "y": 28, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true}
+        { "id": "inf-regress-aql-wbx_vsg-overview",         "x": 0.5, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-containers-overview",      "x": 0.5, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_upgrade-overview",      "x": 0.5, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_underlay-overview",     "x": 0.5, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_stats-overview",        "x": 2.5, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_mirroring-overview",    "x": 2.5, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_acl-overview",          "x": 2.5, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_multi_vip-overview",    "x": 2.5, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-vmware-overview",          "x": 4.5, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_vlan_trunking-overview","x": 4.5, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_qos-overview",          "x": 4.5, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-dc_vrs-overview",          "x": 4.5, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-aqlunderlay-overview",     "x": 7.5, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-aar-overview",             "x": 7.5, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-ipsec-overview",           "x": 7.5, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-nsg_performance-overview", "x": 7.5, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-ipv6-overview",            "x": 7.5, "y": 28, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true}, 
+        { "id": "inf-regress-aql-rg-overview",              "x": 9.5, "y": 0, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-routing-overview",         "x": 9.5, "y": 7, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-qos-overview",             "x": 9.5, "y": 14, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-ui-overview",              "x": 9.5, "y": 21, "w": 2, "h": 7, "minW": 2, "minH": 5, "static": true}
     ],
     "links": [
         {
@@ -70,11 +70,11 @@
                     }
                 },
                 {
-                    "label": "From Last Saturday",
+                    "label": "Last Weekend",
                     "value": "now-7d/d/w+5d",
                     "default":true,
                     "forceOptions": {
-                        "endTime": "now"
+                        "endTime": "now-7d/d/w"
                     }
                 }
             ]

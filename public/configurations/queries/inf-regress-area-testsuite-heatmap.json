@@ -1,14 +1,15 @@
 {
     "id": "inf-regress-area-testsuite-heatmap",
     "service": "elasticsearch",
+    "tabify":"areaHeatmap",
     "query": {
-        "index": "nuage_aql",
+        "index": "nuage_regress",
         "type": "{{type:nuage_doc_type}}",
         "body": {
             "size": 0,
             "sort": [
                 {
-                    "timestamp": {
+                    "time_ran_at": {
                         "order": "desc"
                     }
                 }
@@ -18,10 +19,10 @@
                     "must": [
                         {
                             "range": {
-                                "timestamp": {
+                                "time_ran_at": {
                                     "gte": "now-15d/d",
                                     "lte": "now/d",
-                                    "time_zone":"-08:00"
+                                    "format":"epoch_millis"
                                 }
                             }
                         }
@@ -31,14 +32,15 @@
                             "must": [
                                 {
                                     "term": {
-                                        "Area": "{{testsuiteArea}}"
+                                        "aql_area": "{{testsuiteArea}}"
                                     }
                                 },
                                 {
                                     "term": {
-                                        "branch": "{{branch}}"
+                                        "project": "{{branch}}"
                                     }
-                                }
+                                },
+                                {"term":{"testcase":""}}
                             ]
                         }
                     }
@@ -47,24 +49,42 @@
             "aggs": {
                 "date_histo": {
                     "date_histogram": {
-                        "field": "timestamp",
+                        "field": "time_ran_at",
                         "interval": "1d",
-                        "format" : "yyyy-MM-dd",
-                        "time_zone":"-08:00",
-                        "offset":"-1h"
+                        "format": "epoch_millis",
+                        "time_zone": "America/Los_Angeles"
                     },
                     "aggs": {
                         "testsuite": {
                             "terms": {
-                                "field": "TestSuiteName",
+                                "field": "testsuite",
                                 "size": 100
                             },
                             "aggs": {
-                                "Runs": {
+                                "build_number": {
                                     "terms": {
-                                        "script": {
-                                            "lang":"painless",
-                                            "inline":"doc['TimesRun'].value > 0 ? 'Ran': 'Not Run'"
+                                        "field": "build_number",
+                                        "size": 1,
+                                        "order": {
+                                            "_term": "desc"
+                                        }
+                                    },
+                                    "aggs": {
+                                        "time_2": {
+                                            "terms": {
+                                                "field": "time_ran_at",
+                                                "size":1,
+                                                "order":{
+                                                    "_term":"desc"
+                                                }
+                                            },
+                                            "aggs": {
+                                                "result": {
+                                                    "terms": {
+                                                        "field": "result"
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }

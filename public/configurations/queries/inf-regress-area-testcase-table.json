@@ -8,7 +8,7 @@
       "type": "nuage_doc_type",
       "body": {
         "sort": [
-          { "time_regression_started" : {"order" : "desc"}}
+          { "time_ran_at" : {"order" : "desc"}}
         ],
         "size": 5,
         "query": {
@@ -16,10 +16,25 @@
             "must": [
               {
                 "range":{
-                  "time_regression_submitted":{
-                    "lte":"{{testsuiteTime}}||+1435m",
+                  "time_ran_at":{
+                    "lte":"{{testsuiteTime}}||+1d",
                     "format":"epoch_millis"
                   }
+                }
+              },
+              {
+                "regexp":{
+                  "version.vrs":"[0-9].[0-9]/[0-9.]+"
+                }
+              },
+              {
+                "regexp":{
+                  "version.vsd":"[0-9].[0-9]/[0-9.]+"
+                }
+              },
+              {
+                "regexp":{
+                  "version.vsc":"[0-9].[0-9]/[0-9ISBN.]+"
                 }
               }
             ],

@@ -296,7 +296,220 @@
                     }
                   },
                 "build": "0.0",
-                "file":"{{wkRegFile}}"
+                "file":"{{wkRegFile}}",
+                "aql_area":"{{weekendAqlArea}}",
+                "suite_areas":{
+                  "dc_mirroring": [
+                    "PbmTraffic",
+                    "PbmProvisioning",
+                    "OverlayMirroring",
+                    "OverlayMirroringRealVm",
+                    "DcOvsMirroring"
+                  ],
+                  "dc_vrs": [
+                    "svcChainBasicDualPathLinks3",
+                    "svcChainBasicDoubleLinks",
+                    "sysmonSuiteBasic",
+                    "svcChainBasicLoopTopo",
+                    "DcDualUplinkVrs",
+                    "svcChainBasicDualPathLinks1",
+                    "svcChainBasicDualPathLinks2",
+                    "staticRouteEcmp",
+                    "vrsgBgp",
+                    "staticRouteEcmpFloatingIp",
+                    "vrsgRgBgp",
+                    "stdSixDut",
+                    "vssNoOverlay",
+                    "DcEcmpSuites",
+                    "DcSvcChainSuites",
+                    "dcIpv6",
+                    "rh76Vxlan",
+                    "vmMigrate",
+                    "staticRouteEcmpMultiVip",
+                    "staticRouteEcmpVrsg",
+                    "staticRouteEcmpVnic",
+                    "rh75Vxlan",
+                    "vrsgBgpv6",
+                    "svcChainBasicSingleLink2",
+                    "svcChainBasicSingleLink1",
+                    "dcBgpAll",
+                    "vrsBgp",
+                    "dcBgpBfdAll",
+                    "svcChainBasic8Domain",
+                    "DcOvsPbr"
+                  ],
+                  "qos": [
+                    "NsgCustomerDscpRemarking",
+                    "NsgUplinkIngressQos",
+                    "nsgQosEnhancements",
+                    "ubrEgressQos",
+                    "nsg_sgtQos",
+                    "nsg_egressqos"
+                  ],
+                  "dc_upgrade": [
+                    "DcStatsUpgrade",
+                    "expressUpgradeVspConcise50to00",
+                    "serviceChainUpgrade",
+                    "DcOvsPgUpgrade",
+                    "dcBgpUpgrade"
+                  ],
+                  "wbx/vsg": [
+                    "bmaMclagOverlayL3ForwardingIpv6",
+                    "DcL3TorGwProvision",
+                    "telenorStaticRouteEcmp",
+                    "bmaOverlayMacMove",
+                    "bmaVpls",
+                    "bmaVprnRouteLeakingSpokeToSpoke",
+                    "bgp_pe_ce_ipv6",
+                    "mclagInitHoldTimer",
+                    "bfdOverlay",
+                    "DcL3TorGwProvisionHWPolicyGroupToSWPolicyGroup",
+                    "DcL3TorGwProvisionSdpNextHop",
+                    "ecmpArpUnresolvedCase",
+                    "bmaVprn",
+                    "bmaMclagOverlayL2Forwarding",
+                    "bmaMclagOverlayL3Forwarding",
+                    "bmaVsgBgpPeCe",
+                    "bfdUnderlay",
+                    "bmaVsgxOverlayAclIpv6"
+                  ],
+                  "aar": [
+                    "l2_aar_uc1",
+                    "l2_aar_uc2",
+                    "dyn_app_match",
+                    "nsg_apm_scale",
+                    "npm_functional",
+                    "npm_events",
+                    "nsg_dpi",
+                    "nsg_apm_pc",
+                    "aar_ubr_npm",
+                    "nsg_dpi_provisioning",
+                    "nsg_apm"
+                  ],
+                  "dc_underlay": [
+                    "DcOvsVSPnoGW",
+                    "DcOvsVSPnoTunnels",
+                    "DcOvsVSPnoTunnelsEnhancements",
+                    "DcOvsNat",
+                    "FIPWithoutPE.VRSG",
+                    "fipRtPreference",
+                    "FIPWithoutPE.VSG",
+                    "DcOvsSPAT"
+                  ],
+                  "dc_vlan_trunking": [
+                    "vlanTrunkingVsdValidations",
+                    "vlanTrunking",
+                    "vlanTrunkingMultiVnic"
+                  ],
+                  "rg": [
+                    "rg_shunt",
+                    "rg",
+                    "rg_shunt_migration_tagged_tagged",
+                    "rg_shunt_migration_tagged_untagged",
+                    "rg_dpdk",
+                    "wifi",
+                    "NsgResiliency",
+                    "rg_shunt_migration_untagged_tagged",
+                    "NsgDucShunt"
+                  ],
+                  "UI": [
+                    "UI_React_Infra_More",
+                    "UI_React_Enterprise_Main",
+                    "UI_React_Enterprise_IKE_Gateway",
+                    "UI_React_DC_Mirror_Destination",
+                    "UI_React_Enterprise_UBR_Groups",
+                    "UI_React_Settings"
+                  ],
+                  "routing": [
+                    "NsgBgpRoutePreference",
+                    "NsgLoopbackDualUplink",
+                    "NsgBgpRgHeadless",
+                    "nsg_duc_pps",
+                    "NsgBgpDefaultRoute",
+                    "NsgUbrBgpNhTracking",
+                    "ospf",
+                    "ospf_dpdk",
+                    "NsgBgp",
+                    "NsgLoopbackSingleUplink"
+                  ],
+                  "dc_stats": [
+                    "dcAclFlowLogging",
+                    "dcElasticStats",
+                    "dcAclStats"
+                  ],
+                  "ipv6": [
+                    "DnsForwarderV6V4",
+                    "nsgQosEnhancementsIpv6",
+                    "nsg_egressqosstats",
+                    "nsg_sgtQos_ipv6",
+                    "NsgUplinkStats"
+                  ],
+                  "dc_acl": [
+                    "DcOvsAclStatefulTcpStateMachine",
+                    "DcOvsAclPolicyGroup",
+                    "DcOvsAclFirewallIntraDomain",
+                    "DcOvsAclStatefulNonTcp",
+                    "DcOvsFipAcl",
+                    "DcOvsAclPolicyGroupExpression"
+                  ],
+                  "containers": [
+                    "libnetworkMesos",
+                    "openshiftEnt",
+                    "kubernetes"
+                  ],
+                  "ipsec": [
+                    "NsgHeadlessDuc",
+                    "NsgHeadlessIpsec",
+                    "NsgDualUplink",
+                    "NsgUbrAsBrMT",
+                    "NsgIpSecIkev2Interactions",
+                    "NsgUbrPbrMultipleScenarios",
+                    "NsgBr",
+                    "NsgIpsecL2",
+                    "NsgDuc",
+                    "NsgRgHeadless",
+                    "NsgDPDKDualUplink",
+                    "NsgDucMT",
+                    "NsgDucNattEnhancements",
+                    "NsgIpSecIkev2Datapath"
+                  ],
+                  "dc_qos": [
+                    "OvsQosFunct",
+                    "DcFipQosFunct",
+                    "DcQosFunct",
+                    "DcBUMQosFunct"
+                  ],
+                  "nsg_performance": [
+                    "nsg_perf"
+                  ],
+                  "dc_multi_vip": [
+                    "DcMultiVIPFIPEvent",
+                    "DcMultiVIPFIP",
+                    "DcMultiVIPFIPProvision",
+                    "DcMultiVIPV6",
+                    "DcMultiVIPFIP.Traffic",
+                    "DcMultiVIPFIPArpMove",
+                    "DcMultiVIPFIPVmMigrate",
+                    "DcMultiVIPFIPTraffic",
+                    "DcMultiVIPFIP.Provision",
+                    "DcMultiVIPFIPPbr",
+                    "DcMultiVIPFIPTrafficHost"
+                  ],
+                  "vmware": [
+                    "VCINSanity",
+                    "EAMExpress",
+                    "vmwareInnerMonitoring",
+                    "vmwareExpress"
+                  ],
+                  "aql_underlay": [
+                    "NsgUnderlayInteractionTraffic",
+                    "NsgPatRoutePerUplink",
+                    "NsgPatStats",
+                    "NsgPatPoolsAddressMapPublicIPAsUplinkIP",
+                    "NsgPatUnderlayShunt",
+                    "NsgPatNatEnhancement"
+                  ]
+                }
             },
             "outputType":"coverage"
         }

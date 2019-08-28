@@ -24,6 +24,11 @@
                             "term":{
                                 "project":"5.2"
                             }
+                        },
+                        {
+                            "wildcard":{
+                                "aql_area":"{{weekendAqlArea}}"
+                            }
                         }
                     ]
                 }

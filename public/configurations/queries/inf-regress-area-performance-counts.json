@@ -1,5 +1,5 @@
 {
-  "id": "inf-regress-area-testsuite-performance-counts",
+  "id": "inf-regress-area-performance-counts",
   "author": "Bharat Mukheja",
   "service": "elasticsearch",
   "tabify": "testSuitePerformanceCounts",
@@ -46,7 +46,7 @@
           "filter": [
             {
               "term": {
-                "testsuite": "{{testSuite}}"
+                "aql_area": "{{testsuiteArea}}"
               }
             },
             {
