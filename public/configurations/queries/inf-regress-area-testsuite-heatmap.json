@@ -52,7 +52,7 @@
                         "field": "time_ran_at",
                         "interval": "1d",
                         "format": "epoch_millis",
-                        "offset": "+7h"
+                        "time_zone": "America/Los_Angeles"
                     },
                     "aggs": {
                         "testsuite": {

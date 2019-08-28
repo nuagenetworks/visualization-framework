@@ -1,0 +1,70 @@
+{
+  "id": "inf-regress-area-performance-counts",
+  "author": "Bharat Mukheja",
+  "service": "elasticsearch",
+  "tabify": "testSuitePerformanceCounts",
+  "query": {
+    "index": "nuage_regress",
+    "type": "nuage_doc_type",
+    "body": {
+      "sort": [
+        {
+          "time_ran_at": {
+            "order": "desc"
+          }
+        }
+      ],
+      "size": 0,
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "range": {
+                "time_ran_at": {
+                  "gte": "{{testsuiteTime}}",
+                  "lte": "{{testsuiteTime}}||+1d",
+                  "format": "epoch_millis"
+                }
+              }
+            },
+            {
+              "regexp":{
+                "version.vrs":"[0-9].[0-9]/[0-9.]+"
+              }
+            },
+            {
+              "regexp":{
+                "version.vsd":"[0-9].[0-9]/[0-9.]+"
+              }
+            },
+            {
+              "regexp":{
+                "version.vsc":"[0-9].[0-9]/[0-9ISBN.]+"
+              }
+            }
+          ],
+          "filter": [
+            {
+              "term": {
+                "aql_area": "{{testsuiteArea}}"
+              }
+            },
+            {
+              "term": {"project": "{{branch}}"}
+            }
+          ]
+        }
+      },
+      "_source": {
+        "excludes": []
+      },
+      "aggs": {
+        "result": {
+          "terms": {
+            "field": "result"
+          }
+        }
+      }
+    }
+  }
+}
