@@ -11,17 +11,19 @@ import _ from 'lodash';
   https://github.com/elastic/kibana/blob/master/src/ui/public/agg_response/tabify/tabify.js
 */
 
-export default function weekendCoverage(response, query = {}) 
-{
+const weekendCoverage = async (response, query = {}) => {
+    let table;
     if (query.tabifyOptions.suiteList.file2){
-        readJsonFile(query.tabifyOptions.suiteList.file2)
-        .then(function(data){var read_json = data; return read_json;})
-        .then(function(read_json){
-            return Promise.resolve(process2(response,query = query,read_json));
-        });
+        const read_json = await readJsonFile(query.tabifyOptions.suiteList.file2);
+        table = process2(response, query, read_json);
     }
-    else return process2(response, query);
+    else {
+        table = process2(response, query);
+    }
+    return table;
 }
+
+export default weekendCoverage;
 
 function process2(response, query = {}, suite_data = null){
     if (suite_data != null){
