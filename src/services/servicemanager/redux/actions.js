@@ -166,7 +166,8 @@ function fetch(query, context, forceCache, scroll = false, dashboard = null) {
             .then(
                 async (results) => {
                     // merging "data" here for the case of paging, otherwise will be []
-                    data = [...data, ...ServiceManager.tabify(query, results.response)];
+                    const tabifyData = await ServiceManager.tabify(query, results.response);
+                    data = [...data, ...tabifyData];
 
                     if(scroll) {
                         dispatch(updateScroll(
