@@ -509,7 +509,8 @@
                     "NsgPatUnderlayShunt",
                     "NsgPatNatEnhancement"
                   ]
-                }
+                },
+                "file2":"./suites.json"
             },
             "outputType":"coverage"
         }

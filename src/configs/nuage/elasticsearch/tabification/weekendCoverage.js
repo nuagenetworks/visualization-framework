@@ -11,7 +11,22 @@ import _ from 'lodash';
   https://github.com/elastic/kibana/blob/master/src/ui/public/agg_response/tabify/tabify.js
 */
 
-export default function weekendCoverage(response, query = {}) {
+export default function weekendCoverage(response, query = {}) 
+{
+    if (query.tabifyOptions.suiteList.file2){
+        readJsonFile(query.tabifyOptions.suiteList.file2)
+        .then(function(data){var read_json = data; return read_json;})
+        .then(function(read_json){
+            return Promise.resolve(process2(response,query = query,read_json));
+        });
+    }
+    else return process2(response, query);
+}
+
+function process2(response, query = {}, suite_data = null){
+    if (suite_data != null){
+        console.log("suite_data: ", suite_data);
+    }
     let table;
     if (response.aggregations) {
         const tree = collectBucket(response.aggregations);
@@ -37,6 +52,8 @@ export default function weekendCoverage(response, query = {}) {
         var aql_area = query.tabifyOptions.suiteList.aql_area;
         let area_filtered_suites;
         let bool_all_areas = false;
+        
+        
         if (aql_area && aql_area != "*"){
             area_filtered_suites = suite_areas[aql_area];
         }
@@ -132,6 +149,14 @@ function processPassFail(data, all_suites){
     result.ratio = `${pass}/${fail}/${skip}`;
     const output = [result];
     return output;
+}
+
+function readJsonFile(filename) {
+    return fetch("../suites.json")
+        .then(function(response){ return response.json(); })
+        .then(function(data) {
+            return data;
+        });
 }
 
 function flatArray(data) {
