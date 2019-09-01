@@ -16,7 +16,7 @@ const weekendCoverage = async (response, query = {}) => {
     if (query.tabifyOptions.suiteList.file && query.tabifyOptions.suiteList.suiteAreasFile){
         const all_testsuites = await readJsonFile(query.tabifyOptions.suiteList.file);
         const suite_areas = await readJsonFile(query.tabifyOptions.suiteList.suiteAreasFile)
-        table = processESResponse(response, query, all_testsuites);   
+        table = processESResponse(response, query, all_testsuites,suite_areas);   
     }
     else {
         console.error("Specify weekend regression json file.")
