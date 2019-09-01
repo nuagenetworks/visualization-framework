@@ -4,7 +4,16 @@
     "creationDate": "8/06/2019",
     "title": "Weekend Regressions Overview",
     "visualizations": [
-        { "id": "inf-regress-weekend-coverage-0_0",             "x": 3,     "y": 0, "w": 2.5, "h": 8, "minW": 2, "minH": 5, "static": true}
+        { "id": "inf-regress-weekend-coverage-0_0",             "x": 3,     "y": 0, "w": 2.5, "h": 8, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-passfail-0_0",             "x": 6.5,   "y": 0, "w": 2.5, "h": 8, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-coverage-6_0",             "x": 3,     "y": 8, "w": 2.5, "h": 8, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-passfail-6_0",             "x": 6.5,   "y": 8, "w": 2.5, "h": 8, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-coverage-5_4",             "x": 3,     "y": 16, "w": 2.5, "h": 8, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-passfail-5_4",             "x": 6.5,   "y": 16, "w": 2.5, "h": 8, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-coverage-5_3",             "x": 3,     "y": 24, "w": 2.5, "h": 8, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-passfail-5_3",             "x": 6.5,   "y": 24, "w": 2.5, "h": 8, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-coverage-5_2",             "x": 3,     "y": 32, "w": 2.5, "h": 8, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-passfail-5_2",             "x": 6.5,   "y": 32, "w": 2.5, "h": 8, "minW": 2, "minH": 5, "static": true}
     ],
     "links": [
         {
@@ -43,7 +52,7 @@
             "options": [
                 {
                     "label": "Build Qualification",
-                    "value": "buildqualification",
+                    "value": "../files/buildqualification.json",
                     "default": true
                 }
             ]

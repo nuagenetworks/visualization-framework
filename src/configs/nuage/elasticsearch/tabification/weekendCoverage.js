@@ -13,22 +13,21 @@ import _ from 'lodash';
 
 const weekendCoverage = async (response, query = {}) => {
     let table;
-    if (query.tabifyOptions.suiteList.file2){
-        const read_json = await readJsonFile(query.tabifyOptions.suiteList.file2);
-        table = process2(response, query, read_json);
+    if (query.tabifyOptions.suiteList.file && query.tabifyOptions.suiteList.suiteAreasFile){
+        const all_testsuites = await readJsonFile(query.tabifyOptions.suiteList.file);
+        const suite_areas = await readJsonFile(query.tabifyOptions.suiteList.suiteAreasFile)
+        table = processESResponse(response, query, all_testsuites);   
     }
     else {
-        table = process2(response, query);
+        console.error("Specify weekend regression json file.")
     }
     return table;
 }
 
 export default weekendCoverage;
 
-function process2(response, query = {}, suite_data = null){
-    if (suite_data != null){
-        console.log("suite_data: ", suite_data);
-    }
+function processESResponse(response, query = {}, all_testsuites = null, suite_areas = null){
+
     let table;
     if (response.aggregations) {
         const tree = collectBucket(response.aggregations);
@@ -46,11 +45,8 @@ function process2(response, query = {}, suite_data = null){
 
     // tabify data on the basis of the pre-defined properties in configuration
     if (query.tabifyOptions && query.tabifyOptions.suiteList) {
-        
-        let all_testsuites;
+    
         var build = query.tabifyOptions.suiteList.build;
-        var file = query.tabifyOptions.suiteList.file;
-        var suite_areas = query.tabifyOptions.suiteList.suite_areas;
         var aql_area = query.tabifyOptions.suiteList.aql_area;
         let area_filtered_suites;
         let bool_all_areas = false;
@@ -62,16 +58,8 @@ function process2(response, query = {}, suite_data = null){
         else{
             bool_all_areas = true;
         }
-        if (query.tabifyOptions.suiteList.names) {
-            all_testsuites = query.tabifyOptions.suiteList.names;
-        } 
-        else if (query.tabifyOptions.suiteList.configFile) {
-            //parse the file here to get suite names
-            
-            //TODO - fix the below function to parse a json config file.
-            //all_testsuites = parseRegressionFiles(query.tabifyOptions.suiteList.file)[build];
-        }
-        all_testsuites = all_testsuites[file][build]["testsuites"];
+
+        all_testsuites = all_testsuites[build].testsuites;
         if (!bool_all_areas){
             let set_area_filtered_suites = new Set(Array.from(area_filtered_suites));
             let filtered_all_testsuites = [...all_testsuites].filter(x => set_area_filtered_suites.has(x))
@@ -86,7 +74,7 @@ function process2(response, query = {}, suite_data = null){
         }
     }
     else {
-        console.log("Please specify testsuite source for evaluating counts")
+        console.error("Please specify testsuite source for evaluating counts");
     }
     
     if (process.env.NODE_ENV === "development") {
@@ -154,7 +142,7 @@ function processPassFail(data, all_suites){
 }
 
 function readJsonFile(filename) {
-    return fetch("../suites.json")
+    return fetch(filename)
         .then(function(response){ return response.json(); })
         .then(function(data) {
             return data;
