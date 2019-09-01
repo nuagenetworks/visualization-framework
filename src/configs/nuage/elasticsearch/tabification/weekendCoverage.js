@@ -1,7 +1,7 @@
 import objectPath from 'object-path';
 import evalExpression from 'eval-expression';
 import _ from 'lodash';
-
+import { readJsonFile } from "./common";
 /*
   This utility will convert the nested data structure
   returned from an ElasticSearch query into a tabular
@@ -141,13 +141,7 @@ function processPassFail(data, all_suites){
     return output;
 }
 
-function readJsonFile(filename) {
-    return fetch(filename)
-        .then(function(response){ return response.json(); })
-        .then(function(data) {
-            return data;
-        });
-}
+
 
 function flatArray(data) {
 
