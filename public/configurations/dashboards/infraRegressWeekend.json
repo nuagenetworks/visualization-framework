@@ -58,7 +58,7 @@
             ]
         },
         "AQL Area":{
-            "parameter":"weekendAqlArea",
+            "parameter":"testsuiteArea",
             "options":[
                 {
                     "label":"All Areas",
