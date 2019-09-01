@@ -17,7 +17,7 @@
             "suiteList":{
               "build": "5.3",
               "file":"{{wkRegFile}}",
-              "aql_area":"{{weekendAqlArea}}",
+              "aql_area":"{{testsuiteArea}}",
               "suiteAreasFile":"../files/testsuite_areas.json"
             },
             "outputType":"coverage"
