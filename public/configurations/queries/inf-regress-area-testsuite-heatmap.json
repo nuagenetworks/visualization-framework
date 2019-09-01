@@ -52,7 +52,11 @@
                         "field": "time_ran_at",
                         "interval": "1d",
                         "format": "epoch_millis",
-                        "time_zone": "America/Los_Angeles"
+                        "time_zone": "America/Los_Angeles",
+                        "extended_bounds":{
+                            "min":"now-15d/d",
+                            "max":"now/d"
+                        }
                     },
                     "aggs": {
                         "testsuite": {
