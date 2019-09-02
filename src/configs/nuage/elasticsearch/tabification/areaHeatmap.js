@@ -1,17 +1,28 @@
 import { stringify } from "querystring";
+import { readJsonFile } from "./common";
 
 /*
   This utility will convert the nested data structure
   returned from an ElasticSearch query into a tabular
   data structure represented as an array of row objects.
 */
-export default function tabify(response, options) {
+
+const areaHeatmap = async (response, query = {}) => {
     let table;
-    if (typeof (options) === 'undefined') {
-        options = {
-            debug: false
-        }
+    if (query.tabifyOptions.suiteAreasFile){
+        const suite_areas = await readJsonFile(query.tabifyOptions.suiteAreasFile);
+        table = tabify(response, query, suite_areas);   
     }
+    else {
+        console.error("Specify Suite Areas json file.");
+    }
+    return table;
+}
+
+export default areaHeatmap;
+
+function tabify(response, query = {}, suite_areas = {}) {
+    let table;
 
     if (response.aggregations) {
         const tree = collectBucket(response.aggregations);
@@ -26,8 +37,13 @@ export default function tabify(response, options) {
     } else {
         throw new Error("Tabify() invoked with invalid result set. Result set must have either 'aggregations' or 'hits' defined.");
     }
-
-    table = processForHeatmap(table);
+    let aql_area;
+    if (query.tabifyOptions.aql_area){
+        aql_area = query.tabifyOptions.aql_area;
+    }
+    
+    const area_filtered_suites = suite_areas[aql_area];
+    table = processForHeatmap(table, area_filtered_suites);
 
     if (process.env.NODE_ENV === "development") {
         console.log("Results from tabify (first 3 rows only):");
@@ -42,16 +58,28 @@ export default function tabify(response, options) {
     return table;
 }
 
-function processForHeatmap(table){
+function processForHeatmap(table, suites){
     let result_codes = {
         "1":"FAIL",
         "0":"SKIP",
         "2":"PASS"
     }
     let item;
+    let suites_in_response = new Set();
     for (let i=0; i<table.length; i++){
         item = table[i];
         item.result = result_codes[item.result];
+        suites_in_response.add(item.testsuite);
+    }
+    let suites_left = suites.filter((suite) => { return !suites_in_response.has(suite);});
+    let last_time = table[0].date_histo;
+    for (let i = 0;i<suites_left.length;i++){
+        item = {
+            "testsuite": suites_left[i],
+            "result": "Empty",
+            "date_histo":last_time
+          };
+          table.push(item);
     }
     return table;
 }
