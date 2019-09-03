@@ -24,6 +24,7 @@
                 }
               }
             ],
+            "must_not":{"term":{"testcase":""}},
             "filter": [
               {"term": { "testsuite": "{{testSuite}}"}},
               {"term": {"project": "{{branch}}"}},
