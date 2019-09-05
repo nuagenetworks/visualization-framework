@@ -4,18 +4,18 @@
     "creationDate": "10/26/2016",
     "title": "AAR NSG ({{snsg}})",
     "visualizations": [
-        { "id": "aar-nsg-top10-app",             "x": 0, "y": 10,  "w": 6, "h": 15, "minW": 5, "minH": 10, "static": true},
-        { "id": "aar-nsg-top5-talkers-upload",   "x": 0, "y": 25, "w": 6, "h": 12, "minW": 5, "minH": 10, "static": true},
-        { "id": "aar-nsg-top5-talkers-download", "x": 6, "y": 25, "w": 6, "h": 12, "minW": 5, "minH": 10, "static": true},
-        { "id": "aar-nsg-app-linechart",         "x": 6, "y": 10,  "w": 6, "h": 15, "minW": 5, "minH": 10, "static": true},
-        { "id": "aar-nsg-alarm-count-critical",  "x": 3, "y": 0,  "w": 2, "h": 9, "minW": 1, "minH": 5, "static": true},
-        { "id": "aar-nsg-alarm-count-major",     "x": 5, "y": 0,  "w": 2, "h": 9, "minW": 1, "minH": 5, "static": true},
-        { "id": "aar-nsg-alarm-count-minor",     "x": 7, "y": 0,  "w": 2, "h": 9, "minW": 1, "minH": 5, "static": true}
+        { "id": "aar-nsg-alarm-text",  "x": 1, "y": 0,  "w": 2, "h": 8, "minW": 1, "minH": 5, "static": true},
+        { "id": "aar-nsg-resource-linechart",  "x": 0, "y": 8,  "w": 8, "h": 15, "minW": 1, "minH": 5, "static": true},
+        { "id": "aar-nsg-disk-barchart",    "x": 8, "y": 8, "w": 4, "h": 15, "minW": 1, "minH":5, "static": true}
     ],
     "links": [
         {
             "label": "Dashboard View",
             "url": "/dashboards/aarNSG"
+        },
+        {
+            "label": "Top Apps",
+            "url": "/dashboards/aarNSGTopApps"
         },
         {
             "label": "Detail View",
@@ -33,22 +33,5 @@
             "label": "Alarms",
             "url": "/dashboards/aarNSGAlarms"
         }
-    ],
-    "filterOptions": {
-        "Metric": {
-            "parameter": "metric",
-            "default": "TotalBytesCount",
-            "options": [
-                {
-                    "label": "Total Bytes",
-                    "value": "TotalBytesCount",
-                    "default": true
-                },
-                {
-                    "label": "Total Packets",
-                    "value": "TotalPacketsCount"
-                }
-            ]
-        }
-    }
+    ]
 }

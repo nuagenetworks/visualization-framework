@@ -12,6 +12,10 @@
             "url": "/dashboards/aarNSG"
         },
         {
+            "label": "Top Apps",
+            "url": "/dashboards/aarNSGTopApps"
+        },
+        {
             "label": "Detail View",
             "url": "/dashboards/aarNSGDetail"
         },
