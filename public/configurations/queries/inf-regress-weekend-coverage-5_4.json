@@ -27,7 +27,7 @@
                         },
                         {
                             "wildcard":{
-                                "aql_area":"{{weekendAqlArea}}"
+                                "aql_area":"{{testsuiteArea}}"
                             }
                         }
                     ]
