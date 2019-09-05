@@ -1,18 +1,52 @@
 {
     "id": "inf-regress-weekend-coverage-6_0",
-    "graph": "SimpleTextGraph",
+    "graph": "PieGraph",
     "title": "6.0 Testsuite Coverage",
     "description": "",
     "author": "Bharat Mukheja",
     "creationDate": "08/06/2019",
-    "showTitleBar": false,
     "data": {
-        "borderRadius": "0",
-        "targetedColumn":"ratio",
-        "fontColor":"black",
-        "colors":[
-            "white"
+        "sliceColumn": "value",
+        "labelColumn": "result",
+        "colorColumn": "result",
+        "pieLabelRadius": 0.65,
+        "pieOuterRadius": 0.95,
+        "pieInnerRadius": 0.40,
+        "percentages": true,
+        "otherOptions": {},
+        "showZero": false,
+        "tooltip": [
+            {
+                "column": "result",
+                "label": "Result"
+            },
+            {
+                "column": "value",
+                "label": "Suite Count"
+            }
         ],
+        "colors":[
+            "#D9070A",
+            "#FFBF02",
+            "#62AC00",
+            "#b3d645",
+            "#fec26a",
+            "#f79e99",         
+            "#7da3f7"
+        ],
+        "mappedColors": {
+            "FAIL": "#D9070A",
+            "SKIP": "#FFBF02",
+            "PASS": "#62AC00"
+        },
+        "legend": {
+            "show": true,
+            "orientation": "vertical",
+            "legendColumn": "value",
+            "circleSize": 5,
+            "labelOffset": 2
+        },
+        "fontColor": "#000000",
         "tabifyOptions":{
             "suiteList":{
               "build": "6.0",
