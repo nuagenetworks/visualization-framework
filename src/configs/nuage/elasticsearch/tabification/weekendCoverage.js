@@ -116,10 +116,23 @@ function processCoverage(data, all_suites){
             skip +=1;
         }
     }
-    let result = {};
-    let totalRun = pass+fail+skip;
-    result.ratio = `${pass}/${fail}/${skip} = ${totalRun}/${allSuites.size}`;
-    const output = [result];
+    const output = [];
+    output.push({
+        "result":"PASS",
+        "value":pass
+    });
+    output.push({
+        "result":"FAIL",
+        "value":fail
+    });
+    output.push({
+        "result":"SKIP",
+        "value":skip
+    });
+    output.push({
+        "result":"NOT_RUN",
+        "value":allSuites.size
+    });
     return output;
 }
 
