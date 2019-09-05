@@ -19,8 +19,7 @@
               "file":"{{wkRegFile}}",
               "aql_area":"{{testsuiteArea}}",
               "suiteAreasFile":"../files/testsuite_areas.json"
-            },
-            "outputType":"coverage"
+            }
         }
     },
     "query": "inf-regress-weekend-coverage-6_0"

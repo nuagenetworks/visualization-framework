@@ -65,13 +65,7 @@ function processESResponse(response, query = {}, all_testsuites = null, suite_ar
             let filtered_all_testsuites = [...all_testsuites].filter(x => set_area_filtered_suites.has(x))
             all_testsuites = filtered_all_testsuites;
         }
-        
-        if (query.tabifyOptions.outputType == "coverage") {
-            table = processCoverage(table, all_testsuites);
-        }
-        else if (query.tabifyOptions.outputType == "pass/fail"){
-            table = processPassFail(table, all_testsuites);
-        }
+        table = processCoverage(table, all_testsuites)
     }
     else {
         console.error("Please specify testsuite source for evaluating counts");
@@ -91,19 +85,6 @@ function processESResponse(response, query = {}, all_testsuites = null, suite_ar
 }
 
 function processCoverage(data, all_suites){
-    let suitesRun = new Set();
-    let allSuites = new Set(Array.from(all_suites));
-    data.forEach((item) => {suitesRun.add(item.testsuites);});
-
-    let intersect = new Set();
-    suitesRun.forEach((value) => {if (allSuites.has(value)){ intersect.add(value);}});
-    let result = {};
-    result.ratio = `${intersect.size}/${allSuites.size}`;
-    const output = [result];
-    return output;
-}
-
-function processPassFail(data, all_suites){
     var result_codes = {"FAIL":1,"SKIP":0,"PASS":2};
     let suitesRun = {};
     let allSuites = new Set(Array.from(all_suites));
@@ -136,7 +117,8 @@ function processPassFail(data, all_suites){
         }
     }
     let result = {};
-    result.ratio = `${pass}/${fail}/${skip}`;
+    let totalRun = pass+fail+skip;
+    result.ratio = `${pass}/${fail}/${skip} = ${totalRun}/${allSuites.size}`;
     const output = [result];
     return output;
 }
