@@ -50,6 +50,10 @@ function processESResponse(response, query = {}, all_testsuites = null, suite_ar
         var aql_area = query.tabifyOptions.suiteList.aql_area;
         let area_filtered_suites;
         let bool_all_areas = false;
+        var return_type = "run_count";
+        if (query.tabifyOptions.suiteList.coverageType){
+            return_type = query.tabifyOptions.suiteList.coverageType;//either of "run_count" or "missed_list"
+        }
         
         
         if (aql_area && aql_area != "*"){
@@ -65,7 +69,7 @@ function processESResponse(response, query = {}, all_testsuites = null, suite_ar
             let filtered_all_testsuites = [...all_testsuites].filter(x => set_area_filtered_suites.has(x))
             all_testsuites = filtered_all_testsuites;
         }
-        table = processCoverage(table, all_testsuites)
+        table = processCoverage(table, all_testsuites,return_type)
     }
     else {
         console.error("Please specify testsuite source for evaluating counts");
@@ -84,7 +88,7 @@ function processESResponse(response, query = {}, all_testsuites = null, suite_ar
     return table;
 }
 
-function processCoverage(data, all_suites){
+function processCoverage(data, all_suites, return_type){
     var result_codes = {"FAIL":1,"SKIP":0,"PASS":2};
     let suitesRun = {};
     let allSuites = new Set(Array.from(all_suites));
@@ -97,13 +101,17 @@ function processCoverage(data, all_suites){
             suitesRun[item.testsuites].push(item.results);
         }
     });
+    
+    const output = [];
+    
     function hasSuitePassed(element, index, array){
         return element == result_codes.PASS;
     }
     function hasSuiteFailed(element,index,array){
         return element == result_codes.FAIL;
     }
-
+    var skippedSuites = [];
+    var failedSuites = [];
     let pass =0,fail=0,skip=0;
     for (var item in suitesRun) {
         if (suitesRun[item].some(hasSuitePassed)){
@@ -111,28 +119,54 @@ function processCoverage(data, all_suites){
         }
         else if (suitesRun[item].some(hasSuiteFailed)){
             fail+=1;
+            failedSuites.push(item);
         }
         else {
             skip +=1;
+            skippedSuites.push(item);
         }
     }
-    const output = [];
-    output.push({
-        "result":"PASS",
-        "value":pass
-    });
-    output.push({
-        "result":"FAIL",
-        "value":fail
-    });
-    output.push({
-        "result":"SKIP",
-        "value":skip
-    });
-    output.push({
-        "result":"NOT_RUN",
-        "value":allSuites.size
-    });
+    var suitesRunSet = new Set(Array.from(Object.keys(suitesRun)));
+    const missedSuites = all_suites.filter(x => !suitesRunSet.has(x));
+
+    if (return_type == "run_count"){
+        output.push({
+            "result":"PASS",
+            "value":pass
+        });
+        output.push({
+            "result":"FAIL",
+            "value":fail
+        });
+        output.push({
+            "result":"SKIP",
+            "value":skip
+        });
+        output.push({
+            "result":"NOT_RUN",
+            "value":missedSuites.length
+        });
+    }
+    else {
+        failedSuites.forEach(suite => {
+                output.push(
+                    {"testsuite":suite,
+                    "outcome":"Failed"}
+                )
+            })
+        skippedSuites.forEach(suite => {
+            output.push(
+                {"testsuite":suite,
+                "outcome":"Skipped"}
+            )
+        })
+        missedSuites.forEach(suite => {
+            output.push(
+                {"testsuite":suite,
+                "outcome":"Did Not Run"}
+            )
+        })
+    }
     return output;
 }
 

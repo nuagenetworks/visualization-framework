@@ -4,11 +4,17 @@
     "creationDate": "8/06/2019",
     "title": "Weekend Regressions Coverage",
     "visualizations": [
-        { "id": "inf-regress-weekend-coverage-0_0",             "x": 1,     "y": 2, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-weekend-coverage-6_0",             "x": 3,     "y": 2, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-weekend-coverage-5_4",             "x": 5,     "y": 2, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-weekend-coverage-5_3",             "x": 7,     "y": 2, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-weekend-coverage-5_2",             "x": 9,     "y": 2, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true}
+        { "id": "inf-regress-weekend-coverage-0_0",             "x": 1,     "y": 0, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-coverage-6_0",             "x": 3,     "y": 0, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-coverage-5_4",             "x": 5,     "y": 0, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-coverage-5_3",             "x": 7,     "y": 0, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-coverage-5_2",             "x": 9,     "y": 0, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-missed-suites-0_0",        "x": 1,     "y": 22, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-missed-suites-6_0",        "x": 3,     "y": 22, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-missed-suites-5_4",        "x": 5,     "y": 22, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-missed-suites-5_3",        "x": 7,     "y": 22, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-weekend-missed-suites-5_2",        "x": 9,     "y": 22, "w": 2, "h": 22, "minW": 2, "minH": 5, "static": true}
+        
     ],
     "links": [
         {
