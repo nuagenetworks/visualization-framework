@@ -1,7 +1,7 @@
 {
-    "id": "inf-regress-weekend-coverage-0_0",
+    "id": "inf-regress-weekend-coverage-testcases-5_2",
     "graph": "PieGraph",
-    "title": "0.0 Testsuite Coverage",
+    "title": "5.2 Testcase Coverage",
     "description": "",
     "author": "Bharat Mukheja",
     "creationDate": "08/06/2019",
@@ -22,7 +22,7 @@
             },
             {
                 "column": "value",
-                "label": "Suite Count"
+                "label": "Testcase Count"
             }
         ],
         "colors":[
@@ -49,12 +49,13 @@
         "fontColor": "#000000",
         "tabifyOptions":{
             "suiteList":{
-                "build": "0.0",
-                "file":"{{wkRegFile}}",
-                "aql_area":"{{testsuiteArea}}",
-                "suiteAreasFile":"../files/testsuite_areas.json"
+              "build": "5.2",
+              "file":"{{wkRegFile}}",
+              "aql_area":"{{testsuiteArea}}",
+              "suiteAreasFile":"../files/testsuite_areas.json",
+              "analysisLevel":"testcases"
             }
         }
     },
-    "query": "inf-regress-weekend-coverage-0_0"
+    "query": "inf-regress-weekend-coverage-testcases-5_2"
 }

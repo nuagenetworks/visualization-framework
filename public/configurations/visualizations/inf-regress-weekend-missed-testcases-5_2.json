@@ -1,0 +1,38 @@
+{
+    "id": "inf-regress-weekend-missed-testcases-5_2",
+    "graph": "Table",
+    "title": "5.2 Testcases Missed",
+    "description": "",
+    "author": "Bharat Mukheja",
+    "creationDate": "09/03/2019",
+    "data": {
+        "searchBar":false,
+        "fixedHeader" : true,
+        "columns": [
+            {
+                "column": "testsuite",
+                "label": "Testcase"
+            },
+            {
+                "column": "outcome",
+                "label": "Outcome",
+                "colors":{
+                    "Failed":"red",
+                    "Skipped":"yellow",
+                    "Did Not Run":"gray"
+                }
+            }
+        ],
+        "tabifyOptions": {
+            "suiteList":{
+                "build": "5.2",
+                "file":"{{wkRegFile}}",
+                "aql_area":"{{testsuiteArea}}",
+                "suiteAreasFile":"../files/testsuite_areas.json",
+                "coverageType":"missed_list",
+                "analysisLevel":"testcases"
+            }
+        }
+    },
+    "query": "inf-regress-weekend-coverage-testcases-5_2"
+}
