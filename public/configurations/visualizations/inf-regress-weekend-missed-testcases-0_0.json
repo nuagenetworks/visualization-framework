@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-weekend-missed-testcases-0_0",
     "graph": "Table",
-    "title": "0.0 Testcases Missed",
+    "title": "0.0 Tests Missed",
     "description": "",
     "author": "Bharat Mukheja",
     "creationDate": "09/03/2019",
@@ -11,7 +11,7 @@
         "columns": [
             {
                 "column": "testsuite",
-                "label": "Testcase"
+                "label": "Test"
             },
             {
                 "column": "outcome",
