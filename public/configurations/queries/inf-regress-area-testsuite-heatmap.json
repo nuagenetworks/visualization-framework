@@ -88,19 +88,14 @@
                                             "_term": "desc"
                                         }
                                     },
-                                    "aggs": {
-                                        "time_2": {
-                                            "terms": {
-                                                "field": "time_ran_at",
-                                                "size":1,
-                                                "order":{
-                                                    "_term":"desc"
-                                                }
-                                            },
                                             "aggs": {
                                                 "result": {
                                                     "terms": {
-                                                        "field": "result"
+                                                        "field": "result",
+                                                        "size":1,
+                                                        "order":{
+                                                            "_term":"desc"
+                                                        }
                                                     }
                                                 }
                                             }
@@ -113,5 +108,3 @@
                 }
             }
         }
-    }
-}
