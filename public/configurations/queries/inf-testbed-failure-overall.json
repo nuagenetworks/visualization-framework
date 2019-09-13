@@ -1,0 +1,53 @@
+{
+    "id": "inf-testbed-failure-overall",
+    "title": "",
+    "service": "elasticsearch",
+    "query": {
+      "index": "nuage_regress",
+      "type": "nuage_doc_type",
+      "body": {
+        "size": 0,
+        "query": {
+          "bool": {
+            "must": [
+              {
+                "range": {
+                  "time_regression_started": {
+                    "gte": "{{startTime:now-7d}}",
+                    "lte": "{{endTime:now}}",
+                    "format": "epoch_millis"
+                  }
+                }
+              },
+              {
+                "term": {
+                  "testcase": ""
+                }
+              },
+              {
+                "terms": {
+                  "testsuite": [
+                    "initial",
+                    "sanity",
+                    "Sanity"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        
+        "aggs": {
+          "result": {
+            "terms": {
+              "script": {
+                "inline": "doc['result'].value !=2 ? 'Infra Issues' : 'Passed/Non-Infra Issues'"
+              }
+            }
+          }
+        }
+            }
+        }
+    }
+
+
