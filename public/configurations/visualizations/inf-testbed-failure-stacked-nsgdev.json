@@ -1,0 +1,29 @@
+{
+    "id": "inf-testbed-failure-stacked-nsgdev",
+    "graph": "DynamicBarGraph",
+    "title": "",
+    "description": "",
+    "author": "Bharat Mukheja",
+    "creationDate": "09/12/2019",
+    "data": {
+        "brush": 10,
+        "tooltip": [
+            { "column": "testbed", "label": "Testbed" },
+            { "column": "result", "label": "Result"},
+            { "column": "doc_count", "label":"Value"}
+        ],
+        "yTicks": 10,
+        "xLabel": "NSGDEV beds",
+        "stackColumn":"result",
+        "yLabel": "Total Regressions",
+        "xColumn": "testbed",
+        "yColumn": "doc_count",        
+        "legend": {
+            "show": false,
+            "orientation": "horizontal",
+            "circleSize": 4,
+            "labelOffset": 2
+        }
+    },
+    "query": "inf-testbed-failure-nsgdev"
+}
