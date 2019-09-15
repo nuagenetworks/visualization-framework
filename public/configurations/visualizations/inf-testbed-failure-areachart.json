@@ -1,0 +1,36 @@
+{
+    "id": "inf-testbed-failure-areachart",
+    "graph": "AreaGraph",
+    "title": "Percentage regression failures per day over the last 7 days",
+    "description": "",
+    "author": "Bharat Mukheja",
+    "creationDate": "09/12/2019",
+    "data": {
+        "dateHistogram":true,
+        "colors": [
+            "#D9070A",
+            "#FFBF02"
+        ],
+        "tooltip": [
+            { "column": "date_histo", "label": "Time","timeFormat": "%b %d" },
+            { "column": "failed_percentage", "label": "Failed Percentage (%)", "format": ",.4s"},
+            { "column": "total_jobs", "label":"Total Regressions"},
+            { "column": "failed_jobs", "label":"Failed Regressions"},
+            { "column": "runs_count", "label": "Runs which passed Sanity"}
+        ],
+        "xTicks":7,
+        "xLabel": "Day",
+        "yLabel": "Failure Percentage",
+        "xColumn": "date_histo",
+        "stacked":true,
+        "yColumn":[
+            {
+                "key":"failed_jobs"
+            },
+            {
+                "key":"runs_count"
+            }
+        ]
+    },
+    "query": "inf-testbed-failure"
+}

@@ -5,7 +5,7 @@
     "title": "Testbed Analytics",
     "visualizations": [
         { "id": "inf-testbed-failed-percentage-donut",       "x": 1, "y": 0, "w": 2, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-testbed-failure-linechart",            "x": 3, "y": 0, "w": 8, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-testbed-failure-areachart",            "x": 3, "y": 0, "w": 8, "h": 15, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-testbed-failure-stacked-vtb",          "x": 1, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-testbed-failure-stacked-nsgdev",       "x": 6, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-testbed-failure-stacked-dcdev",        "x": 1, "y": 30, "w": 5, "h": 15, "minW": 2, "minH": 5, "static": true},
