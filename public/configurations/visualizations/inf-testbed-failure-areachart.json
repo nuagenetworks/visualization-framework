@@ -20,7 +20,7 @@
         ],
         "xTicks":7,
         "xLabel": "Day",
-        "yLabel": "Failure Percentage",
+        "yLabel": "# Regressions",
         "xColumn": "date_histo",
         "stacked":true,
         "yColumn":[

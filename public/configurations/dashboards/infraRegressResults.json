@@ -36,7 +36,7 @@
             "url": "/dashboards/infraRegressWeekend"
         },
         {
-            "label": "Testbed Analytics",
+            "label": "Infra Analytics",
             "url": "/dashboards/infraTestbedAnalytics"
         }
     ],
