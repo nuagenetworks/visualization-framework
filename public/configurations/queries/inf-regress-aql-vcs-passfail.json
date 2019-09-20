@@ -1,0 +1,84 @@
+{
+  "id": "inf-regress-aql-vcs-passfail",
+  "title": "",
+  "service": "elasticsearch",
+  "tabify":"aqlPassFail",
+  "query": {
+    "index": "nuage_regress",
+    "type": "nuage_doc_type",
+    "body": {
+      "size": 0,
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "range": {
+                "time_regression_started": {
+                  "gte": "{{startTime}}",
+                  "lte": "{{endTime}}",
+                  "format": "epoch_millis"
+                }
+              }
+            },
+            {
+              "term": {
+                "project": "{{branch}}"
+              }
+            },
+            {
+              "regexp": {
+                "version.vrs": "[0-9].[0-9]/[0-9.]+"
+              }
+            },
+            {
+              "regexp": {
+                "version.vsd": "[0-9].[0-9]/[0-9.]+"
+              }
+            },
+            {
+              "regexp": {
+                "version.vsc": "[0-9].[0-9]/[0-9ISBN.]+"
+              }
+            },
+            {
+              "term": {
+                "testcase": ""
+              }
+            },
+            {
+              "regexp": {
+                "aql_area": "(dc_|wbx|vmware|contain).*"
+              }
+            }
+          ]
+        }
+      },
+      "aggs": {
+        "area": {
+          "terms": {
+            "field": "aql_area"
+          },
+          "aggs": {
+            "testsuite": {
+              "terms": {
+                "field": "testsuite",
+                "size": 800
+              },
+              "aggs": {
+                "result": {
+                  "terms": {
+                    "field": "result",
+                    "size": 1,
+                    "order": {
+                      "_term": "desc"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

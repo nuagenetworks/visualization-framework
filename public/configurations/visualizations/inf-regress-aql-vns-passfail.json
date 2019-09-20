@@ -1,0 +1,42 @@
+{
+    "id": "inf-regress-aql-vns-passfail",
+    "graph": "PieGraph",
+    "title": "VNS Pass/Fail/Skip",
+    "author": "Bharat Mukheja",
+    "creationDate": "09/17/2019",
+    "data": {
+        "sliceColumn": "count",
+        "labelColumn": "result",
+        "colorColumn": "result",
+        "pieLabelRadius": 0.65,
+        "pieOuterRadius": 0.95,
+        "pieInnerRadius": 0.40,
+        "otherOptions": {},
+        "percentages":true,
+        "tooltip": [
+            {
+                "column": "result",
+                "label": "Result"
+            },
+            {
+                "column": "count",
+                "label": "# Testsuites"
+            }
+        ],
+        "mappedColors": {
+            "FAIL": "#D9070A",
+            "PASS": "#FFBF02",
+            "1": "#D9070A",
+            "2": "#FFBF02"
+        },
+        "legend": {
+            "show": true,
+            "orientation": "horizontal",
+            "legendColumn": "value",
+            "circleSize": 5,
+            "labelOffset": 2
+        },
+        "fontColor": "#000000"
+    },
+    "query": "inf-regress-aql-vns-passfail"
+}

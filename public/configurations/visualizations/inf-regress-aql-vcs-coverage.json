@@ -1,0 +1,41 @@
+{
+    "id": "inf-regress-aql-vcs-coverage",
+    "graph": "PieGraph",
+    "title": "VCS Coverage QuickView",
+    "author": "Bharat Mukheja",
+    "creationDate": "09/17/2019",
+    "data": {
+        "sliceColumn": "count",
+        "labelColumn": "result",
+        "colorColumn": "result",
+        "pieLabelRadius": 0.65,
+        "pieOuterRadius": 0.95,
+        "pieInnerRadius": 0.40,
+        "percentages": true,
+        "otherOptions": {},
+        "showZero": false,
+        "tooltip": [
+            {
+                "column": "result",
+                "label": "Result"
+            },
+            {
+                "column": "count",
+                "label": "# Testsuites"
+            }
+        ],
+        "mappedColors": {
+            "NotRun": "#D9070A",
+            "Run": "#FFBF02"
+        },
+        "legend": {
+            "show": true,
+            "orientation": "horizontal",
+            "legendColumn": "value",
+            "circleSize": 5,
+            "labelOffset": 2
+        },
+        "fontColor": "#000000"
+    },
+    "query": "inf-regress-aql-vcs-coverage"
+}
