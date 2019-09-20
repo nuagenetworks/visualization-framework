@@ -1,0 +1,54 @@
+{
+  "id": "inf-regress-aql-vcs-coverage",
+  "title": "",
+  "service": "elasticsearch",
+  "tabify": "aqlCoverage",
+  "query": {
+    "index": "nuage_aql",
+    "type": "nuage_doc_type",
+    "body": {
+      "size": 0,
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "range": {
+                "timestamp": {
+                  "gte": "{{startTime}}",
+                  "lte": "{{endTime}}",
+                  "format": "epoch_millis"
+                }
+              }
+            },
+            {
+              "regexp": {
+                "Area": "(ipsec|routing|rg|aar|aql_underlay|ipv6|UI|qos|nsg_performance)"
+              }
+            }
+          ]
+        }
+      },
+      "aggs": {
+        "suite": {
+          "terms": {
+            "field": "TestSuiteName",
+            "size": 1000
+          },
+          "aggs": {
+            "result": {
+              "terms": {
+                "script": {
+                  "inline": "doc['TimesRun'].value!=0 ? 1 : 0"
+                },
+                "size": 1,
+                "order": {
+                  "_term": "desc"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
