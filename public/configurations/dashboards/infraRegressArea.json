@@ -79,7 +79,7 @@
                     "value": "now-7d/d/w+5d",
                     "default":true,
                     "forceOptions": {
-                        "endTime": "now-7d/d/w"
+                        "endTime": "now-7d/d/w+12h"
                     }
                 }
             ]
