@@ -15,7 +15,7 @@
                             "range":{
                                 "time_regression_submitted":{
                                     "gte": "now-7d/d/w+5d",
-                                    "lte": "now-7d/d/w",
+                                    "lte": "now-7d/d/w+12h",
                                     "format":"epoch_millis"
                                 }
                             }
