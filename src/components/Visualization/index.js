@@ -498,7 +498,7 @@ class VisualizationView extends React.Component {
 
 
         const queryParams = Object.assign({}, context, {fullScreen:null});
-        const iframeText = "<iframe src=\"" + window.location.origin + "/visualizations/" + configuration.id + "?" + $.param(queryParams) + "\" width=\"800\" height=\"600\"></iframe>";
+        const iframeText = "<iframe src=\"" + window.location.origin + "/reports/visualizations/" + configuration.id + "?" + $.param(queryParams) + "\" width=\"800\" height=\"600\"></iframe>";
 
         return (
             <div
@@ -516,7 +516,7 @@ class VisualizationView extends React.Component {
 
                 <Link
                     style={style.cardTitleIcon}
-                    to={{ pathname:"/visualizations/" + configuration.id, search: queryString.stringify(queryParams) }}
+                    to={{ pathname:"/reports/visualizations/" + configuration.id, search: queryString.stringify(queryParams) }}
                     target="_blank"
                     >
                     <button className="btn btn-default btn-xs" onClick={() => {
