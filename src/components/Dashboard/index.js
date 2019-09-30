@@ -1,11 +1,11 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { Link } from "react-router";
-
+import { Link } from "react-router-dom";
+import queryString from "query-string";
 import CircularProgress from "material-ui/CircularProgress";
 import { Responsive, WidthProvider } from "react-grid-layout";
-
+import isEqual from "lodash/isEqual";
 import Visualization from "../Visualization";
 import FiltersToolBar from "../FiltersToolBar";
 
@@ -33,21 +33,21 @@ export class DashboardView extends React.Component {
     constructor(props) {
         super(props);
         this.resizeCallbacks = [];
-    }
-
-    componentWillMount() {
         this.props.setPageTitle("Dashboard");
         this.updateConfiguration();
+       
     }
-
+    
     componentWillUnmount() {
         this.resizeCallbacks = null;
     }
 
     componentDidUpdate(prevProps) {
+      if(!isEqual(prevProps.context,this.props.context) || !isEqual(prevProps.filterContext, this.props.filterContext)) {
         this.updateTitleIfNecessary(prevProps);
         this.updateTitleIconIfNecessary(prevProps);
         this.updateConfiguration();
+      }
     }
 
     currentTitle() {
@@ -88,8 +88,8 @@ export class DashboardView extends React.Component {
     }
 
     updateConfiguration() {
-        const { params, fetchConfigurationIfNeeded } = this.props;
-
+        const { match: { params }, fetchConfigurationIfNeeded } = this.props;
+      
         if (!params.id)
             return;
 
@@ -112,7 +112,6 @@ export class DashboardView extends React.Component {
         } = this.props;
 
         const links = configuration.get("links");
-
         if (!links || links.count() === 0)
             return;
 
@@ -130,7 +129,7 @@ export class DashboardView extends React.Component {
                         return <li key={index}
                                    style={highlight}
                                    >
-                                    <Link to={{ pathname:targetURL, query: contextWithFilter}}
+                                    <Link to={{ pathname:targetURL, search: queryString.stringify(contextWithFilter)}}
                                     style={style.noneTextDecoration}
                                     >
                                         {link.get("label")}
@@ -147,9 +146,8 @@ export class DashboardView extends React.Component {
             configuration,
             error,
             fetching,
-            params
+            match : { params }
         } = this.props;
-
         if (fetching) {
             return (
                 <div>
@@ -164,7 +162,6 @@ export class DashboardView extends React.Component {
                 <div>{error}</div>
             );
         }
-
         if (configuration) {
             const { visualizations, settings } = configuration.toJS();
 
@@ -221,7 +218,6 @@ export class DashboardView extends React.Component {
                 </div>
             );
         }
-
         return <div>No dashboard</div>;
     }
 }
@@ -234,19 +230,19 @@ const mapStateToProps = (state, ownProps) => ({
 
     configuration: state.configurations.getIn([
         ConfigurationsActionKeyStore.DASHBOARDS,
-        ownProps.params.id,
+        ownProps.match.params.id,
         ConfigurationsActionKeyStore.DATA
     ]),
 
     fetching: state.configurations.getIn([
         ConfigurationsActionKeyStore.DASHBOARDS,
-        ownProps.params.id,
+        ownProps.match.params.id,
         ConfigurationsActionKeyStore.IS_FETCHING
     ]),
 
     error: state.configurations.getIn([
         ConfigurationsActionKeyStore.DASHBOARDS,
-        ownProps.params.id,
+        ownProps.match.params.id,
         ConfigurationsActionKeyStore.ERROR
     ])
 });

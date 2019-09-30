@@ -1,20 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider as ReduxProvider } from "react-redux";
+import { ConnectedRouter } from 'connected-react-router'
 
-import store from "./redux/store";
-
-import injectTapEventPlugin from "react-tap-event-plugin";
+import store, { history } from "./redux/store";
 
 import App from "./App";
 
 import "./index.css";
 
-injectTapEventPlugin();
-
 ReactDOM.render(
     <ReduxProvider store={store}>
-        <App />
+        <ConnectedRouter history={history}>
+            <App />
+        </ConnectedRouter>
     </ReduxProvider>,
     document.getElementById("root")
 );

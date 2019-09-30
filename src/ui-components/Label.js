@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+
 import style from './style';
 
 const Label = ({ children }) => <p style={style.label}>{children}</p>;

@@ -1,8 +1,10 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-import { push } from "redux-router";
+import { push } from "react-router-redux";
 import { connect } from "react-redux";
 import FontAwesome from "react-fontawesome";
+import queryString from "query-string";
 
 import {
     Actions as InterfaceActions,
@@ -78,7 +80,7 @@ export class NextPrevFilter extends React.Component {
     renderPrevIcon() {
         return (
             <button className="btn btn-xs btn-default"
-              onTouchTap={() => { this.goToPrev() }}>
+            onClick={() => { this.goToPrev() }}>
                 <FontAwesome
                     name="play"
                     style={style.rotatePlay}
@@ -95,7 +97,7 @@ export class NextPrevFilter extends React.Component {
 
         return (
             <button  className="btn btn-xs btn-default" disabled={btnDisabled}
-            onTouchTap={() => { this.goToNext() }}>
+            onClick={() => { this.goToNext() }}>
                 <FontAwesome
                     name="play"
                 />
@@ -187,7 +189,7 @@ export class NextPrevFilter extends React.Component {
 }
 
 NextPrevFilter.propTypes = {
-    filterOptions: React.PropTypes.bool
+    filterOptions: PropTypes.bool
 };
 
 const mapStateToProps = (state, ownProps) => ({
@@ -197,7 +199,7 @@ const mapStateToProps = (state, ownProps) => ({
 const actionCreators = (dispatch) => ({
 
     goTo: function(link, context) {
-        dispatch(push({pathname:link, query:context}));
+        dispatch(push({pathname:link, search:queryString.stringify(context)}));
     },
 
     updateContext: function(context) {

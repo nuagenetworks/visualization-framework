@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+
 import ModalEditor from '../../components/Editor/ModalEditor';
 import { required } from '../../components/Editor/utils';
 import { TextInput, Select, Checkbox, Header } from '../../ui-components';

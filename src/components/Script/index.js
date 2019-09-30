@@ -1,4 +1,6 @@
-import React, { PropTypes } from "react";
+import React from "react";
+import PropTypes from "prop-types";
+
 import * as Fetch from "./Components";
 
 import { connect } from "react-redux";
