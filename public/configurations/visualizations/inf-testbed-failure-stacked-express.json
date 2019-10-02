@@ -9,15 +9,15 @@
         "brush": 10,
         "tooltip": [
             { "column": "testbed", "label": "Testbed" },
-            { "column": "result", "label": "Result"},
-            { "column": "doc_count", "label":"Value"}
+            { "column": "class", "label": "Result"},
+            { "column": "count", "label":"Count"}
         ],
         "yTicks": 10,
         "xLabel": "Express Beds",
-        "stackColumn":"result",
+        "stackColumn":"class",
         "yLabel": "Total Regressions",
         "xColumn": "testbed",
-        "yColumn": "doc_count",        
+        "yColumn": "count",        
         "legend": {
             "show": false,
             "orientation": "horizontal",

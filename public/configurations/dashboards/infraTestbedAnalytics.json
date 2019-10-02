@@ -47,37 +47,37 @@
             "default": "now-24h",
             "options": [
                 {
-                    "label": "Last 24h",
-                    "value": "now-24h",
+                    "label": "Yesterday",
+                    "value": "now-1d/d",
                     "default": true,
                     "forceOptions": {
                         "interval": "1h",
-                        "prevStartTime": "now-48h",
+                        "prevStartTime": "now-2d/d",
                         "unit": "d",
                         "duration": "1",
-                        "endTime": "now"
+                        "endTime": "now-1d/d"
                     }
                 },
                 {
                     "label": "Last 7 days",
-                    "value": "now-7d",
+                    "value": "now-7d/d",
                     "forceOptions": {
                         "interval": "12h",
-                        "prevStartTime": "now-14d",
+                        "prevStartTime": "now-14d/d",
                         "unit": "d",
                         "duration": "7",
-                        "endTime": "now"
+                        "endTime": "now-1d/d"
                     }
                 },
                 {
                     "label": "Last 14 days",
-                    "value": "now-14d",
+                    "value": "now-14d/d",
                     "forceOptions": {
                         "interval": "24h",
-                        "prevStartTime": "now-28d",
+                        "prevStartTime": "now-28d/d",
                         "unit": "d",
                         "duration": "14",
-                        "endTime": "now"
+                        "endTime": "now-1d/d"
                     }
                 }
             ]

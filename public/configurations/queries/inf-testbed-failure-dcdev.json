@@ -1,66 +1,87 @@
 {
-    "id": "inf-testbed-failure-dcdev",
-    "title": "",
-    "service": "elasticsearch",
-    "query": {
-      "index": "nuage_regress",
-      "type": "nuage_doc_type",
-      "body": {
-        "size": 0,
-        "query": {
-          "bool": {
-            "must": [
-              {
-                "range": {
-                  "time_regression_started": {
-                    "gte": "{{startTime:now-7d}}",
-                    "lte": "{{endTime:now}}",
-                    "format": "epoch_millis"
-                  }
-                }
-              },
-              {
-                "term": {
-                  "testcase": ""
-                }
-              },
-              {
-                "regexp":{
-                  "testbed":".*dcdev.*"
-                }
-              },
-              {
-                "terms": {
-                  "testsuite": [
-                    "initial",
-                    "sanity",
-                    "Sanity"
-                  ]
+  "id": "inf-testbed-failure-dcdev",
+  "title": "",
+  "service": "elasticsearch",
+  "tabify": "infraStackedBar",
+  "query": {
+    "index": "nuage_regress",
+    "type": "nuage_doc_type",
+    "body": {
+      "size": 0,
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "range": {
+                "time_regression_started": {
+                  "gte": "{{startTime:now-7d}}",
+                  "lte": "{{endTime:now}}",
+                  "format": "epoch_millis"
                 }
               }
-            ]
-          }
-        },
-        "aggs": {
-          "testbed": {
-            "terms": {
-              "field": "testbed",
-              "size":200
-            }, 
-                "aggs": {
-                  "result": {
-                    "terms": {
-                      "script": {
-                        "inline": "doc['result'].value !=2 ? 'Infra Issues' : 'Passed/Non-Infra Issues'"
-                      }
-                    }
-                  }
+            },
+            {
+              "term": {
+                "testcase": ""
+              }
+            },
+            {
+              "regexp": {
+                "testbed": ".*dcdev.*"
+              }
+            },
+            {
+              "terms": {
+                "testsuite": [
+                  "initial",
+                  "sanity",
+                  "Sanity"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "aggs": {
+        "testbed": {
+          "terms": {
+            "field": "testbed",
+            "size": 2000
+          },
+           "aggs": {
+            "failed_jobs": {
+              "cardinality": {
+                "script": {
+                  "inline": "doc['result'].value !=2 ? doc['job_id'].value : null"
                 }
+              }
+            },
+            "total_jobs": {
+              "cardinality": {
+                "field": "job_id"
+              }
+            },
+            "runs_count": {
+              "bucket_script": {
+                "buckets_path": {
+                  "failed_jobs": "failed_jobs",
+                  "total_jobs": "total_jobs"
+                },
+                "script": "params.total_jobs - params.failed_jobs"
+              }
+            },
+            "failed_percentage": {
+              "bucket_script": {
+                "buckets_path": {
+                  "failed_jobs": "failed_jobs",
+                  "total_jobs": "total_jobs"
+                },
+                "script": "params.failed_jobs/params.total_jobs * 100.0"
               }
             }
           }
-        
-      
+        }
+      }
     }
   }
-    
+}
