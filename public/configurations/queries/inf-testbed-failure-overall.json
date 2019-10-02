@@ -33,6 +33,11 @@
                   "Sanity"
                 ]
               }
+            },
+            {
+              "wildcard":{
+                "testbed":"{{site}}"
+              }
             }
           ]
         }

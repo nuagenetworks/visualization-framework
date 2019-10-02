@@ -6,10 +6,10 @@
     "visualizations": [
         { "id": "inf-testbed-failed-percentage-donut",       "x": 1, "y": 0, "w": 2, "h": 15, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-testbed-failure-areachart",            "x": 3, "y": 0, "w": 8, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-testbed-failure-stacked-vtb",          "x": 1, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-testbed-failure-stacked-nsgdev",       "x": 6, "y": 15, "w": 5, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-testbed-failure-stacked-dcdev",        "x": 1, "y": 30, "w": 5, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-testbed-failure-stacked-express",      "x": 6, "y": 30, "w": 5, "h": 15, "minW": 2, "minH": 5, "static": true}
+        { "id": "inf-testbed-failure-stacked-vtb",          "x": 1, "y": 15, "w": 5, "h": 12, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-testbed-failure-stacked-nsgdev",       "x": 6, "y": 15, "w": 5, "h": 12, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-testbed-failure-stacked-dcdev",        "x": 1, "y": 27, "w": 5, "h": 12, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-testbed-failure-stacked-express",      "x": 6, "y": 27, "w": 5, "h": 12, "minW": 2, "minH": 5, "static": true}
     ],
     "links": [
         {
@@ -41,7 +41,7 @@
             "url": "/dashboards/infraTestbedAnalytics"
         }
     ],
-    "defaultFilterOptionsOverride":{ 
+    "filterOptions": {
         "Time interval": {
             "parameter": "startTime",
             "default": "now-24h",
@@ -79,6 +79,33 @@
                         "duration": "14",
                         "endTime": "now-1d/d"
                     }
+                }
+            ]
+        },
+        "Site": {
+            "parameter": "site",
+            "default": "mv*",
+            "options": [
+                {
+                    "label": "Mountain View",
+                    "value": "mv*",
+                    "default": true
+                },
+                {
+                    "label": "Westford",
+                    "value": "wf*"
+                },
+                {
+                    "label": "Raleigh",
+                    "value": "ra*"
+                },
+                {
+                    "label": "Bangalore",
+                    "value": "ba*"
+                },
+                {
+                    "label": "Antwerp",
+                    "value": "an*"
                 }
             ]
         }
