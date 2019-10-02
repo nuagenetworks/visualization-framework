@@ -88,7 +88,10 @@
                 {"value": "rg", "label": "rg"},
                 {"value": "routing", "label": "routing"},
                 {"value": "vmware", "label": "vmware"},
-                {"value": "wbx/vsg", "label": "wbx/vsg"}
+                {"value": "wbx/vsg", "label": "wbx/vsg"},
+                {"value": "bootstrap_and_security", "label": "Bts/Sec"},
+                {"value": "platform_and_security_hardening", "label": "Platform/Sec"},
+                {"value": "oat_upgrade_mesh", "label": "OAT/Upgrade/Mesh"}
             ]
         }
     }
