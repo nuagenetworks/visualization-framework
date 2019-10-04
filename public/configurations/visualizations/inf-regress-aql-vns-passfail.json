@@ -25,9 +25,11 @@
         ],
         "mappedColors": {
             "FAIL": "#D9070A",
-            "PASS": "#FFBF02",
+            "PASS": "green",
+            "SKIP":"#C7D9F9",
             "1": "#D9070A",
-            "2": "#FFBF02"
+            "2": "green",
+            "0": "#C7D9F9"
         },
         "legend": {
             "show": true,

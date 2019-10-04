@@ -25,7 +25,7 @@
             }
         ],
         "mappedColors": {
-            "NotRun": "#D9070A",
+            "NotRun": "gray",
             "Run": "#FFBF02"
         },
         "legend": {
