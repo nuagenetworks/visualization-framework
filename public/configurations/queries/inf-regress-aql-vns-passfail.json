@@ -4,7 +4,7 @@
   "service": "elasticsearch",
   "tabify":"aqlPassFail",
   "query": {
-    "index": "nuage_regress",
+    "index": "nuage_aql",
     "type": "nuage_doc_type",
     "body": {
       "size": 0,
@@ -13,7 +13,7 @@
           "must": [
             {
               "range": {
-                "time_regression_started": {
+                "timestamp": {
                   "gte": "{{startTime}}",
                   "lte": "{{endTime}}",
                   "format": "epoch_millis"
@@ -21,33 +21,8 @@
               }
             },
             {
-              "term": {
-                "project": "{{branch}}"
-              }
-            },
-            {
               "regexp": {
-                "version.vrs": "[0-9].[0-9]/[0-9.]+"
-              }
-            },
-            {
-              "regexp": {
-                "version.vsd": "[0-9].[0-9]/[0-9.]+"
-              }
-            },
-            {
-              "regexp": {
-                "version.vsc": "[0-9].[0-9]/[0-9ISBN.]+"
-              }
-            },
-            {
-              "term": {
-                "testcase": ""
-              }
-            },
-            {
-              "regexp": {
-                "aql_area": "(ipsec|routing|rg|aar|aql_underlay|ipv6|UI|qos|nsg_performance)"
+                "Area": "(ipsec|routing|rg|aar|aql_underlay|ipv6|UI|qos|nsg_performance)"
               }
             }
           ]
@@ -56,18 +31,21 @@
       "aggs": {
         "area": {
           "terms": {
-            "field": "aql_area"
+            "field": "Area"
           },
           "aggs": {
             "testsuite": {
               "terms": {
-                "field": "testsuite",
+                "field": "TestSuiteName",
                 "size": 800
               },
               "aggs": {
                 "result": {
                   "terms": {
-                    "field": "result",
+                    "script":{
+                      "inline":"doc['pass'].value != 0 ? 2 : doc['fail'].value !=0?1:doc['skip'].value!=0?0:-1"
+                    },
+                    "exclude":"-1",
                     "size": 1,
                     "order": {
                       "_term": "desc"

@@ -29,20 +29,27 @@
         }
       },
       "aggs": {
-        "suite": {
+        "area": {
           "terms": {
-            "field": "TestSuiteName",
-            "size": 1000
+            "field": "Area"
           },
           "aggs": {
-            "result": {
+            "suite": {
               "terms": {
-                "script": {
-                  "inline": "doc['TimesRun'].value!=0 ? 1 : 0"
-                },
-                "size": 1,
-                "order": {
-                  "_term": "desc"
+                "field": "TestSuiteName",
+                "size": 1000
+              },
+              "aggs": {
+                "result": {
+                  "terms": {
+                    "script": {
+                      "inline": "doc['TimesRun'].value == 0 ? 0 : 1"
+                    },
+                    "size": 1,
+                    "order": {
+                      "_term": "desc"
+                    }
+                  }
                 }
               }
             }

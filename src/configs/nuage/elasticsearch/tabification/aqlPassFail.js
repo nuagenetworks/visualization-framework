@@ -42,11 +42,12 @@ export default function aqlPassFail(response, query = {}){
 }
 
 function aggregateOnArea(data){
-    let results = {1:0,2:0};
+    console.log(data)
+    let results = {1:0,2:0,0:0};
     data.forEach(item => {
         results[item.result]+=1;
     })
-    return [{result:"FAIL",count:results[1]},{result:"PASS",count:results[2]}];
+    return [{result:"FAIL",count:results[1]},{result:"PASS",count:results[2]},{result:"SKIP",count:results[0]}];
 }
 
 
