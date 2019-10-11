@@ -7,7 +7,7 @@ import queryString from "query-string";
 export const updateVisualizationTypeMiddleware = store => next => action => {
     const result = next(action),
           state  = store.getState();
-    if (action.type === "@@router/LOCATION_CHANGE" && state.router && state.router.action !== 'pop' && state.router.location.query && state.router.location.pathname.indexOf('dashboards') !== -1)
+    if (action.type === "@@router/LOCATION_CHANGE" && state.router && state.router.action !== 'pop' && state.router.location.search && state.router.location.pathname.indexOf('dashboards') !== -1)
     {
         const id           = state.router.location.pathname.split('dashboards/')[1],
               previousType = state.interface.get("visualizationType"),
@@ -31,7 +31,7 @@ export const updateContextMiddleware = store => next => action => {
 
     if (action.type === "@@router/LOCATION_CHANGE" && state.router) {
         let context = queryString.parse(state.router.location.search)
-        if((state.router.location.pathname.indexOf('visualizations') !== -1
+        if((state.router.location.pathname.indexOf('dashboards') !== -1
             || state.router.location.pathname.indexOf('visualizations') !== -1))
         {
             const id           = state.router.location.pathname.split('visualizations/')[1],
