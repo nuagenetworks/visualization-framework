@@ -1,6 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import { connect } from "react-redux";
-import { push } from "redux-router";
+import { push } from "react-router-redux";
 import _ from 'lodash';
 
 import Drawer from "material-ui/Drawer";
@@ -8,7 +10,7 @@ import Subheader from "material-ui/Subheader";
 import { List, ListItem } from "material-ui/List";
 
 import { ServiceManager } from "../../services/servicemanager/index";
-
+import queryString from "query-string";
 import {
     Actions as InterfaceActions,
     ActionKeyStore as InterfaceActionKeyStore
@@ -114,7 +116,7 @@ class MainMenuView extends React.Component {
                             primaryText={domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, queryParams) }}
+                            onClick={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, queryParams) }}
                             leftIcon={
                                 <img style={style.iconMenu} src={`${process.env.PUBLIC_URL}/icons/icon-domain.png`} alt="D" />
                             }
@@ -143,14 +145,13 @@ class MainMenuView extends React.Component {
                 {l2Domains.map((l2Domain) => {
 
                     let queryParams = Object.assign({}, context, { domainName: l2Domain.name, domainType: domainType, domainID: l2Domain.ID });
-
                     return (
                         <ListItem
                             key={l2Domain.ID}
                             primaryText={l2Domain.name}
                             style={style.nestedItem}
                             innerDivStyle={style.innerNestedItem}
-                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, queryParams) }}
+                            onClick={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, queryParams) }}
                             leftIcon={
                                 <img style={style.iconMenu} src={`${process.env.PUBLIC_URL}/icons/icon-l2domain.png`} alt="L2D" />
                             }
@@ -175,7 +176,6 @@ class MainMenuView extends React.Component {
                 {nsgs.map((nsg) => {
 
                     let queryParams = Object.assign({}, context, { snsg: nsg.name, dnsg: nsg.name, nsgId: nsg.ID });
-
                     return (
                         <ListItem
                             key={nsg.ID}
@@ -184,7 +184,7 @@ class MainMenuView extends React.Component {
                             innerDivStyle={style.innerNestedItem}
                             initiallyOpen={true}
                             open={true}
-                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/aarNSG`, queryParams) }}
+                            onClick={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/aarNSG`, queryParams) }}
                             leftIcon={
                                 <img style={style.iconMenu} src={`${process.env.PUBLIC_URL}/icons/icon-nsgateway.png`} alt="N" />
                             }
@@ -215,7 +215,7 @@ class MainMenuView extends React.Component {
                             key={enterprise.ID}
                             primaryText={enterprise.name}
                             style={style.listItem}
-                            onTouchTap={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, context) }}
+                            onClick={() => { this.props.goTo(`${process.env.PUBLIC_URL}/dashboards/${targetedDashboard}`, context) }}
                             nestedItems={[
                                 <div key={"sub-enterprise" + enterprise.ID} style={style.nestedItems}>
                                     {this.renderDomainsMenu()}
@@ -262,8 +262,8 @@ class MainMenuView extends React.Component {
 
 
 MainMenuView.propTypes = {
-    open: React.PropTypes.bool,
-    onRequestChange: React.PropTypes.func
+    open: PropTypes.bool,
+    onRequestChange: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -302,7 +302,7 @@ const actionCreators = (dispatch) => ({
     },
 
     goTo: function (link, context) {
-        dispatch(push({ pathname: link, query: context }));
+        dispatch(push({ pathname: link, search: queryString.stringify(context)}));
     },
 
     fetchEnterpriseIfNeeded: (enterpriseID) => {

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 import style from "./styles";
 
@@ -13,7 +14,7 @@ export class CardOverlay extends React.Component {
             }) : this.props.text
 
         return (
-            <div style={overlayStyle} onTouchTap={this.props.onTouchTapOverlay}>
+            <div style={overlayStyle} onClick={this.props.onTouchTapOverlay}>
                 <div style={textStyle}>
                     {text}
                 </div>
@@ -23,6 +24,6 @@ export class CardOverlay extends React.Component {
 }
 
 CardOverlay.propTypes = {
-    overlayStyle: React.PropTypes.object,
-    textStyle: React.PropTypes.object
+    overlayStyle: PropTypes.object,
+    textStyle: PropTypes.object
 };

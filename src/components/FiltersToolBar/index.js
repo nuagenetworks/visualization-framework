@@ -1,6 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
+import isEqual from "lodash/isEqual";
+import queryString from "query-string";
 
-import { push } from "redux-router";
+import { push } from "react-router-redux";
 import { connect } from "react-redux";
 
 import DropDownMenu from 'material-ui/DropDownMenu';
@@ -109,8 +112,10 @@ export class FiltersToolBarView extends React.Component {
         return sourceQueries[key].query;
     }
 
-    componentDidUpdate() {
-        this.updateContext();
+    componentDidUpdate(prevProps) {
+        if (!isEqual(prevProps.context,this.props.context) || !isEqual(prevProps.filterContext, this.props.filterContext)) {
+            this.updateContext();
+        }
     }
 
     componentDidMount() {
@@ -227,7 +232,7 @@ export class FiltersToolBarView extends React.Component {
         } = this.props;
 
         saveFilterContext(queryParams, visualizationId);
-        goTo(window.location.pathname, Object.assign({}, context, queryParams));
+        goTo(window.location.pathname, Object.assign({}, context || {}, queryParams));
     }
 
     renderDropdownContent() {
@@ -269,8 +274,7 @@ export class FiltersToolBarView extends React.Component {
 
                             {configOptions.options.map((option, index) => {
                                 let queryParams  = { [paramName]: option.value },
-                                    forceOptions = option.forceOptions,
-                                    onChange     = option.onChange || null
+                                    forceOptions = option.forceOptions
 
                                 if (forceOptions)
                                     queryParams = Object.assign({}, queryParams, this.updateForceOptionContext(forceOptions, configOptions.append));
@@ -284,7 +288,7 @@ export class FiltersToolBarView extends React.Component {
                                         primaryText={option.label}
                                         style={style.menuItem}
                                         disabled={option.disabled}
-                                        onTouchTap={() => this.onTouchTap(queryParams)}
+                                        onClick={() => this.onTouchTap(queryParams)}
                                     />
                                 )
                             })}
@@ -310,7 +314,7 @@ export class FiltersToolBarView extends React.Component {
 }
 
 FiltersToolBarView.propTypes = {
-    filterOptions: React.PropTypes.object
+    filterOptions: PropTypes.object
 };
 
 const mapStateToProps = (state, ownProps) => ({
@@ -321,7 +325,7 @@ const mapStateToProps = (state, ownProps) => ({
 const actionCreators = (dispatch) => ({
 
     goTo: function(link, context) {
-        dispatch(push({pathname:link, query:context}));
+      dispatch(push({pathname:link, search: queryString.stringify(context)}));
     },
     saveFilterContext: function(context, visualizationId = null) {
         dispatch(ServiceActions.updateScroll(visualizationId, {page: 1, event: events.FILTER}))

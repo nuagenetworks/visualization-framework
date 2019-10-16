@@ -1,4 +1,3 @@
-import _ from "lodash";
 import objectPath from "object-path"
 import { ServiceManager } from "../index"
 import { parameterizedConfiguration } from "../../../utils/configurations";
@@ -216,7 +215,7 @@ function shouldFetch(request) {
 }
 
 function fetchIfNeeded(query, context, forceCache, scroll, dashboard = null) {
-
+  
     // TODO: Temporary - Replace this part in the middleware
     const isScript = typeof(query) === "string";
     let requestID;

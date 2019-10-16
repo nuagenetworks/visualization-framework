@@ -7,15 +7,15 @@ import $ from "jquery";
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { connect } from "react-redux";
-import { Link } from "react-router";
-import { push } from "redux-router";
+import { Link } from "react-router-dom";
+import { push } from "react-router-redux";
 
 import FiltersToolBar from "../FiltersToolBar";
 import NextPrevFilter from "../NextPrevFilter";
 import { CardOverlay } from "../CardOverlay";
 import { Card, CardText } from 'material-ui/Card';
 import Script from "../../components/Script"
-
+import queryString from "query-string";
 import {CSVLink} from 'react-csv';
 import * as d3 from "d3";
 
@@ -383,7 +383,7 @@ class VisualizationView extends React.Component {
             <FontAwesome
                 name="info"
                 style={style.cardTitleIcon}
-                onTouchTap={() => { this.setState({showDescription: !this.state.showDescription}); }}
+                onClick={() => { this.setState({showDescription: !this.state.showDescription}); }}
                 />
         )
     }
@@ -401,7 +401,7 @@ class VisualizationView extends React.Component {
             <FontAwesome
                 name="share-alt"
                 style={style.cardTitleIcon}
-                onTouchTap={() => { this.setState({showSharingOptions: !this.state.showSharingOptions}); }}
+                onClick={() => { this.setState({showSharingOptions: !this.state.showSharingOptions}); }}
                 />
         )
     }
@@ -498,8 +498,7 @@ class VisualizationView extends React.Component {
 
 
         const queryParams = Object.assign({}, context, {fullScreen:null});
-        const queryString = $.param(queryParams);
-        const iframeText = "<iframe src=\"" + window.location.origin + "/reports/visualizations/" + configuration.id + "?" + queryString + "\" width=\"800\" height=\"600\"></iframe>";
+        const iframeText = "<iframe src=\"" + window.location.origin + "/reports/visualizations/" + configuration.id + "?" + $.param(queryParams) + "\" width=\"800\" height=\"600\"></iframe>";
 
         return (
             <div
@@ -517,10 +516,11 @@ class VisualizationView extends React.Component {
 
                 <Link
                     style={style.cardTitleIcon}
-                    to={{ pathname:"/reports/visualizations/" + configuration.id, query: queryParams }}
+                    to={{ pathname:"/reports/visualizations/" + configuration.id, search: queryString.stringify(queryParams) }}
                     target="_blank"
                     >
-                    <button className="btn btn-default btn-xs">
+                    <button className="btn btn-default btn-xs" onClick={() => {
+                    }}>
                          <FontAwesome name="external-link" /> Open new window
                     </button>
                 </Link>
@@ -744,7 +744,7 @@ function findPropertyPath(obj, name) {
 const mapStateToProps = (state, ownProps) => {
     //Fetching Configurations of Visualizations
 
-    const configurationID = ownProps.id || ownProps.params.id,
+    const configurationID = ownProps.id || ownProps.match.params.id,
           orgContext = state.interface.get(InterfaceActionKeyStore.CONTEXT),
           configuration = state.configurations.getIn([
               ConfigurationsActionKeyStore.VISUALIZATIONS,
@@ -920,7 +920,7 @@ const actionCreators = (dispatch) => ({
     },
 
     goTo: function(link, context) {
-        dispatch(push({pathname:link, query:context}));
+        dispatch(push({pathname:link, search:queryString.stringify(context)}));
     },
 
     fetchConfigurationIfNeeded: function(id) {

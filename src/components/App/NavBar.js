@@ -29,7 +29,7 @@ class NavBarView extends React.Component {
                   className="appBar"
                   style={style.navBar}
                   title={navTitleBar}
-                  onLeftIconButtonTouchTap={this.props.onLeftIconButtonTouchTap}
+                  onClick={this.props.onLeftIconButtonTouchTap}
                   iconElementRight={<UserMenu context={context}/>}
                   iconStyleRight={style.menuRight}
                 />

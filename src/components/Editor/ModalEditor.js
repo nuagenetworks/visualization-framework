@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
 import { FlatButton } from 'material-ui';
 import { formSubmit, clickSubmit } from './actions';
@@ -24,13 +26,13 @@ export const ModalEditor = props => {
     let buttons = [
         <FlatButton
             primary={true}
-            onTouchTap={() => handleClick(name)}
+            onClick={() => handleClick(name)}
             disabled={errored}
             style={componentStyle.buttonFlat}
         >{submitLabel}</FlatButton>,
         <FlatButton
             primary={false}
-            onTouchTap={onCancel}
+            onClick={onCancel}
             style={componentStyle.buttonFlat}
         >Cancel</FlatButton>,
     ];
