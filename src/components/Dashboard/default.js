@@ -60,6 +60,14 @@ export const defaultFilterOptions = {
             {
                 "label": timeLabel(),
                 "value": config.REFRESH_INTERVAL.toString(),
+            },
+            {
+                "label": "12 Hours",
+                "value": "43200000",
+            },
+            {
+                "label": "24 Hours",
+                "value": "86400000",
             }
         ]
     }

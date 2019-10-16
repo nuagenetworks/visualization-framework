@@ -1,8 +1,7 @@
 {
-    "id": "inf-regress-weekend-coverage-testcases-5_4",
+    "id": "inf-regress-weekend-coverage-testcases",
     "graph": "PieGraph",
-    "title": "5.4 Test Coverage",
-    "description": "",
+    "title": "{{branch}} Test Coverage",
     "author": "Bharat Mukheja",
     "creationDate": "08/06/2019",
     "data": {
@@ -49,13 +48,13 @@
         "fontColor": "#000000",
         "tabifyOptions":{
             "suiteList":{
-              "build": "5.4",
-              "file":"{{wkRegFile}}",
-              "aql_area":"{{testsuiteArea}}",
-              "suiteAreasFile":"../files/testsuite_areas.json",
-              "analysisLevel":"testcases"
+                "build": "{{branch}}",
+                "file":"{{wkRegFile}}",
+                "aql_area":"{{testsuiteArea}}",
+                "suiteAreasFile":"../files/testsuite_areas.json",
+                "analysisLevel":"testcases"
             }
         }
     },
-    "query": "inf-regress-weekend-coverage-testcases-5_4"
+    "query": "inf-regress-weekend-coverage-testcases"
 }

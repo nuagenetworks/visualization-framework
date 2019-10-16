@@ -1,5 +1,5 @@
 {
-    "id":"inf-regress-weekend-coverage-5_4",
+    "id":"inf-regress-weekend-coverage",
     "title":"",
     "service":"elasticsearch",
     "tabify": "weekendCoverage",
@@ -22,7 +22,7 @@
                         },
                         {
                             "term":{
-                                "project":"5.4"
+                                "project":"{{branch}}"
                             }
                         },
                         {
@@ -36,8 +36,8 @@
             "aggs": {
                 "testsuites": {
                     "terms": {
-                        "field": "testcase",
-                        "size": "10000"
+                        "field": "testsuite",
+                        "size": "1000"
                     },
                     "aggs": {
                       "results": {

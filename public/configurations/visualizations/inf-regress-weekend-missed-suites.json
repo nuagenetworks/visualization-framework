@@ -1,0 +1,37 @@
+{
+    "id": "inf-regress-weekend-missed-suites",
+    "graph": "Table",
+    "title": "{{branch}} Testsuites Missed",
+    "description": "",
+    "author": "Bharat Mukheja",
+    "creationDate": "09/03/2019",
+    "data": {
+        "searchBar":false,
+        "fixedHeader" : true,
+        "columns": [
+            {
+                "column": "testsuite",
+                "label": ""
+            },
+            {
+                "column": "outcome",
+                "label": "Outcome",
+                "colors":{
+                    "Failed":"red",
+                    "Skipped":"yellow",
+                    "Did Not Run":"gray"
+                }
+            }
+        ],
+        "tabifyOptions": {
+            "suiteList":{
+                "build": "{{branch}}",
+                "file":"{{wkRegFile}}",
+                "aql_area":"{{testsuiteArea}}",
+                "suiteAreasFile":"../files/testsuite_areas.json",
+                "coverageType":"missed_list"
+            }
+        }
+    },
+    "query": "inf-regress-weekend-coverage"
+}
