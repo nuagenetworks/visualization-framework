@@ -24,6 +24,11 @@
               "regexp": {
                 "Area": "(dc_|wbx|vmware|contain).*"
               }
+            },
+            {
+              "term":{
+                "branch":"{{branch}}"
+              }
             }
           ]
         }
@@ -31,7 +36,8 @@
       "aggs": {
         "area": {
           "terms": {
-            "field": "Area"
+            "field": "Area",
+            "size":2000
           },
           "aggs": {
             "suite": {
