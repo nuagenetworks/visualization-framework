@@ -22,7 +22,7 @@
             },
             {
               "regexp": {
-                "Area": "(ipsec|routing|rg|aar|aql_underlay|ipv6|UI|qos|nsg_performance)"
+                "Area": "(ipsec|routing|rg|aar|aql_underlay|ipv6|UI|qos|nsg_performance|oat_upgrade_mesh|platform_and_security_hardening|bootstrap_and_security)"
               }
             }
           ]
@@ -36,7 +36,7 @@
           "aggs": {
             "testsuite": {
               "terms": {
-                "field": "TestSuiteName",
+                "field": "RegressionName",
                 "size": 800
               },
               "aggs": {

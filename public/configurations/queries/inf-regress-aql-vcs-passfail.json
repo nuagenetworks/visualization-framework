@@ -36,7 +36,7 @@
           "aggs": {
             "testsuite": {
               "terms": {
-                "field": "TestSuiteName",
+                "field": "RegressionName",
                 "size": 800
               },
               "aggs": {
