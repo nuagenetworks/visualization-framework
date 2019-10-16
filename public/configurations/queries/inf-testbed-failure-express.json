@@ -74,15 +74,6 @@
                 },
                 "script": "params.total_jobs - params.failed_jobs"
               }
-            },
-            "failed_percentage": {
-              "bucket_script": {
-                "buckets_path": {
-                  "failed_jobs": "failed_jobs",
-                  "total_jobs": "total_jobs"
-                },
-                "script": "params.failed_jobs/params.total_jobs * 100.0"
-              }
             }
           }
         }
