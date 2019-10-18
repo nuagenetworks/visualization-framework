@@ -36,12 +36,13 @@
             "aggs": {
                 "area": {
                     "terms": {
-                        "field": "Area"
+                        "field": "Area",
+                        "size":2000
                     },
                     "aggs": {
                         "suites": {
                             "terms": {
-                                "field": "TestSuiteName",
+                                "field": "RegressionName",
                                 "size": 100
                             },
                             "aggs": {
