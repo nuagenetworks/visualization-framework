@@ -28,7 +28,7 @@
     "fontawesome": "^4.5.0",
     "history": "4.9.0",
     "immutable": "3.7.6",
-    "jquery": "3.1.0",
+    "jquery": "3.4.1",
     "lodash": "^4.17.4",
     "material-ui": "^0.20.2",
     "material-ui-datatables": "0.18.2",
