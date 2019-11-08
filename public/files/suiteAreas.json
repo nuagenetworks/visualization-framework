@@ -1243,5 +1243,32 @@
   {
     "TestSuiteName": "vnsCompleteUpgrade",
     "Area": "oat_upgrade_mesh"
+  },
+  {
+    "TestSuiteName": "webfilter",
+    "Area": "vnf_wf",
+    "Args": {"dpdkList": [1, 2]}
+  },
+  {
+    "TestSuiteName": "vnf",
+    "Area": "vnf_wf",
+    "Args": {"dpdkList": [1, 2, 3]}
+  },
+  {
+    "TestSuiteName": "l7acl",
+    "Area": "vnf_wf",
+    "Args": {"dpdkPostBS": [1, 2, 3, 4, 6, 7, 8, 9]}
+  },
+  {
+    "TestSuiteName": "webfilter",
+    "Area": "vnf_wf"
+  },
+  {
+    "TestSuiteName": "vnf",
+    "Area": "vnf_wf"
+  },
+  {
+    "TestSuiteName": "l7acl",
+    "Area": "vnf_wf"
   }
 ]

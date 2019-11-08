@@ -15,10 +15,12 @@
         { "id": "inf-regress-aql-containers-overview",      "x": 0.5, "y": 22, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_upgrade-overview",      "x": 0.5, "y": 29, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_underlay-overview",     "x": 0.5, "y": 36, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
+
         { "id": "inf-regress-aql-dc_stats-overview",        "x": 2, "y": 15,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_mirroring-overview",    "x": 2, "y": 22,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_acl-overview",          "x": 2, "y": 29, "w":1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_multi_vip-overview",    "x": 2, "y": 36, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
+
         { "id": "inf-regress-aql-vmware-overview",          "x": 3.5, "y": 15,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_vlan_trunking-overview","x": 3.5, "y": 22,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_qos-overview",          "x": 3.5, "y": 29, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
@@ -29,10 +31,13 @@
         { "id": "inf-regress-aql-aar-overview",             "x": 6.5, "y": 22,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-ipsec-overview",           "x": 6.5, "y": 29, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-btssec-overview",          "x": 6.5, "y": 36,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-vnfwf-overview",           "x": 6.5, "y": 43,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
+
         { "id": "inf-regress-aql-nsg_performance-overview", "x": 8, "y": 15, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-ipv6-overview",            "x": 8, "y": 22, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true}, 
         { "id": "inf-regress-aql-rg-overview",              "x": 8, "y": 29,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-pltsec-overview",          "x": 8, "y": 36, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
+
         { "id": "inf-regress-aql-routing-overview",         "x": 9.5, "y": 15,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-qos-overview",             "x": 9.5, "y": 22, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-ui-overview",              "x": 9.5, "y": 29, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
