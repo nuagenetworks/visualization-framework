@@ -12,13 +12,17 @@
         "fontColor":"black",
         "colors":[
             "white"
-        ]
+        ],
+        "tabifyOptions":{
+            "suiteAreasFile": "../files/testsuite_areas.json",
+            "aql_area":"ipv6"
+        }
     },
     "listeners": [{
-    "redirect": "/dashboards/infraRegressAreaDetails",
+        "redirect": "/dashboards/infraRegressAreaDetails",
       "params": {
           "testsuiteArea": "area"
       }
     }],
-    "query": "inf-regress-aql-ipv6-overview"
+    "query": "inf-regress-aql-run"
 }

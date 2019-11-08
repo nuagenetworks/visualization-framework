@@ -12,15 +12,17 @@
         "fontColor": "black",
         "colors": [
             "white"
-        ]
-    },
-    "listeners": [
-        {
-            "redirect": "/dashboards/infraRegressAreaDetails",
-            "params": {
-                "testsuiteArea": "area"
-            }
+        ],
+        "tabifyOptions":{
+            "suiteAreasFile": "../files/testsuite_areas.json",
+            "aql_area":"dc_multi_vip"
         }
-    ],
-    "query": "inf-regress-aql-dc_multi_vip-overview"
+    },
+    "listeners": [{
+        "redirect": "/dashboards/infraRegressAreaDetails",
+      "params": {
+          "testsuiteArea": "area"
+      }
+    }],
+    "query": "inf-regress-aql-run"
 }
