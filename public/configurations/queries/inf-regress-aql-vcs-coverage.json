@@ -4,7 +4,7 @@
   "service": "elasticsearch",
   "tabify": "aqlCoverage",
   "query": {
-    "index": "nuage_aql",
+    "index": "nuage_regress",
     "type": "nuage_doc_type",
     "body": {
       "size": 0,
@@ -12,53 +12,51 @@
         "bool": {
           "must": [
             {
-              "range": {
-                "timestamp": {
-                  "gte": "{{startTime}}",
-                  "lte": "{{endTime}}",
-                  "format": "epoch_millis"
-                }
-              }
-            },
-            {
               "regexp": {
-                "Area": "(dc_|wbx|vmware|contain).*"
+                "aql_area": "(dc_|wbx|vmware|contain).*"
               }
             },
             {
-              "term":{
-                "branch":"{{branch}}"
+              "wildcard": {
+                  "_id": "*@*"
               }
-            }
+          },
+          {
+              "regexp": {
+                  "version.vrs": "[0-9].[0-9]/[0-9.]+"
+              }
+          },
+          {
+              "regexp": {
+                  "version.vsd": "[0-9].[0-9]/[0-9.]+"
+              }
+          },
+          {
+              "regexp": {
+                  "version.vsc": "[0-9].[0-9]/[0-9ISBN.]+"
+              }
+          },
+          {
+              "term": {
+                  "project": "{{branch}}"
+              }
+          },
+          {
+              "range": {
+                  "time_regression_started": {
+                      "gte": "{{startTime:now-1d}}",
+                      "lte": "{{endTime:now}}",
+                      "format": "epoch_millis"
+                  }
+              }
+          }
           ]
         }
       },
       "aggs": {
-        "area": {
-          "terms": {
-            "field": "Area",
-            "size":2000
-          },
-          "aggs": {
-            "suite": {
-              "terms": {
-                "field": "RegressionName",
-                "size": 1000
-              },
-              "aggs": {
-                "result": {
-                  "terms": {
-                    "script": {
-                      "inline": "doc['TimesRun'].value == 0 ? 0 : 1"
-                    },
-                    "size": 1,
-                    "order": {
-                      "_term": "desc"
-                    }
-                  }
-                }
-              }
-            }
+        "suites": {
+          "cardinality": {
+            "field": "RegressionName"
           }
         }
       }

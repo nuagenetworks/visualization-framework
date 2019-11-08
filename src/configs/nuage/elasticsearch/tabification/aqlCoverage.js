@@ -1,6 +1,7 @@
 import objectPath from 'object-path';
 import evalExpression from 'eval-expression';
 import _ from 'lodash';
+import { readJsonFile } from "./common";
 /*
   This utility will convert the nested data structure
   returned from an ElasticSearch query into a tabular
@@ -10,7 +11,21 @@ import _ from 'lodash';
   https://github.com/elastic/kibana/blob/master/src/ui/public/agg_response/tabify/tabify.js
 */
 
-export default function aqlCoverage(response, query = {}){
+const aqlCoverage = async (response, query = {}) => {
+    let table;
+    if (query.tabifyOptions.suiteAreasFile){
+        const suite_areas = await readJsonFile(query.tabifyOptions.suiteAreasFile);
+        table = tabify(response, query, suite_areas);   
+    }
+    else {
+        console.error("Specify Suite Areas json file.");
+    }
+    return table;
+}
+
+export default aqlCoverage;
+
+function tabify(response, query = {}, suite_areas={}) {
 
     let table;
     if (response.aggregations) {
@@ -25,8 +40,14 @@ export default function aqlCoverage(response, query = {}){
     } else {
         throw new Error("Tabify() invoked with invalid result set. Result set must have either 'aggregations' or 'hits' defined.");
     }
+
+    let aql_areas;
+    if (query.tabifyOptions.aql_areas){
+        aql_areas = query.tabifyOptions.aql_areas;
+    }
+
     table = flatArray(table);
-    table = aggregateOnArea(table);
+    table = aggregateOnArea(table,suite_areas,aql_areas);
     
     if (process.env.NODE_ENV === "development") {
         console.log("Results from tabify (first 3 rows only):");
@@ -41,12 +62,16 @@ export default function aqlCoverage(response, query = {}){
     return table;
 }
 
-function aggregateOnArea(data){
-    let results = {1:0,0:0};
-    data.forEach(item => {
-        results[item.result]+=1;
+function aggregateOnArea(data,suite_areas,aql_areas){
+    console.log(data);
+    let total = 0;
+    aql_areas.forEach(area => {
+        let area_suites_from_file = suite_areas[area];
+        total += area_suites_from_file.length;
     })
-    return [{result:"Run",count:results[1]},{result:"NotRun",count:results[0]}];
+    let run = data[0].value;
+
+    return [{result:"Run",count:run},{result:"NotRun",count:total - run}];
 }
 
 
