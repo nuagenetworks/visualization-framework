@@ -68,14 +68,16 @@ function processForHeatmap(table, suites){
     let suites_in_response = new Set();
     for (let i=0; i<table.length; i++){
         item = table[i];
+        if (typeof item.regression_name == 'string') {
         item.result = result_codes[item.result];
-        suites_in_response.add(item.testsuite);
+        suites_in_response.add(item.regression_name);
+        }
     }
     let suites_left = suites.filter((suite) => { return !suites_in_response.has(suite);});
     let last_time = table[0].date_histo;
     for (let i = 0;i<suites_left.length;i++){
         item = {
-            "testsuite": suites_left[i],
+            "regression_name": suites_left[i],
             "result": "Empty",
             "date_histo":last_time
           };
