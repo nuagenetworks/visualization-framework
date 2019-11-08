@@ -9,7 +9,7 @@
     "body": {
       "sort": [
         {
-          "time_ran_at": {
+          "time_regression_started": {
             "order": "desc"
           }
         }
@@ -20,7 +20,7 @@
           "must": [
             {
               "range": {
-                "time_ran_at": {
+                "time_regression_started": {
                   "gte": "{{testsuiteTime}}",
                   "lte": "{{testsuiteTime}}||+1d",
                   "format": "epoch_millis"

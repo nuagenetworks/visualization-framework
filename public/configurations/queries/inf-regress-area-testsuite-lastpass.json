@@ -1,42 +1,62 @@
 {
-    "id": "inf-regress-area-testsuite-lastpass",
-    "author": "Ronak Shah",
-    "service": "elasticsearch",
-    "query": {
-      "index": "nuage_regress",
-      "type": "nuage_doc_type",
-      "body": {
-        "sort": [
-          { "time_regression_started" : {"order" : "desc"}}
-        ],
-        "size": 1,
-        "query": {
-          "bool": {
-            "filter": [
-              {"term": { "testsuite": "{{testSuite}}"}},
-              {"term": {"project": "{{branch}}"}}
-            ],
-            "must":[
-          {
-          	"regexp":{
-          		"version.vrs":"[0-9].[0-9]/[0-9.]+"
-          	}
-          },
-          {
-          	"regexp":{
-          		"version.vsd":"[0-9].[0-9]/[0-9.]+"
-          	}
-          },
-          {
-          	"regexp":{
-          		"version.vsc":"[0-9].[0-9]/[0-9ISBN.]+"
-          	}
-          },
-          {"term":{"testcase":""}},
-          {"term":{"result":2}}
-            ]
+  "id": "inf-regress-area-testsuite-lastpass",
+  "author": "Ronak Shah",
+  "service": "elasticsearch",
+  "query": {
+    "index": "nuage_regress",
+    "type": "nuage_doc_type",
+    "body": {
+      "sort": [
+        {
+          "time_regression_started": {
+            "order": "desc"
           }
+        }
+      ],
+      "size": 1,
+      "query": {
+        "bool": {
+          "filter": [
+            {
+              "term": {
+                "testsuite": "{{testSuite}}"
+              }
+            },
+            {
+              "term": {
+                "project": "{{branch}}"
+              }
+            }
+          ],
+          "must": [
+            {
+              "regexp": {
+                "version.vrs": "[0-9].[0-9]/[0-9.]+"
+              }
+            },
+            {
+              "regexp": {
+                "version.vsd": "[0-9].[0-9]/[0-9.]+"
+              }
+            },
+            {
+              "regexp": {
+                "version.vsc": "[0-9].[0-9]/[0-9ISBN.]+"
+              }
+            },
+            {
+              "term": {
+                "testcase": ""
+              }
+            },
+            {
+              "term": {
+                "result": 2
+              }
+            }
+          ]
         }
       }
     }
   }
+}

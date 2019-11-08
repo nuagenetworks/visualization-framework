@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-area-performance-table",
     "graph": "Table",
-    "title": "{{testsuiteArea}} run for date: {{testsuiteTime:call('epoch_to_date')}}",
+    "title": "Area: {{testsuiteArea}} on date: {{testsuiteTime:call('epoch_to_short_date')}}",
     "description": "",
     "author": "Bharat Mukheja",
     "creationDate": "02/18/2019",

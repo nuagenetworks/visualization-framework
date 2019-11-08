@@ -1,51 +1,56 @@
 {
-    "id": "inf-regress-area-testsuite-table",
-    "author": "Ronak Shah",
-    "service": "elasticsearch",
-    "tabify": "regressExtractRunLevel",
-    "query": {
-      "index": "nuage_regress",
-      "type": "nuage_doc_type",
-      "body": {
-        "sort": [
-          { "time_ran_at" : {"order" : "desc"}}
-        ],
-        "size": 100,
-        "query": {
-          "bool": {
-            "must": [
-              {
-                "range":{
-                  "time_ran_at":{
-                    "gte":"{{testsuiteTime}}||",
-                    "lte":"{{testsuiteTime}}||+1d",
-                    "format":"epoch_millis"
-                  }
-                }
+  "id": "inf-regress-area-testsuite-table",
+  "author": "Ronak Shah",
+  "service": "elasticsearch",
+  "tabify": "regressExtractRunLevel",
+  "query": {
+    "index": "nuage_regress",
+    "type": "nuage_doc_type",
+    "body": {
+      "sort": [
+        {
+          "time_ran_at": {
+            "order": "desc"
+          }
+        }
+      ],
+      "size": 100,
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "term": {
+                "time_regression_started": "{{aqlRegressionRegressionStarted}}"
               }
-            ],
-            "must_not":{"term":{"testcase":""}},
-            "filter": [
-              {"term": { "testsuite": "{{testSuite}}"}},
-              {"term": {"project": "{{branch}}"}},
-              {
-                "regexp":{
-                  "version.vrs":"[0-9].[0-9]/[0-9.]+"
-                }
-              },
-              {
-                "regexp":{
-                  "version.vsd":"[0-9].[0-9]/[0-9.]+"
-                }
-              },
-              {
-                "regexp":{
-                  "version.vsc":"[0-9].[0-9]/[0-9ISBN.]+"
-                }
+            },
+            {
+              "term": {
+                "project": "{{branch}}"
               }
-            ]
+            },
+            {
+              "regexp": {
+                "version.vrs": "[0-9].[0-9]/[0-9.]+"
+              }
+            },
+            {
+              "regexp": {
+                "version.vsd": "[0-9].[0-9]/[0-9.]+"
+              }
+            },
+            {
+              "regexp": {
+                "version.vsc": "[0-9].[0-9]/[0-9ISBN.]+"
+              }
+            }
+          ],
+          "must_not": {
+            "term": {
+              "testcase": ""
+            }
           }
         }
       }
     }
   }
+}

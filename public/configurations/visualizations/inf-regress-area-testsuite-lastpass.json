@@ -1,8 +1,8 @@
 {
     "id": "inf-regress-area-testsuite-lastpass",
     "graph": "Table",
-    "title": "Link to the last passed regression",
-    "description": "Shows the last passing regression for the selected testsuite till selected date.",
+    "title": "Last passed Testsuite: {{testSuite}} till today",
+    "description": "Shows the last passed regression for suite: {{testSuite}} on a nightly build till today.",
     "author": "Ronak Shah",
     "data": {
         "searchBar":false,
