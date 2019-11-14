@@ -70,8 +70,11 @@ function processESResponse(response, query = {}, all_testsuites = null, suite_ar
         else{
             analysis_type = "testsuites";
         }
-
+        if (all_testsuites.hasOwnProperty(build)){
         all_testsuites = all_testsuites[build][analysis_type];
+        } else {
+            all_testsuites = [];
+        }
         if (!bool_all_areas){
             let set_area_filtered_suites = new Set(Array.from(area_filtered_suites));
             let filtered_all_testsuites = [...all_testsuites].filter(x => set_area_filtered_suites.has(x))
