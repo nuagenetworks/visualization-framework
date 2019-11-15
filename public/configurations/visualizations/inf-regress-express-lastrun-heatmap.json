@@ -3,7 +3,7 @@
   "graph": "HeatmapGraph",
   "title": "Last 20 days Express suites run results",
   "description": "Colors of the result depict these outcomes.\n\nGray -> Skip\nRed -> Fail\nGreen -> Passed.",
-  "author": "Ronak Shah",
+  "author": "Bharat Mukheja",
   "data": {
     "nextPrevFilter":true,
     "xAlign": true,
@@ -61,7 +61,6 @@
     "tabifyOptions": {
       "express_suites": [
         "express",
-        "DcExpress",
         "NsgExpress"
       ]
     }

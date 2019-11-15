@@ -1,6 +1,6 @@
 {
   "id": "inf-regress-area-testsuite-heatmap",
-  "author": "Ronak Shah",
+  "author": "Bharat Mukheja",
   "service": "elasticsearch",
   "tabify": "expressHeatmap",
   "query": {
