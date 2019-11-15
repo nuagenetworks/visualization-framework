@@ -112,6 +112,11 @@
                                   "terms": {
                                     "field": "regression_link",
                                     "size": 1
+                                  },
+                                  "aggs":{
+                                    "testbed":{
+                                      "terms":{"field":"testbed"}
+                                    }
                                   }
                                 }
                               }
