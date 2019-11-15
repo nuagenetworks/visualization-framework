@@ -41,6 +41,14 @@
               }
             },
             {
+              "terms": {
+                "testbed": [
+                  "mvdchw01",
+                  "mvdcdev25"
+                ]
+              }
+            },
+            {
               "term": {
                 "project": "{{branch}}"
               }
