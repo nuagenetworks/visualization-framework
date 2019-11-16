@@ -58,7 +58,7 @@
                 "testsuite": [
                   "express",
                   "NsgExpress",
-                  "DcExpress"
+                  "ExpressSuiteDCOnly"
                 ]
               }
             }
@@ -78,15 +78,12 @@
             }
           },
           "aggs": {
-            "project": {
-              "terms": {
-                "field": "project",
-                "size": 10
-              },
-              "aggs": {
                 "testsuite": {
                   "terms": {
-                    "field": "testsuite"
+                "script": {
+                  "lang": "painless",
+                  "inline": "if (doc['testsuite'].value == 'express' || doc['testsuite'].value == 'NsgExpress'){ return doc['testsuite'].value;} else {def args = doc['args'].value; if (args.contains('stdSixDut') && args.contains('dcExpress')){if (doc['testbed'].value.contains('dcdev')){return 'dc_stdsixdut_dcdev';} else if (doc['testbed'].value.contains('hw')){return 'dc_stdsixdut_hw';} } else if (args.contains('dctorOvs') && args.contains('rh76Vxlan')){if (args.contains('-ovsBranch 6wind')){return 'dc_rh76vxlan_6wind';}    if (args.contains('-NFIX true')){return 'dc_rh76vxlan_nfix';} return 'dc_rh76vxlan'; }} "
+                }
                   },
                   "aggs": {
                     "build": {
@@ -121,10 +118,10 @@
                                     "field": "regression_link",
                                     "size": 1
                                   },
-                                  "aggs":{
-                                    "testbed":{
-                                      "terms":{"field":"testbed"}
-                                    }
+                              "aggs": {
+                                "testbed": {
+                                  "terms": {
+                                    "field": "testbed"
                                   }
                                 }
                               }

@@ -61,7 +61,12 @@
     "tabifyOptions": {
       "express_suites": [
         "express",
-        "NsgExpress"
+        "NsgExpress",
+        "dc_stdsixdut_hw",
+        "dc_stdsixdut_dcdev",
+        "dc_rh76vxlan",
+        "dc_rh76vxlan_6wind",
+        "rh76vxlan_nfix"
       ]
     }
   },
