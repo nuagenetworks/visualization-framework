@@ -1,0 +1,73 @@
+{
+    "id":"aar-nsg-per-port-traffic-linechart-overlay-uplink1",
+    "title":"TBD",
+    "service":"elasticsearch",
+    "query":{
+        "index":"{{index:nuage_dpi_flowstats}}",
+        "type":"{{type:nuage_doc_type}}",
+        "body":{
+            "size":0,
+            "query":{
+                "bool":{
+                    "must":[
+                        {
+                            "range":{
+                                "timestamp":{
+                                    "gte":"{{startTime:now-20m}}",
+                                    "lte":"{{endTime:now}}",
+                                    "format":"epoch_millis"
+                                }
+                            }
+                        },
+                        {
+                            "term": {
+                                 "EnterpriseName": "{{enterpriseName:test_org}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "{{nsg_traffic_linechart1_nsg_type:SourceNSG}}": "{{snsg}}"
+                            }
+                        },
+                        {
+                            "wildcard":{
+                             "{{nsg_traffic_linechart1_nsgside_uplink:SrcUplink}}":"{{uplink1}}*"   
+                            }
+                        },
+                        {
+                            "exists":{
+                                "field":"{{nsg_traffic_linechart1_uplink:DstUplink}}"
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "ts": {
+                    "date_histogram": {
+                        "field": "timestamp",
+                        "interval": "{{interval:1m}}",
+                        "min_doc_count":0
+                    },
+                    "aggs":{
+                        "App":{
+                            "terms":{
+                                "field":"Application",
+                                "order":{
+                                    "Traffic":"desc"
+                                }
+                            },
+                            "aggs": {
+                                "Traffic": {
+                                    "avg": {
+                                        "field": "{{nsg_traffic_linechart1_bytesType:EgressMB}}"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
