@@ -10,3 +10,4 @@ export { default as defaultTabify } from './defaultTabify';
 export { default as areaHeatmap } from './areaHeatmap';
 export { default as aqlCoverage } from './aqlCoverage';
 export { default as aqlPassFail } from './aqlPassFail';
+export { default as expressHeatmap } from './expressHeatmap';

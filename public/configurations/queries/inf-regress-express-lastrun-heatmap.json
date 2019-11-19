@@ -1,0 +1,142 @@
+{
+  "id": "inf-regress-area-testsuite-heatmap",
+  "author": "Bharat Mukheja",
+  "service": "elasticsearch",
+  "tabify": "expressHeatmap",
+  "query": {
+    "index": "nuage_regress",
+    "type": "nuage_doc_type",
+    "body": {
+      "size": 0,
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "range": {
+                "time_regression_started": {
+                  "gte": "now-20d/d",
+                  "lte": "now-1d/d",
+                  "format": "epoch_millis"
+                }
+              }
+            },
+            {
+              "regexp": {
+                "version.vrs": "[0-9].[0-9]/[0-9.]+"
+              }
+            },
+            {
+              "regexp": {
+                "version.vsd": "[0-9].[0-9]/[0-9.]+"
+              }
+            },
+            {
+              "regexp": {
+                "version.vsc": "[0-9].[0-9]/[0-9ISBN.]+"
+              }
+            },
+            {
+              "term": {
+                "testcase": ""
+              }
+            },
+            {
+              "terms": {
+                "testbed": [
+                  "mvdchw01",
+                  "mvdcdev25"
+                ]
+              }
+            },
+            {
+              "term": {
+                "project": "{{branch}}"
+              }
+            },
+            {
+              "terms": {
+                "testsuite": [
+                  "express",
+                  "NsgExpress",
+                  "ExpressSuiteDCOnly"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "aggs": {
+        "date_histo": {
+          "date_histogram": {
+            "field": "time_regression_started",
+            "interval": "1d",
+            "format": "epoch_millis",
+            "time_zone": "America/Los_Angeles",
+            "extended_bounds": {
+              "min": "now-20d/d",
+              "max": "now-1d/d"
+            }
+          },
+          "aggs": {
+                "testsuite": {
+                  "terms": {
+                "script": {
+                  "lang": "painless",
+                  "inline": "if (doc['testsuite'].value == 'express' || doc['testsuite'].value == 'NsgExpress'){ return doc['testsuite'].value;} else {def args = doc['args'].value; if (args.contains('stdSixDut') && args.contains('dcExpress')){if (doc['testbed'].value.contains('dcdev')){return 'dc_stdsixdut_dcdev';} else if (doc['testbed'].value.contains('hw')){return 'dc_stdsixdut_hw';} } else if (args.contains('dctorOvs') && args.contains('rh76Vxlan')){if (args.contains('-ovsBranch 6wind')){return 'dc_rh76vxlan_6wind';}    if (args.contains('-NFIX true')){return 'dc_rh76vxlan_nfix';} return 'dc_rh76vxlan'; }} "
+                }
+                  },
+                  "aggs": {
+                    "build": {
+                      "terms": {
+                        "field": "build_number",
+                        "size": 1,
+                        "order": {
+                          "_term": "desc"
+                        }
+                      },
+                      "aggs": {
+                        "result": {
+                          "terms": {
+                            "field": "result",
+                            "size": 1,
+                            "order": {
+                              "_term": "desc"
+                            }
+                          },
+                          "aggs": {
+                            "time_regression_started": {
+                              "terms": {
+                                "field": "time_regression_started",
+                                "size": 1,
+                                "order": {
+                                  "_term": "desc"
+                                }
+                              },
+                              "aggs": {
+                                "link": {
+                                  "terms": {
+                                    "field": "regression_link",
+                                    "size": 1
+                                  },
+                              "aggs": {
+                                "testbed": {
+                                  "terms": {
+                                    "field": "testbed"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

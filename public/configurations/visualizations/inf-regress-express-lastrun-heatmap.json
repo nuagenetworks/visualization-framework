@@ -1,0 +1,74 @@
+{
+  "id": "inf-regress-express-lastrun-heatmap",
+  "graph": "HeatmapGraph",
+  "title": "Last 20 days Express suites run results",
+  "description": "Colors of the result depict these outcomes.\n\nGray -> Skip\nRed -> Fail\nGreen -> Passed.",
+  "author": "Bharat Mukheja",
+  "data": {
+    "nextPrevFilter":true,
+    "xAlign": true,
+    "xColumn": "date_histo",
+    "xLabel": "Time",
+    "yColumn": "testsuite",
+    "yTickGrid": false,
+    "brush": 8,
+    "brushArea": 3,
+    "yLabel": "Express Regression",
+    "legendColumn": "result",
+    "colorColumn": "result",
+    "heatmapColor": {
+      "SKIP": "gray",
+      "FAIL": "red",
+      "PASS": "green",
+      "": "white"
+    },
+    "legend": {
+      "show": true,
+      "orientation": "horizontal",
+      "circleSize": 4,
+      "labelOffset": 2
+    },
+    "tooltip": [
+      {
+        "column": "project",
+        "label": "Branch"
+      },
+      {
+        "column": "testsuite"
+      },
+      {
+        "column": "build"
+      },
+      {
+        "column": "time_regression_started",
+        "label": "Start Time",
+        "timeFormat": "%b %d, %y %X"
+      },
+      {
+        "column": "link"
+      },
+      {
+        "column": "result",
+        "label": ""
+      },
+      {
+        "column": "result"
+      },
+      {
+        "column":"testbed"
+      }
+    ],
+    "tabifyOptions": {
+      "express_suites": [
+        "express",
+        "NsgExpress",
+        "dc_stdsixdut_hw",
+        "dc_stdsixdut_dcdev",
+        "dc_rh76vxlan",
+        "dc_rh76vxlan_6wind",
+        "rh76vxlan_nfix"
+      ]
+    }
+  },
+  "query": "inf-regress-express-lastrun-heatmap"
+}
