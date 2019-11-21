@@ -20,7 +20,10 @@
       "SKIP": "gray",
       "FAIL": "red",
       "PASS": "green",
-      "": "white"
+      "": "white",
+      "Empty":"white",
+      "1":"red",
+      "2":"green"
     },
     "legend": {
       "show": true,
@@ -60,8 +63,8 @@
     ],
     "tabifyOptions": {
       "express_suites": [
-        "express",
         "NsgExpress",
+        "express",
         "dc_stdsixdut_hw",
         "dc_stdsixdut_dcdev",
         "dc_rh76vxlan",

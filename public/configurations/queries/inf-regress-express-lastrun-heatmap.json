@@ -59,6 +59,7 @@
                   "express",
                   "NsgExpress",
                   "ExpressSuiteDCOnly"
+                  
                 ]
               }
             }
@@ -70,7 +71,7 @@
           "date_histogram": {
             "field": "time_regression_started",
             "interval": "1d",
-            "format": "epoch_millis",
+            "format": "yyyy-MM-dd",
             "time_zone": "America/Los_Angeles",
             "extended_bounds": {
               "min": "now-20d/d",
@@ -82,7 +83,7 @@
                   "terms": {
                 "script": {
                   "lang": "painless",
-                  "inline": "if (doc['testsuite'].value == 'express' || doc['testsuite'].value == 'NsgExpress'){ return doc['testsuite'].value;} else {def args = doc['args'].value; if (args.contains('stdSixDut') && args.contains('dcExpress')){if (doc['testbed'].value.contains('dcdev')){return 'dc_stdsixdut_dcdev';} else if (doc['testbed'].value.contains('hw')){return 'dc_stdsixdut_hw';} } else if (args.contains('dctorOvs') && args.contains('rh76Vxlan')){if (args.contains('-ovsBranch 6wind')){return 'dc_rh76vxlan_6wind';}    if (args.contains('-NFIX true')){return 'dc_rh76vxlan_nfix';} return 'dc_rh76vxlan'; }} "
+                  "inline": "if (doc['testsuite'].value == 'NsgExpress' || doc['testsuite'].value == 'express'){ return doc['testsuite'].value;} else {def args = doc['args'].value; if (args.contains('stdSixDut') && args.contains('dcExpress')){if (doc['testbed'].value.contains('dcdev')){return 'dc_stdsixdut_dcdev';} else if (doc['testbed'].value.contains('hw')){return 'dc_stdsixdut_hw';} } else if (args.contains('dctorOvs') && args.contains('rh76Vxlan')){if (args.contains('-ovsBranch 6wind')){return 'dc_rh76vxlan_6wind';}    if (args.contains('-NFIX true')){return 'dc_rh76vxlan_nfix';} return 'dc_rh76vxlan'; }} "
                 }
                   },
                   "aggs": {
