@@ -1,5 +1,5 @@
 import React from 'react';
-import { push } from 'redux-router';
+import { push } from 'react-router-redux';
 import { change } from 'redux-form';
 import { ServiceManager } from "../../services/servicemanager";
 import { selectFieldValues } from '../../ui-components/utils';

@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+
 import ModalEditor from '../../components/Editor/ModalEditor';
 import {Form, Label, Select, Header, Checkbox} from '../../ui-components';
 import {buildOptions, getDomainID, getEnterpriseID, getMetaDataAttribute} from './utils';

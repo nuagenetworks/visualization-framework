@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import { connect } from "react-redux";
 
 import { ActionKeyStore, Actions } from "./redux/actions";
@@ -14,7 +16,7 @@ class MessageBoxView extends React.Component {
             <FlatButton
                 label="OK"
                 primary={false}
-                onTouchTap={this.props.close}
+                onClick={this.props.close}
                 />,
         ];
 
@@ -33,9 +35,9 @@ class MessageBoxView extends React.Component {
 }
 
 MessageBoxView.propTypes = {
-    opened: React.PropTypes.bool,
-    title: React.PropTypes.string,
-    body: React.PropTypes.node,
+    opened: PropTypes.bool,
+    title: PropTypes.string,
+    body: PropTypes.node,
 };
 
 const mapStateToProps = (state) => ({

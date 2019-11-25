@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Icon = ({ name, size, avatar }) => {
     const style = avatar ? { borderRadius: 3, height: size, width: size } : { height: size };
