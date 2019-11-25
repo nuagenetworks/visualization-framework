@@ -16,6 +16,8 @@
     "redux-mock-store": "1.2.0"
   },
   "dependencies": {
+    "@material-ui/core": "4.4.0",
+    "@material-ui/icons": "4.5.1",
     "bootstrap": "^4.2.1",
     "cheerio": "^1.0.0-rc.2",
     "connected-react-router": "6.0.0",
@@ -28,19 +30,21 @@
     "fontawesome": "^4.5.0",
     "history": "4.9.0",
     "immutable": "3.7.6",
-    "jquery": "3.1.0",
+    "jquery": "^3.4.1",
     "lodash": "^4.17.4",
     "material-ui": "^0.20.2",
     "material-ui-datatables": "0.18.2",
     "material-ui-superselectfield": "^1.9.8",
+    "mui-datatables": "2.8.1",
     "moment": "^2.22.2",
     "moment-duration-format": "^2.2.2",
     "object-path": "^0.11.4",
     "prop-types": "^15.7.2",
-    "react": "16.6.3",
+    "query-string": "6.8.2",
+    "react": "16.8.0",
     "react-copy-to-clipboard": "^4.3.1",
     "react-csv": "1.0.8",
-    "react-dom": "16.6.3",
+    "react-dom": "16.8.0",
     "react-filter-box": "^3.0.0",
     "react-fontawesome": "1.6.1",
     "react-google-maps": "^9.4.5",
@@ -61,14 +65,13 @@
     "redux-logger": "2.7.4",
     "redux-thunk": "2.3.0",
     "taffydb": "^2.7.3",
-    "whatwg-fetch": "2.0.2",
-    "query-string": "6.8.2"
+    "whatwg-fetch": "2.0.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "node scripts/alias; react-scripts start",
+    "build": "node scripts/alias; react-scripts build",
     "eject": "react-scripts eject",
-    "test": "react-scripts test --env=jsdom"
+    "test": "node scripts/alias; react-scripts test --env=jsdom"
   },
   "eslintConfig": {
     "extends": "./node_modules/react-scripts/node_modules/eslint-config-react-app/index.js"
