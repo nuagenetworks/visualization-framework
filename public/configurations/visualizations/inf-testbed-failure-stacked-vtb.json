@@ -17,9 +17,13 @@
         "stackColumn":"class",
         "yLabel": "Total Regressions",
         "xColumn": "testbed",
-        "yColumn": "count",        
+        "yColumn": "count",
+        "colors": [
+            "#D9070A",
+            "#FFBF02"
+        ],      
         "legend": {
-            "show": false,
+            "show": true,
             "orientation": "horizontal",
             "circleSize": 4,
             "labelOffset": 2

@@ -10,7 +10,13 @@
         "colors": [
             "#D9070A",
             "#FFBF02"
-        ],
+        ],     
+        "legend": {
+            "show": true,
+            "orientation": "horizontal",
+            "circleSize": 4,
+            "labelOffset": 2
+        },
         "tooltip": [
             { "column": "date_histo", "label": "Time","timeFormat": "%b %d" },
             { "column": "failed_percentage", "label": "Failed Percentage (%)", "format": ",.4s"},
