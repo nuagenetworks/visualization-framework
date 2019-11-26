@@ -35,6 +35,10 @@
             "url": "/dashboards/infraRegressWeekend"
         },
         {
+            "label": "Express Analytics",
+            "url": "/dashboards/infraExpressAnalytics"
+        },
+        {
             "label": "Infra Analytics",
             "url": "/dashboards/infraTestbedAnalytics"
         }
