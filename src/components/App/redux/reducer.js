@@ -1,6 +1,6 @@
 import { Map } from "immutable";
 import { ActionTypes, ActionKeyStore } from "./actions"
-
+import _object from 'lodash/object';
 
 let initialState = Map(); // eslint-disable-line
 initialState = initialState.set(ActionKeyStore.MAIN_MENU_OPENED, false);
@@ -26,6 +26,9 @@ function setTitleIcon(state, aTitleIcon) {
 
 function updateContext(state, aContext) {
     let currentContext = state.get(ActionKeyStore.CONTEXT);
+    if(_object.keys(aContext).length <= 0) {
+      return state.set(ActionKeyStore.CONTEXT, {});
+    }
     return state.set(ActionKeyStore.CONTEXT,  Object.assign({}, currentContext, aContext));
 }
 

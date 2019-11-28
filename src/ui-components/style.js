@@ -348,4 +348,41 @@ export default {
         ...wrapper,
         overflow: 'hidden',
     },
+    popupBody: {
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'nowrap',
+      justifyContent: 'space-evenly',
+      alignItems: 'flex-start',
+      padding: 10,
+      fontSize: 12,
+  },
+  popupTitle: {
+      lineHeight: 1,
+      fontSize: 18,
+      padding: 10,
+      color: 'rgb(107, 148, 236)',
+      border: '1px solid rgb(217, 217, 217)',
+  },
+  popupFooter: {
+      borderTop: '1px solid rgb(217, 217, 217)',
+      width: '100%'
+  },
+  dropdownMenu: {
+      fontSize: "12px",
+      height: "42px"
+  },
+  underline: {
+      margin: "9px 24px"
+  },
+  menuLabel : {
+      lineHeight: "42px",
+      height: "42px"
+  },
+  icon: {
+      top: 0,
+      padding: 0,
+      height: "42px",
+      width: "42px"
+  },
 };
