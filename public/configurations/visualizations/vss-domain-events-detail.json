@@ -14,5 +14,5 @@
             { "column": "nuage_metadata.zoneName", "label": "Zone Name" }
         ]
     },
-    "query": "vss-domain-events-detail"
+    "query": {"data":{"name":"vss-domain-events-detail","scroll":true}}
 }

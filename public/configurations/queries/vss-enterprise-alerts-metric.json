@@ -38,8 +38,8 @@
                      "Last 24":{
                         "range":{
                            "timestamp":{
-                              "gte":"{{startTime:now-24h}}",
-                              "lte":"{{endTime:now}}"
+                              "gte":"now-24h",
+                              "lte":"now"
                            }
                         }
                      }

@@ -98,14 +98,14 @@
                     {"term": {"{{domainType:nuage_metadata.domainName}}": "{{domainName}}"} },
                     {
                       "nested": {
-                        "path": "{{destination_field:nuage_metadata.dst-pgmem-info}}",
+                        "path": "{{destination_field:nuage_metadata.src-pgmem-info}}",
                         "score_mode": "none",
                         "query": {
                           "bool": {
                             "must": [
                               {
                                 "match": {
-                                  "{{source_field:nuage_metadata.dst-pgmem-info}}.name": "{{destination}}"
+                                  "{{source_field:nuage_metadata.src-pgmem-info}}.name": "{{destination}}"
                                 }
                               }
                             ]
