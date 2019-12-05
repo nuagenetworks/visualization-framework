@@ -58,7 +58,7 @@
             "failed_jobs": {
               "cardinality": {
                 "script": {
-                  "inline": "doc['result'].value !=2 ? doc['job_id'].value : null"
+                  "inline": "doc['result'].value !=2 ? doc['args'].value.contains('-customInfra') ? null: doc['job_id'].value : null"
                 }
               }
             },
