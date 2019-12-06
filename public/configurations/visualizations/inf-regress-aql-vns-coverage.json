@@ -35,7 +35,24 @@
             "circleSize": 5,
             "labelOffset": 2
         },
-        "fontColor": "#000000"
+        "fontColor": "#000000",
+        "tabifyOptions": {
+            "suiteAreasFile": "../files/testsuite_areas.json",
+            "aql_areas": [
+                "aql_underlay",
+                "aar",
+                "ipsec",
+                "bootstrap_and_security",
+                "nsg_performance",
+                "ipv6",
+                "rg",
+                "platform_and_security_hardening",
+                "routing",
+                "qos",
+                "UI",
+                "oat_upgrade_mesh"
+            ]
+        }
     },
     "query": "inf-regress-aql-vns-coverage"
 }

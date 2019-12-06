@@ -4,7 +4,7 @@
   "service": "elasticsearch",
   "tabify": "aqlCoverage",
   "query": {
-    "index": "nuage_aql",
+    "index": "nuage_regress",
     "type": "nuage_doc_type",
     "body": {
       "size": 0,
@@ -13,52 +13,51 @@
           "must": [
             {
               "range": {
-                "timestamp": {
-                  "gte": "{{startTime}}",
-                  "lte": "{{endTime}}",
-                  "format": "epoch_millis"
+                "time_regression_started": {
+                  "gte": "{{startTime:now-1d}}",
+                  "lte": "{{endTime:now}}",
+                  "format": "epoch_millis",
+									"time_zone":"America/Los_Angeles"
                 }
               }
             },
             {
               "regexp": {
-                "Area": "(ipsec|routing|rg|aar|aql_underlay|ipv6|UI|qos|nsg_performance|oat_upgrade_mesh|platform_and_security_hardening|bootstrap_and_security)"
+                "aql_area": "(ipsec|routing|rg|aar|aql_underlay|ipv6|UI|qos|nsg_performance|oat_upgrade_mesh|platform_and_security_hardening|bootstrap_and_security)"
               }
             },
             {
-              "term":{
-                "branch":"{{branch}}"
+              "wildcard": {
+                "_id": "*@*"
+              }
+            },
+            {
+              "regexp": {
+                "version.vrs": "[0-9].[0-9]/[0-9.]+"
+              }
+            },
+            {
+              "regexp": {
+                "version.vsd": "[0-9].[0-9]/[0-9.]+"
+              }
+            },
+            {
+              "regexp": {
+                "version.vsc": "[0-9].[0-9]/[0-9ISBN.]+"
+              }
+            },
+            {
+              "term": {
+                "project": "{{branch}}"
               }
             }
           ]
         }
       },
       "aggs": {
-        "area": {
-          "terms": {
-            "field": "Area",
-            "size":2000
-          },
-          "aggs": {
-            "suite": {
-              "terms": {
-                "field": "RegressionName",
-                "size": 1000
-              },
-              "aggs": {
-                "result": {
-                  "terms": {
-                    "script": {
-                      "inline": "doc['TimesRun'].value == 0 ? 0 : 1"
-                    },
-                    "size": 1,
-                    "order": {
-                      "_term": "desc"
-                    }
-                  }
-                }
-              }
-            }
+        "suites": {
+          "cardinality": {
+            "field": "RegressionName"
           }
         }
       }

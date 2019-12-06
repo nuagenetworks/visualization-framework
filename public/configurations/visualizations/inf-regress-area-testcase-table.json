@@ -1,7 +1,7 @@
 {
   "id": "inf-regress-area-testcase-table",
   "graph": "Table",
-  "title": "{{testCase}} last 5 results before: {{testsuiteTime:call('epoch_to_date')}}",
+  "title": "last 5 results for Testcase: {{testCase}}  before: {{testsuiteTime:call('epoch_to_date')}}",
   "description": "Colors of the result depict these outcomes.\n\nGray -> Skip\nRed -> Fail\nGreen -> Passed.",
   "author": "Bharat Mukheja",
   "data": {

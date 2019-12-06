@@ -7,24 +7,13 @@
     "index": "nuage_regress",
     "type": "nuage_doc_type",
     "body": {
-      "sort": [
-        {
-          "time_ran_at": {
-            "order": "desc"
-          }
-        }
-      ],
       "size": 0,
       "query": {
         "bool": {
           "must": [
             {
-              "range": {
-                "time_ran_at": {
-                  "gte": "{{testsuiteTime}}",
-                  "lte": "{{testsuiteTime}}||+1d",
-                  "format": "epoch_millis"
-                }
+              "term": {
+                "time_regression_started": "{{aqlRegressionRegressionStarted}}"
               }
             },
             {
@@ -51,6 +40,9 @@
             },
             {
               "term": {"project": "{{branch}}"}
+            },
+            {
+              "term":{"aql_area":"{{testsuiteArea}}"}
             }
           ]
         }

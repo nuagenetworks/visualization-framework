@@ -1,0 +1,68 @@
+{
+    "id": "inf-regress-aql-run",
+    "title": "",
+    "service": "elasticsearch",
+    "tabify": "aqlSimpleText",
+    "query": {
+        "index": "nuage_regress",
+        "type": "{{type:nuage_doc_type}}",
+        "body": {
+            "size": 0,
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "wildcard": {
+                                "_id": "*@*"
+                            }
+                        },
+                        {
+                            "regexp": {
+                                "version.vrs": "[0-9].[0-9]/[0-9.]+"
+                            }
+                        },
+                        {
+                            "regexp": {
+                                "version.vsd": "[0-9].[0-9]/[0-9.]+"
+                            }
+                        },
+                        {
+                            "regexp": {
+                                "version.vsc": "[0-9].[0-9]/[0-9ISBN.]+"
+                            }
+                        },
+                        {
+                            "term": {
+                                "project": "{{branch}}"
+                            }
+                        },
+                        {
+                            "range": {
+                                "time_regression_started": {
+                                    "gte": "{{startTime:now-1d}}",
+                                    "lte": "{{endTime:now}}",
+                                    "format": "epoch_millis"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "aggs": {
+                "area": {
+                    "terms": {
+                        "field": "aql_area",
+                        "size":50
+                    },
+                    "aggs": {
+                        "suites": {
+                            "cardinality": {
+                                "field": "RegressionName"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

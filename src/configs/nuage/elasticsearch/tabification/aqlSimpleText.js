@@ -1,6 +1,7 @@
 import objectPath from 'object-path';
 import evalExpression from 'eval-expression';
 import _ from 'lodash';
+import { readJsonFile } from "./common";
 
 /*
   This utility will convert the nested data structure
@@ -11,7 +12,21 @@ import _ from 'lodash';
   https://github.com/elastic/kibana/blob/master/src/ui/public/agg_response/tabify/tabify.js
 */
 
-export default function aqlSimpleText(response, query = {}) {
+const aqlSimpleText = async (response, query = {}) => {
+    let table;
+    if (query.tabifyOptions.suiteAreasFile){
+        const suite_areas = await readJsonFile(query.tabifyOptions.suiteAreasFile);
+        table = tabify(response, query, suite_areas);   
+    }
+    else {
+        console.error("Specify Suite Areas json file.");
+    }
+    return table;
+}
+
+export default aqlSimpleText;
+
+function tabify(response, query = {}, suite_areas={}) {
     let table;
 
     if (response.aggregations) {
@@ -27,8 +42,15 @@ export default function aqlSimpleText(response, query = {}) {
         throw new Error("Tabify() invoked with invalid result set. Result set must have either 'aggregations' or 'hits' defined.");
     }
 
+    let aql_area;
+    if (query.tabifyOptions.aql_area){
+        aql_area = query.tabifyOptions.aql_area;
+    }
+    const area_filtered_suites = suite_areas[aql_area];
+
     table = flatArray(table);
-    table = processSimpleText(table);
+
+    table = processSimpleText(table,area_filtered_suites,aql_area);
 
     if (process.env.NODE_ENV === "development") {
         console.log("Results from tabify (first 3 rows only):");
@@ -43,35 +65,24 @@ export default function aqlSimpleText(response, query = {}) {
     return table;
 }
 
-function processSimpleText(data){
+function processSimpleText(data,suites,area){
     console.log(data);
-    let notrun = 0;
-    let total;
-    let suitesResult = {};
-    let result = {};
+    let run = 0;
+    let total = suites.length;
     let item;
+    let result = {
+        area: area,
+        ratio: "N/A"
+    };
+    
     for (let i=0; i<data.length; i++) {
         item = data[i];
-        if (!suitesResult[item.suites]) {
-            suitesResult[item.suites] = {};
-        }
-        if (item.run_count == "Total")
-        {
-           suitesResult[item.suites]["total"] = item.doc_count;
-        }
-        else
-        {    
-           suitesResult[item.suites]["notrun"] = item.doc_count;
+        if (item.area == area){
+            run = item.suites
+            break
         }
     }
-    result.area = item.area;
-    total = Object.keys(suitesResult).length;
-    for (var key in suitesResult) {
-        if (suitesResult[key]["total"] == suitesResult[key]["notrun"]) {
-            notrun = notrun + 1;
-        }
-    } 
-    let run = total - notrun;
+    
     result.ratio = `${run}/${total}`;
     const output = [result];
     return output

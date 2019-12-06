@@ -25,7 +25,7 @@ export default function tabify(response, options) {
         throw new Error("Tabify() invoked with invalid result set. Result set must have either 'aggregations' or 'hits' defined.");
     }
 
-    if (options.debug) {
+    if (process.env.NODE_ENV === "development") {
         console.log("Results from tabify (first 3 rows only):");
 
         // This one shows where there are "undefined" values.

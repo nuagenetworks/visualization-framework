@@ -1,7 +1,7 @@
 {
-    "id": "inf-regress-aql-rg-overview",
+    "id": "inf-regress-aql-vnfwf-overview",
     "graph": "SimpleTextGraph",
-    "title": "RG",
+    "title": "VNF/Web_Filter",
     "description": "",
     "author": "Ronak Shah",
     "creationDate": "08/30/2018",
@@ -15,7 +15,7 @@
         ],
         "tabifyOptions":{
             "suiteAreasFile": "../files/testsuite_areas.json",
-            "aql_area":"rg"
+            "aql_area":"vnf_wf"
         }
     },
     "listeners": [{

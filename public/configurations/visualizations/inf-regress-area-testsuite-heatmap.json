@@ -1,19 +1,19 @@
 {
     "id": "inf-regress-area-testsuite-heatmap",
     "graph": "HeatmapGraph",
-    "title": "",
-    "description": "",
+    "title": "Last 15 days preferred regression combinations run history",
+    "description": "The heatmap graph 15 day history of regressions preferred by AQL team. These regressions mean a combination of testsuite and arguments.\n\n Empty: The regression was not run.\nPASS/FAIL/SKIP: Self Descriptive.",
     "author": "Bharat Mukheja",
     "creationDate": "3/6/2018",
     "data": {
         "xAlign": true,
         "xColumn": "date_histo",
         "xLabel": "Time",
-        "yColumn": "testsuite",
+        "yColumn": "regression_name",
         "yTickGrid": false,
         "brush":8,
         "brushArea":3,
-        "yLabel": "TestSuite",
+        "yLabel": "Regression Name",
         "legendColumn": "result",
         "colorColumn": "result",
         "heatmapColor": {
@@ -30,9 +30,11 @@
         },
         "tooltip": [
             { "column": "date_histo", "label": "Timestamp", "timeFormat": "%b %d"},
-            { "column": "testsuite", "label": "Test Suite" },
+            { "column": "regression_name", "label": "Regression Name" },
             { "column": "build_number", "label": "Build Number" },
-            { "column": "result", "label": "Result"}
+            { "column": "result", "label": "Result"},
+            { "column": "link", "label": "Link" },
+            { "column": "testbed", "label": "Testbed"}
         ],
         "tabifyOptions":{
             "suiteAreasFile": "../files/testsuite_areas.json",
@@ -43,7 +45,9 @@
         {
             "params": {
                 "testsuiteTime": "date_histo",
-                "testSuite":"testsuite"
+                "regression_name":"regression_name",
+                "testSuite":"testsuite",
+                "aqlRegressionRegressionStarted":"time_regression_started"
             }
         }
     ],

@@ -1,0 +1,1274 @@
+[
+  {
+    "TestSuiteName": "nsgQosEnhancements",
+    "Area": "qos",
+    "args":{"ovsDpdk": true}
+  },
+  {
+    "TestSuiteName": "nsgQosEnhancements",
+    "Area": "qos",
+    "args":{"ovsDpdk": false}
+  },
+  {
+    "TestSuiteName": "nsg_sgtQos",
+    "Area": "qos",
+    "args":{"ovsDpdk": true}
+  },
+  
+  {
+    "TestSuiteName": "nsg_sgtQos",
+    "Area": "qos",
+    "args":{"ovsDpdk": false}
+  },
+  {
+    "TestSuiteName": "nsg_egressqos",
+    "Area": "qos",
+    "args":{"ovsDpdk": true}
+  },
+  {
+    "TestSuiteName": "nsg_egressqos",
+    "Area": "qos",
+    "args":{"ovsDpdk": false}
+  },
+  {
+    "TestSuiteName": "nsg_egressqosstats",
+    "Area": "qos",
+    "args":{"ovsDpdk": true}
+  },
+  {
+    "TestSuiteName": "nsg_egressqosstats",
+    "Area": "qos",
+    "args":{"ovsDpdk": false}
+  },
+  {
+    "TestSuiteName": "NsgUplinkIngressQos",
+    "Area": "qos",
+    "args":{"ovsDpdk": true}
+  },
+  {
+    "TestSuiteName": "NsgCustomerDscpRemarking",
+    "Area": "qos",
+    "args":{"ovsDpdk": true}
+  },
+  {
+    "TestSuiteName": "ubrEgressQos",
+    "Area": "qos",
+    "args":{"ovsDpdk": true}
+  },
+  {
+    "TestSuiteName": "NsgHeadlessDuc",
+    "Area": "ipv6",
+    "args":{"ipv6Only": true}
+  },
+  {
+    "TestSuiteName": "NsgDuc",
+    "Area": "ipv6",
+    "args":{"ipv6Only": true}
+  },
+  {
+    "TestSuiteName": "NsgDuc",
+    "Area": "ipv6",
+    "args":{"ipv6Only": true, "ovsDpdk": true, "dpdkList": "1 2 3 4 6 7 8 9"}
+  },
+  {
+    "TestSuiteName": "NsgDualUplink",
+    "Area": "ipv6",
+    "args":{"ipv6Only": true}
+  },
+  {
+    "TestSuiteName": "NsgDualUplink",
+    "Area": "ipv6",
+    "args":{"ipv6Only": true, "ovsDpdk": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "NsgUplinkStats",
+    "Area": "ipv6",
+    "args":{"ipv6Only": true}
+  },
+  {
+    "TestSuiteName": "nsg_duc_bfd",
+    "Area": "ipv6",
+    "args":{"ipv6Only": true}
+  },
+  {
+    "TestSuiteName": "DnsForwarderV6V4",
+    "Area": "ipv6",
+    "args":{"ipv6Only": true}
+  },
+  {
+    "TestSuiteName": "nsgQosEnhancementsIpv6",
+    "Area": "ipv6",
+    "args":{"ipv6Only": true}
+  },
+  {
+    "TestSuiteName": "nsg_egressqosstats",
+    "Area": "ipv6",
+    "args":{"ipv6Only": true}
+  },
+  {
+    "TestSuiteName": "nsg_sgtQos_ipv6",
+    "Area": "ipv6",
+    "args":{"ipv6Only": true}
+  },
+  {
+    "TestSuiteName": "NsgUnderlayInteractionTraffic",
+    "Area": "aql_underlay"
+  },
+  {
+    "TestSuiteName": "NsgUnderlayInteractionTraffic",
+    "Area": "aql_underlay",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "NsgPatPoolsAddressMapPublicIPAsUplinkIP",
+    "Area": "aql_underlay"
+  },
+  {
+    "TestSuiteName": "NsgPatPoolsAddressMapPublicIPAsUplinkIP",
+    "Area": "aql_underlay",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "NsgPatRoutePerUplink",
+    "Area": "aql_underlay"
+  },
+  {
+    "TestSuiteName": "NsgPatRoutePerUplink",
+    "Area": "aql_underlay",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "NsgPatNatEnhancement",
+    "Area": "aql_underlay"
+  },
+  {
+    "TestSuiteName": "NsgPatNatEnhancement",
+    "Area": "aql_underlay",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "NsgPatStats",
+    "Area": "aql_underlay"
+  },
+  {
+    "TestSuiteName": "NsgPatStats",
+    "Area": "aql_underlay",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "NsgPatUnderlayShunt",
+    "Area": "aql_underlay",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "NsgUnderlayShuntInteractionTraffic",
+    "Area": "aql_underlay",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "NsgDNASubnets",
+    "Area": "aql_underlay"
+  },
+  {
+    "TestSuiteName": "NsgDNASubnets",
+    "Area": "aql_underlay",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "NsgDhcpRelay",
+    "Area": "aql_underlay"
+  },
+  {
+    "TestSuiteName": "NsgDhcpRelay",
+    "Area": "aql_underlay",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "vmwareExpress",
+    "Area": "vmware"
+  },
+  {
+    "TestSuiteName": "EAMExpress",
+    "Area": "vmware"
+  },
+  {
+    "TestSuiteName": "VCINSanity",
+    "Area": "vmware"
+  },
+  {
+    "TestSuiteName": "vmwareInnerMonitoring",
+    "Area": "vmware"
+  },
+  {
+    "TestSuiteName": "kubernetes",
+    "Area": "containers"
+  },
+  {
+    "TestSuiteName": "libnetworkMesos",
+    "Area": "containers"
+  },
+  {
+    "TestSuiteName": "openshiftEnt",
+    "Area": "containers"
+  },
+  {
+    "TestSuiteName": "nsg_perf",
+    "Area": "nsg_performance"
+  },
+  {
+    "TestSuiteName": "nsg_dpi",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "nsg_dpi",
+    "Area": "aar",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "nsg_dpi_provisioning",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "nsg_dpi_provisioning",
+    "Area": "aar",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "nsg_dpi_old",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "npm_functional",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "npm_functional",
+    "Area": "aar",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "npm_events",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "npm_events",
+    "Area": "aar",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "nsg_npm",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "nsg_apm",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "nsg_apm",
+    "Area": "aar",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "nsg_apm_scale",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "aar_dynAppMatch",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "l2_aar_uc1",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "l2_aar_uc1",
+    "Area": "aar",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4 6 7 8 9"}
+  },
+  {
+    "TestSuiteName": "l2_aar_uc2",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "l2_aar_uc2",
+    "Area": "aar",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "l2_aar_uc3",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "NsgUbrRemoteUplinkPreference",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "nsg_apm_pc",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "nsg_apm_pc",
+    "Area": "aar",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "aar_ubr_npm",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "aar_ubr_npm",
+    "Area": "aar",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4 6 7 8 9"}
+  },
+  {
+    "TestSuiteName": "aar_rg_shunt",
+    "Area": "aar",
+    "args":{"dpdkPreBs": true, "dpdkList": "1 2 3 4"}
+  },
+  {
+    "TestSuiteName": "aar_nsg",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "l2_dynAppMatch",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "mul_uplinks_two_plus_one_UC1",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "mul_uplinks_two_plus_one_UC2",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "mul_uplinks_two_plus_one_UC3",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "mul_uplinks_two_plus_one_events",
+    "Area": "aar"
+  },
+  {
+    "TestSuiteName": "NsgDucNattEnhancements",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "NsgUbrAsBrMT",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "NsgBr",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "NsgDuc",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "NsgDucMT",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "NsgDualUplink",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "NsgIpsecL2",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "NsgUbrPbrMultipleScenarios",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "NsgIpSecIkev2Datapath",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "NsgIpSecIkev2Interactions",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "NsgHeadlessIpsec",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "NsgHeadlessDuc",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "NsgRgHeadless",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "NsgDPDKDualUplink",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "telenorStaticRouteEcmp",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "ecmpArpUnresolvedCase",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "mclagInitHoldTimer",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "bmaMclagOverlayL3Forwarding",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "bmaMclagOverlayL2Forwarding",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "bfdUnderlay",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "bfdOverlay",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "bmaVprn",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "bmaVsgBgpPeCe",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "DcL3TorGwProvision",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "DcL3TorGwProvisionSdpNextHop",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "bmaMclagOverlayL3ForwardingIpv6",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "DcL3TorGwProvisionHWPolicyGroupToSWPolicyGroup",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "bmaOverlayMacMove",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "bmaVprnRouteLeakingSpokeToSpoke",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "bmaVsgxOverlayAclIpv6",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "bmaVpls",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "bgp_pe_ce_ipv6",
+    "Area": "wbx/vsg"
+  },
+  {
+    "TestSuiteName": "NsgBgp",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "NsgLoopbackSingleUplink",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "NsgLoopbackDualUplink",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "NsgBgpDefaultRoute",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "NsgBgpRoutePreference",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "NsgBgpRgHeadless",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "nsg_duc_pps",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "NsgUbrBgpNhTracking",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "ospf",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "ospf_dpdk",
+    "Area": "routing",
+    "args":{"dpdk": true}
+  },
+  {
+    "TestSuiteName": "nsg_duc_pps",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "nsg_duc_bfd",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "Saas1stPacket",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "SaasBreakoutPolicy",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "FwdPathListRGShunt",
+    "Area": "routing",
+    "args":{"dpdk": true}
+  },
+  {
+    "TestSuiteName": "NsgBgpScale10K",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "NsgSlash31Uplink",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "nsg_br_bfd",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "gw_selection",
+    "Area": "routing"
+  },
+  {
+    "TestSuiteName": "DcOvsPgUpgrade",
+    "Area": "dc_upgrade"
+  },
+  {
+    "TestSuiteName": "serviceChainUpgrade",
+    "Area": "dc_upgrade"
+  },
+  {
+    "TestSuiteName": "dcBgpUpgrade",
+    "Area": "dc_upgrade"
+  },
+  {
+    "TestSuiteName": "expressUpgradeVspConcise50to00",
+    "Area": "dc_upgrade"
+  },
+  {
+    "TestSuiteName": "DcStatsUpgrade",
+    "Area": "dc_upgrade"
+  },
+  {
+    "TestSuiteName": "DcOvsAclPolicyGroup",
+    "Area": "dc_acl"
+  },
+  {
+    "TestSuiteName": "DcOvsFipAcl",
+    "Area": "dc_acl"
+  },
+  {
+    "TestSuiteName": "DcOvsAclStatefulNonTcp",
+    "Area": "dc_acl"
+  },
+  {
+    "TestSuiteName": "DcOvsAclStatefulTcpStateMachine",
+    "Area": "dc_acl"
+  },
+  {
+    "TestSuiteName": "DcOvsAclFirewallIntraDomain",
+    "Area": "dc_acl"
+  },
+  {
+    "TestSuiteName": "DcOvsAclPolicyGroupExpression",
+    "Area": "dc_acl"
+  },
+  {
+    "TestSuiteName": "OvsQosFunct",
+    "Area": "dc_qos"
+  },
+  {
+    "TestSuiteName": "DcQosFunct",
+    "Area": "dc_qos"
+  },
+  {
+    "TestSuiteName": "DcBUMQosFunct",
+    "Area": "dc_qos"
+  },
+  {
+    "TestSuiteName": "DcFipQosFunct",
+    "Area": "dc_qos"
+  },
+  {
+    "TestSuiteName": "vlanTrunkingVsdValidations",
+    "Area": "dc_vlan_trunking"
+  },
+  {
+    "TestSuiteName": "vlanTrunking",
+    "Area": "dc_vlan_trunking"
+  },
+  {
+    "TestSuiteName": "vlanTrunkingMultiVnic",
+    "Area": "dc_vlan_trunking"
+  },
+  {
+    "TestSuiteName": "PbmProvisioning",
+    "Area": "dc_mirroring"
+  },
+  {
+    "TestSuiteName": "PbmTraffic",
+    "Area": "dc_mirroring"
+  },
+  {
+    "TestSuiteName": "OverlayMirroring",
+    "Area": "dc_mirroring"
+  },
+  {
+    "TestSuiteName": "OverlayMirroringRealVm",
+    "Area": "dc_mirroring"
+  },
+  {
+    "TestSuiteName": "DcOvsMirroring",
+    "Area": "dc_mirroring"
+  },
+  {
+    "TestSuiteName": "dcAclStats",
+    "Area": "dc_stats"
+  },
+  {
+    "TestSuiteName": "dcElasticStats",
+    "Area": "dc_stats"
+  },
+  {
+    "TestSuiteName": "dcAclFlowLogging",
+    "Area": "dc_stats"
+  },
+  {
+    "TestSuiteName": "FIPWithoutPE.VRSG",
+    "Area": "dc_underlay"
+  },
+  {
+    "TestSuiteName": "FIPWithoutPE.VSG",
+    "Area": "dc_underlay"
+  },
+  {
+    "TestSuiteName": "DcOvsNat",
+    "Area": "dc_underlay"
+  },
+  {
+    "TestSuiteName": "DcOvsVSPnoGW",
+    "Area": "dc_underlay"
+  },
+  {
+    "TestSuiteName": "DcOvsVSPnoTunnels",
+    "Area": "dc_underlay"
+  },
+  {
+    "TestSuiteName": "DcOvsVSPnoTunnelsEnhancements",
+    "Area": "dc_underlay"
+  },
+  {
+    "TestSuiteName": "DcOvsSPAT",
+    "Area": "dc_underlay"
+  },
+  {
+    "TestSuiteName": "fipRtPreference",
+    "Area": "dc_underlay"
+  },
+  {
+    "TestSuiteName": "DcMultiVIPV6",
+    "Area": "dc_multi_vip"
+  },
+  {
+    "TestSuiteName": "DcMultiVIPFIP.Traffic",
+    "Area": "dc_multi_vip"
+  },
+  {
+    "TestSuiteName": "DcMultiVIPFIPTraffic",
+    "Area": "dc_multi_vip"
+  },
+  {
+    "TestSuiteName": "DcMultiVIPFIPTrafficHost",
+    "Area": "dc_multi_vip"
+  },
+  {
+    "TestSuiteName": "DcMultiVIPFIPArpMove",
+    "Area": "dc_multi_vip"
+  },
+  {
+    "TestSuiteName": "DcMultiVIPFIPPbr",
+    "Area": "dc_multi_vip"
+  },
+  {
+    "TestSuiteName": "DcMultiVIPFIPVmMigrate",
+    "Area": "dc_multi_vip"
+  },
+  {
+    "TestSuiteName": "DcMultiVIPFIPEvent",
+    "Area": "dc_multi_vip"
+  },
+  {
+    "TestSuiteName": "DcMultiVIPFIP.Provision",
+    "Area": "dc_multi_vip"
+  },
+  {
+    "TestSuiteName": "DcMultiVIPFIPProvision",
+    "Area": "dc_multi_vip"
+  },
+  {
+    "TestSuiteName": "DcMultiVIPFIP",
+    "Area": "dc_multi_vip"
+  },
+  {
+    "TestSuiteName": "stdSixDut",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "rh75Vxlan",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "rh76Vxlan",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "dcBgpAll",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "vrsgBgp",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "vrsgRgBgp",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "vrsBgp",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "vrsgBgpv6",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "dcBgpBfdAll",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "dcIpv6",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "vssNoOverlay",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "DcDualUplinkVrs",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "DcSvcChainSuites",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "svcChainBasicSingleLink1",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "svcChainBasicSingleLink2",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "svcChainBasicDoubleLinks",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "svcChainBasicDualPathLinks1",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "svcChainBasicDualPathLinks2",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "svcChainBasicDualPathLinks3",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "svcChainBasic8Domain",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "svcChainBasicLoopTopo",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "DcEcmpSuites",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "staticRouteEcmp",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "staticRouteEcmpVrsg",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "staticRouteEcmpMultiVip",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "staticRouteEcmpFloatingIp",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "staticRouteEcmpVnic",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "sysmonSuiteBasic",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "DcOvsPbr",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "vmMigrate",
+    "Area": "dc_vrs"
+  },
+  {
+    "TestSuiteName": "UI_React_Infra_More",
+    "Area": "UI"
+  },
+  {
+    "TestSuiteName": "UI_React_Settings",
+    "Area": "UI"
+  },
+  {
+    "TestSuiteName": "UI_React_Enterprise_Main",
+    "Area": "UI"
+  },
+  {
+    "TestSuiteName": "UI_React_DC_Mirror_Destination",
+    "Area": "UI"
+  },
+  {
+    "TestSuiteName": "UI_React_Enterprise_IKE_Gateway",
+    "Area": "UI"
+  },
+  {
+    "TestSuiteName": "UI_React_Enterprise_UBR_Groups",
+    "Area": "UI"
+  },
+  {
+    "TestSuiteName": "NsgResiliency",
+    "Area": "rg",
+    "args": {"dpdk":true}
+  },
+  {
+    "TestSuiteName": "NsgDucShunt",
+    "Area": "ipsec"
+  },
+  {
+    "TestSuiteName": "rg",
+    "Area": "rg"
+  },
+  {
+    "TestSuiteName": "rg_dpdk",
+    "Area": "rg",
+    "args": {"dpdk":true}
+  },
+  {
+    "TestSuiteName": "rg_shunt_provisioning",
+    "Area": "rg",
+    "args": {"dpdk":true}
+  },
+  {
+    "TestSuiteName": "wifi",
+    "Area": "rg"
+  },
+  {
+    "TestSuiteName": "rg_shunt_migration_tagged_tagged",
+    "Area": "rg",
+    "args": {"dpdk":true}
+  },
+  {
+    "TestSuiteName": "rg_shunt_migration_tagged_untagged",
+    "Area": "rg",
+    "args": {"dpdk":true}
+  },
+  {
+    "TestSuiteName": "rg_shunt_migration_untagged_tagged",
+    "Area": "rg",
+    "args": {"dpdk":true}
+  },
+  {
+    "TestSuiteName": "NsgDhcpFunct",
+    "Area": "rg"
+  },
+  {
+    "TestSuiteName": "dhcp_range",
+    "Area": "rg"
+  },
+  {
+    "TestSuiteName": "tagged_bfd_rg",
+    "Area": "rg"
+  },
+  { "TestSuiteName": "tagged_bfd_rg_dpdk",
+    "Area": "rg",
+    "args": {"dpdk":true}
+  },
+  {
+    "TestSuiteName": "untagged_bfd_rg",
+    "Area": "rg"
+  },
+  { "TestSuiteName": "untagged_bfd_rg_dpdk",
+    "Area": "rg",
+    "args": {"dpdk":true}
+  },
+  {
+    "TestSuiteName": "two_bfd_session_sync",
+    "Area": "rg"
+  },
+  { "TestSuiteName": "two_bfd_session_sync_dpdk",
+    "Area": "rg",
+    "args": {"dpdk":true}
+  },
+  {
+    "TestSuiteName": "NsgUplinkStatsShunt",
+    "Area": "rg",
+    "args": {"dpdk":true}
+  },
+  {
+    "TestSuiteName": "DnsForwarderMultiplePerUplink",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "DnsForwarderOneForBothUplink",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "DnsForwarderOneForBothUplink",
+    "Area": "bootstrap_and_security",
+    "args": {"dpdk":true}
+  },
+  {
+    "TestSuiteName": "DnsForwarderMultiplePerUplink",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "overlay_diagnostics_dpdk",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "overlay_tools",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "nsg_wifi_provision",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "SecurityAdmin",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "vsd_ad_bofa",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "NsgSecurityLogging",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "NsgSecurityCli",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "uplink_access",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "vsdPermission",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "NsgBgpProvisioning",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "NsgBrProvisioning",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "NsgUplinkStats",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "vsdldap",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "vsd_ad_ldap_basic",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "vsd_ad_ldap",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "vsd_ad_ldap_openstack",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "vsd_ad_ldap_openstack2",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "vsd_ad_ldap_openstack_ssl_cert",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "vsd_ad_ldap_openstack_ssl",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "vsd_ad_ldap_openstack_ssl_cert2",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "vsd_ad_ldap_openstack_ssl2",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "vsd_ad_ldap_dsync",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "vsd_ad_ldap_check",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "NsgZFB",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "NsgZFBUpgrade",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "goldNsgUpgrade",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "NsgUntaggedPppoeViaVSD",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "NsgTaggedPppoePort1",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "NsgTaggedPppoePort2",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "pppoe",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "pppoe_dpdk",
+    "Area": "bootstrap_and_security"
+  },
+  {
+    "TestSuiteName": "vsdDhcpBridgePoolAr",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdFloatingIp",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdFipWoPe",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdMulticast",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdMulticastSend",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdQoSBumFip",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "DHCPOptions",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "QoS",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "staticRoute_RD_RT_test",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsd_dev_sanity",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdVmSplitWorkflowActivation",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdVnsSecuritySshLockdownWanPortsNsgBts",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdVnsSecuritySshLockdownWanPortsNsgBtsAdmin",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdVnsSecuritySshLockdownWanPortsNsgBtsDPDK",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "OAMImprovement",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vnsUpgradeWorkflowEnhacementsNsgBts",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "VirtualFirewall",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "NSGSecEnhancementHardening",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdAlarms",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdAlarmsNSGUBR",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdAlarmsNSGBR",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdLicenseEnhancement",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdLicenseEnhancement_Cluster",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdPolicyGroup",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdACLSandwich",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdIPv6",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdDomainLink",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsdExpImp",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsd7x50",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "vsd7x50dynamic",
+    "Area": "platform_and_security_hardening"
+  },
+  {
+    "TestSuiteName": "VrfAwarePAT",
+    "Area": "oat_upgrade_mesh"
+  },
+  {
+    "TestSuiteName": "VrfAwarePAT",
+    "Area": "oat_upgrade_mesh",
+    "args":{"ovsDpdk": true}
+  },
+  {
+    "TestSuiteName": "OAT_RPG",
+    "Area": "oat_upgrade_mesh"
+  },
+  {
+    "TestSuiteName": "BidirNAT",
+    "Area": "oat_upgrade_mesh"
+  },
+  {
+    "TestSuiteName": "mesh",
+    "Area": "oat_upgrade_mesh"
+  },
+  {
+    "TestSuiteName": "vnsCompleteUpgrade",
+    "Area": "oat_upgrade_mesh"
+  },
+  {
+    "TestSuiteName": "webfilter",
+    "Area": "vnf_wf",
+    "Args": {"dpdkList": [1, 2]}
+  },
+  {
+    "TestSuiteName": "vnf",
+    "Area": "vnf_wf",
+    "Args": {"dpdkList": [1, 2, 3]}
+  },
+  {
+    "TestSuiteName": "l7acl",
+    "Area": "vnf_wf",
+    "Args": {"dpdkPostBS": [1, 2, 3, 4, 6, 7, 8, 9]}
+  },
+  {
+    "TestSuiteName": "webfilter",
+    "Area": "vnf_wf"
+  },
+  {
+    "TestSuiteName": "vnf",
+    "Area": "vnf_wf"
+  },
+  {
+    "TestSuiteName": "l7acl",
+    "Area": "vnf_wf"
+  }
+]

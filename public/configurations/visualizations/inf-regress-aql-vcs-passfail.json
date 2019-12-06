@@ -38,7 +38,24 @@
             "circleSize": 5,
             "labelOffset": 2
         },
-        "fontColor": "#000000"
+        "fontColor": "#000000",
+        "tabifyOptions": {
+            "suiteAreasFile": "../files/testsuite_areas.json",
+            "aql_areas": [
+                "wbx/vsg",
+                "containers",
+                "dc_upgrade",
+                "dc_underlay",
+                "dc_stats",
+                "dc_mirroring",
+                "dc_acl",
+                "dc_multi_vip",
+                "vmware",
+                "dc_vlan_trunking",
+                "dc_qos",
+                "dc_vrs"
+            ]
+        }
     },
     "query": "inf-regress-aql-vcs-passfail"
 }

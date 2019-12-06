@@ -12,13 +12,17 @@
         "fontColor":"black",
         "colors":[
             "white"
-        ]
+        ],
+        "tabifyOptions":{
+            "suiteAreasFile": "../files/testsuite_areas.json",
+            "aql_area":"qos"
+        }
     },
     "listeners": [{
-      "redirect": "/dashboards/infraRegressAreaDetails",
+        "redirect": "/dashboards/infraRegressAreaDetails",
       "params": {
           "testsuiteArea": "area"
       }
     }],
-    "query": "inf-regress-aql-qos-overview"
+    "query": "inf-regress-aql-run"
 }

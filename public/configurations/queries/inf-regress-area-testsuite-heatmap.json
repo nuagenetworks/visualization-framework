@@ -1,7 +1,7 @@
 {
     "id": "inf-regress-area-testsuite-heatmap",
     "service": "elasticsearch",
-    "tabify":"areaHeatmap",
+    "tabify": "areaHeatmap",
     "query": {
         "index": "nuage_regress",
         "type": "{{type:nuage_doc_type}}",
@@ -9,7 +9,7 @@
             "size": 0,
             "sort": [
                 {
-                    "time_ran_at": {
+                    "time_regression_started": {
                         "order": "desc"
                     }
                 }
@@ -19,82 +19,112 @@
                     "must": [
                         {
                             "range": {
-                                "time_ran_at": {
+                                "time_regression_started": {
                                     "gte": "now-15d/d",
-                                    "lte": "now/d",
-                                    "format":"epoch_millis"
+                                    "lte": "now-1d/d",
+                                    "format": "epoch_millis"
                                 }
                             }
+                        },
+                        {
+                            "term": {
+                                "aql_area": "{{testsuiteArea}}"
+                            }
+                        },
+                        {
+                            "wildcard": {
+                                "_id": "*@*"
+                            }
+                        },
+                        {
+                            "regexp": {
+                                "version.vrs": "[0-9].[0-9]/[0-9.]+"
+                            }
+                        },
+                        {
+                            "regexp": {
+                                "version.vsd": "[0-9].[0-9]/[0-9.]+"
+                            }
+                        },
+                        {
+                            "regexp": {
+                                "version.vsc": "[0-9].[0-9]/[0-9ISBN.]+"
+                            }
+                        },
+                        {
+                            "term": {
+                                "project": "{{branch}}"
+                            }
+                        },
+                        {
+                            "term": {
+                                "testcase": ""
+                            }
                         }
-                    ],
-                    "filter": {
-                        "bool": {
-                            "must": [
-                                {
-                                    "term": {
-                                        "aql_area": "{{testsuiteArea}}"
-                                    }
-                                },
-                                {
-                                    "regexp":{
-                                        "version.vrs":"[0-9].[0-9]/[0-9.]+"
-                                    }
-                                },
-                                {
-                                    "regexp":{
-                                        "version.vsd":"[0-9].[0-9]/[0-9.]+"
-                                    }
-                                },
-                                {
-                                    "regexp":{
-                                        "version.vsc":"[0-9].[0-9]/[0-9ISBN.]+"
-                                    }
-                                },
-                                {
-                                    "term": {
-                                        "project": "{{branch}}"
-                                    }
-                                },
-                                {"term":{"testcase":""}}
-                            ]
-                        }
-                    }
+                    ]
                 }
             },
             "aggs": {
                 "date_histo": {
                     "date_histogram": {
-                        "field": "time_ran_at",
+                        "field": "time_regression_started",
                         "interval": "1d",
                         "format": "epoch_millis",
                         "time_zone": "America/Los_Angeles",
-                        "extended_bounds":{
-                            "min":"now-15d/d",
-                            "max":"now/d"
+                        "extended_bounds": {
+                            "min": "now-15d/d",
+                            "max": "now-1d/d"
                         }
                     },
                     "aggs": {
-                        "testsuite": {
+                        "regression_name": {
                             "terms": {
-                                "field": "testsuite",
+                                "field": "RegressionName",
                                 "size": 100
                             },
                             "aggs": {
-                                "build_number": {
+                                "testsuite": {
                                     "terms": {
-                                        "field": "build_number",
-                                        "size": 1,
-                                        "order": {
-                                            "_term": "desc"
-                                        }
+                                        "field": "testsuite"
                                     },
+                                    "aggs": {
+                                        "build_number": {
+                                            "terms": {
+                                                "field": "build_number",
+                                                "size": 1,
+                                                "order": {
+                                                    "_term": "desc"
+                                                }
+                                            },
                                             "aggs": {
                                                 "result": {
                                                     "terms": {
                                                         "field": "result",
-                                                        "size":1,
-                                                        "order":{
-                                                            "_term":"desc"
+                                                        "size": 1,
+                                                        "order": {
+                                                            "_term": "desc"
+                                                        }
+                                                    },
+                                                    "aggs": {
+                                                        "time_regression_started": {
+                                                            "terms": {
+                                                                "field": "time_regression_started"
+                                                            },
+                                                            "aggs": {
+                                                                "link": {
+                                                                    "terms": {
+                                                                        "field": "regression_link",
+                                                                        "size": 1
+                                                                    },
+                                                                    "aggs": {
+                                                                        "testbed": {
+                                                                            "terms": {
+                                                                                "field": "testbed"
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -108,3 +138,5 @@
                 }
             }
         }
+    }
+}

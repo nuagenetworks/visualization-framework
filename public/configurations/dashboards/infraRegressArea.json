@@ -4,17 +4,23 @@
     "creationDate": "8/30/2018",
     "title": "Area Quality Overview (Testsuites run / Total)",
     "visualizations": [
-        { "id": "inf-regress-aql-vcs-coverage",             "x": 0.5, "y": 0, "w": 2, "h": 15, "minW": 2, "minH": 5, "static": true},
-        { "id": "inf-regress-aql-vns-coverage",             "x": 6.5, "y": 0, "w": 2, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-vcs-coverage",             "x": 0.5, "y": 0, "w": 2.25, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-vcs-passfail",             "x": 2.75, "y": 0, "w": 2.25, "h": 15, "minW": 2, "minH": 5, "static": true},
         
+        { "id": "inf-regress-aql-vns-coverage",             "x": 6.5, "y": 0, "w": 2.25, "h": 15, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-vns-passfail",             "x": 8.75, "y": 0, "w": 2.25, "h": 15, "minW": 2, "minH": 5, "static": true},
+        
+
         { "id": "inf-regress-aql-wbx_vsg-overview",         "x": 0.5, "y": 15, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-containers-overview",      "x": 0.5, "y": 22, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_upgrade-overview",      "x": 0.5, "y": 29, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_underlay-overview",     "x": 0.5, "y": 36, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
+
         { "id": "inf-regress-aql-dc_stats-overview",        "x": 2, "y": 15,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_mirroring-overview",    "x": 2, "y": 22,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_acl-overview",          "x": 2, "y": 29, "w":1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_multi_vip-overview",    "x": 2, "y": 36, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
+
         { "id": "inf-regress-aql-vmware-overview",          "x": 3.5, "y": 15,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_vlan_trunking-overview","x": 3.5, "y": 22,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-dc_qos-overview",          "x": 3.5, "y": 29, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
@@ -25,10 +31,13 @@
         { "id": "inf-regress-aql-aar-overview",             "x": 6.5, "y": 22,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-ipsec-overview",           "x": 6.5, "y": 29, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-btssec-overview",          "x": 6.5, "y": 36,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
+        { "id": "inf-regress-aql-vnfwf-overview",           "x": 6.5, "y": 43,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
+
         { "id": "inf-regress-aql-nsg_performance-overview", "x": 8, "y": 15, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-ipv6-overview",            "x": 8, "y": 22, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true}, 
         { "id": "inf-regress-aql-rg-overview",              "x": 8, "y": 29,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-pltsec-overview",          "x": 8, "y": 36, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
+
         { "id": "inf-regress-aql-routing-overview",         "x": 9.5, "y": 15,"w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-qos-overview",             "x": 9.5, "y": 22, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
         { "id": "inf-regress-aql-ui-overview",              "x": 9.5, "y": 29, "w": 1.5, "h": 7, "minW": 2, "minH": 5, "static": true},
@@ -60,10 +69,6 @@
             "url": "/dashboards/infraRegressWeekend"
         },
         {
-            "label": "Express Analytics",
-            "url": "/dashboards/infraExpressAnalytics"
-        },
-        {
             "label": "Infra Analytics",
             "url": "/dashboards/infraTestbedAnalytics"
         }
@@ -74,11 +79,11 @@
             "default": "now-15d",
             "options": [
                 {
-                    "label": "In Last 14 days",
-                    "value": "now-15d",
+                    "label": "In Last 15 days",
+                    "value": "now-15d/d",
                     "default":true,
                     "forceOptions": {
-                        "endTime": "now"
+                        "endTime": "now-1d/d"
                     }
                 },
                 {
