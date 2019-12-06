@@ -32,7 +32,9 @@
             { "column": "date_histo", "label": "Timestamp", "timeFormat": "%b %d"},
             { "column": "regression_name", "label": "Regression Name" },
             { "column": "build_number", "label": "Build Number" },
-            { "column": "result", "label": "Result"}
+            { "column": "result", "label": "Result"},
+            { "column": "link", "label": "Link" },
+            { "column": "testbed", "label": "Testbed"}
         ],
         "tabifyOptions":{
             "suiteAreasFile": "../files/testsuite_areas.json",

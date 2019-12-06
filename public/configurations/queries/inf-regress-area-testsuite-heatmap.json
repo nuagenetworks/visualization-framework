@@ -109,6 +109,21 @@
                                                         "time_regression_started": {
                                                             "terms": {
                                                                 "field": "time_regression_started"
+                                                            },
+                                                            "aggs": {
+                                                                "link": {
+                                                                    "terms": {
+                                                                        "field": "regression_link",
+                                                                        "size": 1
+                                                                    },
+                                                                    "aggs": {
+                                                                        "testbed": {
+                                                                            "terms": {
+                                                                                "field": "testbed"
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
                                                             }
                                                         }
                                                     }
