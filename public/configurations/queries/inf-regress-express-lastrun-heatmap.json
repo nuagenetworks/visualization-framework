@@ -63,8 +63,14 @@
                   "express",
                   "NsgExpress",
                   "ExpressSuiteDCOnly"
-                  
                 ]
+              }
+            }
+          ],
+          "must_not":[
+            {
+              "wildcard":{
+                "args":"*-exitAfterSetup true*"
               }
             }
           ]
