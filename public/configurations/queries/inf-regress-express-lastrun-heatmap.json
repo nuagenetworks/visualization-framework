@@ -22,17 +22,17 @@
             },
             {
               "regexp": {
-                "version.vrs": "[0-9].[0-9]/[0-9.]+"
+                "version.vrs": "{{vrs_vsd_regex}}"
               }
             },
             {
               "regexp": {
-                "version.vsd": "[0-9].[0-9]/[0-9.]+"
+                "version.vsd": "{{vrs_vsd_regex}}"
               }
             },
             {
               "regexp": {
-                "version.vsc": "[0-9].[0-9]/[0-9ISBN.]+"
+                "version.vsc": "{{vsc_regex}}"
               }
             },
             {
