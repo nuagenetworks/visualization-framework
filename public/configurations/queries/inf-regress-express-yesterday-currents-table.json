@@ -64,6 +64,18 @@
                 "testcase": ""
               }
             }
+          ],
+          "must_not":[
+            {
+              "terms": {
+                "testsuite": [
+                  "initial",
+                  "sanity",
+                  "Sanity",
+                  "finished"
+                ]
+              }
+            }
           ]
         }
       }
