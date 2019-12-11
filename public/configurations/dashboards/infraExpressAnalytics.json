@@ -41,6 +41,28 @@
         }
     ],
     "defaultFilterOptionsOverride":{
+        "Build Type": {
+            "parameter": "buildType",
+            "default":"mainline",
+            "options": [
+                {
+                    "label": "Mainline",
+                    "value": "mainline",
+                    "forceOptions":{
+                        "vrs_vsd_regex":"[0-9].[0-9]/[0-9.]+",
+                        "vsc_regex":"[0-9].[0-9]/[0-9ISBN.]+"
+                    }
+                },
+                {
+                    "label": "Include current",
+                    "value": "includecurrent",
+                    "forceOptions":{
+                        "vrs_vsd_regex":"[0-9].[0-9]/[0-9].[0-9].(current-[0-9a-f]+|[0-9]+)",
+                        "vsc_regex":"[0-9].[0-9]/[0-9].[0-9].(current-[0-9a-f]+|[0-9ISBN]+)"
+                    }
+                }
+            ]
+        },
         "Branch": {
             "parameter": "branch",
             "default":"6.0",
@@ -56,14 +78,6 @@
                 {
                     "label": "5.4",
                     "value": "5.4"
-                },
-                {
-                    "label": "5.3",
-                    "value": "5.3"
-                },
-                {
-                    "label": "5.2",
-                    "value": "5.2"
                 }
             ]
         }
