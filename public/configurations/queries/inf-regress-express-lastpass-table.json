@@ -1,0 +1,132 @@
+{
+  "id": "inf-regress-express-lastpass-table",
+  "author": "Bharat Mukheja",
+  "service": "elasticsearch",
+  "query": {
+    "index": "nuage_regress",
+    "type": "nuage_doc_type",
+    "body": {
+      "sort": [
+        {
+          "time_regression_started": {
+            "order": "desc"
+          }
+        }
+      ],
+      "size": 0,
+      "query": {
+        "bool": {
+          "filter": [
+            {
+              "terms": {
+                "testbed": [
+                  "mvdchw01",
+                  "mvdcdev25",
+                  "mvnsgdev21",
+                  "mvnsgdev22",
+                  "mvdcvtb25",
+                  "mvdcvtb16"
+                ]
+              }
+            },
+            {
+              "terms": {
+                "testsuite": [
+                  "express",
+                  "NsgExpress",
+                  "ExpressSuiteDCOnly"
+                ]
+              }
+            },
+            {
+              "term": {
+                "project": "{{branch}}"
+              }
+            }
+          ],
+          "must": [
+            {
+              "regexp": {
+                "version.vrs": "[0-9].[0-9]/[0-9.]+"
+              }
+            },
+            {
+              "regexp": {
+                "version.vsd": "[0-9].[0-9]/[0-9.]+"
+              }
+            },
+            {
+              "regexp": {
+                "version.vsc": "[0-9].[0-9]/[0-9ISBN.]+"
+              }
+            },
+            {
+              "term": {
+                "testcase": ""
+              }
+            },
+            {
+              "term": {
+                "result": 2
+              }
+            }
+          ],
+          "must_not": [
+            {
+              "wildcard": {
+                "args": "*-exitAfterSetup true*"
+              }
+            }
+          ]
+        }
+      },
+      "aggs": {
+        "testsuite": {
+          "terms": {
+            "script": {
+              "lang": "painless",
+              "inline": "if (doc['testsuite'].value == 'NsgExpress' || doc['testsuite'].value == 'express'){ return doc['testsuite'].value;} else {def args = doc['args'].value; if (args.contains('stdSixDut') && args.contains('dcExpress')){if (doc['testbed'].value.contains('dcdev')){return 'dc_stdsixdut_dcdev';} else if (doc['testbed'].value.contains('hw')){return 'dc_stdsixdut_hw';} } else if (args.contains('dctorOvs') && args.contains('rh76Vxlan')){if (args.contains('-ovsBranch 6wind')){return 'dc_rh76vxlan_6wind';}    if (args.contains('-NFIX true')){return 'dc_rh76vxlan_nfix';} return 'dc_rh76vxlan'; }} "
+            }
+          },
+          "aggs": {
+            "time_regression_started": {
+              "terms": {
+                "field": "time_regression_started",
+                "size": 1,
+                "order": {
+                  "_term": "desc"
+                }
+              },
+              "aggs": {
+                "build_number": {
+                  "terms": {
+                    "field": "build_number",
+                    "size": 1,
+                    "order": {
+                      "_term": "desc"
+                    }
+                  },
+                  "aggs": {
+                    "regression_link": {
+                      "terms": {
+                        "field": "regression_link",
+                        "size": 1
+                      },
+                      "aggs": {
+                        "testbed": {
+                          "terms": {
+                            "field": "testbed"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

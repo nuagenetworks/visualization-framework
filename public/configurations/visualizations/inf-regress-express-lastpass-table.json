@@ -1,0 +1,34 @@
+{
+    "id": "inf-regress-express-lastpass-table",
+    "graph": "Table",
+    "title": "Last passed express per type of express",
+    "description": "",
+    "author": "Bharat Mukheja",
+    "data": {
+        "searchBar":false,
+        "columns":[
+            {
+                "column":"testsuite",
+                "label": "Express Suite"
+            },
+            {
+                "column":"time_regression_started",
+                "label": "Start Time",
+                "timeFormat": "%b %d, %Y - %X"
+            },
+            {
+                "column":"build_number",
+                "label": "Build"
+            },
+            {
+                "column":"testbed",
+                "label": "Testbed"
+            },
+            {
+                "column":"regression_link",
+                "label": "Regression Link"
+            }
+        ]
+    },
+    "query": "inf-regress-express-lastpass-table"
+}
