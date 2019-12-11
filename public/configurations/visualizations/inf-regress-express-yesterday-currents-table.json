@@ -1,0 +1,48 @@
+{
+    "id": "inf-regress-express-yesterday-currents-table",
+    "graph": "Table",
+    "title": "Yesterday's current runs",
+    "description": "",
+    "author": "Bharat Mukheja",
+    "data": {
+        "searchBar":true,
+        "hidePagination":false,
+        "columns":[
+            {
+                "label":"Result",
+                "column":"result",
+                "colors":{"2":"green","1":"red","0":"gray"}
+            },
+            {
+                "column":"testsuite",
+                "label": "Express Suite"
+            },
+            {
+                "column":"time_regression_started",
+                "label": "Start Time",
+                "timeFormat": "%b %d, %Y - %X"
+            },
+            {
+                "column":"version.vrs",
+                "label": "VRS Version"
+            },
+            {
+                "column":"version.vsc",
+                "label": "VSC Version"
+            },
+            {
+                "column":"version.vsd",
+                "label": "VSD Version"
+            },
+            {
+                "column":"testbed",
+                "label": "Testbed"
+            },
+            {
+                "column":"regression_link",
+                "label": "Regression Link"
+            }
+        ]
+    },
+    "query": "inf-regress-express-yesterday-currents-table"
+}

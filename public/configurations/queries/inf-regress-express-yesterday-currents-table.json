@@ -1,0 +1,72 @@
+{
+  "id": "inf-regress-express-yesterday-currents-table",
+  "author": "Bharat Mukheja",
+  "service": "elasticsearch",
+  "query": {
+    "index": "nuage_regress",
+    "type": "nuage_doc_type",
+    "body": {
+      "sort": [
+        {
+          "time_regression_started": {
+            "order": "desc"
+          }
+        }
+      ],
+      "size": 1000,
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "range": {
+                  "time_regression_started": {
+                      "gte": "now-1d/d",
+                      "lte": "now-1d/d",
+                      "format": "epoch_millis",
+                      "time_zone": "America/Los_Angeles"
+                  }
+              }
+          },
+            {
+              "terms": {
+                "testbed": [
+                  "mvdchw01",
+                  "mvdcdev25",
+                  "mvnsgdev21",
+                  "mvnsgdev22",
+                  "mvdcvtb25",
+                  "mvdcvtb16"
+                ]
+              }
+            },
+            {
+              "term": {
+                "project": "{{branch}}"
+              }
+            },
+            {
+              "regexp": {
+                "version.vrs": "[0-9].[0-9]/[0-9].[0-9].current-[0-9a-f]+"
+              }
+            },
+            {
+              "regexp": {
+                "version.vsd": "[0-9].[0-9]/[0-9].[0-9].current-[0-9a-f]+"
+              }
+            },
+            {
+              "regexp": {
+                "version.vsc": "[0-9].[0-9]/[0-9].[0-9].current-[0-9a-f]+"
+              }
+            },
+            {
+              "term": {
+                "testcase": ""
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
