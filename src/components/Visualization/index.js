@@ -462,14 +462,15 @@ class VisualizationView extends React.Component {
     renderFiltersToolBar() {
         const {
             filterOptions,
-            id
+            id,
+            dashboard,
         } = this.props
 
         if (!filterOptions)
             return
 
         return (
-            <FiltersToolBar filterOptions={filterOptions} visualizationId={id} />
+            <FiltersToolBar filterOptions={filterOptions} visualizationId={id} dashboardId={dashboard}  />
         )
     }
 
@@ -745,12 +746,14 @@ const mapStateToProps = (state, ownProps) => {
     //Fetching Configurations of Visualizations
 
     const configurationID = ownProps.id || ownProps.match.params.id,
-          orgContext = state.interface.get(InterfaceActionKeyStore.CONTEXT),
           configuration = state.configurations.getIn([
               ConfigurationsActionKeyStore.VISUALIZATIONS,
               configurationID,
               ConfigurationsActionKeyStore.DATA
           ]);
+
+    const customFilterContent = state.interface.get(InterfaceActionKeyStore.CUSTOM_FILTER);
+    const orgContext = customFilterContent[ownProps.dashboard] ? customFilterContent[ownProps.dashboard] : state.interface.get(InterfaceActionKeyStore.CONTEXT);
 
     let context = {};
     let filteredID = configurationID.replace(/-/g, '');

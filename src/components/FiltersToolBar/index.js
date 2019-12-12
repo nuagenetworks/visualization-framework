@@ -135,6 +135,7 @@ export class FiltersToolBarView extends React.Component {
             visualizationId,
             saveFilterContext,
             customFilterContent,
+            dashboardId,
         } = this.props;
         const { filterOptions, sourceQuery } = this.state
         let configContexts = {};
@@ -143,7 +144,7 @@ export class FiltersToolBarView extends React.Component {
             if (filterOptions.hasOwnProperty(name)) {
                 let configOptions = filterOptions[name],
                     paramName     = visualizationId && configOptions.append ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
-                    currentValue  = context[paramName],
+                    currentValue  = filterContext && filterContext[dashboardId] ?  filterContext[dashboardId][paramName] : context[paramName],
                     defaultOption = []
 
                 if (configOptions.options && configOptions.display) {
@@ -164,18 +165,16 @@ export class FiltersToolBarView extends React.Component {
                     }
 
                     if(defaultOption.length) {
-                        if(currentValue !== defaultOption[0].value) {
-                            if (customFilterContent[paramName]) {
+                            if (filterContext[dashboardId] && filterContext[dashboardId][paramName]) {
                                 defaultOption = [];
                                 defaultOption.push({
-                                    startTime: objectPath.get(customFilterContent, 'startTime'),
-                                    endTime: objectPath.get(customFilterContent, 'endTime'),
-                                    interval: objectPath.get(customFilterContent, 'interval'),
+                                    startTime: objectPath.get(filterContext[dashboardId], 'startTime'),
+                                    endTime: objectPath.get(filterContext[dashboardId], 'endTime'),
+                                    interval: objectPath.get(filterContext[dashboardId], 'interval'),
                                 });
                             } else {
-                                configContexts[paramName] = defaultOption[0].value;
+                                configContexts[paramName] = configOptions.default;
                             }
-                        }
 
                         if(defaultOption[0].forceOptions) {
                             configContexts = Object.assign({}, configContexts, this.updateForceOptionContext(defaultOption[0].forceOptions, configOptions.append));
@@ -195,18 +194,17 @@ export class FiltersToolBarView extends React.Component {
             if(configContexts[name] === context[name])
                 delete configContexts[name];
         };
-
         const sourceQueryId = `${filteredID}query_source`;
         if ((context[sourceQueryId] && context[sourceQueryId] !== sourceQuery) || (!context[sourceQueryId] && sourceQuery)) {
             configContexts[sourceQueryId] = sourceQuery
         }
 
         if(Object.keys(configContexts).length !== 0) {
-            if(!Object.keys(filterContext).length) {
+            if(filterContext && dashboardId  && filterContext[dashboardId] && !Object.keys(filterContext[dashboardId]).length) {
                 if (!configContexts['endTime']) {
                     configContexts['endTime'] = 'now';
                 }
-                saveFilterContext(configContexts, visualizationId)
+                saveFilterContext({[dashboardId]:configContexts}, visualizationId)
             }
             this.props.goTo(window.location.pathname, Object.assign({}, context, configContexts))
         }
@@ -247,13 +245,26 @@ export class FiltersToolBarView extends React.Component {
           dashboard,
           goTo,
           setCustomFilterContext,
+          dashboardId,
+          customFilterContent,
+          context,
+          filterContext,
+          filterOptions,
         } = this.props;
         this.isCustomFilter = content && content.startTime ? true : false;
         this.filterContent = content || {};
         this.setState({
           showFilterPopup: false,
         });
-        setCustomFilterContext(content || {});
+        const contextData = content || {};
+        let dataToSet = customFilterContent;
+        if(dataToSet[dashboardId]) {
+          dataToSet[dashboardId] = contextData;
+        }
+        else {
+          dataToSet = {...customFilterContent, [dashboardId]:contextData}
+        }
+        setCustomFilterContext(dataToSet);
 
         let queryString = {};
 
@@ -263,11 +274,20 @@ export class FiltersToolBarView extends React.Component {
               endTime: objectPath.get(content, 'endTime'),
               interval: objectPath.get(content, 'interval'),
           }; 
-          saveFilterContext({
+          saveFilterContext({[dashboardId]:{
               startTime: objectPath.get(content, 'startTime'),
               endTime: objectPath.get(content, 'endTime'),
               interval: objectPath.get(content, 'interval'),
-          }, dashboard);
+          }}, dashboard);
+        }
+        else {
+            for(let name in filterOptions) {
+                if (filterOptions.hasOwnProperty(name)) {
+                    let configOptions = filterOptions[name];
+                    queryString = {...queryString, [configOptions.parameter]:configOptions.default}
+                }
+            }
+            saveFilterContext({[dashboardId]:queryString}, dashboard);
         }
 
         goTo(window.location.pathname, queryString);
@@ -278,7 +298,10 @@ export class FiltersToolBarView extends React.Component {
             saveFilterContext,
             visualizationId,
             context,
-            goTo
+            goTo,
+            dashboardId,
+            customFilterContent,
+            setCustomFilterContext,
         } = this.props;
         if (queryParams.startTime === CUSTOM_FILTER) {
             this.isCustomFilter = true;
@@ -287,13 +310,22 @@ export class FiltersToolBarView extends React.Component {
             });
         } else {
             let tContext = context;
-            if (tContext['customFilter'] && queryParams.startTime) {
-                delete tContext['customFilter']
-                if (tContext['endTime']) { delete tContext['endTime'] }
+            if (customFilterContent && customFilterContent[dashboardId] && Object.keys(customFilterContent[dashboardId]).length > 0 && queryParams.startTime) {
+                if (tContext['endTime']) { tContext['endTime'] = 'now'}
                 if (tContext['formatStartTime']) { delete tContext['formatStartTime'] }
                 if (tContext['formatEndTime']) { delete tContext['formatEndTime'] }
+                const contextData = {};
+                let dataToSet = customFilterContent;
+                if(dataToSet[dashboardId]) {
+                  dataToSet[dashboardId] = contextData;
+                }
+                else {
+                  dataToSet = {...customFilterContent, [dashboardId]:contextData}
+                }
+                setCustomFilterContext(dataToSet);
             }
-            saveFilterContext(Object.assign({}, tContext, queryParams), visualizationId);
+            
+            saveFilterContext({[dashboardId]:Object.assign({}, tContext, queryParams)}, visualizationId);
             goTo(window.location.pathname, Object.assign({}, tContext, queryParams));
         }
     }
@@ -303,6 +335,8 @@ export class FiltersToolBarView extends React.Component {
             context,
             visualizationId,
             customFilterContent,
+            filterContext,
+            dashboardId,
         } = this.props
 
         const { filterOptions } = this.state
@@ -310,7 +344,7 @@ export class FiltersToolBarView extends React.Component {
         let filteredID = this.getFilteredVisualizationId(),
             content = []
 
-        if (!filterOptions || Object.keys(filterOptions).lengh === 0)
+        if (!filterOptions || Object.keys(filterOptions).length === 0)
             return (<div></div>);
 
 
@@ -318,9 +352,12 @@ export class FiltersToolBarView extends React.Component {
 
             let configOptions = filterOptions[name],
                 paramName = visualizationId && configOptions.append ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
-                currentValue = context[paramName] || configOptions.default;
-            if (Object.keys(customFilterContent).length > 0 && paramName === "startTime") {
+                currentValue = (filterContext && filterContext[dashboardId] ?  filterContext[dashboardId][paramName] : context[paramName])  || configOptions.default;
+            if (customFilterContent[dashboardId] && Object.keys(customFilterContent[dashboardId]).length > 0 && paramName === "startTime") {
                 currentValue = 'custom';
+            }
+            else if(customFilterContent[dashboardId] && Object.keys(customFilterContent[dashboardId]).length > 0  && paramName === "startTime") {
+              currentValue = configOptions.default
             }
             // Hide all dependent child filters or show them if they are present in context
             if (configOptions.display) {
@@ -369,19 +406,22 @@ export class FiltersToolBarView extends React.Component {
     }
 
     renderCustomFilterTag = () => {
-        const { visualizationId, context, customFilterContent } = this.props;
-
-        const { formatStartTime, formatEndTime, interval, startTime } = customFilterContent;
-        let content = `${formatStartTime} - ${formatEndTime}`;
-        content += interval ? ` (${interval})` : '';
-        return ((!visualizationId && startTime && (Object.keys(customFilterContent).length > 0) ) &&
-            <li style={style.listItem}>
-                <Chips
-                    content={content}
-                    onClose={this.resetCustomFilter}
-                />
-            </li>
-        )
+        const { visualizationId, context, customFilterContent, dashboardId } = this.props;
+        if(dashboardId && customFilterContent[dashboardId]) {
+            const { formatStartTime, formatEndTime, interval, startTime } = customFilterContent[dashboardId];
+            let content = `${formatStartTime} - ${formatEndTime}`;
+            content += interval ? ` (${interval})` : '';
+        
+          return ((!visualizationId && startTime && (Object.keys(customFilterContent[dashboardId]).length > 0) ) &&
+              <li style={style.listItem}>
+                  <Chips
+                      content={content}
+                      onClose={this.resetCustomFilter}
+                  />
+              </li>
+          )
+        }
+        return <React.Fragment/>
     }
 
     render() {
