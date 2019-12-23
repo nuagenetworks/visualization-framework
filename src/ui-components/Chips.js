@@ -11,7 +11,7 @@ export default class Chips extends React.Component {
     render() {
         const { content, labelStyle, deleteIconStyle, backgroundColor, labelColor } = this.props;
         const labelCSS = labelStyle || { fontSize: 12 }
-        const iconStyle = deleteIconStyle || '';
+        const iconStyle = deleteIconStyle || {};
         const chipLabelColor = labelColor || '';
 
         return (
