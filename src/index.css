@@ -84,3 +84,26 @@ img {
   color: white;
   background-color: rgb(107, 148, 236);
 }
+
+.DayPickerInput-Overlay {
+  width: 100%
+}
+
+.DayPicker {
+  display: inline-block;
+  font-size: 10px;
+  width: 100%;
+}
+
+.DayPicker-Day--today {
+  color: rgb(107, 148, 236);
+}
+
+.DayPickerInput input{
+  border: 1px solid rgb(208, 208, 208);
+}
+
+.rc-time-picker-panel {
+  z-index: 9999;
+  color: black;
+}

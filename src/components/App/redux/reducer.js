@@ -1,6 +1,6 @@
 import { Map } from "immutable";
 import { ActionTypes, ActionKeyStore } from "./actions"
-
+import _object from 'lodash/object';
 
 let initialState = Map(); // eslint-disable-line
 initialState = initialState.set(ActionKeyStore.MAIN_MENU_OPENED, false);
@@ -11,6 +11,7 @@ initialState = initialState.set(ActionKeyStore.FILTER_CONTEXT, {});
 initialState = initialState.set(ActionKeyStore.HASLINKS, false);
 initialState = initialState.set(ActionKeyStore.HEADERCOLOR, Map());
 initialState = initialState.set(ActionKeyStore.UPDATEPAGE, "");
+initialState = initialState.set(ActionKeyStore.CUSTOM_FILTER, {});
 
 function toggleMainMenu(state) {
     return state.set(ActionKeyStore.MAIN_MENU_OPENED,  !state.get(ActionKeyStore.MAIN_MENU_OPENED));
@@ -22,6 +23,10 @@ function setTitle(state, aTitle) {
 
 function setTitleIcon(state, aTitleIcon) {
     return state.set(ActionKeyStore.NAV_BAR_TITLE_ICON,  aTitleIcon);
+}
+
+function setCustomFilterContext(state, aFilter) {
+    return state.set(ActionKeyStore.CUSTOM_FILTER, aFilter);  
 }
 
 function updateContext(state, aContext) {
@@ -64,6 +69,9 @@ function interfaceReducer(state = initialState, action) {
 
         case ActionTypes.ACTION_UPDATE_CONTEXT:
             return updateContext(state, action.context);
+
+        case ActionTypes.ACTION_UPDATE_CUSTOM_FILTER:
+            return setCustomFilterContext(state, action.customFilter);
 
         case ActionTypes.ACTION_FILTER_CONTEXT:
             return filterContext(state, action.context);

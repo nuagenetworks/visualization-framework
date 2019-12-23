@@ -46,6 +46,10 @@ export const defaultFilterOptions = {
                     "unit": "d",
                     "duration": "7"
                 }
+            },
+            {
+              "label": "Custom Time",
+              "value": "custom",
             }
         ]
     },

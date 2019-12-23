@@ -9,3 +9,6 @@ export { default as Button } from './Button';
 export { default as Icon } from './Icon';
 export { default as DataView } from './DataView';
 export { default as Header } from './Header';
+export { default as Chips } from './Chips';
+export { default as DateTimePicker } from './DateTimePicker';
+export { default as Interval } from './Interval';

@@ -108,7 +108,8 @@ export class DashboardView extends React.Component {
         const {
             configuration,
             context,
-            filterContext
+            filterContext,
+            customFilterContent,
         } = this.props;
 
         const links = configuration.get("links");
@@ -116,12 +117,24 @@ export class DashboardView extends React.Component {
             return;
 
         const currentUrl = window.location.pathname;
-        let contextWithFilter = Object.assign({}, context, filterContext)
 
         return (
             <div style={style.navigationContainer}>
                 <ul className="list-inline" style={style.linksList}>
                     {links.map((link, index) => {
+                        let dId = link.toJS().url.split('dashboards/')[1];
+                        let contextWithFilter = {};
+                        if(filterContext[dId]) {
+                          if(customFilterContent[dId]) {
+                            contextWithFilter = Object.assign({}, filterContext[dId], customFilterContent[dId])
+                          }
+                          else {
+                            contextWithFilter = {...filterContext[dId]}
+                          }
+                        }
+                        else {
+                          contextWithFilter = Object.assign({}, context)
+                        }
 
                         let targetURL = process.env.PUBLIC_URL + link.get("url");
                         let highlight = currentUrl === link.get("url") ? style.activeLink : style.link;
@@ -188,7 +201,7 @@ export class DashboardView extends React.Component {
                 <div>
                     {this.renderNavigationBarIfNeeded()}
 
-                    <FiltersToolBar filterOptions={filterOptions} />
+                    <FiltersToolBar filterOptions={filterOptions} dashboardId={configuration.toJS().id} />
                     <div style={style.gridContainer}>
                         <ResponsiveReactGridLayout
                             rowHeight={10}
@@ -227,6 +240,8 @@ const mapStateToProps = (state, ownProps) => ({
     context: state.interface.get(InterfaceActionKeyStore.CONTEXT),
 
     filterContext: state.interface.get(InterfaceActionKeyStore.FILTER_CONTEXT),
+
+    customFilterContent: state.interface.get(InterfaceActionKeyStore.CUSTOM_FILTER),
 
     configuration: state.configurations.getIn([
         ConfigurationsActionKeyStore.DASHBOARDS,

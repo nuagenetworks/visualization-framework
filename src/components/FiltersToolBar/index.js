@@ -8,15 +8,19 @@ import { connect } from "react-redux";
 
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
+import objectPath from 'object-path';
 import { events } from '../../lib/vis-graphs/utils/types'
 import {
     Actions as InterfaceActions,
-    ActionKeyStore as InterfaceActionKeyStore
+    ActionKeyStore as InterfaceActionKeyStore,
 } from "../App/redux/actions";
 
 import {
     Actions as ServiceActions
 } from "../../services/servicemanager/redux/actions"
+import { CUSTOM_FILTER, START_TIME } from '../../config';
+import { Chips } from '../../ui-components';
+import CustomFilter from './CustomFilter';
 
 import style from "./styles";
 
@@ -26,9 +30,11 @@ export class FiltersToolBarView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            filterOptions: []
+            filterOptions: [],
+            showFilterPopup: false,
+            customFilterContent: {},
         }
-
+        this.isCustomFilter = false;
         this.onTouchTap = this.onTouchTap.bind(this)
     }
 
@@ -41,7 +47,7 @@ export class FiltersToolBarView extends React.Component {
     }
 
     setFilterOptions(props) {
-        let { context, filterOptions } = props;
+        let { context, filterOptions, customFilterContent } = props;
 
         let updatedFilterOptions = {};
         let childs = [];
@@ -127,20 +133,18 @@ export class FiltersToolBarView extends React.Component {
             context,
             filterContext,
             visualizationId,
-            saveFilterContext
+            saveFilterContext,
+            customFilterContent,
+            dashboardId,
         } = this.props;
-
         const { filterOptions, sourceQuery } = this.state
-
-
         let configContexts = {};
         let filteredID = this.getFilteredVisualizationId();
-
         for(let name in filterOptions) {
             if (filterOptions.hasOwnProperty(name)) {
                 let configOptions = filterOptions[name],
                     paramName     = visualizationId && configOptions.append ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
-                    currentValue  = context[paramName],
+                    currentValue  = filterContext && filterContext[dashboardId] ?  filterContext[dashboardId][paramName] : context[paramName],
                     defaultOption = []
 
                 if (configOptions.options && configOptions.display) {
@@ -161,9 +165,16 @@ export class FiltersToolBarView extends React.Component {
                     }
 
                     if(defaultOption.length) {
-                        if(currentValue !== defaultOption[0].value) {
-                            configContexts[paramName] = defaultOption[0].value
-                        }
+                            if (filterContext[dashboardId] && filterContext[dashboardId][paramName]) {
+                                defaultOption = [];
+                                defaultOption.push({
+                                    startTime: objectPath.get(filterContext[dashboardId], 'startTime'),
+                                    endTime: objectPath.get(filterContext[dashboardId], 'endTime'),
+                                    interval: objectPath.get(filterContext[dashboardId], 'interval'),
+                                });
+                            } else {
+                                configContexts[paramName] = configOptions.default;
+                            }
 
                         if(defaultOption[0].forceOptions) {
                             configContexts = Object.assign({}, configContexts, this.updateForceOptionContext(defaultOption[0].forceOptions, configOptions.append));
@@ -178,21 +189,22 @@ export class FiltersToolBarView extends React.Component {
                 }
             }
         };
-
         // remove similar properties from new context (configContexts)
         for (let name in configContexts) {
             if(configContexts[name] === context[name])
                 delete configContexts[name];
         };
-
         const sourceQueryId = `${filteredID}query_source`;
         if ((context[sourceQueryId] && context[sourceQueryId] !== sourceQuery) || (!context[sourceQueryId] && sourceQuery)) {
             configContexts[sourceQueryId] = sourceQuery
         }
 
         if(Object.keys(configContexts).length !== 0) {
-            if(!Object.keys(filterContext).length) {
-                saveFilterContext(configContexts, visualizationId)
+            if(filterContext && dashboardId  && filterContext[dashboardId] && !Object.keys(filterContext[dashboardId]).length) {
+                if (!configContexts['endTime']) {
+                    configContexts['endTime'] = 'now';
+                }
+                saveFilterContext({[dashboardId]:configContexts}, visualizationId)
             }
             this.props.goTo(window.location.pathname, Object.assign({}, context, configContexts))
         }
@@ -223,22 +235,108 @@ export class FiltersToolBarView extends React.Component {
         return forceContext;
     }
 
+    renderCustomFilters = () => {
+        return this.state.showFilterPopup && <CustomFilter resetCustomFilter={this.resetCustomFilter} />;
+    }
+
+    resetCustomFilter = (content) => {
+        const {
+          saveFilterContext,
+          dashboard,
+          goTo,
+          setCustomFilterContext,
+          dashboardId,
+          customFilterContent,
+          context,
+          filterContext,
+          filterOptions,
+        } = this.props;
+        this.isCustomFilter = content && content.startTime ? true : false;
+        this.filterContent = content || {};
+        this.setState({
+          showFilterPopup: false,
+        });
+        const contextData = content || {};
+        let dataToSet = customFilterContent;
+        if(dataToSet[dashboardId]) {
+          dataToSet[dashboardId] = contextData;
+        }
+        else {
+          dataToSet = {...customFilterContent, [dashboardId]:contextData}
+        }
+        setCustomFilterContext(dataToSet);
+
+        let queryString = {};
+
+        if (this.isCustomFilter) {
+          queryString = {
+              startTime: objectPath.get(content, 'startTime'),
+              endTime: objectPath.get(content, 'endTime'),
+              interval: objectPath.get(content, 'interval'),
+          }; 
+          saveFilterContext({[dashboardId]:{
+              startTime: objectPath.get(content, 'startTime'),
+              endTime: objectPath.get(content, 'endTime'),
+              interval: objectPath.get(content, 'interval'),
+          }}, dashboard);
+        }
+        else {
+            for(let name in filterOptions) {
+                if (filterOptions.hasOwnProperty(name)) {
+                    let configOptions = filterOptions[name];
+                    queryString = {...queryString, [configOptions.parameter]:configOptions.default}
+                }
+            }
+            saveFilterContext({[dashboardId]:queryString}, dashboard);
+        }
+
+        goTo(window.location.pathname, queryString);
+    }
+
     onTouchTap(queryParams) {
         const {
             saveFilterContext,
             visualizationId,
             context,
-            goTo
+            goTo,
+            dashboardId,
+            customFilterContent,
+            setCustomFilterContext,
         } = this.props;
-
-        saveFilterContext(queryParams, visualizationId);
-        goTo(window.location.pathname, Object.assign({}, context || {}, queryParams));
+        if (queryParams.startTime === CUSTOM_FILTER) {
+            this.isCustomFilter = true;
+            this.setState({
+                showFilterPopup: true
+            });
+        } else {
+            let tContext = context;
+            if (customFilterContent && customFilterContent[dashboardId] && Object.keys(customFilterContent[dashboardId]).length > 0 && queryParams.startTime) {
+                if (tContext['endTime']) { tContext['endTime'] = 'now'}
+                if (tContext['formatStartTime']) { delete tContext['formatStartTime'] }
+                if (tContext['formatEndTime']) { delete tContext['formatEndTime'] }
+                const contextData = {};
+                let dataToSet = customFilterContent;
+                if(dataToSet[dashboardId]) {
+                  dataToSet[dashboardId] = contextData;
+                }
+                else {
+                  dataToSet = {...customFilterContent, [dashboardId]:contextData}
+                }
+                setCustomFilterContext(dataToSet);
+            }
+            
+            saveFilterContext({[dashboardId]:Object.assign({}, tContext, queryParams)}, visualizationId);
+            goTo(window.location.pathname, Object.assign({}, tContext, queryParams));
+        }
     }
 
     renderDropdownContent() {
         const {
             context,
-            visualizationId
+            visualizationId,
+            customFilterContent,
+            filterContext,
+            dashboardId,
         } = this.props
 
         const { filterOptions } = this.state
@@ -246,7 +344,7 @@ export class FiltersToolBarView extends React.Component {
         let filteredID = this.getFilteredVisualizationId(),
             content = []
 
-        if (!filterOptions || Object.keys(filterOptions).lengh === 0)
+        if (!filterOptions || Object.keys(filterOptions).length === 0)
             return (<div></div>);
 
 
@@ -254,8 +352,13 @@ export class FiltersToolBarView extends React.Component {
 
             let configOptions = filterOptions[name],
                 paramName = visualizationId && configOptions.append ? `${filteredID}${configOptions.parameter}` : configOptions.parameter,
-                currentValue = context[paramName] || configOptions.default;
-
+                currentValue = (filterContext && filterContext[dashboardId] ?  filterContext[dashboardId][paramName] : context[paramName])  || configOptions.default;
+            if (customFilterContent[dashboardId] && Object.keys(customFilterContent[dashboardId]).length > 0 && paramName === "startTime") {
+                currentValue = 'custom';
+            }
+            else if(customFilterContent[dashboardId] && Object.keys(customFilterContent[dashboardId]).length > 0  && paramName === "startTime") {
+              currentValue = configOptions.default
+            }
             // Hide all dependent child filters or show them if they are present in context
             if (configOptions.display) {
                 content.push(
@@ -273,7 +376,7 @@ export class FiltersToolBarView extends React.Component {
                         >
 
                             {configOptions.options.map((option, index) => {
-                                let queryParams  = { [paramName]: option.value },
+                                let queryParams = { [paramName]: option.value },
                                     forceOptions = option.forceOptions
 
                                 if (forceOptions)
@@ -302,11 +405,32 @@ export class FiltersToolBarView extends React.Component {
         return content;
     }
 
+    renderCustomFilterTag = () => {
+        const { visualizationId, context, customFilterContent, dashboardId } = this.props;
+        if(dashboardId && customFilterContent[dashboardId]) {
+            const { formatStartTime, formatEndTime, interval, startTime } = customFilterContent[dashboardId];
+            let content = `${formatStartTime} - ${formatEndTime}`;
+            content += interval ? ` (${interval})` : '';
+        
+          return ((!visualizationId && startTime && (Object.keys(customFilterContent[dashboardId]).length > 0) ) &&
+              <li style={style.listItem}>
+                  <Chips
+                      content={content}
+                      onClose={this.resetCustomFilter}
+                  />
+              </li>
+          )
+        }
+        return <React.Fragment/>
+    }
+
     render() {
         return (
             <div className="text-right">
                 <ul className="list-inline" style={style.list}>
-                    { this.renderDropdownContent() }
+                    {this.renderCustomFilterTag()}
+                    {this.renderDropdownContent()}
+                    {this.renderCustomFilters()}
                 </ul>
             </div>
         )
@@ -320,16 +444,20 @@ FiltersToolBarView.propTypes = {
 const mapStateToProps = (state, ownProps) => ({
     context: state.interface.get(InterfaceActionKeyStore.CONTEXT),
     filterContext: state.interface.get(InterfaceActionKeyStore.FILTER_CONTEXT),
+    customFilterContent: state.interface.get(InterfaceActionKeyStore.CUSTOM_FILTER),
 })
 
 const actionCreators = (dispatch) => ({
 
-    goTo: function(link, context) {
-      dispatch(push({pathname:link, search: queryString.stringify(context)}));
+    goTo: function (link, context) {
+        dispatch(push({ pathname: link, search: queryString.stringify(context) }));
     },
-    saveFilterContext: function(context, visualizationId = null) {
-        dispatch(ServiceActions.updateScroll(visualizationId, {page: 1, event: events.FILTER}))
+    saveFilterContext: function (context, visualizationId = null) {
+        dispatch(ServiceActions.updateScroll(visualizationId, { page: 1, event: events.FILTER }))
         dispatch(InterfaceActions.filterContext(context));
+    },
+    setCustomFilterContext: function (customFilter) {
+        dispatch(InterfaceActions.setCustomFilterContext(customFilter));
     }
 
 });

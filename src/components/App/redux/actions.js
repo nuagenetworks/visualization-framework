@@ -8,6 +8,7 @@ export const ActionTypes = {
     ACTION_NAV_BAR_HAS_LINKS: "ACTION_NAV_BAR_HAS_LINKS",
     ACTION_UPDATE_HEADER_COLOR: "ACTION_UPDATE_HEADER_COLOR",
     ACTION_UPDATE_PAGE: "ACTION_UPDATE_PAGE",
+    ACTION_UPDATE_CUSTOM_FILTER: "ACTION_UPDATE_CUSTOM_FILTER",
 };
 
 export const ActionKeyStore = {
@@ -18,7 +19,8 @@ export const ActionKeyStore = {
     VISUALIZATION_TYPE: "visualizationType",
     HEADERCOLOR: "headerColor",
     UPDATEPAGE: "updatePage",
-    FILTER_CONTEXT: "filterContext"
+    FILTER_CONTEXT: "filterContext",
+    CUSTOM_FILTER: "CUSTOM_FILTER",
 };
 
 
@@ -80,4 +82,12 @@ export const Actions = {
             id: id
         }
     },
+    
+    setCustomFilterContext: (customFilter) => {
+        return {
+            type: ActionTypes.ACTION_UPDATE_CUSTOM_FILTER,
+            customFilter: customFilter
+        }
+    },
+  
 };
