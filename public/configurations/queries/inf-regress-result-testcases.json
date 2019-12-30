@@ -15,6 +15,7 @@
                         {"wildcard": { "version.vsd": "{{vsdVersion}}" }}
                     ],
                     "must_not": [
+                        {"term": { "testcase": "" }},
                         {
                             "bool": {
                                 "minimum_should_match": 1,
