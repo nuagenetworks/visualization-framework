@@ -5,19 +5,19 @@
     "description": "TBD",
     "author": "Ryan Fredette",
     "data": {
-        "searchBar":false,
+        "searchBar":true,
         "columns": [
-            { "column": "testbed", "label": "Test Bed"},
-            { "column": "total_jobs", "label": "Jobs Run"}
+            { "column": "testbed", "label": "testbed"},
+            { "column": "total_jobs", "label": "No. of jobs run"}
         ],
         "tabifyOptions":{
             "bedType":"{{bedType}}",
             "bedLists":{
-                "nsgdev":["mvnsgdev01","mvnsgdev02","mvnsgdev03","mvnsgdev04","mvnsgdev05","mvnsgdev06","mvnsgdev07","mvnsgdev08","mvnsgdev09","mvnsgdev10","mvnsgdev11","mvnsgdev12","mvnsgdev13","mvnsgdev14","mvnsgdev15","mvnsgdev16","mvnsgdev17","mvnsgdev18","mvnsgdev19","mvnsgdev20","mvnsgdev21","mvnsgdev301","mvnsgdev302","mvnsgdev303","mvnsgdev304","mvnsgdev305","mvnsgdev306","mvnsgdev307","mvnsgdev308","mvnsgdev309","mvnsgdev310"],
-                
-                "dcdev":["mvdcdev01","mvdcdev02","mvdcdev03","mvdcdev04","mvdcdev05","mvdcdev06","mvdcdev07","mvdcdev08","mvdcdev09","mvdcdev10","mvdcdev11","mvdcdev12","mvdcdev13","mvdcdev14","mvdcdev15","mvdcdev22","mvdcdev23","mvdcdev24","mvdcdev25","mvdcdev26","mvdcdev27","mvdcdev28","mvdcdev30","mvdcdev31","mvdcdev32","mvdcdev34","mvdcdev35","mvdcdev36","mvdcdev37","mvdcdev38","mvdcdev39","mvdcdev40","mvdcdev41","mvdcdev42","mvdcdev43","mvdcdev44"],
+                "nsgdev":["wfnsgdev01","wfnsgdev02","wfnsgdev03","wfnsgdev04","wfnsgdev05","wfnsgdev06","wfnsgdev07","wfnsgdev08","wfnsgdev09","wfnsgdev10","wfnsgdev11","wfnsgdev12","wfnsgdev13","wfnsgdev14","wfnsgdev15","wfnsgdev16","wfnsgdev17"],
 
-                "vtb":["mvdcvtb01","mvdcvtb02","mvdcvtb04","mvdcvtb05","mvdcvtb06","mvdcvtb07","mvdcvtb08","mvdcvtb09","mvdcvtb10","mvdcvtb11","mvdcvtb12","mvdcvtb13","mvdcvtb14","mvdcvtb15","mvdcvtb16","mvdcvtb17","mvdcvtb18","mvdcvtb19","mvdcvtb20","mvdcvtb21","mvdcvtb22","mvdcvtb23","mvdcvtb24","mvdcvtb25","mvdcvtb26","mvdcvtb27","mvdcvtb28","mvdcvtb29","mvdcvtb30","mvdcvtb31","mvdcvtb32","mvdcvtb33","mvdcvtb34","mvdcvtb35","mvdcvtb36","mvdcvtb37","mvdcvtb38","mvdcvtb39","mvdcvtb40","mvdcvtb41","mvdcvtb42","mvdcvtb49","mvdcvtb50","mvdcvtb51","mvdcvtb52","mvdcvtb53","mvdcvtb54","mvdcvtb55","mvdcvtb56","mvdcvtb57","mvdcvtb58","mvdcvtb59","mvdcvtb60","mvdcvtb61","mvdcvtb62","mvdcvtb63","mvdcvtb64","mvdcvtb65"]
+                "dcdev":["wfdcdev01","wfdcdev02","wfdcdev03","wfdcdev04","wfdcdev05","wfdcdev06","wfdcdev07","wfdcdev08","wfdcdev09","wfdcdev10","wfdcdev11","wfdcdev12","wfdcdev13","wfdcdev14","wfdcdev15","wfdcdev22","wfdcdev23","wfdcdev24","wfdcdev25","wfdcdev26","wfdcdev27","wfdcdev28","wfdcdev30","wfdcdev31","wfdcdev32","wfdcdev34","wfdcdev35","wfdcdev36"],
+
+                "vtb":["wfdcvtb01","wfdcvtb02","wfdcvtb03","wfdcvtb04","wfdcvtb05","wfdcvtb06","wfdcvtb07","wfdcvtb08","wfdcvtb09","wfdcvtb10","wfdcvtb11","wfdcvtb12","wfdcvtb13","wfdcvtb14","wfdcvtb15"]
             }
         }
     },
