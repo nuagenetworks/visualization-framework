@@ -1,0 +1,331 @@
+
+  
+  {
+    "took": 1,
+    "timed_out": false,
+    "_shards": {
+      "total": 5,
+      "successful": 5,
+      "skipped": 0,
+      "failed": 0
+    },
+    "hits": {
+      "total": 12,
+      "max_score": null,
+      "hits": [
+        {
+          "_index": "nuage_gw_sel_stats-2019-12-13",
+          "_type": "nuage_doc_type",
+          "_id": "kHASAW8BUifmwYl9V2op",
+          "_score": null,
+          "_source": {
+            "Load": 0.13333334,
+            "PercentagePktLoss": 0,
+            "GatewayRank": 1,
+            "DestinationNSG": "",
+            "SrcNSG": "88.213.127.40",
+            "DstUplink": "",
+            "GwNSG": "137.237.32.108",
+            "Latency": 4.1666665,
+            "GatewayGroup": "gw-group-1",
+            "SourceNSG": "HQ-NSG",
+            "DUCGroupID": "22842b68-a361-4741-81fd-2e3c4d79ad21",
+            "GatewayNSG": "ovs-8",
+            "SrcUplink": "",
+            "timestamp": 1576270965103,
+            "GatewayIsActive": true
+          },
+          "sort": [
+            1576270965103
+          ]
+        },
+        {
+          "_index": "nuage_gw_sel_stats-2019-12-13",
+          "_type": "nuage_doc_type",
+          "_id": "oHASAW8BUifmwYl9V2oq",
+          "_score": null,
+          "_source": {
+            "Load": 0.51666665,
+            "PercentagePktLoss": 0,
+            "GatewayRank": 1,
+            "DestinationNSG": "",
+            "SrcNSG": "88.213.127.40",
+            "DstUplink": "",
+            "GwNSG": "49.148.124.173",
+            "Latency": 4.366667,
+            "GatewayGroup": "gw-group-1",
+            "SourceNSG": "HQ-NSG",
+            "DUCGroupID": "22842b68-a361-4741-81fd-2e3c4d79ad21",
+            "GatewayNSG": "ovs-9",
+            "SrcUplink": "",
+            "timestamp": 1576270965103,
+            "GatewayIsActive": true
+          },
+          "sort": [
+            1576270965103
+          ]
+        },
+        {
+          "_index": "nuage_gw_sel_stats-2019-12-13",
+          "_type": "nuage_doc_type",
+          "_id": "g3AWAW8BUifmwYl963cr",
+          "_score": null,
+          "_source": {
+            "Load": 0.2,
+            "PercentagePktLoss": 0,
+            "GatewayRank": 2,
+            "DestinationNSG": "",
+            "SrcNSG": "88.213.127.40",
+            "DstUplink": "",
+            "GwNSG": "137.237.32.108",
+            "Latency": 4.133333,
+            "GatewayGroup": "gw-group-1",
+            "SourceNSG": "HQ-NSG",
+            "DUCGroupID": "22842b68-a361-4741-81fd-2e3c4d79ad21",
+            "GatewayNSG": "ovs-8",
+            "SrcUplink": "",
+            "timestamp": 1576271263124,
+            "GatewayIsActive": true
+          },
+          "sort": [
+            1576271263124
+          ]
+        },
+        {
+          "_index": "nuage_gw_sel_stats-2019-12-13",
+          "_type": "nuage_doc_type",
+          "_id": "k3AWAW8BUifmwYl963c0",
+          "_score": null,
+          "_source": {
+            "Load": 0.6666667,
+            "PercentagePktLoss": 0,
+            "GatewayRank": 2,
+            "DestinationNSG": "",
+            "SrcNSG": "88.213.127.40",
+            "DstUplink": "",
+            "GwNSG": "49.148.124.173",
+            "Latency": 4.3333335,
+            "GatewayGroup": "gw-group-1",
+            "SourceNSG": "HQ-NSG",
+            "DUCGroupID": "22842b68-a361-4741-81fd-2e3c4d79ad21",
+            "GatewayNSG": "ovs-9",
+            "SrcUplink": "",
+            "timestamp": 1576271263124,
+            "GatewayIsActive": true
+          },
+          "sort": [
+            1576271263124
+          ]
+        },
+        {
+          "_index": "nuage_gw_sel_stats-2019-12-13",
+          "_type": "nuage_doc_type",
+          "_id": "UXAbAW8BUifmwYl9f4Qp",
+          "_score": null,
+          "_source": {
+            "Load": 0.25,
+            "PercentagePktLoss": 0,
+            "GatewayRank": 2,
+            "DestinationNSG": "",
+            "SrcNSG": "88.213.127.40",
+            "DstUplink": "",
+            "GwNSG": "49.148.124.173",
+            "Latency": 3.3666666,
+            "GatewayGroup": "gw-group-1",
+            "SourceNSG": "HQ-NSG",
+            "DUCGroupID": "22842b68-a361-4741-81fd-2e3c4d79ad21",
+            "GatewayNSG": "ovs-9",
+            "SrcUplink": "",
+            "timestamp": 1576271561140,
+            "GatewayIsActive": true
+          },
+          "sort": [
+            1576271561140
+          ]
+        },
+        {
+          "_index": "nuage_gw_sel_stats-2019-12-13",
+          "_type": "nuage_doc_type",
+          "_id": "YXAbAW8BUifmwYl9f4Qv",
+          "_score": null,
+          "_source": {
+            "Load": 0.31666666,
+            "PercentagePktLoss": 0,
+            "GatewayRank": 0,
+            "DestinationNSG": "",
+            "SrcNSG": "88.213.127.40",
+            "DstUplink": "",
+            "GwNSG": "137.237.32.108",
+            "Latency": 3.6666667,
+            "GatewayGroup": "gw-group-1",
+            "SourceNSG": "HQ-NSG",
+            "DUCGroupID": "22842b68-a361-4741-81fd-2e3c4d79ad21",
+            "GatewayNSG": "ovs-8",
+            "SrcUplink": "",
+            "timestamp": 1576271561140,
+            "GatewayIsActive": true
+          },
+          "sort": [
+            1576271561140
+          ]
+        },
+        {
+          "_index": "nuage_gw_sel_stats-2019-12-13",
+          "_type": "nuage_doc_type",
+          "_id": "rHAfAW8BUifmwYl95JBf",
+          "_score": null,
+          "_source": {
+            "Load": 0,
+            "PercentagePktLoss": 0,
+            "GatewayRank": 0,
+            "DestinationNSG": "",
+            "SrcNSG": "88.213.127.40",
+            "DstUplink": "",
+            "GwNSG": "49.148.124.173",
+            "Latency": 2.8666666,
+            "GatewayGroup": "gw-group-1",
+            "SourceNSG": "HQ-NSG",
+            "DUCGroupID": "22842b68-a361-4741-81fd-2e3c4d79ad21",
+            "GatewayNSG": "ovs-9",
+            "SrcUplink": "",
+            "timestamp": 1576271859153,
+            "GatewayIsActive": true
+          },
+          "sort": [
+            1576271859153
+          ]
+        },
+        {
+          "_index": "nuage_gw_sel_stats-2019-12-13",
+          "_type": "nuage_doc_type",
+          "_id": "vnAfAW8BUifmwYl95JBg",
+          "_score": null,
+          "_source": {
+            "Load": 0.15,
+            "PercentagePktLoss": 0,
+            "GatewayRank": 4,
+            "DestinationNSG": "",
+            "SrcNSG": "88.213.127.40",
+            "DstUplink": "",
+            "GwNSG": "137.237.32.108",
+            "Latency": 3.7333333,
+            "GatewayGroup": "gw-group-1",
+            "SourceNSG": "HQ-NSG",
+            "DUCGroupID": "22842b68-a361-4741-81fd-2e3c4d79ad21",
+            "GatewayNSG": "ovs-8",
+            "SrcUplink": "",
+            "timestamp": 1576271859153,
+            "GatewayIsActive": true
+          },
+          "sort": [
+            1576271859153
+          ]
+        },
+        {
+          "_index": "nuage_gw_sel_stats-2019-12-13",
+          "_type": "nuage_doc_type",
+          "_id": "u3AkAW8BUifmwYl9eJ2J",
+          "_score": null,
+          "_source": {
+            "Load": 0.16666667,
+            "PercentagePktLoss": 0,
+            "GatewayRank": 4,
+            "DestinationNSG": "",
+            "SrcNSG": "88.213.127.40",
+            "DstUplink": "",
+            "GwNSG": "49.148.124.173",
+            "Latency": 3.2666667,
+            "GatewayGroup": "gw-group-1",
+            "SourceNSG": "HQ-NSG",
+            "DUCGroupID": "22842b68-a361-4741-81fd-2e3c4d79ad21",
+            "GatewayNSG": "ovs-9",
+            "SrcUplink": "",
+            "timestamp": 1576272157167,
+            "GatewayIsActive": true
+          },
+          "sort": [
+            1576272157167
+          ]
+        },
+        {
+          "_index": "nuage_gw_sel_stats-2019-12-13",
+          "_type": "nuage_doc_type",
+          "_id": "rHAkAW8BUifmwYl9eJ1i",
+          "_score": null,
+          "_source": {
+            "Load": 0.7,
+            "PercentagePktLoss": 0,
+            "GatewayRank": 2,
+            "DestinationNSG": "",
+            "SrcNSG": "88.213.127.40",
+            "DstUplink": "",
+            "GwNSG": "137.237.32.108",
+            "Latency": 4.3333335,
+            "GatewayGroup": "gw-group-1",
+            "SourceNSG": "HQ-NSG",
+            "DUCGroupID": "22842b68-a361-4741-81fd-2e3c4d79ad21",
+            "GatewayNSG": "ovs-8",
+            "SrcUplink": "",
+            "timestamp": 1576272157167,
+            "GatewayIsActive": true
+          },
+          "sort": [
+            1576272157167
+          ]
+        },
+        {
+          "_index": "nuage_gw_sel_stats-2019-12-13",
+          "_type": "nuage_doc_type",
+          "_id": "nHApAW8BUifmwYl9AKrN",
+          "_score": null,
+          "_source": {
+            "Load": 0.033333335,
+            "PercentagePktLoss": 0,
+            "GatewayRank": 1,
+            "DestinationNSG": "",
+            "SrcNSG": "88.213.127.40",
+            "DstUplink": "",
+            "GwNSG": "49.148.124.173",
+            "Latency": 3.2,
+            "GatewayGroup": "gw-group-1",
+            "SourceNSG": "HQ-NSG",
+            "DUCGroupID": "22842b68-a361-4741-81fd-2e3c4d79ad21",
+            "GatewayNSG": "ovs-9",
+            "SrcUplink": "",
+            "timestamp": 1576272455222,
+            "GatewayIsActive": true
+          },
+          "sort": [
+            1576272455222
+          ]
+        },
+        {
+          "_index": "nuage_gw_sel_stats-2019-12-13",
+          "_type": "nuage_doc_type",
+          "_id": "i3ApAW8BUifmwYl9AKqv",
+          "_score": null,
+          "_source": {
+            "Load": 0.28333333,
+            "PercentagePktLoss": 0,
+            "GatewayRank": 0,
+            "DestinationNSG": "",
+            "SrcNSG": "88.213.127.40",
+            "DstUplink": "",
+            "GwNSG": "137.237.32.108",
+            "Latency": 3.8333333,
+            "GatewayGroup": "gw-group-1",
+            "SourceNSG": "HQ-NSG",
+            "DUCGroupID": "22842b68-a361-4741-81fd-2e3c4d79ad21",
+            "GatewayNSG": "ovs-8",
+            "SrcUplink": "",
+            "timestamp": 1576272455222,
+            "GatewayIsActive": true
+          },
+          "sort": [
+            1576272455222
+          ]
+        }
+      ]
+    }
+  }
+
