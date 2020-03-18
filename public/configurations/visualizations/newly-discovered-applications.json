@@ -1,9 +1,0 @@
-{
-    "id": "newly-discovered-applications",
-    "title": "Newly Discovered Default Applications",
-    "query": "aar-default-app-l7",
-    "graph": "SimpleTextGraph",
-    "data": {
-        "targetedColumn":"value"
-    }
-}

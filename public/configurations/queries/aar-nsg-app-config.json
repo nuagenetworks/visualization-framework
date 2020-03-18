@@ -1,9 +1,0 @@
-{
-    "id":"aar-nsg-app-config",
-    "title":"aar nsg app config",
-    "service":"VSD",
-    "query":{
-        "parentResource":"applications",
-        "parentID":"{{appID}}"
-    }
-}

@@ -1,9 +1,0 @@
-{
-    "id":"medalsPerCountry",
-    "title":"Country Medals",
-    "service":"memory",
-    "query": {
-        "country":"{{country:China}}",
-        "year": "{{year:2012}}"
-    }
-}
