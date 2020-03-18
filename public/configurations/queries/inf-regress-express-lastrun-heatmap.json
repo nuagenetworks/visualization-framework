@@ -43,12 +43,8 @@
             {
               "terms": {
                 "testbed": [
-                  "mvdchw01",
-                  "mvdcdev25",
-                  "mvnsgdev21",
-                  "mvnsgdev22",
-                  "mvdcvtb25",
-                  "mvdcvtb16"
+                  "wfdcvtb01",
+                  "wfdcdev02"
                 ]
               }
             },
