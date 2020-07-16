@@ -88,16 +88,16 @@
         },
         "Site": {
             "parameter": "site",
-            "default": "mv*",
+            "default": "wf*",
             "options": [
                 {
                     "label": "Mountain View",
-                    "value": "mv*",
-                    "default": true
+                    "value": "mv*"
                 },
                 {
                     "label": "Westford",
-                    "value": "wf*"
+                    "value": "wf*",
+                    "default": true
                 },
                 {
                     "label": "Raleigh",
