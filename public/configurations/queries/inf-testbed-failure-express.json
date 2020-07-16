@@ -28,7 +28,7 @@
             },
             {
               "regexp": {
-                "testbed": "(.*infra.*|mvnsgdev21|mvnsgdev22)"
+                "testbed": "(wfdcvtb01|wfdcdev02|wfdcdev03)"
               }
             },
             {
