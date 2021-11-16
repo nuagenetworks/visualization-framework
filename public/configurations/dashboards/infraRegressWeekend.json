@@ -53,6 +53,31 @@
                     "label": "Build Qualification",
                     "value": "../files/buildqualification.json",
                     "default": true
+                },
+                {
+                    "label": "Autoregress",
+                    "value": "../files/autoregress.json",
+                    "default": true
+                },
+                {
+                    "label": "Express",
+                    "value": "../files/express.json",
+                    "default": true
+                },
+                {
+                    "label": "Upgrade",
+                    "value": "../files/upgrade.json",
+                    "default": true
+                },
+                {
+                    "label": "Quick",
+                    "value": "../files/quick.json",
+                    "default": true
+                },
+                {
+                    "label": "E2E Jobs",
+                    "value": "../files/e2eJobs.json",
+                    "default": true
                 }
             ]
         },
