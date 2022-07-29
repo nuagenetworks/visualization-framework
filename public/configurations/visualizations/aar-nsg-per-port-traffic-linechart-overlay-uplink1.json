@@ -1,0 +1,56 @@
+{
+    "id": "aar-nsg-per-port-traffic-linechart-overlay-uplink1",
+    "graph": "AreaGraph",
+    "title": "Overlay Traffic for {{uplink1}}",
+    "description": "Line graph displays the throughput of the application over the selected path",
+    "author": "Bharat Mukheja",
+    "creationDate": "11/06/2018",
+    "data": {
+        "dateHistogram": true,
+        "xColumn": "ts",
+        "yColumn": "Traffic",
+        "yTickFormat": ".2s",
+        "xLabel": "Time",
+        "yLabel": "Traffic(MB/{{interval}})",
+        "linesColumn": "App",
+        "showNull": false,
+        "legend": {
+            "orientation": "horizontal",
+            "show": true,
+            "circleSize": 5,
+            "labelOffset": 5
+        },
+        "tooltip": [
+          { "column": "App", "label": "Application"},
+          { "column": "Traffic", "label": "Data Usage", "format": ",.2s"},
+          { "column": "ts", "label": "Timestamp", "timeFormat": "%b %d, %y %X"}
+        ]
+    },
+    "filterOptions": {
+        "Traffic Type": {
+          "parameter": "traffic_type1",
+          "options": [
+            {
+              "label": "Download",
+              "value":"Download",
+              "forceOptions": {
+                "nsg_traffic_linechart1_uplink": "SrcUplink",
+                "nsg_traffic_linechart1_nsgside_uplink":"DstUplink",
+                "nsg_traffic_linechart1_bytesType":"IngressMB"
+              }
+            },
+            {
+              "label": "Upload",
+              "value": "Upload",
+              "default":true,
+              "forceOptions": {
+                "nsg_traffic_linechart1_uplink": "DstUplink",
+                "nsg_traffic_linechart1_nsgside_uplink":"SrcUplink",
+                "nsg_traffic_linechart1_bytesType":"EgressMB"
+              }
+            }
+          ]
+        }
+      },
+    "query": "aar-nsg-per-port-traffic-linechart-overlay-uplink1"
+}
