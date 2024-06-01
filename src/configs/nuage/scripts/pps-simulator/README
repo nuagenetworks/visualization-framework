@@ -31,6 +31,19 @@ Eg: For def_conf: 4C2 = 6
 number of sla records generated = nsg_cnt/2 * appgrp_cnt
 Eg: For def_conf: 4/2 * 2 = 4
 
+duration:
+Duration of past to cover in stats, specified in hours(h) or minutes(h)
+Eg: 5h => 5 hours, 30m => 30 minutes
 
+NATT based settings:
+    natt_ip_prefix:
+    IP prefix used alongside real host address
+
+    natt_port:
+    Default used natt port
+
+    natt_conn_failure_probability:
+    The probability with which an IP of NATT(applies to all 4 IP addresses Probe learnt * 2, VSC learnt * 2) is found to be ZERO at each timestep by the NSG.
+    This boils down to the amount of "YELLOW/RED" to increase in the NATT summary heatmap.
 
 
